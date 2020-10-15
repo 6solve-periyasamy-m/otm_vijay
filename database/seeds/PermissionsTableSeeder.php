@@ -265,6 +265,166 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-13 13:24:21',
                 'updated_at' => '2020-10-13 13:24:21',
             ),
+            31 => 
+            array (
+                'id' => 32,
+                'key' => 'browse_accommodation_inventory',
+                'table_name' => 'accommodation_inventory',
+                'created_at' => '2020-10-15 09:18:14',
+                'updated_at' => '2020-10-15 09:18:14',
+            ),
+            32 => 
+            array (
+                'id' => 33,
+                'key' => 'read_accommodation_inventory',
+                'table_name' => 'accommodation_inventory',
+                'created_at' => '2020-10-15 09:18:14',
+                'updated_at' => '2020-10-15 09:18:14',
+            ),
+            33 => 
+            array (
+                'id' => 34,
+                'key' => 'edit_accommodation_inventory',
+                'table_name' => 'accommodation_inventory',
+                'created_at' => '2020-10-15 09:18:14',
+                'updated_at' => '2020-10-15 09:18:14',
+            ),
+            34 => 
+            array (
+                'id' => 35,
+                'key' => 'add_accommodation_inventory',
+                'table_name' => 'accommodation_inventory',
+                'created_at' => '2020-10-15 09:18:14',
+                'updated_at' => '2020-10-15 09:18:14',
+            ),
+            35 => 
+            array (
+                'id' => 36,
+                'key' => 'delete_accommodation_inventory',
+                'table_name' => 'accommodation_inventory',
+                'created_at' => '2020-10-15 09:18:14',
+                'updated_at' => '2020-10-15 09:18:14',
+            ),
+            36 => 
+            array (
+                'id' => 37,
+                'key' => 'browse_accommodation_inventories',
+                'table_name' => 'accommodation_inventories',
+                'created_at' => '2020-10-15 09:21:00',
+                'updated_at' => '2020-10-15 09:21:00',
+            ),
+            37 => 
+            array (
+                'id' => 38,
+                'key' => 'read_accommodation_inventories',
+                'table_name' => 'accommodation_inventories',
+                'created_at' => '2020-10-15 09:21:00',
+                'updated_at' => '2020-10-15 09:21:00',
+            ),
+            38 => 
+            array (
+                'id' => 39,
+                'key' => 'edit_accommodation_inventories',
+                'table_name' => 'accommodation_inventories',
+                'created_at' => '2020-10-15 09:21:00',
+                'updated_at' => '2020-10-15 09:21:00',
+            ),
+            39 => 
+            array (
+                'id' => 40,
+                'key' => 'add_accommodation_inventories',
+                'table_name' => 'accommodation_inventories',
+                'created_at' => '2020-10-15 09:21:00',
+                'updated_at' => '2020-10-15 09:21:00',
+            ),
+            40 => 
+            array (
+                'id' => 41,
+                'key' => 'delete_accommodation_inventories',
+                'table_name' => 'accommodation_inventories',
+                'created_at' => '2020-10-15 09:21:00',
+                'updated_at' => '2020-10-15 09:21:00',
+            ),
+            41 => 
+            array (
+                'id' => 42,
+                'key' => 'browse_board_types',
+                'table_name' => 'board_types',
+                'created_at' => '2020-10-15 10:03:54',
+                'updated_at' => '2020-10-15 10:03:54',
+            ),
+            42 => 
+            array (
+                'id' => 43,
+                'key' => 'read_board_types',
+                'table_name' => 'board_types',
+                'created_at' => '2020-10-15 10:03:54',
+                'updated_at' => '2020-10-15 10:03:54',
+            ),
+            43 => 
+            array (
+                'id' => 44,
+                'key' => 'edit_board_types',
+                'table_name' => 'board_types',
+                'created_at' => '2020-10-15 10:03:54',
+                'updated_at' => '2020-10-15 10:03:54',
+            ),
+            44 => 
+            array (
+                'id' => 45,
+                'key' => 'add_board_types',
+                'table_name' => 'board_types',
+                'created_at' => '2020-10-15 10:03:54',
+                'updated_at' => '2020-10-15 10:03:54',
+            ),
+            45 => 
+            array (
+                'id' => 46,
+                'key' => 'delete_board_types',
+                'table_name' => 'board_types',
+                'created_at' => '2020-10-15 10:03:54',
+                'updated_at' => '2020-10-15 10:03:54',
+            ),
+            46 => 
+            array (
+                'id' => 47,
+                'key' => 'browse_room_types',
+                'table_name' => 'room_types',
+                'created_at' => '2020-10-15 11:16:35',
+                'updated_at' => '2020-10-15 11:16:35',
+            ),
+            47 => 
+            array (
+                'id' => 48,
+                'key' => 'read_room_types',
+                'table_name' => 'room_types',
+                'created_at' => '2020-10-15 11:16:35',
+                'updated_at' => '2020-10-15 11:16:35',
+            ),
+            48 => 
+            array (
+                'id' => 49,
+                'key' => 'edit_room_types',
+                'table_name' => 'room_types',
+                'created_at' => '2020-10-15 11:16:35',
+                'updated_at' => '2020-10-15 11:16:35',
+            ),
+            49 => 
+            array (
+                'id' => 50,
+                'key' => 'add_room_types',
+                'table_name' => 'room_types',
+                'created_at' => '2020-10-15 11:16:35',
+                'updated_at' => '2020-10-15 11:16:35',
+            ),
+            50 => 
+            array (
+                'id' => 51,
+                'key' => 'delete_room_types',
+                'table_name' => 'room_types',
+                'created_at' => '2020-10-15 11:16:35',
+                'updated_at' => '2020-10-15 11:16:35',
+            ),
         ));
         
         
