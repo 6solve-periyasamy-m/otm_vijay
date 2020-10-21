@@ -425,6 +425,22 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
             ),
+            51 => 
+            array (
+                'id' => 52,
+                'key' => 'browse_model_log',
+                'table_name' => 'model_log',
+                'created_at' => '2020-10-15 14:41:14',
+                'updated_at' => '2020-10-15 14:41:14',
+            ),
+            52 => 
+            array (
+                'id' => 53,
+                'key' => 'clear_model_log',
+                'table_name' => 'model_log',
+                'created_at' => '2020-10-15 14:41:14',
+                'updated_at' => '2020-10-15 14:41:14',
+            ),
         ));
         
         

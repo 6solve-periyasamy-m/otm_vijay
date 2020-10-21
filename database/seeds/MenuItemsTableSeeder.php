@@ -257,6 +257,22 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.room-types.index',
                 'parameters' => NULL,
             ),
+            15 => 
+            array (
+                'id' => 17,
+                'menu_id' => 1,
+                'title' => 'Model Logs',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => 'voyager-logbook',
+                'color' => NULL,
+                'parent_id' => NULL,
+                'order' => 98,
+                'created_at' => '2020-10-15 14:41:14',
+                'updated_at' => '2020-10-15 14:41:14',
+                'route' => 'voyager.model_log.index',
+                'parameters' => NULL,
+            ),
         ));
         
         
