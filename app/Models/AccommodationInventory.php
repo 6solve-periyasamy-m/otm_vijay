@@ -12,5 +12,3 @@ class AccommodationInventory extends Model
     use HasFactory, ModelLogging;
 }
     $logFields = ['accommodation_id','purchase_price'];
-
-
