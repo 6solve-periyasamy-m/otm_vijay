@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class DataTypesTableSeeder extends Seeder
@@ -73,24 +73,6 @@ class DataTypesTableSeeder extends Seeder
             ),
             3 => 
             array (
-                'id' => 7,
-                'name' => 'accommodations',
-                'slug' => 'accommodations',
-                'display_name_singular' => 'Accommodation',
-                'display_name_plural' => 'Accommodations',
-                'icon' => NULL,
-                'model_name' => 'App\\Models\\Accommodation',
-                'policy_name' => NULL,
-                'controller' => NULL,
-                'description' => NULL,
-                'generate_permissions' => 1,
-                'server_side' => 0,
-                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":"title","scope":null}',
-                'created_at' => '2020-10-13 13:24:21',
-                'updated_at' => '2020-10-15 11:27:47',
-            ),
-            4 => 
-            array (
                 'id' => 9,
                 'name' => 'accommodation_inventory',
                 'slug' => 'accommodation-inventory',
@@ -107,7 +89,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:18:14',
                 'updated_at' => '2020-10-15 09:18:14',
             ),
-            5 => 
+            4 => 
             array (
                 'id' => 11,
                 'name' => 'accommodation_inventories',
@@ -123,9 +105,9 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 09:20:59',
-                'updated_at' => '2020-10-15 15:13:48',
+                'updated_at' => '2020-10-22 13:57:46',
             ),
-            6 => 
+            5 => 
             array (
                 'id' => 13,
                 'name' => 'board_types',
@@ -143,7 +125,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-10-15 10:03:54',
                 'updated_at' => '2020-10-15 10:03:54',
             ),
-            7 => 
+            6 => 
             array (
                 'id' => 14,
                 'name' => 'room_types',
@@ -160,6 +142,96 @@ class DataTypesTableSeeder extends Seeder
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
+            ),
+            7 => 
+            array (
+                'id' => 20,
+                'name' => 'regions',
+                'slug' => 'regions',
+                'display_name_singular' => 'Region',
+                'display_name_plural' => 'Regions',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Region',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-10-22 12:22:09',
+                'updated_at' => '2020-10-22 12:57:08',
+            ),
+            8 => 
+            array (
+                'id' => 21,
+                'name' => 'countries',
+                'slug' => 'countries',
+                'display_name_singular' => 'Country',
+                'display_name_plural' => 'Countries',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Country',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2020-10-22 12:25:43',
+                'updated_at' => '2020-10-22 12:25:43',
+            ),
+            9 => 
+            array (
+                'id' => 26,
+                'name' => 'location_types',
+                'slug' => 'location-types',
+                'display_name_singular' => 'Location Type',
+                'display_name_plural' => 'Location Types',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\LocationType',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2020-10-22 12:52:30',
+                'updated_at' => '2020-10-22 12:52:30',
+            ),
+            10 => 
+            array (
+                'id' => 27,
+                'name' => 'locations',
+                'slug' => 'locations',
+                'display_name_singular' => 'Location',
+                'display_name_plural' => 'Locations',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Location',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-10-22 13:00:12',
+                'updated_at' => '2020-10-22 13:18:09',
+            ),
+            11 => 
+            array (
+                'id' => 28,
+                'name' => 'accommodations',
+                'slug' => 'accommodations',
+                'display_name_singular' => 'Accommodation',
+                'display_name_plural' => 'Accommodations',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Accommodation',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-10-22 13:17:24',
+                'updated_at' => '2020-10-22 13:19:15',
             ),
         ));
         

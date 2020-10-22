@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class PermissionsTableSeeder extends Seeder
@@ -227,53 +227,13 @@ class PermissionsTableSeeder extends Seeder
             ),
             26 => 
             array (
-                'id' => 27,
-                'key' => 'browse_accommodations',
-                'table_name' => 'accommodations',
-                'created_at' => '2020-10-13 13:24:21',
-                'updated_at' => '2020-10-13 13:24:21',
-            ),
-            27 => 
-            array (
-                'id' => 28,
-                'key' => 'read_accommodations',
-                'table_name' => 'accommodations',
-                'created_at' => '2020-10-13 13:24:21',
-                'updated_at' => '2020-10-13 13:24:21',
-            ),
-            28 => 
-            array (
-                'id' => 29,
-                'key' => 'edit_accommodations',
-                'table_name' => 'accommodations',
-                'created_at' => '2020-10-13 13:24:21',
-                'updated_at' => '2020-10-13 13:24:21',
-            ),
-            29 => 
-            array (
-                'id' => 30,
-                'key' => 'add_accommodations',
-                'table_name' => 'accommodations',
-                'created_at' => '2020-10-13 13:24:21',
-                'updated_at' => '2020-10-13 13:24:21',
-            ),
-            30 => 
-            array (
-                'id' => 31,
-                'key' => 'delete_accommodations',
-                'table_name' => 'accommodations',
-                'created_at' => '2020-10-13 13:24:21',
-                'updated_at' => '2020-10-13 13:24:21',
-            ),
-            31 => 
-            array (
                 'id' => 32,
                 'key' => 'browse_accommodation_inventory',
                 'table_name' => 'accommodation_inventory',
                 'created_at' => '2020-10-15 09:18:14',
                 'updated_at' => '2020-10-15 09:18:14',
             ),
-            32 => 
+            27 => 
             array (
                 'id' => 33,
                 'key' => 'read_accommodation_inventory',
@@ -281,7 +241,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:18:14',
                 'updated_at' => '2020-10-15 09:18:14',
             ),
-            33 => 
+            28 => 
             array (
                 'id' => 34,
                 'key' => 'edit_accommodation_inventory',
@@ -289,7 +249,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:18:14',
                 'updated_at' => '2020-10-15 09:18:14',
             ),
-            34 => 
+            29 => 
             array (
                 'id' => 35,
                 'key' => 'add_accommodation_inventory',
@@ -297,7 +257,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:18:14',
                 'updated_at' => '2020-10-15 09:18:14',
             ),
-            35 => 
+            30 => 
             array (
                 'id' => 36,
                 'key' => 'delete_accommodation_inventory',
@@ -305,7 +265,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:18:14',
                 'updated_at' => '2020-10-15 09:18:14',
             ),
-            36 => 
+            31 => 
             array (
                 'id' => 37,
                 'key' => 'browse_accommodation_inventories',
@@ -313,7 +273,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:21:00',
                 'updated_at' => '2020-10-15 09:21:00',
             ),
-            37 => 
+            32 => 
             array (
                 'id' => 38,
                 'key' => 'read_accommodation_inventories',
@@ -321,7 +281,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:21:00',
                 'updated_at' => '2020-10-15 09:21:00',
             ),
-            38 => 
+            33 => 
             array (
                 'id' => 39,
                 'key' => 'edit_accommodation_inventories',
@@ -329,7 +289,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:21:00',
                 'updated_at' => '2020-10-15 09:21:00',
             ),
-            39 => 
+            34 => 
             array (
                 'id' => 40,
                 'key' => 'add_accommodation_inventories',
@@ -337,7 +297,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:21:00',
                 'updated_at' => '2020-10-15 09:21:00',
             ),
-            40 => 
+            35 => 
             array (
                 'id' => 41,
                 'key' => 'delete_accommodation_inventories',
@@ -345,7 +305,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 09:21:00',
                 'updated_at' => '2020-10-15 09:21:00',
             ),
-            41 => 
+            36 => 
             array (
                 'id' => 42,
                 'key' => 'browse_board_types',
@@ -353,7 +313,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 10:03:54',
                 'updated_at' => '2020-10-15 10:03:54',
             ),
-            42 => 
+            37 => 
             array (
                 'id' => 43,
                 'key' => 'read_board_types',
@@ -361,7 +321,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 10:03:54',
                 'updated_at' => '2020-10-15 10:03:54',
             ),
-            43 => 
+            38 => 
             array (
                 'id' => 44,
                 'key' => 'edit_board_types',
@@ -369,7 +329,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 10:03:54',
                 'updated_at' => '2020-10-15 10:03:54',
             ),
-            44 => 
+            39 => 
             array (
                 'id' => 45,
                 'key' => 'add_board_types',
@@ -377,7 +337,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 10:03:54',
                 'updated_at' => '2020-10-15 10:03:54',
             ),
-            45 => 
+            40 => 
             array (
                 'id' => 46,
                 'key' => 'delete_board_types',
@@ -385,7 +345,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 10:03:54',
                 'updated_at' => '2020-10-15 10:03:54',
             ),
-            46 => 
+            41 => 
             array (
                 'id' => 47,
                 'key' => 'browse_room_types',
@@ -393,7 +353,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
             ),
-            47 => 
+            42 => 
             array (
                 'id' => 48,
                 'key' => 'read_room_types',
@@ -401,7 +361,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
             ),
-            48 => 
+            43 => 
             array (
                 'id' => 49,
                 'key' => 'edit_room_types',
@@ -409,7 +369,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
             ),
-            49 => 
+            44 => 
             array (
                 'id' => 50,
                 'key' => 'add_room_types',
@@ -417,7 +377,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
             ),
-            50 => 
+            45 => 
             array (
                 'id' => 51,
                 'key' => 'delete_room_types',
@@ -425,7 +385,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 11:16:35',
                 'updated_at' => '2020-10-15 11:16:35',
             ),
-            51 => 
+            46 => 
             array (
                 'id' => 52,
                 'key' => 'browse_model_log',
@@ -433,13 +393,213 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-15 14:41:14',
                 'updated_at' => '2020-10-15 14:41:14',
             ),
-            52 => 
+            47 => 
             array (
                 'id' => 53,
                 'key' => 'clear_model_log',
                 'table_name' => 'model_log',
                 'created_at' => '2020-10-15 14:41:14',
                 'updated_at' => '2020-10-15 14:41:14',
+            ),
+            48 => 
+            array (
+                'id' => 59,
+                'key' => 'browse_regions',
+                'table_name' => 'regions',
+                'created_at' => '2020-10-22 12:22:09',
+                'updated_at' => '2020-10-22 12:22:09',
+            ),
+            49 => 
+            array (
+                'id' => 60,
+                'key' => 'read_regions',
+                'table_name' => 'regions',
+                'created_at' => '2020-10-22 12:22:09',
+                'updated_at' => '2020-10-22 12:22:09',
+            ),
+            50 => 
+            array (
+                'id' => 61,
+                'key' => 'edit_regions',
+                'table_name' => 'regions',
+                'created_at' => '2020-10-22 12:22:09',
+                'updated_at' => '2020-10-22 12:22:09',
+            ),
+            51 => 
+            array (
+                'id' => 62,
+                'key' => 'add_regions',
+                'table_name' => 'regions',
+                'created_at' => '2020-10-22 12:22:09',
+                'updated_at' => '2020-10-22 12:22:09',
+            ),
+            52 => 
+            array (
+                'id' => 63,
+                'key' => 'delete_regions',
+                'table_name' => 'regions',
+                'created_at' => '2020-10-22 12:22:09',
+                'updated_at' => '2020-10-22 12:22:09',
+            ),
+            53 => 
+            array (
+                'id' => 64,
+                'key' => 'browse_countries',
+                'table_name' => 'countries',
+                'created_at' => '2020-10-22 12:25:43',
+                'updated_at' => '2020-10-22 12:25:43',
+            ),
+            54 => 
+            array (
+                'id' => 65,
+                'key' => 'read_countries',
+                'table_name' => 'countries',
+                'created_at' => '2020-10-22 12:25:43',
+                'updated_at' => '2020-10-22 12:25:43',
+            ),
+            55 => 
+            array (
+                'id' => 66,
+                'key' => 'edit_countries',
+                'table_name' => 'countries',
+                'created_at' => '2020-10-22 12:25:43',
+                'updated_at' => '2020-10-22 12:25:43',
+            ),
+            56 => 
+            array (
+                'id' => 67,
+                'key' => 'add_countries',
+                'table_name' => 'countries',
+                'created_at' => '2020-10-22 12:25:43',
+                'updated_at' => '2020-10-22 12:25:43',
+            ),
+            57 => 
+            array (
+                'id' => 68,
+                'key' => 'delete_countries',
+                'table_name' => 'countries',
+                'created_at' => '2020-10-22 12:25:43',
+                'updated_at' => '2020-10-22 12:25:43',
+            ),
+            58 => 
+            array (
+                'id' => 69,
+                'key' => 'browse_location_types',
+                'table_name' => 'location_types',
+                'created_at' => '2020-10-22 12:52:30',
+                'updated_at' => '2020-10-22 12:52:30',
+            ),
+            59 => 
+            array (
+                'id' => 70,
+                'key' => 'read_location_types',
+                'table_name' => 'location_types',
+                'created_at' => '2020-10-22 12:52:30',
+                'updated_at' => '2020-10-22 12:52:30',
+            ),
+            60 => 
+            array (
+                'id' => 71,
+                'key' => 'edit_location_types',
+                'table_name' => 'location_types',
+                'created_at' => '2020-10-22 12:52:30',
+                'updated_at' => '2020-10-22 12:52:30',
+            ),
+            61 => 
+            array (
+                'id' => 72,
+                'key' => 'add_location_types',
+                'table_name' => 'location_types',
+                'created_at' => '2020-10-22 12:52:30',
+                'updated_at' => '2020-10-22 12:52:30',
+            ),
+            62 => 
+            array (
+                'id' => 73,
+                'key' => 'delete_location_types',
+                'table_name' => 'location_types',
+                'created_at' => '2020-10-22 12:52:30',
+                'updated_at' => '2020-10-22 12:52:30',
+            ),
+            63 => 
+            array (
+                'id' => 74,
+                'key' => 'browse_locations',
+                'table_name' => 'locations',
+                'created_at' => '2020-10-22 13:00:12',
+                'updated_at' => '2020-10-22 13:00:12',
+            ),
+            64 => 
+            array (
+                'id' => 75,
+                'key' => 'read_locations',
+                'table_name' => 'locations',
+                'created_at' => '2020-10-22 13:00:12',
+                'updated_at' => '2020-10-22 13:00:12',
+            ),
+            65 => 
+            array (
+                'id' => 76,
+                'key' => 'edit_locations',
+                'table_name' => 'locations',
+                'created_at' => '2020-10-22 13:00:12',
+                'updated_at' => '2020-10-22 13:00:12',
+            ),
+            66 => 
+            array (
+                'id' => 77,
+                'key' => 'add_locations',
+                'table_name' => 'locations',
+                'created_at' => '2020-10-22 13:00:12',
+                'updated_at' => '2020-10-22 13:00:12',
+            ),
+            67 => 
+            array (
+                'id' => 78,
+                'key' => 'delete_locations',
+                'table_name' => 'locations',
+                'created_at' => '2020-10-22 13:00:12',
+                'updated_at' => '2020-10-22 13:00:12',
+            ),
+            68 => 
+            array (
+                'id' => 79,
+                'key' => 'browse_accommodations',
+                'table_name' => 'accommodations',
+                'created_at' => '2020-10-22 13:17:24',
+                'updated_at' => '2020-10-22 13:17:24',
+            ),
+            69 => 
+            array (
+                'id' => 80,
+                'key' => 'read_accommodations',
+                'table_name' => 'accommodations',
+                'created_at' => '2020-10-22 13:17:24',
+                'updated_at' => '2020-10-22 13:17:24',
+            ),
+            70 => 
+            array (
+                'id' => 81,
+                'key' => 'edit_accommodations',
+                'table_name' => 'accommodations',
+                'created_at' => '2020-10-22 13:17:24',
+                'updated_at' => '2020-10-22 13:17:24',
+            ),
+            71 => 
+            array (
+                'id' => 82,
+                'key' => 'add_accommodations',
+                'table_name' => 'accommodations',
+                'created_at' => '2020-10-22 13:17:24',
+                'updated_at' => '2020-10-22 13:17:24',
+            ),
+            72 => 
+            array (
+                'id' => 83,
+                'key' => 'delete_accommodations',
+                'table_name' => 'accommodations',
+                'created_at' => '2020-10-22 13:17:24',
+                'updated_at' => '2020-10-22 13:17:24',
             ),
         ));
         

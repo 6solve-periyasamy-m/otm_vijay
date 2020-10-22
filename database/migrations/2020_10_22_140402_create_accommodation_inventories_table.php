@@ -22,8 +22,8 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->integer('board_type_id')->nullable();
             $table->binary('fit_selectable')->nullable();
             $table->integer('stock')->nullable();
-            $table->float('purchase_price', 10, 0)->nullable();
-            $table->float('sales_price', 10, 0)->nullable();
+            $table->double('purchase_price')->nullable();
+            $table->double('sales_price')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
