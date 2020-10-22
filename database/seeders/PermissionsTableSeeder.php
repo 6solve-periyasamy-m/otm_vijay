@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class PermissionsTableSeeder extends Seeder
@@ -563,43 +563,43 @@ class PermissionsTableSeeder extends Seeder
             ),
             68 => 
             array (
-                'id' => 79,
+                'id' => 84,
                 'key' => 'browse_accommodations',
                 'table_name' => 'accommodations',
-                'created_at' => '2020-10-22 13:17:24',
-                'updated_at' => '2020-10-22 13:17:24',
+                'created_at' => '2020-10-22 14:27:11',
+                'updated_at' => '2020-10-22 14:27:11',
             ),
             69 => 
             array (
-                'id' => 80,
+                'id' => 85,
                 'key' => 'read_accommodations',
                 'table_name' => 'accommodations',
-                'created_at' => '2020-10-22 13:17:24',
-                'updated_at' => '2020-10-22 13:17:24',
+                'created_at' => '2020-10-22 14:27:11',
+                'updated_at' => '2020-10-22 14:27:11',
             ),
             70 => 
             array (
-                'id' => 81,
+                'id' => 86,
                 'key' => 'edit_accommodations',
                 'table_name' => 'accommodations',
-                'created_at' => '2020-10-22 13:17:24',
-                'updated_at' => '2020-10-22 13:17:24',
+                'created_at' => '2020-10-22 14:27:11',
+                'updated_at' => '2020-10-22 14:27:11',
             ),
             71 => 
             array (
-                'id' => 82,
+                'id' => 87,
                 'key' => 'add_accommodations',
                 'table_name' => 'accommodations',
-                'created_at' => '2020-10-22 13:17:24',
-                'updated_at' => '2020-10-22 13:17:24',
+                'created_at' => '2020-10-22 14:27:11',
+                'updated_at' => '2020-10-22 14:27:11',
             ),
             72 => 
             array (
-                'id' => 83,
+                'id' => 88,
                 'key' => 'delete_accommodations',
                 'table_name' => 'accommodations',
-                'created_at' => '2020-10-22 13:17:24',
-                'updated_at' => '2020-10-22 13:17:24',
+                'created_at' => '2020-10-22 14:27:11',
+                'updated_at' => '2020-10-22 14:27:11',
             ),
         ));
         

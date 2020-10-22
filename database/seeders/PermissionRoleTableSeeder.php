@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class PermissionRoleTableSeeder extends Seeder
@@ -359,27 +359,27 @@ class PermissionRoleTableSeeder extends Seeder
             ),
             68 => 
             array (
-                'permission_id' => 79,
+                'permission_id' => 84,
                 'role_id' => 1,
             ),
             69 => 
             array (
-                'permission_id' => 80,
+                'permission_id' => 85,
                 'role_id' => 1,
             ),
             70 => 
             array (
-                'permission_id' => 81,
+                'permission_id' => 86,
                 'role_id' => 1,
             ),
             71 => 
             array (
-                'permission_id' => 82,
+                'permission_id' => 87,
                 'role_id' => 1,
             ),
             72 => 
             array (
-                'permission_id' => 83,
+                'permission_id' => 88,
                 'role_id' => 1,
             ),
         ));

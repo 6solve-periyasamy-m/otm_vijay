@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class MenuItemsTableSeeder extends Seeder
@@ -323,22 +323,6 @@ class MenuItemsTableSeeder extends Seeder
             ),
             19 => 
             array (
-                'id' => 23,
-                'menu_id' => 1,
-                'title' => 'Accommodations',
-                'url' => '',
-                'target' => '_self',
-                'icon_class' => NULL,
-                'color' => NULL,
-                'parent_id' => 25,
-                'order' => 1,
-                'created_at' => '2020-10-22 13:17:24',
-                'updated_at' => '2020-10-22 14:00:43',
-                'route' => 'voyager.accommodations.index',
-                'parameters' => NULL,
-            ),
-            20 => 
-            array (
                 'id' => 24,
                 'menu_id' => 1,
                 'title' => 'Locations',
@@ -353,7 +337,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => NULL,
                 'parameters' => '',
             ),
-            21 => 
+            20 => 
             array (
                 'id' => 25,
                 'menu_id' => 1,
@@ -368,6 +352,22 @@ class MenuItemsTableSeeder extends Seeder
                 'updated_at' => '2020-10-22 14:02:28',
                 'route' => NULL,
                 'parameters' => '',
+            ),
+            21 => 
+            array (
+                'id' => 26,
+                'menu_id' => 1,
+                'title' => 'Accommodations',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => NULL,
+                'color' => NULL,
+                'parent_id' => 25,
+                'order' => 1,
+                'created_at' => '2020-10-22 14:27:11',
+                'updated_at' => '2020-10-22 14:29:55',
+                'route' => 'voyager.accommodations.index',
+                'parameters' => NULL,
             ),
         ));
         
