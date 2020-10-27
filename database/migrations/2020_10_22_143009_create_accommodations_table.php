@@ -15,12 +15,13 @@ class CreateAccommodationsTable extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('location_id')->nullable();
+            $table->integer('region_id')->nullable();
             $table->string('title')->nullable()->index();
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->date('audit_date')->nullable();
+            $table->text('address')->nullable();
         });
     }
 

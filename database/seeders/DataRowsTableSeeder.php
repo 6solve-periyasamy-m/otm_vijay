@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class DataRowsTableSeeder extends Seeder
@@ -355,134 +355,6 @@ class DataRowsTableSeeder extends Seeder
             ),
             21 => 
             array (
-                'id' => 22,
-                'data_type_id' => 7,
-                'field' => 'id',
-                'type' => 'text',
-                'display_name' => 'Id',
-                'required' => 1,
-                'browse' => 0,
-                'read' => 0,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 0,
-                'details' => '{}',
-                'order' => 1,
-            ),
-            22 => 
-            array (
-                'id' => 23,
-                'data_type_id' => 7,
-                'field' => 'location_id',
-                'type' => 'text',
-                'display_name' => 'Location',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{}',
-                'order' => 4,
-            ),
-            23 => 
-            array (
-                'id' => 24,
-                'data_type_id' => 7,
-                'field' => 'title',
-                'type' => 'text',
-                'display_name' => 'Title',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{}',
-                'order' => 2,
-            ),
-            24 => 
-            array (
-                'id' => 25,
-                'data_type_id' => 7,
-                'field' => 'description',
-                'type' => 'text',
-                'display_name' => 'Description',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{}',
-                'order' => 3,
-            ),
-            25 => 
-            array (
-                'id' => 26,
-                'data_type_id' => 7,
-                'field' => 'created_at',
-                'type' => 'timestamp',
-                'display_name' => 'Created At',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 0,
-                'delete' => 1,
-                'details' => '{}',
-                'order' => 6,
-            ),
-            26 => 
-            array (
-                'id' => 27,
-                'data_type_id' => 7,
-                'field' => 'updated_at',
-                'type' => 'timestamp',
-                'display_name' => 'Updated At',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 0,
-                'add' => 0,
-                'delete' => 0,
-                'details' => '{}',
-                'order' => 7,
-            ),
-            27 => 
-            array (
-                'id' => 28,
-                'data_type_id' => 7,
-                'field' => 'deleted_at',
-                'type' => 'timestamp',
-                'display_name' => 'Deleted At',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{}',
-                'order' => 8,
-            ),
-            28 => 
-            array (
-                'id' => 29,
-                'data_type_id' => 7,
-                'field' => 'audit_date',
-                'type' => 'date',
-                'display_name' => 'Audit Date',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{}',
-                'order' => 5,
-            ),
-            29 => 
-            array (
                 'id' => 30,
                 'data_type_id' => 11,
                 'field' => 'id',
@@ -497,7 +369,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 3,
             ),
-            30 => 
+            22 => 
             array (
                 'id' => 31,
                 'data_type_id' => 11,
@@ -513,7 +385,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 2,
             ),
-            31 => 
+            23 => 
             array (
                 'id' => 32,
                 'data_type_id' => 11,
@@ -529,7 +401,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 6,
             ),
-            32 => 
+            24 => 
             array (
                 'id' => 33,
                 'data_type_id' => 11,
@@ -545,7 +417,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 7,
             ),
-            33 => 
+            25 => 
             array (
                 'id' => 34,
                 'data_type_id' => 11,
@@ -561,7 +433,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 8,
             ),
-            34 => 
+            26 => 
             array (
                 'id' => 35,
                 'data_type_id' => 11,
@@ -577,7 +449,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 9,
             ),
-            35 => 
+            27 => 
             array (
                 'id' => 36,
                 'data_type_id' => 11,
@@ -593,7 +465,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 10,
             ),
-            36 => 
+            28 => 
             array (
                 'id' => 37,
                 'data_type_id' => 11,
@@ -609,7 +481,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 11,
             ),
-            37 => 
+            29 => 
             array (
                 'id' => 38,
                 'data_type_id' => 11,
@@ -623,9 +495,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 12,
+                'order' => 16,
             ),
-            38 => 
+            30 => 
             array (
                 'id' => 39,
                 'data_type_id' => 11,
@@ -639,9 +511,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 13,
+                'order' => 17,
             ),
-            39 => 
+            31 => 
             array (
                 'id' => 40,
                 'data_type_id' => 11,
@@ -655,9 +527,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 14,
+                'order' => 12,
             ),
-            40 => 
+            32 => 
             array (
                 'id' => 41,
                 'data_type_id' => 11,
@@ -671,9 +543,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => '{"default":"CURRENT_TIMESTAMP"}',
-                'order' => 15,
+                'order' => 13,
             ),
-            41 => 
+            33 => 
             array (
                 'id' => 42,
                 'data_type_id' => 11,
@@ -687,9 +559,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => '{}',
-                'order' => 16,
+                'order' => 14,
             ),
-            42 => 
+            34 => 
             array (
                 'id' => 43,
                 'data_type_id' => 11,
@@ -703,25 +575,9 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 0,
                 'details' => '{}',
-                'order' => 17,
+                'order' => 15,
             ),
-            43 => 
-            array (
-                'id' => 44,
-                'data_type_id' => 7,
-                'field' => 'accommodation_hasmany_accommodation_inventory_relationship',
-                'type' => 'relationship',
-                'display_name' => 'accommodation_inventories',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\AccommodationInventory","table":"accommodation_inventories","type":"hasMany","column":"accommodation_id","key":"id","label":"room_type_id","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
-                'order' => 9,
-            ),
-            44 => 
+            35 => 
             array (
                 'id' => 45,
                 'data_type_id' => 11,
@@ -737,7 +593,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{"model":"App\\\\Models\\\\Accommodation","table":"accommodations","type":"belongsTo","column":"accommodation_id","key":"id","label":"title","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 1,
             ),
-            45 => 
+            36 => 
             array (
                 'id' => 46,
                 'data_type_id' => 13,
@@ -753,7 +609,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 1,
             ),
-            46 => 
+            37 => 
             array (
                 'id' => 47,
                 'data_type_id' => 13,
@@ -769,7 +625,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 2,
             ),
-            47 => 
+            38 => 
             array (
                 'id' => 48,
                 'data_type_id' => 13,
@@ -785,7 +641,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 3,
             ),
-            48 => 
+            39 => 
             array (
                 'id' => 49,
                 'data_type_id' => 13,
@@ -801,7 +657,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 4,
             ),
-            49 => 
+            40 => 
             array (
                 'id' => 50,
                 'data_type_id' => 13,
@@ -817,7 +673,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 5,
             ),
-            50 => 
+            41 => 
             array (
                 'id' => 51,
                 'data_type_id' => 13,
@@ -833,7 +689,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 6,
             ),
-            51 => 
+            42 => 
             array (
                 'id' => 54,
                 'data_type_id' => 11,
@@ -849,7 +705,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{"model":"App\\\\Models\\\\BoardType","table":"board_types","type":"belongsTo","column":"board_type_id","key":"id","label":"board_type_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 4,
             ),
-            52 => 
+            43 => 
             array (
                 'id' => 55,
                 'data_type_id' => 11,
@@ -865,7 +721,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{"model":"App\\\\Models\\\\RoomType","table":"room_types","type":"belongsTo","column":"room_type_id","key":"id","label":"room_type_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 5,
             ),
-            53 => 
+            44 => 
             array (
                 'id' => 56,
                 'data_type_id' => 14,
@@ -881,7 +737,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 1,
             ),
-            54 => 
+            45 => 
             array (
                 'id' => 57,
                 'data_type_id' => 14,
@@ -897,7 +753,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 2,
             ),
-            55 => 
+            46 => 
             array (
                 'id' => 58,
                 'data_type_id' => 14,
@@ -913,7 +769,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 3,
             ),
-            56 => 
+            47 => 
             array (
                 'id' => 59,
                 'data_type_id' => 14,
@@ -929,7 +785,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 4,
             ),
-            57 => 
+            48 => 
             array (
                 'id' => 60,
                 'data_type_id' => 14,
@@ -945,7 +801,7 @@ class DataRowsTableSeeder extends Seeder
                 'details' => '{}',
                 'order' => 5,
             ),
-            58 => 
+            49 => 
             array (
                 'id' => 61,
                 'data_type_id' => 14,
@@ -959,6 +815,630 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
+                'order' => 6,
+            ),
+            50 => 
+            array (
+                'id' => 70,
+                'data_type_id' => 20,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 1,
+            ),
+            51 => 
+            array (
+                'id' => 71,
+                'data_type_id' => 20,
+                'field' => 'region_name',
+                'type' => 'text',
+                'display_name' => 'Region Name',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 2,
+            ),
+            52 => 
+            array (
+                'id' => 73,
+                'data_type_id' => 20,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 4,
+            ),
+            53 => 
+            array (
+                'id' => 74,
+                'data_type_id' => 20,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 5,
+            ),
+            54 => 
+            array (
+                'id' => 75,
+                'data_type_id' => 20,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 6,
+            ),
+            55 => 
+            array (
+                'id' => 76,
+                'data_type_id' => 21,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 1,
+            ),
+            56 => 
+            array (
+                'id' => 77,
+                'data_type_id' => 21,
+                'field' => 'country_name',
+                'type' => 'text',
+                'display_name' => 'Country Name',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 2,
+            ),
+            57 => 
+            array (
+                'id' => 78,
+                'data_type_id' => 21,
+                'field' => 'country_code',
+                'type' => 'text',
+                'display_name' => 'Country Code',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 3,
+            ),
+            58 => 
+            array (
+                'id' => 79,
+                'data_type_id' => 21,
+                'field' => 'currency',
+                'type' => 'text',
+                'display_name' => 'Currency',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 4,
+            ),
+            59 => 
+            array (
+                'id' => 80,
+                'data_type_id' => 21,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 5,
+            ),
+            60 => 
+            array (
+                'id' => 81,
+                'data_type_id' => 21,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 6,
+            ),
+            61 => 
+            array (
+                'id' => 82,
+                'data_type_id' => 21,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 7,
+            ),
+            62 => 
+            array (
+                'id' => 86,
+                'data_type_id' => 20,
+                'field' => 'country_id',
+                'type' => 'text',
+                'display_name' => 'Country Id',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 3,
+            ),
+            63 => 
+            array (
+                'id' => 88,
+                'data_type_id' => 20,
+                'field' => 'region_belongsto_country_relationship',
+                'type' => 'relationship',
+                'display_name' => 'countries',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\Country","table":"countries","type":"belongsTo","column":"country_id","key":"id","label":"country_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 7,
+            ),
+            64 => 
+            array (
+                'id' => 89,
+                'data_type_id' => 26,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 1,
+            ),
+            65 => 
+            array (
+                'id' => 90,
+                'data_type_id' => 26,
+                'field' => 'location_type_name',
+                'type' => 'text',
+                'display_name' => 'Location Type Name',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 2,
+            ),
+            66 => 
+            array (
+                'id' => 91,
+                'data_type_id' => 26,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 3,
+            ),
+            67 => 
+            array (
+                'id' => 92,
+                'data_type_id' => 26,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 4,
+            ),
+            68 => 
+            array (
+                'id' => 93,
+                'data_type_id' => 26,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 5,
+            ),
+            69 => 
+            array (
+                'id' => 95,
+                'data_type_id' => 27,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 1,
+            ),
+            70 => 
+            array (
+                'id' => 96,
+                'data_type_id' => 27,
+                'field' => 'region_id',
+                'type' => 'text',
+                'display_name' => 'Region',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 3,
+            ),
+            71 => 
+            array (
+                'id' => 97,
+                'data_type_id' => 27,
+                'field' => 'location_name',
+                'type' => 'text',
+                'display_name' => 'Location Name',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 2,
+            ),
+            72 => 
+            array (
+                'id' => 98,
+                'data_type_id' => 27,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 5,
+            ),
+            73 => 
+            array (
+                'id' => 99,
+                'data_type_id' => 27,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 6,
+            ),
+            74 => 
+            array (
+                'id' => 100,
+                'data_type_id' => 27,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 7,
+            ),
+            75 => 
+            array (
+                'id' => 101,
+                'data_type_id' => 27,
+                'field' => 'location_type_id',
+                'type' => 'text',
+                'display_name' => 'Location Type',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 4,
+            ),
+            76 => 
+            array (
+                'id' => 102,
+                'data_type_id' => 27,
+                'field' => 'location_belongsto_location_type_relationship',
+                'type' => 'relationship',
+                'display_name' => 'Location Type',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\LocationType","table":"location_types","type":"belongsTo","column":"location_type_id","key":"id","label":"location_type_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 8,
+            ),
+            77 => 
+            array (
+                'id' => 103,
+                'data_type_id' => 27,
+                'field' => 'location_belongsto_region_relationship',
+                'type' => 'relationship',
+                'display_name' => 'Region Type',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"region_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 9,
+            ),
+            78 => 
+            array (
+                'id' => 106,
+                'data_type_id' => 27,
+                'field' => 'address',
+                'type' => 'text_area',
+                'display_name' => 'Address',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 8,
+            ),
+            79 => 
+            array (
+                'id' => 117,
+                'data_type_id' => 30,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 1,
+            ),
+            80 => 
+            array (
+                'id' => 118,
+                'data_type_id' => 30,
+                'field' => 'region_id',
+                'type' => 'text',
+                'display_name' => 'Region',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 5,
+            ),
+            81 => 
+            array (
+                'id' => 119,
+                'data_type_id' => 30,
+                'field' => 'title',
+                'type' => 'text',
+                'display_name' => 'Title',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 2,
+            ),
+            82 => 
+            array (
+                'id' => 120,
+                'data_type_id' => 30,
+                'field' => 'description',
+                'type' => 'text',
+                'display_name' => 'Description',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 3,
+            ),
+            83 => 
+            array (
+                'id' => 121,
+                'data_type_id' => 30,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 8,
+            ),
+            84 => 
+            array (
+                'id' => 122,
+                'data_type_id' => 30,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 9,
+            ),
+            85 => 
+            array (
+                'id' => 123,
+                'data_type_id' => 30,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 10,
+            ),
+            86 => 
+            array (
+                'id' => 124,
+                'data_type_id' => 30,
+                'field' => 'audit_date',
+                'type' => 'date',
+                'display_name' => 'Audit Date',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 7,
+            ),
+            87 => 
+            array (
+                'id' => 125,
+                'data_type_id' => 30,
+                'field' => 'address',
+                'type' => 'text_area',
+                'display_name' => 'Address',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 4,
+            ),
+            88 => 
+            array (
+                'id' => 126,
+                'data_type_id' => 30,
+                'field' => 'accommodation_belongsto_region_relationship',
+                'type' => 'relationship',
+                'display_name' => 'Region',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"region_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 6,
             ),
         ));
