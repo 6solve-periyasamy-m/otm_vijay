@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocationsTable extends Migration
+class CreateBoardTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('board_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('region_id')->nullable();
-            $table->string('location_name')->nullable();
+            $table->string('board_type_name', 255);
+            $table->integer('maximum_occupancy');
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('location_type_id')->nullable();
-            $table->text('address')->nullable();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('board_types');
     }
 }

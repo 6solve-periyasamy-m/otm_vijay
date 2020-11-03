@@ -601,6 +601,206 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-10-22 14:27:11',
                 'updated_at' => '2020-10-22 14:27:11',
             ),
+            73 => 
+            array (
+                'id' => 104,
+                'key' => 'browse_airlines',
+                'table_name' => 'airlines',
+                'created_at' => '2020-11-03 10:45:18',
+                'updated_at' => '2020-11-03 10:45:18',
+            ),
+            74 => 
+            array (
+                'id' => 105,
+                'key' => 'read_airlines',
+                'table_name' => 'airlines',
+                'created_at' => '2020-11-03 10:45:18',
+                'updated_at' => '2020-11-03 10:45:18',
+            ),
+            75 => 
+            array (
+                'id' => 106,
+                'key' => 'edit_airlines',
+                'table_name' => 'airlines',
+                'created_at' => '2020-11-03 10:45:18',
+                'updated_at' => '2020-11-03 10:45:18',
+            ),
+            76 => 
+            array (
+                'id' => 107,
+                'key' => 'add_airlines',
+                'table_name' => 'airlines',
+                'created_at' => '2020-11-03 10:45:18',
+                'updated_at' => '2020-11-03 10:45:18',
+            ),
+            77 => 
+            array (
+                'id' => 108,
+                'key' => 'delete_airlines',
+                'table_name' => 'airlines',
+                'created_at' => '2020-11-03 10:45:18',
+                'updated_at' => '2020-11-03 10:45:18',
+            ),
+            78 => 
+            array (
+                'id' => 109,
+                'key' => 'browse_airports',
+                'table_name' => 'airports',
+                'created_at' => '2020-11-03 10:47:14',
+                'updated_at' => '2020-11-03 10:47:14',
+            ),
+            79 => 
+            array (
+                'id' => 110,
+                'key' => 'read_airports',
+                'table_name' => 'airports',
+                'created_at' => '2020-11-03 10:47:14',
+                'updated_at' => '2020-11-03 10:47:14',
+            ),
+            80 => 
+            array (
+                'id' => 111,
+                'key' => 'edit_airports',
+                'table_name' => 'airports',
+                'created_at' => '2020-11-03 10:47:14',
+                'updated_at' => '2020-11-03 10:47:14',
+            ),
+            81 => 
+            array (
+                'id' => 112,
+                'key' => 'add_airports',
+                'table_name' => 'airports',
+                'created_at' => '2020-11-03 10:47:14',
+                'updated_at' => '2020-11-03 10:47:14',
+            ),
+            82 => 
+            array (
+                'id' => 113,
+                'key' => 'delete_airports',
+                'table_name' => 'airports',
+                'created_at' => '2020-11-03 10:47:14',
+                'updated_at' => '2020-11-03 10:47:14',
+            ),
+            83 => 
+            array (
+                'id' => 114,
+                'key' => 'browse_flights',
+                'table_name' => 'flights',
+                'created_at' => '2020-11-03 10:47:42',
+                'updated_at' => '2020-11-03 10:47:42',
+            ),
+            84 => 
+            array (
+                'id' => 115,
+                'key' => 'read_flights',
+                'table_name' => 'flights',
+                'created_at' => '2020-11-03 10:47:42',
+                'updated_at' => '2020-11-03 10:47:42',
+            ),
+            85 => 
+            array (
+                'id' => 116,
+                'key' => 'edit_flights',
+                'table_name' => 'flights',
+                'created_at' => '2020-11-03 10:47:42',
+                'updated_at' => '2020-11-03 10:47:42',
+            ),
+            86 => 
+            array (
+                'id' => 117,
+                'key' => 'add_flights',
+                'table_name' => 'flights',
+                'created_at' => '2020-11-03 10:47:42',
+                'updated_at' => '2020-11-03 10:47:42',
+            ),
+            87 => 
+            array (
+                'id' => 118,
+                'key' => 'delete_flights',
+                'table_name' => 'flights',
+                'created_at' => '2020-11-03 10:47:42',
+                'updated_at' => '2020-11-03 10:47:42',
+            ),
+            88 => 
+            array (
+                'id' => 119,
+                'key' => 'browse_travel_classes',
+                'table_name' => 'travel_classes',
+                'created_at' => '2020-11-03 16:06:58',
+                'updated_at' => '2020-11-03 16:06:58',
+            ),
+            89 => 
+            array (
+                'id' => 120,
+                'key' => 'read_travel_classes',
+                'table_name' => 'travel_classes',
+                'created_at' => '2020-11-03 16:06:58',
+                'updated_at' => '2020-11-03 16:06:58',
+            ),
+            90 => 
+            array (
+                'id' => 121,
+                'key' => 'edit_travel_classes',
+                'table_name' => 'travel_classes',
+                'created_at' => '2020-11-03 16:06:58',
+                'updated_at' => '2020-11-03 16:06:58',
+            ),
+            91 => 
+            array (
+                'id' => 122,
+                'key' => 'add_travel_classes',
+                'table_name' => 'travel_classes',
+                'created_at' => '2020-11-03 16:06:58',
+                'updated_at' => '2020-11-03 16:06:58',
+            ),
+            92 => 
+            array (
+                'id' => 123,
+                'key' => 'delete_travel_classes',
+                'table_name' => 'travel_classes',
+                'created_at' => '2020-11-03 16:06:58',
+                'updated_at' => '2020-11-03 16:06:58',
+            ),
+            93 => 
+            array (
+                'id' => 124,
+                'key' => 'browse_flight_inventories',
+                'table_name' => 'flight_inventories',
+                'created_at' => '2020-11-03 18:21:33',
+                'updated_at' => '2020-11-03 18:21:33',
+            ),
+            94 => 
+            array (
+                'id' => 125,
+                'key' => 'read_flight_inventories',
+                'table_name' => 'flight_inventories',
+                'created_at' => '2020-11-03 18:21:33',
+                'updated_at' => '2020-11-03 18:21:33',
+            ),
+            95 => 
+            array (
+                'id' => 126,
+                'key' => 'edit_flight_inventories',
+                'table_name' => 'flight_inventories',
+                'created_at' => '2020-11-03 18:21:33',
+                'updated_at' => '2020-11-03 18:21:33',
+            ),
+            96 => 
+            array (
+                'id' => 127,
+                'key' => 'add_flight_inventories',
+                'table_name' => 'flight_inventories',
+                'created_at' => '2020-11-03 18:21:33',
+                'updated_at' => '2020-11-03 18:21:33',
+            ),
+            97 => 
+            array (
+                'id' => 128,
+                'key' => 'delete_flight_inventories',
+                'table_name' => 'flight_inventories',
+                'created_at' => '2020-11-03 18:21:33',
+                'updated_at' => '2020-11-03 18:21:33',
+            ),
         ));
         
         

@@ -16,9 +16,9 @@ class CreateDataRowsTable extends Migration
         Schema::create('data_rows', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('data_type_id')->index('data_rows_data_type_id_foreign');
-            $table->string('field');
-            $table->string('type');
-            $table->string('display_name');
+            $table->string('field', 255);
+            $table->string('type', 255);
+            $table->string('display_name', 255);
             $table->boolean('required')->default(0);
             $table->boolean('browse')->default(1);
             $table->boolean('read')->default(1);

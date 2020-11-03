@@ -15,13 +15,13 @@ class CreateAccommodationInventoriesTable extends Migration
     {
         Schema::create('accommodation_inventories', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('accommodation_id')->nullable();
+            $table->integer('accommodation_id');
             $table->dateTime('check_in_date_time')->nullable();
             $table->dateTime('check_out_date_time')->nullable();
-            $table->integer('room_type_id')->nullable();
-            $table->integer('board_type_id')->nullable();
-            $table->binary('fit_selectable')->nullable();
-            $table->integer('stock')->nullable();
+            $table->integer('room_type_id');
+            $table->integer('board_type_id');
+            $table->binary('fit_selectable');
+            $table->integer('stock');
             $table->double('purchase_price')->nullable();
             $table->double('sales_price')->nullable();
             $table->text('notes')->nullable();
