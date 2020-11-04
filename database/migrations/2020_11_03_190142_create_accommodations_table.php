@@ -16,7 +16,7 @@ class CreateAccommodationsTable extends Migration
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('region_id');
-            $table->string('title', 255)->index();
+            $table->string('title', 255);
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
