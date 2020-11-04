@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTelescopeEntriesTagsTable extends Migration
+class CreateRegionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateTelescopeEntriesTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('telescope_entries_tags', function (Blueprint $table) {
-            $table->char('entry_uuid', 36);
-            $table->string('tag')->index();
-            $table->index(['entry_uuid', 'tag']);
+        Schema::create('regions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->text('region_name');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->integer('country_id');
         });
     }
 
@@ -27,6 +29,6 @@ class CreateTelescopeEntriesTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('telescope_entries_tags');
+        Schema::dropIfExists('regions');
     }
 }

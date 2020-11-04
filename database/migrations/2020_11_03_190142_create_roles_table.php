@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTelescopeMonitoringTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateTelescopeMonitoringTable extends Migration
      */
     public function up()
     {
-        Schema::create('telescope_monitoring', function (Blueprint $table) {
-            $table->string('tag');
+        Schema::create('roles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name', 255)->unique();
+            $table->string('display_name', 255);
+            $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ class CreateTelescopeMonitoringTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('telescope_monitoring');
+        Schema::dropIfExists('roles');
     }
 }

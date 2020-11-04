@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermissionsTable extends Migration
+class CreateRoomTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreatePermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('key')->index();
-            $table->string('table_name')->nullable();
+        Schema::create('room_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('room_type_name', 255)->nullable();
+            $table->integer('maximum_occupancy')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +29,6 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('room_types');
     }
 }
