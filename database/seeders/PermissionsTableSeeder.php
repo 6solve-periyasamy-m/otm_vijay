@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class PermissionsTableSeeder extends Seeder
@@ -800,6 +800,326 @@ class PermissionsTableSeeder extends Seeder
                 'table_name' => 'flight_inventories',
                 'created_at' => '2020-11-03 18:21:33',
                 'updated_at' => '2020-11-03 18:21:33',
+            ),
+            98 => 
+            array (
+                'id' => 129,
+                'key' => 'browse_activity_types',
+                'table_name' => 'activity_types',
+                'created_at' => '2020-11-04 14:48:19',
+                'updated_at' => '2020-11-04 14:48:19',
+            ),
+            99 => 
+            array (
+                'id' => 130,
+                'key' => 'read_activity_types',
+                'table_name' => 'activity_types',
+                'created_at' => '2020-11-04 14:48:19',
+                'updated_at' => '2020-11-04 14:48:19',
+            ),
+            100 => 
+            array (
+                'id' => 131,
+                'key' => 'edit_activity_types',
+                'table_name' => 'activity_types',
+                'created_at' => '2020-11-04 14:48:19',
+                'updated_at' => '2020-11-04 14:48:19',
+            ),
+            101 => 
+            array (
+                'id' => 132,
+                'key' => 'add_activity_types',
+                'table_name' => 'activity_types',
+                'created_at' => '2020-11-04 14:48:19',
+                'updated_at' => '2020-11-04 14:48:19',
+            ),
+            102 => 
+            array (
+                'id' => 133,
+                'key' => 'delete_activity_types',
+                'table_name' => 'activity_types',
+                'created_at' => '2020-11-04 14:48:19',
+                'updated_at' => '2020-11-04 14:48:19',
+            ),
+            103 => 
+            array (
+                'id' => 134,
+                'key' => 'browse_ticket_types',
+                'table_name' => 'ticket_types',
+                'created_at' => '2020-11-04 16:01:42',
+                'updated_at' => '2020-11-04 16:01:42',
+            ),
+            104 => 
+            array (
+                'id' => 135,
+                'key' => 'read_ticket_types',
+                'table_name' => 'ticket_types',
+                'created_at' => '2020-11-04 16:01:42',
+                'updated_at' => '2020-11-04 16:01:42',
+            ),
+            105 => 
+            array (
+                'id' => 136,
+                'key' => 'edit_ticket_types',
+                'table_name' => 'ticket_types',
+                'created_at' => '2020-11-04 16:01:42',
+                'updated_at' => '2020-11-04 16:01:42',
+            ),
+            106 => 
+            array (
+                'id' => 137,
+                'key' => 'add_ticket_types',
+                'table_name' => 'ticket_types',
+                'created_at' => '2020-11-04 16:01:42',
+                'updated_at' => '2020-11-04 16:01:42',
+            ),
+            107 => 
+            array (
+                'id' => 138,
+                'key' => 'delete_ticket_types',
+                'table_name' => 'ticket_types',
+                'created_at' => '2020-11-04 16:01:42',
+                'updated_at' => '2020-11-04 16:01:42',
+            ),
+            108 => 
+            array (
+                'id' => 139,
+                'key' => 'browse_activities',
+                'table_name' => 'activities',
+                'created_at' => '2020-11-04 16:02:46',
+                'updated_at' => '2020-11-04 16:02:46',
+            ),
+            109 => 
+            array (
+                'id' => 140,
+                'key' => 'read_activities',
+                'table_name' => 'activities',
+                'created_at' => '2020-11-04 16:02:46',
+                'updated_at' => '2020-11-04 16:02:46',
+            ),
+            110 => 
+            array (
+                'id' => 141,
+                'key' => 'edit_activities',
+                'table_name' => 'activities',
+                'created_at' => '2020-11-04 16:02:46',
+                'updated_at' => '2020-11-04 16:02:46',
+            ),
+            111 => 
+            array (
+                'id' => 142,
+                'key' => 'add_activities',
+                'table_name' => 'activities',
+                'created_at' => '2020-11-04 16:02:46',
+                'updated_at' => '2020-11-04 16:02:46',
+            ),
+            112 => 
+            array (
+                'id' => 143,
+                'key' => 'delete_activities',
+                'table_name' => 'activities',
+                'created_at' => '2020-11-04 16:02:46',
+                'updated_at' => '2020-11-04 16:02:46',
+            ),
+            113 => 
+            array (
+                'id' => 144,
+                'key' => 'browse_activity_inventories',
+                'table_name' => 'activity_inventories',
+                'created_at' => '2020-11-04 18:08:44',
+                'updated_at' => '2020-11-04 18:08:44',
+            ),
+            114 => 
+            array (
+                'id' => 145,
+                'key' => 'read_activity_inventories',
+                'table_name' => 'activity_inventories',
+                'created_at' => '2020-11-04 18:08:44',
+                'updated_at' => '2020-11-04 18:08:44',
+            ),
+            115 => 
+            array (
+                'id' => 146,
+                'key' => 'edit_activity_inventories',
+                'table_name' => 'activity_inventories',
+                'created_at' => '2020-11-04 18:08:44',
+                'updated_at' => '2020-11-04 18:08:44',
+            ),
+            116 => 
+            array (
+                'id' => 147,
+                'key' => 'add_activity_inventories',
+                'table_name' => 'activity_inventories',
+                'created_at' => '2020-11-04 18:08:44',
+                'updated_at' => '2020-11-04 18:08:44',
+            ),
+            117 => 
+            array (
+                'id' => 148,
+                'key' => 'delete_activity_inventories',
+                'table_name' => 'activity_inventories',
+                'created_at' => '2020-11-04 18:08:44',
+                'updated_at' => '2020-11-04 18:08:44',
+            ),
+            118 => 
+            array (
+                'id' => 149,
+                'key' => 'browse_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            119 => 
+            array (
+                'id' => 150,
+                'key' => 'read_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            120 => 
+            array (
+                'id' => 151,
+                'key' => 'edit_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            121 => 
+            array (
+                'id' => 152,
+                'key' => 'add_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            122 => 
+            array (
+                'id' => 153,
+                'key' => 'delete_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            123 => 
+            array (
+                'id' => 154,
+                'key' => 'browse_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            124 => 
+            array (
+                'id' => 155,
+                'key' => 'read_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            125 => 
+            array (
+                'id' => 156,
+                'key' => 'edit_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            126 => 
+            array (
+                'id' => 157,
+                'key' => 'add_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            127 => 
+            array (
+                'id' => 158,
+                'key' => 'delete_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            128 => 
+            array (
+                'id' => 159,
+                'key' => 'browse_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            129 => 
+            array (
+                'id' => 160,
+                'key' => 'read_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            130 => 
+            array (
+                'id' => 161,
+                'key' => 'edit_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            131 => 
+            array (
+                'id' => 162,
+                'key' => 'add_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            132 => 
+            array (
+                'id' => 163,
+                'key' => 'delete_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            133 => 
+            array (
+                'id' => 164,
+                'key' => 'browse_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            134 => 
+            array (
+                'id' => 165,
+                'key' => 'read_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            135 => 
+            array (
+                'id' => 166,
+                'key' => 'edit_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            136 => 
+            array (
+                'id' => 167,
+                'key' => 'add_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            137 => 
+            array (
+                'id' => 168,
+                'key' => 'delete_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
             ),
         ));
         
