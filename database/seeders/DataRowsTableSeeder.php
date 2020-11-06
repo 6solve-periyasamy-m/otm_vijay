@@ -1,5 +1,5 @@
 <?php
-
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 class DataRowsTableSeeder extends Seeder
@@ -398,7 +398,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{}',
+                'details' => '{"format":"%d-%m-%Y %H:%m"}',
                 'order' => 6,
             ),
             24 => 
@@ -414,7 +414,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{}',
+                'details' => '{"format":"%d-%m-%Y %H:%m"}',
                 'order' => 7,
             ),
             25 => 
@@ -1998,7 +1998,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{}',
+                'details' => '{"format":"%d-%m-%Y %H:%m"}',
                 'order' => 4,
             ),
             124 => 
@@ -2975,7 +2975,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"on":"Domestic","off":"Not Domestic"}',
-                'order' => 8,
+                'order' => 9,
             ),
             185 => 
             array (
@@ -2991,7 +2991,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 9,
+                'order' => 10,
             ),
             186 => 
             array (
@@ -3007,7 +3007,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 10,
+                'order' => 11,
             ),
             187 => 
             array (
@@ -3023,7 +3023,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 11,
+                'order' => 12,
             ),
             188 => 
             array (
@@ -3039,7 +3039,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 12,
+                'order' => 13,
             ),
             189 => 
             array (
@@ -3055,7 +3055,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => '{}',
-                'order' => 13,
+                'order' => 15,
             ),
             190 => 
             array (
@@ -3071,7 +3071,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 14,
+                'order' => 17,
             ),
             191 => 
             array (
@@ -3294,7 +3294,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{}',
+                'details' => '{"format":"%d-%m-%Y %H:%m"}',
                 'order' => 4,
             ),
             205 => 
@@ -3310,7 +3310,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{}',
+                'details' => '{"format":"%d-%m-%Y %H:%m"}',
                 'order' => 5,
             ),
             206 => 
@@ -3567,7 +3567,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"default":"GBP"}',
-                'order' => 12,
+                'order' => 14,
             ),
             222 => 
             array (
@@ -3584,6 +3584,38 @@ class DataRowsTableSeeder extends Seeder
                 'delete' => 1,
                 'details' => '{"default":"GBP"}',
                 'order' => 9,
+            ),
+            223 => 
+            array (
+                'id' => 298,
+                'data_type_id' => 57,
+                'field' => 'transport_belongsto_location_relationship_1',
+                'type' => 'relationship',
+                'display_name' => 'Arrival Location',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\Location","table":"locations","type":"belongsTo","column":"arrival_location_id","key":"id","label":"location_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 8,
+            ),
+            224 => 
+            array (
+                'id' => 299,
+                'data_type_id' => 57,
+                'field' => 'arrival_location_id',
+                'type' => 'text',
+                'display_name' => 'Arrival Location Id',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 16,
             ),
         ));
         
