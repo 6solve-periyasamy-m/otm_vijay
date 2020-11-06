@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DataRowsTableSeeder extends Seeder
@@ -1295,7 +1295,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 6,
+                'order' => 5,
             ),
             80 => 
             array (
@@ -1311,7 +1311,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 3,
+                'order' => 2,
             ),
             81 => 
             array (
@@ -1327,7 +1327,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 4,
+                'order' => 3,
             ),
             82 => 
             array (
@@ -1391,7 +1391,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 8,
+                'order' => 7,
             ),
             86 => 
             array (
@@ -1407,7 +1407,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 5,
+                'order' => 4,
             ),
             87 => 
             array (
@@ -1423,7 +1423,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"region_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
-                'order' => 7,
+                'order' => 6,
             ),
             88 => 
             array (
@@ -1679,7 +1679,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 4,
+                'order' => 3,
             ),
             104 => 
             array (
@@ -1727,7 +1727,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"on":"Domestic","off":"Not Domestic"}',
-                'order' => 11,
+                'order' => 10,
             ),
             107 => 
             array (
@@ -1759,7 +1759,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"on":"Archived","off":"Not Archived"}',
-                'order' => 12,
+                'order' => 11,
             ),
             109 => 
             array (
@@ -1839,7 +1839,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"model":"App\\\\Models\\\\Airline","table":"airlines","type":"belongsTo","column":"airline_id","key":"id","label":"airline_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
-                'order' => 3,
+                'order' => 2,
             ),
             114 => 
             array (
@@ -1855,7 +1855,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"model":"App\\\\Models\\\\Airport","table":"airports","type":"belongsTo","column":"departure_airport_id","key":"id","label":"airport_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
-                'order' => 6,
+                'order' => 7,
             ),
             115 => 
             array (
@@ -2527,7 +2527,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 9,
+                'order' => 10,
             ),
             157 => 
             array (
@@ -2543,7 +2543,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => '{}',
-                'order' => 10,
+                'order' => 11,
             ),
             158 => 
             array (
@@ -2575,7 +2575,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 11,
+                'order' => 12,
             ),
             160 => 
             array (
@@ -3520,6 +3520,70 @@ class DataRowsTableSeeder extends Seeder
                 'delete' => 1,
                 'details' => '{"model":"App\\\\Models\\\\Transport","table":"transports","type":"belongsTo","column":"transport_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 3,
+            ),
+            219 => 
+            array (
+                'id' => 294,
+                'data_type_id' => 30,
+                'field' => 'currency',
+                'type' => 'text',
+                'display_name' => 'Currency',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"default":"GBP"}',
+                'order' => 8,
+            ),
+            220 => 
+            array (
+                'id' => 295,
+                'data_type_id' => 45,
+                'field' => 'currency',
+                'type' => 'text',
+                'display_name' => 'Currency',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"default":"GBP"}',
+                'order' => 12,
+            ),
+            221 => 
+            array (
+                'id' => 296,
+                'data_type_id' => 57,
+                'field' => 'currency',
+                'type' => 'text',
+                'display_name' => 'Currency',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"default":"GBP"}',
+                'order' => 12,
+            ),
+            222 => 
+            array (
+                'id' => 297,
+                'data_type_id' => 55,
+                'field' => 'currency',
+                'type' => 'text',
+                'display_name' => 'Currency',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"default":"GBP"}',
+                'order' => 9,
             ),
         ));
         
