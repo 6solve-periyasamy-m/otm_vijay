@@ -24,7 +24,7 @@ class CreateTransportsTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('currency', 255)->nullable();
+            $table->string('currency', 5)->nullable();
             $table->integer('arrival_location_id')->nullable();
         });
     }

@@ -25,7 +25,7 @@ class CreateFlightsTable extends Migration
             $table->tinyInteger('is_archived')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('currency', 255)->nullable();
+            $table->string('currency', 5)->nullable();
         });
     }
 

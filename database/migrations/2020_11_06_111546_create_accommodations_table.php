@@ -23,7 +23,7 @@ class CreateAccommodationsTable extends Migration
             $table->date('audit_date')->nullable();
             $table->text('address')->nullable();
             $table->binary('archive_status')->nullable();
-            $table->string('currency', 255)->nullable();
+            $table->string('currency', 5)->nullable();
         });
     }
 
