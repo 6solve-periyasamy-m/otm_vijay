@@ -16,13 +16,14 @@ class CreateAccommodationsTable extends Migration
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('region_id');
-            $table->string('title', 160);
+            $table->string('title', 255)->index();
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->date('audit_date')->nullable();
             $table->text('address')->nullable();
             $table->binary('archive_status')->nullable();
+            $table->string('currency', 5)->nullable();
         });
     }
 
