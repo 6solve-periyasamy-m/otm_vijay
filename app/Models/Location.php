@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
 
+    public static function getLocationById($location_id)
+    {
+        return Location::where('id', $location_id)->first();
+    }
+
 }
