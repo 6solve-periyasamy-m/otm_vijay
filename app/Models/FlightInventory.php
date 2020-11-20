@@ -8,15 +8,14 @@ use Carbon\Carbon;
 
 class FlightInventory extends Model
 {
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class);
+    }
 
     public function tour()
     {
         return $this->belongsToMany(Tour::class);
-    }
-
-    public function flight()
-    {
-        return $this->belongto(Flight::class);
     }
 
     public function travelClass()
@@ -26,15 +25,14 @@ class FlightInventory extends Model
 
     public function getFlightForTourAttribute()
     {
-        $flight = Flight::where('id', $this->flight_id)->first();
-        $departure_airport = Airport::where('id', $flight->departure_airport_id)->first();
-        $departure_location = Location::where('id', $departure_airport->location_id)->first();
-        $arrival_airport = Airport::where('id', $flight->arrival_airport_id)->first();
-        $arrival_location = Location::where('id', $arrival_airport->location_id)->first();
-        $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $flight->departure_date.''.$this->departure_time)->format('d/m/Y H:i');
-        $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $flight->arrival_date.''.$this->arrival_time)->format('d/m/Y H:i');
+        $departure_airport = Airport::where('id', $this->flight->departure_airport_id)->first();
+        $arrival_airport = Airport::where('id', $this->flight->arrival_airport_id)->first();
 
-       return "{$flight->airline->airline_name}｜Departs from: {$departure_location->location_name} - Arrives at: {$arrival_location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
+        $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->departure_date.''.$this->departure_time)->format('d/m/Y H:i');
+        $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->arrival_date.''.$this->arrival_time)->format('d/m/Y H:i');
+
+
+       return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport->location->location_name} - Arrives at: {$arrival_airport->location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
     }
     public $additional_attributes = ['Flight_for_tour'];
 }
