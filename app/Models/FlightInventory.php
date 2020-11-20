@@ -23,19 +23,14 @@ class FlightInventory extends Model
         return $this->belongsTo(TravelClass::class);
     }
 
-    public static function getAirportById($airport_id)
-    {
-        return Airport::where('id', $airport_id)->first();
-    }
 
     public function getFlightForTourAttribute()
     {
-        $departure_airport = FlightInventory::getAirportById($this->flight->departure_airport_id);
-        $arrival_airport = FlightInventory::getAirportById($this->flight->arrival_airport_id);
+        $departure_airport = Airport::getAirportById($this->flight->departure_airport_id);
+        $arrival_airport = Airport::getAirportById($this->flight->arrival_airport_id);
 
         $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->departure_date.''.$this->departure_time)->format('d/m/Y H:i');
         $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->arrival_date.''.$this->arrival_time)->format('d/m/Y H:i');
-
 
        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport->location->location_name} - Arrives at: {$arrival_airport->location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
     }
