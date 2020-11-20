@@ -23,7 +23,7 @@ class CreateActivityInventoriesTable extends Migration
             $table->integer('stock')->nullable();
             $table->float('purchase_price', 10, 0)->nullable();
             $table->float('sales_price', 10, 0)->nullable();
-            $table->string('currency', 255)->nullable();
+            $table->string('currency', 10)->nullable();
             $table->integer('activity_type_id')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
