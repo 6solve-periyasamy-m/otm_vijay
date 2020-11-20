@@ -34,7 +34,6 @@ class AccommodationInventory extends Model
 
     public function getAccommodationForTourAttribute()
     {
-      // dd($this->accommodation->region);
       $check_in_date_time = Carbon::createFromFormat('Y-m-d H:i:s', $this->check_in_date_time)->format('d/m/Y H:i');
       $check_out_date_time = Carbon::createFromFormat('Y-m-d H:i:s', $this->check_out_date_time)->format('d/m/Y H:i');
 
