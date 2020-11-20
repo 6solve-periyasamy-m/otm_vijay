@@ -961,6 +961,166 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-11-04 18:08:44',
             ),
+            118 => 
+            array (
+                'id' => 149,
+                'key' => 'browse_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            119 => 
+            array (
+                'id' => 150,
+                'key' => 'read_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            120 => 
+            array (
+                'id' => 151,
+                'key' => 'edit_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            121 => 
+            array (
+                'id' => 152,
+                'key' => 'add_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            122 => 
+            array (
+                'id' => 153,
+                'key' => 'delete_transports',
+                'table_name' => 'transports',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-05 12:08:07',
+            ),
+            123 => 
+            array (
+                'id' => 154,
+                'key' => 'browse_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            124 => 
+            array (
+                'id' => 155,
+                'key' => 'read_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            125 => 
+            array (
+                'id' => 156,
+                'key' => 'edit_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            126 => 
+            array (
+                'id' => 157,
+                'key' => 'add_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            127 => 
+            array (
+                'id' => 158,
+                'key' => 'delete_transport_types',
+                'table_name' => 'transport_types',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            128 => 
+            array (
+                'id' => 159,
+                'key' => 'browse_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            129 => 
+            array (
+                'id' => 160,
+                'key' => 'read_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            130 => 
+            array (
+                'id' => 161,
+                'key' => 'edit_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            131 => 
+            array (
+                'id' => 162,
+                'key' => 'add_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            132 => 
+            array (
+                'id' => 163,
+                'key' => 'delete_operators',
+                'table_name' => 'operators',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            133 => 
+            array (
+                'id' => 164,
+                'key' => 'browse_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            134 => 
+            array (
+                'id' => 165,
+                'key' => 'read_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            135 => 
+            array (
+                'id' => 166,
+                'key' => 'edit_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            136 => 
+            array (
+                'id' => 167,
+                'key' => 'add_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
+            137 => 
+            array (
+                'id' => 168,
+                'key' => 'delete_transport_inventories',
+                'table_name' => 'transport_inventories',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-05 12:38:06',
+            ),
         ));
         
         

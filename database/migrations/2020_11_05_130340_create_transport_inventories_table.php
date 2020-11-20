@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActivityInventoriesTable extends Migration
+class CreateTransportInventoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,21 @@ class CreateActivityInventoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('activity_inventories', function (Blueprint $table) {
+        Schema::create('transport_inventories', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('activity_id')->nullable();
-            $table->dateTime('activity_start_date_time')->nullable();
-            $table->dateTime('activity_end_date_time')->nullable();
+            $table->integer('transport_id')->nullable();
+            $table->dateTime('departure_date_time')->nullable();
+            $table->dateTime('arrival_date_time')->nullable();
             $table->tinyInteger('fit_selectable')->nullable();
-            $table->integer('ticket_type_id')->nullable();
             $table->integer('stock')->nullable();
             $table->float('purchase_price', 10, 0)->nullable();
             $table->float('sales_price', 10, 0)->nullable();
+<<<<<<< HEAD:database/migrations/2020_11_04_190432_create_activity_inventories_table.php
             $table->string('currency', 10)->nullable();
             $table->integer('activity_type_id')->nullable();
+=======
+            $table->string('currency', 5)->nullable();
+>>>>>>> 2871ebf7050de9517d5b514b5d112fa7af31d41d:database/migrations/2020_11_05_130340_create_transport_inventories_table.php
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -38,6 +41,6 @@ class CreateActivityInventoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activity_inventories');
+        Schema::dropIfExists('transport_inventories');
     }
 }

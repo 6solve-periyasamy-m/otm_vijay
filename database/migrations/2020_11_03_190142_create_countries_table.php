@@ -17,7 +17,7 @@ class CreateCountriesTable extends Migration
             $table->increments('id');
             $table->text('country_name');
             $table->string('country_code', 255);
-            $table->string('currency', 255);
+            $table->string('currency', 5);
             $table->timestamps();
             $table->softDeletes();
         });

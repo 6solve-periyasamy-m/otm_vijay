@@ -99,13 +99,13 @@ class DataTypesTableSeeder extends Seeder
                 'icon' => NULL,
                 'model_name' => 'App\\Models\\AccommodationInventory',
                 'policy_name' => NULL,
-                'controller' => '',
+                'controller' => NULL,
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 09:20:59',
-                'updated_at' => '2020-10-30 12:47:37',
+                'updated_at' => '2020-11-06 16:10:30',
             ),
             5 => 
             array (
@@ -117,13 +117,13 @@ class DataTypesTableSeeder extends Seeder
                 'icon' => NULL,
                 'model_name' => 'App\\Models\\BoardType',
                 'policy_name' => NULL,
-                'controller' => '',
+                'controller' => NULL,
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 10:03:54',
-                'updated_at' => '2020-10-30 12:48:15',
+                'updated_at' => '2020-11-05 16:05:44',
             ),
             6 => 
             array (
@@ -231,7 +231,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-22 14:27:11',
-                'updated_at' => '2020-11-03 15:17:03',
+                'updated_at' => '2020-11-06 11:11:34',
             ),
             12 => 
             array (
@@ -285,7 +285,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 10:47:42',
-                'updated_at' => '2020-11-03 18:56:25',
+                'updated_at' => '2020-11-06 11:12:32',
             ),
             15 => 
             array (
@@ -321,7 +321,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 18:21:33',
-                'updated_at' => '2020-11-03 18:57:03',
+                'updated_at' => '2020-11-06 16:14:18',
             ),
             17 => 
             array (
@@ -375,7 +375,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 18:15:45',
+                'updated_at' => '2020-11-06 11:14:46',
             ),
             20 => 
             array (
@@ -393,7 +393,79 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-04 18:08:44',
-                'updated_at' => '2020-11-04 18:58:25',
+                'updated_at' => '2020-11-05 09:01:08',
+            ),
+            21 => 
+            array (
+                'id' => 57,
+                'name' => 'transports',
+                'slug' => 'transports',
+                'display_name_singular' => 'Transport',
+                'display_name_plural' => 'Transports',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Transport',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-11-05 12:08:07',
+                'updated_at' => '2020-11-06 15:55:32',
+            ),
+            22 => 
+            array (
+                'id' => 63,
+                'name' => 'transport_types',
+                'slug' => 'transport-types',
+                'display_name_singular' => 'Transport Type',
+                'display_name_plural' => 'Transport Types',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\TransportType',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2020-11-05 12:11:44',
+                'updated_at' => '2020-11-05 12:11:44',
+            ),
+            23 => 
+            array (
+                'id' => 64,
+                'name' => 'operators',
+                'slug' => 'operators',
+                'display_name_singular' => 'Operator',
+                'display_name_plural' => 'Operators',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Operator',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2020-11-05 12:36:33',
+                'updated_at' => '2020-11-05 12:36:33',
+            ),
+            24 => 
+            array (
+                'id' => 65,
+                'name' => 'transport_inventories',
+                'slug' => 'transport-inventories',
+                'display_name_singular' => 'Transport Inventory',
+                'display_name_plural' => 'Transport Inventories',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\TransportInventory',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-11-05 12:38:06',
+                'updated_at' => '2020-11-06 16:16:00',
             ),
         ));
         

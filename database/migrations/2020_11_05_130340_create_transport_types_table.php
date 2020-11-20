@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccommodationsTable extends Migration
+class CreateTransportTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,11 @@ class CreateAccommodationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accommodations', function (Blueprint $table) {
+        Schema::create('transport_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('region_id');
-            $table->string('title', 255)->index();
-            $table->text('description')->nullable();
+            $table->text('transport_type_name')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->date('audit_date')->nullable();
-            $table->text('address')->nullable();
-            $table->binary('archive_status')->nullable();
         });
     }
 
@@ -33,6 +28,6 @@ class CreateAccommodationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accommodations');
+        Schema::dropIfExists('transport_types');
     }
 }

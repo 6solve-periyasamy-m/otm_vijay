@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActivityTypesTable extends Migration
+class CreateBoardTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateActivityTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('activity_types', function (Blueprint $table) {
+        Schema::create('board_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('activity_type_title')->nullable();
+            $table->string('board_type_name', 255);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ class CreateActivityTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activity_types');
+        Schema::dropIfExists('board_types');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFlightsTable extends Migration
+class CreateTransportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,19 @@ class CreateFlightsTable extends Migration
      */
     public function up()
     {
-        Schema::create('flights', function (Blueprint $table) {
+        Schema::create('transports', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('airline_id')->nullable();
-            $table->integer('departure_airport_id')->nullable();
-            $table->date('departure_date')->nullable();
-            $table->integer('arrival_airport_id')->nullable();
-            $table->date('arrival_date')->nullable();
+            $table->integer('transport_type_id')->nullable();
+            $table->integer('operator_id')->nullable();
+            $table->integer('departure_location_id')->nullable();
             $table->tinyInteger('is_domestic')->nullable();
+            $table->text('name')->nullable();
+            $table->text('description')->nullable();
             $table->text('notes')->nullable();
-            $table->tinyInteger('is_archived')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('currency', 5)->nullable();
+            $table->integer('arrival_location_id')->nullable();
         });
     }
 
@@ -35,6 +36,6 @@ class CreateFlightsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('flights');
+        Schema::dropIfExists('transports');
     }
 }
