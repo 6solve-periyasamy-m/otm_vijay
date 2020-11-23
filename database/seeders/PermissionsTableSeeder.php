@@ -1121,6 +1121,166 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
             ),
+            138 => 
+            array (
+                'id' => 169,
+                'key' => 'browse_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            139 => 
+            array (
+                'id' => 170,
+                'key' => 'read_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            140 => 
+            array (
+                'id' => 171,
+                'key' => 'edit_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            141 => 
+            array (
+                'id' => 172,
+                'key' => 'add_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            142 => 
+            array (
+                'id' => 173,
+                'key' => 'delete_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            143 => 
+            array (
+                'id' => 174,
+                'key' => 'browse_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            144 => 
+            array (
+                'id' => 175,
+                'key' => 'read_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            145 => 
+            array (
+                'id' => 176,
+                'key' => 'edit_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            146 => 
+            array (
+                'id' => 177,
+                'key' => 'add_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            147 => 
+            array (
+                'id' => 178,
+                'key' => 'delete_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            148 => 
+            array (
+                'id' => 189,
+                'key' => 'browse_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            149 => 
+            array (
+                'id' => 190,
+                'key' => 'read_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            150 => 
+            array (
+                'id' => 191,
+                'key' => 'edit_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            151 => 
+            array (
+                'id' => 192,
+                'key' => 'add_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            152 => 
+            array (
+                'id' => 193,
+                'key' => 'delete_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            153 => 
+            array (
+                'id' => 194,
+                'key' => 'browse_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            154 => 
+            array (
+                'id' => 195,
+                'key' => 'read_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            155 => 
+            array (
+                'id' => 196,
+                'key' => 'edit_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            156 => 
+            array (
+                'id' => 197,
+                'key' => 'add_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            157 => 
+            array (
+                'id' => 198,
+                'key' => 'delete_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
         ));
         
         
