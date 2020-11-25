@@ -33,6 +33,7 @@ class CreateToursTable extends Migration
             $table->date('date_to')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->integer('payment_schedule_id')->nullable();
         });
     }
 
