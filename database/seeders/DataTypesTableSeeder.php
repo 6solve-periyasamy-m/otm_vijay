@@ -105,7 +105,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 09:20:59',
-                'updated_at' => '2020-11-06 16:10:30',
+                'updated_at' => '2020-11-20 12:36:30',
             ),
             5 => 
             array (
@@ -117,13 +117,13 @@ class DataTypesTableSeeder extends Seeder
                 'icon' => NULL,
                 'model_name' => 'App\\Models\\BoardType',
                 'policy_name' => NULL,
-                'controller' => NULL,
+                'controller' => '',
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 10:03:54',
-                'updated_at' => '2020-11-05 16:05:44',
+                'updated_at' => '2020-10-30 12:48:15',
             ),
             6 => 
             array (
@@ -231,7 +231,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-22 14:27:11',
-                'updated_at' => '2020-11-06 11:11:34',
+                'updated_at' => '2020-11-17 09:36:47',
             ),
             12 => 
             array (
@@ -285,7 +285,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 10:47:42',
-                'updated_at' => '2020-11-06 11:12:32',
+                'updated_at' => '2020-11-13 16:28:44',
             ),
             15 => 
             array (
@@ -321,7 +321,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 18:21:33',
-                'updated_at' => '2020-11-06 16:14:18',
+                'updated_at' => '2020-11-20 12:37:12',
             ),
             17 => 
             array (
@@ -375,7 +375,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-06 11:14:46',
+                'updated_at' => '2020-11-05 08:57:43',
             ),
             20 => 
             array (
@@ -411,7 +411,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-05 12:08:07',
-                'updated_at' => '2020-11-06 15:55:32',
+                'updated_at' => '2020-11-19 13:17:12',
             ),
             22 => 
             array (
@@ -465,7 +465,79 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-05 12:38:06',
-                'updated_at' => '2020-11-06 16:16:00',
+                'updated_at' => '2020-11-19 14:45:41',
+            ),
+            25 => 
+            array (
+                'id' => 67,
+                'name' => 'tours',
+                'slug' => 'tours',
+                'display_name_singular' => 'Tour',
+                'display_name_plural' => 'Tours',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Tour',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-23 14:12:40',
+            ),
+            26 => 
+            array (
+                'id' => 68,
+                'name' => 'events',
+                'slug' => 'events',
+                'display_name_singular' => 'Event',
+                'display_name_plural' => 'Events',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Event',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:16:14',
+            ),
+            27 => 
+            array (
+                'id' => 73,
+                'name' => 'payment_schedules',
+                'slug' => 'payment-schedules',
+                'display_name_singular' => 'Payment Schedule',
+                'display_name_plural' => 'Payment Schedules',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\PaymentSchedule',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:09:43',
+            ),
+            28 => 
+            array (
+                'id' => 75,
+                'name' => 'payment_installments',
+                'slug' => 'payment-installments',
+                'display_name_singular' => 'Payment Installment',
+                'display_name_plural' => 'Payment Installments',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\PaymentInstallment',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:07:37',
             ),
         ));
         
