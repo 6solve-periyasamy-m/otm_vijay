@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\OrderCustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,11 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('customers', [HomeController::class, 'showLogin'])->middleware('auth:customers')->name('login');
+
+//Route::get('login', [HomeController::class, 'showLogin'])->name('login');
+Route::get('login', [HomeController::class, 'doLogin']);
+
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 });
+
+
