@@ -11,7 +11,7 @@ class Transport extends Model
 
     public function transportInventory()
     {
-        return $this->hasMany(TransportTransportInventory::class);
+        return $this->hasMany(TransportInventory::class);
     }
 
     public function location()
