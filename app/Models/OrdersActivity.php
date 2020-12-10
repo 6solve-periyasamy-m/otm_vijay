@@ -27,7 +27,6 @@ class OrdersActivity extends Model
     {
         $orderActivities = OrdersActivity::where('order_customer_id',$orderCustomerId)->get();
 
-       // dd($orderactivity);
 
         return $orderActivities;
     }
