@@ -32,4 +32,3 @@ class ActivityInventory extends Model
 
     public $additional_attributes = ['Activity_for_tour'];
 }
-

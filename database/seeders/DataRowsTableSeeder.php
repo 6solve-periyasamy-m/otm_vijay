@@ -5555,5 +5555,10 @@ class DataRowsTableSeeder extends Seeder
                 'order' => 14,
             ),
         ));
+<<<<<<< HEAD
+=======
+        
+        
+>>>>>>> 05e3464e4096fc4767da6e209ed18ceb9ce416cc
     }
 }

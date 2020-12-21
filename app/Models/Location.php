@@ -21,5 +21,4 @@ class Location extends Model
     {
         return $this->belongsTo(Region::class);
     }
-
 }
