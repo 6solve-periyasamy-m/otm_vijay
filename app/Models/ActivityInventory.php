@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityInventory extends Model
 {
     
+    public function ticketType()
+    {
+        return $this->belongsTo(TicketType::class);
+    }
 }

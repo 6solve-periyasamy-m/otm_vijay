@@ -807,6 +807,131 @@ class PermissionRoleTableSeeder extends Seeder
                 'permission_id' => 198,
                 'role_id' => 1,
             ),
+            158 => 
+            array (
+                'permission_id' => 199,
+                'role_id' => 1,
+            ),
+            159 => 
+            array (
+                'permission_id' => 200,
+                'role_id' => 1,
+            ),
+            160 => 
+            array (
+                'permission_id' => 201,
+                'role_id' => 1,
+            ),
+            161 => 
+            array (
+                'permission_id' => 202,
+                'role_id' => 1,
+            ),
+            162 => 
+            array (
+                'permission_id' => 203,
+                'role_id' => 1,
+            ),
+            163 => 
+            array (
+                'permission_id' => 204,
+                'role_id' => 1,
+            ),
+            164 => 
+            array (
+                'permission_id' => 205,
+                'role_id' => 1,
+            ),
+            165 => 
+            array (
+                'permission_id' => 206,
+                'role_id' => 1,
+            ),
+            166 => 
+            array (
+                'permission_id' => 207,
+                'role_id' => 1,
+            ),
+            167 => 
+            array (
+                'permission_id' => 208,
+                'role_id' => 1,
+            ),
+            168 => 
+            array (
+                'permission_id' => 209,
+                'role_id' => 1,
+            ),
+            169 => 
+            array (
+                'permission_id' => 210,
+                'role_id' => 1,
+            ),
+            170 => 
+            array (
+                'permission_id' => 211,
+                'role_id' => 1,
+            ),
+            171 => 
+            array (
+                'permission_id' => 212,
+                'role_id' => 1,
+            ),
+            172 => 
+            array (
+                'permission_id' => 213,
+                'role_id' => 1,
+            ),
+            173 => 
+            array (
+                'permission_id' => 214,
+                'role_id' => 1,
+            ),
+            174 => 
+            array (
+                'permission_id' => 215,
+                'role_id' => 1,
+            ),
+            175 => 
+            array (
+                'permission_id' => 216,
+                'role_id' => 1,
+            ),
+            176 => 
+            array (
+                'permission_id' => 217,
+                'role_id' => 1,
+            ),
+            177 => 
+            array (
+                'permission_id' => 218,
+                'role_id' => 1,
+            ),
+            178 => 
+            array (
+                'permission_id' => 224,
+                'role_id' => 1,
+            ),
+            179 => 
+            array (
+                'permission_id' => 225,
+                'role_id' => 1,
+            ),
+            180 => 
+            array (
+                'permission_id' => 226,
+                'role_id' => 1,
+            ),
+            181 => 
+            array (
+                'permission_id' => 227,
+                'role_id' => 1,
+            ),
+            182 => 
+            array (
+                'permission_id' => 228,
+                'role_id' => 1,
+            ),
         ));
         
         

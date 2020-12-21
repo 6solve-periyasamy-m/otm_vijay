@@ -1281,6 +1281,206 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-23 14:03:41',
                 'updated_at' => '2020-11-23 14:03:41',
             ),
+            158 => 
+            array (
+                'id' => 199,
+                'key' => 'browse_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            159 => 
+            array (
+                'id' => 200,
+                'key' => 'read_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            160 => 
+            array (
+                'id' => 201,
+                'key' => 'edit_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            161 => 
+            array (
+                'id' => 202,
+                'key' => 'add_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            162 => 
+            array (
+                'id' => 203,
+                'key' => 'delete_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            163 => 
+            array (
+                'id' => 204,
+                'key' => 'browse_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            164 => 
+            array (
+                'id' => 205,
+                'key' => 'read_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            165 => 
+            array (
+                'id' => 206,
+                'key' => 'edit_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            166 => 
+            array (
+                'id' => 207,
+                'key' => 'add_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            167 => 
+            array (
+                'id' => 208,
+                'key' => 'delete_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            168 => 
+            array (
+                'id' => 209,
+                'key' => 'browse_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            169 => 
+            array (
+                'id' => 210,
+                'key' => 'read_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            170 => 
+            array (
+                'id' => 211,
+                'key' => 'edit_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            171 => 
+            array (
+                'id' => 212,
+                'key' => 'add_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            172 => 
+            array (
+                'id' => 213,
+                'key' => 'delete_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            173 => 
+            array (
+                'id' => 214,
+                'key' => 'browse_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            174 => 
+            array (
+                'id' => 215,
+                'key' => 'read_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            175 => 
+            array (
+                'id' => 216,
+                'key' => 'edit_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            176 => 
+            array (
+                'id' => 217,
+                'key' => 'add_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            177 => 
+            array (
+                'id' => 218,
+                'key' => 'delete_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            178 => 
+            array (
+                'id' => 224,
+                'key' => 'browse_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            179 => 
+            array (
+                'id' => 225,
+                'key' => 'read_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            180 => 
+            array (
+                'id' => 226,
+                'key' => 'edit_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            181 => 
+            array (
+                'id' => 227,
+                'key' => 'add_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            182 => 
+            array (
+                'id' => 228,
+                'key' => 'delete_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
         ));
         
         
