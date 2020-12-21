@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+<<<<<<< HEAD
 use Carbon\Carbon;
+=======
+>>>>>>> add-orders
 
 class TransportInventory extends Model
 {
     use HasFactory;
+<<<<<<< HEAD
 
     protected $casts = [
         "departure_date_time" => "datetime",
@@ -42,4 +46,6 @@ class TransportInventory extends Model
     }
 
     public $additional_attributes = ['Transport_for_tour'];
+=======
+>>>>>>> add-orders
 }

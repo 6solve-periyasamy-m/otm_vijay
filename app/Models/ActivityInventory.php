@@ -13,15 +13,19 @@ class ActivityInventory extends Model
         'activity_end_date_time' => 'datetime',
     ];
     
+<<<<<<< HEAD
     public function activity()
     {
         return $this->belongsTo(Activity::class);
     }
 
+=======
+>>>>>>> add-orders
     public function ticketType()
     {
         return $this->belongsTo(TicketType::class);
     }
+<<<<<<< HEAD
 
     public function getActivityForTourAttribute()
     {
@@ -32,3 +36,6 @@ class ActivityInventory extends Model
     }
     public $additional_attributes = ['Activity_for_tour'];
 }
+=======
+}
+>>>>>>> add-orders
