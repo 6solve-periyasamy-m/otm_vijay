@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MenuItemsTableSeeder extends Seeder
 {
@@ -14,9 +15,9 @@ class MenuItemsTableSeeder extends Seeder
     {
         
 
-        \DB::table('menu_items')->delete();
+        DB::table('menu_items')->delete();
         
-        \DB::table('menu_items')->insert(array (
+        DB::table('menu_items')->insert(array (
             0 => 
             array (
                 'id' => 1,

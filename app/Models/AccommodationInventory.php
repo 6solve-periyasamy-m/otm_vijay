@@ -11,7 +11,6 @@ use Carbon\Carbon;
 class AccommodationInventory extends Model
 {
     use HasFactory, ModelLogging;
-<<<<<<< HEAD
     
     protected $casts = [
         'check_in_date_time' => 'datetime',
@@ -25,16 +24,16 @@ class AccommodationInventory extends Model
     public function tour()
     {
         return $this->belongsToMany(Tour::class);
-=======
+    }
 
     public function region()
     {
         return $this->hasOneThrough(Region::class, Accommodation::class, 'id', 'accommodation_id', 'region_id');
     }
+
     public function OrdersAccommodation()
     {
         return $this->belongsTo(OrdersAccommodation::class);
->>>>>>> add-orders
     }
 
     public function boardType()
@@ -46,7 +45,6 @@ class AccommodationInventory extends Model
     {
         return $this->belongsTo(RoomType::class);
     }
-<<<<<<< HEAD
 
     public function getAccommodationForTourAttribute()
     {
@@ -57,9 +55,5 @@ class AccommodationInventory extends Model
     }
     public $additional_attributes = ['Accommodation_for_tour'];
 }
-$logFields = ['accommodation_id', 'purchase_price'];
-=======
-}
 
     $logFields = ['accommodation_id','purchase_price'];
->>>>>>> add-orders

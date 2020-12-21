@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Airport extends Model
 {
-<<<<<<< HEAD
     public function flightInventory()
     {
         return $this->hasManyThrough(FlightInventory::class, Flight::class);
@@ -17,13 +16,14 @@ class Airport extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
     public static function getAirportById($airport_id)
     {
         return Airport::where('id', $airport_id)->first();
-=======
+    }
+
     public function flight()
     {
         return $this->hasMany(Flight::class);
->>>>>>> add-orders
     }
 }

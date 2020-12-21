@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 
 class ActivityInventory extends Model
@@ -13,19 +12,15 @@ class ActivityInventory extends Model
         'activity_end_date_time' => 'datetime',
     ];
     
-<<<<<<< HEAD
     public function activity()
     {
         return $this->belongsTo(Activity::class);
     }
 
-=======
->>>>>>> add-orders
     public function ticketType()
     {
         return $this->belongsTo(TicketType::class);
     }
-<<<<<<< HEAD
 
     public function getActivityForTourAttribute()
     {
@@ -34,8 +29,7 @@ class ActivityInventory extends Model
 
         return "{$this->activity->title}｜Activity Start: {$activity_start_date_time}｜Activity End: {$activity_end_date_time}｜Ticket Type: {$this->ticketType->ticket_type_name}";
     }
+
     public $additional_attributes = ['Activity_for_tour'];
 }
-=======
-}
->>>>>>> add-orders
+

@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flight extends Model
 {
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> add-orders
     public function flightInventory()
     {
         return $this->hasMany(FlightInventory::class);
@@ -24,11 +19,7 @@ class Flight extends Model
 
     public function airport()
     {
-<<<<<<< HEAD
-        return $this->belongsTo(Airport::class);
-=======
         return $this->belongsTo(Airport::class, 'id', 'departure_airport_id');
->>>>>>> add-orders
     }
 
     public function airline()
