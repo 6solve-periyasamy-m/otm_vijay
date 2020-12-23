@@ -1,7 +1,6 @@
 <?php
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PermissionsTableSeeder extends Seeder
 {
@@ -15,9 +14,9 @@ class PermissionsTableSeeder extends Seeder
     {
         
 
-        DB::table('permissions')->delete();
+        \DB::table('permissions')->delete();
         
-        DB::table('permissions')->insert(array (
+        \DB::table('permissions')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -1122,7 +1121,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
             ),
-            138 =>
+            138 => 
             array (
                 'id' => 169,
                 'key' => 'browse_tours',
@@ -1482,6 +1481,48 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-27 09:18:30',
                 'updated_at' => '2020-11-27 09:18:30',
             ),
+            183 => 
+            array (
+                'id' => 229,
+                'key' => 'browse_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            184 => 
+            array (
+                'id' => 230,
+                'key' => 'read_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            185 => 
+            array (
+                'id' => 231,
+                'key' => 'edit_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            186 => 
+            array (
+                'id' => 232,
+                'key' => 'add_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            187 => 
+            array (
+                'id' => 233,
+                'key' => 'delete_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
         ));
+        
+        
     }
 }
