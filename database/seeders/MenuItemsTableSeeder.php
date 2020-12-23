@@ -1,7 +1,6 @@
 <?php
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class MenuItemsTableSeeder extends Seeder
 {
@@ -15,9 +14,9 @@ class MenuItemsTableSeeder extends Seeder
     {
         
 
-        DB::table('menu_items')->delete();
+        \DB::table('menu_items')->delete();
         
-        DB::table('menu_items')->insert(array (
+        \DB::table('menu_items')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -554,13 +553,13 @@ class MenuItemsTableSeeder extends Seeder
                 'url' => '',
                 'target' => '_self',
                 'icon_class' => NULL,
-                'color' => NULL,
+                'color' => '#000000',
                 'parent_id' => 45,
                 'order' => 1,
                 'created_at' => '2020-11-05 12:08:07',
-                'updated_at' => '2020-11-05 12:44:36',
+                'updated_at' => '2020-11-13 16:04:11',
                 'route' => 'voyager.transports.index',
-                'parameters' => NULL,
+                'parameters' => 'null',
             ),
             34 => 
             array (
@@ -668,9 +667,9 @@ class MenuItemsTableSeeder extends Seeder
                 'icon_class' => NULL,
                 'color' => NULL,
                 'parent_id' => 53,
-                'order' => 2,
+                'order' => 3,
                 'created_at' => '2020-11-23 14:02:22',
-                'updated_at' => '2020-11-23 14:13:46',
+                'updated_at' => '2020-12-08 15:34:32',
                 'route' => 'voyager.payment-schedules.index',
                 'parameters' => NULL,
             ),
@@ -684,9 +683,9 @@ class MenuItemsTableSeeder extends Seeder
                 'icon_class' => NULL,
                 'color' => NULL,
                 'parent_id' => 53,
-                'order' => 3,
+                'order' => 4,
                 'created_at' => '2020-11-23 14:03:41',
-                'updated_at' => '2020-11-23 14:14:02',
+                'updated_at' => '2020-12-08 15:34:32',
                 'route' => 'voyager.payment-installments.index',
                 'parameters' => NULL,
             ),
@@ -786,6 +785,24 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => NULL,
                 'parameters' => '',
             ),
+            48 => 
+            array (
+                'id' => 61,
+                'menu_id' => 1,
+                'title' => 'Tour Component Types',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => NULL,
+                'color' => NULL,
+                'parent_id' => 53,
+                'order' => 2,
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:34:32',
+                'route' => 'voyager.tour-component-types.index',
+                'parameters' => NULL,
+            ),
         ));
+        
+        
     }
 }

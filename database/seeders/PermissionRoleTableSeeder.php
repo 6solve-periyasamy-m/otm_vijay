@@ -1,7 +1,6 @@
 <?php
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PermissionRoleTableSeeder extends Seeder
 {
@@ -15,9 +14,9 @@ class PermissionRoleTableSeeder extends Seeder
     {
         
 
-        DB::table('permission_role')->delete();
+        \DB::table('permission_role')->delete();
         
-        DB::table('permission_role')->insert(array (
+        \DB::table('permission_role')->insert(array (
             0 => 
             array (
                 'permission_id' => 1,
@@ -708,7 +707,7 @@ class PermissionRoleTableSeeder extends Seeder
                 'permission_id' => 168,
                 'role_id' => 1,
             ),
-            138 =>
+            138 => 
             array (
                 'permission_id' => 169,
                 'role_id' => 1,
@@ -933,6 +932,33 @@ class PermissionRoleTableSeeder extends Seeder
                 'permission_id' => 228,
                 'role_id' => 1,
             ),
+            183 => 
+            array (
+                'permission_id' => 229,
+                'role_id' => 1,
+            ),
+            184 => 
+            array (
+                'permission_id' => 230,
+                'role_id' => 1,
+            ),
+            185 => 
+            array (
+                'permission_id' => 231,
+                'role_id' => 1,
+            ),
+            186 => 
+            array (
+                'permission_id' => 232,
+                'role_id' => 1,
+            ),
+            187 => 
+            array (
+                'permission_id' => 233,
+                'role_id' => 1,
+            ),
         ));
+        
+        
     }
 }
