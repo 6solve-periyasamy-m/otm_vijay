@@ -17,7 +17,7 @@ class CreateTelescopeEntriesTable extends Migration
             $table->bigIncrements('sequence');
             $table->char('uuid', 36)->unique();
             $table->char('batch_id', 36)->index();
-            $table->string('family_hash', 255)->nullable()->index();
+            $table->string('family_hash', 190)->nullable()->index();
             $table->boolean('should_display_on_index')->default(1);
             $table->string('type', 20);
             $table->longText('content');

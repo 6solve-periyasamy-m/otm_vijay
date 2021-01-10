@@ -17,7 +17,7 @@ class CreateModelLogTable extends Migration
             $table->increments('id');
             $table->string('table_name', 255);
             $table->unsignedBigInteger('row_id')->index();
-            $table->string('event', 255)->index();
+            $table->string('event', 120)->index();
             $table->text('before')->nullable();
             $table->text('after')->nullable();
             $table->string('ip_address', 255)->nullable();
