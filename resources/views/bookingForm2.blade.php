@@ -38,6 +38,8 @@
                             data-parent="#accordion">
                             <div class="card-body">
                                 <div class="row">
+                                    <p> Flight information </p>
+                                    <br>
                                     <div class="col-sm-6">
                                     <label class="form-label">Flying from
                                     <br>
@@ -61,6 +63,10 @@
                                     </select>
                                     </label>
                                     </div>
+                                </div>
+
+                                <div class="row">
+
                                 </div>
 
                             </div>
