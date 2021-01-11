@@ -1,0 +1,91 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5vw;
+}
+
+.tourheader{
+	font-size: 2vw;
+}
+
+.socials{
+	font-size: 1vw;
+	line-height: 1vw;
+	margin-bottom: 0;
+	display: visible;
+}
+
+.form-label {
+	width: 100%;
+}
+
+.bgclass{
+	background-image: url('../res/geometric-bg.jpg');
+	background-repeat: repeat;
+  	background-size: 150vh;	
+}
+
+.customdropdown{
+	margin-top: 2.5rem;
+	margin-bottom: 1.5rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #ced4da;
+    border-radius: 0;
+    outline: none;
+    color: #495057;
+ 	text-align-last: left;
+	width: 100%;
+}
+
+.centercol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+
+.customformcheck{
+	margin-left: 1rem;
+	margin-top: 2rem;
+	margin-bottom: 1.5rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #495057;
+}
+
+.customimg{
+    display: block;
+}
+
+.cardhead{
+    font-weight: bolder;
+    font-size: 1.5vw;
+}
+
+.cont{
+    float: right;
+}
+
+@media (max-width: 575px) {
+    .customimg{
+    display: none;
+	}
+
+	*{
+    font-size: 3vw;
+ }
+
+	.tourheader{
+	font-size: 6vw;
+	}
+
+	.cardhead{
+		font-size: 4vw;
+	}
+
+	.socials{
+		display: none;
+	}
+
+}
+
