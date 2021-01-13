@@ -5,7 +5,7 @@ document.getElementById("contbutt").onclick = function(){link()};
      var form = document.getElementById('extraPersonTemplate');
 
 function link() {
-     var url = "public\pages\welcome2.blade.php";
+     var url = "views/BookingForm2.blade.php";
     window.location.href = url;
 }
 

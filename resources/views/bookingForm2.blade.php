@@ -321,6 +321,7 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-sm-6">
                 </div>
@@ -330,8 +331,10 @@
                 <div class="col-sm-1">
                 </div>
             </div>
+            <br>
         </div>
 
-        <br><br>
+        <br>
 
     </div>
+</body>

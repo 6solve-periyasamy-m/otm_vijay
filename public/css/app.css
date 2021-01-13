@@ -3,6 +3,54 @@
 	font-size: 1.5vw;
 }
 
+.segment {
+	position: absolute;
+	border: 7em solid #000;
+	display: inline-block;
+	min-width: 30em;
+	min-height: 30em;
+	border-radius: 50%;
+	top: 0;
+	left: 0;
+	border-color: transparent;
+	-ms-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+  }
+  
+  .s1 {
+	border-top-color: rgb(0, 110, 255);
+	left: 2px
+  }
+  
+  .s2 {
+	border-right-color: rgb(57, 143, 255);
+	top: 2px;
+	left: 2px
+  }
+  
+  .s3 {
+	border-bottom-color: rgb(130, 183, 253);
+	top: 2px;
+  }
+  
+  .s4 {
+	border-left-color: rgb(180, 212, 255);
+  }
+
+  .stext{
+	  text-align: center;
+  }
+
+  .st1{
+	  left: 2px;
+  }
+
+  .st2{
+	top: 2px;
+	left: 2px
+  }
+
 .tourheader {
 	font-size: 2vw;
 }
@@ -22,6 +70,16 @@ pre {
 
 .form-label {
 	width: 100%;
+}
+
+.form-check-label{
+	padding-left: 2vw;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+		-webkit-appearance: none;
+		margin: 0;
 }
 
 .addon {
