@@ -11,10 +11,11 @@ class CreateEventsTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->integer('id', true)->increments();
             $table->string('event_title');
             $table->string('event_description')->nullable();
             $table->date('event_start_date');
