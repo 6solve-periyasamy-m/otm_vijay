@@ -20,10 +20,10 @@ class CreateActivityInventoriesTable extends Migration
             $table->dateTime('activity_end_date_time')->nullable();
             $table->tinyInteger('fit_selectable')->nullable();
             $table->integer('ticket_type_id')->index();
-            $table->integer('stock')->nullable();
+            $table->integer('stock');
             $table->double('purchase_price')->nullable();
             $table->double('sales_price')->nullable();
-            $table->string('currency', 255)->nullable();
+            $table->string('currency', 10)->default('GBP');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
