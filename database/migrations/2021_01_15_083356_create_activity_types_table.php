@@ -15,7 +15,7 @@ class CreateActivityTypesTable extends Migration
     {
         Schema::create('activity_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('activity_type_title')->nullable();
+            $table->text('activity_type_title')->index();
             $table->timestamps();
             $table->softDeletes();
         });

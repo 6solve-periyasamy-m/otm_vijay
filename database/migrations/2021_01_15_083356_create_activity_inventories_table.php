@@ -19,7 +19,7 @@ class CreateActivityInventoriesTable extends Migration
             $table->dateTime('activity_start_date_time')->nullable();
             $table->dateTime('activity_end_date_time')->nullable();
             $table->tinyInteger('fit_selectable')->nullable();
-            $table->integer('ticket_type_id')->nullable();
+            $table->integer('ticket_type_id')->index();
             $table->integer('stock')->nullable();
             $table->double('purchase_price')->nullable();
             $table->double('sales_price')->nullable();
