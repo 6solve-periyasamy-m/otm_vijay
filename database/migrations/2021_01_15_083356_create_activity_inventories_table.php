@@ -21,8 +21,8 @@ class CreateActivityInventoriesTable extends Migration
             $table->tinyInteger('fit_selectable')->nullable();
             $table->integer('ticket_type_id')->index();
             $table->integer('stock');
-            $table->double('purchase_price')->nullable();
-            $table->double('sales_price')->nullable();
+            $table->double('purchase_price');
+            $table->double('sales_price');
             $table->string('currency', 10)->default('GBP');
             $table->text('notes')->nullable();
             $table->timestamps();
