@@ -23,6 +23,16 @@ class FlightInventory extends Model
         return $this->belongsTo(TravelClass::class);
     }
 
+    public function getDepartureAirport()
+    {
+        return Airport::getAirportById($this->flight->departure_airport_id);
+    }
+
+    public function getArrivalAirport()
+    {
+        return Airport::getAirportById($this->flight->arrival_airport_id);
+    }
+
 
     public function getFlightForTourAttribute()
     {
@@ -36,5 +46,13 @@ class FlightInventory extends Model
 
        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport->location->location_name} - Arrives at: {$arrival_airport->location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
     }
+
+    public function getFlightDetails()
+    {
+
+        return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->location_name} - Arrives at: {$this->getArrivalAirport()->location->location_name} ";
+
+    }
+
     public $additional_attributes = ['Flight_for_tour'];
 }

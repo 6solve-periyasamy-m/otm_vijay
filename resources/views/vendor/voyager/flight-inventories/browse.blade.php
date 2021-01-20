@@ -83,6 +83,9 @@
                                                 <input type="checkbox" class="select_all">
                                             </th>
                                         @endif
+                                        <th>
+                                            Flight Details
+                                        </th>
                                         @foreach($dataType->browseRows as $row)
                                         <th>
                                             @if ($isServerSide && $row->type !== 'relationship')
@@ -113,6 +116,9 @@
                                                 <input type="checkbox" name="row_id" id="checkbox_{{ $data->getKey() }}" value="{{ $data->getKey() }}">
                                             </td>
                                         @endif
+                                        <td>
+                                            {{ ($data->getFlightDetails()) }}
+                                        </td>
                                         @foreach($dataType->browseRows as $row)
                                             @php
                                             if ($data->{$row->field.'_browse'}) {
@@ -120,7 +126,6 @@
                                             }
                                             @endphp
                                             <td>
-
                                                 @if (isset($row->details->view))
                                                     @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $data->{$row->field}, 'action' => 'browse', 'view' => 'browse', 'options' => $row->details])
                                                 @elseif($row->type == 'image')
@@ -253,9 +258,7 @@
                                             </td>
                                         @endforeach
                                         <td>
-                                            @foreach($dataTypeContent as $item)
-                                                               £{{ $item->sales_price-$item->purchase_price }}
-                                                            @endforeach
+                                                               £{{ $data->sales_price-$data->purchase_price }}
                                         </td>
                                         <td class="no-sort no-click bread-actions">
                                             @foreach($actions as $action)
