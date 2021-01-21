@@ -14,4 +14,11 @@ class Accommodation extends Model
     {
         return $this->belongsTo(Region::class);
     }
+
+    public function getInventoryRelationAttribute()
+    {
+        return "{$this->title} | {$this->region->region_name}";
+    }
+
+    public $additional_attributes = ['inventory_relation'];
 }
