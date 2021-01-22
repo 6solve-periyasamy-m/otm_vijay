@@ -499,22 +499,6 @@ class MenuItemsTableSeeder extends Seeder
             ),
             30 => 
             array (
-                'id' => 38,
-                'menu_id' => 1,
-                'title' => 'Activities',
-                'url' => '',
-                'target' => '_self',
-                'icon_class' => NULL,
-                'color' => NULL,
-                'parent_id' => 40,
-                'order' => 1,
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 18:59:41',
-                'route' => 'voyager.activities.index',
-                'parameters' => NULL,
-            ),
-            31 => 
-            array (
                 'id' => 39,
                 'menu_id' => 1,
                 'title' => 'Activity Inventories',
@@ -529,7 +513,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.activity-inventories.index',
                 'parameters' => NULL,
             ),
-            32 => 
+            31 => 
             array (
                 'id' => 40,
                 'menu_id' => 1,
@@ -545,7 +529,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => NULL,
                 'parameters' => '',
             ),
-            33 => 
+            32 => 
             array (
                 'id' => 41,
                 'menu_id' => 1,
@@ -561,7 +545,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.transports.index',
                 'parameters' => 'null',
             ),
-            34 => 
+            33 => 
             array (
                 'id' => 42,
                 'menu_id' => 1,
@@ -577,7 +561,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.transport-types.index',
                 'parameters' => NULL,
             ),
-            35 => 
+            34 => 
             array (
                 'id' => 43,
                 'menu_id' => 1,
@@ -593,7 +577,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.operators.index',
                 'parameters' => NULL,
             ),
-            36 => 
+            35 => 
             array (
                 'id' => 44,
                 'menu_id' => 1,
@@ -609,7 +593,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.transport-inventories.index',
                 'parameters' => NULL,
             ),
-            37 => 
+            36 => 
             array (
                 'id' => 45,
                 'menu_id' => 1,
@@ -625,7 +609,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => NULL,
                 'parameters' => '',
             ),
-            38 => 
+            37 => 
             array (
                 'id' => 47,
                 'menu_id' => 1,
@@ -641,7 +625,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.tours.index',
                 'parameters' => NULL,
             ),
-            39 => 
+            38 => 
             array (
                 'id' => 48,
                 'menu_id' => 1,
@@ -657,7 +641,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.events.index',
                 'parameters' => 'null',
             ),
-            40 => 
+            39 => 
             array (
                 'id' => 51,
                 'menu_id' => 1,
@@ -673,7 +657,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.payment-schedules.index',
                 'parameters' => NULL,
             ),
-            41 => 
+            40 => 
             array (
                 'id' => 52,
                 'menu_id' => 1,
@@ -689,7 +673,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.payment-installments.index',
                 'parameters' => NULL,
             ),
-            42 => 
+            41 => 
             array (
                 'id' => 53,
                 'menu_id' => 1,
@@ -705,7 +689,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => NULL,
                 'parameters' => '',
             ),
-            43 => 
+            42 => 
             array (
                 'id' => 54,
                 'menu_id' => 1,
@@ -721,7 +705,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.orders.index',
                 'parameters' => NULL,
             ),
-            44 => 
+            43 => 
             array (
                 'id' => 56,
                 'menu_id' => 1,
@@ -737,7 +721,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.order-statuses.index',
                 'parameters' => NULL,
             ),
-            45 => 
+            44 => 
             array (
                 'id' => 57,
                 'menu_id' => 1,
@@ -753,7 +737,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.customers.index',
                 'parameters' => 'null',
             ),
-            46 => 
+            45 => 
             array (
                 'id' => 59,
                 'menu_id' => 1,
@@ -769,7 +753,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.invoices.index',
                 'parameters' => NULL,
             ),
-            47 => 
+            46 => 
             array (
                 'id' => 60,
                 'menu_id' => 1,
@@ -785,7 +769,7 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => NULL,
                 'parameters' => '',
             ),
-            48 => 
+            47 => 
             array (
                 'id' => 61,
                 'menu_id' => 1,
@@ -799,6 +783,22 @@ class MenuItemsTableSeeder extends Seeder
                 'created_at' => '2020-12-08 15:33:09',
                 'updated_at' => '2020-12-08 15:34:32',
                 'route' => 'voyager.tour-component-types.index',
+                'parameters' => NULL,
+            ),
+            48 => 
+            array (
+                'id' => 62,
+                'menu_id' => 1,
+                'title' => 'Activities',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => NULL,
+                'color' => NULL,
+                'parent_id' => 40,
+                'order' => 1,
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:13:19',
+                'route' => 'voyager.activities.index',
                 'parameters' => NULL,
             ),
         ));
