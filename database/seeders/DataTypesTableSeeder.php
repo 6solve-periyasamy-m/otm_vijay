@@ -105,7 +105,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 09:20:59',
-                'updated_at' => '2020-12-21 13:28:47',
+                'updated_at' => '2021-01-21 01:40:09',
             ),
             5 => 
             array (
@@ -117,13 +117,13 @@ class DataTypesTableSeeder extends Seeder
                 'icon' => NULL,
                 'model_name' => 'App\\Models\\BoardType',
                 'policy_name' => NULL,
-                'controller' => '',
+                'controller' => NULL,
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 10:03:54',
-                'updated_at' => '2020-10-30 12:48:15',
+                'updated_at' => '2021-01-21 00:54:34',
             ),
             6 => 
             array (
@@ -361,24 +361,6 @@ class DataTypesTableSeeder extends Seeder
             ),
             19 => 
             array (
-                'id' => 55,
-                'name' => 'activities',
-                'slug' => 'activities',
-                'display_name_singular' => 'Activity',
-                'display_name_plural' => 'Activities',
-                'icon' => NULL,
-                'model_name' => 'App\\Models\\Activity',
-                'policy_name' => NULL,
-                'controller' => NULL,
-                'description' => NULL,
-                'generate_permissions' => 1,
-                'server_side' => 1,
-                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-05 08:57:43',
-            ),
-            20 => 
-            array (
                 'id' => 56,
                 'name' => 'activity_inventories',
                 'slug' => 'activity-inventories',
@@ -395,7 +377,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-12-21 13:37:33',
             ),
-            21 => 
+            20 => 
             array (
                 'id' => 57,
                 'name' => 'transports',
@@ -413,7 +395,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:08:07',
                 'updated_at' => '2020-11-19 13:17:12',
             ),
-            22 => 
+            21 => 
             array (
                 'id' => 63,
                 'name' => 'transport_types',
@@ -431,7 +413,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:11:44',
                 'updated_at' => '2020-11-05 12:11:44',
             ),
-            23 => 
+            22 => 
             array (
                 'id' => 64,
                 'name' => 'operators',
@@ -449,7 +431,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:36:33',
                 'updated_at' => '2020-11-05 12:36:33',
             ),
-            24 => 
+            23 => 
             array (
                 'id' => 65,
                 'name' => 'transport_inventories',
@@ -465,9 +447,9 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-05 12:38:06',
-                'updated_at' => '2020-12-21 13:32:20',
+                'updated_at' => '2021-01-21 14:43:29',
             ),
-            25 => 
+            24 => 
             array (
                 'id' => 67,
                 'name' => 'tours',
@@ -485,7 +467,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-16 08:43:02',
                 'updated_at' => '2020-12-21 13:41:15',
             ),
-            26 => 
+            25 => 
             array (
                 'id' => 68,
                 'name' => 'events',
@@ -503,7 +485,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-20 17:12:37',
                 'updated_at' => '2020-11-20 17:16:14',
             ),
-            27 => 
+            26 => 
             array (
                 'id' => 73,
                 'name' => 'payment_schedules',
@@ -521,7 +503,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-23 14:02:22',
                 'updated_at' => '2020-11-23 14:09:43',
             ),
-            28 => 
+            27 => 
             array (
                 'id' => 75,
                 'name' => 'payment_installments',
@@ -539,7 +521,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-23 14:03:41',
                 'updated_at' => '2020-11-23 14:07:37',
             ),
-            29 => 
+            28 => 
             array (
                 'id' => 76,
                 'name' => 'orders',
@@ -557,7 +539,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-25 15:38:18',
                 'updated_at' => '2020-11-26 08:49:36',
             ),
-            30 => 
+            29 => 
             array (
                 'id' => 78,
                 'name' => 'orders_customers',
@@ -575,7 +557,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-25 16:08:05',
                 'updated_at' => '2020-11-25 16:16:16',
             ),
-            31 => 
+            30 => 
             array (
                 'id' => 80,
                 'name' => 'order_statuses',
@@ -593,7 +575,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-26 08:51:04',
                 'updated_at' => '2020-11-26 08:51:04',
             ),
-            32 => 
+            31 => 
             array (
                 'id' => 82,
                 'name' => 'customers',
@@ -611,7 +593,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-26 09:18:56',
                 'updated_at' => '2020-11-27 08:56:16',
             ),
-            33 => 
+            32 => 
             array (
                 'id' => 84,
                 'name' => 'invoices',
@@ -629,7 +611,7 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2020-11-27 09:18:30',
                 'updated_at' => '2020-11-27 09:18:30',
             ),
-            34 => 
+            33 => 
             array (
                 'id' => 85,
                 'name' => 'tour_component_types',
@@ -646,6 +628,24 @@ class DataTypesTableSeeder extends Seeder
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
                 'created_at' => '2020-12-08 15:33:09',
                 'updated_at' => '2020-12-08 15:33:09',
+            ),
+            34 => 
+            array (
+                'id' => 87,
+                'name' => 'activities',
+                'slug' => 'activities',
+                'display_name_singular' => 'Activity',
+                'display_name_plural' => 'Activities',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Activity',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 1,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:14:05',
             ),
         ));
         

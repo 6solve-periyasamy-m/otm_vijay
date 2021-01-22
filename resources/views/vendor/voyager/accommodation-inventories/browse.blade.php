@@ -253,9 +253,7 @@
                                             </td>
                                         @endforeach
                                         <td>
-                                            @foreach($dataTypeContent as $item)
-                                                               £{{ $item->sales_price-$item->purchase_price }}
-                                                            @endforeach
+                                            £{{ $data->sales_price-$data->purchase_price }}
                                         </td>
                                         <td class="no-sort no-click bread-actions">
                                             @foreach($actions as $action)
