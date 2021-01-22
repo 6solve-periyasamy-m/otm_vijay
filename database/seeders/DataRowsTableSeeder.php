@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DataRowsTableSeeder extends Seeder
 {
@@ -14,9 +15,9 @@ class DataRowsTableSeeder extends Seeder
     {
         
 
-        \DB::table('data_rows')->delete();
+        DB::table('data_rows')->delete();
         
-        \DB::table('data_rows')->insert(array (
+        DB::table('data_rows')->insert(array (
             0 => 
             array (
                 'id' => 1,
