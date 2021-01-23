@@ -1,0 +1,191 @@
+* {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.5vw;
+}
+
+.segment {
+	position: absolute;
+	border: 7em solid #000;
+	display: inline-block;
+	min-width: 30em;
+	min-height: 30em;
+	border-radius: 50%;
+	top: 0;
+	left: 0;
+	border-color: transparent;
+	-ms-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+  }
+  
+  .s1 {
+	border-top-color: rgb(0, 110, 255);
+	left: 2px
+  }
+  
+  .s2 {
+	border-right-color: rgb(57, 143, 255);
+	top: 2px;
+	left: 2px
+  }
+  
+  .s3 {
+	border-bottom-color: rgb(130, 183, 253);
+	top: 2px;
+  }
+  
+  .s4 {
+	border-left-color: rgb(180, 212, 255);
+  }
+
+  .stext{
+	  text-align: center;
+  }
+
+  .st1{
+	  left: 2px;
+  }
+
+  .st2{
+	top: 2px;
+	left: 2px
+  }
+
+.tourheader {
+	font-size: 2vw;
+}
+
+pre {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 100%;
+	line-height: 225%;
+}
+
+.socials {
+	font-size: 1vw;
+	line-height: 1vw;
+	margin-bottom: 0;
+	display: visible;
+}
+
+.form-label {
+	width: 100%;
+}
+
+.form-check-label{
+	padding-left: 2vw;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+		-webkit-appearance: none;
+		margin: 0;
+}
+
+.addon {
+	display: inline-block;
+}
+
+.addontag {
+	width: 90%;
+}
+
+.bgclass {
+	background-image: url('../res/geometric-bg.jpg');
+	background-repeat: repeat;
+	background-size: 150vh;
+}
+
+.formright {
+	text-align: right;
+	color: grey;
+}
+
+.tickboxpad {
+	padding-right: 5vw;
+}
+
+.customdropdown {
+	margin-top: 2.5rem;
+	margin-bottom: 1.5rem;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #ced4da;
+	border-radius: 0;
+	outline: none;
+	color: #495057;
+	text-align-last: left;
+	width: 100%;
+}
+
+.centercol {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.customformcheck {
+	margin-left: 1rem;
+	margin-top: 2rem;
+	margin-bottom: 1.5rem;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	color: #495057;
+}
+
+.form-check-input {
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-top: 0vh;
+}
+
+.customimg {
+	display: block;
+}
+
+.solid {
+	clear: both;
+}
+
+hr {
+	border: 0;
+	clear: both;
+	display: block;
+	background-color: grey;
+	width: 90%;
+	height: 1px;
+}
+
+.cardhead {
+	font-weight: bolder;
+	font-size: 1.5vw;
+}
+
+.cont {
+	float: right;
+}
+
+@media (max-width: 575px) {
+	.customimg {
+		display: none;
+	}
+
+	* {
+		font-size: 3vw;
+	}
+
+	.tourheader {
+		font-size: 6vw;
+	}
+
+	.cardhead {
+		font-size: 4vw;
+	}
+
+	.socials {
+		display: none;
+	}
+
+
+}

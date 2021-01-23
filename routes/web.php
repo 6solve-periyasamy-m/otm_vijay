@@ -16,6 +16,18 @@ use App\Http\Controllers\OrderCustomerController;
 |
 */
 
+Route::get('/booking-form', function () {
+    return view('bookingForm');
+});
+
+Route::get('/booking-form2', function () {
+    return view('bookingForm2');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
+
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
