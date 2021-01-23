@@ -1,3 +1,5 @@
+/* app.scss */
+
 * {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.5vw;
@@ -91,7 +93,7 @@ input[type=number]::-webkit-outer-spin-button{
 }
 
 .bgclass {
-	background-image: url('../res/geometric-bg.jpg');
+	background-image: url('/assets/images/geometric-bg.jpg');
 	background-repeat: repeat;
 	background-size: 150vh;
 }
