@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderCustomerController;
 
+use App\Http\Controllers\BookingController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,4 +23,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 });
 
+Route::get('booking', [BookingController::class, 'bookingForm']);
+Route::post('booking', [BookingController::class, 'bookingForm']);
 
