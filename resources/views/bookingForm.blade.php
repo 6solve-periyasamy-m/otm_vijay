@@ -1,26 +1,21 @@
 @extends ('layout.main')
-
-<body class="antialiased">
-    <div class="container-fluid">
+@section('content')
+    <div class="container-fluid" id="app">
+ <example-component></example-component>
         <div class="row">
             <div class="col-sm-6">
                 <div class="py-2">
-                    <img class="img-fluid" src="{{ asset('res/octlogo.png') }}" width="472" height="472">
+                    <img class="img-fluid" src="{{ asset('images/octlogo.png') }}" width="472" height="472" />
                 </div>
             </div>
             <div class="col-sm-6 centercol">
                 <div class="text-center">
-                    <h1 class="tourheader">The OTM Decemeber 2020 Demo tour</h1>
-                    <p class="socials">@OctopusTravelMatrix</p>
-                    <p class="socials">@OctopusComputers</p>
-                    <p class="socials">@RyanCatlin</p>
-                    <p class="socials">@JosephOgulskij</p>
+                    <h1 class="tourheader">Octopus Travel Matrix Booking Form</h1>
                 </div>
             </div>
         </div>
 
         <div class="bgclass" id="bgclass">
-            <br>
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div id="accordion" class="col-sm-10">
@@ -34,7 +29,9 @@
                             </h5>
                         </div>
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" 
+                            class="collapse show"
+                            aria-labelledby="headingOne"
                             data-parent="#accordion">
                             <div class="card-body">
                                 <form action="/default.php" method="get">
@@ -268,7 +265,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-2 customimg">
-                                            <img class="img-fluid" src="{{ asset('res/iconban1.png') }}" width="472"
+                                            <img class="img-fluid" src="{{ asset('images/iconban1.png') }}" width="472"
                                                 height="472">
                                         </div>
                                         <div class="col-sm-8">
@@ -296,7 +293,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-2 customimg">
-                                            <img class="img-fluid" src="{{ asset('res/iconban2.png') }}" width="472"
+                                            <img class="img-fluid" src="{{ asset('images/iconban2.png') }}" width="472"
                                                 height="472">
                                         </div>
                                     </div>
@@ -320,7 +317,6 @@
                 <p></p>
             </div>
         </div>
-        <br><br>
 
     </div>
-    </div>
+@endsection

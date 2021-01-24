@@ -1,64 +1,22 @@
-document.getElementById("addrow").onclick = function(){cloner()};
-document.getElementById("contbutt").onclick = function(){link()};
+// import $ from 'jquery';
+// import 'jquery-ui/themes/base/core.css';
+// import 'jquery-ui/themes/base/theme.css';
+// import 'jquery-ui/themes/base/selectable.css';
+// import 'jquery-ui/ui/core';
+// import 'jquery-ui/ui/widgets/selectable';
+require('./bootstrap');
+require('./script');
+window.axios = require('axios');
+window.Vue = require('vue');
+window.lodash = require('lodash');
 
-     var counter = 0; //Set counter
-     var form = document.getElementById('extraPersonTemplate');
+window.axios.defaults.headers.common = {
+     'X-Requested-With': 'XMLHttpRequest',
+     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+     'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
+ };
 
-function link() {
-     var url = "views/BookingForm2.blade.php";
-    window.location.href = url;
-}
-
-function removebtn(tempcount, eventArgs){
-     var tempform = "extraPersonTemplate" + (tempcount);
-     var tempbutt = "b" + (tempcount);
-
-     console.log("You tried to remove me" + tempcount);
-     console.log("You tried to remove me" + tempform);
-     console.log("You tried to remove me" + tempbutt);
-
-     if (tempcount>0){
-     document.getElementById(tempform).remove();
-     document.getElementById(tempbutt).remove();
-     }
-     else{
-          document.getElementById("extraPersonTemplate").remove();
-          document.getElementById(tempbutt).remove();   
-     }
-
-}
-
-function cloner(sender, eventArgs) {
-     console.log("working button");
-     var btn = document.createElement("BUTTON");
-     var t = document.createTextNode("Remove Traveller");
-     var tempcounter = counter;
-     btn.appendChild(t);
-     btn.setAttribute("class","btn btn-danger");
-     btn.setAttribute("id","b"+counter);
-     var formclone = form,
-     clone = formclone.cloneNode(true);
-     counter++;
-     clone.id = "extraPersonTemplate" + counter;
-     btn.onclick = function() { removebtn(tempcounter) };
-
-     
-     if (counter > 1){
-     	console.log(counter);
-     	var i = "extraPersonTemplate"+(counter-1);
-     	console.log(i); 
-          document.getElementById(i).after(clone);
-          document.getElementById(i).after(btn);
-              	
-     }
-
-     if (counter == 1){
-          document.getElementById("extraPersonTemplate").after(clone);
-          document.getElementById("extraPersonTemplate").after(btn);
-     }
-     
-
-
-}
-
-$("#datepicker").datepicker();
+ Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+ const app = new Vue({
+     el: '#app'
+});
