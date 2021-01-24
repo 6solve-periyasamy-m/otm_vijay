@@ -20,6 +20,7 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .copy('resources/assets/images', 'public/images')
     .copy('resources/assets/css', 'public/css')
     .sass('resources/assets/scss/app.scss', 'css')
+    .sass('resources/assets/scss/dash.scss', 'css')
     .js('resources/assets/js/app.js', 'js')
     .setPublicPath('public');
 

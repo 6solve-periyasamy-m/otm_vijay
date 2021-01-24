@@ -85,17 +85,16 @@ html, body {
 	text-align: center;
 	margin: 33% 0;
 	color: white;
-
 }
 
 .cutout {
 	width:30%;
 	height:30%;
-	background-image:url('../res/oct.png');
+	background-image:url(/assets/images//oct.png);
 	background-position: center;
-	position:absolute;
-	top:35%;
-	left:35%;
-	border-radius:50%;
-	pointer-events:none;
-	} 
+	position: absolute;
+	top: 35%;
+	left: 35%;
+	border-radius: 50%;
+	pointer-events: none;
+}
