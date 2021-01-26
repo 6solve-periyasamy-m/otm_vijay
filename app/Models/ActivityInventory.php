@@ -8,11 +8,12 @@ use Carbon\Carbon;
 
 class ActivityInventory extends Model
 {
+
+
     protected $casts = [
         'activity_start_date_time' => 'datetime',
         'activity_end_date_time' => 'datetime',
     ];
-    
     public function activity()
     {
         return $this->belongsTo(Activity::class);
@@ -21,6 +22,23 @@ class ActivityInventory extends Model
     public function ticketType()
     {
         return $this->belongsTo(TicketType::class);
+    }
+
+    public function component_type()
+    {
+        return $this->hasOneThrough(TourComponentType::class, ActivityInventoryTour::class, 'activity_inventory_id', 'id', 'id');
+    }
+
+    public function tour()
+    {
+        return $this->belongsToMany(Tour::class, 'activity_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+    }
+
+    public static function findByTour($tour_id)
+    {
+        return ActivityInventory::with(['tour' => function ($q) use ($tour_id) {
+            $q->where('tour_id', $tour_id);
+        }])->get();
     }
 
     public function getActivityForTourAttribute()

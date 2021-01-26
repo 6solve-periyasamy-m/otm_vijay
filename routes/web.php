@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TourController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/booking-form', function () {
+    return view('bookingForm');
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+    Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
+    Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
 });

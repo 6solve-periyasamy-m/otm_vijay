@@ -13,16 +13,37 @@ class FlightInventory extends Model
         return $this->belongsTo(Flight::class);
     }
 
-    public function tour()
-    {
-        return $this->belongsToMany(Tour::class);
-    }
-
     public function travelClass()
     {
         return $this->belongsTo(TravelClass::class);
     }
 
+    public function component_type()
+    {
+        return $this->hasOneThrough(TourComponentType::class, FlightInventoryTour::class, 'flight_inventory_id', 'id', 'id');
+    }
+
+    public function tour()
+    {
+        return $this->belongsToMany(Tour::class, 'flight_inventory_tour')->withPivot('sales_price');
+    }
+
+    public function departureAirport()
+    {
+        return $this->hasOneThrough(Airport::class, Flight::class, 'departure_airport_id', 'id');
+    }
+
+    public function arrivalAirport()
+    {
+        return $this->hasOneThrough(Airport::class, Flight::class, 'arrival_airport_id', 'id');
+    }
+
+    public static function findByTour($tour_id)
+    {
+        return FlightInventory::with(['tour' => function ($q) use ($tour_id) {
+            $q->where('tour_id', $tour_id);
+        }])->get();
+    }
 
     public function getFlightForTourAttribute()
     {

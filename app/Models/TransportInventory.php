@@ -22,12 +22,34 @@ class TransportInventory extends Model
 
     public function tour()
     {
-        return $this->belongsToMany(Tour::class);
+        return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
+    }
+
+    public function departureLocation()
+    {
+        return $this->hasOneThrough(Location::class, Transport::class, 'departure_location_id', 'id');
+    }
+
+    public function arrivalLocation()
+    {
+        return $this->hasOneThrough(Location::class, Transport::class, 'arrival_location_id', 'id');
+    }
+
+    public function component_type()
+    {
+        return $this->hasOneThrough(TourComponentType::class, TransportInventoryTour::class, 'transport_inventory_id', 'id', 'id');
     }
 
     public function travelClass()
     {
         return $this->belongsTo(TravelClass::class);
+    }
+
+    public static function findByTour($tour_id)
+    {
+        return TransportInventory::with(['tour' => function ($q) use ($tour_id) {
+            $q->where('tour_id', $tour_id);
+        }])->with('departureLocation', 'arrivalLocation')->get();
     }
 
     public function getTransportForTourAttribute()
