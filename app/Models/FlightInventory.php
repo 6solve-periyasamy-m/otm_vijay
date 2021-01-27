@@ -39,12 +39,10 @@ class FlightInventory extends Model
         $departure_airport = Airport::getAirportById($this->flight->departure_airport_id);
         $arrival_airport = Airport::getAirportById($this->flight->arrival_airport_id);
 
-        // Because the date and time are in seperate variables, I can't have these Carbon objects be dynamically created by the model
-        // the same way as I've done the others. This one will have to stay this way.
-        $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->departure_date.''.$this->departure_time)->format('d/m/Y H:i');
-        $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->arrival_date.''.$this->arrival_time)->format('d/m/Y H:i');
+        $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->departure_date.' '.$this->flight->departure_time)->format('d/m/Y H:i');
+        $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->arrival_date.' '.$this->flight->arrival_time)->format('d/m/Y H:i');
 
-       return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport->location->location_name} - Arrives at: {$arrival_airport->location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
+        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport->location->location_name} - Arrives at: {$arrival_airport->location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
     }
 
     public function getFlightDetails()
