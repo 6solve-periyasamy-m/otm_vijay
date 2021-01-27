@@ -41,6 +41,8 @@ class FlightInventory extends Model
 
         // Because the date and time are in seperate variables, I can't have these Carbon objects be dynamically created by the model
         // the same way as I've done the others. This one will have to stay this way.
+	// DEBUG var_dump(Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'))->format('d/m/Y H:i'));dd();
+	//
 	$departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->departure_date.' '.$this->flight->departure_time)->format('d/m/Y H:i');
  	$arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->arrival_date.' '.$this->flight->arrival_time)->format('d/m/Y H:i');
 
