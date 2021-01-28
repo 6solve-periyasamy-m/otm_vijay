@@ -39,12 +39,12 @@ class AccommodationInventory extends Model
 
     public function boardType()
     {
-        return $this->hasOne(BoardType::class);
+        return $this->belongsTo(BoardType::class);
     }
 
     public function roomType()
     {
-        return $this->hasOne(RoomType::class);
+        return $this->belongsTo(RoomType::class);
     }
 
     // public function component_type()
