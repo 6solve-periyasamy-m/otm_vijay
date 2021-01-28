@@ -29,11 +29,10 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
     Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 
 });
-
-
