@@ -883,53 +883,13 @@ class PermissionsTableSeeder extends Seeder
             ),
             108 => 
             array (
-                'id' => 139,
-                'key' => 'browse_activities',
-                'table_name' => 'activities',
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 16:02:46',
-            ),
-            109 => 
-            array (
-                'id' => 140,
-                'key' => 'read_activities',
-                'table_name' => 'activities',
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 16:02:46',
-            ),
-            110 => 
-            array (
-                'id' => 141,
-                'key' => 'edit_activities',
-                'table_name' => 'activities',
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 16:02:46',
-            ),
-            111 => 
-            array (
-                'id' => 142,
-                'key' => 'add_activities',
-                'table_name' => 'activities',
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 16:02:46',
-            ),
-            112 => 
-            array (
-                'id' => 143,
-                'key' => 'delete_activities',
-                'table_name' => 'activities',
-                'created_at' => '2020-11-04 16:02:46',
-                'updated_at' => '2020-11-04 16:02:46',
-            ),
-            113 => 
-            array (
                 'id' => 144,
                 'key' => 'browse_activity_inventories',
                 'table_name' => 'activity_inventories',
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-11-04 18:08:44',
             ),
-            114 => 
+            109 => 
             array (
                 'id' => 145,
                 'key' => 'read_activity_inventories',
@@ -937,7 +897,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-11-04 18:08:44',
             ),
-            115 => 
+            110 => 
             array (
                 'id' => 146,
                 'key' => 'edit_activity_inventories',
@@ -945,7 +905,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-11-04 18:08:44',
             ),
-            116 => 
+            111 => 
             array (
                 'id' => 147,
                 'key' => 'add_activity_inventories',
@@ -953,7 +913,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-11-04 18:08:44',
             ),
-            117 => 
+            112 => 
             array (
                 'id' => 148,
                 'key' => 'delete_activity_inventories',
@@ -961,7 +921,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-04 18:08:44',
                 'updated_at' => '2020-11-04 18:08:44',
             ),
-            118 => 
+            113 => 
             array (
                 'id' => 149,
                 'key' => 'browse_transports',
@@ -969,7 +929,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:08:07',
                 'updated_at' => '2020-11-05 12:08:07',
             ),
-            119 => 
+            114 => 
             array (
                 'id' => 150,
                 'key' => 'read_transports',
@@ -977,7 +937,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:08:07',
                 'updated_at' => '2020-11-05 12:08:07',
             ),
-            120 => 
+            115 => 
             array (
                 'id' => 151,
                 'key' => 'edit_transports',
@@ -985,7 +945,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:08:07',
                 'updated_at' => '2020-11-05 12:08:07',
             ),
-            121 => 
+            116 => 
             array (
                 'id' => 152,
                 'key' => 'add_transports',
@@ -993,7 +953,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:08:07',
                 'updated_at' => '2020-11-05 12:08:07',
             ),
-            122 => 
+            117 => 
             array (
                 'id' => 153,
                 'key' => 'delete_transports',
@@ -1001,7 +961,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:08:07',
                 'updated_at' => '2020-11-05 12:08:07',
             ),
-            123 => 
+            118 => 
             array (
                 'id' => 154,
                 'key' => 'browse_transport_types',
@@ -1009,7 +969,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:11:44',
                 'updated_at' => '2020-11-05 12:11:44',
             ),
-            124 => 
+            119 => 
             array (
                 'id' => 155,
                 'key' => 'read_transport_types',
@@ -1017,7 +977,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:11:44',
                 'updated_at' => '2020-11-05 12:11:44',
             ),
-            125 => 
+            120 => 
             array (
                 'id' => 156,
                 'key' => 'edit_transport_types',
@@ -1025,7 +985,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:11:44',
                 'updated_at' => '2020-11-05 12:11:44',
             ),
-            126 => 
+            121 => 
             array (
                 'id' => 157,
                 'key' => 'add_transport_types',
@@ -1033,7 +993,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:11:44',
                 'updated_at' => '2020-11-05 12:11:44',
             ),
-            127 => 
+            122 => 
             array (
                 'id' => 158,
                 'key' => 'delete_transport_types',
@@ -1041,7 +1001,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:11:44',
                 'updated_at' => '2020-11-05 12:11:44',
             ),
-            128 => 
+            123 => 
             array (
                 'id' => 159,
                 'key' => 'browse_operators',
@@ -1049,7 +1009,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:36:33',
                 'updated_at' => '2020-11-05 12:36:33',
             ),
-            129 => 
+            124 => 
             array (
                 'id' => 160,
                 'key' => 'read_operators',
@@ -1057,7 +1017,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:36:33',
                 'updated_at' => '2020-11-05 12:36:33',
             ),
-            130 => 
+            125 => 
             array (
                 'id' => 161,
                 'key' => 'edit_operators',
@@ -1065,7 +1025,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:36:33',
                 'updated_at' => '2020-11-05 12:36:33',
             ),
-            131 => 
+            126 => 
             array (
                 'id' => 162,
                 'key' => 'add_operators',
@@ -1073,7 +1033,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:36:33',
                 'updated_at' => '2020-11-05 12:36:33',
             ),
-            132 => 
+            127 => 
             array (
                 'id' => 163,
                 'key' => 'delete_operators',
@@ -1081,7 +1041,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:36:33',
                 'updated_at' => '2020-11-05 12:36:33',
             ),
-            133 => 
+            128 => 
             array (
                 'id' => 164,
                 'key' => 'browse_transport_inventories',
@@ -1089,7 +1049,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
             ),
-            134 => 
+            129 => 
             array (
                 'id' => 165,
                 'key' => 'read_transport_inventories',
@@ -1097,7 +1057,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
             ),
-            135 => 
+            130 => 
             array (
                 'id' => 166,
                 'key' => 'edit_transport_inventories',
@@ -1105,7 +1065,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
             ),
-            136 => 
+            131 => 
             array (
                 'id' => 167,
                 'key' => 'add_transport_inventories',
@@ -1113,13 +1073,453 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
             ),
-            137 => 
+            132 => 
             array (
                 'id' => 168,
                 'key' => 'delete_transport_inventories',
                 'table_name' => 'transport_inventories',
                 'created_at' => '2020-11-05 12:38:06',
                 'updated_at' => '2020-11-05 12:38:06',
+            ),
+            133 => 
+            array (
+                'id' => 169,
+                'key' => 'browse_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            134 => 
+            array (
+                'id' => 170,
+                'key' => 'read_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            135 => 
+            array (
+                'id' => 171,
+                'key' => 'edit_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            136 => 
+            array (
+                'id' => 172,
+                'key' => 'add_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            137 => 
+            array (
+                'id' => 173,
+                'key' => 'delete_tours',
+                'table_name' => 'tours',
+                'created_at' => '2020-11-16 08:43:02',
+                'updated_at' => '2020-11-16 08:43:02',
+            ),
+            138 => 
+            array (
+                'id' => 174,
+                'key' => 'browse_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            139 => 
+            array (
+                'id' => 175,
+                'key' => 'read_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            140 => 
+            array (
+                'id' => 176,
+                'key' => 'edit_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            141 => 
+            array (
+                'id' => 177,
+                'key' => 'add_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            142 => 
+            array (
+                'id' => 178,
+                'key' => 'delete_events',
+                'table_name' => 'events',
+                'created_at' => '2020-11-20 17:12:37',
+                'updated_at' => '2020-11-20 17:12:37',
+            ),
+            143 => 
+            array (
+                'id' => 189,
+                'key' => 'browse_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            144 => 
+            array (
+                'id' => 190,
+                'key' => 'read_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            145 => 
+            array (
+                'id' => 191,
+                'key' => 'edit_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            146 => 
+            array (
+                'id' => 192,
+                'key' => 'add_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            147 => 
+            array (
+                'id' => 193,
+                'key' => 'delete_payment_schedules',
+                'table_name' => 'payment_schedules',
+                'created_at' => '2020-11-23 14:02:22',
+                'updated_at' => '2020-11-23 14:02:22',
+            ),
+            148 => 
+            array (
+                'id' => 194,
+                'key' => 'browse_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            149 => 
+            array (
+                'id' => 195,
+                'key' => 'read_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            150 => 
+            array (
+                'id' => 196,
+                'key' => 'edit_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            151 => 
+            array (
+                'id' => 197,
+                'key' => 'add_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            152 => 
+            array (
+                'id' => 198,
+                'key' => 'delete_payment_installments',
+                'table_name' => 'payment_installments',
+                'created_at' => '2020-11-23 14:03:41',
+                'updated_at' => '2020-11-23 14:03:41',
+            ),
+            153 => 
+            array (
+                'id' => 199,
+                'key' => 'browse_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            154 => 
+            array (
+                'id' => 200,
+                'key' => 'read_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            155 => 
+            array (
+                'id' => 201,
+                'key' => 'edit_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            156 => 
+            array (
+                'id' => 202,
+                'key' => 'add_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            157 => 
+            array (
+                'id' => 203,
+                'key' => 'delete_orders',
+                'table_name' => 'orders',
+                'created_at' => '2020-11-25 15:38:18',
+                'updated_at' => '2020-11-25 15:38:18',
+            ),
+            158 => 
+            array (
+                'id' => 204,
+                'key' => 'browse_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            159 => 
+            array (
+                'id' => 205,
+                'key' => 'read_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            160 => 
+            array (
+                'id' => 206,
+                'key' => 'edit_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            161 => 
+            array (
+                'id' => 207,
+                'key' => 'add_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            162 => 
+            array (
+                'id' => 208,
+                'key' => 'delete_orders_customers',
+                'table_name' => 'orders_customers',
+                'created_at' => '2020-11-25 16:08:05',
+                'updated_at' => '2020-11-25 16:08:05',
+            ),
+            163 => 
+            array (
+                'id' => 209,
+                'key' => 'browse_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            164 => 
+            array (
+                'id' => 210,
+                'key' => 'read_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            165 => 
+            array (
+                'id' => 211,
+                'key' => 'edit_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            166 => 
+            array (
+                'id' => 212,
+                'key' => 'add_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            167 => 
+            array (
+                'id' => 213,
+                'key' => 'delete_order_statuses',
+                'table_name' => 'order_statuses',
+                'created_at' => '2020-11-26 08:51:04',
+                'updated_at' => '2020-11-26 08:51:04',
+            ),
+            168 => 
+            array (
+                'id' => 214,
+                'key' => 'browse_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            169 => 
+            array (
+                'id' => 215,
+                'key' => 'read_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            170 => 
+            array (
+                'id' => 216,
+                'key' => 'edit_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            171 => 
+            array (
+                'id' => 217,
+                'key' => 'add_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            172 => 
+            array (
+                'id' => 218,
+                'key' => 'delete_customers',
+                'table_name' => 'customers',
+                'created_at' => '2020-11-26 09:18:56',
+                'updated_at' => '2020-11-26 09:18:56',
+            ),
+            173 => 
+            array (
+                'id' => 224,
+                'key' => 'browse_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            174 => 
+            array (
+                'id' => 225,
+                'key' => 'read_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            175 => 
+            array (
+                'id' => 226,
+                'key' => 'edit_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            176 => 
+            array (
+                'id' => 227,
+                'key' => 'add_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            177 => 
+            array (
+                'id' => 228,
+                'key' => 'delete_invoices',
+                'table_name' => 'invoices',
+                'created_at' => '2020-11-27 09:18:30',
+                'updated_at' => '2020-11-27 09:18:30',
+            ),
+            178 => 
+            array (
+                'id' => 229,
+                'key' => 'browse_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            179 => 
+            array (
+                'id' => 230,
+                'key' => 'read_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            180 => 
+            array (
+                'id' => 231,
+                'key' => 'edit_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            181 => 
+            array (
+                'id' => 232,
+                'key' => 'add_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            182 => 
+            array (
+                'id' => 233,
+                'key' => 'delete_tour_component_types',
+                'table_name' => 'tour_component_types',
+                'created_at' => '2020-12-08 15:33:09',
+                'updated_at' => '2020-12-08 15:33:09',
+            ),
+            183 => 
+            array (
+                'id' => 234,
+                'key' => 'browse_activities',
+                'table_name' => 'activities',
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:11:37',
+            ),
+            184 => 
+            array (
+                'id' => 235,
+                'key' => 'read_activities',
+                'table_name' => 'activities',
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:11:37',
+            ),
+            185 => 
+            array (
+                'id' => 236,
+                'key' => 'edit_activities',
+                'table_name' => 'activities',
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:11:37',
+            ),
+            186 => 
+            array (
+                'id' => 237,
+                'key' => 'add_activities',
+                'table_name' => 'activities',
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:11:37',
+            ),
+            187 => 
+            array (
+                'id' => 238,
+                'key' => 'delete_activities',
+                'table_name' => 'activities',
+                'created_at' => '2021-01-22 12:11:37',
+                'updated_at' => '2021-01-22 12:11:37',
             ),
         ));
         

@@ -39,3 +39,4 @@ class getTourComponentListAction extends AbstractAction
         return route('tourComponents', ['id' => $tourId]);
     }
 }
+
