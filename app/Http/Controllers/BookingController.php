@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
 
 class BookingController extends Controller
 {
@@ -11,30 +12,32 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function bookingForm()
+    public function newBookingForm()
     {
         return view('bookingForm');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function bookingForm($id)
     {
-        //
+
+        $orders = new Order;
+        $order = $orders->findOrFail($id);
+        
+        return view('bookingForm')->with(['order', $order]);;
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * A new booking creates an order with dependencies
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $newOrder = new Order;
+        
+        return (var_dump($request));
     }
 
     /**

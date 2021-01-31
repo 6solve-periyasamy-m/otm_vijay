@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderCustomerController;
-
 use App\Http\Controllers\BookingController;
 
 /*
@@ -20,9 +19,13 @@ use App\Http\Controllers\BookingController;
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
+    Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
+    Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
+    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
+
 });
 
-Route::get('booking', [BookingController::class, 'bookingForm']);
-Route::post('booking', [BookingController::class, 'bookingForm']);
-
+Route::get('booking/{id}', [BookingController::class, 'bookingForm']);
+Route::get('booking', [BookingController::class, 'newBookingForm']);
