@@ -47,10 +47,10 @@ class AccommodationInventory extends Model
         return $this->belongsTo(RoomType::class);
     }
 
-    // public function component_type()
-    // {
-    //     return $this->hasOneThrough(TourComponentType::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'id', 'id');
-    // }
+    public function component_type()
+    {
+        return $this->hasOneThrough(TourComponentType::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'id', 'id');
+    }
 
     public function getAccommodationForTourAttribute()
     {

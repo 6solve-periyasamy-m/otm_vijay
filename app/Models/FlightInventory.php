@@ -19,10 +19,10 @@ class FlightInventory extends Model
         return $this->belongsTo(TravelClass::class);
     }
 
-    // public function component_type()
-    // {
-    //     return $this->hasOneThrough(TourComponentType::class, FlightInventoryTour::class, 'flight_inventory_id', 'id', 'id');
-    // }
+    public function component_type()
+    {
+        return $this->hasOneThrough(TourComponentType::class, FlightInventoryTour::class, 'flight_inventory_id', 'id', 'id');
+    }
 
     public function tour()
     {

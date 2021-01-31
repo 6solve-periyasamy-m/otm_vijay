@@ -17,9 +17,14 @@ class Flight extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function airport()
+    public function arrivalAirport()
     {
-        return $this->belongsTo(Airport::class, 'id', 'departure_airport_id');
+        return $this->belongsTo(Airport::class, 'arrival_airport_id', 'id');
+    }
+
+    public function departureAirport()
+    {
+        return $this->belongsTo(Airport::class, 'departure_airport_id', 'id');
     }
 
     public function airline()
