@@ -2,7 +2,7 @@
 @section('content')
     <div class="container-fluid" id="app">
  <example-component></example-component>
- <example-dupe></example-dupe>
+ <bookinghead></bookinghead>
         <div class="row">
             <div class="col-sm-6">
                 <div class="py-2">

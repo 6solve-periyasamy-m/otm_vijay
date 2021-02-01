@@ -16,7 +16,8 @@ window.axios.defaults.headers.common = {
      'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
  };
 
- Vue.component('example-dupe', require('./components/ExampleComponent2.vue').default);
+ Vue.component('donut', require('./components/donut.vue').default);
+ Vue.component('bookinghead', require('./components/BookingHead.vue').default);
  Vue.component('example-component', require('./components/ExampleComponent.vue').default);
  const app = new Vue({
      el: '#app',
