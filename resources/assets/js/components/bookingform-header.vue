@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="py-2">
-            <img :src="image"/>
+            <img class="img-fluid" width="472" height="472" />
         </div>
     </div>
     <div class="col-sm-6 centercol">
@@ -16,14 +16,8 @@
 </template>
 
 <script>
-import image from "@/assets/images/octlogo.png"
 
 export default {
-        data: function () {
-            return {
-                image: image
-            }
-        },
         mounted() {
             console.log('Component mounted.')
         }

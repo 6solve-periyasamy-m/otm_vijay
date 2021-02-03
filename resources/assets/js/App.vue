@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="overflowwrap">
-    <Donut @click1="testFunction1" @click2="testFunction2" @click3="testFunction3" @click4="testFunction4"/>
+    <donut-menu @click1="testFunction1" @click2="testFunction2" @click3="testFunction3" @click4="testFunction4"><donut-menu/>
     <transition name="fade" mode="out-in">
     <component v-bind:is="component"></component>
     </transition>
@@ -11,36 +11,36 @@
 </template>
 
 <script>
-import Background from './components/Background.vue'
-import Donut from './components/Donut.vue'
-import Menu1 from './components/Menu1.vue'
-import Menu2 from './components/Menu2.vue'
-import Menu3 from './components/Menu3.vue'
-import Menu4 from './components/Menu4.vue'
+import bubble-background from './components/bubble-background.vue'
+import donut-menu from './components/donut-menu.vue'
+import tour-menu from './components/tour-menu.vue'
+import details-menu from './components/details-menu.vue'
+import extras-menu from './components/extras-menu.vue'
+import finance-menu from './components/finance-menu.vue'
 
 export default {
-  name: 'App',
+  name: 'App',extras-menu
   methods: {
     testFunction1: function (event) {
-      this.component = Menu1
+      this.component = tour-menu
     },
     testFunction2: function (event) {
-      this.component = Menu2
+      this.component = details-menu
     },
     testFunction3: function (event) {
-      this.component = Menu3
+      this.component = extras-menu
     },
     testFunction4: function (event) {
-      this.component = Menu4
+      this.component = finance-menu
     }
   },
   components: {
-    Background,
-    Donut,
-    Menu1,
-    Menu2,
-    Menu3,
-    Menu4
+    bubble-background,
+    donut-menu,
+    tour-menu,
+    details-menu,
+    extras-menu,
+    finance-menu
   },
   data () {
     return {

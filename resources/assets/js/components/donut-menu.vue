@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'Donut'
+  name: 'donut-menu'
 }
 </script>
 
