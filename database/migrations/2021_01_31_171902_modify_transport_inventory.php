@@ -14,7 +14,8 @@ class ModifyTransportInventory extends Migration
     public function up()
     {
         Schema::table('transport_inventories', function(Blueprint $table) {
-            $table->addColumn('boolean', 'time_confirmed')->default(false);
+            $table->addColumn('boolean', 'arrival_confirmed')->default(false);
+            $table->addColumn('boolean', 'departure_confirmed')->default(false);
         });
     }
 
@@ -26,7 +27,8 @@ class ModifyTransportInventory extends Migration
     public function down()
     {
         Schema::table('transport_inventories', function(Blueprint $table) {
-            $table->dropColumn('time_confirmed');
+            $table->dropColumn('arrival_confirmed');
+            $table->dropColumn('departure_confirmed');
         });
     }
 }

@@ -14,8 +14,10 @@ class ChangeDepartureAndArrivalDatetimeDataTypeInFlightInventory extends Migrati
     public function up()
     {
         Schema::table('flight_inventories', function (Blueprint $table) {
-            $table->dateTime("arrival_date_time")->change();
-            $table->dateTime("arrival_date_time")->change();
+            $table->dropColumn("departure_time");
+            $table->dropColumn("arrival_time");
+            $table->dateTime("departure_date_time");
+            $table->dateTime("arrival_date_time");
         });
     }
 
@@ -27,8 +29,10 @@ class ChangeDepartureAndArrivalDatetimeDataTypeInFlightInventory extends Migrati
     public function down()
     {
         Schema::table('flight_inventories', function (Blueprint $table) {
-            $table->time("arrival_time")->change();
-            $table->time("arrival_time")->change();
+            $table->dropColumn("departure_date_time");
+            $table->dropColumn("arrival_date_time");
+            $table->time("departure_time");
+            $table->time("arrival_time");
         });
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tour extends Model
 {
-    public function flightinventory()
+    public function flightInventory()
     {
         return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tour')->withPivot('sales_price', 'tour_component_type');
     }
@@ -26,4 +26,13 @@ class Tour extends Model
     {
         return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tour')->withPivot('sales_price', 'tour_component_type');
     }
+    // public function flightInventory()
+    // {
+    //     return $this->belongsTo(FlightInventory::class);
+    // }
+
+    // public function activityInventoryTour()
+    // {
+    //     return $this->belongsToMany(ActivityInventoryTour::class)->withPivot('created_at', 'deleted_at');
+    // }
 }

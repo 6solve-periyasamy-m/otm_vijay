@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flight extends Model
 {
+    public $additional_attributes = ['flight_details'];
+
     public function flightInventory()
     {
         return $this->hasMany(FlightInventory::class);
@@ -30,6 +32,11 @@ class Flight extends Model
     public function airline()
     {
         return $this->belongsTo(Airline::class);
+    }
+
+    public function getFlightDetailsAttribute()
+    {
+        return "{$this->airline->airline_name} | Departs from: {$this->departureAirport->location->location_name} - Arrives at: {$this->arrivalAirport->location->location_name} ";
     }
 
 }

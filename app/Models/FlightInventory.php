@@ -61,14 +61,16 @@ class FlightInventory extends Model
         $departure_airport = Airport::getAirportById($this->flight->departure_airport_id);
         $arrival_airport = Airport::getAirportById($this->flight->arrival_airport_id);
 
-        $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->departure_date.' '.$this->flight->departure_time)->format('d/m/Y H:i');
-        $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->flight->arrival_date.' '.$this->flight->arrival_time)->format('d/m/Y H:i');
+        $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->departure_date_time)->format('d/m/Y H:i');
+        $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->arrival_date_time)->format('d/m/Y H:i');
 
         return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport->location->location_name} - Arrives at: {$arrival_airport->location->location_name}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
+
+
     }
 
-    public function getFlightDetails()
-    {
-        return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->location_name} - Arrives at: {$this->getArrivalAirport()->location->location_name} ";
-    }
+    // public function getFlightDetails()
+    // {
+    //     return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->location_name} - Arrives at: {$this->getArrivalAirport()->location->location_name} ";
+    // }
 }
