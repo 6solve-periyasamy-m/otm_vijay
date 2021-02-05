@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentInstallment extends Model
 {
     use HasFactory;
+
+    public function PaymentSchedule() 
+    {
+        return $this->belongsTo(PaymentSchedule::class);
+    }
+
+
 }
