@@ -13,6 +13,8 @@ class TourController extends Controller
 {
     public function tourComponents($id)
     {
+
+        dd(AccommodationInventory::findByTour($id));
         return view('tourComponents', [
             'accommodationInventories' => AccommodationInventory::findByTour($id),
             'componentTypes' => TourComponentType::all(),

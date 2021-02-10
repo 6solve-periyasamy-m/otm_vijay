@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Jahondust\ModelLog\Traits\ModelLogging;
+// use Jahondust\ModelLog\Traits\ModelLogging;
 use Carbon\Carbon;
 
 class AccommodationInventory extends Model
 {
-    use HasFactory, ModelLogging;
+    use HasFactory;
+    // use ModelLogging;
 
     protected $casts = [
         'check_in_date_time' => 'datetime',
