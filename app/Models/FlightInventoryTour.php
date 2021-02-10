@@ -5,14 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentInstallment extends Model
+class FlightInventoryTour extends Model
 {
+    protected $table = 'flight_inventory_tour';
     use HasFactory;
-
-    public function PaymentSchedule() 
-    {
-        return $this->belongsTo(PaymentSchedule::class);
-    }
-
-
 }

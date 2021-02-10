@@ -5,14 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentInstallment extends Model
+class TransportInventoryTour extends Model
 {
+    protected $table = 'transport_inventory_tour';
     use HasFactory;
-
-    public function PaymentSchedule() 
-    {
-        return $this->belongsTo(PaymentSchedule::class);
-    }
-
-
 }

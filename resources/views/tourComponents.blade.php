@@ -63,14 +63,14 @@
                                     </td>
                                     <td>
                                         <input type="text"
-                                            placeholder="{{ $accommodation->tour[0]->pivot->sales_price}}"
+                                            placeholder="{{ $accommodation->tour[0]->pivot->sales_price }}"
                                             class="form-control"> </input>
                                     </td>
                                     <td>
                                         <select class="form-control form-control-lg">
                                             @foreach ($componentTypes as $componentType)
                                             <option value="{{ $componentType->id }}"
-                                                {{$componentType->id == $accommodation->component_type->id ? 'selected="selected"' : ''}}>
+                                                {{ $componentType->id == $accommodation->component_type->id ? 'selected="selected"' : ''}}>
                                                 {{ $componentType->component_type_name }}
                                             </option>
                                             @endforeach
@@ -138,14 +138,14 @@
                                         </td>
                                         <td>
                                             <input type="text"
-                                                placeholder="{{ $activity->tour[0]->pivot->sales_price}}"
+                                                placeholder="{{ $activity->tour[0]->pivot->sales_price }}"
                                                 class="form-control"> </input>
                                         </td>
                                         <td>
                                             <select class="form-control form-control-lg">
                                                 @foreach ($componentTypes as $componentType)
                                                 <option value="{{ $componentType->id }}"
-                                                    {{$componentType->id == $activity->component_type->id ? 'selected="selected"' : ''}}>
+                                                    {{ $componentType->id == $activity->component_type_id ? 'selected="selected"' : '' }}>
                                                     {{ $componentType->component_type_name }}
                                                 </option>
                                                 @endforeach
@@ -199,42 +199,50 @@
                                 </th>
                             </thead>
                             <tbody>
-                                @foreach($flightInventories as $flight)
-                                <tr>
+                                @foreach($flightInventories as $flightInventory)
+                                <?php //dump( $flightInventory, $flightInventory->flight, $flightInventory->flight->departureAirport); ?>
+                                 <tr>
                                     <td>
-                                        {{($flight->flight->airline->airline_name)}}
+                                        {{ $flightInventory->flight->airline->airline_name }}
                                     </td>
                                     <td>
-                                        {{ $flight->departureAirport->airport_name }}
+                                        {{ $flightInventory->flight->departureAirport->airport_name }}
+                                    </td>
+                                    
+                                    <td>
+                                        {{ Carbon\Carbon::parse($flightInventory->flight->departure_time . $flightInventory->flight->departure_date)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($flight->departure_time.$flight->flight->departure_date)->format('d-m-Y H:i') }}
+                                        {{ $flightInventory->flight->arrivalAirport->airport_name }}
                                     </td>
                                     <td>
-                                        {{ $flight->arrivalAirport->airport_name }}
-                                    </td>
-                                    <td>
-                                        {{ Carbon\Carbon::parse($flight->arrival_time.$flight->flight->arrival_date)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($flightInventory->flight->arrival_time . $flightInventory->flight->arrival_date)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
                                         <input type="text"
-                                            placeholder="{{ $flight->sales_price }}"
-                                            class="form-control"> </input>
+                                            placeholder="{{ $flightInventory->sales_price }}"
+                                            class="form-control" /> 
                                     </td>
+                                    <?php
+                                    dump($componentTypes); 
+                                    /*
                                     <td>
                                         <select class="form-control form-control-lg">
                                             @foreach ($componentTypes as $componentType)
                                             <option value="{{ $componentType->id }}"
-                                                {{ $componentType->id == $flight->component_type->id ? 'selected="selected"' : '' }}>
+                                                {{ $componentType->id == $flightInventory->component_type->id ? 'selected="selected"' : '' }}>
                                                 {{ $componentType->component_type_name }}
                                             </option>
                                             @endforeach
                                         </select>
                                     </td>
+                                    */
+                                    ?>
                                     <td>
                                         <button class="btn btn-success">Submit</button>
                                     </td>
-                                </tr>
+                                    --}}
+                                </tr> 
                                 @endforeach
                             </tbody>
                         </table>
