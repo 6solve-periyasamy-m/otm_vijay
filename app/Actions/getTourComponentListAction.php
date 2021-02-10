@@ -2,14 +2,14 @@
 
 namespace App\Actions;
 
-use Illuminate\Support\Facades\Redirect;
 use TCG\Voyager\Actions\AbstractAction;
+use App\Controllers\TourController;
 
-class getOrderCustomersAction extends AbstractAction
+class getTourComponentListAction extends AbstractAction
 {
     public function getTitle()
     {
-        return 'View Customers';
+        return 'Component Price/Types';
     }
 
     public function getIcon()
@@ -30,14 +30,13 @@ class getOrderCustomersAction extends AbstractAction
     }
 
     public function shouldActionDisplayOnDataType() {
-        //Display this action only for the Posts
-        return $this->dataType->slug === 'orders';
+        return $this->dataType->slug === 'tours';
     }
 
     public function getDefaultRoute()
     {
-        $order_id = $this->data->id;
-        return route('voyager.orders-customers.index',  ['key=order_id','filter=equals', "s={$order_id}"]);
+        $tourId = $this->data->id;
+        return route('tourComponents', ['id' => $tourId]);
     }
 }
 
