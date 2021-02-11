@@ -16,6 +16,11 @@ use App\Http\Controllers\OrderCustomerController;
 |
 */
 
+
+Route::get('/', function () {
+    return view('otm');
+});
+
 Route::get('/booking-form', function () {
     return view('bookingForm');
 });
@@ -32,5 +37,3 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 });
-
-
