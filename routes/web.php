@@ -18,11 +18,19 @@ use App\Http\Controllers\OrderCustomerController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('otm');
 });
 
 Route::get('/booking-form', function () {
     return view('bookingForm');
+});
+
+Route::get('/booking-form2', function () {
+    return view('bookingForm2');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
 });
 
 Route::group(['prefix' => 'admin'], function () {
