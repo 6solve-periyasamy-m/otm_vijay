@@ -227,11 +227,7 @@
                                         <button class="btn btn-success">Submit</button>
                                     </td>
                                 </tr> 
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-success">Submit</button>
-                                    </td>
-                                </tr>
+
                                 @endforeach
                             </tbody>
                         </table>
