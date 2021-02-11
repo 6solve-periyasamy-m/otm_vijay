@@ -199,7 +199,6 @@
                                 </th>
                             </thead>
                             <tbody>
-<<<<<<< HEAD
                                 @foreach($flightInventories as $flightInventory)
                                 <?php //dump( $flightInventory, $flightInventory->flight, $flightInventory->flight->departureAirport); ?>
                                  <tr>
@@ -233,7 +232,6 @@
                                         <button class="btn btn-success">Submit</button>
                                     </td>
                                 </tr>
-
                                 @endforeach
                             </tbody>
                         </table>
@@ -275,7 +273,7 @@
                                         {{($transport->transport->name)}}
 </td>
 <td>
-    {{ dd($transport->departureLocation) }}
+    {{ $transport->departureLocation }}
 </td>
 <td>
     {{ Carbon\Carbon::parse($transport->departure_date_time)->format('d-m-Y H:i') }}
