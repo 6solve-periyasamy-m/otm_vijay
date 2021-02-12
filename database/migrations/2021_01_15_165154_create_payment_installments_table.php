@@ -15,14 +15,13 @@ class CreatePaymentInstallmentsTable extends Migration
     {
         Schema::create('payment_installments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 255)->nullable();
-            $table->integer('is_deposit');
-            $table->date('due_date');
-            $table->float('value', 10, 0);
-            $table->integer('value_type');
+            $table->integer('payment_schedule_id');
+            $table->float('deposit', 10, 2);
+            $table->string('period', 20);
+            $table->integer('installments');
+            $table->float('amount', 10, 2);
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('payment_schedule_id')->nullable();
         });
     }
 

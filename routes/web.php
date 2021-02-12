@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TourController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderCustomerController;
@@ -17,6 +18,14 @@ use App\Http\Controllers\BookingController;
 |
 */
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/booking-form', function () {
+    return view('bookingForm');
+});
+
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 
@@ -29,3 +38,10 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::get('booking/{id}', [BookingController::class, 'bookingForm']);
 Route::get('booking', [BookingController::class, 'newBookingForm']);
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
+
+});
+
