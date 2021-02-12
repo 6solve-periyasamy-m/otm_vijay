@@ -10,6 +10,11 @@ You can document your branch by adding a section.
 ## Booking API
 
 
-## Pricing Schedule
+## Payment Schedule
 
-The pricing schedule comprises two tables that allow a tour to be priced.
+The payment schedule comprises two tables that manage payment schedules and installment plans.  The basic idea 
+
+schedule label -< installments
+
+e.g.
+monthly-acclerated -< deposit 30%, month1 20%, month2 30%, month3 50%
