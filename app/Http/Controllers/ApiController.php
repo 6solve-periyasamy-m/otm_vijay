@@ -32,15 +32,35 @@ class ApiController extends Controller
         $inventory = $tour->flightInventory;
         $result = $inventory->map(function ($flightInventory) {
             return [
+                "id" => $flightInventory->id,
+                "flight_id" => $flightInventory->flight->id,
                 "check_in_date_time" => $flightInventory->check_in_date_time,
                 "departure_date_time" => $flightInventory->departure_date_time,
+                "arrival_date_time" => $flightInventory->arrival_date_time,
                 "class" => $flightInventory->travelClass->title,
                 "airline" => $flightInventory->flight->airline->airline_name,
                 "departure_airport" => $flightInventory->flight->departureAirport->airport_name,
                 "arrival_airport" => $flightInventory->flight->arrivalAirport->airport_name,
             ];
         })->toArray();
-        $result["success"] = true;
-        return response()->json($result);
+        return response()->json(["success" => true, "data" => $result]);
+    }
+
+    public function getAccommodationFromTour(Tour $tour) // would use route model binding
+    {
+        $inventory = $tour->accommodationInventory;
+        $result = $inventory->map(function ($accommodationInventory) {
+            return [
+                "id" => $accommodationInventory->id,
+                "accommodation_id" => $accommodationInventory->accommodation->id,
+                "check_in_date_time" => $accommodationInventory->check_in_date_time->format('Y-m-d H:i:s'),
+                "check_out_date_time" => $accommodationInventory->check_out_date_time->format('Y-m-d H:i:s'),
+                "accommodation_name" => $accommodationInventory->accommodation->title,
+                "accommodation_address" => $accommodationInventory->accommodation->address,
+                "room_type" => $accommodationInventory->roomType->room_type_name,
+                "board_type" => $accommodationInventory->boardType->board_type_name,
+            ];
+        })->toArray();
+        return response()->json(["success" => true, "data" => $result]);
     }
 }
