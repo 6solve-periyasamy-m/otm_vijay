@@ -5,6 +5,8 @@ use App\Http\Controllers\TourController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderCustomerController;
+use App\Http\Controllers\PaymentScheduleController;
+use App\Models\PaymentSchedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +21,11 @@ use App\Http\Controllers\OrderCustomerController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::prefix('customer')->group(function () {
+    Route::get('/payment/schedule', [PaymentScheduleController::class, 'index'])->name('payment-schedule');
 });
 
 Route::get('/booking-form', function () {

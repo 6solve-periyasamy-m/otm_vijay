@@ -12,7 +12,7 @@ class PaymentSchedule extends Model
 
     public $additional_attributes = ['Tour_Payment_Schedule'];
 
-    public function paymentInstallment() 
+    public function installments() 
     {
         return $this->hasMany(PaymentInstallment::class);
     }

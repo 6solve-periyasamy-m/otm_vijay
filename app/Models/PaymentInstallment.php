@@ -9,7 +9,7 @@ class PaymentInstallment extends Model
 {
     use HasFactory;
 
-    public function PaymentSchedule() 
+    public function paymentSchedule() 
     {
         return $this->belongsTo(PaymentSchedule::class);
     }
