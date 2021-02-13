@@ -1,4 +1,7 @@
-@extends('layouts.customer')
+@extends ('layout.main')
 @section('content')
-booking form
+<div class="container-fluid" id="app">
+    <booking-form></booking-form>
+</div>
 @endsection
+
