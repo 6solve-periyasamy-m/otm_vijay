@@ -2,13 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+
+use App\Models\Event;
 use App\Models\Tour;
+use App\Models\Airline;
+use App\Models\Airport;
+use App\Models\Flight;
+
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
-    //
+    // Open API - populate the booking form selectors
+    public function getTours(Event $event_id = null) {
+        $today = date('Y-m-d');
+        $tours = Tour::whereNull('event_id')
+            ->orWhere('event_id', $event_id)
+            ->whereNull('date_from')
+            ->orWhere(DB::raw("(STR_TO_DATE(tours.date_from,'%y-%m-%d'))"), ">=", $today)
+            ->get();
+        $data = $tours->toArray();
 
+        return response()->json(['success' => true, 'data' => $data]);
+    }
+
+    public function getAirlines() 
+    {
+        $airlines = Airline::orderBy('airline_name')->get();
+
+        return response()->json(["success" => true, "data" => $airlines->toArray()]);
+    }
+
+
+    public function getFlightsFromAirport(Airport $airport = null)
+    {
+        // Returns a list of flights from an airport
+        $today = date('Y-m-d');
+        $flights = Flight::where('departure_airport_id', $airport->id)
+            ->orWhere(function($query) {
+                $query->whereNull('departure_date')
+                ->where(DB::raw("(STR_TO_DATE(flights.departure_date,'%y-%m-%d'))"), ">=", date('Y-m-d'));
+            })
+            ->get();
+        $result = $flights->map(function ($flight) {
+            return [
+                "id" => $flight->id,
+                "departure_airport_id" => $flight->departure_airport_id,
+                "departure_date" => $flight->departure_date,
+                "arrival_airport_id" => $flight->arrival_airport_id,
+                "arrival_date" => $flight->arrival_date,
+            ];
+        })->toArray();
+
+        return response()->json(["success" => true, "data" => $result]);
+    }
+
+    // Autheticated API - return data for logged in user sessions
     public function getBasicTourInformation(Tour $tour)
     {
         // TODO: I'm assuming there is going to be some sort of authentication check here somewhere

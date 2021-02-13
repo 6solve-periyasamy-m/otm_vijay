@@ -19,9 +19,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->get('/booking/flight', [ApiController::class, 'getFlightsFromTour']);
-Route::middleware('auth:api')->get('/booking/tour/{id}', [ApiController::class, 'getBasicTourInformation']);
-Route::middleware('auth:api')->get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
+Route::get('/tours', [ApiController::class, 'getTours']);
+Route::get('/airlines', [ApiController::class, 'getAirlines']);
+Route::get('/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);
+Route::get('/booking/flight',       [ApiController::class, 'getFlightsFromTour']);
+Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
+Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
+Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
+
+Route::middleware('auth:api')->group(function() {
+    Route::get('/booking/tour/{id}', [ApiController::class, 'getBasicTourInformation']);
+});
 
 
 Route::prefix('/booking')->group(function() {
