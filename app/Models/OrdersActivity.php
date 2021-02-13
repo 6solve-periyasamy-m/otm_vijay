@@ -13,6 +13,7 @@ class OrdersActivity extends Model
     {
         return $this->belongsTo(OrdersCustomer::class);
     }
+
     public function activity()
     {
         return $this->hasOne(Activity::class,'id','activity_id');

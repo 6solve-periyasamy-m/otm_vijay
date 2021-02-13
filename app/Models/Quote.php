@@ -5,23 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrdersCustomer extends Model
+class Quote extends Model
 {
     use HasFactory;
-
-    public function order() 
-    {
-        return $this->belongsTo(Order::class);
-    }
 
     public function customer() 
     {
         return $this->belongsTo(Customer::class);
     }
 
-    public function orderAccommodation()
+    public function tour()
     {
-        return $this->hasMany(OrdersAccommodation::class, 'id');
+        return $this->belongsTo(Tour::class);
     }
-
 }

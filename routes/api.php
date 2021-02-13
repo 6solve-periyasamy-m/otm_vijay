@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('/booking')->group(function() {
+    Route::post('/store', [BookingController::class, 'store']);
+    Route::put('{id}', [BookingController::class, 'update']);
+    Route::delete('{id}', [BookingController::class, 'destroy']);
 });
