@@ -14,6 +14,20 @@ It uses VueJS to render the booking form and to connect it to backend services v
 
 ## Booking API
 
+The Booking API are requests made for records from the backend services
+
+/api/booking/tour/{id}
+/api/booking/tour/{id}/flights
+/api/booking/tour/{id}/accommodation
+/api/booking/tour/{id}/accomodation/{type}
+/api/booking/tour/{id}/activities
+/api/booking/tour/{id}/activities/{type}
+/api/booking/accomodation
+/api/booking/flights
+/api/booking/activities
+/api/booking/transport
+/api/booking/tour/{id}/lead
+/api/booking/tour/{id}/group
 
 ## Payment Schedule
 

@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TourController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\LoginController;
+// use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\BookingController;
