@@ -1,62 +1,82 @@
 <template>
 <div class="col-0 col-sm-12">
     <div class="row">
-        <div class="col-0 col-sm-6">
+        <div :class="column_1" class="payments__column--highlight">
+            Date
+        </div>
+        <div :class="column_2" class="payments__column--highlight">
+            Detail
+        </div>
+        <div :class="column_3" class="payments__column--highlight">
+            Amount 
+        </div>
+        <div :class="column_4" class="payments__column--highlight">
+            Action
+        </div>
+    </div>
+    <div class="row">
+        <div :class="column_1">
             Now
         </div>
-        <div class="col-8 col-sm-4">
+        <div :class="column_2">
             Deposit
         </div>
-        <div class="col-4 col-sm-2">
-            £779 <button>Pay Now</button>
+        <div :class="column_3">
+            £900.00 
+        </div>
+        <div :class="column_4" v-if="status == 'new'">
+            <button class="payments__button--action">Due Now</button>
         </div>
     </div>
-    <div class="row">
-        <div class="col-3 col-sm-6">
-            1 month
+    <div class="row" v-for="month in months" :key="month">
+        <div :class="column_1">
+            Month {{ month }}
         </div>
-        <div class="col-4 col-sm-4">
-            First installment
+        <div :class="column_2">
+            Installment
         </div>
-        <div class="col-3 col-sm-2">
+        <div :class="column_3">
             £1000 
         </div>
-        <div class="col-2">
-            <button>Pay Now</button>
+        <div :class="column_4">
+            by 01/0{{3+month}}/2021
         </div>
     </div>
+
     <div class="row">
-        <div class="col-3 col-sm-6">
-            2 months
+        <div :class="column_1">
+            01/07/2021
         </div>
-        <div class="col-4 col-sm-4">
-            Second installment
+        <div :class="column_2">
+            Balance remaining
         </div>
-        <div class="col-3 col-sm-2">
-            £1000 
+        <div :class="column_3">
+            £5900.00 
         </div>
-        <div class="col-2">
-            <button>Pay Now</button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3 col-sm-6">
-            3 month
-        </div>
-        <div class="col-4 col-sm-4">
-            Final settlement
-        </div>
-        <div class="col-3 col-sm-2">
-            £1400 
-        </div>
-        <div class="col-2">
-            <button>Pay Now</button>
+        <div :class="column_4" v-if="status == 'payment'">
+            <button class="payments__button--action">Pay Now</button>
         </div>
     </div>
+
 </div>
 </template>
 <script>
 export default {
+    props: ['status'], 
+    data() {
+        return {
+            months: [1,2,3],
+            column_1: 'col-3',
+            column_1x: 'col-6 col-offset-1',
+            column_2: 'col-4',
+            column_3: 'col-3',
+            column_4: 'col-2',
+
+        }
+    }
     
 }
 </script>
+
+<style scoped>
+</style>

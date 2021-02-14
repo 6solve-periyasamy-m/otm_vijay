@@ -211,7 +211,7 @@
         </div>
         <div class="card-body" v-if="showPaymentsCard">
             <div class="row">
-                <payment-schedule></payment-schedule>
+                <payment-schedule status="new"></payment-schedule>
             </div>
         </div>
     </div>
