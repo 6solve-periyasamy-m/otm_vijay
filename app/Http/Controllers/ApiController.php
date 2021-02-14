@@ -9,6 +9,8 @@ use App\Models\Tour;
 use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\Flight;
+use App\Models\PaymentSchedule;
+use App\Models\PaymentInstallment;
 
 use Illuminate\Http\Request;
 
@@ -34,6 +36,25 @@ class ApiController extends Controller
         return response()->json(["success" => true, "data" => $airlines->toArray()]);
     }
 
+    public function getPaymentSchedules($tour_id, $withInstallments = null)
+    {
+        $schedules = PaymentSchedule::where('tour_id', $tour_id)->get();
+        if ($withInstallments) {
+            $schedules->map(function ($schedule) {
+                $installments = PaymentInstallment::where('payment_schedule_id', $schedule->id)->get();
+                $schedule->installments = $installments;
+            });
+        }
+
+        return response()->json(["success" => true, "data" => $schedules->toArray()]);
+    }
+
+    public function getPaymentInstallments($schedule_id)
+    {
+        $installments = PaymentInstallment::where('schedule_id', $schedule_id)->get();
+
+        return response()->json(["success" => true, "data" => $installments->toArray()]);
+    }
 
     public function getFlightsFromAirport(Airport $airport = null)
     {
