@@ -11,9 +11,10 @@
                             <tour-menu></tour-menu>
                             <bookingform-lead></bookingform-lead>
                             <bookingform-additional></bookingform-additional>
-                            <tour-menu></tour-menu>
+                            <booking-form-details></booking-form-details>
+                            <!-- <tour-menu></tour-menu>
                             <finance-menu></finance-menu>
-                            <extras-menu></extras-menu>
+                            <extras-menu></extras-menu> -->
                             <bookingform-terms></bookingform-terms>
                         <bookingform-footer></bookingform-footer>
                     </div>

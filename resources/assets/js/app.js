@@ -10,6 +10,7 @@ window.axios.defaults.headers.common = {
  };
 
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
+ Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
 
  Vue.component('donut-menu', require('./components/donut-menu.vue').default);
  Vue.component('tour-menu', require('./components/tour-menu.vue').default);
