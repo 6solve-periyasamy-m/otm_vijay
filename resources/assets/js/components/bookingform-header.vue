@@ -3,7 +3,7 @@
     <div class="row">
         <div class="bookingform-header">
             <div class="py-2">
-                <img class="img-fluid" src="images/octlogo.png" />
+                <img class="img-fluid" src="/images/octlogo.png" />
             </div>
             <div>
                 <h1 class="tourheader">Octopus Travel Matrix Booking Form</h1>
