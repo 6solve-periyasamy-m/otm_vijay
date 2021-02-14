@@ -11,6 +11,11 @@ window.axios.defaults.headers.common = {
 
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
  Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
+ Vue.component('flight-information', require('./components/FlightInformation.vue').default);
+ Vue.component('accommodation-details', require('./components/AccommodationDetails.vue').default);
+
+ Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
+ Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
 
  Vue.component('donut-menu', require('./components/donut-menu.vue').default);
  Vue.component('tour-menu', require('./components/tour-menu.vue').default);
