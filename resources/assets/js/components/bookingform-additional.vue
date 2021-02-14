@@ -3,35 +3,45 @@
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
-                    <button class="btn btn-link collapsed cardhead" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="false" aria-controls="collapseTwo">
+                    <button class="btn btn-link collapsed cardhead" @click="toggleAdditional">
                         Additional Travellers
                     </button>
                 </h5>
             </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
+            <div id="collapseTwo">
+                <div class="card-body" v-if="showAdditional">
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
-                    <br>
+                    <div v-for="item in additional" :key="item.name">
+                        <bookingform-addtemplate></bookingform-addtemplate>
+                    </div>
+                    <button type="button" class="btn btn-success" @click="addAdditional">Add another person</button>
                 </div>
-                <bookingformaddtemplate />
-                <br>
-                <button type="button" class="btn btn-success" id="addrow">Add</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import bookingformaddtemplate from './bookingform-addtemplate'
     export default {
+        data() {
+            return {
+                showAdditional: false,
+                additional: [],
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         },
-        components: {
-            bookingformaddtemplate
+        methods: {
+            toggleAdditional() {
+                this.showAdditional = !this.showAdditional
+            },
+            addAdditional() {
+                this.additional.push('<bookingform-addtemplate></bookingform-addtemplate>')
+                this.showAdditional = true
+                console.log('additional added')
+            }
         }
     }
-
 </script>

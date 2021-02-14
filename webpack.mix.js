@@ -15,7 +15,8 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .extract(['vue', 'jquery', 'lodash', 'bootstrap', 'axios'])
     .sass('resources/assets/scss/app.scss', 'css')
     .js('resources/assets/js/app.js', 'js')
-    .copy('resources/assets/js/modules', 'public/js')
+    .copy('resources/assets/js/modules', 'js/modules')
     .copy('resources/assets/images', 'public/images')
+    .copy('resources/assets/css', 'css')
     .setPublicPath('public');
 

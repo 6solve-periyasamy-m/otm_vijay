@@ -17,6 +17,7 @@ window.axios.defaults.headers.common = {
  Vue.component('extras-menu', require('./components/extras-menu.vue').default);
  Vue.component('finance-menu', require('./components/finance-menu.vue').default);
  Vue.component('bookingform-header', require('./components/bookingform-header.vue').default);
+ Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
  Vue.component('bookingform-lead', require('./components/bookingform-lead.vue').default);
  Vue.component('bookingform-additional', require('./components/bookingform-additional.vue').default);
  Vue.component('bookingform-addtemplate', require('./components/bookingform-addtemplate.vue').default);

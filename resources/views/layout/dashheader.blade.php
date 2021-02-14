@@ -12,7 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/jquery-ui.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('/css/jquery-ui.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/dash.css?v=').time()}}" rel="stylesheet">
+    <link href="{{ asset('/css/dash.css?v=').time()}}" rel="stylesheet"> --}}
 </head>

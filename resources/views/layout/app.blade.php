@@ -39,10 +39,10 @@
                     <h1 class="justify-center text-white">Octopus Travel Matrix</h1>
                 </div>
             </div>
-           @yield('content')
-        <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-            Copyright &copy; 2021 by Octopus Travel Matrix
+            @yield('content')
+            <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                Copyright &copy; 2021 by Octopus Travel Matrix
+            </div>
         </div>
-    </div>
     </body>
 </html>

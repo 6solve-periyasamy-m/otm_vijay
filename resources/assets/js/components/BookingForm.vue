@@ -7,6 +7,8 @@
 
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
+                            <!-- donut-menu></donut-menu -->
+                            <tour-menu></tour-menu>
                             <bookingform-lead></bookingform-lead>
                             <bookingform-additional></bookingform-additional>
                             <bookingform-terms></bookingform-terms>
@@ -19,6 +21,7 @@
 </template>
 
 <script>
+import DonutMenu from './donut-menu.vue'
     export default {
         mounted() {
             console.log('BookingForm mounted.')
