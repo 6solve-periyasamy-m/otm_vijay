@@ -45,12 +45,12 @@
         <div class="card-header" id="headingOne">
             <h5 class="mb-1 dropdownbutt">
                 <button class="btn btn-link cardhead" @click="toggleAccommodationCard">
-                    Accomodation
+                    Accommodation
                 </button>
             </h5>
         </div>
 
-        <div id="accommodation-card" v-if="showTermsConditions">
+        <div id="accommodation-card" v-if="showAccommodationCard">
             <div class="card-body">
                 <h4> Accommodation </h4>
                 <div class="accomdiv">
@@ -300,8 +300,8 @@
 export default {
     data() {
         return {
-            showFlightsCard:boolean = false,
-            showAccmodationCard:boolean = false
+            showFlightsCard: false,
+            showAccommodationCard: false
         }
     },
     methods: {
@@ -309,7 +309,7 @@ export default {
             this.showFlightsCard = !this.showFlightsCard
         },
         toggleAccommodationCard() {
-            this.showAccmodationCard = !this.showAccommodation
+            this.showAccommodationCard = !this.showAccommodationCard
         }
     }
 }
