@@ -10,7 +10,19 @@
 
                 <div class="ml-12">
                     <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                        Octopus Travel Matrix offers the travel agency a complete tour solution.
+                        Octopus Travel Matrix offers the travel agency a complete tour solution. 
+                        <dl style="text-align: left">
+
+                            <dt>Your site</dt>
+                            <dd>Your site could be called www.travelagency.info.</dd>
+                            
+                            <dt>Customer bookings</dt>
+                            <dd>Your booking URL would be travelagency.octopustravelmatrix.com/booking - you can setup a redirect from your site to your OTM booking form.</dd>
+
+                            <dt><a href="/booking">Customer Booking Form</a></dt>
+                            <dd>The Customer Booking Form is a public URL from you site to your OTM site.</dd>
+
+                        </dl>
                     </div>
                 </div>
             </div>
