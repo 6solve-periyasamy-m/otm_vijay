@@ -160,11 +160,10 @@ export default {
             showTraveller: false
         }
     },
-    method: {
-        toggleTraveller: {
+    methods: {
+        toggleTraveller() {
             this.showTraveller = !this.showTraveller
         }
-        
     }
 }
 </script>

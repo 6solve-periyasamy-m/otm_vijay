@@ -1,15 +1,14 @@
 <template>
     <div class="container">
         <div class="card">
-            <div class="card-header" id="headingThree">
-                <h5 class="mb-1">
-                    <button class="btn btn-link collapsed cardhead" data-toggle="collapse" data-target="#collapseThree"
-                        aria-expanded="false" aria-controls="collapseThree">
+            <div class="card-header">
+                <h5 class="mb-1 dropdown-button">
+                    <button class="btn btn-link cardhead" @click="toggleTermsConditions">
                         Terms and conditions
                     </button>
                 </h5>
             </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div v-if="showTermsConditions">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-2 customimg">
@@ -52,6 +51,16 @@
     export default {
         mounted() {
             console.log('Component mounted.')
+        },
+        data() {
+            return {
+                showTermsConditions: false
+            }
+        },
+        methods: {
+            toggleTermsConditions() {
+                this.showTermsConditions = !this.showTermsConditions
+            }
         }
     }
 
