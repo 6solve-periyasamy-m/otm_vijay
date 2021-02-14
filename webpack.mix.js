@@ -18,5 +18,6 @@ mix.copy('resources/assets/js/addons', 'public/js')
     .copy('resources/assets/js/modules', 'public/js/modules')
     .copy('resources/assets/images', 'public/images')
     .copy('resources/assets/css', 'public/css')
+    .copy('resources/assets/external-css', 'public/css')
     .setPublicPath('public');
 
