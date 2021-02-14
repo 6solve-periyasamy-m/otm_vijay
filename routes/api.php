@@ -24,8 +24,6 @@ Route::get('/airlines', [ApiController::class, 'getAirlines']);
 Route::get('/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);
 Route::get('/booking/flight',       [ApiController::class, 'getFlightsFromTour']);
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
-Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
-Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules/{tour_id}', [ApiController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedules', [ApiController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-installments/{schedule_id}', [ApiController::class, 'getPaymentInstallments']);
