@@ -57,12 +57,14 @@
             <button class="payments__button--action">Pay Now</button>
         </div>
     </div>
-
+{{schedule}}
+{{installments}}
 </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
-    props: ['status'], 
+    props: ['status', 'schedule'], 
     data() {
         return {
             months: [1,2,3],
@@ -71,7 +73,20 @@ export default {
             column_2: 'col-4',
             column_3: 'col-3',
             column_4: 'col-2',
+            installments: []
 
+        }
+    },
+    mounted() {
+        this.loadInstallments(this.schedule)
+    },
+    methods: {
+        loadInstallments(schedule) {
+            const url = `/api/booking/payment-installments/${schedule}`
+            console.log(url)
+            axios.get(url)
+                .then(response => (this.installments = response.data.installments))
+              //  .catch(error)
         }
     }
     

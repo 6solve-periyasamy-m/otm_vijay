@@ -3,10 +3,10 @@
     <h3>Total Cost of Travel Booking</h3>
     <div class="row">
         <div :class="column_1" class="payments__column--highlight">
-            4 Passengers        
+            Total Charges
         </div>
         <div :class="column_2" class="payments__column--highlight">
-            Total Charges
+            {{number_passengers}} Passengers        
         </div>
         <div :class="column_3" class="payments__column--highlight">
             Discount for full payment
@@ -17,39 +17,38 @@
     </div>
     <div class="row">
         <div :class="column_1">
-            £1500 per passenger
+            {{currency}}{{per_passenger}} per passenger
         </div>
         <div :class="column_2">
-            £6000
+            {{currency}}{{total_charge}}
         </div>
         <div :class="column_3">
-            £600
+            {{currency}}{{discount}}
         </div>
         <div :class="column_4">
-            £5400            
+            {{currency}}{{pay_now_price}}            
         </div>
     </div>
-
-    
     <hr/>
     <div class="row">
         <div :class="column_1x">
-            Alternatively, you can select an installment plan
+            Alternatively, you can select an installment plan...
         </div>
 
         <div :class="column_3">
-            <select name="installment_plan">
+            <select v-model="schedule_selected" name="installment_plan">
                 <option>Select</option>
-                <option>Plan 1</option>
-                <option>Plan 2</option>
-                <option>Plan 3</option>
+                <option v-for="schedule in schedules" :key="schedule.id" :value="schedule.id">{{schedule.title}}</option>
             </select>
+            <div class="msg">
+                {{ schedule_selected ? '' : 'Select a schedule for payments'}}
+            </div>
         </div>
     </div>
     <hr/>
     <h4>Payment Schedule and Installment Plan</h4>
-    <div class="row">
-        <payment-installments status="new"></payment-installments>
+    <div class="row" v-if="schedule_selected">
+        <payment-installments status="new" :schedule="schedule_selected"></payment-installments>
     </div>
     <hr/>
 
@@ -82,13 +81,13 @@
             <button>Pay Now</button>
         </div>
     </div>
-
-
 </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
-    props: ['status'],
+    props: ['status', 'tour', 'total_price', 'passengers'],
     data() {
         return {
             column_1: 'col-3',
@@ -96,16 +95,34 @@ export default {
             column_2: 'col-4',
             column_3: 'col-3',
             column_4: 'col-2',
-            schedule: [],
-            installments: []
+            schedules: [],
+            schedule_selected: null,
+            installments: [],
+            currency: '£',
+            total_charge: this.total_price,
+            number_passengers: this.passengers
         }
     },
-    methods: {
-        loadPaymentSchedule() {
-
+    computed: {
+        per_passenger: function() {
+            return this.total_charge / this.number_passengers
         },
-        loadInstallments() {
-
+        discount: function() {
+            return this.total_charge / 10
+        },
+        pay_now_price: function() {
+            return this.total_charge - this.discount
+        }
+    },
+    mounted() {
+        console.log('Loading payment schedules for tour', this.tour, ' charge ', this.total_charge, ' passengers ', this.number_passengers)
+        this.loadPaymentSchedules(this.tour)
+    },
+    methods: {
+        // load generic payment schedules (ignore tour_id - schedules are not tour specific)
+        loadPaymentSchedules() {
+            axios.get(`/api/booking/payment-schedules`)
+                .then(response => (this.schedules = response.data.schedules))
         }
     }
 }
