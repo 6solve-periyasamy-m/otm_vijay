@@ -19,7 +19,7 @@
                             <dt>Customer bookings</dt>
                             <dd>Your booking URL would be travelagency.octopustravelmatrix.com/booking - you can setup a redirect from your site to your OTM booking form.</dd>
 
-                            <dt><a href="/booking">Customer Booking Form</a></dt>
+                            <dt><a style="text-decoration: underline" href="/booking">Customer Booking Form</a></dt>
                             <dd>The Customer Booking Form is a public URL from you site to your OTM site.</dd>
 
                         </dl>
