@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DataRowsTableSeederFeb extends Seeder
+class UpdaterDataRowsTableSeeder extends Seeder
 {
 
     /**
