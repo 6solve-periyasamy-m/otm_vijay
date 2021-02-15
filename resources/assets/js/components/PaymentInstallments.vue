@@ -22,7 +22,7 @@
             Deposit
         </div>
         <div :class="column_3">
-            £900.00 
+            £{{deposit_value}}
         </div>
         <div :class="column_4" v-if="status == 'new'">
             <button class="payments__button--action">Due Now</button>
@@ -58,13 +58,12 @@
         </div>
     </div>
 {{schedule}}
-{{installments}}
 </div>
 </template>
 <script>
 import axios from 'axios';
 export default {
-    props: ['status', 'schedule'], 
+    props: ['status', 'load_schedule', 'price'], 
     data() {
         return {
             months: [1,2,3],
@@ -73,23 +72,41 @@ export default {
             column_2: 'col-4',
             column_3: 'col-3',
             column_4: 'col-2',
+            schedule: null,
+            deposit_value: 0,
             installments: []
 
         }
     },
-    mounted() {
-        this.loadInstallments(this.schedule)
+    async mounted() {
+        console.log('before')
+        const url = `/api/booking/payment-schedule/${this.load_schedule}`
+        await axios.get(url)
+                   .then(response => (this.schedule = response.data.schedule))
+        console.log('after')
+        this.deposit_value = this.calculate_deposit();
     },
     methods: {
-        loadInstallments(schedule) {
-            const url = `/api/booking/payment-installments/${schedule}`
-            console.log(url)
-            axios.get(url)
-                .then(response => (this.installments = response.data.installments))
-              //  .catch(error)
+        pc_value(s) {
+            const re = /%d*/
+            const t = re.exec(s)
+            return parse_int(t)
+
+        },
+        calculate_deposit() {
+            const deposit_string = this.schedule.deposit
+            let ri = 0
+            var deposit_amount = 0;
+            if (deposit_string.indexOf('%')) {
+                ri = new Number(deposit_string.replace("%", ""));
+                deposit_amount = (ri / 100) * this.price;
+            } else {
+                deposit_amount = deposit_string.valueOf();
+            }
+            console.log(deposit_string, ri, deposit_amount)
+            return deposit_amount;
         }
-    }
-    
+    }    
 }
 </script>
 

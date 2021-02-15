@@ -36,29 +36,18 @@ class ApiController extends Controller
         return response()->json(["success" => true, "data" => $airlines->toArray()]);
     }
 
-    public function getPaymentSchedules($tour_id = 0, $withInstallments = false)
+    public function getPaymentSchedules()
     {
-        if ($tour_id) {
-            $schedules = PaymentSchedule::where('tour_id', $tour_id)->get();
-        } else {
-            $schedules = PaymentSchedule::orderBy('title')->get();
-        }
-
-        if ($withInstallments) {
-            $schedules->map(function ($schedule) {
-                $installments = PaymentInstallment::where('payment_schedule_id', $schedule->id)->get();
-                $schedule->installments = $installments;
-            });
-        }
+        $schedules = PaymentSchedule::orderBy('title')->get();
 
         return response()->json(["success" => true, "schedules" => $schedules->toArray()]);
     }
 
-    public function getPaymentInstallments($schedule_id)
+    public function getPaymentSchedule($id) 
     {
-        $installments = PaymentInstallment::where('payment_schedule_id', $schedule_id)->get();
-\Log::debug('installments....for '.$schedule_id, $installments->toArray());
-        return response()->json(["success" => true, "installments" => $installments->toArray()]);
+        $schedule = PaymentSchedule::findOrFail($id);
+\Log::debug('schedule for id '.$id, $schedule->toArray());
+        return response()->json(["success" => true, "schedule" => $schedule->toArray()]);
     }
 
     public function getFlightsFromAirport(Airport $airport = null)

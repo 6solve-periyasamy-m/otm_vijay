@@ -42,13 +42,14 @@
             </select>
             <div class="msg">
                 {{ schedule_selected ? '' : 'Select a schedule for payments'}}
+                {{ schedule_selected }}
             </div>
         </div>
     </div>
     <hr/>
     <h4>Payment Schedule and Installment Plan</h4>
     <div class="row" v-if="schedule_selected">
-        <payment-installments status="new" :schedule="schedule_selected"></payment-installments>
+        <payment-installments status="new" :price="total_price" :load_schedule="schedule_selected"></payment-installments>
     </div>
     <hr/>
 
@@ -99,6 +100,7 @@ export default {
             schedule_selected: null,
             installments: [],
             currency: '£',
+            discount_rate: 10,
             total_charge: this.total_price,
             number_passengers: this.passengers
         }
@@ -108,22 +110,16 @@ export default {
             return this.total_charge / this.number_passengers
         },
         discount: function() {
-            return this.total_charge / 10
+            return this.total_charge * (this.discount_rate/100)
         },
         pay_now_price: function() {
             return this.total_charge - this.discount
         }
     },
-    mounted() {
+    async mounted() {
         console.log('Loading payment schedules for tour', this.tour, ' charge ', this.total_charge, ' passengers ', this.number_passengers)
-        this.loadPaymentSchedules(this.tour)
-    },
-    methods: {
-        // load generic payment schedules (ignore tour_id - schedules are not tour specific)
-        loadPaymentSchedules() {
-            axios.get(`/api/booking/payment-schedules`)
-                .then(response => (this.schedules = response.data.schedules))
-        }
+        await axios.get(`/api/booking/payment-schedules`)
+                   .then(response => (this.schedules = response.data.schedules))
     }
 }
 </script>
