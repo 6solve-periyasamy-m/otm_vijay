@@ -60,7 +60,7 @@
             Total Paid
         </div>
         <div :class="column_3">
-            £0.00
+            
         </div>
         <div :class="column_4">
             
@@ -75,7 +75,7 @@
             Balance remaining
         </div>
         <div :class="column_3">
-            £5900.00 
+            
         </div>
         <div :class="column_4" v-if="status == 'payment'">
             <button>Pay Now</button>

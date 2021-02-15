@@ -36,28 +36,12 @@
             Installment
         </div>
         <div :class="column_3">
-            {{ installment }} 
+            {{currency}}{{ installment }} 
         </div>
         <div :class="column_4">
             by 'date_to_calc'
         </div>
     </div>
-
-    <div class="row">
-        <div :class="column_1">
-            01/07/2021
-        </div>
-        <div :class="column_2">
-            Balance remaining
-        </div>
-        <div :class="column_3">
-            £5900.00 
-        </div>
-        <div :class="column_4" v-if="status == 'payment'">
-            <button class="payments__button--action">Pay Now</button>
-        </div>
-    </div>
-{{schedule}}
 </div>
 </template>
 <script>
@@ -75,6 +59,7 @@ export default {
             schedule: null,
             deposit_value: 0,
             period: null,
+            currency: '£',
             installments: []
 
         }
@@ -89,23 +74,18 @@ export default {
         this.calculate_installments()
     },
     methods: {
-        pc_value(s) {
-            const re = /%d*/
-            const t = re.exec(s)
-            return parse_int(t)
-
-        },
         calculate_deposit() {
             const deposit_string = this.schedule.deposit
             let ri = 0
             var deposit_amount = 0;
-            if (deposit_string.indexOf('%')) {
+            if (deposit_string.indexOf('%')>0) {
                 ri = new Number(deposit_string.replace("%", ""));
                 deposit_amount = (ri / 100) * this.price;
             } else {
-                deposit_amount = deposit_string.valueOf();
+                deposit_amount = new Number(deposit_string)
+                console.log('deposit_amount',deposit_amount)
             }
-            console.log(deposit_string, ri, deposit_amount)
+            console.log(deposit_string, ri, deposit_amount, deposit_string.indexOf('%'))
             return deposit_amount;
         },
         calculate_installments() {
