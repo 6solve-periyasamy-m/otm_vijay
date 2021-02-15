@@ -36,11 +36,11 @@
         </div>
 
         <div :class="column_3">
-            <select v-model="schedule_selected" name="installment_plan">
+            <select @change="changeSelection" v-model="schedule_selected" name="installment_plan">
                 <option>Select</option>
                 <option v-for="schedule in schedules" :key="schedule.id" :value="schedule.id">{{schedule.title}}</option>
             </select>
-            <div class="msg">
+            <div class="message">
                 {{ schedule_selected ? '' : 'Select a schedule for payments'}}
             </div>
         </div>
@@ -48,7 +48,7 @@
     <hr/>
     <h4>Payment Schedule and Installment Plan</h4>
     <div class="row" v-if="schedule_selected">
-        <payment-installments status="new" :price="total_price" :load_schedule="schedule_selected"></payment-installments>
+        <payment-installments :key="changed" status="new" :price="total_price" :load_schedule="schedule_selected"></payment-installments>
     </div>
     <hr/>
 
@@ -98,6 +98,7 @@ export default {
             schedules: [],
             schedule_selected: null,
             installments: [],
+            changed: null,
             currency: '£',
             discount_rate: 10,
             total_charge: this.total_price,
@@ -116,9 +117,14 @@ export default {
         }
     },
     async mounted() {
-        console.log('Loading payment schedules for tour', this.tour, ' charge ', this.total_charge, ' passengers ', this.number_passengers)
+        //console.log('Loading payment schedules for tour', this.tour, ' charge ', this.total_charge, ' passengers ', this.number_passengers)
         await axios.get(`/api/booking/payment-schedules`)
                    .then(response => (this.schedules = response.data.schedules))
+    },
+    methods: {
+        changeSelection() {
+            this.changed = this.schedule_selected;
+        }
     }
 }
 </script>

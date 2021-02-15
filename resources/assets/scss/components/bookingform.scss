@@ -17,4 +17,8 @@
             font-weight: bold;
         }
     }
+    &__info {
+        color: var(--payment-button-color);
+        font-weight: 600;
+    }
 }

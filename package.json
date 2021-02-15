@@ -23,7 +23,7 @@
     "dependencies": {
         "bootstrap": "^4.6.0",
         "bootstrap-vue": "^2.21.2",
-        "date-arithmetic": "^4.1.0",
+        "date-fns": "^2.17.0",
         "datepicker": "0.0.0",
         "jquery": "^3.5.1",
         "jquery-ui": "^1.12.1",

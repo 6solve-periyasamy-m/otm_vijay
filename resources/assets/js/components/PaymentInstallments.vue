@@ -1,12 +1,8 @@
 <template>
 <div class="col-0 col-sm-12">
     <div class="row">
-        <div :class="column_1">
-        </div>
-        <div :class="column_2">
+        <div :class="column_1x" class="payments__info">
             Schedule: {{ schedule.title }}
-        </div>
-        <div :class="column_3">
             {{ schedule.installments }} {{schedule.period}} installments
         </div>        
     </div>
@@ -56,7 +52,7 @@
 </template>
 <script>
 import axios from 'axios';
-import * as dateMath from 'date-arithmetic'
+import { add, format } from 'date-fns'
 function paymentDates(date) {
 
 }
@@ -79,11 +75,9 @@ export default {
         }
     },
     async mounted() {
-        console.log('before')
         const url = `/api/booking/payment-schedule/${this.load_schedule}`
         await axios.get(url)
                    .then(response => (this.schedule = response.data.schedule))
-        console.log('after', this.schedule)
         this.deposit_value = this.calculate_deposit()
         this.installments = this.calculate_installments()
     },
@@ -97,13 +91,12 @@ export default {
                 deposit_amount = (ri / 100) * this.price;
             } else {
                 deposit_amount = new Number(deposit_string)
-                console.log('deposit_amount',deposit_amount)
             }
-            // console.log(deposit_string, ri, deposit_amount, deposit_string.indexOf('%'))
             return deposit_amount;
         },
         normalise_unit() {
                 let unit;
+                let qty = 1;
                 switch (this.schedule.period.toLowerCase()) {
                     case 'week':
                     case 'weeks':
@@ -125,37 +118,40 @@ export default {
                     default: 
                         unit = 'month'
                 }
-                return unit
+                return { period: unit, quantity: qty }
         },
         calculate_installments() {
-            //console.log('this.schedule.installments',this.schedule.installments)
             const installment_count = this.schedule.installments
             let repayments = this.price - this.deposit_value
             const payment = repayments / installment_count;
 
             const payment_numbers = new Array(installment_count).fill(payment);
             var previous_date = new Date
-
-            const dueDates = payment_numbers.map((payment) => {
+            const dueDates = payment_numbers.map(() => {
                 let payment_date = new Date
                 let qty = 1;
                 const unit = this.normalise_unit()
-                
-                previous_date = dateMath.add(previous_date, 1, unit)
+                if (unit.period === 'day') {
+                    previous_date = add(previous_date, {days: unit.quantity});
+                }
+                if (unit.period === 'week') {
+                    previous_date = add(previous_date, {weeks: unit.quantity});
+                }
+                if (unit.period === 'month') {
+                    previous_date = add(previous_date, {months: unit.quantity});
+                }
                 return previous_date
             })
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            // turn two arrays into a useful array of objects
             const payments = payment_numbers.map((payment, i) => {
                 return {
                     amount: payment,
                     sequence: i+1,
                     unit: this.normalise_unit(),
                     period: this.schedule.period,
-                    due: dateMath.day(dueDates[i]) + '/' + monthNames[dateMath.month(dueDates[i])] + '/' + dateMath.year(dueDates[i])   
+                    due: format(dueDates[i], "dd-MMM-yyyy")
                 }
             })
-            console.log(payments) //, dueDates, repayments, this.period, this.installments)
+
             return payments
         }
     }    
