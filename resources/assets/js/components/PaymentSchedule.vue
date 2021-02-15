@@ -60,14 +60,14 @@
             Total Paid
         </div>
         <div :class="column_3">
-            
+            {{ paid }}
         </div>
         <div :class="column_4">
             
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-if="paid > 0">
         <div :class="column_1">
             
         </div>
@@ -87,7 +87,7 @@
 import axios from 'axios';
 
 export default {
-    props: ['status', 'tour', 'total_price', 'passengers'],
+    props: ['status', 'tour', 'total_price', 'passengers', 'paid'],
     data() {
         return {
             column_1: 'col-3',
