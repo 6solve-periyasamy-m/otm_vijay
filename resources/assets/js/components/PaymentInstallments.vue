@@ -28,18 +28,18 @@
             <button class="payments__button--action">Due Now</button>
         </div>
     </div>
-    <div class="row" v-for="month in months" :key="month">
+    <div class="row" v-for="(installment,c) in installments" :key="c">
         <div :class="column_1">
-            Month {{ month }}
+            {{ period }} # {{ c+1 }}
         </div>
         <div :class="column_2">
             Installment
         </div>
         <div :class="column_3">
-            £1000 
+            {{ installment }} 
         </div>
         <div :class="column_4">
-            by 01/0{{3+month}}/2021
+            by 'date_to_calc'
         </div>
     </div>
 
@@ -74,6 +74,7 @@ export default {
             column_4: 'col-2',
             schedule: null,
             deposit_value: 0,
+            period: null,
             installments: []
 
         }
@@ -83,8 +84,9 @@ export default {
         const url = `/api/booking/payment-schedule/${this.load_schedule}`
         await axios.get(url)
                    .then(response => (this.schedule = response.data.schedule))
-        console.log('after')
-        this.deposit_value = this.calculate_deposit();
+        console.log('after', this.schedule)
+        this.deposit_value = this.calculate_deposit()
+        this.calculate_installments()
     },
     methods: {
         pc_value(s) {
@@ -105,6 +107,14 @@ export default {
             }
             console.log(deposit_string, ri, deposit_amount)
             return deposit_amount;
+        },
+        calculate_installments() {
+            console.log('this.schedule.installments',this.schedule.installments)
+            const installment_count = this.schedule.installments
+            this.period = this.schedule.period
+            let repayments = this.price - this.deposit_value
+            this.installments = new Array(installment_count).fill(repayments / installment_count);
+            console.log(repayments, this.period, this.installments)
         }
     }    
 }

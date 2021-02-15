@@ -42,7 +42,6 @@
             </select>
             <div class="msg">
                 {{ schedule_selected ? '' : 'Select a schedule for payments'}}
-                {{ schedule_selected }}
             </div>
         </div>
     </div>
