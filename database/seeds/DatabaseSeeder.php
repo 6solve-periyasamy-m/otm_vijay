@@ -13,10 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UpdaterDataRowsTableSeeder::class);
-        $this->call(UpdaterDataTypesTableSeeder::class);
-        $this->call(UpdaterMenusTableSeeder::class);
-        $this->call(UpdaterMenuItemsTableSeeder::class);
-        $this->call(UpdaterSettingsTableSeeder::class);
+        $this->call(DataTypesTableSeeder::class);
+        $this->call(DataRowsTableSeeder::class);
+        $this->call(MenusTableSeeder::class);
+        $this->call(MenuItemsTableSeeder::class);
+        $this->call(RolesTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
+        $this->call(PermissionRoleTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
     }
 }

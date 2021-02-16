@@ -10,6 +10,11 @@ class Accommodation extends Model
 {
     //use ModelLogging;
 
+    public function orderAccommodation()
+    {
+        return $this->belongsTo(OrdersAccommodation::class);
+    }
+    
     public function region()
     {
         return $this->belongsTo(Region::class);

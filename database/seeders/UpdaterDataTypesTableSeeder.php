@@ -1,9 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UpdaterDataTypesTableSeeder extends Seeder
 {
@@ -15,8 +13,11 @@ class UpdaterDataTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('data_types')->delete();
-        DB::table('data_types')->insert(array (
+        
+
+        \DB::table('data_types')->delete();
+        
+        \DB::table('data_types')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -465,7 +466,7 @@ class UpdaterDataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-16 08:43:02',
-                'updated_at' => '2021-02-04 21:26:10',
+                'updated_at' => '2021-02-09 06:22:08',
             ),
             25 => 
             array (
@@ -501,7 +502,7 @@ class UpdaterDataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-23 14:02:22',
-                'updated_at' => '2021-02-04 22:57:57',
+                'updated_at' => '2021-02-14 21:04:55',
             ),
             27 => 
             array (

@@ -1,0 +1,17 @@
+
+
+.listing {
+    display: flex;
+    flex-direction: column;
+    &__title {
+        display: inline-flex;
+    }
+    &__installment {
+        display: block;
+
+    }
+}
+
+ul.menu {
+    list-style: none;
+}

@@ -15,9 +15,10 @@ class CreatePaymentSchedulesTable extends Migration
     {
         Schema::create('payment_schedules', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('tour_id')->index();
             $table->string('title', 250)->nullable();
-            $table->float('amount', 10, 2);
+            $table->string('deposit');
+            $table->string('period', 20);
+            $table->integer('installments');
             $table->timestamps();
             $table->softDeletes();
         });

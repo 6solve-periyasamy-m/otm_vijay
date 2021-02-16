@@ -12,16 +12,22 @@ class PaymentSchedule extends Model
 
     public $additional_attributes = ['Tour_Payment_Schedule'];
 
-    public function PaymentInstallment() 
+    public function installments() 
     {
         return $this->hasMany(PaymentInstallment::class);
     }
-    public function Tour() 
+
+    public function tour() 
     {
         return $this->belongsTo(Tour::class);
     }
+
     public function getTourPaymentScheduleAttribute() 
     {
+        if (empty($this->tour)) {
+            throw new \Exception('Payment schedule for non-existent tour!');
+        }
+
         return "Tour: {$this->tour->title} Amount: {$this->amount}";
     }
 }
