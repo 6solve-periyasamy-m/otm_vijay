@@ -7,8 +7,8 @@
 
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
-                            <bookingform-lead></bookingform-lead>
-                            <bookingform-additional></bookingform-additional>
+                            <booking-form-lead></booking-form-lead>
+                            <booking-form-additional></booking-form-additional>
                             <booking-form-details></booking-form-details>
                             <bookingform-terms></bookingform-terms>
                         <bookingform-footer></bookingform-footer>
