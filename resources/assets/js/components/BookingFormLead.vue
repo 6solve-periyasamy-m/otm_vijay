@@ -32,19 +32,20 @@
                     </div>
                     <div class="col-sm-6 form-group height-rem5">
                         <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                        <input type="text" v-model="mobile_number" placeholder="Mobile number" name="mobile_number" id="mobile_number" class="form-control" />
+                        <input type="text" v-model="mobile_number" placeholder="Mobile number" pattern="^(?:0|\(?\+33\)?\s?|0033\s?)[1-79](?:[\.\-\s]?\d\d){4}$" name="mobile_number" id="mobile_number" class="form-control" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-5">
-                        <select v-model="other_phone_number_type" name="additional_phone_number_select" @change="modifyOtherPhone" class="customdropdown">
+                        <select v-model="other_phone_number_type" name="additional_phone_number_select" class="x-customdropdown">
                             <option value="" disabled selected>Additional Phone number</option>
                             <option value="(mob)">Mobile</option>
                             <option value="(tel)">Home</option>
                             <option value="(bus)">Business</option>
                         </select>
 
-                        <input type="number" v-model="other_phone_number" placeholder="Other contact number" name="other_phone_number" id="other_phone_number" class="form-control">
+                        <input type="text" v-model="other_phone_number" @change="validphone" placeholder="Other contact number" name="other_phone_number" id="other_phone_number" class="form-control">
+                        <label class="invalid" v-if="other_phone_number_invalid">{{other_phone_number_validation}}</label>
                     </div>
                 </div>
 
@@ -72,33 +73,33 @@
 
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="adl1">Delivery Address line 1</label>
+                        <label class="form-label" for="adl1" v-show="address_line_1">Delivery Address line 1</label>
                         <input v-model="address_line_1" type="text" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label">Billing Address line 1</label>
+                        <label class="form-label" v-show="billing_address_line_1">Billing Address line 1</label>
                         <input type="text" v-model="billing_address_line_1" class="form-control">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="adl1">Delivery Address line 2</label>
+                        <label class="form-label" for="adl1" v-show="address_line_2">Delivery Address line 2</label>
                         <input v-model="address_line_2" type="text" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label">Billing Address line 2</label>
+                        <label class="form-label" v-show="billing_address_line_2">Billing Address line 2</label>
                         <input type="text" v-model="billing_address_line_2" class="form-control">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="adl1">Delivery Address line 3</label>
+                        <label class="form-label" for="adl1" v-show="address_line_3">Delivery Address line 3</label>
                         <input v-model="address_line_3" type="text" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label">Billing Address line 3</label>
+                        <label class="form-label" v-show="billing_address_line_1">Billing Address line 3</label>
                         <input type="text" v-model="billing_address_line_3" class="form-control">
                     </div>
                 </div>
@@ -106,43 +107,43 @@
 
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="town">Town</label>
+                        <label class="form-label" for="town" v-show="town">Town</label>
                         <input type="text" v-model="town" name="town" id="town" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="town">Town</label>
-                        <input type="text" v-model="town" name="town" id="town" class="form-control">
+                        <label class="form-label" for="billing_town">Town</label>
+                        <input type="text" v-model="billing_town" name="billing_town" class="form-control">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
                         <label class="form-label" for="county">County</label>
-                        <input type="text" v-model="county" name="county" id="county" class="form-control">
+                        <input type="text" v-model="county" name="county" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="county">County</label>
-                        <input type="text" v-model="county" name="county" id="county" class="form-control">
+                        <label class="form-label" for="billing_county">Billing County</label>
+                        <input type="text" v-model="county" name="billing_county" class="form-control">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="postcode">Postcode</label>
-                        <input type="text" v-model="postcode" name="postcode" id="postcode" class="form-control">
+                        <label class="form-label" for="postcode" v-show="postcode">Postcode</label>
+                        <input type="text" v-model="postcode" name="postcode" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="postcode">Postcode</label>
-                        <input type="text" v-model="postcode" name="postcode" id="postcode" class="form-control">
+                        <label class="form-label" for="billing_postcode">Billing Postcode</label>
+                        <input type="text" v-model="billing_postcode" name="billing_postcode" class="form-control">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="country">Country</label>
-                        <input type="text" v-model="country" name="country" id="country" class="form-control">
+                        <label class="form-label" for="country" v-show="country">Country</label>
+                        <input type="text" v-model="country" name="country" class="form-control">
                     </div>
                     <div v-if="!same_address" class="col-sm-6 form-group height-rem5">
-                        <label class="form-label" for="country">Country</label>
-                        <input type="text" v-model="country" name="country" id="country" class="form-control">
+                        <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
+                        <input type="text" v-model="billing_country" name="billing_country" class="form-control">
                     </div>
                 </div>
             </form>
@@ -164,23 +165,61 @@ export default {
             middle_name: '',
             email_address: '',
             mobile_number: '',
+            address_line_1: '',
+            address_line_2: '',
+            address_line_3: '',
+            country: '',
+            county: '',
+            town: '',
+            postcode: '',
+            billing_address_line_1: '',
+            billing_address_line_2: '',
+            billing_address_line_3: '',
+            billing_country: '',
+            billing_county: '',
+            billing_town: '',
+            billing_postcode: '',
+            other_phone_number: '',
             other_phone_number_input: '',
             other_phone_number_type: '',
             date_of_birth: '',
-            same_address: false
+            same_address: false,
+            other_phone_number_invalid: false,
+            other_phone_number_validation: 'Please enter a valid phone number'
+
         }
     },
-    computed: {
-        other_phone_number: function() {
-            return this.other_phone_number_type + ' ' + this.other_phone_number_input
-        }
-    },
+    // computed: {
+    //     other_phone_number: function() {
+    //         return this.other_phone_number_type + ' ' + this.other_phone_number_input
+    //     }
+    // },
     methods: {
         toggleTraveller() {
             this.showTraveller = !this.showTraveller
         },
         toggleSameAddress() {
             this.same_address = !this.same_address
+        },
+        validphone(e) {
+            // re seems to work
+            const re = /((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}/
+            // re2 seems too permissive?
+            const re2 = /^((((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\(\d{4}|\d{3}))?)|((\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3})|((((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\(\d{4}|\d{3}))?$/
+
+            const field = e.srcElement.name
+            switch (field) {
+                case 'other_phone_number':
+                    this.other_phone_number_invalid = false
+                    if (!this.other_phone_number.match(re)) {
+                        this.other_phone_number_invalid = true
+                        return false
+                    }
+                    break
+                default:
+                    alert(field + ' not handled in switch')
+            }
+            return true
         },
         storeData() {
             return true
@@ -190,6 +229,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input[pattern]:invalid,
+.invalid {
+    color: red;
+}
   .maxwidth {
     width: 100%;
   }
