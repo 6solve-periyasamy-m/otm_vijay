@@ -54,7 +54,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 Route::prefix("/booking")->group(function() {
-    Route::get('/login/{token}', [BookingFormLoginController::class, 'login']); // Demo for now
+    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
     Route::get('/{id}', [BookingController::class, 'bookingForm']);
     Route::get('/', [BookingController::class, 'newBookingForm']);
 });
