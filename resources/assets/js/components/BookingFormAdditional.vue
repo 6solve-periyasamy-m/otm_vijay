@@ -13,7 +13,7 @@
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                     <div v-for="item in additional" :key="item.name">
-                        <bookingform-addtemplate></bookingform-addtemplate>
+                        <booking-form-add-traveller :form-id="formId"></booking-form-add-traveller>
                     </div>
                     <button type="button" class="btn btn-success" @click="addAdditional">Add another person</button>
                 </div>
@@ -32,6 +32,11 @@
         },
         mounted() {
             console.log('Component mounted.')
+        },
+        computed: {
+            formId: function() {
+                return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            }
         },
         methods: {
             toggleAdditional() {

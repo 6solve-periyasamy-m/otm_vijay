@@ -2,6 +2,7 @@ require('./bootstrap');
 window.axios = require('axios');
 window.Vue = require('vue');
 window.lodash = require('lodash');
+//window.validPhone = require('validphone');
 
 window.axios.defaults.headers.common = {
      'X-Requested-With': 'XMLHttpRequest',
@@ -15,6 +16,7 @@ window.axios.defaults.headers.common = {
  Vue.component('accommodation-details', require('./components/AccommodationDetails.vue').default);
  Vue.component('booking-form-lead', require('./components/BookingFormLead.vue').default);
  Vue.component('booking-form-additional', require('./components/BookingFormAdditional.vue').default);
+ Vue.component('booking-form-add-traveller', require('./components/BookingFormAddTraveller.vue').default);
  
  Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
  Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
@@ -26,7 +28,6 @@ window.axios.defaults.headers.common = {
  Vue.component('finance-menu', require('./components/finance-menu.vue').default);
  Vue.component('bookingform-header', require('./components/bookingform-header.vue').default);
  Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
- Vue.component('bookingform-addtemplate', require('./components/bookingform-addtemplate.vue').default);
  Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
  Vue.component('bookingform-terms', require('./components/bookingform-terms.vue').default);
  const app = new Vue({

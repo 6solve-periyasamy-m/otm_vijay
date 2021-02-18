@@ -22,3 +22,42 @@
         font-weight: 600;
     }
 }
+.has-dropdown {
+    top: 0.5rem;
+    width: 100%;
+    .dropdown {
+        border: none;
+        align-content: right;
+    }
+    .dropdown::selection {
+        border-radius: 8px;
+        border: thin #ddd solid;
+    }
+}
+.dropdown {
+    border: thin #ddd solid;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 4px;
+}
+.lower {
+    margin-top: 1rem;
+}
+input, .dropdown {
+    border-radius: 8px;
+    border: thin #ddd solid;
+}
+input[pattern]:invalid,
+.invalid {
+    color: red;
+}
+.maxwidth {
+    width: 100%;
+}
+.field-separation {
+    min-height: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
