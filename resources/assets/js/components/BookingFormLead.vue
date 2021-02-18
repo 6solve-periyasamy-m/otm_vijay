@@ -207,9 +207,6 @@ export default {
             const name = this.other_phone_number_type
             return 'Other ' + name.charAt(0).toUpperCase() + name.slice(1) + ' number'
         }
-        // other_phone_number: function() {
-        //     return this.other_phone_number_type + ' ' + this.other_phone_number_input
-        // }
     },
     methods: {
         toggleTraveller() {
@@ -219,25 +216,22 @@ export default {
             this.same_address = !this.same_address
         },
         validPhone(e) {
-        // re seems to work
-        const re = /((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}/
-        // re2 seems too permissive?
-        const re2 = /^((((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\(\d{4}|\d{3}))?)|((\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3})|((((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\(\d{4}|\d{3}))?$/
-
+            const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
             const field = e.srcElement.name
-            console.log(field)
+            // console.log(field)
             switch (field) {
                 case 'mobile_number':
-                    this.mobile_phone_number_invalid = false
-                    if (!this.mobile_number.match(re)) {
+                    this.mobile_number_invalid = false
+                    if (!valid_uk.test(this.mobile_number)) {
+                    //if (!this.mobile_number.match(valid_uk)) {
                         this.mobile_number_invalid = true
                         return false
                     }
                     break
                 case 'other_phone_number':
                     this.other_phone_number_invalid = false
-                    if (!this.other_phone_number.match(re)) {
-//                    if (validPhone(field)) {
+                    if (!valid_uk.test(this.other_phone_number)) {
+                        //if (!this.other_phone_number.match(valid_uk)) {
                         this.other_phone_number_invalid = true
                         return false
                     }

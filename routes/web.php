@@ -26,6 +26,10 @@ Route::get('/', function () {
 });
 
 
+Route::get('phones', function() {
+    return view('phoneValidation');
+});
+
 Route::prefix('customer')->group(function () {
     Route::get('/payment/schedule', [PaymentScheduleController::class, 'index'])->name('payment-schedule');
 });

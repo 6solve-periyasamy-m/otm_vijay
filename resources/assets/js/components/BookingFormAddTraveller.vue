@@ -2,7 +2,11 @@
 <div class="container">
     <div class="ept" :id="additionalTraveller">
         <div class="ept-control">
-            <button v-if="emptyForm" type="button" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
+            <button v-if="emptyForm" 
+                type="button" 
+                :name="formId"
+                class="btn btn-warning" 
+                @click="removeTraveller">Remove Traveller</button>
             <div v-else>
                 <label for="include">Include</label>
                 <input type="checkbox" name="include" :value="additionalTraveller">
@@ -29,6 +33,7 @@
                 <div class="col-sm-6 form-group field-separation">
                     <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
                     <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" id="mobile_number" class="form-control" />
+                    <label class="invalid" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
                 </div>
             </div>
 
@@ -69,9 +74,14 @@
                 email_address: '',
                 date_of_birth: '',
                 mobile_number: '',
+                mobile_number_invalid: false,
+                mobile_number_validation: 'Please enter a valid phone number',
                 other_phone_number: '',
                 other_phone_number_invalid: false,
-                other_phone_number_validation: 'Please enter a valid phone number'
+                other_phone_number_validation: 'Please enter a valid phone number',
+                validphone: false,
+                other_phone_number_type: '',
+                otherNumberType: ''
             }
         },
         computed: {
@@ -85,7 +95,37 @@
         },
         methods: {
             validPhone(e) {
-                return true;
+                // valid_uk appears to be fairly accurate
+                const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
+                const field = e.srcElement.name
+                // console.log(field)
+                switch (field) {
+                    case 'mobile_number':
+                        console.log(field, this.mobile_number)
+                        this.mobile_number_invalid = false
+                        //if (!this.mobile_number.match(valid_uk)) {
+                        if (!valid_uk.test(this.mobile_number)) {
+                            this.mobile_number_invalid = true
+                            console.log(field, this.mobile_number)
+                            return false
+                        }
+                        break
+                    case 'other_phone_number':
+                        this.other_phone_number_invalid = false
+                        //if (!this.other_phone_number.match(valid_uk)) {
+                        if (!valid_uk.test(this.other_phone_number)) {
+                            this.other_phone_number_invalid = true
+                            return false
+                        }
+                        break
+                    default:
+                        alert(field + ' not handled in switch')
+                }
+                return true
+            },
+            removeTraveller(e) {
+                const field = e.srcElement.name
+                console.log(e, field)
             }
         }
     }
