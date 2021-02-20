@@ -1,6 +1,13 @@
 :root {
     --payment-button-color: #007bff;
 }
+.ept {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px double #ccc;
+    padding: 0 0 1rem 0;
+}
+
 .payments {
     &__column {
         &--highlight {
@@ -37,11 +44,8 @@
 .dropdown {
     border: thin #ddd solid;
     margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem;
     padding: 4px;
-}
-.lower {
-    margin-top: 1rem;
 }
 input, .dropdown {
     border-radius: 8px;
@@ -55,9 +59,16 @@ input[pattern]:invalid,
     width: 100%;
 }
 .field-separation {
-    min-height: 4rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    min-height: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.field-joining {
+    max-height: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
 }
 

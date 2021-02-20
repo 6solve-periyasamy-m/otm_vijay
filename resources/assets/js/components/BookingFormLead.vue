@@ -14,11 +14,11 @@
                 <div class="row">
                     <div class="col-sm-4 form-group field-separation">
                             <label type="form-label" for="first_name" v-show="first_name">First name</label>
-                            <input type="text" v-model="first_name" placeholder="First name" name="first_name" id="first_name" class="form-control maxwidth" />                        
+                            <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />                        
                     </div>
                     <div class="col-sm-4 form-group field-separation">
                         <label class="form-label" for="middle_name" v-show="middle_name">Middle name(s)</label>
-                        <input type="text" v-model="middle_name" placeholder="Middle name" name="middle_name" id="middle_name" class="form-control maxwidth" />
+                        <input type="text" v-model="middle_name" placeholder="Middle name" name="middle_name" class="form-control maxwidth" />
                     </div>
                     <div class="col-sm-4 form-group field-separation">
                         <label class="form-label" for="last_name" v-show="last_name">Last name</label>
@@ -29,12 +29,15 @@
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
                         <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
-                        <input type="email" v-model="email_address" placeholder="Email address" name="email_address" id="email_address" class="form-control" />
+                        <input type="email" v-model="email_address" placeholder="Email address" name="email_address" class="form-control" />
+                        <label class="invalid" v-if="email_invalid">{{email_validation}}</label>
+                        <label class="valid" v-else>{{email_validation}}</label>
                     </div>
                     <div class="col-sm-6 form-group field-separation">
                         <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" id="mobile_number" class="form-control" />
+                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
                         <label class="invalid" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
+                        <label class="valid" v-else>{{mobile_number_validation}}</label>
                     </div>
                 </div>
 
@@ -42,30 +45,34 @@
                     <div class="col-sm-3 form-group field-separation has-dropdown">
                         <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
                             <option value="" disabled selected>Additional Phone</option>
-                            <option value="mobile">Other Mobile</option>
-                            <option value="home">Other Home Phone</option>
-                            <option value="business">Other Business Phone</option>
+                            <option value="mobile">UK Mobile</option>
+                            <option value="home">UK Home Phone</option>
+                            <option value="business">UK Business Phone</option>
+                            <option value="other">Non-UK Phone</option>
                         </select>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-sm-6 form-group field-separation">
                         <label class="form-label" for="other_phone_number" v-show="other_phone_number">{{otherNumberType}}</label>
                         <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" id="other_phone_number" class="form-control">
                         <label class="invalid" v-if="other_phone_number_invalid">{{other_phone_number_validation}}</label>
+                        <label class="valid" v-else>{{other_phone_number_validation}}</label>
                     </div>
-                    <div class="col-sm-3 form-group field-separation">
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group field-separation">
                         <label class="form-label" for="date_of_birth" >Date of Birth</label>
                         <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="offset-7 col-sm-5 form-group field-separation lower">
-                        <input class="form-check-input " 
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-6 form-group field-separation lower">
+                        <input class="form-check-input inset" 
                             @click="toggleSameAddress" 
                             type="checkbox" 
                             name="billing" 
                             value="true">
-                        <label class="form-check-label" for="billing">
+                        <label class="form-check-label inset" for="billing">
                             Delivery and billing address are the same
                         </label>
                     </div>
@@ -77,7 +84,6 @@
                    <div class="col-sm-6 form-group field-separation" v-if="!same_address">
                         <h4>Billing Address (optional)</h4>
                    </div>
-
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
@@ -162,10 +168,9 @@
 </template>
 
 <script>
-//import validPhone from 'validphone'
 export default {
     mounted() {
-        console.log('Component mounted.')
+        console.log('OTM Booking form loaded')
     },
     data() {
         return {
@@ -195,6 +200,8 @@ export default {
             other_phone_number_type: '',
             date_of_birth: '',
             same_address: false,
+            email_invalid: false,
+            email_validation: 'Please enter a valid email address',
             mobile_number_invalid: false,
             mobile_number_validation: 'Please enter a valid phone number',
             other_phone_number_invalid: false,
@@ -218,12 +225,10 @@ export default {
         validPhone(e) {
             const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
             const field = e.srcElement.name
-            // console.log(field)
             switch (field) {
                 case 'mobile_number':
                     this.mobile_number_invalid = false
                     if (!valid_uk.test(this.mobile_number)) {
-                    //if (!this.mobile_number.match(valid_uk)) {
                         this.mobile_number_invalid = true
                         return false
                     }
@@ -231,7 +236,6 @@ export default {
                 case 'other_phone_number':
                     this.other_phone_number_invalid = false
                     if (!valid_uk.test(this.other_phone_number)) {
-                        //if (!this.other_phone_number.match(valid_uk)) {
                         this.other_phone_number_invalid = true
                         return false
                     }
@@ -249,4 +253,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.inset {
+    margin-left: 0.25rem;
+    padding-left: 2rem;
+}
+.lower {
+    position: relative;
+    top: 2rem;
+}
 </style>

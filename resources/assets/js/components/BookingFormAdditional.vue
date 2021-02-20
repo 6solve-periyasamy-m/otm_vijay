@@ -10,10 +10,12 @@
             </div>
             <div id="collapseTwo">
                 <div class="card-body" v-if="showAdditional">
-                    <p>Please input data for any additional travellers that are accompanying you.</p>
-                    <p>Use the add button to add more travellers or remove to delete entries.</p>
+                    <div v-if="showInstruction">
+                        <p>Please input data for any additional travellers that are accompanying you.</p>
+                        <p>Use the add button to add more travellers or remove to delete entries.</p>
+                    </div>
                     <div v-for="item in additional" :key="item.name">
-                        <booking-form-add-traveller :form-id="formId"></booking-form-add-traveller>
+                        <booking-form-add-traveller v-model="formId" @remove="removeTraveller"></booking-form-add-traveller>
                     </div>
                     <button type="button" class="btn btn-success" @click="addAdditional">Add another person</button>
                 </div>
@@ -27,7 +29,8 @@
         data() {
             return {
                 showAdditional: false,
-                additional: [],
+                showInstruction: true,
+                additional: []
             }
         },
         mounted() {
@@ -39,10 +42,15 @@
             }
         },
         methods: {
+            removeTraveller() {
+                console.log('removing ', this.formId)
+
+            },
             toggleAdditional() {
                 this.showAdditional = !this.showAdditional
             },
             addAdditional() {
+                this.showInstruction = false
                 this.additional.push('<bookingform-addtemplate></bookingform-addtemplate>')
                 this.showAdditional = true
                 console.log('additional added')
