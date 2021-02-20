@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default">
-                    <div class="card-header">OTM Booking Form version 0.03 PRERELEASE</div>
+                    <div class="card-header">OTM Booking Form version 0.1.0 PRERELEASE - display only - backend not connected </div>
 
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
