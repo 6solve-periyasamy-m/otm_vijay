@@ -11,10 +11,11 @@ return [
     */
 
     'user' => [
-        'add_default_role_on_register' => true,
+        'add_default_role_on_register' => false,
         'default_role'                 => 'user',
         'default_avatar'               => 'users/default.png',
         'redirect'                     => '/admin',
+        'namespace'                    => App\Models\User::class
     ],
 
     /*

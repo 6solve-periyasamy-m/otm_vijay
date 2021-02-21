@@ -8,7 +8,7 @@ use App\Http\Controllers\TourController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\BookingController;
-
+use App\Http\Controllers\BookingFormLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,11 +52,9 @@ Route::group(['prefix' => 'admin'], function () {
 
 });
 
-Route::get('booking/{id}', [BookingController::class, 'bookingForm']);
-Route::get('booking', [BookingController::class, 'newBookingForm']);
 
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
-    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
+Route::prefix("/booking")->group(function() {
+    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
+    Route::get('/{id}', [BookingController::class, 'bookingForm']);
+    Route::get('/', [BookingController::class, 'newBookingForm']);
 });
-
