@@ -11,12 +11,16 @@ window.axios.defaults.headers.common = {
  };
 
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
- Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
- Vue.component('flight-information', require('./components/FlightInformation.vue').default);
- Vue.component('accommodation-details', require('./components/AccommodationDetails.vue').default);
+ Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
  Vue.component('booking-form-lead', require('./components/BookingFormLead.vue').default);
  Vue.component('booking-form-additional', require('./components/BookingFormAdditional.vue').default);
  Vue.component('booking-form-add-traveller', require('./components/BookingFormAddTraveller.vue').default);
+ Vue.component('booking-form-flights', require('./components/BookingFormFlights.vue').default);
+ Vue.component('booking-form-accommodation', require('./components/BookingFormAccommodation.vue').default);
+ Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
+ Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
+
+
  Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
  Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
  Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);
@@ -28,7 +32,12 @@ window.axios.defaults.headers.common = {
  Vue.component('bookingform-header', require('./components/bookingform-header.vue').default);
  Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
  Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
- Vue.component('bookingform-terms', require('./components/bookingform-terms.vue').default);
+
+
+ // deprecated
+ // Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
+ // Vue.component('x-accommodation-details', require('./components/x-accommodation-details.vue').default);
+
  const app = new Vue({
      el: '#app',
 });

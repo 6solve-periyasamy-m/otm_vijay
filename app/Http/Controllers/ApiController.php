@@ -17,16 +17,28 @@ use Illuminate\Http\Request;
 class ApiController extends Controller
 {
     // Open API - populate the booking form selectors
-    public function getTours(Event $event_id = null) {
-        $today = date('Y-m-d');
-        $tours = Tour::whereNull('event_id')
-            ->orWhere('event_id', $event_id)
-            ->whereNull('date_from')
-            ->orWhere(DB::raw("(STR_TO_DATE(tours.date_from,'%y-%m-%d'))"), ">=", $today)
-            ->get();
-        $data = $tours->toArray();
+    public function getEvents() {
+        $events = Event::where('event_start_date', '>', date('Y-m-d'))->get();
 
-        return response()->json(['success' => true, 'data' => $data]);
+        return response()->json(['success' => true, 'data' => $events->toArray()]);
+    }
+
+    public function getTours($event_id = null) {
+        $today = date('Y-m-d');
+        if ($event_id) {
+            $tours = Tour::where('event_id', $event_id)
+                        ->get();
+        } else {
+            $tours = Tour::get();
+        }
+        // $tours = Tour::whereNull('event_id')
+        //     ->orWhere('event_id', $event_id)
+        //     ->whereNull('date_from')
+        //     ->orWhere(DB::raw("(STR_TO_DATE(tours.date_from,'%y-%m-%d'))"), ">=", $today)
+        //     ->get();
+\Log::info('tours', $tours->toArray());
+
+        return response()->json(['success' => true, 'data' => $tours->toArray()]);
     }
 
     public function getAirlines() 
@@ -48,6 +60,11 @@ class ApiController extends Controller
         $schedule = PaymentSchedule::findOrFail($id);
 \Log::debug('schedule for id '.$id, $schedule->toArray());
         return response()->json(["success" => true, "schedule" => $schedule->toArray()]);
+    }
+
+    public function getAirports($type = ['domestic', 'international']) {
+        $airports = Airport::orderBy('airport_name', 'asc')->get();
+        return response()->json(["success" => true, "airports" => $airports->toArray()]);
     }
 
     public function getFlightsFromAirport(Airport $airport = null)
@@ -76,7 +93,8 @@ class ApiController extends Controller
     // Autheticated API - return data for logged in user sessions
     public function getBasicTourInformation(Tour $tour)
     {
-        // TODO: I'm assuming there is going to be some sort of authentication check here somewhere
+        $tour = Tour::findOrFail($tour->id);
+
         return response()->json([
             "success" => true,
             "title" => $tour->title,

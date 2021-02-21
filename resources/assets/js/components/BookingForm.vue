@@ -7,10 +7,13 @@
 
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
+                            <booking-form-tour></booking-form-tour>
                             <booking-form-lead></booking-form-lead>
                             <booking-form-additional></booking-form-additional>
-                            <booking-form-details></booking-form-details>
-                            <bookingform-terms></bookingform-terms>
+                            <booking-form-flights></booking-form-flights>
+                            <booking-form-accommodation></booking-form-accommodation>
+                            <booking-form-payment></booking-form-payment>
+                            <booking-form-terms></booking-form-terms>
                         <bookingform-footer></bookingform-footer>
                     </div>
                 </div>
@@ -20,10 +23,11 @@
 </template>
 
 <script>
+import BookingFormTour from './BookingFormTour.vue'
 import DonutMenu from './donut-menu.vue'
 import financeMenu from './finance-menu.vue'
     export default {
-        components: { financeMenu },
+        components: { financeMenu, BookingFormTour },
             mounted() {
                 console.log('BookingForm mounted.')
             }

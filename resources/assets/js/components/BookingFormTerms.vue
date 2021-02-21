@@ -50,7 +50,7 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
+            console.log('Booking Form Terms and Conditions active.')
         },
         data() {
             return {

@@ -19,14 +19,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/tours', [ApiController::class, 'getTours']);
-Route::get('/airlines', [ApiController::class, 'getAirlines']);
-Route::get('/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);
-Route::get('/booking/flight',       [ApiController::class, 'getFlightsFromTour']);
+/* valid public routes */
+Route::get('/booking/events', [ApiController::class, 'getEvents']);
+Route::get('/booking/tours/{event_id}', [ApiController::class, 'getTours']);
+Route::get('/booking/tour/{id}', [ApiController::class, 'getBasicTourInformation']);
+Route::get('/booking/airlines', [ApiController::class, 'getAirlines']);
+Route::get('/booking/flights',      [ApiController::class, 'getFlights']);
+
+/* to be verified */
+Route::get('/booking/flights/{tour}', [ApiController::class, 'getFlightsFromTour']);
+
+Route::get('/booking/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);
+Route::get('/booking/booking/airports',      [ApiController::class, 'getAirports']);
+
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules', [ApiController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [ApiController::class, 'getPaymentSchedule']);
 
 Route::middleware('auth:api')->group(function() {
-    Route::get('/booking/tour/{id}', [ApiController::class, 'getBasicTourInformation']);
+    
 });

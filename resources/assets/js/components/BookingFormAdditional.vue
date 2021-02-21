@@ -8,17 +8,15 @@
                     </button>
                 </h5>
             </div>
-            <div id="collapseTwo">
-                <div class="card-body" v-if="showAdditional">
-                    <div v-if="showInstruction">
-                        <p>Please input data for any additional travellers that are accompanying you.</p>
-                        <p>Use the add button to add more travellers or remove to delete entries.</p>
-                    </div>
-                    <div v-for="item in additional" :key="item.name">
-                        <booking-form-add-traveller v-model="formId" @remove="removeTraveller"></booking-form-add-traveller>
-                    </div>
-                    <button type="button" class="btn btn-success" @click="addAdditional">Add another person</button>
+            <div class="card-body" v-if="showAdditional">
+                <div v-if="showInstruction">
+                    <p>Please input data for any additional travellers that are accompanying you.</p>
+                    <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
+                <div v-for="item in additional" :key="item.name">
+                    <booking-form-add-traveller v-model="formId" @remove="removeTraveller"></booking-form-add-traveller>
+                </div>
+                <button type="button" class="btn btn-success" @click="addAdditional">Add another person</button>
             </div>
         </div>
     </div>
