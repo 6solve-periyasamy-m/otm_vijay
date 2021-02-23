@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tour extends Model
 {
+    public function event()
+    {
+        return $this->belongsTo(Event::class, 'event');
+    }
     public function paymentSchedule() {
         return $this->hasMany(PaymentSchedule::class, 'payment_schedule');
     }

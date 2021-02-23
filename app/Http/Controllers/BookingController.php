@@ -4,28 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Tour;
+use App\Models\Event;
 
 class BookingController extends Controller
 {
     /**
-     * Display a new booking form
+     * bookingForm
+     * returns a booking form from an order with token
+     * or a new booking form that requests a tour be specified
      *
-     * @return \Illuminate\Http\Response
+     * @param [type] $token
+     * @return void
      */
-    public function newBookingForm()
+    public function bookingForm($token = null)
     {
+        if ($token) {
+            $orders = new Order;
+            $order = $orders->where(['token', $token])->first();
+            if ($order) {
+                return view('bookingForm')->with(['order' => $order]);
+            }
+        } 
         return view('bookingForm');
     }
 
-    public function bookingForm($id)
+    public function tourBookingForm($tourUrl)
     {
+        $tour = Tour::where('booking_form_url', $tourUrl)->first();
+        $event = Event::findOrFail($tour->event_id);
 
-        $orders = new Order;
-        $order = $orders->findOrFail($id);
-        
-        return view('bookingForm')->with(['order', $order]);;
+        if ($tour && $event) {
+            return view('tourBookingForm')->with(['tour' => $tour, 'event' => $event]);
+        }
+        return view('bookingForm');
     }
-
 
     /**
      * A new booking creates an order with dependencies

@@ -7,7 +7,8 @@
 
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
-                            <booking-form-tour></booking-form-tour>
+                            <booking-form-tour v-if="tour == null"></booking-form-tour>
+                            <h2 v-else>{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
                             <booking-form-lead></booking-form-lead>
                             <booking-form-additional></booking-form-additional>
                             <booking-form-flights></booking-form-flights>
@@ -24,12 +25,22 @@
 
 <script>
 import BookingFormTour from './BookingFormTour.vue'
-import DonutMenu from './donut-menu.vue'
+import dates from '../utilities'
 import financeMenu from './finance-menu.vue'
     export default {
+        props: ['tour', 'event'],
         components: { financeMenu, BookingFormTour },
             mounted() {
                 console.log('BookingForm mounted.')
+            },
+            methods: {
+                startDate(event) {
+                    console.log(event.event_start_date)
+                    return dates.makeDateFromString(event.event_start_date)
+                },
+                endDate(event) {
+                    return dates.makeDateFromString(event.event_end_date)
+                },
             }
     }
 </script>

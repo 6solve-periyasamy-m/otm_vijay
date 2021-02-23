@@ -25,6 +25,12 @@ Route::get('/', function () {
     return view('otm');
 });
 
+Route::prefix("/booking")->group(function() {
+    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
+    Route::get('tour/{url}', [BookingController::class, 'tourBookingForm']);
+    Route::get('/{id}', [BookingController::class, 'bookingForm']);
+    Route::get('/', [BookingController::class, 'bookingForm']);
+});
 
 Route::get('phones', function() {
     return view('phoneValidation');
@@ -32,14 +38,6 @@ Route::get('phones', function() {
 
 Route::prefix('customer')->group(function () {
     Route::get('/payment/schedule', [PaymentScheduleController::class, 'index'])->name('payment-schedule');
-});
-
-Route::get('/booking-form', function () {
-    return view('bookingForm');
-});
-
-Route::get('/booking-form2', function () {
-    return view('bookingForm2');
 });
 
 Route::get('/dashboard', function () {
@@ -54,11 +52,4 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 
-});
-
-
-Route::prefix("/booking")->group(function() {
-    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
-    Route::get('/{id}', [BookingController::class, 'bookingForm']);
-    Route::get('/', [BookingController::class, 'newBookingForm']);
 });

@@ -52,7 +52,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { add, format } from 'date-fns'
+import { add, format } from 'date-fns';
 function paymentDates(date) {
 
 }

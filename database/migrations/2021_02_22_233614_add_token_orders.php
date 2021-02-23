@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTokenFieldToCustomersTable extends Migration
+class AddTokenOrders extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddTokenFieldToCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->string('login_token', 255)->nullable();
+        Schema::table('orders', function(Blueprint $table) {
+            $table->string('token', 255)->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddTokenFieldToCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropColumn('login_token');
+        Schema::table('orders', function(Blueprint $table) {
+            $table->dropColumn('token');
         });
     }
 }

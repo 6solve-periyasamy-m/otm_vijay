@@ -16,7 +16,8 @@
                         <select v-model="event" @change="getTourData">
                                 <option default value="">Select</option>
                                 <option v-for="event in events.data" :key="event.id" :value="event.id">
-                                    {{ event.event_title }} From: {{ event.event_start_date }} To: {{ event.event_end_date }}
+                                    {{ event.event_title }} 
+                                    From: {{ startDate(event) }} To: {{ endDate(event) }}
                                 </option>
                             </select>
                         </label>
@@ -41,6 +42,7 @@
     </div>
 </template>
 <script>
+import dates from '../utilities';
 export default {
     data() {
         return {
@@ -55,6 +57,13 @@ export default {
         this.getEvents()
     },
     methods: {
+        startDate(event) {
+            console.log(event.event_start_date)
+            return dates.makeDateFromString(event.event_start_date)
+        },
+        endDate(event) {
+            return dates.makeDateFromString(event.event_end_date)
+        },
         toggleTours() {
             this.showTours = !this.showTours
         },
