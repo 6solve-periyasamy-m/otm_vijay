@@ -1,8 +1,8 @@
 <template>
 <div class="container">
-    <div class="ept" :id="additionalTraveller" v-if="!removed">
+    <div class="ept" v-if="!removed">
     <h3>Additional Traveller Details</h3>
-        <div class="ept-form">
+        <div class="ept-form" :id="formId">
             <div class="row">
                 <div class="col-sm-6 form-group field-separation">
                     <label type="form-label" for="first_name" v-show="first_name">First name</label>
@@ -101,9 +101,6 @@
             }
         },
         computed: {
-            additionalTraveller: function() {
-                return 'additionalTraveller-' + this.formId
-            },
             emptyForm: function() {
                 // console.log('evaluation', this.first_name)
                 return this.first_name == null || this.first_name == '' || this.first_name.length == 0;

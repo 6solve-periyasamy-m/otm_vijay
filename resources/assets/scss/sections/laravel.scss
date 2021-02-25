@@ -484,6 +484,38 @@ video {
     grid-template-columns: repeat(1, minmax(0, 1fr))
 }
 
+@media (prefers-color-scheme:dark) {
+    .dark\:bg-gray-800 {
+        --bg-opacity: 1;
+        background-color: #2d3748;
+        background-color: rgba(45, 55, 72, var(--bg-opacity))
+    }
+    .dark\:bg-gray-900 {
+        --bg-opacity: 1;
+        background-color: #1a202c;
+        background-color: rgba(26, 32, 44, var(--bg-opacity))
+    }
+    .dark\:border-gray-700 {
+        --border-opacity: 1;
+        border-color: #4a5568;
+        border-color: rgba(74, 85, 104, var(--border-opacity))
+    }
+    .dark\:text-white {
+        --text-opacity: 1;
+        color: #fff;
+        color: rgba(255, 255, 255, var(--text-opacity))
+    }
+    .dark\:text-gray-400 {
+        --text-opacity: 1;
+        color: #cbd5e0;
+        color: rgba(203, 213, 224, var(--text-opacity))
+    }
+}
+
+
+
+
+/*
 @media (min-width:640px) {
     .sm\:rounded-lg {
         border-radius: .5rem
@@ -513,12 +545,12 @@ video {
     .sm\:pt-0 {
         padding-top: 0
     }
-    .sm\:text-left {
-        text-align: left
-    }
-    .sm\:text-right {
-        text-align: right
-    }
+    // .sm\:text-left {
+    //     text-align: left
+    // }
+    // .sm\:text-right {
+    //     text-align: right
+    // }
 }
 
 @media (min-width:768px) {
@@ -539,31 +571,4 @@ video {
         padding-right: 2rem
     }
 }
-
-@media (prefers-color-scheme:dark) {
-    .dark\:bg-gray-800 {
-        --bg-opacity: 1;
-        background-color: #2d3748;
-        background-color: rgba(45, 55, 72, var(--bg-opacity))
-    }
-    .dark\:bg-gray-900 {
-        --bg-opacity: 1;
-        background-color: #1a202c;
-        background-color: rgba(26, 32, 44, var(--bg-opacity))
-    }
-    .dark\:border-gray-700 {
-        --border-opacity: 1;
-        border-color: #4a5568;
-        border-color: rgba(74, 85, 104, var(--border-opacity))
-    }
-    .dark\:text-white {
-        --text-opacity: 1;
-        color: #fff;
-        color: rgba(255, 255, 255, var(--text-opacity))
-    }
-    .dark\:text-gray-400 {
-        --text-opacity: 1;
-        color: #cbd5e0;
-        color: rgba(203, 213, 224, var(--text-opacity))
-    }
-}
+*/

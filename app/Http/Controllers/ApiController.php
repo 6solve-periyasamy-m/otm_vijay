@@ -11,6 +11,7 @@ use App\Models\Airport;
 use App\Models\Flight;
 use App\Models\PaymentSchedule;
 use App\Models\PaymentInstallment;
+use App\Repository\FlightsRepository;
 
 use Illuminate\Http\Request;
 
@@ -31,12 +32,6 @@ class ApiController extends Controller
         } else {
             $tours = Tour::get();
         }
-        // $tours = Tour::whereNull('event_id')
-        //     ->orWhere('event_id', $event_id)
-        //     ->whereNull('date_from')
-        //     ->orWhere(DB::raw("(STR_TO_DATE(tours.date_from,'%y-%m-%d'))"), ">=", $today)
-        //     ->get();
-\Log::info('tours', $tours->toArray());
 
         return response()->json(['success' => true, 'data' => $tours->toArray()]);
     }
@@ -46,6 +41,58 @@ class ApiController extends Controller
         $airlines = Airline::orderBy('airline_name')->get();
 
         return response()->json(["success" => true, "data" => $airlines->toArray()]);
+    }
+
+
+    public function getAirports($location_id = null, $region_id = null) 
+    {
+        $airport = new Airport();
+        $airport = $airport->select('airports.*')
+                        ->join('locations', 'location_id', 'locations.id')
+                        ->join('regions', 'locations.region_id', 'regions.id');
+        if (isset($location_id)) {
+            $airport = $airport->where('location_id', $location_id);
+        }
+        if (isset($region_id)) {
+            $airport = $airport->where('region_id', $region_id);
+        }
+
+        $airports = $airport->orderBy('airport_name', 'asc')->get()->toArray();
+        $airports = array_combine(array_column($airports,'id'),$airports);
+
+        return response()->json(["success" => true, "airports" => $airports]);
+    }
+
+    public function getFlightInventories()
+    {
+        $flights = Flight::join('airlines', 'airline_id', 'airlines.id')
+            ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
+            ->get();
+
+        return response()->json(["success" => true, "data" => $flights->toArray()]);
+    }
+
+    /***
+     * flights booked for a tour create records in the flight_inventory_tours table
+     * these associate a flight_inventory_id with a tour_id (so the tour booking creates these)
+     */
+    public function getFlightInventoriesForTour($tour_id)
+    {
+        $flight = new Flight();
+        // $flightsRepository = new FlightsRepository($flight);
+        // $flights = $flightsRepository->flights($tour_id);
+
+        $flights = Flight::select('flight_inventories.*', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.airline_name', 'travel_classes.title as travel_class')
+            ->join('airlines', 'airline_id', 'airlines.id')
+            ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
+            ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
+            ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
+            ->where('flight_inventory_tour.tour_id', $tour_id)
+            ->orderBy('airlines.airline_name')
+            ->get();
+\Log::info('flights', $flights->toArray());
+        return response()->json(["success" => true, "data" => $flights->toArray()]);
+
     }
 
     public function getPaymentSchedules()
@@ -60,11 +107,6 @@ class ApiController extends Controller
         $schedule = PaymentSchedule::findOrFail($id);
 \Log::debug('schedule for id '.$id, $schedule->toArray());
         return response()->json(["success" => true, "schedule" => $schedule->toArray()]);
-    }
-
-    public function getAirports($type = ['domestic', 'international']) {
-        $airports = Airport::orderBy('airport_name', 'asc')->get();
-        return response()->json(["success" => true, "airports" => $airports->toArray()]);
     }
 
     public function getFlightsFromAirport(Airport $airport = null)

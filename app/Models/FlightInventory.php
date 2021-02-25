@@ -58,8 +58,8 @@ class FlightInventory extends Model
 
     public function getFlightForTourAttribute()
     {
-        \Log::debug('flight', $this->flight->toArray());
-        \Log::debug( $this->getDepartureAirport()->airport_name);
+        // \Log::debug('flight', $this->flight->toArray());
+        // \Log::debug( $this->getDepartureAirport()->airport_name);
         $departure_airport = $this->getDepartureAirport()->airport_name; //Airport::getAirportById($this->flight->departure_airport_id);
         $arrival_airport = $this->getArrivalAirport()->airport_name; //Airport::getAirportById($this->flight->arrival_airport_id);
 

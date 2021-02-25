@@ -9,46 +9,55 @@
                 </h5>
             </div>
             <div class="card-body" v-if="showFlights">
-                <h4> Flight information </h4>
+                <h4> Flight out </h4>
                 <div class="row">
                     <div class="col-sm-6">
-                        <label class="form-label">Flying from       
-                        <select v-model="flight_from">
-                                <option default value="">Select</option>
-                                <option v-for="airport in airports" :key="airport.id">
-                                    {{ airport.airport_name }}
-                                </option>
-                            </select>
-                        </label>
+                        <select v-model="flight_outward">
+                            <option v-for="flight in flights.data" :key="flight.id" :value="flight.id">
+                            {{flight.airline_name}} {{flight.flight_number}} {{flight.travel_class}} 
+                            {{airports[flight.departure_airport_id].airport_name}} to {{airports[flight.arrival_airport_id].airport_name}} 
+                            {{dmy(flight.departure_date_time)}} 
+                            </option>
+                        </select>
                     </div>
+                </div>
+                
+                <button @click="addFlight">Add a flight</button>
+                <div v-for="(flight_selected, c) in flights_selected" :key="flight_selected">
+                    <booking-form-flight-selector 
+                        :tour="tour" 
+                        :airports="airports" 
+                        :flights="flights" 
+                        :types="tour_flight_types">
+                    </booking-form-flight-selector>
+                </div>
+
+                <h4> Flight home </h4>
+                <div class="row">
                     <div class="col-sm-6">
-                        <label class="form-label">Flying to 
-                            <select v-model="flight_to">
-                                <option default value="">Select</option>
-                                <option v-for="airport in otherairports" :key="airport.id">
-                                    {{ airport.airport_name }}
-                                </option>
-                            </select>
-                        </label>
+                        <select v-model="flight_home">
+                            <option v-for="flight in flights.data" :key="flight.id" :value="flight.id">
+                            {{flight.airline_name}} {{flight.flight_number}} {{flight.travel_class}}
+                            {{airports[flight.departure_airport_id].airport_name}} to {{airports[flight.arrival_airport_id].airport_name}} 
+                            {{dmy(flight.departure_date_time)}} 
+                            </option>
+                        </select>
                     </div>
                 </div>
-                {{flights}}
-                <div class="row" v-if="flight_from && flight_to">
-                    <h3>Available flights</h3>
-                    <select v-model="flight_selected">
-                        <option v-for="flight in flights" :key="flight.id">
-                            {{flight.info}}
-                        </option>
-                    </select>
-                </div>
+
             </div>
         </div>
     </div>
 </template>
 <script>
+import dates from '../utilities'
+import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
 export default {
+  components: { BookingFormFlightSelector },
+    props: ['tour'],
     data() {
         return {
+            c: 0,
             showFlights: false,
             airports: [],
             airport: {},
@@ -57,40 +66,54 @@ export default {
             flightToOptions: [],
             flight_to: {},
             flights: [],
-            flight_selected: {}
+            flights_selected: [],
+            flight: 0,
+            flight_outward: {},
+            flight_home: {},
+            tour_flight_types: ['Outward', 'Excursion', 'Intercity', 'Home'],
+
         }
     },
     mounted() {
-        this.getAirports()
-        this.getFlights(1) // need an event bus to set the tourId from the 
+        this.getFlights(this.tour.id) // need an event bus to set the tourId from the 
     },
     computed: {
         otherairports: function() {
-            const items  = this.airports.filter((airport) => {
-                if (airport.airport_name === this.flight_from) {
-                    return false
-                }
-                return true
+            const airports = this.airports
+            console.log('other .... ',airports)
+            const items  = airports.filter((airport) => {
+                return airport.airport_name != this.flight_from;
             })
             return items
         }
     },
     methods: {
+        dmy(s) {
+            console.log(s)
+            return dates.makeDateFromString(s)
+        },
         toggleFlights() {
             this.showFlights = !this.showFlights
         },
         getAirports() {
-            axios.get('api/booking/airports')
-                .then(response => (this.airports = response.data.airports))
+            axios.get('/api/booking/airports')
+                .then(response => {
+                    this.airports = response.data.airports
+                    console.log('airports', this.airports)
+                })
                 .catch(error => console.log(error.message))
         },
         getFlights(tour) {
-            axios.get(`api/booking/flights/${tour}`)
+            axios.get(`/api/booking/flights/${tour}`)
                 .then(response => {
-                    this.flights = response.data.flights
-                    console.log(response)
+                    this.flights = response.data.data
+                    this.getAirports()
                 })
                 .catch(error => console.log(error.message))
+        },
+        addFlight() {
+            let flight = this.flight++;
+            this.flights_selected.push(flight)
         }
     },
 }

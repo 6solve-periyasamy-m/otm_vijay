@@ -16,6 +16,7 @@ window.axios.defaults.headers.common = {
  Vue.component('booking-form-additional', require('./components/BookingFormAdditional.vue').default);
  Vue.component('booking-form-add-traveller', require('./components/BookingFormAddTraveller.vue').default);
  Vue.component('booking-form-flights', require('./components/BookingFormFlights.vue').default);
+ Vue.component('booking-form-flight-select', require('./components/BookingFormFlightSelector.vue').default);
  Vue.component('booking-form-accommodation', require('./components/BookingFormAccommodation.vue').default);
  Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
  Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);

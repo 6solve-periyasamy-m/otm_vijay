@@ -32,7 +32,11 @@ class BookingController extends Controller
     public function tourBookingForm($tourUrl)
     {
         $tour = Tour::where('booking_form_url', $tourUrl)->first();
-        $event = Event::findOrFail($tour->event_id);
+        try {
+            $event = Event::findOrFail($tour->event_id);
+        } catch(\Exception $e) {
+            return view('bookingForm');
+        }
 
         if ($tour && $event) {
             return view('tourBookingForm')->with(['tour' => $tour, 'event' => $event]);

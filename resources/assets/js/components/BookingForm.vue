@@ -11,7 +11,7 @@
                             <h2 v-else>{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
                             <booking-form-lead></booking-form-lead>
                             <booking-form-additional></booking-form-additional>
-                            <booking-form-flights></booking-form-flights>
+                            <booking-form-flights :tour="tour"></booking-form-flights>
                             <booking-form-accommodation></booking-form-accommodation>
                             <booking-form-payment></booking-form-payment>
                             <booking-form-terms></booking-form-terms>
