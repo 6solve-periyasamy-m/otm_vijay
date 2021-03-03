@@ -26,7 +26,7 @@ class FlightInventory extends Model
 
     public function tour()
     {
-        return $this->belongsToMany(Tour::class, 'flight_inventory_tour')->withPivot('sales_price');
+        return $this->belongsToMany(Tour::class, 'flight_inventory_tour')->withPivot('sales_price', 'flight_type');
     }
 
     public function departureAirport()

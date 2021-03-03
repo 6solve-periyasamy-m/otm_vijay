@@ -13,6 +13,10 @@ var num = {
 }
 var dates = {
     makeDateFromString(s) {
+console.debug(s)
+if (typeof(s) === 'undefined' || s.length < 6) {
+    return 'invalid date'
+}
         const ds = s.split('-')
         return num.pad(parseInt(ds[2]),2) + '/' + num.pad(parseInt(ds[1]),2) + '/' +  parseInt(ds[0])
     }

@@ -76,7 +76,7 @@ class ApiController extends Controller
      * flights booked for a tour create records in the flight_inventory_tours table
      * these associate a flight_inventory_id with a tour_id (so the tour booking creates these)
      */
-    public function getFlightInventoriesForTour($tour_id)
+    public function getFlightInventoriesForTour($tour_id, $flight_type = null)
     {
         $flight = new Flight();
         // $flightsRepository = new FlightsRepository($flight);
@@ -87,10 +87,18 @@ class ApiController extends Controller
             ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
             ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
-            ->where('flight_inventory_tour.tour_id', $tour_id)
-            ->orderBy('airlines.airline_name')
+            ->where('flight_inventory_tour.tour_id', $tour_id);
+        if (isset($flight_type)) {
+            $flights = $flights->where('flight_type', $flight_type);
+        } else {
+            $flights = $flights->whereIn('flight_type', ['Outbound', 'Inbound'])
+                ->orderBy('flight_type', 'desc');
+        }
+        $flights = $flights 
+            ->orderBy('airlines.airline_name', 'asc')
             ->get();
-\Log::info('flights', $flights->toArray());
+
+        // \Log::info('flights', $flights->toArray());
         return response()->json(["success" => true, "data" => $flights->toArray()]);
 
     }

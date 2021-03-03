@@ -13,8 +13,8 @@ class AmendFlightInventoryTour extends Migration
      */
     public function up()
     {
-        Schema::table('flight_inventory_tour', function(Blueprint $table) {
-            $table->string('description', 255);
+        Schema::table('flight_inventories', function(Blueprint $table) {
+            $table->string('flight_type', 20);
         });
     }
 
@@ -25,6 +25,8 @@ class AmendFlightInventoryTour extends Migration
      */
     public function down()
     {
-        $table->dropColumn('description');
+        Schema::table('flight_inventories', function(Blueprint $table) {
+            $table->dropColumn(['flight_type']);
+        });
     }
 }

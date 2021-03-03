@@ -32,6 +32,7 @@ import financeMenu from './finance-menu.vue'
         components: { financeMenu, BookingFormTour },
             mounted() {
                 console.log('BookingForm mounted.')
+                console.log('tour', this.tour)
             },
             methods: {
                 startDate(event) {
