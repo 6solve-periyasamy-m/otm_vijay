@@ -34,7 +34,6 @@
                 <div class="row">
                     <div class="col-sm-9">
                         <h4> Add On Flights </h4>
-                        <!-- button @click="addFlight">Add a flight</button -->
                         <div v-for="flight in other_flights" :key="flight.id">
                             <booking-form-flight-selector v-model="flight_selected"
                                 :tour="tour" 
@@ -52,8 +51,23 @@
 <script>
 import dates from '../utilities'
 import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
+
+/**
+ * Flights selection component
+ * Loads in available flights for this tour
+ * asks the lead booker to select from Outbound and Inbound flights
+ * and to select addons for each kind that is available
+ * Any selected flights can then be booked or edited.
+ * 
+ * Known Issues:
+ * 1. Addon selector: if we are building an itinery: the order of these selections matters 
+ * - the dates should set the order in the order summary
+ * Expansions:
+ * 1. Tour members may not all book same addons
+ * 2. Tour members may require different Outbound/Inbound selections
+ */
 export default {
-  components: { BookingFormFlightSelector },
+    components: { BookingFormFlightSelector },
     props: ['tour'],
     data() {
         return {
@@ -86,15 +100,10 @@ export default {
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
-        console.log('all flights', this.flights.map((f) => {
-            return f.flight_type
-        }))
-        console.log('flights (other)', this.other_flights)
     },
     computed: {
         otherairports: function() {
             const airports = this.airports
-            console.log('other .... ',airports)
             const items  = airports.filter((airport) => {
                 return airport.airport_name != this.flight_from;
             })
@@ -102,11 +111,7 @@ export default {
         }
     },
     methods: {
-        addFlight() {
-console.log('flight selected', this.flight_selected)
-        },
         dmy(s) {
-            console.log(s)
             return dates.makeDateFromString(s)
         },
         toggleFlights() {
