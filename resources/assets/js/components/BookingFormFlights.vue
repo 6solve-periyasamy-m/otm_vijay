@@ -11,13 +11,12 @@
             <div class="card-body" v-if="showFlights">
                 <div class="row">
                     <div class="col-sm-12">
-                       
+                            <h4> Flights </h4>
                             <booking-form-flight-selector 
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="outbound_flights" 
-                                :types="outbound_type"
-                                :form_id="123">
+                                :types="outbound_type">
                             </booking-form-flight-selector>
                        
                     </div>
@@ -28,18 +27,16 @@
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="inbound_flights" 
-                                :types="inbound_type"
-                                :form_id="123">
+                                :types="inbound_type">
                             </booking-form-flight-selector>
                     </div>
                 </div>
-
-                <h4> AddOn Flights </h4>
                 <div class="row">
                     <div class="col-sm-9">
-                        <button @click="addFlight">Add a flight</button>
-                        <div v-for="flight_selected in flights_selected" :key="flight_selected">
-                            <booking-form-flight-selector 
+                        <h4> Add On Flights </h4>
+                        <!-- button @click="addFlight">Add a flight</button -->
+                        <div v-for="flight in other_flights" :key="flight.id">
+                            <booking-form-flight-selector v-model="flight_selected"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="flights" 
@@ -71,7 +68,9 @@ export default {
             flights: [],
             outbound_flights: [],
             inbound_flights: [],
+            other_flights: [],
             flights_selected: [],
+            flight_selected: {},
             flight: 0,
             flight_outward: {},
             flight_home: {},
@@ -84,17 +83,13 @@ export default {
     },
     async mounted() {
         await this.getFlights(this.tour.id)
-
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
-        if (this.debug > 1) {
-            console.log('all flights', this.flights)
-            console.log('outbound_flights', this.outbound_flights);
-            console.log('inbound_flights', this.inbound_flights);
-        }
-
-        // this.outbound_flights.forEach((flight) => this.addOutboundFlight(flight))
-        // this.inbound_flights.forEach((flight) => this.addInboundFlight(flight))
+        this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
+        console.log('all flights', this.flights.map((f) => {
+            return f.flight_type
+        }))
+        console.log('flights (other)', this.other_flights)
     },
     computed: {
         otherairports: function() {
@@ -107,6 +102,9 @@ export default {
         }
     },
     methods: {
+        addFlight() {
+console.log('flight selected', this.flight_selected)
+        },
         dmy(s) {
             console.log(s)
             return dates.makeDateFromString(s)
@@ -145,11 +143,7 @@ export default {
         },
         addInboundFlight(flight) {
             this.inbound_flights.push(flight)
-        },
-        addFlight() {
-            let flight = this.flight++;
-            this.flights_selected.push(flight)
         }
-    },
+    }
 }
 </script>

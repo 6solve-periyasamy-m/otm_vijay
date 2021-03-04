@@ -91,7 +91,7 @@ class ApiController extends Controller
         if (isset($flight_type)) {
             $flights = $flights->where('flight_type', $flight_type);
         } else {
-            $flights = $flights->whereIn('flight_type', ['Outbound', 'Inbound'])
+            $flights = $flights->whereIn('flight_type', ['Outbound', 'Inbound', 'Connection'])
                 ->orderBy('flight_type', 'desc');
         }
         $flights = $flights 
