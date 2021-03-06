@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class FlightInventory extends Model
 {
-    public $additional_attributes = ['Flight_for_tour'];
+    public $additional_attributes = ['flight_for_tour'];
 
     public function flight()
     {
@@ -29,6 +29,12 @@ class FlightInventory extends Model
         return $this->belongsToMany(Tour::class, 'flight_inventory_tour')->withPivot('sales_price', 'flight_type');
     }
 
+    public function flightInventoryTour()
+    {
+        return $this->hasMany(FlightInventoryTour::class);
+    }
+
+
     public function departureAirport()
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'departure_airport_id', 'id');
@@ -48,18 +54,16 @@ class FlightInventory extends Model
 
     public function getDepartureAirport()
     {
-        return Airport::getAirportById($this->flight->departure_airport_id);
+        return Airport::findOrFail($this->flight->departure_airport_id);
     }
 
     public function getArrivalAirport()
     {
-        return Airport::getAirportById($this->flight->arrival_airport_id);
+        return Airport::findOrFail($this->flight->arrival_airport_id);
     }
 
     public function getFlightForTourAttribute()
     {
-        // \Log::debug('flight', $this->flight->toArray());
-        // \Log::debug( $this->getDepartureAirport()->airport_name);
         $departure_airport = $this->getDepartureAirport()->airport_name; //Airport::getAirportById($this->flight->departure_airport_id);
         $arrival_airport = $this->getArrivalAirport()->airport_name; //Airport::getAirportById($this->flight->arrival_airport_id);
 

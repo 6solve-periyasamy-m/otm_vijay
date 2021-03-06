@@ -82,23 +82,22 @@ class ApiController extends Controller
         // $flightsRepository = new FlightsRepository($flight);
         // $flights = $flightsRepository->flights($tour_id);
 
-        $flights = Flight::select('flight_inventories.*', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.airline_name', 'travel_classes.title as travel_class')
+        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.airline_name', 'travel_classes.title as travel_class')
             ->join('airlines', 'airline_id', 'airlines.id')
             ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
             ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
             ->where('flight_inventory_tour.tour_id', $tour_id);
         if (isset($flight_type)) {
-            $flights = $flights->where('flight_type', $flight_type);
+            $flights = $flights->where('flight_inventory_tour.flight_type', $flight_type);
         } else {
-            $flights = $flights->whereIn('flight_type', ['Outbound', 'Inbound', 'Connection'])
-                ->orderBy('flight_type', 'desc');
+            $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
+                ->orderBy('flight_inventory_tour.flight_type', 'desc');
         }
         $flights = $flights 
             ->orderBy('airlines.airline_name', 'asc')
             ->get();
-
-        // \Log::info('flights', $flights->toArray());
+\Log::info('flights', $flights->toArray());
         return response()->json(["success" => true, "data" => $flights->toArray()]);
 
     }

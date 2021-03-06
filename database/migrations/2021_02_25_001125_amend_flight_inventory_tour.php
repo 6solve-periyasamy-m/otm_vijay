@@ -13,8 +13,9 @@ class AmendFlightInventoryTour extends Migration
      */
     public function up()
     {
-        Schema::table('flight_inventories', function(Blueprint $table) {
-            $table->string('flight_type', 20);
+        Schema::table('flight_inventory_tour', function(Blueprint $table) {
+            $table->string('flight_type', 20)->nullable();
+            $table->renameColumn('tour_component_type', 'tour_component_type_id');
         });
     }
 
@@ -25,8 +26,9 @@ class AmendFlightInventoryTour extends Migration
      */
     public function down()
     {
-        Schema::table('flight_inventories', function(Blueprint $table) {
+        Schema::table('flight_inventory_tour', function(Blueprint $table) {
             $table->dropColumn(['flight_type']);
+            $table->renameColumn('tour_component_type_id', 'tour_component_type');
         });
     }
 }

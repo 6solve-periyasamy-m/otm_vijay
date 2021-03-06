@@ -31,7 +31,7 @@
                             </booking-form-flight-selector>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" v-if="showOtherFlights">
                     <div class="col-sm-9">
                         <h4> Add On Flights </h4>
                         <div v-for="flight in other_flights" :key="flight.id">
@@ -73,6 +73,7 @@ export default {
         return {
             c: 0,
             showFlights: false,
+            showOtherFlights: false,
             airports: [],
             airport: {},
             flightFromOptions: [],
