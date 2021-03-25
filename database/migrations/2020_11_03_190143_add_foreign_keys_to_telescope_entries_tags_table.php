@@ -14,7 +14,7 @@ class AddForeignKeysToTelescopeEntriesTagsTable extends Migration
     public function up()
     {
         Schema::table('telescope_entries_tags', function (Blueprint $table) {
-            $table->foreign('entry_uuid')->references('uuid')->on('telescope_entries')->onUpdate('RESTRICT')->onDelete('CASCADE');
+            // $table->foreign('entry_uuid')->references('uuid')->on('telescope_entries')->onUpdate('RESTRICT')->onDelete('CASCADE');
         });
     }
 
@@ -26,7 +26,7 @@ class AddForeignKeysToTelescopeEntriesTagsTable extends Migration
     public function down()
     {
         Schema::table('telescope_entries_tags', function (Blueprint $table) {
-            $table->dropForeign('telescope_entries_tags_entry_uuid_foreign');
+            // $table->dropForeign('telescope_entries_tags_entry_uuid_foreign');
         });
     }
 }

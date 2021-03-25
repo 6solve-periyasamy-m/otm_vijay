@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DataTypesTableSeeder extends Seeder
@@ -285,7 +287,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 10:47:42',
-                'updated_at' => '2021-02-02 22:17:00',
+                'updated_at' => '2021-02-26 08:05:15',
             ),
             15 => 
             array (
@@ -321,7 +323,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 18:21:33',
-                'updated_at' => '2021-02-03 23:44:55',
+                'updated_at' => '2021-02-26 08:02:51',
             ),
             17 => 
             array (
@@ -465,7 +467,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-16 08:43:02',
-                'updated_at' => '2021-02-09 06:22:08',
+                'updated_at' => '2021-02-22 07:38:31',
             ),
             25 => 
             array (

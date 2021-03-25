@@ -14,7 +14,9 @@ class AddTravelClassToTransportInventoriesTable extends Migration
     public function up()
     {
         Schema::table('transport_inventories', function (Blueprint $table) {
-            $table->integer('travel_class_id');
+            // tests indicate this must be nullable (i.e. no class assigned to the transport)
+            // TODO: make this madatory (not-nullable)?
+            $table->integer('travel_class_id')->nullable();
         });
     }
 

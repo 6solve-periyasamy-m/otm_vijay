@@ -14,7 +14,7 @@ class AddTokenFieldToCustomersTable extends Migration
     public function up()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('login_token', 255)->nullable();
+            // $table->string('login_token', 255)->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddTokenFieldToCustomersTable extends Migration
     public function down()
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->dropColumn('login_token');
+            // $table->dropColumn('login_token');
         });
     }
 }

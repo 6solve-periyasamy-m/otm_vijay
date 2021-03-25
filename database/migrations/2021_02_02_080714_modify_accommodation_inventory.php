@@ -14,8 +14,8 @@ class ModifyAccommodationInventory extends Migration
     public function up()
     {
         Schema::table('accommodation_inventories', function(Blueprint $table) {
-            $table->addColumn('boolean', 'checkin_confirmed')->default(false);
-            $table->addColumn('boolean', 'checkout_confirmed')->default(false);
+            // $table->addColumn('boolean', 'checkin_confirmed')->default(false);
+            // $table->addColumn('boolean', 'checkout_confirmed')->default(false);
         });
     }
 
@@ -27,8 +27,8 @@ class ModifyAccommodationInventory extends Migration
     public function down()
     {
         Schema::table('accommodation_inventories', function(Blueprint $table) {
-            $table->dropColumn('checkin_confirmed');
-            $table->dropColumn('checkout_confirmed');
+            // $table->dropColumn('checkin_confirmed');
+            // $table->dropColumn('checkout_confirmed');
         });
     }
 }

@@ -14,7 +14,7 @@ class AddTokenOrders extends Migration
     public function up()
     {
         Schema::table('orders', function(Blueprint $table) {
-            $table->string('token', 255)->nullable();
+            // $table->string('token', 255)->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddTokenOrders extends Migration
     public function down()
     {
         Schema::table('orders', function(Blueprint $table) {
-            $table->dropColumn('token');
+            // $table->dropColumn('token');
         });
     }
 }

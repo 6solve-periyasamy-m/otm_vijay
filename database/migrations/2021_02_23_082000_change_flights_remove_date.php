@@ -14,8 +14,8 @@ class ChangeFlightsRemoveDate extends Migration
     public function up()
     {
         Schema::table('flights', function(Blueprint $table) {
-            $table->dropColumn(['departure_date', 'arrival_date']);
-            $table->date('available_after')->nullable();
+            // $table->dropColumn(['departure_date', 'arrival_date']);
+            // $table->date('available_after')->nullable();
         });
     }
 
@@ -27,9 +27,9 @@ class ChangeFlightsRemoveDate extends Migration
     public function down()
     {
         Schema::table('flights', function(Blueprint $table) {
-            $table->dropColumn('available_after');
-            $table->date('departure_date')->nullable();
-            $table->date('arrival_date')->nullable();
+            // $table->dropColumn('available_after');
+            // $table->date('departure_date')->nullable();
+            // $table->date('arrival_date')->nullable();
         });
     }
 }

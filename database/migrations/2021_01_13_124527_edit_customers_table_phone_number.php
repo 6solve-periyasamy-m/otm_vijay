@@ -15,8 +15,8 @@ class EditCustomersTablePhoneNumber extends Migration
     {
         //
         Schema::table("customers", function (Blueprint $table) {
-            $table->string("mobile_number", 255)->change();
-            $table->string("other_phone_number", 255)->change();
+            // $table->string("mobile_number", 255)->change();
+            // $table->string("other_phone_number", 255)->change();
         });
 
     }
@@ -29,8 +29,8 @@ class EditCustomersTablePhoneNumber extends Migration
     public function down()
     {
         Schema::table("customers", function (Blueprint $table) {
-            $table->integer("mobile_number")->change();
-            $table->integer("other_phone_number")->change();
+            // $table->integer("mobile_number")->change();
+            // $table->integer("other_phone_number")->change();
         });
     }
 }

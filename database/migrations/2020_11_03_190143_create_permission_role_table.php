@@ -17,6 +17,8 @@ class CreatePermissionRoleTable extends Migration
             $table->unsignedBigInteger('permission_id')->index();
             $table->unsignedBigInteger('role_id')->index();
             $table->primary(['permission_id', 'role_id']);
+            $table->foreign('permission_id')->references('id')->on('permissions')->onUpdate('RESTRICT')->onDelete('CASCADE');
+            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('RESTRICT')->onDelete('CASCADE');
         });
     }
 

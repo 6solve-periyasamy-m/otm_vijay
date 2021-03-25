@@ -27,6 +27,7 @@ class CreateDataRowsTable extends Migration
             $table->boolean('delete')->default(1);
             $table->text('details')->nullable();
             $table->integer('order')->default(1);
+            $table->foreign('data_type_id')->references('id')->on('data_types')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 
