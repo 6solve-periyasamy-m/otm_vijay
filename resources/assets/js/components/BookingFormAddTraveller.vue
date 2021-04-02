@@ -68,6 +68,7 @@
 </template>
 
 <script>
+    import { bus } from '../main'
     export default {
         props: {
             formId: String
@@ -145,6 +146,7 @@ console.log(field, this.other_phone_number)
             removeTraveller() {
                 this.removed = true
                 this.$emit('remove', this.formId)
+                bus.$emit('removeTraveller', this.formId)
             }
         }
     }

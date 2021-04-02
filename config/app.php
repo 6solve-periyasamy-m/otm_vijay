@@ -228,5 +228,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-
+    // this apps settings
+    'setting' => [
+        // if /booking path returns a form with event/tour selectors
+        'booking-selection' => false
+    ]
 ];

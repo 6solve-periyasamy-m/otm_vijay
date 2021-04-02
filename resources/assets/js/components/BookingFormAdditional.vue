@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import { bus } from '../main' 
     export default {
         data() {
             return {
@@ -53,6 +54,7 @@
                 this.additional.push(`traveller_${formId}`) 
                 this.showAdditional = true
                 console.log('additional added')
+                bus.$emit('addTraveller', this.formId)
             }
         }
     }

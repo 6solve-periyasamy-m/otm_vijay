@@ -33,7 +33,7 @@ class TourFactory extends Factory
             'stock_control_active' => true,
             'booking_form_url' => 'example-tour',
             'tour_colour_id' => null,
-            'tour_mechandise_id' => null,
+            'tour_merchandise_id' => null,
             'is_active' => true,
             'archive_status' => false,
             'date_from' => '2022-05-01',

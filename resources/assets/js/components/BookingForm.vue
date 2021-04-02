@@ -7,14 +7,19 @@
 
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
-                            <booking-form-tour v-if="tour == null"></booking-form-tour>
-                            <h2 v-else>{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
+                            <h1 v-if="event != null">{{event.event_title}}</h1>
+                            <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
+                            <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
+                            <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                             <booking-form-lead></booking-form-lead>
                             <booking-form-additional></booking-form-additional>
-                            <booking-form-flights :tour="tour"></booking-form-flights>
-                            <booking-form-accommodation></booking-form-accommodation>
-                            <booking-form-payment></booking-form-payment>
-                            <booking-form-terms></booking-form-terms>
+                            <div v-if="tour">
+                                <booking-form-flights :tour="tour"></booking-form-flights>
+                                <booking-form-accommodation></booking-form-accommodation>
+                                
+                                <booking-form-payment></booking-form-payment>
+                                <booking-form-terms></booking-form-terms>
+                            </div>
                         <bookingform-footer></bookingform-footer>
                     </div>
                 </div>
@@ -26,14 +31,19 @@
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import dates from '../utilities'
-import financeMenu from './finance-menu.vue'
+import { bus } from '../main'
     export default {
         props: ['tour', 'event'],
-        components: { financeMenu, BookingFormTour },
+        components: { BookingFormTour },
             mounted() {
                 console.log('BookingForm mounted.')
                 console.log('tour', this.tour)
             },
+            // created() {
+            //     bus.$on('selectFlight', (data) => {
+            //         this.flight = data
+            //     })
+            // },
             methods: {
                 startDate(event) {
                     console.log(event.event_start_date)

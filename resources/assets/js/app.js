@@ -1,14 +1,30 @@
 require('./bootstrap');
 window.axios = require('axios');
-window.Vue = require('vue');
 window.lodash = require('lodash');
 //window.validPhone = require('validphone');
+import Vue from 'vue'
+import { bus } from './main'
+
+// import Vuex from 'vuex'
+// window.Vue = require('vue')
+// window.Vuex = require('vuex')
+// Vue.use(Vuex)
 
 window.axios.defaults.headers.common = {
      'X-Requested-With': 'XMLHttpRequest',
      'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
      'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
  };
+
+ // event bus handlers
+ // addTraveller 
+ // removeTraveller
+ bus.$on('click', function(id) {
+    console.log('added traveller', id)
+ })
+ bus.$on('removeTraveller', function(id) {
+     console.log('removed traveller ',id)
+ })
 
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
  Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
@@ -21,18 +37,19 @@ window.axios.defaults.headers.common = {
  Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
  Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
 
+// Vue.component('booking-store', require('./components/BookingStore.vue').default);
 
- Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
- Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
- Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);
- Vue.component('donut-menu', require('./components/donut-menu.vue').default);
- Vue.component('tour-menu', require('./components/tour-menu.vue').default);
- Vue.component('details-menu', require('./components/details-menu.vue').default);
- Vue.component('extras-menu', require('./components/extras-menu.vue').default);
- Vue.component('finance-menu', require('./components/finance-menu.vue').default);
- Vue.component('bookingform-header', require('./components/bookingform-header.vue').default);
- Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
- Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
+//  Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
+//  Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
+//  Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);
+//  Vue.component('donut-menu', require('./components/donut-menu.vue').default);
+//  Vue.component('tour-menu', require('./components/tour-menu.vue').default);
+//  Vue.component('details-menu', require('./components/details-menu.vue').default);
+//  Vue.component('extras-menu', require('./components/extras-menu.vue').default);
+//  Vue.component('finance-menu', require('./components/finance-menu.vue').default);
+Vue.component('bookingform-header', require('./components/bookingform-header.vue').default);
+Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
+//  Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
 
 
  // deprecated
