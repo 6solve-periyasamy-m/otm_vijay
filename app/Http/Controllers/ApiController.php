@@ -9,6 +9,9 @@ use App\Models\Tour;
 use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\Flight;
+use App\Models\Order;
+use App\Models\Customer;
+use App\Models\OrdersCustomer;
 use App\Models\PaymentSchedule;
 use App\Models\PaymentInstallment;
 use App\Repository\FlightsRepository;
@@ -94,10 +97,10 @@ class ApiController extends Controller
             $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
                 ->orderBy('flight_inventory_tour.flight_type', 'desc');
         }
+        // \Log::info('flights' . $flights->toSql());
         $flights = $flights 
             ->orderBy('airlines.airline_name', 'asc')
             ->get();
-\Log::info('flights', $flights->toArray());
         return response()->json(["success" => true, "data" => $flights->toArray()]);
 
     }
@@ -194,5 +197,80 @@ class ApiController extends Controller
             ];
         })->toArray();
         return response()->json(["success" => true, "data" => $result]);
+    }
+
+    public function createOrder(Request $request)
+    {
+        \Log::info('create order for tour ' . $request->tour);
+        $order = new Order();
+        $order->quote_id = null;
+        $order->tour_id = $request->tour;
+        $order->total_order_value = null;
+        $order->notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
+        $order->order_status_id = 1;
+        $order->token = md5(uniqId());
+        Order::insert([
+            'tour_id' => $order->tour_id, 
+            'notes' => $order->notes,
+            'token' => $order->token]);
+        return response()->json(["success" => true, "order" => $order]);
+    }
+
+    private function saveCustomerDetails($request, $isLead = false) {
+        $customer = new Customer();
+        $customer->title = $request->title;
+        $customer->first_name = $request->first_name;
+        $customer->middle_names = $request->middle_names;
+        $customer->last_name = $request->last_name;
+        $customer->date_of_birth = $request->date_of_birth;
+        $customer->mobile_number = $request->mobile_number;
+        $customer->other_phone_number = $request->other_phone_number;
+        $customer->email_address = $request->email_address;
+        $customer->password = null;
+        $customer->gender = $request->gender;
+        if ($isLead) {
+            $customer->address_line_1 = $request->address_line_1;
+            $customer->address_line_2 = $request->address_line_2;
+            $customer->address_line_3 = $request->address_line_3;
+            $customer->billing_line_1 = isset($request->billing_line_1) ? $request->billing_line_1 : $request->address_line_1;
+            $customer->billing_line_2 = isset($request->billing_line_2) ? $request->billing_line_2 : $request->address_line_2;
+            $customer->billing_line_1 = isset($request->billing_line_3) ? $request->billing_line_3 : $request->address_line_3;
+            $customer->town = $request->town;
+            $customer->country = $request->country;
+            $customer->postcode = $request->postcode;
+            $customer->billing_town = isset($request->billing_town) ? $request->billing_town : $request->town;
+            $customer->billing_country = isset($request->billing_country) ? $request->billing_country : $request->country;
+            $customer->billing_postcode = isset($request->billing_postcode) ? $request->billing_postcode : $request->postcode;
+        }
+        \Log::info('saving customer detaisl ', $customer->toArray());
+        $customer->save();
+    }
+    private function updateEmergencyContactDetails(Request $request) {
+        return false;
+    }
+    private function saveOrderCustomer(Request $request, $isLead = false) {
+        $ordersCustomer = new OrdersCustomer();
+        $ordersCustomer->order_id = $request->order_id;
+        $ordersCustomer->customer_id = $request->customer_id;
+        $ordersCustomer->is_lead_booker = $isLead;
+        $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
+        $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+        $ordersCustomer->travel_insurer = null;
+        $ordersCustomer->policy_number = null;
+        $ordersCustomer->save();
+    }
+
+    public function leadTraveller(Request $request) 
+    {
+        \Log::info('leadTraveller', $request->toArray());
+        $this->saveCustomerDetails($request, true);
+        return $this->saveOrderCustomer($request, true);
+    }
+
+    public function additionalTraveller(Request $request) 
+    {
+        \Log::info('additionalTraveller', $request->toArray());
+        $this->saveCustomerDetails($request);
+        return $this->saveOrderCustomer($request);
     }
 }

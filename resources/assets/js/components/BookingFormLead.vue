@@ -13,8 +13,8 @@
                 <h4>Your Details</h4>
                 <div class="row">
                     <div class="col-sm-4 form-group field-separation">
-                            <label type="form-label" for="first_name" v-show="first_name">First name</label>
-                            <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />                        
+                        <label type="form-label" for="first_name" v-show="first_name">First name</label>
+                        <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />                        
                     </div>
                     <div class="col-sm-4 form-group field-separation">
                         <label class="form-label" for="middle_name" v-show="middle_name">Middle name(s)</label>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-3 form-group field-separation has-dropdown">
+                    <div class="col-sm-6 form-group field-separation has-dropdown">
                         <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
                             <option value="" disabled selected>Additional Phone</option>
                             <option value="mobile">UK Mobile</option>
@@ -161,6 +161,15 @@
                         <input type="text" v-model="billing_country" name="billing_country" placeholder="Country" class="form-control">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group field-separation">
+                        <button v-if="validForm"
+                            type="button"
+                            :formId="formId"
+                            class="btn btn-success"
+                            @click="storeTraveller">Save Traveller</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -169,6 +178,7 @@
 
 <script>
 export default {
+    props: ['formId', 'tour', 'order_id'],
     mounted() {
         console.log('OTM Booking form loaded')
     },
@@ -213,6 +223,9 @@ export default {
         otherNumberType: function() {
             const name = this.other_phone_number_type
             return 'Other ' + name.charAt(0).toUpperCase() + name.slice(1) + ' number'
+        },
+        validForm: function() {
+            return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth
         }
     },
     methods: {
@@ -245,8 +258,40 @@ export default {
             }
             return true
         },
-        storeData() {
-            return true
+        storeTraveller() {
+            console.log(this.tour)
+            axios.post('/api/booking/lead-traveller', {
+                tour: this.tour,
+                order_id: this.order_id,
+                form_id: this.formId,
+                first_name: this.first_name,
+                last_name: this.last_name,
+                email_address: this.email_address,
+                mobile_number: this.mobile_number,
+                other_phone_number: this.other_phone_number,
+                other_phone_number_type: this.other_phone_number_type,
+                date_of_birth: this.date_of_birth,
+                address_line_1: this.address_line_1,
+                address_line_2: this.address_line_2,
+                address_line_3: this.address_line_3,
+                country: this.country,
+                county: this.county,
+                town: this.town,
+                postcode: this.postcode,
+                billing_address_line_1: this.billing_address_line_1,
+                billing_address_line_2: this.billing_address_line_2,
+                billing_address_line_3: this.billing_address_line_3,
+                billing_country: this.billing_country,
+                billing_county: this.billing_county,
+                billing_town: this.billing_town,
+                billing_postcode: this.billing_postcode
+            })
+            .then(response => {
+                console.log('response', response)
+            })
+            .catch(e => {
+                console.log('error', e)
+            })
         }
     }
 }

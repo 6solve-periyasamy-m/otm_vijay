@@ -44,6 +44,9 @@
                         </div>
                     </div>
                 </div>
+                <div v-for="traveller as booking.additionalTravellers">
+                    <div>
+                </div>
             </div>
         </div>
     </div>
@@ -71,33 +74,20 @@ export default {
     props: ['tour'],
     data() {
         return {
-            c: 0,
-            showFlights: false,
-            showOtherFlights: false,
-            airports: [],
-            airport: {},
-            flightFromOptions: [],
-            flight_from: {},
-            flightToOptions: [],
-            flight_to: {},
-            flights: [],
             outbound_flights: [],
             inbound_flights: [],
             other_flights: [],
-            flights_selected: [],
-            flight_selected: {},
-            flight: 0,
-            flight_outward: {},
-            flight_home: {},
+            airports: [],
+            flights: [],
+            showFlights: false,
+            showOtherFlights: false,
             outbound_type: ['Outbound'],
             inbound_type: ['Inbound'],
-            tour_flight_types: ['Outbound', 'Inbound'],
-            tour_flight_optional_types: ['Excursion', 'Connection'],
-            debug: 2
         }
     },
     async mounted() {
         await this.getFlights(this.tour.id)
+        console.log(this.flights)
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
@@ -128,6 +118,7 @@ export default {
         },
         async getFlights(tour) {
             var that = this
+            console.log('getflights for tour ', tour)
             await axios.get(`/api/booking/flights/${tour}`)
                 .then(response => {
                     that.flights = response.data.data
