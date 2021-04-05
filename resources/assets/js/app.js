@@ -1,6 +1,7 @@
 require('./bootstrap');
 window.axios = require('axios');
 window.lodash = require('lodash');
+import { BIconNodePlus } from 'bootstrap-vue';
 //window.validPhone = require('./validphone');
 import Vue from 'vue'
 import { bus } from './bus'
@@ -11,26 +12,6 @@ window.axios.defaults.headers.common = {
      'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
      'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
  };
-
- // event bus handlers
- // addTraveller 
- // removeTraveller
- function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
- bus.$on('click', function(id) {
-    console.log('added traveller', id)
- })
- bus.$on('removeTraveller', function(id) {
-     console.log('removed traveller ',id)
- })
-bus.$on('setOrderToken', function(token) {
-    setCookie('OTM_booking_order_token', token);
-
-})
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
  Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
  Vue.component('booking-form-lead', require('./components/BookingFormLead.vue').default);
@@ -61,6 +42,28 @@ Vue.component('bookingform-footer', require('./components/bookingform-footer.vue
  // Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
  // Vue.component('x-accommodation-details', require('./components/x-accommodation-details.vue').default);
 
- const app = new Vue({
-     el: '#app',
+const app = new Vue({
+    el: '#app'
 });
+
+ // event bus handlers
+ // addTraveller 
+ // removeTraveller
+ function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+ bus.$on('click', function(id) {
+    console.log('added traveller', id)
+ })
+//  bus.$on('saveLeadCustomer', function(name) {
+//      bus.booking.name = name
+//  })
+ bus.$on('removeTraveller', function(id) {
+     console.log('removed traveller ',id)
+ })
+bus.$on('setOrderToken', function(token) {
+    setCookie('OTM_booking_order_token', token);
+})

@@ -4,7 +4,7 @@
         <div class="card-header">
             <h5 class="mb-1 dropdown-button">
                 <button class="btn btn-link cardhead" @click="toggleTraveller">
-                    Lead Traveller details
+                    Lead Traveller details {{lead_traveller? ": " + lead_traveller : ''}}
                 </button>
             </h5>
         </div>
@@ -168,6 +168,7 @@
                             :formId="formId"
                             class="btn btn-success"
                             @click="storeTraveller">Save Traveller</button>
+
                     </div>
                 </div>
             </form>
@@ -180,11 +181,12 @@
 export default {
     props: ['formId', 'tour', 'order_id'],
     mounted() {
-        console.log('OTM Booking form loaded')
+        console.log('OTM Booking form loaded', this.order_id)
     },
     data() {
         return {
             showTraveller: false,
+            lead_traveller: '',
             first_name: '',
             last_name: '',
             middle_name: '',
@@ -287,7 +289,10 @@ export default {
                 billing_postcode: this.billing_postcode
             })
             .then(response => {
-                console.log('response', response)
+                const customer = response.data.customer
+                this.lead_traveller = customer.first_name + ' ' + customer.last_name
+                this.showTraveller = false
+                // this.$emit('savedLeadCustomer', customer.first_name + ' ' + customer.last_name)
             })
             .catch(e => {
                 console.log('error', e)

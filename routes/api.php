@@ -27,10 +27,13 @@ Route::get('/booking/airlines',          [ApiController::class, 'getAirlines']);
 Route::get('/booking/flights/{tour_id}', [ApiController::class, 'getFlightInventoriesForTour']);
 Route::get('/booking/flights/{tour_id}/{flight_type}', [ApiController::class, 'getFlightInventoriesForTour']);
 Route::get('/booking/flight-inventories',[ApiController::class, 'getFlightsInventories']);
+Route::get('/booking/tourparty', [ApiController::class, 'getTravellers']);
+
 
 Route::post('/booking/create-order', [ApiController::class, 'createOrder']);
 Route::post('/booking/lead-traveller', [ApiController::class, 'leadTraveller']);
 Route::post('/booking/additional-traveller', [ApiController::class, 'additionalTraveller']);
+
 
 Route::get('/booking/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);
 Route::get('/booking/airports',         [ApiController::class, 'getAirports']);

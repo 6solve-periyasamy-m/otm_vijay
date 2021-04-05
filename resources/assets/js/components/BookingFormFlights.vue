@@ -44,8 +44,18 @@
                         </div>
                     </div>
                 </div>
-                <div v-for="traveller as booking.additionalTravellers">
-                    <div>
+                <div v-for="traveller in travellers" v-bind="traveller.token">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            {{ traveller.first_name }}
+                        </div>
+                        <div class="col-sm-3">
+                            {{ traveller.last_name}}
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="checkbox" name="custom">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,7 +81,7 @@ import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
  */
 export default {
     components: { BookingFormFlightSelector },
-    props: ['tour'],
+    props: ['tour', 'booking'],
     data() {
         return {
             outbound_flights: [],
@@ -83,6 +93,7 @@ export default {
             showOtherFlights: false,
             outbound_type: ['Outbound'],
             inbound_type: ['Inbound'],
+            travellers: []
         }
     },
     async mounted() {
@@ -107,6 +118,24 @@ export default {
         },
         toggleFlights() {
             this.showFlights = !this.showFlights
+            /**
+             * when flights is opened, load the additional travellers
+             */
+            if (this.showFlights) {
+                axios.get('/api/booking/tourparty', {
+                    params: {
+                        tour: this.tour
+                    }
+                })
+                .then(response => {
+                    console.log('get additonal travellers for tour', response)
+                    this.travellers = response.data                    
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                    
+            }
         },
         async getAirports() {
             var that = this

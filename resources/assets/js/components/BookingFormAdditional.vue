@@ -16,7 +16,13 @@
                 <div v-for="item in additional" :key="item.name">
                     <booking-form-add-traveller :formId="item" @remove="removeTraveller"></booking-form-add-traveller>
                 </div>
-                <button type="button" class="btn btn-success" @click="addAdditional">Add another person</button>
+                <button type="button" class="btn btn-success" @click="addAdditional">Add traveller</button>
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    @click="showAdditional=false">
+                    All travellers entered
+                </button>
             </div>
         </div>
     </div>

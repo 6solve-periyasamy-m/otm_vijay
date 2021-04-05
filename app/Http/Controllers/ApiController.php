@@ -209,10 +209,12 @@ class ApiController extends Controller
         $order->notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
         $order->order_status_id = 1;
         $order->token = md5(uniqId());
-        Order::insert([
-            'tour_id' => $order->tour_id, 
-            'notes' => $order->notes,
-            'token' => $order->token]);
+        $order->save();
+        // Order::insert([
+        //     'tour_id' => $order->tour_id, 
+        //     'notes' => $order->notes,
+        //     'token' => $order->token]);
+\Log::info('order id ', $order->toArray());
         return response()->json(["success" => true, "order" => $order]);
     }
 
@@ -244,33 +246,58 @@ class ApiController extends Controller
         }
         \Log::info('saving customer detaisl ', $customer->toArray());
         $customer->save();
+        return $customer;
     }
     private function updateEmergencyContactDetails(Request $request) {
         return false;
     }
-    private function saveOrderCustomer(Request $request, $isLead = false) {
-        $ordersCustomer = new OrdersCustomer();
-        $ordersCustomer->order_id = $request->order_id;
-        $ordersCustomer->customer_id = $request->customer_id;
-        $ordersCustomer->is_lead_booker = $isLead;
+    private function updateOrderCustomer(Request $request) {
         $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
         $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+    }
+    private function saveOrderCustomer(Customer $customer, Request $request, $isLead = false) {
+        $ordersCustomer = new OrdersCustomer();
+        $ordersCustomer->order_id = $request->order_id;
+        $ordersCustomer->customer_id = $customer->id;
+        $ordersCustomer->is_lead_booker = $isLead;
         $ordersCustomer->travel_insurer = null;
         $ordersCustomer->policy_number = null;
         $ordersCustomer->save();
+        return $ordersCustomer;
     }
 
     public function leadTraveller(Request $request) 
     {
         \Log::info('leadTraveller', $request->toArray());
-        $this->saveCustomerDetails($request, true);
-        return $this->saveOrderCustomer($request, true);
+
+        $customer = $this->saveCustomerDetails($request, true);
+        $orderCustomer = $this->saveOrderCustomer($customer, $request, true);
+
+        return ['customer' => $customer, 'orderCustomer' => $orderCustomer];
     }
 
+    /** 
+     * post - add an additional traveller to the tour
+     */
     public function additionalTraveller(Request $request) 
     {
         \Log::info('additionalTraveller', $request->toArray());
-        $this->saveCustomerDetails($request);
-        return $this->saveOrderCustomer($request);
+        $customer = $this->saveCustomerDetails($request);
+
+        return $this->saveOrderCustomer($customer, $request, false);
+    }
+    
+    public function getTravellers(Request $request) {
+        $tour = json_decode($request->tour);
+
+        $customer = new Customer();
+        $customers = $customer
+            ->join('orders_customers', 'orders_customers.customer_id', 'customers.id')
+            ->join('orders', 'orders.id', 'orders_customers.order_id')
+            ->where('orders.tour_id', $tour->id)
+            ->get();
+            //->toSql();
+//dd($customers);
+        return $customers->toJson();
     }
 }
