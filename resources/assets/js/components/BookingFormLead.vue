@@ -179,7 +179,7 @@
 
 <script>
 export default {
-    props: ['formId', 'tour', 'order_id'],
+    props: ['order_id'],
     mounted() {
         console.log('OTM Booking form loaded', this.order_id)
     },

@@ -44,8 +44,11 @@
                         </div>
                     </div>
                 </div>
-                <div v-for="traveller in travellers" v-bind="traveller.token">
+                <div v-for="traveller in travellers" v-bind="traveller.id">
                     <div class="row">
+                        <div class="col-sm-1">
+                            {{ traveller.id }} {{ traveller.isLead }}
+                        </div>
                         <div class="col-sm-3">
                             {{ traveller.first_name }}
                         </div>
@@ -81,7 +84,7 @@ import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
  */
 export default {
     components: { BookingFormFlightSelector },
-    props: ['tour', 'booking'],
+    props: ['tour', 'booking', 'order_id'],
     data() {
         return {
             outbound_flights: [],
@@ -97,8 +100,10 @@ export default {
         }
     },
     async mounted() {
+        console.log('tour', this.tour)
         await this.getFlights(this.tour.id)
         console.log(this.flights)
+        
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
@@ -122,9 +127,10 @@ export default {
              * when flights is opened, load the additional travellers
              */
             if (this.showFlights) {
+                console.log('show filights for order', this.order_id)
                 axios.get('/api/booking/tourparty', {
                     params: {
-                        tour: this.tour
+                        order_id: this.order_id
                     }
                 })
                 .then(response => {

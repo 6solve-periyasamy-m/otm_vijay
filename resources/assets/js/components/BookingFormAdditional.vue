@@ -4,7 +4,7 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
                     <button class="btn btn-link collapsed cardhead" @click="toggleAdditional">
-                        Additional Travellers
+                        Additional Travellers {{ order_id }}
                     </button>
                 </h5>
             </div>
@@ -14,7 +14,7 @@
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
                 <div v-for="item in additional" :key="item.name">
-                    <booking-form-add-traveller :formId="item" @remove="removeTraveller"></booking-form-add-traveller>
+                    <booking-form-add-traveller :order_id="order_id" :tour="tour" :formId="item" @remove="removeTraveller"></booking-form-add-traveller>
                 </div>
                 <button type="button" class="btn btn-success" @click="addAdditional">Add traveller</button>
                 <button
@@ -31,6 +31,9 @@
 <script>
     import { bus } from '../bus' 
     export default {
+        props: [
+            'order_id'
+        ],
         data() {
             return {
                 id: 0,

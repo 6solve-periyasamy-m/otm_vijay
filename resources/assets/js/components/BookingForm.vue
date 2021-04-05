@@ -11,10 +11,10 @@
                             <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
                             <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                             <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                            <booking-form-lead :tour="tour" :order_id="order_id" :booked="booked"></booking-form-lead>
-                            <booking-form-additional :tour="tour" :order_id="order_id"></booking-form-additional>
+                            <booking-form-lead :order_id="order_id" :booked="booked"></booking-form-lead>
+                            <booking-form-additional :order_id="order_id"></booking-form-additional>
                             <div v-if="tour">
-                                <booking-form-flights :tour="tour" :booked="booked"></booking-form-flights>
+                                <booking-form-flights :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
                                 <booking-form-accommodation></booking-form-accommodation>
                                 
                                 <booking-form-payment></booking-form-payment>as

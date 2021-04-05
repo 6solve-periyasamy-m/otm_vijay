@@ -81,14 +81,16 @@
     import { bus } from '../bus'
     export default {
         props: {
-            formId: String
+            formId: String,
+            order_id: Number
         },
         model: {
             prop: 'formId',
             event: 'click'
         },
         mounted() {
-            console.log('Additional traveller ', this.formId)
+            console.log('Additional traveller formId', this.formId)
+            console.log('order_id', this.order_id)
         },
         data() {
             return {
@@ -169,6 +171,7 @@
             storeTraveller() {
                 axios.post('/api/booking/additional-traveller', {
                     form_id: this.formId,
+                    order_id: this.order_id,
                     first_name: this.first_name,
                     last_name: this.last_name,
                     email_address: this.email_address,

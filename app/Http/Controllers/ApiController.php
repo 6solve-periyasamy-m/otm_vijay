@@ -282,19 +282,23 @@ class ApiController extends Controller
     public function additionalTraveller(Request $request) 
     {
         \Log::info('additionalTraveller', $request->toArray());
-        $customer = $this->saveCustomerDetails($request);
 
-        return $this->saveOrderCustomer($customer, $request, false);
+        $customer = $this->saveCustomerDetails($request);
+        $orderCustomer = $this->saveOrderCustomer($customer, $request, false);
+
+        return ['customer' => $customer, 'orderCustomer' => $orderCustomer];
     }
     
     public function getTravellers(Request $request) {
-        $tour = json_decode($request->tour);
-
+        if (empty($request->order_id)) {
+            \Log::debug('getTravellers without order ID');
+            return null;
+        }
         $customer = new Customer();
         $customers = $customer
             ->join('orders_customers', 'orders_customers.customer_id', 'customers.id')
             ->join('orders', 'orders.id', 'orders_customers.order_id')
-            ->where('orders.tour_id', $tour->id)
+            ->where('orders.id', $request->order_id)
             ->get();
             //->toSql();
 //dd($customers);
