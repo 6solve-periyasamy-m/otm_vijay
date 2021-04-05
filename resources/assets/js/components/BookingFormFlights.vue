@@ -44,19 +44,42 @@
                         </div>
                     </div>
                 </div>
-                <div v-for="traveller in travellers" v-bind="traveller.id">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary" @click="customFlights">Customise Flights per passenger</button>
+                    </div>
+                </div>
+                <hr/>
+                <div class="custom-flights" v-if="customFlights">
                     <div class="row">
                         <div class="col-sm-1">
-                            {{ traveller.id }} {{ traveller.isLead }}
+                            Traveller
                         </div>
                         <div class="col-sm-3">
-                            {{ traveller.first_name }}
+                            First name
                         </div>
                         <div class="col-sm-3">
-                            {{ traveller.last_name}}
+                            Last name
                         </div>
                         <div class="col-sm-1">
-                            <input type="checkbox" name="custom">
+                            Custom Flights
+                        </div>
+                    </div>
+                    <hr/>
+                    <div v-for="traveller in travellers" v-bind="traveller.id">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                {{ traveller.id }} {{ traveller.is_lead_booker }}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ traveller.first_name }}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ traveller.last_name}}
+                            </div>
+                            <div class="col-sm-1">
+                                <input type="checkbox" name="custom">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,11 +146,14 @@ export default {
         },
         toggleFlights() {
             this.showFlights = !this.showFlights
+        },
+        customFlights() {
+            this.showCustomFlights = !this.showCustomFlights
             /**
-             * when flights is opened, load the additional travellers
+             * when flights are selected, show customers with checkboxes
              */
-            if (this.showFlights) {
-                console.log('show filights for order', this.order_id)
+            if (this.showFlights && this.showCustomFlights) {
+                console.log('show flights for order', this.order_id)
                 axios.get('/api/booking/tourparty', {
                     params: {
                         order_id: this.order_id

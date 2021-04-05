@@ -199,6 +199,12 @@ class ApiController extends Controller
         return response()->json(["success" => true, "data" => $result]);
     }
 
+    /**
+     * createOrder - makes an order every time booking form is accessed by URL, unless it already exists (via token or link)
+     *
+     * @param Request $request
+     * @return JSON (order object)
+     */
     public function createOrder(Request $request)
     {
         \Log::info('create order for tour ' . $request->tour);
@@ -218,8 +224,24 @@ class ApiController extends Controller
         return response()->json(["success" => true, "order" => $order]);
     }
 
-    private function saveCustomerDetails($request, $isLead = false) {
+    /**
+     * saveCustomerDetails
+     *
+     * @param [type] $request
+     * @param boolean $isLead
+     * @return JSON (Customer object)
+     */
+    private function saveCustomerDetails($request, $isLead = false) 
+    {
         $customer = new Customer();
+        //does this customer already exist?
+        $customerExists = $customer->where('email_address', $request->email_address)->first();
+        if ($customerExists) {
+            \Log::info('customer exists record ', $customerExists->toArray());
+            $customer = $customerExists;
+        } else {
+            $customer->email_address = $request->email_address;
+        }
         $customer->title = $request->title;
         $customer->first_name = $request->first_name;
         $customer->middle_names = $request->middle_names;
@@ -227,7 +249,6 @@ class ApiController extends Controller
         $customer->date_of_birth = $request->date_of_birth;
         $customer->mobile_number = $request->mobile_number;
         $customer->other_phone_number = $request->other_phone_number;
-        $customer->email_address = $request->email_address;
         $customer->password = null;
         $customer->gender = $request->gender;
         if ($isLead) {
@@ -246,26 +267,65 @@ class ApiController extends Controller
         }
         \Log::info('saving customer detaisl ', $customer->toArray());
         $customer->save();
+
         return $customer;
     }
-    private function updateEmergencyContactDetails(Request $request) {
+
+    private function updateEmergencyContactDetails(Request $request) 
+    {
         return false;
     }
-    private function updateOrderCustomer(Request $request) {
-        $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
-        $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+
+    /**
+     * updateOrderCustomer - adds fields to existing orderCustomer record for a single traveller
+     *
+     * @param [type] $ordersCustomer (object)
+     * @param Request $request
+     * @return void
+     */
+    private function updateOrderCustomer($ordersCustomer, Request $request) 
+    {
+        if ($request->tour['base_price_per_person']) {
+            $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
+        }
+        if ($request->tour['single_occupancy_surcharge']) {
+            $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+        }
     }
-    private function saveOrderCustomer(Customer $customer, Request $request, $isLead = false) {
+    
+    /**
+     * saveOrderCustomer - stores the orderCustomer data from the booking form
+     *
+     * @param Customer $customer
+     * @param Request $request
+     * @param boolean $isLead
+     * @return JSON (record saved)
+     */
+    private function saveOrderCustomer(Customer $customer, Request $request, $isLead = false) 
+    {
         $ordersCustomer = new OrdersCustomer();
-        $ordersCustomer->order_id = $request->order_id;
-        $ordersCustomer->customer_id = $customer->id;
+        $ordersCustomerExists = $ordersCustomer->where('order_id', $request->order_id)->where('customer_id', $request->id)->first();
+        if ($ordersCustomerExists) {
+            $ordersCustomer = $ordersCustomerExists;
+            $this->updateOrderCusotmer($ordersCustomer, $request);
+        } else {
+            $ordersCustomer->order_id = $request->order_id;
+            $ordersCustomer->customer_id = $customer->id;
+        }
         $ordersCustomer->is_lead_booker = $isLead;
         $ordersCustomer->travel_insurer = null;
         $ordersCustomer->policy_number = null;
         $ordersCustomer->save();
+
         return $ordersCustomer;
     }
 
+    /**
+     * leadTraveller - save the leadTraveller data
+     *
+     * @param Request $request
+     * @return array of what was saved in customer and orderCustomer
+     */
     public function leadTraveller(Request $request) 
     {
         \Log::info('leadTraveller', $request->toArray());
@@ -273,11 +333,14 @@ class ApiController extends Controller
         $customer = $this->saveCustomerDetails($request, true);
         $orderCustomer = $this->saveOrderCustomer($customer, $request, true);
 
-        return ['customer' => $customer, 'orderCustomer' => $orderCustomer];
+        return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
 
-    /** 
-     * post - add an additional traveller to the tour
+    /**
+     * additionalTraveller - save the additionalTraveller data
+     *
+     * @param Request $request
+     * @return array of what was saved in customer and orderCustomer
      */
     public function additionalTraveller(Request $request) 
     {
@@ -286,9 +349,15 @@ class ApiController extends Controller
         $customer = $this->saveCustomerDetails($request);
         $orderCustomer = $this->saveOrderCustomer($customer, $request, false);
 
-        return ['customer' => $customer, 'orderCustomer' => $orderCustomer];
+        return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
-    
+
+    /**
+     * getTravellers for this order
+     *
+     * @param Request $request
+     * @return JSON
+     */
     public function getTravellers(Request $request) {
         if (empty($request->order_id)) {
             \Log::debug('getTravellers without order ID');
@@ -300,8 +369,7 @@ class ApiController extends Controller
             ->join('orders', 'orders.id', 'orders_customers.order_id')
             ->where('orders.id', $request->order_id)
             ->get();
-            //->toSql();
-//dd($customers);
-        return $customers->toJson();
+
+            return $customers->toJson();
     }
 }
