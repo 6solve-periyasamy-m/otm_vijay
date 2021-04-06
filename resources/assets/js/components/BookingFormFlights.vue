@@ -18,7 +18,6 @@
                                 :flights="outbound_flights" 
                                 :types="outbound_type">
                             </booking-form-flight-selector>
-                       
                     </div>
                 </div>
                 <div class="row">
@@ -46,13 +45,15 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button class="btn btn-primary" @click="customFlights">Customise Flights per passenger</button>
+                        <button class="btn btn-primary" @click="customFlights()">
+                            Customise Flights per passenger
+                        </button>
                     </div>
                 </div>
-                <hr/>
-                <div class="custom-flights" v-if="customFlights">
+                <div class="custom-flights" v-if="showCustomFlights">
+                    <hr/>
                     <div class="row">
-                        <div class="col-sm-1">
+                        <div class="col-sm-3">
                             Traveller
                         </div>
                         <div class="col-sm-3">
@@ -61,15 +62,15 @@
                         <div class="col-sm-3">
                             Last name
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-sm-3">
                             Custom Flights
                         </div>
                     </div>
                     <hr/>
-                    <div v-for="traveller in travellers" v-bind="traveller.id">
+                    <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
                         <div class="row">
-                            <div class="col-sm-1">
-                                {{ traveller.id }} {{ traveller.is_lead_booker }}
+                            <div class="col-sm-3">
+                                {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
                             </div>
                             <div class="col-sm-3">
                                 {{ traveller.first_name }}
@@ -77,8 +78,40 @@
                             <div class="col-sm-3">
                                 {{ traveller.last_name}}
                             </div>
-                            <div class="col-sm-1">
-                                <input type="checkbox" name="custom">
+                            <div class="col-sm-3">
+                                <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
+                            </div>
+                            <div v-if="travellerFlightOptions[traveller.order_customer_id]">
+                                <h5>Flight Options for traveller</h5>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <booking-form-flight-selector 
+                                            :tour="tour" 
+                                            :airports="airports" 
+                                            :flights="outbound_flights" 
+                                            :types="outbound_type">
+                                        </booking-form-flight-selector>
+                                        <booking-form-flight-selector 
+                                            :tour="tour" 
+                                            :airports="airports" 
+                                            :flights="inbound_flights" 
+                                            :types="inbound_type">
+                                        </booking-form-flight-selector>
+                                    </div>
+                                </div>
+                                <div class="row" v-if="showOtherFlights">
+                                    <div class="col-sm-9">
+                                        <h4> Add On Flights </h4>
+                                        <div v-for="flight in other_flights" :key="flight.id">
+                                            <booking-form-flight-selector v-model="flight_selected"
+                                                :tour="tour" 
+                                                :airports="airports" 
+                                                :flights="flights" 
+                                                :types="tour_flight_optional_types">
+                                            </booking-form-flight-selector>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -90,7 +123,7 @@
 <script>
 import dates from '../utilities'
 import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
-
+import Vue from 'vue'
 /**
  * Flights selection component
  * Loads in available flights for this tour
@@ -119,7 +152,9 @@ export default {
             showOtherFlights: false,
             outbound_type: ['Outbound'],
             inbound_type: ['Inbound'],
-            travellers: []
+            travellers: [],
+            travellerFlightOptions: [],
+            showCustomFlights: false
         }
     },
     async mounted() {
@@ -130,6 +165,9 @@ export default {
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
+    },
+    watch: {
+
     },
     computed: {
         otherairports: function() {
@@ -147,7 +185,15 @@ export default {
         toggleFlights() {
             this.showFlights = !this.showFlights
         },
+        flightOptionsCustomer(id) {
+            if (typeof this.travellerFlightOptions[id] == 'undefined' || this.travellerFlightOptions.length == 0 || this.travellerFlightOptions[id] == null) {
+                Vue.set(this.travellerFlightOptions, id, true)
+           } else {
+                Vue.set(this.travellerFlightOptions, id, !this.travellerFlightOptions[id])
+            }
+        },
         customFlights() {
+            console.log('this.showFlights && this.showCustomFlights', this.showFlights, this.showCustomFlights) 
             this.showCustomFlights = !this.showCustomFlights
             /**
              * when flights are selected, show customers with checkboxes

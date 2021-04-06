@@ -31,9 +31,7 @@
 <script>
     import { bus } from '../bus' 
     export default {
-        props: [
-            'order_id'
-        ],
+        props: ['order_id', 'tour'],
         data() {
             return {
                 id: 0,

@@ -165,10 +165,8 @@
                     <div class="col-sm-6 form-group field-separation">
                         <button v-if="validForm"
                             type="button"
-                            :formId="formId"
                             class="btn btn-success"
                             @click="storeTraveller">Save Traveller</button>
-
                     </div>
                 </div>
             </form>
@@ -265,7 +263,6 @@ export default {
             axios.post('/api/booking/lead-traveller', {
                 tour: this.tour,
                 order_id: this.order_id,
-                form_id: this.formId,
                 first_name: this.first_name,
                 last_name: this.last_name,
                 email_address: this.email_address,

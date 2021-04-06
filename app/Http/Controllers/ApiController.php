@@ -360,16 +360,16 @@ class ApiController extends Controller
      */
     public function getTravellers(Request $request) {
         if (empty($request->order_id)) {
-            \Log::debug('getTravellers without order ID');
+            \Log::debug('ERROR: getTravellers requires an order_id');
             return null;
         }
         $customer = new Customer();
         $customers = $customer
+            ->select('orders_customers.id as order_customer_id', 'orders_customers.is_lead_booker', 'customers.first_name', 'customers.last_name')
             ->join('orders_customers', 'orders_customers.customer_id', 'customers.id')
             ->join('orders', 'orders.id', 'orders_customers.order_id')
-            ->where('orders.id', $request->order_id)
-            ->get();
-
+            ->where('orders.id', $request->order_id)->get();
+        
             return $customers->toJson();
     }
 }

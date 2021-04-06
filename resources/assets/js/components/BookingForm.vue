@@ -5,19 +5,18 @@
                 <div class="card card-default">
                     <div class="card-header">OTM Booking Form version 0.1.0 PRERELEASE - display only - backend not connected </div>
 
-                    <div class="card-body">Order [ {{order_id}} {{ token }}]
+                    <div class="card-body">
                         <bookingform-header></bookingform-header>
                             <h1 v-if="event != null">{{event.event_title}}</h1>
                             <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
                             <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                             <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                            <booking-form-lead :order_id="order_id" :booked="booked"></booking-form-lead>
-                            <booking-form-additional :order_id="order_id"></booking-form-additional>
+                            <booking-form-lead :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                            <booking-form-additional :order_id="order_id" :tour="tour"></booking-form-additional>
                             <div v-if="tour">
                                 <booking-form-flights :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
                                 <booking-form-accommodation></booking-form-accommodation>
-                                
-                                <booking-form-payment></booking-form-payment>as
+                                <booking-form-payment></booking-form-payment>
                                 <booking-form-terms></booking-form-terms>
                             </div>
                         <bookingform-footer></bookingform-footer>
