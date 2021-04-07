@@ -4,8 +4,9 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
                     <button class="btn btn-link collapsed cardhead" @click="toggleAdditional">
-                        Additional Travellers {{ order_id }}
+                        Additional Travellers 
                     </button>
+                    <p class="caption" v-if="!lead_traveller && !showTraveller">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
                 </h5>
             </div>
             <div class="card-body" v-if="showAdditional">

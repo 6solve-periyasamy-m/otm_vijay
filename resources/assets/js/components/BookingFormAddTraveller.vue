@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <div class="ept" v-if="!removed">
-    <h3>Additional Traveller Details</h3>
+        <h3>Additional Traveller Details</h3>
         <div class="ept-form" :id="formId">
             <div class="row">
                 <div class="col-sm-6 form-group field-separation">
@@ -19,14 +19,14 @@
                 <div class="col-sm-6 form-group field-separation">
                     <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
                     <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
-                    <label :class="{invalid: emailInvalid}" v-if="email_invalid">{{email_validation}}</label>
-                    <label class="valid" v-else>OK</label>
+                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
+                    <label v-else class="valid">Email address</label>
                 </div>
                 <div class="col-sm-6 form-group field-separation">
                     <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
                     <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" id="mobile_number" class="form-control" />
                     <label :class="{invalid: mobileNumberInvalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                    <label class="valid" v-else>OK</label>
+                    <label class="valid" v-else>Mobile Number</label>
                 </div>
             </div>
             <div class="row">
@@ -41,26 +41,18 @@
                     <label class="form-label" for="other_phone_number" v-show="other_phone_number">{{otherNumberType}}</label>
                     <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
                     <label :class="{invalid: additionalNumberInvalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
-                    <label class="valid" v-else>{{other_phone_number_type.name}} Number OK</label>
+                    <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6 form-group field-separation">
-                    <label class="form-label" for="date_of_birth" >Date of Birth</label>
+                    <label class="form-label" for="date_of_birth">Date of Birth</label>
                     <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
                 </div>
                 <div class="col-sm-2"></div>
                 <div class="col-sm-4 form-group field-separation">
-                    <button v-if="validForm"
-                        type="button"
-                        :formId="formId"
-                        class="btn btn-success"
-                        @click="storeTraveller">Save Traveller</button>
-                    <button v-if="emptyForm" 
-                        type="button" 
-                        :formId="formId"
-                        class="btn btn-warning" 
-                        @click="removeTraveller">Remove Traveller</button>
+                    <button v-if="validForm" type="button" :formId="formId" class="btn btn-success" @click="storeTraveller">Save Traveller</button>
+                    <button v-if="emptyForm" type="button" :formId="formId" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
                     <div v-else>
                         <label for="include">Include</label>
                         <input type="checkbox" v-model="included" :checked="included">
@@ -68,9 +60,9 @@
                 </div>
             </div>
             <div class="row">
-                    <div v-for="err in errors">
-                        {{err}}
-                    </div>
+                <div v-for="err in errors">
+                    {{err}}
+                </div>
             </div>
         </div>
     </div>
@@ -78,98 +70,103 @@
 </template>
 
 <script>
-    import { bus } from '../bus'
-    export default {
-        props: {
-            formId: String,
-            order_id: Number
+import {
+    bus
+} from '../bus'
+export default {
+    props: {
+        formId: String,
+        order_id: Number
+    },
+    model: {
+        prop: 'formId',
+        event: 'click'
+    },
+    mounted() {
+        console.log('Additional traveller formId', this.formId)
+        console.log('order_id', this.order_id)
+    },
+    data() {
+        return {
+            first_name: '',
+            last_name: '',
+            email_address: '',
+            date_of_birth: '',
+            mobile_number: '',
+            mobile_number_invalid: false,
+            mobile_number_validation: 'Please enter a valid mobile number',
+            other_phone_number: '',
+            other_number_invalid: false,
+            other_number_validation: 'Please enter a valid phone number',
+            email_invalid: false,
+            email_validation: 'Please enter your email address',
+            validphone: false,
+            other_phone_number_type: '',
+            otherNumberType: '',
+            additionalTraveller: 'checked',
+            removed: false,
+            included: false,
+            errors: []
+        }
+    },
+    computed: {
+        emptyForm: function () {
+            // console.log('evaluation', this.first_name)
+            return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
         },
-        model: {
-            prop: 'formId',
-            event: 'click'
+        validForm: function () {
+            return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
         },
-        mounted() {
-            console.log('Additional traveller formId', this.formId)
-            console.log('order_id', this.order_id)
+        mobileNumberInvalid: function () {
+            return this.mobile_number.length > 1 && this.mobile_number_invalid
         },
-        data() {
-            return {
-                first_name: '',
-                last_name: '',
-                email_address: '',
-                date_of_birth: '',
-                mobile_number: '',
-                mobile_number_invalid: true,
-                mobile_number_validation: 'Please enter a valid mobile number',
-                other_phone_number: '',
-                other_number_invalid: true,
-                other_number_validation: 'Please enter a valid phone number',
-                email_invalid: true,
-                email_validation: 'Please enter your email address',
-                validphone: false,
-                other_phone_number_type: '',
-                otherNumberType: '',
-                additionalTraveller: 'checked',
-                removed: false,
-                included: false,
-                errors: []
+        emailInvalid: function () {
+            return this.email_address.length > 4 && this.email_invalid
+        },
+        additionalNumberInvalid: function () {
+            return this.other_phone_number.length > 1 && this.other_number_invalid
+        }
+    },
+    methods: {
+        validPhone(e) {
+            // valid_uk appears to be fairly accurate
+            const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
+            const field = e.srcElement.name
+            console.log('validating ', field)
+            switch (field) {
+                case 'mobile_number':
+                    if (!valid_uk.test(this.mobile_number)) {
+                        this.mobile_number_invalid = true
+                        console.log('Invalid!', this.mobile_number)
+                        return false
+                    }
+                    this.mobile_number_invalid = false
+                    break
+                case 'other_phone_number':
+                    if (this.other_phone_number_type !== 'other' && !valid_uk.test(this.other_phone_number)) {
+                        this.other_number_invalid = true
+                        return false
+                    }
+                    this.other_number_invalid = false
+                    break
+                default:
+                    alert(field + ' not handled in switch')
             }
+            console.log(field, 'validated')
+            return true
         },
-        computed: {
-            emptyForm: function() {
-                // console.log('evaluation', this.first_name)
-                return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
-            },
-            validForm: function() {
-                return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
-            },
-            mobileNumberInvalid: function() {
-                return this.mobile_number.length>1 && this.mobile_number_invalid
-            },
-            emailInvalid: function() {
-                return this.email_address.length>4 && this.email_invalid
-            },
-            additionalNumberInvalid: function() {
-                return this.other_phone_number.length>1 && this.other_number_invalid
-            }
-        },
-        methods: {
-            validPhone(e) {
-                // valid_uk appears to be fairly accurate
-                const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
-                const field = e.srcElement.name
-                console.log('validating ', field)
-                switch (field) {
-                    case 'mobile_number':
-                        if (!valid_uk.test(this.mobile_number)) {
-                            this.mobile_number_invalid = true
-                            console.log('Invalid!', this.mobile_number)
-                            return false
-                        }
-                        this.mobile_number_invalid = false
-                        break
-                    case 'other_phone_number':
-                        if (this.other_phone_number_type !== 'other' && !valid_uk.test(this.other_phone_number)) {
-                            this.other_number_invalid = true
-                            return false
-                        }
-                        this.other_number_invalid = false
-                        break
-                    default:
-                        alert(field + ' not handled in switch')
-                }
-                console.log(field, 'validated')
-                return true
-            },
-            validEmail(e) {
-                const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-                const valid = valid_email.test(this.email_address)
-                console.log(this.email, valid)
-                this.email_invalid = !valid
+        validEmail() {
+            if (!this.email_address.length) {
                 return false
-            },
-            storeTraveller() {
-                axios.post('/api/booking/additional-traveller', {
+            }
+            const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+            const valid = valid_email.test(this.email_address)
+            console.log(this.email, valid)
+            this.email_invalid = !valid
+            return false
+        },
+        storeTraveller() {
+            axios.post('/api/booking/additional-traveller', {
                     form_id: this.formId,
                     order_id: this.order_id,
                     first_name: this.first_name,
@@ -187,13 +184,12 @@
                     console.log('submit error', e)
                     this.errors.push(e)
                 })
-            },
-            removeTraveller() {
-                this.removed = true
-                this.$emit('remove', this.formId)
-                bus.$emit('removeTraveller', this.formId)
-            }
+        },
+        removeTraveller() {
+            this.removed = true
+            this.$emit('remove', this.formId)
+            bus.$emit('removeTraveller', this.formId)
         }
     }
-
+}
 </script>

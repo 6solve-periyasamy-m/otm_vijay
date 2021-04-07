@@ -81,10 +81,6 @@ export default {
                 })
                 .catch(error => console.log(error.message))
         },
-        // getTourData() {
-        //     console.log('requesting...', this.event)
-        //     return this.getTours(this.event)
-        // },
         getTours() {
             console.log(`getting tours for event ${this.event.id}`)
             axios.get(`/api/booking/tours/${this.event.id}`)

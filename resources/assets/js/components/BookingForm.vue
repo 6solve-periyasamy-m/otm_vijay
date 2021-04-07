@@ -3,8 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default">
-                    <div class="card-header">OTM Booking Form version 0.1.0 PRERELEASE - display only - backend not connected </div>
-
+                    <div class="card-header">OTM Booking Form version 0.2.0 PRERELEASE - Lead/Additional/Flights/Custom Flights</div>
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
                             <h1 v-if="event != null">{{event.event_title}}</h1>
