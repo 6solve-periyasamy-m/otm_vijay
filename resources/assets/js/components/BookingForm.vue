@@ -5,20 +5,30 @@
                 <div class="card card-default">
                     <div class="card-header">OTM Booking Form version 0.2.0 PRERELEASE - Lead/Additional/Flights/Custom Flights</div>
                     <div class="card-body">
+                    {{customer}}
                         <bookingform-header></bookingform-header>
                             <h1 v-if="event != null">{{event.event_title}}</h1>
                             <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
-                            <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
-                            <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                            <booking-form-lead :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
-                            <booking-form-additional :order_id="order_id" :tour="tour"></booking-form-additional>
-                            <div v-if="tour">
-                                <booking-form-flights :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
-                                <booking-form-accommodation></booking-form-accommodation>
-                                <booking-form-payment></booking-form-payment>
-                                <booking-form-terms></booking-form-terms>
+                            <div v-if="selectOrder.length>0 && order_selected === null">
+                                <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected" >
+                                    <option value="">Select an Order</option>
+                                    <option :value="key">{{order.id}}</option>
+                                </select>
                             </div>
-                        <bookingform-footer></bookingform-footer>
+                            <div v-else>
+                                    <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
+                                    <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
+                                    <booking-form-lead :customer="customer" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                                    <booking-form-additional :order_id="order_id" :tour="tour"></booking-form-additional>
+                                    <div v-if="tour">
+                                        <booking-form-flights :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
+                                        <booking-form-accommodation></booking-form-accommodation>
+                                        <booking-form-payment></booking-form-payment>
+                                        <booking-form-terms></booking-form-terms>
+                                    </div>
+                            </div>
+                            <bookingform-footer></bookingform-footer>
+
                     </div>
                 </div>
             </div>
@@ -30,20 +40,67 @@
 import BookingFormTour from './BookingFormTour.vue'
 import dates from '../utilities'
 import { bus, booking } from '../bus'
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 export default {
     props: ['tour', 'event', 'name'],
     components: { BookingFormTour },
-    mounted() {
+    async mounted() {
         console.log('BookingForm mounted.')
         console.log('tour', this.tour)
-        this.getOrderId();
+        let currentCustomer = getCookie('OTM_booking_order_token')
+        if (typeof currentCustomer != 'undefined' && currentCustomer.length) {
+            console.log('currentCustomer', currentCustomer)
+            await axios.get(`/api/booking/customer/${currentCustomer}`)
+                .then(response => {
+                    console.log('customer orders found', response);
+                    this.orders = response.data
+                    console.log('Orders = ', this.orders)
+                    if (this.orders.length > 0) {
+                        this.selectOrder = this.orders
+                    } else {
+                        this.order_selected = this.orders[0].id
+                    }
+                    console.log('order selected is ', this.order_selected)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        } else if (typeof orders == 'undefined' || !orders.length) {
+            this.getOrderId();
+            console.log('created order = ', this.orders)
+        }
+    },
+    watch: {
+        order_selected: function() {
+            console.log('An order has been selected', this.order_selected)
+            this.customer = this.orders[this.order_selected].customer
+            console.log('this order has a customer', this.customer)
+        }
     },
     data() {
         return {
             token: '',
             travellers: [],
+            orders: [],
             order_id: 0,
-            booked: booking, 
+            booked: booking,
+            selectOrder: [],
+            order_selected: null,
+            customer: {}
         }
     },
     // created() {
@@ -58,9 +115,9 @@ export default {
                 event: this.event.id
             })
             .then(response => {
+                console.log('bookingForm - create order_id', response)
                 this.order_id = response.data.order.id
                 this.token = response.data.order.token
-                console.log('bookingForm - create order_id', response)
                 bus.$emit('setOrderToken', this.token)
                 console.log(response)
             })

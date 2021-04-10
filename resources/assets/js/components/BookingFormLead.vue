@@ -12,15 +12,26 @@
         <div class="ept-form card-body" v-if="showTraveller">
             <h4>Your Details</h4>
             <div class="row">
-                <div class="col-sm-4 form-group field-separation">
+                <div class="col-sm-2 form-group field-separation">
+                    <select>
+                        <option value="" default>Select title</option>
+                        <option value="Mr">Mr</option>
+                        <option value="Ms">Ms</option>
+                        <option value="Mrs">Mrs</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Dr">Dr</option>
+                        <option value="Prof">Prof</option>
+                    </select>
+                </div>
+                <div class="col-sm-3 form-group field-separation">
                     <label type="form-label" for="first_name" v-show="first_name">First name</label>
                     <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
                 </div>
-                <div class="col-sm-4 form-group field-separation">
-                    <label class="form-label" for="middle_name" v-show="middle_name">Middle name(s)</label>
-                    <input type="text" v-model="middle_name" placeholder="Middle name" name="middle_name" class="form-control maxwidth" />
+                <div class="col-sm-3 form-group field-separation">
+                    <label class="form-label" for="middle_names" v-show="middle_names">Middle name(s)</label>
+                    <input type="text" v-model="middle_names" placeholder="Middle name" name="middle_names" class="form-control maxwidth" />
                 </div>
-                <div class="col-sm-4 form-group field-separation">
+                <div class="col-sm-3 form-group field-separation">
                     <label class="form-label" for="last_name" v-show="last_name">Last name</label>
                     <input type="text" v-model="last_name" placeholder="Last name" name="last_name" id="last_name" class="form-control maxwidth" />
                 </div>
@@ -171,9 +182,19 @@
 
 <script>
 export default {
-    props: ['order_id'],
+    props: ['order_id', 'customer', 'tour', 'booked'],
     mounted() {
         console.log('OTM Booking form loaded', this.order_id)
+        console.log('customer', this.customer)
+        if (this.customer.first_name) {
+            this.first_name = this.customer.first_name
+        }
+        if (this.customer.middle_names) {
+            this.middle_names = this.customer.middle_names
+        }
+        if (this.customer.last_name) {
+            this.last_name = this.customer.last_name
+        }
     },
     data() {
         return {
@@ -181,7 +202,7 @@ export default {
             lead_traveller: '',
             first_name: '',
             last_name: '',
-            middle_name: '',
+            middle_names: '',
             email_address: '',
             mobile_number: '',
             address_line_1: '',

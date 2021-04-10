@@ -6,7 +6,7 @@
                     <button class="btn btn-link collapsed cardhead" @click="toggleAdditional">
                         Additional Travellers 
                     </button>
-                    <p class="caption" v-if="!lead_traveller && !showTraveller">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
+                    <p class="caption" v-if="!lead_traveller && !showAdditional">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
                 </h5>
             </div>
             <div class="card-body" v-if="showAdditional">
@@ -36,6 +36,7 @@
         data() {
             return {
                 id: 0,
+                lead_traveller: false, // TODO: this should be set by the event bus
                 showAdditional: false,
                 showInstruction: true,
                 additional: []

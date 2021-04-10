@@ -320,6 +320,43 @@ class ApiController extends Controller
         return $ordersCustomer;
     }
 
+    /** 
+     * getCustomerByToken
+     * 
+     * @param $token
+     * @return $customer or NULL if token no longer valid
+     */
+    public function getCustomerOrderByToken($token = null)
+    {
+        if (empty($token)) {
+            return null;
+        }
+
+        $order = new Order();
+        $orders = $order->where('token', $token)->get();
+        \Log::info( $token . ' found '. count($orders). ' orders');
+
+        if (count($orders)) {
+            $orderCount = count($orders->toArray());
+            if ($orderCount > 1) {
+                \Log::info('Multiple orders '.$orderCount.' for token '. $token);
+            }
+            foreach ($orders as &$ord) {
+                $ordersCustomers = new OrdersCustomer();
+                $orderCustomer = $ordersCustomers->where('order_id', $ord->id)
+                    ->join('customers', 'orders_customers.customer_id', 'customers.id')
+                    ->get();
+                if (count($orderCustomer) > 1) {
+                    throw new \Exception('more than one ordersCustomers record found for order '.$ord->id);
+                }
+                $ord->customer = $orderCustomer[0];
+            }
+            \Log::info('order data for customer retrieved ', $orders->toArray());
+
+            return $orders;
+        }
+        return null;
+    }
     /**
      * leadTraveller - save the leadTraveller data
      *
