@@ -61,9 +61,12 @@ const app = new Vue({
 //  bus.$on('saveLeadCustomer', function(name) {
 //      bus.booking.name = name
 //  })
+bus.$on('customerLoaded', function(customer) {
+    console.log('bus signal Customer Loaded', customer)
+})
  bus.$on('removeTraveller', function(id) {
-     console.log('removed traveller ',id)
+     console.log('bus signal removed traveller ',id)
  })
 bus.$on('setOrderToken', function(token) {
-    setCookie('OTM_booking_order_token', token);
+    setCookie('bus signal OTM_booking_order_token', token);
 })

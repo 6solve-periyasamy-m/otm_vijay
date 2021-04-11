@@ -181,23 +181,18 @@
 </template>
 
 <script>
+import { bus, booking } from '../bus'
 export default {
     props: ['order_id', 'customer', 'tour', 'booked'],
-    mounted() {
-        console.log('OTM Booking form loaded', this.order_id)
-        console.log('customer', this.customer)
-        if (this.customer.first_name) {
-            this.first_name = this.customer.first_name
-        }
-        if (this.customer.middle_names) {
-            this.middle_names = this.customer.middle_names
-        }
-        if (this.customer.last_name) {
-            this.last_name = this.customer.last_name
-        }
+    async mounted() {
+        this.debug && console.log('OTM Booking Lead Customer form loaded', this.order_id)
+        bus.$on('customerLoaded', (customer) => {
+            this.setCustomer(customer)
+        })
     },
     data() {
         return {
+            debug: true,
             showTraveller: false,
             lead_traveller: '',
             first_name: '',
@@ -230,8 +225,20 @@ export default {
             mobile_number_invalid: false,
             mobile_number_validation: 'Please enter a valid phone number',
             other_number_invalid: false,
-            other_number_validation: 'Please enter a valid phone number'
-
+            other_number_validation: 'Please enter a valid phone number'.date_of_birth,
+            fields: [
+                'first_name', 'middle_names', 'last_name', 
+                'date_of_birth', 'gender', 'email_address',
+                'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
+                'address_line_1', 'address_line_2', 'address_line_3',
+                'town', 'country', 'postcode',
+                'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
+                'billing_town', 'billing_country', 'billing_postcode',
+            ],
+            addressFields: [
+                'address_line_1', 'address_line_2', 'address_line_3',
+                'town', 'country', 'postcode'
+            ]
         }
     },
     computed: {
@@ -244,6 +251,26 @@ export default {
         }
     },
     methods: {
+        setCustomer(customer) {
+            this.debug && console.log('Lead Traveller customer', customer)
+            let that = this
+            this.fields.forEach(function(key,value) {
+                //console.log(key, value, customer[key])
+                if (customer[key]) {
+                    that[key] = customer[key]
+                }
+            })
+            let allSame = true
+            this.addressFields.forEach(function(key,value) {
+                let billingKey = `billing_${key}`
+                // console.log(customer[key], customer[billingKey])
+                if (customer[key] != customer[billingKey]) {
+                    allSame = false
+                }
+            })
+            this.debug && console.log('billing address matches', allSame)
+            this.same_address = allSame
+        },
         toggleTraveller() {
             this.showTraveller = !this.showTraveller
         },
@@ -279,7 +306,7 @@ export default {
             }
             const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             const valid = valid_email.test(this.email_address)
-            console.log(this.email, valid)
+            this.debug && console.log(this.email, valid)
             this.email_invalid = !valid
             return false
         },
@@ -289,6 +316,7 @@ export default {
                     tour: this.tour,
                     order_id: this.order_id,
                     first_name: this.first_name,
+                    middle_names: this.middle_names,
                     last_name: this.last_name,
                     email_address: this.email_address,
                     mobile_number: this.mobile_number,

@@ -5,11 +5,10 @@
                 <div class="card card-default">
                     <div class="card-header">OTM Booking Form version 0.2.0 PRERELEASE - Lead/Additional/Flights/Custom Flights</div>
                     <div class="card-body">
-                    {{customer}}
                         <bookingform-header></bookingform-header>
                             <h1 v-if="event != null">{{event.event_title}}</h1>
                             <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
-                            <div v-if="selectOrder.length>0 && order_selected === null">
+                            <div v-if="selectOrder.length>1 && order_selected === null">
                                 <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected" >
                                     <option value="">Select an Order</option>
                                     <option :value="key">{{order.id}}</option>
@@ -58,41 +57,45 @@ function getCookie(cname) {
 export default {
     props: ['tour', 'event', 'name'],
     components: { BookingFormTour },
-    async mounted() {
+    async created() {
+        
         console.log('BookingForm mounted.')
-        console.log('tour', this.tour)
+        this.debug && console.log('>>>> tour', this.tour)
+
         let currentCustomer = getCookie('OTM_booking_order_token')
         if (typeof currentCustomer != 'undefined' && currentCustomer.length) {
-            console.log('currentCustomer', currentCustomer)
+            this.debug && console.log('currentCustomer', currentCustomer)
             await axios.get(`/api/booking/customer/${currentCustomer}`)
                 .then(response => {
-                    console.log('customer orders found', response);
+                    this.debug && console.log('customer orders found', response);
                     this.orders = response.data
-                    console.log('Orders = ', this.orders)
-                    if (this.orders.length > 0) {
+                    this.debug && console.log('Orders = ', this.orders)
+                    if (this.orders.length > 1) {
                         this.selectOrder = this.orders
                     } else {
                         this.order_selected = this.orders[0].id
                     }
-                    console.log('order selected is ', this.order_selected)
+                    this.debug && console.log('order selected is ', this.order_selected)
+                    bus.$emit('customerLoaded', this.orders[0].customer)
                 })
                 .catch(error => {
                     console.log(error)
                 })
         } else if (typeof orders == 'undefined' || !orders.length) {
             this.getOrderId();
-            console.log('created order = ', this.orders)
+            this.debug && console.log('created order = ', this.orders)
         }
     },
-    watch: {
-        order_selected: function() {
-            console.log('An order has been selected', this.order_selected)
-            this.customer = this.orders[this.order_selected].customer
-            console.log('this order has a customer', this.customer)
-        }
-    },
+    // watch: {
+    //     order_selected: function() {
+    //         this.customer = this.orders[this.order_selected].customer
+    //         this.debug && console.log('An order has been selected', this.order_selected)
+    //         this.debug && console.log('this order has a customer', this.customer)
+    //     }
+    // },
     data() {
         return {
+            debug: true,
             token: '',
             travellers: [],
             orders: [],
@@ -115,18 +118,18 @@ export default {
                 event: this.event.id
             })
             .then(response => {
-                console.log('bookingForm - create order_id', response)
+                this.debug && console.log('bookingForm - create order_id', response)
                 this.order_id = response.data.order.id
                 this.token = response.data.order.token
                 bus.$emit('setOrderToken', this.token)
-                console.log(response)
+                this.debug && console.log(response)
             })
             .catch(err => {
                 console.log('error creating an order', e)
             })
         },
         startDate(event) {
-            console.log(event.event_start_date)
+            this.debug && console.log(event.event_start_date)
             return dates.makeDateFromString(event.event_start_date)
         },
         endDate(event) {
