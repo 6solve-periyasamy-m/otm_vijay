@@ -14,8 +14,13 @@
 </template>
 <script>
 export default {
+        data() {
+            return {
+                debug: false
+            }
+        },
         mounted() {
-            console.log('Component mounted.')
+            this.debug && console.log('Booking form header Component mounted.')
         }
     }
 </script>

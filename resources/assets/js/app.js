@@ -54,19 +54,21 @@ const app = new Vue({
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
- bus.$on('click', function(id) {
-    console.log('added traveller', id)
- })
+}
+const busEventLogging = false
+bus.$on('click', function(id) {
+    busEventLogging && console.log('added traveller', id)
+})
 //  bus.$on('saveLeadCustomer', function(name) {
 //      bus.booking.name = name
 //  })
 bus.$on('customerLoaded', function(customer) {
-    console.log('bus signal Customer Loaded', customer)
+    busEventLogging && console.log('Event Bus: Customer Loaded', customer)
 })
  bus.$on('removeTraveller', function(id) {
-     console.log('bus signal removed traveller ',id)
+     busEventLogging && console.log('Event Bus: removed traveller ',id)
  })
 bus.$on('setOrderToken', function(token) {
-    setCookie('bus signal OTM_booking_order_token', token);
+    busEventLogging && console.log('Event Bus: token set ', token)
+    setCookie('OTM_booking_order_token', token);
 })

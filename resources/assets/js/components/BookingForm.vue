@@ -17,8 +17,8 @@
                             <div v-else>
                                     <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                                     <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                                    <booking-form-lead :customer="customer" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
-                                    <booking-form-additional :order_id="order_id" :tour="tour"></booking-form-additional>
+                                    <booking-form-lead :form_info="formInfo" :customer="customer" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                                    <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour">
                                         <booking-form-flights :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
                                         <booking-form-accommodation></booking-form-accommodation>
@@ -59,8 +59,7 @@ export default {
     components: { BookingFormTour },
     async created() {
         
-        console.log('BookingForm mounted.')
-        this.debug && console.log('>>>> tour', this.tour)
+        this.debug && console.log('BookingForm created, tour:', this.tour)
 
         let currentCustomer = getCookie('OTM_booking_order_token')
         if (typeof currentCustomer != 'undefined' && currentCustomer.length) {
@@ -70,21 +69,33 @@ export default {
                     this.debug && console.log('customer orders found', response);
                     this.orders = response.data
                     this.debug && console.log('Orders = ', this.orders)
-                    if (this.orders.length > 1) {
-                        this.selectOrder = this.orders
+                    if (this.orders.length<1) {
+                        console.log('*** expired order cookie', currentCustomer)
+                        this.order_id = null
+                        //this.getOrderId()
+                        alert('Your order appears to have expired, please rebook or contact us.')
                     } else {
-                        this.order_selected = this.orders[0].id
+                        if (this.orders.length > 1) {
+                            this.selectOrder = this.orders
+                        } else {
+                            this.order_selected = this.orders[0].id
+                        }
+                        this.debug && console.log('order selected = ', this.order_selected, this.orders)
+                        bus.$emit('customerLoaded', this.orders[0].customer)
+                        bus.$emit('additionalTravellersLoaded', this.orders[0].customers)
+                        this.order_id = this.order_selected
                     }
-                    this.debug && console.log('order selected is ', this.order_selected)
-                    bus.$emit('customerLoaded', this.orders[0].customer)
                 })
                 .catch(error => {
                     console.log(error)
                 })
-        } else if (typeof orders == 'undefined' || !orders.length) {
+        }
+        if (typeof this.orders == 'undefined' || !this.orders.length) {
             this.getOrderId();
             this.debug && console.log('created order = ', this.orders)
         }
+
+
     },
     // watch: {
     //     order_selected: function() {
@@ -95,7 +106,8 @@ export default {
     // },
     data() {
         return {
-            debug: true,
+            debug: false,
+            formInfo: false,
             token: '',
             travellers: [],
             orders: [],

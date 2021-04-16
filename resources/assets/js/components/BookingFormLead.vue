@@ -5,7 +5,9 @@
             <h5 class="mb-1 dropdown-button">
                 <button class="btn btn-link cardhead" @click="toggleTraveller">
                     Lead Traveller details {{lead_traveller? ": " + lead_traveller : '' }}
+                    <div v-if="form_info">on order {{order_id}}</div>
                 </button>
+                
             </h5>
             <p class="caption" v-if="!lead_traveller && !showTraveller">Click here to start</p>
         </div>
@@ -13,8 +15,8 @@
             <h4>Your Details</h4>
             <div class="row">
                 <div class="col-sm-2 form-group field-separation">
-                    <select>
-                        <option value="" default>Select title</option>
+                    <select class="form-control">
+                        <option value="" default>Title</option>
                         <option value="Mr">Mr</option>
                         <option value="Ms">Ms</option>
                         <option value="Mrs">Mrs</option>
@@ -54,13 +56,12 @@
             <div class="row">
                 <div class="col-sm-6 form-group field-separation has-dropdown">
                     <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
-                        <option value="" disabled selected>Additional Phone</option>
+                        <option value="" disabled>Additional Phone</option>
                         <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
                         <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
                         <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
                         <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
                     </select>
-                    <label class="form-label" for="other_phone_number" v-show="other_phone_number">{{otherNumberType}}</label>
                     <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
                     <label :class="{invalid: other_number_invalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
                     <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
@@ -119,7 +120,7 @@
             </div>
             <div class="row spacer">
                 <div class="col-sm-12">
-                    <input class="form-check-input inset" @click="toggleSameAddress" type="checkbox" name="billing" value="true">
+                    <input class="form-check-input inset" @click="toggleSameAddress" type="checkbox" v-model="same_address">
                     <label class="form-check-label inset" for="billing">
                         Billing is delivery address
                     </label>
@@ -134,20 +135,20 @@
                     </div>
                     <div class="row">
                         <div v-if="!same_address" class="col-sm-12 form-group field-separation">
-                            <label class="form-label" v-show="billing_address_line_1">Billing Address line 1</label>
-                            <input type="text" v-model="billing_address_line_1" placeholder="Billing Address Line 1" class="form-control">
+                            <label class="form-label" v-show="billing_line_1">Billing Address line 1</label>
+                            <input type="text" v-model="billing_line_1" placeholder="Billing Address Line 1" class="form-control">
                         </div>
                     </div>
                     <div class="row">
                         <div v-if="!same_address" class="col-sm-12 form-group field-separation">
-                            <label class="form-label" v-show="billing_address_line_2">Billing Address line 2</label>
-                            <input type="text" v-model="billing_address_line_2" placeholder="Billing Address Line 2" class="form-control">
+                            <label class="form-label" v-show="billing_line_2">Billing Address line 2</label>
+                            <input type="text" v-model="billing_line_2" placeholder="Billing Address Line 2" class="form-control">
                         </div>
                     </div>
                     <div class="row">
                         <div v-if="!same_address" class="col-sm-12 form-group field-separation">
-                            <label class="form-label" v-show="billing_address_line_3">Billing Address line 3</label>
-                            <input type="text" v-model="billing_address_line_3" placeholder="Billing Address Line 3" class="form-control">
+                            <label class="form-label" v-show="billing_line_3">Billing Address line 3</label>
+                            <input type="text" v-model="billing_line_3" placeholder="Billing Address Line 3" class="form-control">
                         </div>
                     </div>
                     <div class="row">
@@ -183,7 +184,7 @@
 <script>
 import { bus, booking } from '../bus'
 export default {
-    props: ['order_id', 'customer', 'tour', 'booked'],
+    props: ['form_info', 'order_id', 'customer', 'tour', 'booked'],
     async mounted() {
         this.debug && console.log('OTM Booking Lead Customer form loaded', this.order_id)
         bus.$on('customerLoaded', (customer) => {
@@ -192,7 +193,7 @@ export default {
     },
     data() {
         return {
-            debug: true,
+            debug: false,
             showTraveller: false,
             lead_traveller: '',
             first_name: '',
@@ -207,9 +208,9 @@ export default {
             county: '',
             town: '',
             postcode: '',
-            billing_address_line_1: '',
-            billing_address_line_2: '',
-            billing_address_line_3: '',
+            billing_line_1: '',
+            billing_line_2: '',
+            billing_line_3: '',
             billing_country: '',
             billing_county: '',
             billing_town: '',
@@ -232,7 +233,7 @@ export default {
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
                 'address_line_1', 'address_line_2', 'address_line_3',
                 'town', 'country', 'postcode',
-                'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
+                'billing_line_1', 'billing_line_2', 'billing_line_3',
                 'billing_town', 'billing_country', 'billing_postcode',
             ],
             addressFields: [
@@ -243,8 +244,10 @@ export default {
     },
     computed: {
         otherNumberType: function () {
-            const name = this.other_phone_number_type
-            return 'Other ' + name.charAt(0).toUpperCase() + name.slice(1) + ' number'
+            if (typeof this.other_phone_number_type.name == 'undefined') {
+                return 'Additional Phone Number'
+            }
+            return 'Other ' + this.other_phone_number_type.name + ' number'
         },
         validForm: function () {
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth
@@ -262,14 +265,16 @@ export default {
             })
             let allSame = true
             this.addressFields.forEach(function(key,value) {
-                let billingKey = `billing_${key}`
-                // console.log(customer[key], customer[billingKey])
+                let addresskey = key.replace('address_', '')
+                let billingKey = `billing_${addresskey}`
+                that.debug && console.log(key, billingKey, customer[key], customer[billingKey])
                 if (customer[key] != customer[billingKey]) {
                     allSame = false
                 }
             })
             this.debug && console.log('billing address matches', allSame)
             this.same_address = allSame
+            this.lead_traveller = customer.first_name + ' ' + customer.last_name
         },
         toggleTraveller() {
             this.showTraveller = !this.showTraveller
@@ -311,7 +316,7 @@ export default {
             return false
         },
         storeTraveller() {
-            console.log(this.tour)
+            this.debug && console.log('BookingFormLead.storeTraveller() tour:',this.tour)
             axios.post('/api/booking/lead-traveller', {
                     tour: this.tour,
                     order_id: this.order_id,
@@ -345,7 +350,7 @@ export default {
                     // this.$emit('savedLeadCustomer', customer.first_name + ' ' + customer.last_name)
                 })
                 .catch(e => {
-                    console.log('error', e)
+                    console.log('BookingFormLead.storeTraveller() error', e)
                 })
         }
     }

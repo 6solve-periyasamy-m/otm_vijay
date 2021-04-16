@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
+    public $logging = false;
+
     // Open API - populate the booking form selectors
     public function getEvents() {
         $events = Event::where('event_start_date', '>', date('Y-m-d'))->get();
@@ -207,7 +209,6 @@ class ApiController extends Controller
      */
     public function createOrder(Request $request)
     {
-        \Log::info('create order for tour ' . $request->tour);
         $order = new Order();
         $order->quote_id = null;
         $order->tour_id = $request->tour;
@@ -220,7 +221,10 @@ class ApiController extends Controller
         //     'tour_id' => $order->tour_id, 
         //     'notes' => $order->notes,
         //     'token' => $order->token]);
-\Log::info('order id ', $order->toArray());
+        if ($this->logging) {
+            \Log::info('create order for tour ' . $request->tour);
+            \Log::info('order id ', $order->toArray());
+        }
         return response()->json(["success" => true, "order" => $order]);
     }
 
@@ -237,7 +241,9 @@ class ApiController extends Controller
         //does this customer already exist?
         $customerExists = $customer->where('email_address', $request->email_address)->first();
         if ($customerExists) {
-            \Log::info('customer exists record ', $customerExists->toArray());
+            if ($this->logging) {
+                \Log::info('customer exists record ', $customerExists->toArray());
+            }
             $customer = $customerExists;
         } else {
             $customer->email_address = $request->email_address;
@@ -257,7 +263,7 @@ class ApiController extends Controller
             $customer->address_line_3 = $request->address_line_3;
             $customer->billing_line_1 = isset($request->billing_line_1) ? $request->billing_line_1 : $request->address_line_1;
             $customer->billing_line_2 = isset($request->billing_line_2) ? $request->billing_line_2 : $request->address_line_2;
-            $customer->billing_line_1 = isset($request->billing_line_3) ? $request->billing_line_3 : $request->address_line_3;
+            $customer->billing_line_3 = isset($request->billing_line_3) ? $request->billing_line_3 : $request->address_line_3;
             $customer->town = $request->town;
             $customer->country = $request->country;
             $customer->postcode = $request->postcode;
@@ -265,7 +271,9 @@ class ApiController extends Controller
             $customer->billing_country = isset($request->billing_country) ? $request->billing_country : $request->country;
             $customer->billing_postcode = isset($request->billing_postcode) ? $request->billing_postcode : $request->postcode;
         }
-        \Log::info('saving customer detaisl ', $customer->toArray());
+        if ($this->logging) {
+            \Log::info('saving customer detaisl ', $customer->toArray());
+        }
         $customer->save();
 
         return $customer;
@@ -283,12 +291,12 @@ class ApiController extends Controller
      * @param Request $request
      * @return void
      */
-    private function updateOrderCustomer($ordersCustomer, Request $request) 
+    private function updateOrderCustomerFields($ordersCustomer, Request $request) 
     {
-        if ($request->tour['base_price_per_person']) {
+        if (!empty($request->tour['base_price_per_person'])) {
             $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
         }
-        if ($request->tour['single_occupancy_surcharge']) {
+        if (!empty($request->tour['single_occupancy_surcharge'])) {
             $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
         }
     }
@@ -303,11 +311,14 @@ class ApiController extends Controller
      */
     private function saveOrderCustomer(Customer $customer, Request $request, $isLead = false) 
     {
+        if (empty($request->order_id)) {
+            throw new \Exception('SaveOrderCustomer has no order ID');
+        }
         $ordersCustomer = new OrdersCustomer();
-        $ordersCustomerExists = $ordersCustomer->where('order_id', $request->order_id)->where('customer_id', $request->id)->first();
+        $ordersCustomerExists = $ordersCustomer->where('order_id', $request->order_id)->where('customer_id', $request->customer_id)->first();
         if ($ordersCustomerExists) {
             $ordersCustomer = $ordersCustomerExists;
-            $this->updateOrderCusotmer($ordersCustomer, $request);
+            $this->updateOrderCustomerFields($ordersCustomer, $request);
         } else {
             $ordersCustomer->order_id = $request->order_id;
             $ordersCustomer->customer_id = $customer->id;
@@ -334,24 +345,31 @@ class ApiController extends Controller
 
         $order = new Order();
         $orders = $order->where('token', $token)->get();
-        \Log::info( $token . ' found '. count($orders). ' orders');
+        if ($this->logging) {
+            \Log::info($token . ' found '. count($orders). ' orders');
+        }
 
         if (count($orders)) {
-            $orderCount = count($orders->toArray());
+            $orderCount = count($orders);
             if ($orderCount > 1) {
                 \Log::info('Multiple orders '.$orderCount.' for token '. $token);
+            }
+            if ($this->logging) {
+                \Log::info('orders are ', $orders->toArray());
             }
             foreach ($orders as &$ord) {
                 $ordersCustomers = new OrdersCustomer();
                 $orderCustomer = $ordersCustomers->where('order_id', $ord->id)
                     ->join('customers', 'orders_customers.customer_id', 'customers.id')
                     ->get();
-                if (count($orderCustomer) > 1) {
-                    throw new \Exception('more than one ordersCustomers record found for order '.$ord->id);
+                if (count($orderCustomer)) {
+                    $ord->customer = $orderCustomer[0];
+                    $ord->customers = $orderCustomer;
                 }
-                $ord->customer = $orderCustomer[0];
             }
-            \Log::info('order data for customer retrieved ', $orders->toArray());
+            if ($this->logging) {
+                \Log::info('order data for customer retrieved ', $orders->toArray());
+            }
 
             return $orders;
         }
@@ -365,7 +383,9 @@ class ApiController extends Controller
      */
     public function leadTraveller(Request $request) 
     {
-        \Log::info('leadTraveller', $request->toArray());
+        if ($this->logging) {
+            \Log::info('leadTraveller', $request->toArray());
+        }
 
         $customer = $this->saveCustomerDetails($request, true);
         $orderCustomer = $this->saveOrderCustomer($customer, $request, true);
@@ -381,7 +401,9 @@ class ApiController extends Controller
      */
     public function additionalTraveller(Request $request) 
     {
-        \Log::info('additionalTraveller', $request->toArray());
+        if ($this->logging) {
+            \Log::info('additionalTraveller', $request->toArray());
+        }
 
         $customer = $this->saveCustomerDetails($request);
         $orderCustomer = $this->saveOrderCustomer($customer, $request, false);

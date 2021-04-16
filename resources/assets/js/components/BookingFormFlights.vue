@@ -143,6 +143,7 @@ export default {
     props: ['tour', 'booking', 'order_id'],
     data() {
         return {
+            debug: false,
             outbound_flights: [],
             inbound_flights: [],
             other_flights: [],
@@ -158,9 +159,9 @@ export default {
         }
     },
     async mounted() {
-        console.log('tour', this.tour)
+        this.debug && console.log('BookingFormFlights mounted, tour', this.tour)
         await this.getFlights(this.tour.id)
-        console.log(this.flights)
+        this.debug && console.log('flights: ', this.flights)
         
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
@@ -193,13 +194,13 @@ export default {
             }
         },
         customFlights() {
-            console.log('this.showFlights && this.showCustomFlights', this.showFlights, this.showCustomFlights) 
+            this.debug && console.log('this.showFlights && this.showCustomFlights', this.showFlights, this.showCustomFlights) 
             this.showCustomFlights = !this.showCustomFlights
             /**
              * when flights are selected, show customers with checkboxes
              */
             if (this.showFlights && this.showCustomFlights) {
-                console.log('show flights for order', this.order_id)
+                this.debug && console.log('show flights for order', this.order_id)
                 axios.get('/api/booking/tourparty', {
                     params: {
                         order_id: this.order_id
@@ -225,7 +226,7 @@ export default {
         },
         async getFlights(tour) {
             var that = this
-            console.log('getflights for tour ', tour)
+            this.debug && console.log('BookingFormFlights: getFlights, tour ', tour)
             await axios.get(`/api/booking/flights/${tour}`)
                 .then(response => {
                     that.flights = response.data.data

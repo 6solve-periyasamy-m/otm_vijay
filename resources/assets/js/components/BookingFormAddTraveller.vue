@@ -1,8 +1,8 @@
 <template>
 <div class="container">
     <div class="ept" v-if="!removed">
-        <h3>Additional Traveller Details</h3>
-        <div class="ept-form" :id="formId">
+        <h3>Additional Traveller Details for Order {{order_id}} </h3>
+        <div class="ept-form" :id="form_id">
             <div class="row">
                 <div class="col-sm-6 form-group field-separation">
                     <label type="form-label" for="first_name" v-show="first_name">First name</label>
@@ -51,8 +51,8 @@
                 </div>
                 <div class="col-sm-2"></div>
                 <div class="col-sm-4 form-group field-separation">
-                    <button v-if="validForm" type="button" :formId="formId" class="btn btn-success" @click="storeTraveller">Save Traveller</button>
-                    <button v-if="emptyForm" type="button" :formId="formId" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
+                    <button v-if="validForm" type="button" :formId="form_id" class="btn btn-success" @click="storeTraveller">Save Traveller</button>
+                    <button v-if="emptyForm" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
                     <div v-else>
                         <label for="include">Include</label>
                         <input type="checkbox" v-model="included" :checked="included">
@@ -74,20 +74,24 @@ import {
     bus
 } from '../bus'
 export default {
-    props: {
-        formId: String,
-        order_id: Number
-    },
-    model: {
-        prop: 'formId',
-        event: 'click'
-    },
+    props: ['order_id', 'form_id', 'customer'],
+    // model: {
+    //     prop: 'form_id',
+    //     event: 'click'
+    // },
     mounted() {
-        console.log('Additional traveller formId', this.formId)
-        console.log('order_id', this.order_id)
+        this.setCustomer()
+        this.debug && console.log('Additional traveller formId: ' + this.form_id, ' order '+this.order_id, ' customer ID' + this.customer_id)
     },
     data() {
         return {
+            debug: false,
+            fields: [
+                'customer_id',
+                'first_name', 'middle_names', 'last_name', 
+                'date_of_birth', 'gender', 'email_address',
+                'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
+            ],
             first_name: '',
             last_name: '',
             email_address: '',
@@ -128,6 +132,15 @@ export default {
         }
     },
     methods: {
+        setCustomer() {
+            const that = this
+            that['id'] =that.customer['id']
+            this.fields.forEach(function(key,value) {
+                if (that.customer[key]) {
+                    that[key] = that.customer[key]
+                }
+            })
+        },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
             const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
@@ -161,14 +174,15 @@ export default {
             }
             const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             const valid = valid_email.test(this.email_address)
-            console.log(this.email, valid)
+            //console.log(this.email_address, valid)
             this.email_invalid = !valid
             return false
         },
         storeTraveller() {
             axios.post('/api/booking/additional-traveller', {
-                    form_id: this.formId,
+                    form_id: this.form_id,
                     order_id: this.order_id,
+                    customer_id: this.customer_id,
                     first_name: this.first_name,
                     last_name: this.last_name,
                     email_address: this.email_address,
@@ -179,6 +193,7 @@ export default {
                 })
                 .then(response => {
                     this.include = 'checked'
+                    this.debug && console.log('stored', response)
                 })
                 .catch(e => {
                     console.log('submit error', e)
@@ -187,8 +202,8 @@ export default {
         },
         removeTraveller() {
             this.removed = true
-            this.$emit('remove', this.formId)
-            bus.$emit('removeTraveller', this.formId)
+            this.$emit('remove', this.form_id)
+            bus.$emit('removeTraveller', this.form_id)
         }
     }
 }
