@@ -81,3 +81,19 @@ input[pattern]:invalid,
 .cardhead {
     text-align: left;
 }
+.card-body {
+    overflow: hidden;
+    width: 100%;
+}
+.flight-customise {
+    margin: 1rem 2rem;
+    overflow: hidden;
+    width: 95%;
+}
+.flight-options {
+    margin: 1rem 3rem 2rem 1rem;
+}
+hr.light {
+    margin: 1rem 0;
+    background-color: #ccc;
+}

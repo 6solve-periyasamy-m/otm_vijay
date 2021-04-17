@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div v-if="tour_flight_types.length > 1" class="col-sm-3 pull-right">
+        <div v-if="tour_flight_types.length > 1" class="col-sm-2">
             <select v-model="tour_flight_type" @change="filterFlights">
                 <option selected disabled value="">Select</option>
                 <option v-for="(tour_flight_type) in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
@@ -8,10 +8,10 @@
                 </option>
             </select>
         </div>
-        <div v-else class="col-sm-3 pull-right">
+        <div v-else class="col-sm-2">
             {{tour_flight_types[0]}}
         </div>
-        <div class="col-sm-6" v-if="tour_flights_filtered">
+        <div class="col-sm-10" v-if="tour_flights_filtered">
             <select v-model="formId">
                 <option selected disabled value="">Select</option>
                 <option v-for="flight in tour_flights_filtered" :key="flight.id" :value="flight.id">

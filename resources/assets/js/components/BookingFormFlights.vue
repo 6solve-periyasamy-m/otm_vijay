@@ -11,7 +11,7 @@
             <div class="card-body" v-if="showFlights">
                 <div class="row">
                     <div class="col-sm-12">
-                            <h4> Flights </h4>
+                            <h4> Group Flight </h4><p>Flights for each member, unless custom selections made</p>
                             <booking-form-flight-selector 
                                 :tour="tour" 
                                 :airports="airports" 
@@ -43,16 +43,20 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-sm-12">
-                        <button class="btn btn-primary" @click="customFlights()">
-                            Customise Flights per passenger
+                        <button class="btn btn-primary" :disabled="travellerFlightOptions.includes(true)" @click="customFlights()">
+                            Customise
                         </button>
                     </div>
                 </div>
-                <div class="custom-flights" v-if="showCustomFlights">
-                    <hr/>
+                <div class="flight-customise" v-if="showCustomFlights">
+
                     <div class="row">
+                        <div class="col-sm-3">
+                            Custom Flights
+                        </div>
                         <div class="col-sm-3">
                             Traveller
                         </div>
@@ -62,13 +66,13 @@
                         <div class="col-sm-3">
                             Last name
                         </div>
-                        <div class="col-sm-3">
-                            Custom Flights
-                        </div>
                     </div>
-                    <hr/>
+                    <hr class="light" />
                     <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
                         <div class="row">
+                            <div class="col-sm-3">
+                                <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
+                            </div>
                             <div class="col-sm-3">
                                 {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
                             </div>
@@ -78,10 +82,7 @@
                             <div class="col-sm-3">
                                 {{ traveller.last_name}}
                             </div>
-                            <div class="col-sm-3">
-                                <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
-                            </div>
-                            <div v-if="travellerFlightOptions[traveller.order_customer_id]">
+                            <div class="flight-options" v-if="travellerFlightOptions[traveller.order_customer_id]">
                                 <h5>Flight Options for traveller</h5>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -143,7 +144,7 @@ export default {
     props: ['tour', 'booking', 'order_id'],
     data() {
         return {
-            debug: false,
+            debug: true,
             outbound_flights: [],
             inbound_flights: [],
             other_flights: [],
@@ -229,6 +230,7 @@ export default {
             this.debug && console.log('BookingFormFlights: getFlights, tour ', tour)
             await axios.get(`/api/booking/flights/${tour}`)
                 .then(response => {
+                    this.debug && console.log('flight response', response)
                     that.flights = response.data.data
                     that.getAirports()
                 })

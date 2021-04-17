@@ -93,13 +93,14 @@ class ApiController extends Controller
             ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
             ->where('flight_inventory_tour.tour_id', $tour_id);
-        if (isset($flight_type)) {
+
+        if (isset($flight_type) && strlen($flight_type)) {
             $flights = $flights->where('flight_inventory_tour.flight_type', $flight_type);
         } else {
             $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
                 ->orderBy('flight_inventory_tour.flight_type', 'desc');
         }
-        // \Log::info('flights' . $flights->toSql());
+        \Log::info('flights  type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
         $flights = $flights 
             ->orderBy('airlines.airline_name', 'asc')
             ->get();
