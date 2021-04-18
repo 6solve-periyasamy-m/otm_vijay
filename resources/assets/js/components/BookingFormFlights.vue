@@ -8,11 +8,13 @@
                     </button>
                 </h5>
             </div>
-            <div class="card-body" v-if="showFlights">
+            <div class="card-body compress" v-if="showFlights">
                 <div class="row">
                     <div class="col-sm-12">
                             <h4> Group Flight </h4><p>Flights for each member, unless custom selections made</p>
                             <booking-form-flight-selector 
+                                :enabled="!travellerFlightOptions.includes(true)"
+                                v-model="outbound_flight_selected"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="outbound_flights" 
@@ -23,6 +25,8 @@
                 <div class="row">
                     <div class="col-sm-12">
                             <booking-form-flight-selector 
+                                :enabled="!travellerFlightOptions.includes(true)"
+                                v-model="inbound_flight_selected"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="inbound_flights" 
@@ -34,7 +38,8 @@
                     <div class="col-sm-9">
                         <h4> Add On Flights </h4>
                         <div v-for="flight in other_flights" :key="flight.id">
-                            <booking-form-flight-selector v-model="flight_selected"
+                            <booking-form-flight-selector 
+                                v-model="other_flight_selected"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="flights" 
@@ -46,7 +51,9 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <button class="btn btn-primary" :disabled="travellerFlightOptions.includes(true)" @click="customFlights()">
+                        <button class="btn btn-primary" 
+                            :disabled="travellerFlightOptions.includes(true)" 
+                            @click="customFlights()">
                             Customise
                         </button>
                     </div>
@@ -87,15 +94,17 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <booking-form-flight-selector 
+                                            :enabled="true"
                                             :tour="tour" 
                                             :airports="airports" 
-                                            :flights="outbound_flights" 
+                                            :flights="unselected_outbound"
                                             :types="outbound_type">
                                         </booking-form-flight-selector>
                                         <booking-form-flight-selector 
+                                            :enabled="true"
                                             :tour="tour" 
                                             :airports="airports" 
-                                            :flights="inbound_flights" 
+                                            :flights="unselected_inbound" 
                                             :types="inbound_type">
                                         </booking-form-flight-selector>
                                     </div>
@@ -104,7 +113,8 @@
                                     <div class="col-sm-9">
                                         <h4> Add On Flights </h4>
                                         <div v-for="flight in other_flights" :key="flight.id">
-                                            <booking-form-flight-selector v-model="flight_selected"
+                                            <booking-form-flight-selector 
+                                                v-model="flight_selected"
                                                 :tour="tour" 
                                                 :airports="airports" 
                                                 :flights="flights" 
@@ -124,6 +134,7 @@
 <script>
 import dates from '../utilities'
 import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
+import { bus, booking } from '../bus'
 import Vue from 'vue'
 /**
  * Flights selection component
@@ -150,10 +161,16 @@ export default {
             other_flights: [],
             airports: [],
             flights: [],
+            outbound_flight_selected: {},
+            inbound_flight_selected: {},
             showFlights: false,
             showOtherFlights: false,
             outbound_type: ['Outbound'],
             inbound_type: ['Inbound'],
+            selected_outbound: 0,
+            selected_inbound: 0,
+            unselected_outbound: [],
+            unselected_inbound: [],
             travellers: [],
             travellerFlightOptions: [],
             showCustomFlights: false
@@ -168,8 +185,20 @@ export default {
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
     },
+    created() {
+        bus.$on('set_outbound', (flight_id) => this.selected_outbound = flight_id)
+        bus.$on('set_inbound', (flight_id) => this.selected_inbound = flight_id)
+    },
     watch: {
-
+        selected_outbound: function() {
+            let that = this
+            this.unselected_outbound = this.outbound_flights.filter(flight => flight.id != that.selected_outbound)
+            console.log('watcher: reset ', this.unselected_outbound)
+        },
+        selected_inbound: function() {
+            let that = this
+            this.unselected_inbound = this.inbound_flights.filter(flight => flight.id != that.selected_inbound)
+        }
     },
     computed: {
         otherairports: function() {
@@ -178,7 +207,7 @@ export default {
                 return airport.airport_name != this.flight_from;
             })
             return items
-        }
+        },
     },
     methods: {
         dmy(s) {
@@ -188,6 +217,7 @@ export default {
             this.showFlights = !this.showFlights
         },
         flightOptionsCustomer(id) {
+            console.log('setting flight options for customer ', id)
             if (typeof this.travellerFlightOptions[id] == 'undefined' || this.travellerFlightOptions.length == 0 || this.travellerFlightOptions[id] == null) {
                 Vue.set(this.travellerFlightOptions, id, true)
            } else {
@@ -216,6 +246,15 @@ export default {
                 })
                     
             }
+        },
+        async updateFlights() {
+            await axios.post(`/api/booking/flights/${tour}/${customer}/${flight}`)
+            .then(response => {
+                console.log('flight booking response', response)
+            })  
+            .catch(error => {
+                console.log(error)
+            })
         },
         async getAirports() {
             var that = this
