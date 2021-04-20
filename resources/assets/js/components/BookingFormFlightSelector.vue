@@ -29,7 +29,7 @@
 import dates from '../utilities'
 import { bus, booking } from '../bus'
 export default {
-    props: [ 'tour', 'airports', 'flights', 'types', 'enabled'],
+    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled','custom'],
     mounted() {
         this.tour_flights = this.flights
         this.tour_flight_types = this.types
@@ -44,8 +44,10 @@ export default {
     },
     watch: {
         flightId: function(flight) {
-            bus.$emit(`set_${this.tour_flight_type}`, flight)
-            console.log('flight-selected emit', `set_${this.tour_flight_type}`, flight)
+            if (!this.custom) {
+                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
+                console.log('flight-selected emit', `set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
+            }
         }
     },
     data() {
