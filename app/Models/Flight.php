@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 
 
 class Flight extends Model
 {
+    use HasFactory;
+
     public $additional_attributes = ['flight_details'];
 
     public function flightInventory()

@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Jahondust\ModelLog\Traits\ModelLogging;
 
 
 class Accommodation extends Model
 {
     //use ModelLogging;
+    use HasFactory;
 
     public function orderAccommodation()
     {

@@ -26,10 +26,17 @@ Route::get('/', function () {
 });
 
 Route::prefix("/booking")->group(function() {
+    Route::get('/store', function() {
+        return view('bookingStore');
+    });
     Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
-    Route::get('tour/{url}', [BookingController::class, 'tourBookingForm']);
-    Route::get('/{id}', [BookingController::class, 'bookingForm']);
+    Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
+    Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);    
+    Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);    
     Route::get('/', [BookingController::class, 'bookingForm']);
+
+    Route::get('/{url}', [BookingController::class, 'tourBookingForm']);
+
 });
 
 Route::get('phones', function() {

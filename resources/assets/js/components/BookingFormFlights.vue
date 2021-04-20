@@ -8,22 +8,27 @@
                     </button>
                 </h5>
             </div>
-            <div class="card-body" v-if="showFlights">
+            <div class="card-body compress" v-if="showFlights">
                 <div class="row">
                     <div class="col-sm-12">
-                            <h4> Flights </h4>
+                            <h4> Group Flight </h4><p>Flights for each member, unless custom selections made</p>
                             <booking-form-flight-selector 
+                                :enabled="!travellerFlightOptions.includes(true)"
+                                v-model="outbound_flight_selected"
+                                :custom="false"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="outbound_flights" 
                                 :types="outbound_type">
                             </booking-form-flight-selector>
-                       
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
                             <booking-form-flight-selector 
+                                :enabled="!travellerFlightOptions.includes(true)"
+                                v-model="inbound_flight_selected"
+                                :custom="false"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="inbound_flights" 
@@ -35,12 +40,97 @@
                     <div class="col-sm-9">
                         <h4> Add On Flights </h4>
                         <div v-for="flight in other_flights" :key="flight.id">
-                            <booking-form-flight-selector v-model="flight_selected"
+                            <booking-form-flight-selector 
+                                v-model="other_flight_selected"
                                 :tour="tour" 
                                 :airports="airports" 
                                 :flights="flights" 
                                 :types="tour_flight_optional_types">
                             </booking-form-flight-selector>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary" 
+                            :disabled="checkCustomButton"
+                            @click="customFlights()">
+                            Customise
+                        </button>
+                    </div>
+                </div>
+                <div class="flight-customise" v-if="showCustomFlights">
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            Custom Flights
+                        </div>
+                        <div class="col-sm-3">
+                            Traveller
+                        </div>
+                        <div class="col-sm-3">
+                            First name
+                        </div>
+                        <div class="col-sm-3">
+                            Last name
+                        </div>
+                    </div>
+                    <hr class="light" />
+                    <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
+                            </div>
+                            <div class="col-sm-3">
+                                {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ traveller.first_name }}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ traveller.last_name}}
+                            </div>
+                            <div class="flight-options" v-if="travellerFlightOptions[traveller.order_customer_id]">
+                                <h5>Flight Options for traveller</h5>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <booking-form-flight-selector
+                                            :enabled="true"
+                                            :custom="true"
+                                            :tour="tour"
+                                            :traveller="traveller"
+                                            :airports="airports" 
+                                            :flights="unselected_outbound"
+                                            :types="outbound_type">
+                                        </booking-form-flight-selector>
+                                        <booking-form-flight-selector 
+                                            :enabled="true"
+                                            :custom="true"
+                                            :tour="tour" 
+                                            :traveller="traveller"
+                                            :airports="airports" 
+                                            :flights="unselected_inbound" 
+                                            :types="inbound_type">
+                                        </booking-form-flight-selector>
+                                    </div>
+                                </div>
+                                <div class="row" v-if="showOtherFlights">
+                                    <div class="col-sm-9">
+                                        <h4> Add On Flights </h4>
+                                        <div v-for="flight in other_flights" :key="flight.id">
+                                            <booking-form-flight-selector 
+                                                v-model="flight_selected"
+                                                :tour="tour" 
+                                                :traveller="traveller"
+                                                :airports="airports" 
+                                                :flights="flights" 
+                                                :types="tour_flight_optional_types">
+                                            </booking-form-flight-selector>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +141,8 @@
 <script>
 import dates from '../utilities'
 import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
-
+import { bus, booking } from '../bus'
+import Vue from 'vue'
 /**
  * Flights selection component
  * Loads in available flights for this tour
@@ -68,39 +159,83 @@ import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
  */
 export default {
     components: { BookingFormFlightSelector },
-    props: ['tour'],
+    props: ['tour', 'booking', 'order_id'],
     data() {
         return {
-            c: 0,
-            showFlights: false,
-            showOtherFlights: false,
+            debug: true,
+
             airports: [],
-            airport: {},
-            flightFromOptions: [],
-            flight_from: {},
-            flightToOptions: [],
-            flight_to: {},
             flights: [],
+            travellers: [],
+
             outbound_flights: [],
             inbound_flights: [],
             other_flights: [],
-            flights_selected: [],
-            flight_selected: {},
-            flight: 0,
-            flight_outward: {},
-            flight_home: {},
+
+            // group flight selections
+            outbound_flight_selected: {},
+            inbound_flight_selected: {},
+
+            // flights displays ON/OFF
+            showFlights: false,
+            showCustomFlights: false,
+
+            // otherflights feature is turned OFF (probably deprecate - it was for connections)
+            showOtherFlights: false,
+
+            // labels
             outbound_type: ['Outbound'],
             inbound_type: ['Inbound'],
-            tour_flight_types: ['Outbound', 'Inbound'],
-            tour_flight_optional_types: ['Excursion', 'Connection'],
-            debug: 2
+
+            // for updating backend with a flight/tour/traveller selection
+            set_outbound_flight: null,
+            set_inbound_flight: null,
+            flight_tour: {},
+            flight_traveller: {},
+
+            // for control of custom flight selection
+            selected_outbound: 0,
+            selected_inbound: 0,
+            unselected_outbound: [],
+            unselected_inbound: [],
+            // 
+
+            travellerFlightOptions: []
+            
         }
     },
     async mounted() {
+        this.debug && console.log('BookingFormFlights mounted, tour', this.tour)
         await this.getFlights(this.tour.id)
+        this.debug && console.log('flights: ', this.flights)
+        
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
+    },
+    created() {
+        bus.$on('set_outbound', (flight_id, flight_tour, flight_traveller) => this.selected_outbound = flight_id)
+        bus.$on('set_inbound', (flight_id, flight_tour, flight_traveller) => this.selected_inbound = flight_id)
+    },
+    watch: {
+        // control custom by traveller selections
+        selected_outbound: function() {
+            let that = this
+            this.unselected_outbound = this.outbound_flights.filter(flight => flight.id != that.selected_outbound)
+        },
+        selected_inbound: function() {
+            let that = this
+            this.unselected_inbound = this.inbound_flights.filter(flight => flight.id != that.selected_inbound)
+            console.log('** unselected_inbound', this.unselected_inbound)
+        },
+        // update flight selections to backend
+        set_outbound_flight: function() {
+            console.log('set_outbound_flight', this.set_outbound_flight)
+
+        },
+        set_inbound_flight: function() {
+            console.log('set_inbound_flight', this.set_inbound_flight)
+        }
     },
     computed: {
         otherairports: function() {
@@ -109,6 +244,12 @@ export default {
                 return airport.airport_name != this.flight_from;
             })
             return items
+        },
+        checkCustomButton: function() {
+            const customChanges = this.travellerFlightOptions.includes(true)
+            const selections = this.selected_outbound && this.selected_inbound
+            console.log('checkCustomButton:', this.selected_outbound, this.selected_inbound, this.selected_outbound && this.selected_inbound, selections)
+            return selections == 0
         }
     },
     methods: {
@@ -117,6 +258,45 @@ export default {
         },
         toggleFlights() {
             this.showFlights = !this.showFlights
+        },
+        flightOptionsCustomer(id) {
+            if (typeof this.travellerFlightOptions[id] == 'undefined' || this.travellerFlightOptions.length == 0 || this.travellerFlightOptions[id] == null) {
+                Vue.set(this.travellerFlightOptions, id, true)
+           } else {
+                Vue.set(this.travellerFlightOptions, id, !this.travellerFlightOptions[id])
+            }
+        },
+        customFlights() {
+            this.debug && console.log('this.showFlights && this.showCustomFlights', this.showFlights, this.showCustomFlights) 
+            this.showCustomFlights = !this.showCustomFlights
+            /**
+             * when flights are selected, show customers with checkboxes
+             */
+            if (this.showFlights && this.showCustomFlights) {
+                this.debug && console.log('show flights for order', this.order_id)
+                axios.get('/api/booking/tourparty', {
+                    params: {
+                        order_id: this.order_id
+                    }
+                })
+                .then(response => {
+                    console.log('get additonal travellers for tour', response)
+                    this.travellers = response.data                    
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                    
+            }
+        },
+        async updateFlights() {
+            await axios.post(`/api/booking/flights/${tour}/${customer}/${flight}`)
+            .then(response => {
+                console.log('flight booking response', response)
+            })  
+            .catch(error => {
+                console.log(error)
+            })
         },
         async getAirports() {
             var that = this
@@ -128,8 +308,10 @@ export default {
         },
         async getFlights(tour) {
             var that = this
+            this.debug && console.log('BookingFormFlights: getFlights, tour ', tour)
             await axios.get(`/api/booking/flights/${tour}`)
                 .then(response => {
+                    this.debug && console.log('flight response', response)
                     that.flights = response.data.data
                     that.getAirports()
                 })

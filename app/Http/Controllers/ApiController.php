@@ -9,6 +9,9 @@ use App\Models\Tour;
 use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\Flight;
+use App\Models\Order;
+use App\Models\Customer;
+use App\Models\OrdersCustomer;
 use App\Models\PaymentSchedule;
 use App\Models\PaymentInstallment;
 use App\Repository\FlightsRepository;
@@ -17,6 +20,8 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
+    public $logging = false;
+
     // Open API - populate the booking form selectors
     public function getEvents() {
         $events = Event::where('event_start_date', '>', date('Y-m-d'))->get();
@@ -88,16 +93,20 @@ class ApiController extends Controller
             ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
             ->where('flight_inventory_tour.tour_id', $tour_id);
-        if (isset($flight_type)) {
+
+        if (isset($flight_type) && strlen($flight_type)) {
             $flights = $flights->where('flight_inventory_tour.flight_type', $flight_type);
         } else {
             $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
                 ->orderBy('flight_inventory_tour.flight_type', 'desc');
         }
+        
+        if ($this->logging) \Log::info('flights  type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
+
         $flights = $flights 
             ->orderBy('airlines.airline_name', 'asc')
             ->get();
-\Log::info('flights', $flights->toArray());
+
         return response()->json(["success" => true, "data" => $flights->toArray()]);
 
     }
@@ -112,7 +121,7 @@ class ApiController extends Controller
     public function getPaymentSchedule($id) 
     {
         $schedule = PaymentSchedule::findOrFail($id);
-\Log::debug('schedule for id '.$id, $schedule->toArray());
+        if ($this->logging) \Log::debug('schedule for id '.$id, $schedule->toArray());
         return response()->json(["success" => true, "schedule" => $schedule->toArray()]);
     }
 
@@ -194,5 +203,234 @@ class ApiController extends Controller
             ];
         })->toArray();
         return response()->json(["success" => true, "data" => $result]);
+    }
+
+    /**
+     * createOrder - makes an order every time booking form is accessed by URL, unless it already exists (via token or link)
+     *
+     * @param Request $request
+     * @return JSON (order object)
+     */
+    public function createOrder(Request $request)
+    {
+        $order = new Order();
+        $order->quote_id = null;
+        $order->tour_id = $request->tour;
+        $order->total_order_value = null;
+        $order->notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
+        $order->order_status_id = 1;
+        $order->token = md5(uniqId());
+        $order->save();
+        // Order::insert([
+        //     'tour_id' => $order->tour_id, 
+        //     'notes' => $order->notes,
+        //     'token' => $order->token]);
+        if ($this->logging) {
+            \Log::info('create order for tour ' . $request->tour);
+            \Log::info('order id ', $order->toArray());
+        }
+        return response()->json(["success" => true, "order" => $order]);
+    }
+
+    /**
+     * saveCustomerDetails
+     *
+     * @param [type] $request
+     * @param boolean $isLead
+     * @return JSON (Customer object)
+     */
+    private function saveCustomerDetails($request, $isLead = false) 
+    {
+        $customer = new Customer();
+        //does this customer already exist?
+        $customerExists = $customer->where('email_address', $request->email_address)->first();
+        if ($customerExists) {
+            if ($this->logging) {
+                \Log::info('customer exists record ', $customerExists->toArray());
+            }
+            $customer = $customerExists;
+        } else {
+            $customer->email_address = $request->email_address;
+        }
+        $customer->title = $request->title;
+        $customer->first_name = $request->first_name;
+        $customer->middle_names = $request->middle_names;
+        $customer->last_name = $request->last_name;
+        $customer->date_of_birth = $request->date_of_birth;
+        $customer->mobile_number = $request->mobile_number;
+        $customer->other_phone_number = $request->other_phone_number;
+        $customer->password = null;
+        $customer->gender = $request->gender;
+        if ($isLead) {
+            $customer->address_line_1 = $request->address_line_1;
+            $customer->address_line_2 = $request->address_line_2;
+            $customer->address_line_3 = $request->address_line_3;
+            $customer->billing_line_1 = isset($request->billing_line_1) ? $request->billing_line_1 : $request->address_line_1;
+            $customer->billing_line_2 = isset($request->billing_line_2) ? $request->billing_line_2 : $request->address_line_2;
+            $customer->billing_line_3 = isset($request->billing_line_3) ? $request->billing_line_3 : $request->address_line_3;
+            $customer->town = $request->town;
+            $customer->country = $request->country;
+            $customer->postcode = $request->postcode;
+            $customer->billing_town = isset($request->billing_town) ? $request->billing_town : $request->town;
+            $customer->billing_country = isset($request->billing_country) ? $request->billing_country : $request->country;
+            $customer->billing_postcode = isset($request->billing_postcode) ? $request->billing_postcode : $request->postcode;
+        }
+        if ($this->logging) {
+            \Log::info('saving customer detaisl ', $customer->toArray());
+        }
+        $customer->save();
+
+        return $customer;
+    }
+
+    private function updateEmergencyContactDetails(Request $request) 
+    {
+        return false;
+    }
+
+    /**
+     * updateOrderCustomer - adds fields to existing orderCustomer record for a single traveller
+     *
+     * @param [type] $ordersCustomer (object)
+     * @param Request $request
+     * @return void
+     */
+    private function updateOrderCustomerFields($ordersCustomer, Request $request) 
+    {
+        if (!empty($request->tour['base_price_per_person'])) {
+            $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
+        }
+        if (!empty($request->tour['single_occupancy_surcharge'])) {
+            $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+        }
+    }
+    
+    /**
+     * saveOrderCustomer - stores the orderCustomer data from the booking form
+     *
+     * @param Customer $customer
+     * @param Request $request
+     * @param boolean $isLead
+     * @return JSON (record saved)
+     */
+    private function saveOrderCustomer(Customer $customer, Request $request, $isLead = false) 
+    {
+        if (empty($request->order_id)) {
+            throw new \Exception('SaveOrderCustomer has no order ID');
+        }
+        $ordersCustomer = new OrdersCustomer();
+        $ordersCustomerExists = $ordersCustomer->where('order_id', $request->order_id)->where('customer_id', $request->customer_id)->first();
+        if ($ordersCustomerExists) {
+            $ordersCustomer = $ordersCustomerExists;
+            $this->updateOrderCustomerFields($ordersCustomer, $request);
+        } else {
+            $ordersCustomer->order_id = $request->order_id;
+            $ordersCustomer->customer_id = $customer->id;
+        }
+        $ordersCustomer->is_lead_booker = $isLead;
+        $ordersCustomer->travel_insurer = null;
+        $ordersCustomer->policy_number = null;
+        $ordersCustomer->save();
+
+        return $ordersCustomer;
+    }
+
+    /** 
+     * getCustomerByToken
+     * 
+     * @param $token
+     * @return $customer or NULL if token no longer valid
+     */
+    public function getCustomerOrderByToken($token = null)
+    {
+        if (empty($token)) {
+            return null;
+        }
+
+        $order = new Order();
+        $orders = $order->where('token', $token)->get();
+        if ($this->logging) {
+            \Log::info($token . ' found '. count($orders). ' orders');
+        }
+
+        if (count($orders)) {
+            $orderCount = count($orders);
+            if ($orderCount > 1) {
+                \Log::info('Multiple orders '.$orderCount.' for token '. $token);
+            }
+
+            if ($this->logging) \Log::info('orders are ', $orders->toArray());
+            
+            foreach ($orders as &$ord) {
+                $ordersCustomers = new OrdersCustomer();
+                $orderCustomer = $ordersCustomers->where('order_id', $ord->id)
+                    ->join('customers', 'orders_customers.customer_id', 'customers.id')
+                    ->get();
+                if (count($orderCustomer)) {
+                    $ord->customer = $orderCustomer[0];
+                    $ord->customers = $orderCustomer;
+                }
+            }
+            if ($this->logging) \Log::info('order data for customer retrieved ', $orders->toArray());
+
+            return $orders;
+        }
+        return null;
+    }
+    /**
+     * leadTraveller - save the leadTraveller data
+     *
+     * @param Request $request
+     * @return array of what was saved in customer and orderCustomer
+     */
+    public function leadTraveller(Request $request) 
+    {
+        if ($this->logging) {
+            \Log::info('leadTraveller', $request->toArray());
+        }
+
+        $customer = $this->saveCustomerDetails($request, true);
+        $orderCustomer = $this->saveOrderCustomer($customer, $request, true);
+
+        return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
+    }
+
+    /**
+     * additionalTraveller - save the additionalTraveller data
+     *
+     * @param Request $request
+     * @return array of what was saved in customer and orderCustomer
+     */
+    public function additionalTraveller(Request $request) 
+    {
+        if ($this->logging) {
+            \Log::info('additionalTraveller', $request->toArray());
+        }
+
+        $customer = $this->saveCustomerDetails($request);
+        $orderCustomer = $this->saveOrderCustomer($customer, $request, false);
+
+        return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
+    }
+
+    /**
+     * getTravellers for this order
+     *
+     * @param Request $request
+     * @return JSON
+     */
+    public function getTravellers(Request $request) {
+        if (empty($request->order_id)) {
+            \Log::debug('ERROR: getTravellers requires an order_id');
+            return null;
+        }
+        $customer = new Customer();
+        $customers = $customer
+            ->select('orders_customers.id as order_customer_id', 'orders_customers.is_lead_booker', 'customers.first_name', 'customers.last_name')
+            ->join('orders_customers', 'orders_customers.customer_id', 'customers.id')
+            ->join('orders', 'orders.id', 'orders_customers.order_id')
+            ->where('orders.id', $request->order_id)->get();
+        
+            return $customers->toJson();
     }
 }

@@ -21,27 +21,52 @@ class BookingController extends Controller
     {
         if ($token) {
             $orders = new Order;
-            $order = $orders->where(['token', $token])->first();
+            $order = $orders->where('token', $token)->first();
             if ($order) {
                 return view('bookingForm')->with(['order' => $order]);
             }
-        } 
-        return view('bookingForm');
+            abort(404);
+        }
+        if (config('app.setting.booking-selection')) {
+            return view('bookingForm');
+        }
+        abort(403);
     }
 
-    public function tourBookingForm($tourUrl)
+    public function eventBookingForm($url) 
     {
-        $tour = Tour::where('booking_form_url', $tourUrl)->first();
+        $event = Event::where('booking_url', $url)->first();
+        if (empty($event)) {
+            abort(404);
+        }
+        $tours = Tour::where('event_id', $event->id)->get();
+        if (empty($tours)) {
+            \Log::error('There are no tours for event ', $event->toArray());
+            abort(404);
+        }
+        return view('eventBookingForm')->with('event', $event);
+    }
+
+    public function tourBookingForm($url)
+    {
+        $tour = Tour::where('booking_form_url', $url)->first();
+        if (empty($tour)) {
+            abort(404);
+        }
         try {
             $event = Event::findOrFail($tour->event_id);
         } catch(\Exception $e) {
+            if (!config('app.setting.booking-selection')) {
+                abort(403);
+            }
             return view('bookingForm');
         }
 
-        if ($tour && $event) {
+        if (isset($tour) && isset($event)) {
             return view('tourBookingForm')->with(['tour' => $tour, 'event' => $event]);
         }
-        return view('bookingForm');
+
+        abort(404);
     }
 
     /**

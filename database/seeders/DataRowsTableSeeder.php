@@ -1,7 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
 
 class DataRowsTableSeeder extends Seeder
@@ -1968,8 +1967,8 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{}',
-                'order' => 21,
+                'details' => '{"validation":{"rule":"required"}}',
+                'order' => 19,
             ),
             122 => 
             array (
@@ -2033,7 +2032,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"on":"Fit Selectable","off":"Not Fit Selectable"}',
-                'order' => 9,
+                'order' => 10,
             ),
             126 => 
             array (
@@ -2049,7 +2048,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 12,
+                'order' => 11,
             ),
             127 => 
             array (
@@ -2065,7 +2064,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 13,
+                'order' => 12,
             ),
             128 => 
             array (
@@ -2081,7 +2080,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 14,
+                'order' => 13,
             ),
             129 => 
             array (
@@ -2097,7 +2096,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"default":"GBP"}',
-                'order' => 15,
+                'order' => 14,
             ),
             130 => 
             array (
@@ -2113,7 +2112,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 16,
+                'order' => 15,
             ),
             131 => 
             array (
@@ -2129,7 +2128,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 17,
+                'order' => 16,
             ),
             132 => 
             array (
@@ -2145,7 +2144,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 0,
                 'details' => '{}',
-                'order' => 19,
+                'order' => 17,
             ),
             133 => 
             array (
@@ -2161,7 +2160,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 0,
                 'delete' => 1,
                 'details' => '{}',
-                'order' => 20,
+                'order' => 18,
             ),
             134 => 
             array (
@@ -2193,7 +2192,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 1,
                 'details' => '{"model":"App\\\\Models\\\\TravelClass","table":"travel_classes","type":"belongsTo","column":"travel_class_id","key":"id","label":"title","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
-                'order' => 8,
+                'order' => 9,
             ),
             136 => 
             array (
@@ -5685,38 +5684,6 @@ class DataRowsTableSeeder extends Seeder
             ),
             354 => 
             array (
-                'id' => 491,
-                'data_type_id' => 49,
-                'field' => 'flight_inventory_belongstomany_tour_relationship',
-                'type' => 'relationship',
-                'display_name' => 'tours',
-                'required' => 0,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Tour","table":"tours","type":"belongsToMany","column":"id","key":"id","label":"title","pivot_table":"flight_inventory_tour","pivot":"1","taggable":"on"}',
-                'order' => 11,
-            ),
-            355 => 
-            array (
-                'id' => 494,
-                'data_type_id' => 49,
-                'field' => 'flight_type',
-                'type' => 'select_dropdown',
-                'display_name' => 'Flight Type',
-                'required' => 1,
-                'browse' => 1,
-                'read' => 1,
-                'edit' => 1,
-                'add' => 1,
-                'delete' => 1,
-                'details' => '{"default":"Outbound","options":{"Outbound":"Outbound","Inbound":"Inbound","Connection":"Connection","Excursion":"Excursion"}}',
-                'order' => 10,
-            ),
-            356 => 
-            array (
                 'id' => 495,
                 'data_type_id' => 45,
                 'field' => 'available_after',
@@ -5730,6 +5697,214 @@ class DataRowsTableSeeder extends Seeder
                 'delete' => 1,
                 'details' => '{}',
                 'order' => 12,
+            ),
+            355 => 
+            array (
+                'id' => 500,
+                'data_type_id' => 49,
+                'field' => 'flight_inventory_belongstomany_tour_relationship',
+                'type' => 'relationship',
+                'display_name' => 'tours',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\Tour","table":"tours","type":"belongsToMany","column":"id","key":"id","label":"title","pivot_table":"flight_inventory_tour","pivot":"1","taggable":"on"}',
+                'order' => 8,
+            ),
+            356 => 
+            array (
+                'id' => 502,
+                'data_type_id' => 89,
+                'field' => 'tour_id',
+                'type' => 'hidden',
+                'display_name' => 'Tour Id',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 11,
+            ),
+            357 => 
+            array (
+                'id' => 503,
+                'data_type_id' => 89,
+                'field' => 'flight_inventory_id',
+                'type' => 'hidden',
+                'display_name' => 'Flight Inventory Id',
+                'required' => 1,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 12,
+            ),
+            358 => 
+            array (
+                'id' => 504,
+                'data_type_id' => 89,
+                'field' => 'created_at',
+                'type' => 'timestamp',
+                'display_name' => 'Created At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 0,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 7,
+            ),
+            359 => 
+            array (
+                'id' => 505,
+                'data_type_id' => 89,
+                'field' => 'updated_at',
+                'type' => 'timestamp',
+                'display_name' => 'Updated At',
+                'required' => 0,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 8,
+            ),
+            360 => 
+            array (
+                'id' => 506,
+                'data_type_id' => 89,
+                'field' => 'deleted_at',
+                'type' => 'timestamp',
+                'display_name' => 'Deleted At',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 9,
+            ),
+            361 => 
+            array (
+                'id' => 508,
+                'data_type_id' => 89,
+                'field' => 'id',
+                'type' => 'text',
+                'display_name' => 'Id',
+                'required' => 1,
+                'browse' => 0,
+                'read' => 0,
+                'edit' => 0,
+                'add' => 0,
+                'delete' => 0,
+                'details' => '{}',
+                'order' => 1,
+            ),
+            362 => 
+            array (
+                'id' => 509,
+                'data_type_id' => 89,
+                'field' => 'sales_price',
+                'type' => 'text',
+                'display_name' => 'Sales Price',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 5,
+            ),
+            363 => 
+            array (
+                'id' => 510,
+                'data_type_id' => 89,
+                'field' => 'flight_type',
+                'type' => 'select_dropdown',
+                'display_name' => 'Flight Type',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"default":"outbound","options":{"Outbound":"Outbound","Inbound":"Inbound"}}',
+                'order' => 6,
+            ),
+            364 => 
+            array (
+                'id' => 511,
+                'data_type_id' => 89,
+                'field' => 'flight_inventory_tour_belongsto_tour_component_type_relationship',
+                'type' => 'relationship',
+                'display_name' => 'Tour Component Types',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\TourComponentType","table":"tour_component_types","type":"belongsTo","column":"tour_component_type_id","key":"id","label":"component_type_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 4,
+            ),
+            365 => 
+            array (
+                'id' => 512,
+                'data_type_id' => 89,
+                'field' => 'flight_inventory_tour_belongsto_flight_inventory_relationship',
+                'type' => 'relationship',
+                'display_name' => 'Flight Inventory',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"default":1,"model":"App\\\\Models\\\\FlightInventory","table":"flight_inventories","type":"belongsTo","column":"flight_inventory_id","key":"id","label":"flight_for_tour","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 3,
+            ),
+            366 => 
+            array (
+                'id' => 513,
+                'data_type_id' => 89,
+                'field' => 'tour_component_type_id',
+                'type' => 'hidden',
+                'display_name' => 'Tour Component Type Id',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{}',
+                'order' => 10,
+            ),
+            367 => 
+            array (
+                'id' => 514,
+                'data_type_id' => 89,
+                'field' => 'flight_inventory_tour_hasone_tour_relationship',
+                'type' => 'relationship',
+                'display_name' => 'Tours',
+                'required' => 0,
+                'browse' => 1,
+                'read' => 1,
+                'edit' => 1,
+                'add' => 1,
+                'delete' => 1,
+                'details' => '{"model":"App\\\\Models\\\\Tour","table":"tours","type":"belongsTo","column":"tour_id","key":"id","label":"title","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'order' => 2,
             ),
         ));
         

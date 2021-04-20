@@ -13,16 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-	$setupUsers = false;
         $this->call(DataTypesTableSeeder::class);
         $this->call(DataRowsTableSeeder::class);
         $this->call(MenusTableSeeder::class);
         $this->call(MenuItemsTableSeeder::class);
-	if ($setupUsers) {
-		$this->call(RolesTableSeeder::class);
-		$this->call(PermissionsTableSeeder::class);
-		$this->call(PermissionRoleTableSeeder::class);
-		$this->call(SettingsTableSeeder::class);
-	}
+        $this->call(RolesTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
+        $this->call(PermissionRoleTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
+        $this->call(LocationTypesTableSeeder::class);
+        $this->call(LocationsTableSeeder::class);
+        $this->call(AirportsTableSeeder::class);
+        $this->call(FlightsTableSeeder::class);
+        $this->call(FlightInventoryTourTableSeeder::class);
+        $this->call(FlightInventoriesTableSeeder::class);
+        $this->call(RegionsTableSeeder::class);
+        $this->call(TransportTypesTableSeeder::class);
+        $this->call(RoomTypesTableSeeder::class);
+        $this->call(EventsTableSeeder::class);
+        $this->call(CountriesTableSeeder::class);
+        $this->call(AirlinesTableSeeder::class);
     }
 }

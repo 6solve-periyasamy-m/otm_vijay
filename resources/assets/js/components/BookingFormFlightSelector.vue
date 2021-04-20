@@ -1,18 +1,22 @@
 <template>
-    <div class="row">
-        <div v-if="tour_flight_types.length > 1" class="col-sm-3 pull-right">
-            <select v-model="tour_flight_type" @change="filterFlights">
+    <div class="row compress">
+        <div v-if="tour_flight_types.length > 1" class="col-sm-2">
+            <select 
+                v-model="tour_flight_type" 
+                @change="filterFlights">
                 <option selected disabled value="">Select</option>
                 <option v-for="(tour_flight_type) in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
                    {{tour_flight_type}}
                 </option>
             </select>
         </div>
-        <div v-else class="col-sm-3 pull-right">
+        <div v-else class="col-sm-2">
             {{tour_flight_types[0]}}
         </div>
-        <div class="col-sm-6" v-if="tour_flights_filtered">
-            <select v-model="formId">
+        <div class="col-sm-10" v-if="tour_flights_filtered">
+            <select 
+                :disabled="!enabled"
+                v-model="flightId">
                 <option selected disabled value="">Select</option>
                 <option v-for="flight in tour_flights_filtered" :key="flight.id" :value="flight.id">
                     {{flightValue(flight)}}
@@ -22,22 +26,33 @@
     </div>
 </template>
 <script>
-import dates from '../utilities';
+import dates from '../utilities'
+import { bus, booking } from '../bus'
 export default {
-    props: [ 'tour', 'airports', 'flights', 'types'],
+    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled','custom'],
     mounted() {
         this.tour_flights = this.flights
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
         if (this.tour_flight_types.length == 1) {
-            this.tour_flights_filtered = this.tour_flights;
+            this.tour_flights_filtered = this.tour_flights
+            this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
         } else {
             console.log(this.tour_flights)
+        }
+        console.log(this.enabled)
+    },
+    watch: {
+        flightId: function(flight) {
+            if (!this.custom) {
+                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
+                console.log('flight-selected emit', `set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
+            }
         }
     },
     data() {
         return {
-            formId: '',
+            flightId: '',
             tour_flight_type: '',
             flight_selected: '',
             tour_flight_type: {},
