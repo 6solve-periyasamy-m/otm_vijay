@@ -100,10 +100,13 @@ class ApiController extends Controller
             $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
                 ->orderBy('flight_inventory_tour.flight_type', 'desc');
         }
-        \Log::info('flights  type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
+        
+        if ($this->logging) \Log::info('flights  type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
+
         $flights = $flights 
             ->orderBy('airlines.airline_name', 'asc')
             ->get();
+
         return response()->json(["success" => true, "data" => $flights->toArray()]);
 
     }
@@ -118,7 +121,7 @@ class ApiController extends Controller
     public function getPaymentSchedule($id) 
     {
         $schedule = PaymentSchedule::findOrFail($id);
-\Log::debug('schedule for id '.$id, $schedule->toArray());
+        if ($this->logging) \Log::debug('schedule for id '.$id, $schedule->toArray());
         return response()->json(["success" => true, "schedule" => $schedule->toArray()]);
     }
 
@@ -355,9 +358,9 @@ class ApiController extends Controller
             if ($orderCount > 1) {
                 \Log::info('Multiple orders '.$orderCount.' for token '. $token);
             }
-            if ($this->logging) {
-                \Log::info('orders are ', $orders->toArray());
-            }
+
+            if ($this->logging) \Log::info('orders are ', $orders->toArray());
+            
             foreach ($orders as &$ord) {
                 $ordersCustomers = new OrdersCustomer();
                 $orderCustomer = $ordersCustomers->where('order_id', $ord->id)
@@ -368,9 +371,7 @@ class ApiController extends Controller
                     $ord->customers = $orderCustomer;
                 }
             }
-            if ($this->logging) {
-                \Log::info('order data for customer retrieved ', $orders->toArray());
-            }
+            if ($this->logging) \Log::info('order data for customer retrieved ', $orders->toArray());
 
             return $orders;
         }
