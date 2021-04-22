@@ -11,6 +11,9 @@ use App\Models\Airport;
 use App\Models\Flight;
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\FlightInventoryTour;
+use App\Models\FlightInventory;
+use App\Models\OrdersFlight;
 use App\Models\OrdersCustomer;
 use App\Models\PaymentSchedule;
 use App\Models\PaymentInstallment;
@@ -132,7 +135,7 @@ class ApiController extends Controller
         $flights = Flight::where('departure_airport_id', $airport->id)
             ->orWhere(function($query) {
                 $query->whereNull('departure_date')
-                ->where(DB::raw("(STR_TO_DATE(flights.departure_date,'%y-%m-%d'))"), ">=", date('Y-m-d'));
+                    ->where(DB::raw("(STR_TO_DATE(flights.departure_date,'%y-%m-%d'))"), ">=", date('Y-m-d'));
             })
             ->get();
         $result = $flights->map(function ($flight) {
@@ -333,6 +336,101 @@ class ApiController extends Controller
         $ordersCustomer->save();
 
         return $ordersCustomer;
+    }
+
+    /**
+     * bookFlightDetails
+     * save flight details for a pax tour flight
+     * @param tour
+     * @param passenger
+     * @param flight
+     */
+    public function bookFlightDetails($customer_id, $tour_id, $order_id, $flight_type, $flight_id)
+    {
+        $customers = new Customer();
+        $tours = new Tour();
+        $flights = new FlightInventory();
+        $flightTours = new FlightInventoryTour();
+        $orders = new Order();
+
+        $flight = $flights->find($flight_id);
+        $tour = $tours->find($tour_id);
+        $order = $orders->find($order_id);
+        $rejection = 0;
+        if ($tour->id !== $order->tour_id) {
+            $rejection = 302;
+            $status = 'Invalid Order';
+        } else {
+            $status = 'Order and Tour agree';
+        }
+        $orderCustomers = new OrdersCustomer();
+        if ($customer_id !== 'group') {
+            $customer_id = 0 + $customer_id;
+            $orderCustomer = $orderCustomers
+                ->where('order_id', $order->id)
+                ->where('is_lead_booker', false)
+                ->where('customer_id', $customer_id)
+                ->first();
+            if (!$orderCustomer) {
+                $rejection = 403;
+                $status = 'No Record or additional traveller order';
+            }
+        } else {
+            $orderCustomer = $orderCustomers
+                ->where('order_id', $order->id)
+                ->where('is_lead_booker', true)
+                ->first();
+            if (!$orderCustomer) {
+                $rejection = 403;
+                $status = 'No Record of Lead Traveller order';
+            }
+            $customer_id = $orderCustomer->customer_id;
+        }
+        // flight exists?
+        $flight = $flights->find($flight_id);
+        if (!$flight) {
+            $rejection = 402;
+            $status = 'Invalid flight selection';
+        }
+        // flight Tour exists?
+        $flightTour = $flightTours
+            ->where('flight_inventory_id', $flight->id)
+            ->where('tour_id', $tour_id)
+            ->where('flight_type', $flight_type)
+            ->first();
+
+        if ($rejection || !$customer_id || !$flight->id || !$flightTour->id) {
+            return [
+                'status' => $rejection,
+                'message' => $status
+            ];
+        }
+        // order_flights exists? :: LOGIC FAULT
+        // order_flights must have a reference to the flight_inventory_tour (not the flight_inventory)
+        // to find/update the order we need to know the order_customer_id, and the tour_id
+        // then we can update the flight_inventory_tour id -> flight_inventory_id -> flight_id
+        $orderFlights = new OrdersFlight();
+        $orderFlight = $orderFlights->where('order_customer_id', $orderCustomer->id)
+            ->where('flight_id', $flight->id)
+            ->first();
+        if(!$orderFlight) {
+            $orderFlight = new OrdersFlight();
+            $orderFlight->flight_id = $flightTour->id;
+            $orderFlight->order_customer_id = $orderCustomer->id;
+            $orderFlight->save();
+            $rejection = 200;
+            $status = 'Created order flight';
+        } else {
+            $orderFlight->flight_id = $flightTour->id;
+            $orderFlight->save();
+            $rejection = 201;
+            $status = 'Updated order flight';
+        }
+        \Log::info('booking flight details:', [$tour_id, $flight_id, $customer_id]);
+        return [
+            'status' => $rejection,
+            'message' => $status
+        ];
     }
 
     /** 

@@ -222,11 +222,15 @@ export default {
         selected_outbound: function() {
             let that = this
             this.unselected_outbound = this.outbound_flights.filter(flight => flight.id != that.selected_outbound)
+            console.log('outbound selected')
+            this.updateFlight(this.selected_outbound, 'Outbound', null)
         },
         selected_inbound: function() {
             let that = this
             this.unselected_inbound = this.inbound_flights.filter(flight => flight.id != that.selected_inbound)
             console.log('** unselected_inbound', this.unselected_inbound)
+            console.log('inbound selected')
+            this.updateFlight(this.selected_inbound, 'Inbound', null)
         },
         // update flight selections to backend
         set_outbound_flight: function() {
@@ -281,7 +285,7 @@ export default {
                 })
                 .then(response => {
                     console.log('get additonal travellers for tour', response)
-                    this.travellers = response.data                    
+                    this.travellers = response.data
                 })
                 .catch(err => {
                     console.log(err)
@@ -289,14 +293,27 @@ export default {
                     
             }
         },
-        async updateFlights() {
-            await axios.post(`/api/booking/flights/${tour}/${customer}/${flight}`)
-            .then(response => {
-                console.log('flight booking response', response)
-            })  
-            .catch(error => {
-                console.log(error)
-            })
+        async updateFlight(flight, flight_type, customer) {
+            console.log('updateFlight called', this.order_id, customer, this.tour.id, flight)
+            // ($customer_id, $tour_id, $order_id, $flight_id)
+            if (customer != null) {
+                await axios.post(`/api/booking/flight/${customer}/${this.tour.id}/${this.order_id}/${flight_type}/${flight}`)
+                .then(response => {
+                    console.log('flight booking response', response)
+                })  
+                .catch(error => {
+                    console.log(error)
+                })
+            } else {
+                await axios.post(`/api/booking/flight/group/${this.tour.id}/${this.order_id}/${flight_type}/${flight}`)
+                .then(response => {
+                    console.log('group flight booking response', response)
+                })  
+                .catch(error => {
+                    console.log(error)
+                })
+
+            }
         },
         async getAirports() {
             var that = this

@@ -33,6 +33,7 @@ Route::get('/booking/customer/{token}', [ApiController::class, 'getCustomerOrder
 Route::post('/booking/create-order', [ApiController::class, 'createOrder']);
 Route::post('/booking/lead-traveller', [ApiController::class, 'leadTraveller']);
 Route::post('/booking/additional-traveller', [ApiController::class, 'additionalTraveller']);
+Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}', [ApiController::class, 'bookFlightDetails']);
 
 
 Route::get('/booking/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);
