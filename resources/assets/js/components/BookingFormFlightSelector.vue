@@ -17,8 +17,8 @@
             <select 
                 :disabled="!enabled"
                 v-model="flightId">
-                <option selected disabled value="">Select</option>
-                <option v-for="flight in tour_flights_filtered" :key="flight.id" :value="flight.id">
+                <option selected value="">Selection</option>
+                <option v-for="flight in tour_flights_filtered" :key="flight.id" :value="flight.flight_inventory_tour_id">
                     {{flightValue(flight)}}
                 </option>
             </select>
@@ -31,23 +31,19 @@ import { bus, booking } from '../bus'
 export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled','custom'],
     mounted() {
+        console.log('BFFS', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
+    },
+    created() {
         this.tour_flights = this.flights
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
-        if (this.tour_flight_types.length == 1) {
-            this.tour_flights_filtered = this.tour_flights
-            this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
-        } else {
-            console.log(this.tour_flights)
-        }
-        console.log(this.enabled)
+        this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
+        this.filterFlights()
     },
     watch: {
         flightId: function(flight) {
-            if (!this.custom) {
-                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
-                console.log('flight-selected emit', `set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
-            }
+            bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
+            console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
         }
     },
     data() {
@@ -66,7 +62,7 @@ export default {
         filterFlights() {
             var that = this
             this.tour_flights_filtered = this.tour_flights.filter((flight) => {
-                return flight.flight_type == that.tour_flight_type
+                return flight.flight_type.toLowerCase() == that.tour_flight_type.toLowerCase()
             })
         },
         flightValue(flight) {
