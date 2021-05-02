@@ -31,7 +31,7 @@ import { bus, booking } from '../bus'
 export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled','custom'],
     mounted() {
-        console.log('BFFS', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
+        console.log('B.F.F.S', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
     },
     created() {
         this.tour_flights = this.flights
@@ -41,9 +41,9 @@ export default {
         this.filterFlights()
     },
     watch: {
-        flightId: function(flight) {
+        flightId: function(flight, oldFlight) {
+            console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
             bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
-            console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, flight, this.tour, this.traveller)
         }
     },
     data() {

@@ -23,17 +23,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/booking/events',            [ApiController::class, 'getEvents']);
 Route::get('/booking/tours/{event_id}',  [ApiController::class, 'getTours']);
 Route::get('/booking/tour/{id}',         [ApiController::class, 'getBasicTourInformation']);
+
 Route::get('/booking/airlines',          [ApiController::class, 'getAirlines']);
 Route::get('/booking/flights/{tour_id}', [ApiController::class, 'getFlightInventoriesForTour']);
 Route::get('/booking/flights/{tour_id}/{flight_type}', [ApiController::class, 'getFlightInventoriesForTour']);
-Route::get('/booking/flight-inventories',[ApiController::class, 'getFlightsInventories']);
+Route::get('/booking/flight-inventories', [ApiController::class, 'getFlightsInventories']);
+
 Route::get('/booking/tourparty', [ApiController::class, 'getTravellers']);
 Route::get('/booking/customer/{token}', [ApiController::class, 'getCustomerOrderByToken']);
 
 Route::post('/booking/create-order', [ApiController::class, 'createOrder']);
 Route::post('/booking/lead-traveller', [ApiController::class, 'leadTraveller']);
 Route::post('/booking/additional-traveller', [ApiController::class, 'additionalTraveller']);
-Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}', [ApiController::class, 'bookFlightDetails']);
+Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
+    ApiController::class, 'bookFlightDetails'
+]);
 
 
 Route::get('/booking/flights/airport/{airport}', [ApiController::class, 'getFlightsFromAirport']);

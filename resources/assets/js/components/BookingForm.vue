@@ -20,7 +20,7 @@
                                     <booking-form-lead :form_info="formInfo" :customer="customer" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour">
-                                        <booking-form-flights :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
+                                        <booking-form-flights :token="token" :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
                                         <booking-form-accommodation></booking-form-accommodation>
                                         <booking-form-payment></booking-form-payment>
                                         <booking-form-terms></booking-form-terms>
@@ -58,44 +58,45 @@ export default {
     props: ['tour', 'event', 'name'],
     components: { BookingFormTour },
     async created() {
-        
+        let that = this
         this.debug && console.log('BookingForm created, tour:', this.tour)
 
-        let currentCustomer = getCookie('OTM_booking_order_token')
-        if (typeof currentCustomer != 'undefined' && currentCustomer.length) {
-            this.debug && console.log('currentCustomer', currentCustomer)
-            await axios.get(`/api/booking/customer/${currentCustomer}`)
+        that.currentCustomer = getCookie('OTM_booking_order_token')
+        if (typeof that.currentCustomer != 'undefined' && that.currentCustomer.length) {
+            this.debug && console.log('this.currentCustomer', that.currentCustomer)
+            await axios.get(`/api/booking/customer/${that.currentCustomer}`)
                 .then(response => {
-                    this.debug && console.log('customer orders found', response);
-                    this.orders = response.data
-                    this.debug && console.log('Orders = ', this.orders)
-                    if (this.orders.length<1) {
-                        console.log('*** expired order cookie', currentCustomer)
-                        this.order_id = null
-                        //this.getOrderId()
+                    that.debug && console.log('>>>> customer orders found', response);
+                    that.orders = response.data
+                    that.debug && console.log('Orders = ', that.orders)
+                    if (that.orders.length < 1) {
+                        console.log('*** expired order cookie', that.currentCustomer)
+                        that.order_id = null
+                        //that.getOrderId()
                         alert('Your order appears to have expired, please rebook or contact us.')
                     } else {
-                        if (this.orders.length > 1) {
-                            this.selectOrder = this.orders
+                        if (that.orders.length > 1) {
+                            that.selectOrder = that.orders
                         } else {
-                            this.order_selected = this.orders[0].id
+                            that.order_selected = that.orders[0].id
                         }
-                        this.debug && console.log('order selected = ', this.order_selected, this.orders)
-                        bus.$emit('customerLoaded', this.orders[0].customer)
-                        bus.$emit('additionalTravellersLoaded', this.orders[0].customers)
-                        this.order_id = this.order_selected
+                        that.debug && console.log('order selected = ', that.order_selected, that.orders)
+                        bus.$emit('customerLoaded', that.orders[0].customer, that.currentCustomer)
+                        bus.$emit('additionalTravellersLoaded', that.orders[0].customers)
+                        that.order_id = that.order_selected
+                        that.token = that.orders[0].token
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.log('get current customer', error)
                 })
+        } else {
+            console.log('currentCustomer detected', that.currentCustomer)
         }
         if (typeof this.orders == 'undefined' || !this.orders.length) {
             this.getOrderId();
             this.debug && console.log('created order = ', this.orders)
         }
-
-
     },
     // watch: {
     //     order_selected: function() {
@@ -106,7 +107,7 @@ export default {
     // },
     data() {
         return {
-            debug: false,
+            debug: true,
             formInfo: false,
             token: '',
             travellers: [],
@@ -115,7 +116,8 @@ export default {
             booked: booking,
             selectOrder: [],
             order_selected: null,
-            customer: {}
+            customer: {},
+            currentCustomer: ''
         }
     },
     // created() {
@@ -124,7 +126,7 @@ export default {
     //     })
     // },
     methods: {
-        getOrderId() {
+        async getOrderId() {
             axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
                 event: this.event.id
@@ -134,6 +136,7 @@ export default {
                 this.order_id = response.data.order.id
                 this.token = response.data.order.token
                 bus.$emit('setOrderToken', this.token)
+                this.debug('EMIT setOrderToken', this.token)
                 this.debug && console.log(response)
             })
             .catch(err => {

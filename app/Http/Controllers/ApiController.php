@@ -6,18 +6,21 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Event;
 use App\Models\Tour;
-use App\Models\Airline;
-use App\Models\Airport;
 use App\Models\Flight;
 use App\Models\Order;
+
 use App\Models\Customer;
+use App\Models\CustomerOrderDetail;
+
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventory;
-use App\Models\CustomerOrderDetails;
+
+use App\Models\Airline;
+use App\Models\Airport;
+
 use App\Models\OrdersCustomer;
 use App\Models\PaymentSchedule;
-// use App\Models\PaymentInstallment;
-// use App\Repository\FlightsRepository;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
@@ -44,76 +47,6 @@ class ApiController extends Controller
         return response()->json(['success' => true, 'data' => $tours->toArray()]);
     }
 
-    public function getAirlines() 
-    {
-        $airlines = Airline::orderBy('airline_name')->get();
-
-        return response()->json(["success" => true, "data" => $airlines->toArray()]);
-    }
-
-
-    public function getAirports($location_id = null, $region_id = null) 
-    {
-        $airport = new Airport();
-        $airport = $airport->select('airports.*')
-                        ->join('locations', 'location_id', 'locations.id')
-                        ->join('regions', 'locations.region_id', 'regions.id');
-        if (isset($location_id)) {
-            $airport = $airport->where('location_id', $location_id);
-        }
-        if (isset($region_id)) {
-            $airport = $airport->where('region_id', $region_id);
-        }
-
-        $airports = $airport->orderBy('airport_name', 'asc')->get()->toArray();
-        $airports = array_combine(array_column($airports,'id'),$airports);
-
-        return response()->json(["success" => true, "airports" => $airports]);
-    }
-
-    public function getFlightInventories()
-    {
-        $flights = Flight::join('airlines', 'airline_id', 'airlines.id')
-            ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
-            ->get();
-
-        return response()->json(["success" => true, "data" => $flights->toArray()]);
-    }
-
-    /***
-     * flights booked for a tour create records in the flight_inventory_tours table
-     * these associate a flight_inventory_id with a tour_id (so the tour booking creates these)
-     */
-    public function getFlightInventoriesForTour($tour_id, $flight_type = null)
-    {
-        $flight = new Flight();
-        // $flightsRepository = new FlightsRepository($flight);
-        // $flights = $flightsRepository->flights($tour_id);
-
-        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.airline_name', 'travel_classes.title as travel_class')
-            ->join('airlines', 'airline_id', 'airlines.id')
-            ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
-            ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
-            ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
-            ->where('flight_inventory_tour.tour_id', $tour_id);
-
-        if (isset($flight_type) && strlen($flight_type)) {
-            $flights = $flights->where('flight_inventory_tour.flight_type', $flight_type);
-        } else {
-            $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
-                ->orderBy('flight_inventory_tour.flight_type', 'desc');
-        }
-        
-        if ($this->logging) \Log::info('flights  type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
-
-        $flights = $flights 
-            ->orderBy('airlines.airline_name', 'asc')
-            ->get();
-
-        return response()->json(["success" => true, "data" => $flights->toArray()]);
-
-    }
-
     public function getPaymentSchedules()
     {
         $schedules = PaymentSchedule::orderBy('title')->get();
@@ -124,31 +57,8 @@ class ApiController extends Controller
     public function getPaymentSchedule($id) 
     {
         $schedule = PaymentSchedule::findOrFail($id);
-        if ($this->logging) \Log::debug('schedule for id '.$id, $schedule->toArray());
+        if ($this->logging) Log::debug('schedule for id '.$id, $schedule->toArray());
         return response()->json(["success" => true, "schedule" => $schedule->toArray()]);
-    }
-
-    public function getFlightsFromAirport(Airport $airport = null)
-    {
-        // Returns a list of flights from an airport
-        $today = date('Y-m-d');
-        $flights = Flight::where('departure_airport_id', $airport->id)
-            ->orWhere(function($query) {
-                $query->whereNull('departure_date')
-                    ->where(DB::raw("(STR_TO_DATE(flights.departure_date,'%y-%m-%d'))"), ">=", date('Y-m-d'));
-            })
-            ->get();
-        $result = $flights->map(function ($flight) {
-            return [
-                "id" => $flight->id,
-                "departure_airport_id" => $flight->departure_airport_id,
-                "departure_date" => $flight->departure_date,
-                "arrival_airport_id" => $flight->arrival_airport_id,
-                "arrival_date" => $flight->arrival_date,
-            ];
-        })->toArray();
-
-        return response()->json(["success" => true, "data" => $result]);
     }
 
     // Autheticated API - return data for logged in user sessions
@@ -169,27 +79,6 @@ class ApiController extends Controller
         ]);
     }
 
-    public function getFlightsFromTour(Tour $tour)
-    {
-        // TODO: As above, add authentication.
-        // You don't want scrapers just scraping all of the information out of the DB from these APIs
-        $inventory = $tour->flightInventory;
-        $result = $inventory->map(function ($flightInventory) {
-            return [
-                "id" => $flightInventory->id,
-                "flight_id" => $flightInventory->flight->id,
-                "check_in_date_time" => $flightInventory->check_in_date_time,
-                "departure_date_time" => $flightInventory->departure_date_time,
-                "arrival_date_time" => $flightInventory->arrival_date_time,
-                "class" => $flightInventory->travelClass->title,
-                "airline" => $flightInventory->flight->airline->airline_name,
-                "departure_airport" => $flightInventory->flight->departureAirport->airport_name,
-                "arrival_airport" => $flightInventory->flight->arrivalAirport->airport_name,
-            ];
-        })->toArray();
-        return response()->json(["success" => true, "data" => $result]);
-    }
-
     public function getAccommodationFromTour(Tour $tour) // would use route model binding
     {
         $inventory = $tour->accommodationInventory;
@@ -207,35 +96,42 @@ class ApiController extends Controller
         })->toArray();
         return response()->json(["success" => true, "data" => $result]);
     }
-
-    /**
-     * createOrder - makes an order every time booking form is accessed by URL, unless it already exists (via token or link)
-     *
-     * @param Request $request
-     * @return JSON (order object)
-     */
-    public function createOrder(Request $request)
+    private function getFlightTour($flight_inventory_tour_id)
+    {   
+        $flightTours = new FlightInventoryTour();
+        $flightTour = $flightTours->find($flight_inventory_tour_id);
+        Log::info('flightTour', $flightTour->toArray());
+        return $flightTour;
+    }
+    private function getOrder($order_id)
     {
-        $order = new Order();
-        $order->quote_id = null;
-        $order->tour_id = $request->tour;
-        $order->total_order_value = null;
-        $order->notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
-        $order->order_status_id = 1;
-        $order->token = md5(uniqId());
-        $order->save();
-        // Order::insert([
-        //     'tour_id' => $order->tour_id, 
-        //     'notes' => $order->notes,
-        //     'token' => $order->token]);
-        if ($this->logging) {
-            \Log::info('create order for tour ' . $request->tour);
-            \Log::info('order id ', $order->toArray());
+        $orders = new Order();
+        $order = $orders->find($order_id);
+        return $order;
+    }
+    private function getOrderCustomer($order, $customer_id) 
+    {
+        $orderCustomers = new OrdersCustomer();
+        $customer_id = 0 + $customer_id;
+        $orderCustomer = $orderCustomers
+                ->where('order_id', $order->id)
+                ->where('customer_id', $customer_id)
+                ->first();
+        if (!$orderCustomer) {
+            $rejection = 403;
+            $status = 'No Record or additional traveller order';
+            Log::info('orderCustomer not found order_id'.$order->id.' customer_id'.$customer_id);
+        } else {
+            Log::info('orderCustomer found', $orderCustomer->toArray());
         }
-        return response()->json(["success" => true, "order" => $order]);
+        return $orderCustomer;
     }
 
-    /**
+
+    /***
+     * CUSTOMER SECTION
+     */
+        /**
      * saveCustomerDetails
      *
      * @param [type] $request
@@ -249,7 +145,7 @@ class ApiController extends Controller
         $customerExists = $customer->where('email_address', $request->email_address)->first();
         if ($customerExists) {
             if ($this->logging) {
-                \Log::info('customer exists record ', $customerExists->toArray());
+                Log::info('customer exists record ', $customerExists->toArray());
             }
             $customer = $customerExists;
         } else {
@@ -279,7 +175,7 @@ class ApiController extends Controller
             $customer->billing_postcode = isset($request->billing_postcode) ? $request->billing_postcode : $request->postcode;
         }
         if ($this->logging) {
-            \Log::info('saving customer detaisl ', $customer->toArray());
+            Log::info('saving customer detaisl ', $customer->toArray());
         }
         $customer->save();
 
@@ -316,7 +212,7 @@ class ApiController extends Controller
      * @param boolean $isLead
      * @return JSON (record saved)
      */
-    private function saveOrderCustomer(Customer $customer, Request $request, $isLead = false) 
+    private function saveOrderCustomer($customer, Request $request, $isLead = false) 
     {
         if (empty($request->order_id)) {
             throw new \Exception('SaveOrderCustomer has no order ID');
@@ -338,68 +234,11 @@ class ApiController extends Controller
         return $ordersCustomer;
     }
 
-    /**
-     * bookFlightDetails
-     * save flight details for a pax tour flight
-     * @param tour
-     * @param passenger
-     * @param flight (we are sending in the flight->id - which should be the flightInventoryTour record id)
-     */
-    public function bookFlightDetails($customer_id, $tour_id, $order_id, $flight_type, $flight_inventory_tour_id)
+    public function addCustomerOrderDetail($order, $orderCustomer, $flightTour, $custom, $reference)
     {
-        $customers = new Customer();
-        $tours = new Tour();
-        $flights = new Flight();
-        $flightInventory = new FlightInventory();
-        $flightTours = new FlightInventoryTour();
-        $orders = new Order();
-\Log::info('bookFlightDetails', [$customer_id, $tour_id, $order_id, $flight_type, $flight_inventory_tour_id]);
-        $flightTour = $flightTours->find($flight_inventory_tour_id);
-\Log::info('flightTour', $flightTour->toArray());
-        $tour = $tours->find($tour_id);
-        $order = $orders->find($order_id);
-        $rejection = 0;
-        if ($tour->id !== $order->tour_id) {
-            $rejection = 302;
-            $status = 'Invalid Order';
-        } else {
-            $status = 'Order and Tour agree';
-        }
-        $orderCustomers = new OrdersCustomer();
-        $customer_id = 0 + $customer_id;
-        $orderCustomer = $orderCustomers
-            ->where('order_id', $order->id)
-            ->where('customer_id', $customer_id)
-            ->first();
-        if (!$orderCustomer) {
-            $rejection = 403;
-            $status = 'No Record or additional traveller order';
-            \Log::info('orderCustomer not found order_id'.$order->id.' customer_id'.$customer_id); 
-        } else {
-            \Log::info('orderCustomer found', $orderCustomer->toArray());
-        }
-        // flight exists?
-        // $flight = $flights->find($flight_id);
-        // if (!$flight) {
-        //     $rejection = 402;
-        //     $status = 'Invalid flight selection';
-        // }
-        // // flight Tour exists?
-        // $flightTour = $flightTours
-        //     ->where('flight_inventory_id', $flight->id)
-        //     ->where('tour_id', $tour_id)
-        //     ->where('flight_type', $flight_type)
-        //     ->first();
-
-        if ($rejection || !$customer_id || !$flightTour->id) {
-            return [
-                'status' => $rejection,
-                'message' => $status
-            ];
-        }
 
         // customer_order_details
-        $customer_order_details = new CustomerOrderDetails();
+        $customer_order_details = new CustomerOrderDetail();
         $customer_order_detail = $customer_order_details
             ->where('orders_customer_id', $orderCustomer->id)
             ->where('order_id', $order->id)
@@ -408,48 +247,71 @@ class ApiController extends Controller
             ->first();
         if (empty($customer_order_detail)) {
             $customer_order_detail = $customer_order_details;
-            $customer_order_detail->status = 'new';
+            $status = 'original';
         } else {
-            $customer_order_detail->status = 'update';
-
+            $status = 'updated';
         }
         $customer_order_detail->orders_customer_id = $orderCustomer->id;
         $customer_order_detail->order_id = $order->id;
         $customer_order_detail->type = 'flight';
         $customer_order_detail->inventory_tour_id = $flightTour->id;
         $customer_order_detail->date_time = now();
-
+        $customer_order_detail->status = $status;
         // these parameters have yet to be established
         // reference - the leads hash?
         // addon if there is a cost associated: where from?
         // cost for addon
-        $customer_order_detail->reference = 'reference';
-        $customer_order_detail->addon = false;
+        $customer_order_detail->reference = $reference;
+        $customer_order_detail->addon = $custom;
         $customer_order_detail->cost = 0;
-        \Log::info('saving customer_order_detail record', $customer_order_detail->toArray());
+
+        Log::info('saving customer_order_detail record', $customer_order_detail->toArray());
         $customer_order_detail->save();
-        // order_flights exists? :: LOGIC FAULT
-        // order_flights must have a reference to the flight_inventory_tour (not the flight_inventory)
-        // to find/update the order we need to know the order_customer_id, and the tour_id
-        // then we can update the flight_inventory_tour id -> flight_inventory_id -> flight_id
-        // $orderFlights = new OrdersFlight();
-        // $orderFlight = $orderFlights->where('order_customer_id', $orderCustomer->id)
-        //     ->where('flight_id', $flight->id)
-        //     ->first();
-        // if(!$orderFlight) {
-        //     $orderFlight = new OrdersFlight();
-        //     $orderFlight->flight_id = $flightTour->id;
-        //     $orderFlight->order_customer_id = $orderCustomer->id;
-        //     $orderFlight->save();
-        //     $rejection = 200;
-        //     $status = 'Created order flight';
-        // } else {
-        //     $orderFlight->flight_id = $flightTour->id;
-        //     $orderFlight->save();
-        //     $rejection = 201;
-        //     $status = 'Updated order flight';
-        // }
-        \Log::info('booking flight details:', [$tour_id, $flightTour->id, $customer_id]);
+    }
+
+
+    /***
+     * FLIGHT SECTION
+     */
+
+    /**
+     * bookFlightDetails
+     * save flight details for a pax tour flight
+     * 1. create / update orders_customers
+     * 2. create customer_order_details (audit)
+     * 3. create / update 8orders_flights
+     * @param tour
+     * @param passenger
+     * @param flight (we are sending in the flight->id - which should be the flightInventoryTour record id)
+     */
+    public function bookFlightDetails($customer_id, $tour_id, $order_id, $flight_type, $flight_inventory_tour_id, $custom, $reference)
+    {
+        Log::info('bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $flight_inventory_tour_id, $custom, $reference]);
+
+        $customers = new Customer();
+        $tours = new Tour();
+        $flights = new Flight();
+        $flightInventory = new FlightInventory();
+
+        $flightTour = $this->getFlightTour($flight_inventory_tour_id);
+        $tour = $tours->find($tour_id);
+        $order = $this->getOrder($order_id);
+        $rejection = 0;
+        if ($tour->id !== $order->tour_id) {
+            $rejection = 302;
+            $status = 'Invalid Order';
+        } else {
+            $status = 'Order and Tour agree';
+        }
+        $orderCustomer = $this->getOrderCustomer($order, $customer_id);
+        $this->addCustomerOrderDetail($order, $orderCustomer, $flightTour, $custom, $reference);
+        if ($rejection || !$customer_id || !$flightTour->id) {
+            return [
+                'status' => $rejection,
+                'message' => $status
+            ];
+        }
+        Log::info('booking flight details:', [$tour_id, $flightTour->id, $customer_id]);
         return [
             'status' => $rejection,
             'message' => $status
@@ -465,22 +327,23 @@ class ApiController extends Controller
     public function getCustomerOrderByToken($token = null)
     {
         if (empty($token)) {
+            Log::info('getCustomerOrderByToken: no token');
             return null;
         }
 
         $order = new Order();
         $orders = $order->where('token', $token)->get();
         if ($this->logging) {
-            \Log::info($token . ' found '. count($orders). ' orders');
+            Log::info($token . ' found '. count($orders). ' orders');
         }
 
         if (count($orders)) {
             $orderCount = count($orders);
             if ($orderCount > 1) {
-                \Log::info('Multiple orders '.$orderCount.' for token '. $token);
+                Log::info('Multiple orders '.$orderCount.' for token '. $token);
             }
 
-            if ($this->logging) \Log::info('orders are ', $orders->toArray());
+            if ($this->logging) Log::info('orders are ', $orders->toArray());
             
             foreach ($orders as &$ord) {
                 $ordersCustomers = new OrdersCustomer();
@@ -492,7 +355,7 @@ class ApiController extends Controller
                     $ord->customers = $orderCustomer;
                 }
             }
-            if ($this->logging) \Log::info('order data for customer retrieved ', $orders->toArray());
+            if ($this->logging) Log::info('order data for customer retrieved ', $orders->toArray());
 
             return $orders;
         }
@@ -507,9 +370,8 @@ class ApiController extends Controller
     public function leadTraveller(Request $request) 
     {
         if ($this->logging) {
-            \Log::info('leadTraveller', $request->toArray());
+            Log::info('leadTraveller', $request->toArray());
         }
-
         $customer = $this->saveCustomerDetails($request, true);
         $orderCustomer = $this->saveOrderCustomer($customer, $request, true);
 
@@ -525,7 +387,7 @@ class ApiController extends Controller
     public function additionalTraveller(Request $request) 
     {
         if ($this->logging) {
-            \Log::info('additionalTraveller', $request->toArray());
+            Log::info('additionalTraveller', $request->toArray());
         }
 
         $customer = $this->saveCustomerDetails($request);
@@ -542,7 +404,7 @@ class ApiController extends Controller
      */
     public function getTravellers(Request $request) {
         if (empty($request->order_id)) {
-            \Log::debug('ERROR: getTravellers requires an order_id');
+            Log::debug('ERROR: getTravellers requires an order_id');
             return null;
         }
         $customer = new Customer();
@@ -554,4 +416,153 @@ class ApiController extends Controller
         
             return $customers->toJson();
     }
+
+    /***
+     * AIRLINES SECTION
+     */
+    public function getAirlines()
+    {
+        $airlines = Airline::orderBy('airline_name')->get();
+
+        return response()->json(["success" => true, "data" => $airlines->toArray()]);
+    }
+
+    public function getAirports($location_id = null, $region_id = null)
+    {
+        $airport = new Airport();
+        $airport = $airport->select('airports.*')
+                    ->join('locations', 'location_id', 'locations.id')
+                    ->join('regions', 'locations.region_id', 'regions.id');
+        if (isset($location_id)) {
+            $airport = $airport->where('location_id', $location_id);
+        }
+        if (isset($region_id)) {
+            $airport = $airport->where('region_id', $region_id);
+        }
+
+        $airports = $airport->orderBy('airport_name', 'asc')->get()->toArray();
+        $airports = array_combine(array_column($airports, 'id'), $airports);
+
+        return response()->json(["success" => true, "airports" => $airports]);
+    }
+
+    public function getFlightInventories()
+    {
+        $flights = Flight::join('airlines', 'airline_id', 'airlines.id')
+        ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
+        ->get();
+
+        return response()->json(["success" => true, "data" => $flights->toArray()]);
+    }
+
+    public function getFlightsFromTour(Tour $tour)
+    {
+        // TODO: As above, add authentication.
+        // You don't want scrapers just scraping all of the information out of the DB from these APIs
+        $inventory = $tour->flightInventory;
+        $result = $inventory->map(function ($flightInventory) {
+            return [
+                "id" => $flightInventory->id,
+                "flight_id" => $flightInventory->flight->id,
+                "check_in_date_time" => $flightInventory->check_in_date_time,
+                "departure_date_time" => $flightInventory->departure_date_time,
+                "arrival_date_time" => $flightInventory->arrival_date_time,
+                "class" => $flightInventory->travelClass->title,
+                "airline" => $flightInventory->flight->airline->airline_name,
+                "departure_airport" => $flightInventory->flight->departureAirport->airport_name,
+                "arrival_airport" => $flightInventory->flight->arrivalAirport->airport_name,
+            ];
+        })->toArray();
+        return response()->json(["success" => true, "data" => $result]);
+    }
+
+    /***
+     * flights booked for a tour create records in the flight_inventory_tours table
+     * these associate a flight_inventory_id with a tour_id (so the tour booking creates these)
+     */
+    public function getFlightInventoriesForTour($tour_id, $flight_type = null)
+    {
+        $flight = new Flight();
+        // $flightsRepository = new FlightsRepository($flight);
+        // $flights = $flightsRepository->flights($tour_id);
+
+        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.airline_name', 'travel_classes.title as travel_class')
+        ->join('airlines', 'airline_id', 'airlines.id')
+        ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
+        ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
+        ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
+        ->where('flight_inventory_tour.tour_id', $tour_id);
+
+        if (isset($flight_type) && strlen($flight_type)) {
+            $flights = $flights->where('flight_inventory_tour.flight_type', $flight_type);
+        } else {
+            $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
+            ->orderBy('flight_inventory_tour.flight_type', 'desc');
+        }
+    
+        if ($this->logging) {
+            Log::info('flights  type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
+        }
+
+        $flights = $flights
+        ->orderBy('airlines.airline_name', 'asc')
+        ->get();
+
+        return response()->json(["success" => true, "data" => $flights->toArray()]);
+    }
+
+    public function getFlightsFromAirport(Airport $airport = null)
+    {
+        // Returns a list of flights from an airport
+        $today = date('Y-m-d');
+        $flights = Flight::where('departure_airport_id', $airport->id)
+        ->orWhere(function ($query) {
+            $query->whereNull('departure_date')
+                ->where(DB::raw("(STR_TO_DATE(flights.departure_date,'%y-%m-%d'))"), ">=", date('Y-m-d'));
+        })
+        ->get();
+        $result = $flights->map(function ($flight) {
+            return [
+            "id" => $flight->id,
+            "departure_airport_id" => $flight->departure_airport_id,
+            "departure_date" => $flight->departure_date,
+            "arrival_airport_id" => $flight->arrival_airport_id,
+            "arrival_date" => $flight->arrival_date,
+        ];
+        })->toArray();
+
+        return response()->json(["success" => true, "data" => $result]);
+    }
+
+
+    /***
+     * order section
+     */
+        /**
+     * createOrder - makes an order every time booking form is accessed by URL, unless it already exists (via token or link)
+     *
+     * @param Request $request
+     * @return JSON (order object)
+     */
+    public function createOrder(Request $request)
+    {
+        $order = new Order();
+        $order->quote_id = null;
+        $order->tour_id = $request->tour;
+        $order->total_order_value = null;
+        $order->notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
+        $order->order_status_id = 1;
+        $order->token = md5(uniqId());
+        $order->save();
+        // Order::insert([
+        //     'tour_id' => $order->tour_id, 
+        //     'notes' => $order->notes,
+        //     'token' => $order->token]);
+        if ($this->logging) {
+            Log::info('create order for tour ' . $request->tour);
+            Log::info('order id ', $order->toArray());
+        }
+        return response()->json(["success" => true, "order" => $order]);
+    }
+
 }
