@@ -331,7 +331,7 @@ export default {
         },
         async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom) {
             
-            console.log('[updateFlight] called', this.order_id, this.tour.id, flight_tour, flight_inventory_tour_id, flight_type, customer, 'token' + this.token)
+            console.log('[updateFlight] called', this.order_id, this.tour.id, flight_tour, 'flight_inventory_tour_id', flight_inventory_tour_id, flight_type, customer, 'token' + this.token)
             if (customer != null) {
                 // booking the flight
                 await axios.post(`/api/booking/flight/${customer.customer_id}/${this.tour.id}/${this.order_id}/${flight_type}/${flight_inventory_tour_id}/${custom ? 1 : 0}/${this.token}`)

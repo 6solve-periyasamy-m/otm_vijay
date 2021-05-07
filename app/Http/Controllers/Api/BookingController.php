@@ -112,7 +112,7 @@ class BookingController extends ApiController
             $status = 'updated';
         }
         // always make a fresh record, so we can track how the form works
-        // $customer_order_detail = new CustomerOrderDetail();
+        $customer_order_detail = new CustomerOrderDetail();
         $customer_order_detail->orders_customer_id = $orderCustomer->id;
         $customer_order_detail->inventory_id = $flightTour->flight_inventory_id;
         $customer_order_detail->order_id = $order->id;

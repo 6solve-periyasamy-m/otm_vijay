@@ -5,7 +5,7 @@
                 v-model="tour_flight_type" 
                 @change="filterFlights">
                 <option selected disabled value="">Select</option>
-                <option v-for="(tour_flight_type) in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
+                <option v-for="tour_flight_type in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
                    {{tour_flight_type}}
                 </option>
             </select>
@@ -50,8 +50,12 @@ export default {
     },
     watch: {
         flightId: function(flight, oldFlight) {
-            console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
-            bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
+            if (flight != oldFlight && flight != null) {
+                console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
+                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
+            } else {
+                console.log('BFFS OLDFLIGHT was NULL')
+            }
         }
     },
     data() {
