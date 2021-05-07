@@ -15,7 +15,7 @@
             <h4>Your Details</h4>
             <div class="row">
                 <div class="col-sm-2 form-group field-separation">
-                    <select class="form-control">
+                    <select v-model="title" class="form-control">
                         <option value="" default>Title</option>
                         <option value="Mr">Mr</option>
                         <option value="Ms">Ms</option>
@@ -182,10 +182,13 @@
 </template>
 
 <script>
-import { bus, booking } from '../bus'
+import { bus } from '../bus'
 export default {
     props: ['form_info', 'order_id', 'customer', 'tour', 'booked'],
     async mounted() {
+        let that = this
+        bus.$on('debugOverride', (debug) => that.debug = debug)
+
         this.debug && console.log('OTM Booking Lead Customer form loaded', this.order_id)
         bus.$on('customerLoaded', (customer) => {
             this.setCustomer(customer)
@@ -193,9 +196,10 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: true,
             showTraveller: false,
             lead_traveller: '',
+            title: '',
             first_name: '',
             last_name: '',
             middle_names: '',
@@ -228,7 +232,7 @@ export default {
             other_number_invalid: false,
             other_number_validation: 'Please enter a valid phone number'.date_of_birth,
             fields: [
-                'first_name', 'middle_names', 'last_name', 
+                'title','first_name', 'middle_names', 'last_name', 
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
                 'address_line_1', 'address_line_2', 'address_line_3',
@@ -258,7 +262,6 @@ export default {
             this.debug && console.log('Lead Traveller customer', customer)
             let that = this
             this.fields.forEach(function(key,value) {
-                //console.log(key, value, customer[key])
                 if (customer[key]) {
                     that[key] = customer[key]
                 }
@@ -320,6 +323,7 @@ export default {
             axios.post('/api/booking/lead-traveller', {
                     tour: this.tour,
                     order_id: this.order_id,
+                    title: this.title,
                     first_name: this.first_name,
                     middle_names: this.middle_names,
                     last_name: this.last_name,

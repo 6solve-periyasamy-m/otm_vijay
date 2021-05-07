@@ -17,12 +17,17 @@
 </div>
 </template>
 <script>
+import { bus } from '../bus'
 export default {
     mounted() {
-        console.log('Payments form active')
+        let that = this
+        bus.$on('debugOverride', (debug) => that.debug = debug)
+
+        this.debug && console.log('Payments form active')
     },
     data() {
         return {
+            debug: false,
             paymentsActive: false,
         }
     },

@@ -13,12 +13,16 @@
         <div v-else class="col-sm-2">
             {{tour_flight_types[0]}}
         </div>
-        <div class="col-sm-10" v-if="tour_flights_filtered">
+        <div class="col-sm-10" v-if="tour_flights_filtered">{{selected_item}}
             <select 
                 :disabled="!enabled"
                 v-model="flightId">
-                <option selected value="">Selection</option>
-                <option v-for="flight in tour_flights_filtered" :key="flight.id" :value="flight.flight_inventory_tour_id">
+                <option value="" v-if="!selected_item" selected>Flight Select</option>
+                <option 
+                    v-for="flight in tour_flights_filtered" 
+                    :key="flight.id" 
+                    :value="flight.flight_inventory_tour_id"
+                    :selected="checkMatch(flight.inventory_tour_id, selected_item)">
                     {{flightValue(flight)}}
                 </option>
             </select>
@@ -29,9 +33,12 @@
 import dates from '../utilities'
 import { bus, booking } from '../bus'
 export default {
-    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled','custom'],
+    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
     mounted() {
-        console.log('B.F.F.S', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
+        let that = this
+        bus.$on('debugOverride', (debug) => that.debug = debug)
+
+        this.debug && console.log('B.F.F.S', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
     },
     created() {
         this.tour_flights = this.flights
@@ -48,6 +55,7 @@ export default {
     },
     data() {
         return {
+            debug: false,
             flightId: '',
             tour_flight_type: '',
             flight_selected: '',
@@ -59,11 +67,18 @@ export default {
         }
     },
     methods: {
+        checkMatch(id1, id2) {
+            console.log('comparing: ', id1, id2)
+            if (id1 == id2) {
+                return 'selected'
+            }
+        },
         filterFlights() {
             var that = this
             this.tour_flights_filtered = this.tour_flights.filter((flight) => {
                 return flight.flight_type.toLowerCase() == that.tour_flight_type.toLowerCase()
             })
+            console.log('tour flights filtered', this.tour_flights_filtered)
         },
         flightValue(flight) {
             if (typeof flight == 'undefined') {

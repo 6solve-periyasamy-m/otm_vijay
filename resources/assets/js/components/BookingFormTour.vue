@@ -42,25 +42,29 @@
     </div>
 </template>
 <script>
-import dates from '../utilities';
+import dates from '../utilities'
+import { bus } from '../bus'
 export default {
     props: ['event','tour'],
     data() {
         return {
+            debug: false,
             showTours: false,
             events: [],
             tours: []
         }
     },
     async mounted() {
-        console.log('BookingFormTour Component')
+        let that = this
+        bus.$on('debugOverride', (debug) => that.debug = debug)
+        this.debug && console.log('BookingFormTour component active')
+
         if (this.event == undefined) {
             this.getEvents()
         }
         if (this.tour == null) {
             await this.getTours()
         }
-        console.log('tours', this.tours)
     },
     methods: {
         startDate(event) {

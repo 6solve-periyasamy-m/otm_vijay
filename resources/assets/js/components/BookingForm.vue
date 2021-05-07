@@ -20,7 +20,7 @@
                                     <booking-form-lead :form_info="formInfo" :customer="customer" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour">
-                                        <booking-form-flights :token="token" :tour="tour" :booked="booked" :order_id="order_id"></booking-form-flights>
+                                        <booking-form-flights :order_token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
                                         <booking-form-accommodation></booking-form-accommodation>
                                         <booking-form-payment></booking-form-payment>
                                         <booking-form-terms></booking-form-terms>
@@ -38,7 +38,7 @@
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import dates from '../utilities'
-import { bus, booking } from '../bus'
+import { bus } from '../bus'
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -57,16 +57,32 @@ function getCookie(cname) {
 export default {
     props: ['tour', 'event', 'name'],
     components: { BookingFormTour },
+    data() {
+        return {
+            debug: true,
+            formInfo: false,
+            token: '',
+            travellers: [],
+            orders: [],
+            order_id: 0,
+            booked: {},
+            selectOrder: [],
+            order_selected: null,
+            customer: {},
+            currentCustomer: ''
+        }
+    },
     async created() {
         let that = this
         this.debug && console.log('BookingForm created, tour:', this.tour)
+        this.$emit('debugOverride', this.debug)
 
         that.currentCustomer = getCookie('OTM_booking_order_token')
         if (typeof that.currentCustomer != 'undefined' && that.currentCustomer.length) {
-            this.debug && console.log('this.currentCustomer', that.currentCustomer)
+            this.debug && console.log('currentCustomer', that.currentCustomer)
             await axios.get(`/api/booking/customer/${that.currentCustomer}`)
                 .then(response => {
-                    that.debug && console.log('>>>> customer orders found', response);
+                    that.debug && console.log('>>>> customer orders found', response)
                     that.orders = response.data
                     that.debug && console.log('Orders = ', that.orders)
                     if (that.orders.length < 1) {
@@ -85,17 +101,21 @@ export default {
                         bus.$emit('additionalTravellersLoaded', that.orders[0].customers)
                         that.order_id = that.order_selected
                         that.token = that.orders[0].token
+                        console.log('^^^^^ BookingForm set token', that.token)
+                        bus.$emit('setOrderToken', that.token)
                     }
                 })
                 .catch(error => {
                     console.log('get current customer', error)
                 })
         } else {
-            console.log('currentCustomer detected', that.currentCustomer)
+            console.log('currentCustomer NOT detected', that.currentCustomer)
         }
         if (typeof this.orders == 'undefined' || !this.orders.length) {
             this.getOrderId();
             this.debug && console.log('created order = ', this.orders)
+        } else {
+            this.debug && console.log('BOOKING FORM existing order = ', this.orders)
         }
     },
     // watch: {
@@ -105,21 +125,6 @@ export default {
     //         this.debug && console.log('this order has a customer', this.customer)
     //     }
     // },
-    data() {
-        return {
-            debug: true,
-            formInfo: false,
-            token: '',
-            travellers: [],
-            orders: [],
-            order_id: 0,
-            booked: booking,
-            selectOrder: [],
-            order_selected: null,
-            customer: {},
-            currentCustomer: ''
-        }
-    },
     // created() {
     //     bus.$on('selectFlight', (data) => {
     //         this.flight = data
@@ -127,24 +132,25 @@ export default {
     // },
     methods: {
         async getOrderId() {
+            let that = this
+            console.log('BOOKING FORM: getOrderId call') 
             axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
                 event: this.event.id
             })
             .then(response => {
-                this.debug && console.log('bookingForm - create order_id', response)
-                this.order_id = response.data.order.id
-                this.token = response.data.order.token
-                bus.$emit('setOrderToken', this.token)
-                this.debug('EMIT setOrderToken', this.token)
-                this.debug && console.log(response)
+                that.debug && console.log('bookingForm - create order_id', response)
+                that.order_id = response.data.order.id
+                that.token = response.data.order.token
+                bus.$emit('setOrderToken', that.token)
+                that.debug && console.log('EMIT setOrderToken', that.token)
+                that.debug && console.log(response)
             })
             .catch(err => {
                 console.log('error creating an order', e)
             })
         },
         startDate(event) {
-            this.debug && console.log(event.event_start_date)
             return dates.makeDateFromString(event.event_start_date)
         },
         endDate(event) {

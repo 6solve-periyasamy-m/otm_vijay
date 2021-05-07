@@ -55,7 +55,7 @@ const app = new Vue({
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
-const busEventLogging = false
+const busEventLogging = true
 bus.$on('click', function(id) {
     busEventLogging && console.log('added traveller', id)
 })
