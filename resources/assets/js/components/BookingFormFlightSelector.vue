@@ -13,7 +13,7 @@
         <div v-else class="col-sm-2">
             {{tour_flight_types[0]}}
         </div>
-        <div class="col-sm-10" v-if="tour_flights_filtered">{{selected_item}}
+        <div class="col-sm-10" v-if="tour_flights_filtered">
             <select 
                 :disabled="!enabled"
                 v-model="flightId">
@@ -22,7 +22,7 @@
                     v-for="flight in tour_flights_filtered" 
                     :key="flight.id" 
                     :value="flight.flight_inventory_tour_id"
-                    :selected="checkMatch(flight.inventory_tour_id, selected_item)">
+                >
                     {{flightValue(flight)}}
                 </option>
             </select>
@@ -45,6 +45,7 @@ export default {
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
+        this.flightId = this.selected_item
         this.filterFlights()
     },
     watch: {
@@ -67,12 +68,6 @@ export default {
         }
     },
     methods: {
-        checkMatch(id1, id2) {
-            console.log('comparing: ', id1, id2)
-            if (id1 == id2) {
-                return 'selected'
-            }
-        },
         filterFlights() {
             var that = this
             this.tour_flights_filtered = this.tour_flights.filter((flight) => {
