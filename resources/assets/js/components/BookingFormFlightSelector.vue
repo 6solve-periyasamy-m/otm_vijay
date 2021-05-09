@@ -11,13 +11,13 @@
             </select>
         </div>
         <div v-else class="col-sm-2">
-            {{tour_flight_types[0]}}
+            {{tour_flight_types[0]}} 
         </div>
         <div class="col-sm-10" v-if="tour_flights_filtered">
             <select 
                 :disabled="!enabled"
                 v-model="flightId">
-                <option value="" v-if="!selected_item" selected>Flight Select</option>
+                <option value="Flight Select" v-if="!selected_item" selected>Flight Select</option>
                 <option 
                     v-for="flight in tour_flights_filtered" 
                     :key="flight.id" 
@@ -31,13 +31,15 @@
 </template>
 <script>
 import dates from '../utilities'
-import { bus, booking } from '../bus'
+import { bus } from '../bus'
 export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-
+        // bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
+        //     console.log('&&&&&&******^^^^^ BFFS: EVENT ON setting customFlight for ', customtraveller, selected)
+        // })
         this.debug && console.log('B.F.F.S', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
     },
     created() {
@@ -60,7 +62,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: true,
             flightId: '',
             tour_flight_type: '',
             flight_selected: '',

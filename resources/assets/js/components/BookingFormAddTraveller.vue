@@ -202,7 +202,7 @@ export default {
         },
         removeTraveller() {
             this.removed = true
-            this.$emit('remove', this.form_id)
+            // this.$emit('remove', this.form_id) <- removed as looks wrong and no 'remove' event handler
             bus.$emit('removeTraveller', this.form_id)
         }
     }

@@ -69,24 +69,24 @@ export default {
             selectOrder: [],
             order_selected: null,
             customer: {},
-            currentCustomer: ''
+            bookingOrderToken: ''
         }
     },
     async created() {
         let that = this
         this.debug && console.log('BookingForm created, tour:', this.tour)
-        this.$emit('debugOverride', this.debug)
+        bus.$emit('debugOverride', this.debug)
 
-        that.currentCustomer = getCookie('OTM_booking_order_token')
-        if (typeof that.currentCustomer != 'undefined' && that.currentCustomer.length) {
-            this.debug && console.log('currentCustomer', that.currentCustomer)
-            await axios.get(`/api/booking/customer/${that.currentCustomer}`)
+        that.bookingOrderToken = getCookie('OTM_booking_order_token')
+        if (typeof that.bookingOrderToken != 'undefined' && that.bookingOrderToken.length) {
+            this.debug && console.log('bookingOrderToken', that.bookingOrderToken)
+            await axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
                 .then(response => {
                     that.debug && console.log('>>>> customer orders found', response)
                     that.orders = response.data
                     that.debug && console.log('Orders = ', that.orders)
                     if (that.orders.length < 1) {
-                        console.log('*** expired order cookie', that.currentCustomer)
+                        console.log('*** expired order cookie', that.bookingOrderToken)
                         that.order_id = null
                         //that.getOrderId()
                         alert('Your order appears to have expired, please rebook or contact us.')
@@ -97,11 +97,11 @@ export default {
                             that.order_selected = that.orders[0].id
                         }
                         that.debug && console.log('order selected = ', that.order_selected, that.orders)
-                        bus.$emit('customerLoaded', that.orders[0].customer, that.currentCustomer)
+                        bus.$emit('customerLoaded', that.orders[0].customer, that.bookingOrderToken)
                         bus.$emit('additionalTravellersLoaded', that.orders[0].customers)
                         that.order_id = that.order_selected
                         that.token = that.orders[0].token
-                        console.log('^^^^^ BookingForm set token', that.token)
+                        that.debug && console.log('^^^^^ BookingForm set token', that.token)
                         bus.$emit('setOrderToken', that.token)
                     }
                 })
@@ -109,7 +109,7 @@ export default {
                     console.log('get current customer', error)
                 })
         } else {
-            console.log('currentCustomer NOT detected', that.currentCustomer)
+            console.log('bookingOrderToken NOT detected', that.bookingOrderToken)
         }
         if (typeof this.orders == 'undefined' || !this.orders.length) {
             this.getOrderId();

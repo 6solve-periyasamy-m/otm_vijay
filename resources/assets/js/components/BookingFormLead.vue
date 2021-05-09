@@ -185,12 +185,13 @@
 import { bus } from '../bus'
 export default {
     props: ['form_info', 'order_id', 'customer', 'tour', 'booked'],
-    async mounted() {
+    mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
 
         this.debug && console.log('OTM Booking Lead Customer form loaded', this.order_id)
         bus.$on('customerLoaded', (customer) => {
+            console.log('EVENT customer loaded', customer)
             this.setCustomer(customer)
         })
     },

@@ -41,8 +41,12 @@ class CustomerController extends ApiController
             
             foreach ($orders as &$ord) {
                 $ordersCustomers = new OrdersCustomer();
-                $orderCustomer = $ordersCustomers->where('order_id', $ord->id)
+                $orderCustomer = $ordersCustomers
+                    ->select('customers.*', 'orders_customers.*', 'orders_customers.id as order_customer_id')
+                    ->where('order_id', $ord->id)
                     ->join('customers', 'orders_customers.customer_id', 'customers.id')
+                    // order by isLead desc so lead is first
+                    ->orderBy('orders_customers.is_lead_booker', 'desc')
                     ->get();
                 if (count($orderCustomer)) {
                     $ord->customer = $orderCustomer[0];
