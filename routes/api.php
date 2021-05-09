@@ -31,8 +31,9 @@ Route::get('/booking/tour/{id}',        [ApiController::class, 'getBasicTourInfo
 Route::get('/booking/airlines',         [AirlinesController::class, 'getAirlines']);
 Route::get('/booking/airports',         [AirlinesController::class, 'getAirports']);
 
-Route::get('/booking/loadflights/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
-Route::get('/booking/flights/{tour_id}',[FlightController::class, 'getFlightInventoriesForTour']);
+Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
+
+Route::get('/booking/flights/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
 Route::get('/booking/flights/{tour_id}/{flight_type}', [FlightController::class, 'getFlightInventoriesForTour']);
 Route::get('/booking/flight-inventories', [FlightController::class, 'getFlightsInventories']);
 Route::get('/booking/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 class ApiController extends Controller
 {
-    protected $logging = true;
+    protected $logging = 4;
 
     /***
      * these methods are from

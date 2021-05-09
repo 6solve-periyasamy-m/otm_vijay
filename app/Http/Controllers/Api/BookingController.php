@@ -103,6 +103,7 @@ class BookingController extends ApiController
             ->where('order_id', $order->id)
             ->where('type', $flightType)
             ->where('reference', $reference)
+            ->where('addon', $custom)
             //->where('inventory_id', $flightTour->flight_inventory_id)
             ->first();
         if (empty($customer_order_detail)) {
@@ -112,7 +113,7 @@ class BookingController extends ApiController
             $status = 'updated';
         }
         // always make a fresh record, so we can track how the form works
-        $customer_order_detail = new CustomerOrderDetail();
+        //$customer_order_detail = new CustomerOrderDetail();
         $customer_order_detail->orders_customer_id = $orderCustomer->id;
         $customer_order_detail->inventory_id = $flightTour->flight_inventory_id;
         $customer_order_detail->order_id = $order->id;
