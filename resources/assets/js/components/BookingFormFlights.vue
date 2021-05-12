@@ -83,11 +83,11 @@
                     </div>
                     <hr class="light" />
                     <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
-                        <div v-if="debug>2 && traveller.selected_outbound_addon">Selected outbound {{traveller.selected_outbound_addon}}</div>
-                        <div v-if="debug>2 && traveller.selected_inbound_addon">Selected inbound {{traveller.selected_inbound_addon}}</div>
+                        <div v-if="traveller.selected_outbound_addon">Custom outbound selected {{outbound_flights[traveller.selected_outbound_addon]}}</div>
+                        <div v-if="traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
                         <div class="row">
                             <div class="col-sm-3">
-                                <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
+                                View <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
                             </div>
                             <div class="col-sm-3">
                                 {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
@@ -173,7 +173,8 @@ export default {
     props: ['tour', 'order_id', 'order_token'],
     data() {
         return {
-            debug: 0,
+            debug: 5,
+            activated: false,
 
             token: null,
             airports: [],
@@ -252,7 +253,7 @@ export default {
         //              add transactions to cancel previous booking and rebook
     },
     created() {
-        // TODO: flight does not look like the right object??
+        // TODO: setting when loading?  backend knows if this is a change or not (front end )
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom) => {
             let that = this
             console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
@@ -295,6 +296,7 @@ export default {
             //     traveller['selected_inbound_addon'] = null
             // })
             this.travellers = travellers
+            this.activated = true
         })
 
     },
@@ -318,7 +320,9 @@ export default {
             return dates.makeDateFromString(s)
         },
         toggleFlights() {
-            this.showFlights = !this.showFlights
+            if (this.activated) {
+                this.showFlights = !this.showFlights
+            }
         },
         flightOptionsCustomer(id) {
             if (typeof this.travellerFlightOptions[id] == 'undefined' || this.travellerFlightOptions.length == 0 || this.travellerFlightOptions[id] == null) {
@@ -389,12 +393,12 @@ export default {
           //this.selected_flight('Inbound', 1, orders, that.travellers[1])
                     outbound = that.selected_flight('Outbound', 0, orders, that.travellers[0])
                     inbound = that.selected_flight('Inbound', 0, orders, that.travellers[0])
-                    
+
                     // set the selected_outbound_flight (group selector)
-                    if (typeof outbound !== 'undefined' && outbound.flight_inventory_tour_id) {
+                    if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
                         that.selected_outbound_flight = outbound.flight_inventory_tour_id
                     }
-                    if (typeof inbound !== 'undefined' && inbound.flight_inventory_tour_id) {
+                    if (typeof inbound !== 'undefined' && outbound != null && inbound.flight_inventory_tour_id) {
                         that.selected_inbound_flight = inbound.flight_inventory_tour_id
                     }
 

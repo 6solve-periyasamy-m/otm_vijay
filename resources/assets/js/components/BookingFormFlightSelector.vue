@@ -56,7 +56,7 @@ export default {
                 console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
                 bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
             } else {
-                console.log('BFFS OLDFLIGHT was NULL')
+                this.debug>6 && console.log('BFFS Flight was NULL, flightId watch fired but not flight was selected yet')
             }
         }
     },
