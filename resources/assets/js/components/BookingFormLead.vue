@@ -197,7 +197,7 @@ export default {
     },
     data() {
         return {
-            debug: true,
+            debug: false,
             showTraveller: false,
             lead_traveller: '',
             title: '',

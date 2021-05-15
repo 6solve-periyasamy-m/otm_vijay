@@ -83,8 +83,8 @@
                     </div>
                     <hr class="light" />
                     <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
-                        <div v-if="traveller.selected_outbound_addon">Custom outbound selected {{outbound_flights[traveller.selected_outbound_addon]}}</div>
-                        <div v-if="traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
+                        <div v-if="debug && traveller.selected_outbound_addon">Custom outbound selected {{outbound_flights[traveller.selected_outbound_addon]}}</div>
+                        <div v-if="debug  && traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
                         <div class="row">
                             <div class="col-sm-3">
                                 View <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
@@ -173,7 +173,7 @@ export default {
     props: ['tour', 'order_id', 'order_token'],
     data() {
         return {
-            debug: 5,
+            debug: 0,
             activated: false,
 
             token: null,
@@ -224,11 +224,10 @@ export default {
     async mounted() {
         let that = this
         this.token = this.order_token
-        console.log('token has been set to ', this.token)
         bus.$on('debugOverride', (debug) => that.debug = debug)
         bus.$on('customerLoaded', (leadTraveller => that.leadTraveller = leadTraveller))
         bus.$on('setOrderToken', (token) => {
-            console.log('>>> BFFlights order token detected ', token)
+            this.debug>2 && console.log('>>> BFFlights order token detected ', token)
             that.token = token
         })
 
@@ -256,18 +255,17 @@ export default {
         // TODO: setting when loading?  backend knows if this is a change or not (front end )
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom) => {
             let that = this
-            console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
+            this.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
             if (traveller == null) {
                 console.log('set_outbound: no traveller is passed in')
             } else if (this.leadTraveller == null) {
                 console.log('set_outbound: leadTravller NOT set')
             } else if (traveller.id == this.leadTraveller.id && traveller.is_lead_booker && !custom) {
                 this.unselected_outbound = this.outbound_flights.filter(flight => {
-                    console.log('unselected outbound: flight: ', flight)
+                    this.debug>2 && ('unselected outbound: flight: ', flight)
                     return flight.flight_inventory_tour_id != flight_inventory_tour_id
                 })
             }
-            console.log('bffs on data: traveller', traveller)
             this.updateFlight(flight_inventory_tour_id, 'Outbound', flight_tour, traveller, custom, this.token)
         })
         bus.$on('set_inbound', (flight_inventory_tour_id, flight_tour, traveller, custom) => {
@@ -284,13 +282,13 @@ export default {
             this.updateFlight(flight_inventory_tour_id, 'Inbound', flight_tour, traveller, custom, this.token)
         })
         bus.$on('customerLoaded', (leadTraveller) => {
-            console.log('BFF:  customerLoaded leadTraveller loaded:', leadTraveller)
+            this.debug>2 && console.log('BFF:  customerLoaded leadTraveller loaded:', leadTraveller)
             // leadTraveller['selected_outbound_addon'] = null
             // leadTraveller['selected_inbound_addon'] = null
             this.leadTraveller = leadTraveller
         })
         bus.$on('additionalTravellersLoaded', (travellers) => {
-            console.log('BFF: additionalTravellers loaded', travellers)
+            this.debug>2 && console.log('BFF: additionalTravellers loaded', travellers)
             // travellers.map(traveller => {
             //     traveller['selected_outbound_addon'] = null
             //     traveller['selected_inbound_addon'] = null
@@ -311,7 +309,6 @@ export default {
         checkCustomButton: function() {
             const customChanges = this.travellerFlightOptions.includes(true)
             const selections = this.selected_outbound && this.selected_inbound
-
             return selections || customChanges
         }
     },
@@ -351,13 +348,13 @@ export default {
             this.showCustomFlights = !this.showCustomFlights
         },
         async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom) {
-            this.debug > 4 && console.log('[updateFlight] called', this.order_id, this.tour.id, flight_tour, 'flight_inventory_tour_id', flight_inventory_tour_id, flight_type, customer, 'token' + this.token)
+            this.debug>4 && console.log('[updateFlight] called', this.order_id, this.tour.id, flight_tour, 'flight_inventory_tour_id', flight_inventory_tour_id, flight_type, customer, 'token' + this.token)
+            this.debug>6 && console.log('updateFlight()', flight_inventory_tour_id, flight_type, flight_tour, customer, custom);
             if (customer != null) {
-                // booking the flight
-                await axios.post(`/api/booking/flight/${customer.customer_id}/${this.tour.id}/${this.order_id}/${flight_type}/${flight_inventory_tour_id}/${custom ? 1 : 0}/${this.token}`)
+                const url = `/api/booking/flight/${customer.customer_id}/${this.tour.id}/${this.order_id}/${flight_type}/${flight_inventory_tour_id}/${custom ? 1 : 0}/${this.token}`
+                await axios.post(url)
                 .then(response => {
                     console.log('flight booking response', response)
-
                 })  
                 .catch(error => {
                     console.log(error)

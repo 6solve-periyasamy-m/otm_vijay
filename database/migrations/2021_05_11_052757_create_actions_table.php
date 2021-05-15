@@ -15,10 +15,12 @@ class CreateActionsTable extends Migration
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('action');
             $table->integer('customer_id')->index();
             $table->integer('order_id')->index();
+            $table->string('reference')->nullable();
+            $table->text('detail')->nullable();
+            $table->timestamps();
         });
     }
 

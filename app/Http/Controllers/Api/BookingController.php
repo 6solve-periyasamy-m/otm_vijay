@@ -60,6 +60,7 @@ class BookingController extends ApiController
      * @param passenger
      * @param flight (we are sending in the flight->id - which should be the flightInventoryTour record id)
      */
+    //    // /booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}
     public function bookFlightDetails($customer_id, $tour_id, $order_id, $flight_type, $flight_inventory_tour_id, $custom, $reference)
     {
         Log::info('bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $flight_inventory_tour_id, $custom, $reference]);
@@ -90,37 +91,61 @@ class BookingController extends ApiController
             ];
         }
         
-        ActionsRepository::log('Booking Order '.$status, $customer_id, $order_id);
+        if ($rejection) {
+            ActionsRepository::log('Booking Order '.$status, $customer_id, $order_id);
+            Log::info('booking flight details:', [$tour_id, $flightTour->id, $customer_id]);
+        }
 
-        Log::info('booking flight details:', [$tour_id, $flightTour->id, $customer_id]);
         return [
             'status' => $rejection,
             'message' => $status
         ];
     }
 
-    private function findCustomerOrderDetail($orders_customer_id, $order_id, $flight_type, $reference, $addon)
+    private function findCustomerOrderDetailsByOrderId($orders_customer_id, $order_id, $flight_type, $reference, $addon)
     {
         $model = new CustomerOrderDetail();
-        $customer_order_detail = $model
+        $customer_order_details = $model
             ->where('orders_customer_id', $orders_customer_id)
             ->where('order_id', $order_id)
             ->where('type', $flight_type)
             ->where('reference', $reference)
             ->where('addon', $addon)
-            ->first();
+            ->get();
 
+        return $customer_order_details;
+    }
+
+    private function findCustomerOrderDetailByInventoryTourId($orders_customer_id, $inventory_tour_id, $flight_type, $reference, $addon)
+    {
+        $model = new CustomerOrderDetail();
+        Log::info('findCustomerOrderDetailByInventoryTourId', [$orders_customer_id, $inventory_tour_id, $flight_type, $reference, $addon]);
+        $customer_order_detail = $model
+            ->join('flight_inventory_tour', 'flight_inventory_tour.id', 'customer_order_details.inventory_tour_id')
+            ->where('orders_customer_id', $orders_customer_id)
+            ->where('flight_inventory_tour.flight_inventory_id', $inventory_tour_id)
+            ->where('type', $flight_type)
+            ->where('reference', $reference)
+            ->where('addon', $addon)
+            ->first();
+            if ($customer_order_detail) {
+                Log::info('found this', $customer_order_detail->toArray());
+            } else {
+                Log::info('nothing found!');
+            }
         return $customer_order_detail;
     }
 
     public function storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flightType, $addon, $reference)
     {
-        $customer_order_detail = $this->findCustomerOrderDetail($orderCustomer->id, $order->id, $flightType, $reference, $addon);
+        Log::info('storeOrUpdateCustomerOrderDetail --- check flightTour', $flightTour->toArray());
+        $customer_order_detail = $this->findCustomerOrderDetailByInventoryTourId($orderCustomer->id, $flightTour->flight_inventory_id, $flightType, $reference, $addon);
         
         // when setting an group order, remove any addon that matches it
         if (!$addon) {
-            $addon_cod = $this->findCustomerOrderDetail($orderCustomer->id, $order->id, $flightType, $reference, 1);
+            $addon_cod = $this->findCustomerOrderDetailByInventoryTourId($orderCustomer->id, $flightTour->flight_inventory_id, $flightType, $reference, 1);
             if ($addon_cod) {
+                ActionsRepository::log('Customer Order Detail removing ', $orderCustomer->id, $order->id, $reference);
                 $addon_cod->delete();
                 //$addon_cod->status = 'deleted';
                 //$addon_cod->save();
@@ -129,7 +154,7 @@ class BookingController extends ApiController
 
         if (empty($customer_order_detail)) {
             $customer_order_detail = new CustomerOrderDetail();
-            $status = 'original';
+            $status = 'created';
         } else {
             $status = 'updated';
             // anything to update?
@@ -149,16 +174,18 @@ class BookingController extends ApiController
         $customer_order_detail->inventory_tour_id = $flightTour->id;
         $customer_order_detail->date_time = now();
         $customer_order_detail->status = $status;
-        // these parameters have yet to be established
-        // reference - the leads hash?
-        // addon if there is a cost associated: where from?
-        // cost for addon
-\Log::info('***********************nchecking: fightTour', $flightTour->toArray());
         $customer_order_detail->reference = $reference;
         $customer_order_detail->addon = $addon;
-        $customer_order_detail->cost = $flightTour->sales_price;
-        ActionsRepository::log('Customer Order Detail '.$status, $orderCustomer->id, $flightTour->id);
-        Log::info('saving customer_order_detail record', $customer_order_detail->toArray());
+        $customer_order_detail->cost = isset($flightTour->sales_price) ? $flightTour->sales_price : 0;
+        $actionDescription = 'Customer Order Detail ';
+        if ($addon) {
+            $actionDescription .= ' addon ';
+        } else {
+            $actionDescription .= ' group ';
+        }
+        $actionDescription .= $status;
+        ActionsRepository::log($actionDescription, $orderCustomer->id, $flightTour->id, $reference);
+        // Log::info('saving customer_order_detail record', $customer_order_detail->toArray());
         $customer_order_detail->save();
     }
     

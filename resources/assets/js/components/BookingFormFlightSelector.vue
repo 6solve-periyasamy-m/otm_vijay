@@ -53,7 +53,7 @@ export default {
     watch: {
         flightId: function(flight, oldFlight) {
             if (flight != oldFlight && flight != null) {
-                console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
+                this.debug>4 && console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
                 bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
             } else {
                 this.debug>6 && console.log('BFFS Flight was NULL, flightId watch fired but not flight was selected yet')
@@ -62,7 +62,7 @@ export default {
     },
     data() {
         return {
-            debug: true,
+            debug: 0,
             flightId: '',
             tour_flight_type: '',
             flight_selected: '',
@@ -79,7 +79,7 @@ export default {
             this.tour_flights_filtered = this.tour_flights.filter((flight) => {
                 return flight.flight_type.toLowerCase() == that.tour_flight_type.toLowerCase()
             })
-            console.log('tour flights filtered', this.tour_flights_filtered)
+            this.debug>4 && console.log('tour flights filtered', this.tour_flights_filtered)
         },
         flightValue(flight) {
             if (typeof flight == 'undefined') {
