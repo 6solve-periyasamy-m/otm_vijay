@@ -4,8 +4,9 @@
             <div class="card-header">
                 <h5 class="mb-1">
                     <button class="btn btn-link cardhead" @click="toggleFlights">
-                        Flights
+                        Activities
                     </button>
+                    <p>Activities planned as part of your package, plus available options for each traveller in your group.</p>
                 </h5>
             </div>
             <div class="card-body compress" v-if="showFlights">

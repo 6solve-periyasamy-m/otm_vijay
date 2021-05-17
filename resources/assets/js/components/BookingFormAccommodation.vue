@@ -6,6 +6,7 @@
                     <button class="btn btn-link collapsed cardhead" @click="toggleAccommodation">
                         Accommodation
                     </button>
+                    <p>Accommodation options for your tour group including indication of single or shared rooms requirements.</p>
                 </h5>
             </div>
             <div class="card-body" v-if="showAccommodation">
@@ -17,6 +18,9 @@
     </div>
 </template>
 <script>
+/**
+ * accommodation is found related to the tour
+ */
 export default {
     data() {
         return {

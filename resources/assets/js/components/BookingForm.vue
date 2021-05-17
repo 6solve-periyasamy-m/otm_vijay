@@ -22,6 +22,8 @@
                                     <div v-if="tour">
                                         <booking-form-flights :order_token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
                                         <booking-form-accommodation></booking-form-accommodation>
+                                        <booking-form-activity></booking-form-activity>
+                                        <booking-form-transport></booking-form-transport>
                                         <booking-form-payment></booking-form-payment>
                                         <booking-form-terms></booking-form-terms>
                                     </div>
@@ -118,22 +120,10 @@ export default {
             this.debug && console.log('BOOKING FORM existing order = ', this.orders)
         }
     },
-    // watch: {
-    //     order_selected: function() {
-    //         this.customer = this.orders[this.order_selected].customer
-    //         this.debug && console.log('An order has been selected', this.order_selected)
-    //         this.debug && console.log('this order has a customer', this.customer)
-    //     }
-    // },
-    // created() {
-    //     bus.$on('selectFlight', (data) => {
-    //         this.flight = data
-    //     })
-    // },
     methods: {
         async getOrderId() {
             let that = this
-            console.log('BOOKING FORM: getOrderId call') 
+            // console.log('BOOKING FORM: getOrderId call') 
             axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
                 event: this.event.id
