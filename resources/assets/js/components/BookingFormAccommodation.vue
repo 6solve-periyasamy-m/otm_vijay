@@ -12,64 +12,8 @@
             <div class="card-body" v-if="showAccommodation">
                 <h4>Accommodation options</h4>
                 <h4 v-if="bookings.length">Booked</h4>
-                <section class="col a-cards" v-if="bookings.length">
-                    <article class="a-card" v-for="booking in bookings" :key="booking.id">
-                        <aside><img src="https://picsum.photos/300/200" :alt="booking.accommodation.details.title"/></aside>
-                        <div class="a-card__content">
-                            <div class="active content">
-                                <!-- input type="radio" name="accommodation" :value="accommodation.id" / --> 
-                                {{booking.accommodation.details.title}}
-                            </div>
-                            <div class="label">
-                                Check-in 
-                            </div>
-                            <div class="content">
-                                {{bookingTime(booking.accommodation.check_in_date_time)}}
-                            </div>
-                            <div class="label">
-                                Checkout
-                            </div>
-                            <div class="content">
-                                {{bookingTime(booking.accommodation.check_out_date_time)}} 
-                            </div>
-                            <div class="label">
-                                Room type
-                            </div>
-                            <div class="content">
-                                {{booking.accommodation.room_type}} 
-                            </div>
-                            <div class="label">
-                                Max occupancy
-                            </div>
-                            <div class="content">
-                                {{booking.accommodation.maximum_occupancy}}
-                            </div>
-                            <div class="label">
-                                Price
-                            </div>
-                            <div class="content">
-                                {{booking.accommodation.sales_price}}
-                            </div>
-                            <div class="label">
-                                Travellers
-                            </div>
-                            <div class="content">
-                                <span v-for="traveller in travellers" :key="traveller.customer_id">
-                                    {{fullName(traveller)}}
-                                    <input 
-                                        change="handleChange($event, booking.accommodation.inventory_id)"
-                                        :checked="traveller.id == booking.orders_customer_id ? 'checked' : ''" 
-                                        :name="`${traveller.email_address}`" 
-                                        type="radio" 
-                                    />
-                                </span>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-
                 <h3>Available accommodation options</h3>
-                <section class="col a-cards">
+                <section class="col a-cards" v-if="makeBooking">
                     <article class="a-card" v-for="accommodation in accommodations" :key="accommodation.id">
                         <aside><img src="https://picsum.photos/300/200" :alt="accommodation.title"/></aside>
                         <div class="a-card__content">
@@ -114,8 +58,7 @@
                                     {{fullName(traveller)}}
                                     <input 
                                         @change="handleChange($event, traveller.id, accommodation.inventory_id)"
-                                        xvalue="traveller.id == booking.orders_customer_id" 
-                                        
+                                        :checked="traveller.id == booking.orders_customer_id" 
                                         :value="accommodation.id"
                                         :name="`${traveller.email_address}`" 
                                         type="radio" 
@@ -124,8 +67,63 @@
                             </div>
                         </div>
                     </article>
+                    <div v-for="booking in bookings" :key="booking.id">
+                        {{booking.type}} {{booking.accommodation.details.title}}
+                    </div>
                 </section>
-                <button @click="submit">Submit</button>
+                <section v-else class="col a-cards">
+                    <article class="a-card" v-for="booking in bookings" :key="booking.id">
+                        <aside><img src="https://picsum.photos/300/200" :alt="booking.accommodation.details.title"/></aside>
+                        <div class="a-card__content">
+                            <div class="active content">
+                                <!-- input type="radio" name="accommodation" :value="accommodation.id" / --> 
+                                {{booking.accommodation.details.title}}
+                            </div>
+                            <div class="label">
+                                Check-in 
+                            </div>
+                            <div class="content">
+                                {{bookingTime(booking.accommodation.check_in_date_time)}}
+                            </div>
+                            <div class="label">
+                                Checkout
+                            </div>
+                            <div class="content">
+                                {{bookingTime(booking.accommodation.check_out_date_time)}} 
+                            </div>
+                            <div class="label">
+                                Room type
+                            </div>
+                            <div class="content">
+                                {{booking.accommodation.details.room_type}} 
+                            </div>
+                            <div class="label">
+                                Max occupancy
+                            </div>
+                            <div class="content">
+                                {{booking.accommodation.details.maximum_occupancy}}
+                            </div>
+                            <div class="label">
+                                Price
+                            </div>
+                            <div class="content">
+                                {{booking.accommodation.details.sales_price}}
+                            </div>
+                            <div class="label">
+                                Booked for
+                            </div>
+                            <div class="content">
+                                <span v-for="traveller in travellers" :key="traveller.customer_id">
+                                    <div v-if="traveller.id == booking.orders_customer_id">
+                                        {{fullName(traveller)}}
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+                <button v-if="!makeBooking" @click="makeBooking = true">Change</button>
+                <button v-else @click="submit">Submit</button>
             </div>
         </div>
     </div>
@@ -148,7 +146,8 @@ export default {
             bookings: [],
             travellers: [],
             option: [],
-            booking: {}
+            booking: {},
+            makeBooking: false
         }
     },
     async mounted() {
@@ -191,6 +190,8 @@ export default {
                     axios.post(`/api/booking/accommodation/${this.tour.id}/${customer}/${this.token}/${accommodation_id}/${this.order_id}`)
                         .then(response => {
                             console.log('accommodation change response:', response)
+                            this.loadBooking()
+                            
                         })
                         .catch(error => console.log(error))
                 }
@@ -208,6 +209,7 @@ export default {
             this.travellers.map(traveller => {
                 console.log(traveller.email)
             })
+            this.makeBooking = false
         },
         fullName(t) {
             return `${t.first_name} ${t.last_name}`;
