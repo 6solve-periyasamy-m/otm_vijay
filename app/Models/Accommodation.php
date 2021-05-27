@@ -22,6 +22,11 @@ class Accommodation extends Model
         return $this->belongsTo(Region::class);
     }
 
+    public function board_type()
+    {
+        return $this->belongsTo(BoardType::class);
+    }
+
     public function getInventoryRelationAttribute()
     {
         return "{$this->title} | {$this->region->region_name}";

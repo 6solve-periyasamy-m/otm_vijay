@@ -100,3 +100,55 @@ hr.light {
 .compress {
     font-size: 10px;
 }
+.a-cards {
+    padding: 1rem;
+}
+.a-card {
+    width: 100%;
+    height: auto;
+    padding: 0.25rem;
+    margin: 0.5rem;
+    font-size: 16px;
+    border: 2px solid teal;
+    border-radius: 6px;
+    img {
+        width: 100%;
+        height: auto;
+    }
+    &__content {
+        padding: 0.1em;
+    }
+    .label {
+        padding: 0.1em 0.25em;
+        font-size: 0.7rem;
+        background: grey;
+        color: white;
+    }
+    .content {
+        padding: 0 0 0.5em 0;
+        font-size: 0.85rem;
+        background: white;
+        color: indigo;
+    }
+    &:hover {
+        box-shadow: 3px 3px 8px hsl(0, 0%, 80%);
+    }
+}
+
+@media screen and (min-width: 40em) {
+    .a-cards {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .a-card {
+        flex: 0 1 calc(50% - 1em);
+    }
+}
+@media screen and (min-width: 50em) {
+    .a-card {
+        flex: 0 1 calc(20% - 1rem);
+    }
+}
+

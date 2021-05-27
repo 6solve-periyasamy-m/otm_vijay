@@ -92,8 +92,8 @@ class BookingController extends ApiController
         }
         
         if ($rejection) {
-            ActionsRepository::log('Booking Order '.$status, $customer_id, $order_id);
             Log::info('booking flight details:', [$tour_id, $flightTour->id, $customer_id]);
+            ActionsRepository::log('Booking Order '.$status, $customer_id, $order_id);
         }
 
         return [
@@ -102,19 +102,19 @@ class BookingController extends ApiController
         ];
     }
 
-    private function findCustomerOrderDetailsByOrderId($orders_customer_id, $order_id, $flight_type, $reference, $addon)
-    {
-        $model = new CustomerOrderDetail();
-        $customer_order_details = $model
-            ->where('orders_customer_id', $orders_customer_id)
-            ->where('order_id', $order_id)
-            ->where('type', $flight_type)
-            ->where('reference', $reference)
-            ->where('addon', $addon)
-            ->get();
+    // private function findCustomerOrderDetailsByOrderId($orders_customer_id, $order_id, $flight_type, $reference, $addon)
+    // {
+    //     $model = new CustomerOrderDetail();
+    //     $customer_order_details = $model
+    //         ->where('orders_customer_id', $orders_customer_id)
+    //         ->where('order_id', $order_id)
+    //         ->where('type', $flight_type)
+    //         ->where('reference', $reference)
+    //         ->where('addon', $addon)
+    //         ->get();
 
-        return $customer_order_details;
-    }
+    //     return $customer_order_details;
+    // }
 
     private function findCustomerOrderDetailByInventoryTourId($orders_customer_id, $inventory_tour_id, $flight_type, $reference, $addon)
     {
@@ -204,22 +204,20 @@ class BookingController extends ApiController
         }
         $ordersCustomer = new OrdersCustomer();
         Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer_id);
-        // $ordersCustomerExists = $ordersCustomer
-        //     ->where('order_id', $request->order_id)
-        //     ->where('inventory_tour_id', $request->inventory_tour_id)
-        //     ->where('customer_id', $customer_id)
-        //     ->first();
-        // if ($ordersCustomerExists) {
-        //     $ordersCustomer = $ordersCustomerExists;
-        //     Log::info('orderCustomer record', $ordersCustomerExists->toArray());
-        //     $this->updateOrderCustomerFields($ordersCustomer, $request);
-        //     Log::info('ordercustomer exists, updating');
-        // } else {
+        $ordersCustomerExists = $ordersCustomer
+            ->where('order_id', $request->order_id)
+            ->where('customer_id', $customer_id)
+            ->first();
+        if ($ordersCustomerExists) {
+            $ordersCustomer = $ordersCustomerExists;
+            Log::info('orderCustomer record', $ordersCustomerExists->toArray());
+            $this->updateOrderCustomerFields($ordersCustomer, $request);
+            // Log::info('ordercustomer exists, updating');
+        } else {
             $ordersCustomer->order_id = $request->order_id;
             $ordersCustomer->customer_id = $customer_id;
-            $ordersCustomer->inventory_tour_id = $request->inventory_tour_id;
-            Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer_id);
-//        }
+            Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer_id);
+        }
         $ordersCustomer->is_lead_booker = $isLead;
         $ordersCustomer->travel_insurer = null;
         $ordersCustomer->policy_number = null;
@@ -239,7 +237,9 @@ class BookingController extends ApiController
     {
         $customer = new Customer();
         //does this customer already exist?
+        Log::info('search for '. $request->email_address);
         $customerExists = $customer->where('email_address', $request->email_address)->first();
+        Log::info('customer record ', $customerExists->toArray());
         if ($customerExists) {
             if ($this->logging) {
                 Log::info('customer exists record ', $customerExists->toArray());
@@ -272,7 +272,7 @@ class BookingController extends ApiController
             $customer->billing_postcode = isset($request->billing_postcode) ? $request->billing_postcode : $request->postcode;
         }
         if ($this->logging) {
-            Log::info('saving customer detaisl ', $customer->toArray());
+            Log::info('saving customer details ', $customer->toArray());
         }
         $customer->save();
 

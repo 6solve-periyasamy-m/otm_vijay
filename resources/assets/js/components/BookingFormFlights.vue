@@ -170,13 +170,14 @@ import Vue from 'vue'
  */
 export default {
     components: { BookingFormFlightSelector },
-    props: ['tour', 'order_id', 'order_token'],
+    props: ['tour'],
     data() {
         return {
             debug: 0,
             activated: false,
 
             token: null,
+            order_id: 0,
             airports: [],
             flights: [],
             travellers: [],
@@ -223,24 +224,24 @@ export default {
     },
     async mounted() {
         let that = this
-        this.token = this.order_token
         bus.$on('debugOverride', (debug) => that.debug = debug)
         bus.$on('customerLoaded', (leadTraveller => that.leadTraveller = leadTraveller))
-        bus.$on('setOrderToken', (token) => {
-            this.debug>2 && console.log('>>> BFFlights order token detected ', token)
+        bus.$on('setOrderToken', (token, order_id) => {
             that.token = token
+            that.order_id = order_id
+            this.debug && console.log('BFFlights: setOrderToken ::  ', token, order_id)
         })
 
         await this.getFlights(this.tour.id)
         await this.getTourParty(this.order_id)
 
-        this.debug && console.log('MOUNTED: gettourParty', this.order_id, this.travellers)
+        this.debug && console.log('MOUNTED: order_id & gettourParty', this.order_id, this.travellers)
 
         await this.loadFlights(this.order_id)
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
-        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' using order ID ', this.order_id)
+        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out_date_time ', this.order_id)
         this.debug > 1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
         this.debug > 1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
 

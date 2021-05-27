@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Log;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
@@ -41,7 +42,7 @@ class BookingController extends Controller
         }
         $tours = Tour::where('event_id', $event->id)->get();
         if (empty($tours)) {
-            \Log::error('There are no tours for event ', $event->toArray());
+            Log::error('There are no tours for event ', $event->toArray());
             abort(404);
         }
         return view('eventBookingForm')->with('event', $event);

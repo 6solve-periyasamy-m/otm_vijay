@@ -48,31 +48,29 @@ const app = new Vue({
     el: '#app'
 });
 
-function setCookie(cname, cvalue, exdays) {
+ // event bus handlers
+ // addTraveller 
+ // removeTraveller
+ function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
-
 const busEventLogging = true
-
 bus.$on('click', function(id) {
     busEventLogging && console.log('added traveller', id)
 })
 //  bus.$on('saveLeadCustomer', function(name) {
 //      bus.booking.name = name
 //  })
-
 bus.$on('customerLoaded', function(customer) {
     busEventLogging && console.log('Event Bus: Customer Loaded', customer)
 })
-
-bus.$on('removeTraveller', function(id) {
+ bus.$on('removeTraveller', function(id) {
      busEventLogging && console.log('Event Bus: removed traveller ',id)
-})
-
+ })
 bus.$on('setOrderToken', function(token, order_id) {
-    busEventLogging && console.log('Event Bus: setting token cookie for order_id', token, order_id)
+    busEventLogging && console.log('Event Bus: setOrderToken token, order_id', token, order_id)
     setCookie('OTM_booking_order_token', token);
 })

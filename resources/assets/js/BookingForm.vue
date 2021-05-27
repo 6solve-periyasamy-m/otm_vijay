@@ -103,7 +103,7 @@ export default {
                         bus.$emit('additionalTravellersLoaded', that.orders[0].customers)
                         that.order_id = that.order_selected
                         that.token = that.orders[0].token
-                        that.debug && console.log('^^^^^ BookingForm set token', that.token)
+                        that.debug && console.log('^^^^^ BookingForm set token & order_id', that.token, that.order_id)
                         bus.$emit('setOrderToken', that.token, that.order_id)
                     }
                 })

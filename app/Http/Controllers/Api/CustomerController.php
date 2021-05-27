@@ -12,6 +12,7 @@ use App\Models\OrdersCustomer;
 
 class CustomerController extends ApiController
 {
+    protected $logging = 0;
     /** 
      * getCustomerByToken
      * 

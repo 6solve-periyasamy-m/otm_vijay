@@ -11,11 +11,12 @@ use App\Models\Flight;
 use App\Models\Airport;
 use App\Models\Order;
 use App\Models\CustomerOrderDetail;
+use App\Models\FlightInventory;
 use App\Models\OrdersCustomer;
 
 class FlightController extends ApiController
 {
-
+    protected $logging = 0;
     public function getFlightInventories()
     {
         $flights = Flight::join('airlines', 'airline_id', 'airlines.id')
@@ -25,12 +26,13 @@ class FlightController extends ApiController
         return response()->json(["success" => true, "data" => $flights->toArray()]);
     }
 
-    public function getFlightsFromTour(Tour $tour)
+    // NB: limitedvalue: replaces getFlightsFromTour which was incorect and not used
+    // same as above??
+    public function getFlightInventoryData()
     {
-        // TODO: As above, add authentication.
-        // You don't want scrapers just scraping all of the information out of the DB from these APIs
-        $inventory = $tour->flightInventory;
-        $result = $inventory->map(function ($flightInventory) {
+        $inventory = new FlightInventory();
+        $records = $inventory->get();
+        $result = $records->map(function ($flightInventory) {
             return [
                 "id" => $flightInventory->id,
                 "flight_id" => $flightInventory->flight->id,
