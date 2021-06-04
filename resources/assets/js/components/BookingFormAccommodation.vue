@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </article>
-                    <div class="accommodations__summary">
+                    <div v-if="false" class="accommodations__summary">
                         <div v-for="booking in bookings" :key="booking.id">
                             <div class="card">
                                 <div>
