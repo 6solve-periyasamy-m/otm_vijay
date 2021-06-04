@@ -18,10 +18,12 @@
                     <booking-form-add-traveller :customer="item" :order_id="order_id" :tour="tour" :form_id="item.formId" @remove="removeTraveller"></booking-form-add-traveller>
 
                 </div>
-                <button type="button" class="btn btn-success" @click="addAdditional">Add traveller</button>
+                <button type="button" 
+                    class="btn btn-primary" 
+                    @click="addAdditional">Add traveller</button>
                 <button
                     type="button"
-                    class="btn btn-success"
+                    class="btn btn-primary"
                     @click="showAdditional=false">
                     All travellers entered
                 </button>

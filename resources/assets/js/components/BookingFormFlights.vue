@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-1">
-                    <button class="btn btn-link cardhead" @click="toggleFlights">
+                    <button :disabled="ready ? false : true" class="btn btn-link cardhead" @click="toggleFlights">
                         Flights
                     </button>
                 </h5>
@@ -60,9 +60,13 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <button class="btn btn-primary" 
-                            :disabled="checkCustomButton"
+                            :disabled="disableCustomButton"
                             @click="customFlights()">
                             Customise
+                        </button>
+                        <button class="btn btn-primary"
+                            @click="toggleFlights">
+                            Close
                         </button>
                     </div>
                 </div>
@@ -87,7 +91,7 @@
                         <div v-if="debug  && traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
                         <div class="row">
                             <div class="col-sm-3">
-                                View <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" @change="flightOptionsCustomer(traveller.order_customer_id)">
+                                View <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" :checked="flightChecked(traveller)" @change="flightOptionsCustomer(traveller.order_customer_id)">
                             </div>
                             <div class="col-sm-3">
                                 {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
@@ -124,21 +128,6 @@
                                             :types="inbound_type"
                                             :selected_item="traveller.selected_inbound_addon">
                                         </booking-form-flight-selector>
-                                    </div>
-                                </div>
-                                <div class="row" v-if="showOtherFlights">
-                                    <div class="col-sm-9">
-                                        <h4> Add On Flights </h4>
-                                        <div v-for="flight in other_flights" :key="flight.id">
-                                            <booking-form-flight-selector 
-                                                v-model="flight_selected"
-                                                :tour="tour" 
-                                                :traveller="traveller"
-                                                :airports="airports" 
-                                                :flights="flights" 
-                                                :types="tour_flight_optional_types">
-                                            </booking-form-flight-selector>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -220,6 +209,7 @@ export default {
             selected_inbound_flight: null,
             outbound_group_order: {},
             inbound_group_order: {},
+            ready: false
         }
     },
     async mounted() {
@@ -245,6 +235,7 @@ export default {
         this.debug > 1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
         this.debug > 1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
 
+        this.ready = true
         // TODO: get customer_order_details for type='flight' customer_order_id = this.order_id
         //       select the booked flights in this.outbound_flights, this.inbound_flights
         //       if this is a confirmed order, 
@@ -296,7 +287,6 @@ export default {
             this.travellers = travellers
             this.activated = true
         })
-
     },
     computed: {
         otherairports: function() {
@@ -306,13 +296,19 @@ export default {
             })
             return items
         },
-        checkCustomButton: function() {
+        disableCustomButton: function() {
             const customChanges = this.travellerFlightOptions.includes(true)
-            const selections = this.selected_outbound && this.selected_inbound
+            const selections = this.selected_outbound || this.selected_inbound
             return selections || customChanges
         }
     },
     methods: {
+        flightChecked(traveller) {
+            if (traveller.selected_outbound_addon || traveller.selected_inbound_addon) {
+                return true
+            } 
+            return true
+        },
         dmy(s) {
             return dates.makeDateFromString(s)
         },
@@ -344,8 +340,23 @@ export default {
             })
 
         },
+        hasCustomFlights(traveller) {
+            if (traveller.order_customer_id) {
+                this.flightOptionsCustomer(traveller.order_customer_id)
+                return true
+            }
+            return false
+        },
         customFlights() {
-            this.showCustomFlights = !this.showCustomFlights
+            let state = this.showCustomFlights
+            const that = this
+            this.travellers.map(traveller => {
+                if (that.hasCustomFlights(traveller)) {
+                    state = false
+                }
+            })
+            
+            this.showCustomFlights = !state
         },
         async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom) {
             this.debug>4 && console.log('[updateFlight] called', this.order_id, this.tour.id, flight_tour, 'flight_inventory_tour_id', flight_inventory_tour_id, flight_type, customer, 'token' + this.token)

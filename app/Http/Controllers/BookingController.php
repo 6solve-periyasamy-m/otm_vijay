@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Log;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use App\Models\Order;

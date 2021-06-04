@@ -170,7 +170,8 @@ class BookingController extends ApiController
         $customer_order_detail->orders_customer_id = $orderCustomer->id;
         $customer_order_detail->inventory_id = $flightTour->flight_inventory_id;
         $customer_order_detail->order_id = $order->id;
-        $customer_order_detail->type = $flightType;
+        $customer_order_detail->component_type = 'flight';
+        $customer_order_detail->type=$flightType;
         $customer_order_detail->inventory_tour_id = $flightTour->id;
         $customer_order_detail->date_time = now();
         $customer_order_detail->status = $status;
@@ -239,7 +240,7 @@ class BookingController extends ApiController
         //does this customer already exist?
         Log::info('search for '. $request->email_address);
         $customerExists = $customer->where('email_address', $request->email_address)->first();
-        Log::info('customer record ', $customerExists->toArray());
+
         if ($customerExists) {
             if ($this->logging) {
                 Log::info('customer exists record ', $customerExists->toArray());

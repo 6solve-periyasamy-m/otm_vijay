@@ -11,7 +11,7 @@
             </h5>
             <p class="caption" v-if="!lead_traveller && !showTraveller">Click here to start</p>
         </div>
-        <div class="ept-form card-body" v-if="showTraveller">
+        <div class="card-body" v-if="showTraveller">
             <h4>Your Details</h4>
             <div class="row">
                 <div class="col-sm-2 form-group field-separation">
@@ -173,7 +173,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6 form-group field-separation">
-                    <button v-if="validForm" type="button" class="btn btn-success" @click="storeTraveller">Save Traveller</button>
+                    <button v-if="validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                 </div>
             </div>
         </div>

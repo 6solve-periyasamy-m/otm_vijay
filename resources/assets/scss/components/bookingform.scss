@@ -1,7 +1,7 @@
 :root {
     --payment-button-color: #007bff;
 }
-.ept {
+.ept-form {
     margin-top: 1rem;
     margin-bottom: 1rem;
     border-bottom: 1px double #ccc;
@@ -102,6 +102,7 @@ hr.light {
 }
 .a-cards {
     padding: 1rem;
+    display: flex;
 }
 .a-card {
     width: 100%;
@@ -134,21 +135,72 @@ hr.light {
         box-shadow: 3px 3px 8px hsl(0, 0%, 80%);
     }
 }
-
-@media screen and (min-width: 40em) {
+.accommodations {
+    &__traveller {
+        font-size: 11px;
+    }
+    &__summary {
+        display: flex;
+        .card {
+            padding: 1rem;
+            margin: 1rem;
+        }
+    }
+}
+.mb-1 {
+    p {
+        margin-left: 1.25em;
+    }
+}
+.a-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background:blue;
+}
+.a-card {
+    flex: 0 1 auto;
+}
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.btn-small {
+    width: 3rem;
+    height: 1rem;
+    padding: 0;
+    vertical-align: inherit;
+    font-size: 12px;
+}
+@media screen and (min-width: 576px) {
     .a-cards {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
+        background:green;
     }
     .a-card {
-        flex: 0 1 calc(50% - 1em);
+        flex: 0 1 40%;
     }
 }
-@media screen and (min-width: 50em) {
+@media screen and (min-width: 768px) {
+    .a-cards {
+        background: orange;
+    }
     .a-card {
-        flex: 0 1 calc(20% - 1rem);
+        flex: 0 1 30%;
+    }
+}
+@media screen and (min-width: 992px) {
+    .a-cards {
+        background: red;
+    }
+    .a-card {
+        flex: 0 1 20%;
     }
 }
 

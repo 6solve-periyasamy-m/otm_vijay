@@ -1,68 +1,70 @@
 <template>
 <div class="container">
     <div class="ept" v-if="!removed">
-        <h3>Additional Traveller Details for Order {{order_id}} </h3>
+        <h3 v-if="developer">Additional Traveller Details for Order {{order_id}} </h3>
         <div class="ept-form" :id="form_id">
-            <div class="row">
-                <div class="col-sm-6 form-group field-separation">
-                    <label type="form-label" for="first_name" v-show="first_name">First name</label>
-                    <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
-                    <label class="valid"></label>
-                </div>
-                <div class="col-sm-6 form-group field-separation">
-                    <label type="form-label" for="last_name" v-show="last_name">Last name</label>
-                    <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
-                    <label class="valid"></label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 form-group field-separation">
-                    <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
-                    <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
-                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                    <label v-else class="valid">Email address</label>
-                </div>
-                <div class="col-sm-6 form-group field-separation">
-                    <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                    <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" id="mobile_number" class="form-control" />
-                    <label :class="{invalid: mobileNumberInvalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                    <label class="valid" v-else>Mobile Number</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 form-group field-separation has-dropdown">
-                    <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
-                        <option value="" disabled selected>Additional Phone</option>
-                        <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
-                        <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
-                        <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
-                        <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
-                    </select>
-                    <label class="form-label" for="other_phone_number" v-show="other_phone_number">{{otherNumberType}}</label>
-                    <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
-                    <label :class="{invalid: additionalNumberInvalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
-                    <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 form-group field-separation">
-                    <label class="form-label" for="date_of_birth">Date of Birth</label>
-                    <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
-                </div>
-                <div class="col-sm-2"></div>
-                <div class="col-sm-4 form-group field-separation">
-                    <button v-if="validForm" type="button" :formId="form_id" class="btn btn-success" @click="storeTraveller">Save Traveller</button>
-                    <button v-if="emptyForm" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
-                    <div v-else>
-                        <label for="include">Include</label>
-                        <input type="checkbox" v-model="included" :checked="included">
+            <div v-if="edit_fields">
+                <div class="row">
+                    <div class="col-sm-6 form-group field-separation">
+                        <label type="form-label" for="first_name" v-show="first_name">First name</label>
+                        <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
+                        <label class="valid"></label>
+                    </div>
+                    <div class="col-sm-6 form-group field-separation">
+                        <label type="form-label" for="last_name" v-show="last_name">Last name</label>
+                        <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
+                        <label class="valid"></label>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div v-for="err in errors">
-                    {{err}}
+                <div class="row">
+                    <div class="col-sm-6 form-group field-separation">
+                        <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
+                        <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
+                        <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
+                        <label v-else class="valid">Email address</label>
+                    </div>
+                    <div class="col-sm-6 form-group field-separation">
+                        <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
+                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" id="mobile_number" class="form-control" />
+                        <label :class="{invalid: mobileNumberInvalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
+                        <label class="valid" v-else>Mobile Number</label>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group field-separation has-dropdown">
+                        <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
+                            <option value="" disabled selected>Additional Phone</option>
+                            <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
+                            <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
+                            <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
+                            <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
+                        </select>
+                        <label class="form-label" for="other_phone_number" v-show="other_phone_number">{{otherNumberType}}</label>
+                        <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
+                        <label :class="{invalid: additionalNumberInvalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
+                        <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group field-separation">
+                        <label class="form-label" for="date_of_birth">Date of Birth</label>
+                        <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 form-group field-separation">
+                        <button v-if="validForm" type="button" :formId="form_id" class="btn btn-secondary" @click="storeTraveller">Save Traveller</button>
+                        <button v-if="emptyForm" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
+                    </div>
+                </div>
+                <div class="row" v-if="errors.length">
+                Errors:
+                    {{errors}}
+                </div>
+        
+            </div>
+            <div v-else>
+                {{first_name}} {{last_name}} <button class="btn btn-small btn-warning" @click="edit_fields = true">Edit</button>
             </div>
         </div>
     </div>
@@ -75,22 +77,26 @@ import {
 } from '../bus'
 export default {
     props: ['order_id', 'form_id', 'customer'],
-    // model: {
-    //     prop: 'form_id',
-    //     event: 'click'
-    // },
     mounted() {
-        this.setCustomer()
+        this.setCustomerFields()
         this.debug && console.log('Additional traveller formId: ' + this.form_id, ' order '+this.order_id, ' customer ID' + this.customer_id)
+    },
+    created() {
+        const that = this
+        this.$on('addTraveller', function(formId) {
+            console.log('adding', formId)
+            that.edit_fields = true
+        })
     },
     data() {
         return {
             debug: false,
+            developer: false,
             fields: [
                 'customer_id',
                 'first_name', 'middle_names', 'last_name', 
                 'date_of_birth', 'gender', 'email_address',
-                'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
+                'mobile_number', 'other_phone_number', 'other_phone_numnber_type'
             ],
             first_name: '',
             last_name: '',
@@ -109,8 +115,8 @@ export default {
             otherNumberType: '',
             additionalTraveller: 'checked',
             removed: false,
-            included: false,
-            errors: []
+            errors: [],
+            edit_fields: false
         }
     },
     computed: {
@@ -132,14 +138,15 @@ export default {
         }
     },
     methods: {
-        setCustomer() {
+        setCustomerFields() {
             const that = this
-            that['id'] =that.customer['id']
+            that['id'] = that.customer['id']
             this.fields.forEach(function(key,value) {
                 if (that.customer[key]) {
                     that[key] = that.customer[key]
                 }
             })
+            this.edit_fields = false
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
@@ -179,6 +186,7 @@ export default {
             return false
         },
         storeTraveller() {
+            const that = this
             axios.post('/api/booking/additional-traveller', {
                     form_id: this.form_id,
                     order_id: this.order_id,
@@ -192,12 +200,13 @@ export default {
                     date_of_birth: this.date_of_birth
                 })
                 .then(response => {
-                    this.include = 'checked'
-                    this.debug && console.log('stored', response)
+                    that.include = 'checked'
+                    that.edit_fields = false
+                    that.debug && console.log('stored', response)
                 })
                 .catch(e => {
                     console.log('submit error', e)
-                    this.errors.push(e)
+                    that.errors.push(e)
                 })
         },
         removeTraveller() {
