@@ -24,7 +24,7 @@ window.axios.defaults.headers.common = {
  Vue.component('booking-form-transport', require('./components/BookingFormTransport.vue').default);
  Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
  Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
-
+ Vue.component('vue-test', require('./components/VueTest.vue').default);
 // Vue.component('booking-store', require('./components/BookingStore.vue').default);
 
 //  Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);

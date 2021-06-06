@@ -41,6 +41,7 @@
                                     <dd class="definition__body"><a target="newtab" href="/booking/world-cup">Booking Form</a> tour for world-cup event</dd>
                                     <dd class="definition__body"><a target="newtab" href="/booking/check/tour/1">Check Tour for event 1</a> </dd>
                                     <dd class="definition__body"><a target="newtab" href="/booking/check/events">Check events</a></dd>
+                                    <dd class="definition__body"><a target="newtab" href="/booking/vuetest">Check front end working</a></dd>
 
                                 </dd>
                         </dl>
