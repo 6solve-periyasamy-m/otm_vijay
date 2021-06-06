@@ -29,7 +29,7 @@ Route::prefix("/booking")->group(function() {
 
     // debugging routes
     Route::get('/check/events', [TourController::class, 'getEvents']);
-    Route::get('/check/tours/{event}', [TourController::class, 'getTours']);
+    Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
 
     Route::get('/store', function() {
         return view('bookingStore');
