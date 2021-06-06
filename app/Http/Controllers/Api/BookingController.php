@@ -198,16 +198,16 @@ class BookingController extends ApiController
      * @param boolean $isLead
      * @return JSON (record saved)
      */
-    private function storeOrUpdateOrderCustomer($customer_id, Request $request, $isLead = false) 
+    private function storeOrUpdateOrderCustomer(Customer $customer, Request $request, $isLead = false) 
     {
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
         }
         $ordersCustomer = new OrdersCustomer();
-        Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer_id);
+        Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer->id);
         $ordersCustomerExists = $ordersCustomer
             ->where('order_id', $request->order_id)
-            ->where('customer_id', $customer_id)
+            ->where('customer_id', $customer->id)
             ->first();
         if ($ordersCustomerExists) {
             $ordersCustomer = $ordersCustomerExists;
@@ -216,8 +216,8 @@ class BookingController extends ApiController
             // Log::info('ordercustomer exists, updating');
         } else {
             $ordersCustomer->order_id = $request->order_id;
-            $ordersCustomer->customer_id = $customer_id;
-            Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer_id);
+            $ordersCustomer->customer_id = $customer->id;
+            Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer->id);
         }
         $ordersCustomer->is_lead_booker = $isLead;
         $ordersCustomer->travel_insurer = null;
@@ -277,7 +277,7 @@ class BookingController extends ApiController
         }
         $customer->save();
 
-        return $customer->id;
+        return $customer;
     }
 
     /**

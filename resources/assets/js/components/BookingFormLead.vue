@@ -203,7 +203,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: 10,
             showTraveller: false,
             lead_traveller: '',
             title: '',
@@ -358,7 +358,6 @@ export default {
                     const customer = response.data.customer
                     this.lead_traveller = customer.first_name + ' ' + customer.last_name
                     this.showTraveller = false
-                    // this.$emit('savedLeadCustomer', customer.first_name + ' ' + customer.last_name)
                 })
                 .catch(e => {
                     console.log('BookingFormLead.storeTraveller() error', e)
