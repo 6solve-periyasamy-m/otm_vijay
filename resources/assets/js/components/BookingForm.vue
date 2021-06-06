@@ -3,11 +3,15 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default">
-                    <div class="card-header">OTM Booking Form version 0.2.0 PRERELEASE - Lead/Additional/Flights/Custom Flights</div>
-                    <div class="card-body">
-                        <bookingform-header></bookingform-header>
-                            <h1 v-if="event != null">{{event.event_title}}</h1>
-                            <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
+                    <div class="card-header">
+                        OTM Booking Form version 0.4.0 PRERELEASE - Lead/Additionals/Flights/Accommodation
+                        <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
+                        <button class="btn btn-small btn-themed cool" @click="changeTheme('cool')">Cool</button>
+                        <button class="btn btn-small btn-themed warm" @click="changeTheme('warm')">Warm</button>
+                        <button class="btn btn-small btn-themed action" @click="changeTheme('action')">Action</button>
+                    </div>
+                    <bookingform-header :event="event" :tour="tour"></bookingform-header>
+                    <div id="booking-form" class="card-body">
                             <div v-if="selectOrder.length>1 && order_selected === null">
                                 <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected" >
                                     <option value="">Select an Order</option>
@@ -39,7 +43,6 @@
 
 <script>
 import BookingFormTour from './BookingFormTour.vue'
-import dates from '../utilities'
 import { bus } from '../bus'
 function getCookie(cname) {
   var name = cname + "=";
@@ -121,6 +124,26 @@ export default {
         }
     },
     methods: {
+        changeTheme(theme) {
+            const bookingForm = document.querySelector('#booking-form')
+            bookingForm.classList.remove('cool-theme')
+            bookingForm.classList.remove('warm-theme')
+            bookingForm.classList.remove('action-theme')
+            switch (theme) {
+                case 'cool':
+                    bookingForm.classList.add('cool-theme')
+                    break;
+                case 'warm':
+                    bookingForm.classList.add('warm-theme')
+                    break;
+                case 'action':
+                    bookingForm.classList.add('action-theme')
+                    break;
+
+                default: 
+                    break;
+            }
+        },
         async getOrderId() {
             let that = this
             // console.log('BOOKING FORM: getOrderId call') 
@@ -138,12 +161,36 @@ export default {
                 console.log('error creating an order', e)
             })
         },
-        startDate(event) {
-            return dates.makeDateFromString(event.event_start_date)
-        },
-        endDate(event) {
-            return dates.makeDateFromString(event.event_end_date)
-        },
     }
 }
 </script>
+<style scoped>
+    .cool-theme {
+        --payment-button-color: #007bff;
+        --card-background: #c2e2c5;
+        --card-body-background: #72a7c2;
+        --booking-form-background: #e1e7c9;
+    }
+    .warm-theme {
+        --payment-button-color: #007bff;
+        --card-background: #ff7d7d;
+        --card-body-background: #fdde88;
+        --booking-form-background: #ff9c2b;
+    }
+    .action-theme {
+        --payment-button-color: #007bff;
+        --card-background: #ffaf04;
+        --card-body-background: #4281ff;
+        --booking-form-background: #ffffff;
+    }
+    button.btn-themed.cool {
+        background: #7efafa;
+    }
+    button.btn-themed.warm {
+        background: #f38181;
+    }
+    button.btn-themed.action {
+        background: #2c89f3;
+    }
+
+</style>

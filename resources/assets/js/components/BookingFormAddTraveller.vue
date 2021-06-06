@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <div class="ept" v-if="!removed">
+    <div class="card-options" v-if="!removed">
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}} </h3>
         <div class="ept-form" :id="form_id">
             <div v-if="edit_fields">
