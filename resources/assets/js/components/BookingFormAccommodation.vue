@@ -56,7 +56,7 @@
                                 <span v-for="traveller in travellers" :key="traveller.customer_id">
                                     <div class="accommodations__traveller">{{fullName(traveller)}}</div>
                                     <input 
-                                        @change="handleChange($event, traveller.id, accommodation.inventory_id)"
+                                        @change="booked = handleChange($event, traveller.id, accommodation.inventory_id)"
                                         :checked="traveller.id == booking.orders_customer_id" 
                                         :value="accommodation.id"
                                         :name="`${traveller.email_address}`" 
@@ -149,8 +149,10 @@
                         </div>
                     </article>
                 </section>
-                <button v-if="!makeBooking" @click="makeBooking = true">Change</button>
-                <button v-else @click="submit">Change booking</button>
+                <button class="btn btn-primary" v-if="!makeBooking" @click="makeBooking = true">Change</button>
+                <div v-else>
+                    <button class="btn btn-primary" @click="submit">Continue</button>
+                </div>
             </div>
         </div>
     </div>
@@ -176,13 +178,17 @@ export default {
             booking: {},
             makeBooking: false,
             bookings:[],
-            occupancy: []
+            occupancy: [],
+            booked: false
         }
     },
     async mounted() {
         let that = this
-        console.log('Accommodation options active', this.order_token)
-        await bus.$on('setOrderToken', (token, order_id) => {
+        console.log('Accommodation options active', this.order_token, this.occupancy)
+        bus.$on('bookingsLoaded', (bookings)  => {
+            bookings.map(b => that.reduceOccupancy(b.accommodation))
+        })
+        bus.$on('setOrderToken', (token, order_id) => {
             this.debug>2 && console.log('>>> ACCOMMODATION token detected ', token)
             that.token = token
             that.order_id = order_id
@@ -197,20 +203,16 @@ export default {
         await this.getAccommodationOptions()
     },
     methods: {
-        occupancyRemaining(accommodation) {
-            console.log('occupancy remaining: ', accommodation)
-//            this.occupancy[accommodation] = 
-            // console.log('filtered', ids)
-            // ids = ids.map(b => b.accommodation.accommodation_id)
-            // console.log('ampped', ids)
-            // const occupancy = this.accommodations.map(a => {
-            //     return a.maximum_occupancy
-            // })
-            // console.log(ids, occupancy)
-            // //this.bookings.filter(b => b.accommodation.accomomodation_id != booking.accommodation.accommodation_id).map(b => b.accommodation.accommodation_id)
-            // // console.log(ids)
-            // return (ids.includes(booking.accommodation.accommodation_id))
-            return true
+        reduceOccupancy(accommodation) {
+            if (this.occupancy[accommodation.accommodation_id] > 0) {
+                this.occupancy[accommodation.accommodation_id] -= 1
+                console.log('occupancy remaining: ', accommodation.accommodation_id, this.occupancy[accommodation.accommodation_id])
+                return true
+            } 
+            return false
+        },
+        occupancyRemaining(accommodation, booked) {
+            return this.occupancy[accommodation.accommodation_id]
         },
         shared(booking) {
             console.log('bookings', this.bookings)
@@ -223,18 +225,18 @@ export default {
             return false
         },
         async loadBooking() {
+            const that = this
             console.log('loadBooking() accommodation booking data ', this.token, `${this.tour.id}/${this.order_id}/${this.token}`)
             await axios.get(`/api/booking/accommodation/customer/${this.tour.id}/${this.order_id}/${this.token}`)
                 .then(response => {
-                    this.bookings = response.data.bookings
-                    // reduce occupancyRemaining[accommodation.id]
-                    /// this.occupancyRemaining[accommodation_id] ???
-                    //this.bookings.accommodations.map(a => a.value = 1)
-                    console.log('accommodations booking data loaded', this.bookings)
+                    that.bookings = response.data.bookings
+                    console.log('loadBooking: ', this.bookings)
+                    that.$emit('bookingsLoaded', this.bookings)
                 })
                 .catch(error => console.log(error))
         },
         handleChange(e, traveller, id) {
+            const that = this
             this.bookings = []
             this.accommodations.filter(o=>o.id===id).map(o=>o.value=true)
             this.accommodations.filter(o=>o.id!==id).map(o=>o.value=false)
@@ -244,13 +246,19 @@ export default {
                 const accommodation_id = e.target.value
                 console.log('handleChange: customer ', e.target.value, customer, accommodation)
                 if (e.target.value == accommodation.id && customer != null) {
-                    axios.post(`/api/booking/accommodation/${this.tour.id}/${customer}/${this.token}/${accommodation_id}/${this.order_id}`)
+                    if (this.reduceOccupancy(accommodation)) {
+                        axios.post(`/api/booking/accommodation/${this.tour.id}/${customer}/${this.token}/${accommodation_id}/${this.order_id}`)
                         .then(response => {
                             console.log('accommodation change response:', response)
-                            this.loadBooking()
+                            that.loadBooking()
                             
                         })
                         .catch(error => console.log(error))
+                    } else {
+                        alert('No occupancy left here')
+                        return false
+                        // disable further bookings for this accommodation
+                    }
                 }
             })
         },
@@ -275,10 +283,12 @@ export default {
             this.showAccommodation = !this.showAccommodation
         },
         async getAccommodationOptions() {
+            const that = this
             const url = `/api/booking/accommodation/${this.tour.id}`
             await axios.get(url)
                 .then(response => {
-                    this.accommodations = response.data.accommodations
+                    that.accommodations = response.data.accommodations
+                    that.accommodations.map(accommodation => that.occupancy[accommodation.accommodation_id] = accommodation.maximum_occupancy)
                 })
                 .catch(error => console.log(error))
         },
