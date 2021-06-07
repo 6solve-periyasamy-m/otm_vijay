@@ -206,7 +206,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: 6,
             email: '',
             showTraveller: false,
             lead_traveller: '',
@@ -346,7 +346,11 @@ export default {
             return false
         },
         storeTraveller() {
-            this.debug && console.log('BookingFormLead.storeTraveller() tour:',this.tour)
+            this.debug && console.log('BookingFormLead.storeTraveller() tour:',this.tour,this.order_id)
+            if (!this.order_id) {
+                alert('No order established!');
+                return;
+            }
             axios.post('/api/booking/lead-traveller', {
                     tour: this.tour,
                     order_id: this.order_id,

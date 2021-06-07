@@ -42,7 +42,7 @@
                         <label class="form-label" for="other_phone_number" v-show="other_phone_number">{{otherNumberType}}</label>
                         <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
                         <label :class="{invalid: additionalNumberInvalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
-                        <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
+                        <label class="valid" v-else>{{other_phone_number_type}} Number</label>
                     </div>
                 </div>
                 <div class="row">
@@ -91,7 +91,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: true,
             developer: false,
             fields: [
                 'customer_id',
@@ -204,8 +204,10 @@ export default {
                     that.include = 'checked'
                     that.edit_fields = false
                     that.debug && console.log('stored', response)
-                    const customer = response.customer
-                    this.customer_id = customer.id
+                    const customer = response.data.customer
+                    const orderCustomer = response.data.orderCustomer
+                    this.id = orderCustomer.customer_id
+                    this.customer_id = orderCustomer.id
                     this.first_name = customer.first_name
                     this.middle_names = customer.middle_names
                     this.last_name = customer.last_name

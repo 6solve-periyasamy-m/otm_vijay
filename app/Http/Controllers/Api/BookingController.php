@@ -312,8 +312,10 @@ class BookingController extends ApiController
         }
         $customer = $this->storeOrUpdateCustomer($request);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, false);
+Log::info('orderCustomer', $orderCustomer->toArray());
+Log::info('customer', $customer->toArray());
 
-        return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
+        return json_encode(['success' => true, 'customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
 
     public function removeAdditionalTraveller(Request $request)
@@ -326,7 +328,7 @@ class BookingController extends ApiController
         }
         $orderCustomer->deleted_at = date('Y-m-d H:i:s');
         $orderCustomer->save();
-        
+
         return json_encode(['success' => true, 'customer' => $customer]);
     }
         /**
