@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AirlinesController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\AccommodationController;
 
 /*
@@ -25,13 +26,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 /* valid public routes */
-Route::get('/booking/events',           [ApiController::class, 'getEvents']);
-Route::get('/booking/tours/{event_id}', [ApiController::class, 'getTours']);
-Route::get('/booking/tour/{id}',        [ApiController::class, 'getBasicTourInformation']);
+Route::get('/booking/events',           [TourController::class, 'getEvents']);
+Route::get('/booking/tours/{event_id}', [TourController::class, 'getTours']);
+Route::get('/booking/tour/{id}',        [TourController::class, 'getBasicTourInformation']);
 
 Route::get('/booking/airlines',         [AirlinesController::class, 'getAirlines']);
 Route::get('/booking/airports',         [AirlinesController::class, 'getAirports']);
 
+Route::get('/booking/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
 // Travellers
 Route::get('/booking/tourparty', [CustomerController::class, 'getTravellers']);
 Route::get('/booking/customer/{token}', [CustomerController::class, 'getCustomerOrderByToken']);
@@ -49,9 +51,11 @@ Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [Accommodat
 Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
 
 // POST routes (requires AUTH)
+
 // store travellers
 Route::post('/booking/lead-traveller', [BookingController::class, 'leadTraveller']);
 Route::post('/booking/additional-traveller', [BookingController::class, 'additionalTraveller']);
+Route::post('/booking/additional-traveller/remove', [BookingController::class, 'removeAdditionalTraveller']);
 // create Booking Order
 Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
 // create Flights Order

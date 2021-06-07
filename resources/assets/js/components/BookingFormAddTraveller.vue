@@ -55,6 +55,7 @@
                     <div class="col-sm-10 form-group field-separation">
                         <button v-if="validForm" type="button" :formId="form_id" class="btn btn-secondary" @click="storeTraveller">Save Traveller</button>
                         <button v-if="emptyForm" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
+                        <p class="small" v-else>To remove an additional traveller, clear the name fields first</p>
                     </div>
                 </div>
                 <div class="row" v-if="errors.length">
@@ -64,7 +65,7 @@
         
             </div>
             <div v-else>
-                {{first_name}} {{last_name}} <button class="btn btn-small btn-warning" @click="edit_fields = true">Edit</button>
+                {{first_name}} {{last_name}} <button class="btn btn-small btn-warning" @click="edit_fields = true">Edit</button> 
             </div>
         </div>
     </div>
@@ -146,7 +147,7 @@ export default {
                     that[key] = that.customer[key]
                 }
             })
-            this.edit_fields = false
+            this.edit_fields = true
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
@@ -203,6 +204,16 @@ export default {
                     that.include = 'checked'
                     that.edit_fields = false
                     that.debug && console.log('stored', response)
+                    const customer = response.customer
+                    this.customer_id = customer.id
+                    this.first_name = customer.first_name
+                    this.middle_names = customer.middle_names
+                    this.last_name = customer.last_name
+                    this.email_address = customer.email_address
+                    this.mobile_number = customer.mobile_number
+                    this.other_phone_number = customer.other_phone_number
+                    this.other_phone_number_type = customer.other_phone_number_type
+                    this.date_of_birth = customer.date_of_birth
                 })
                 .catch(e => {
                     console.log('submit error', e)
@@ -210,8 +221,15 @@ export default {
                 })
         },
         removeTraveller() {
-            this.removed = true
-            // this.$emit('remove', this.form_id) <- removed as looks wrong and no 'remove' event handler
+            const that = this
+            axios.post(`/api/booking/additional-traveller/remove`, {
+                order_customer_id: this.customer_id
+            })
+            .then(response => {
+                that.removed = true
+            })
+            .catch(error => console.log('remove customer error', error))            
+            
             bus.$emit('removeTraveller', this.form_id)
         }
     }

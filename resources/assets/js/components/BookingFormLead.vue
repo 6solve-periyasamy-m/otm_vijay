@@ -7,7 +7,10 @@
                     Lead Traveller details {{lead_traveller? ": " + lead_traveller : '' }}
                     <div v-if="form_info">on order {{order_id}}</div>
                 </button>
-                
+                <div v-if="!lead_traveller">
+                    <input v-model="email" type="email" width="20" placeholder="Retrive booking by email" />
+                    <button @click="retrieveOrder()" class="btn btn-small btn-primary">Check</button>
+                </div>                
             </h5>
             <p class="caption" v-if="!lead_traveller && !showTraveller">Click here to start</p>
         </div>
@@ -203,7 +206,8 @@ export default {
     },
     data() {
         return {
-            debug: 10,
+            debug: false,
+            email: '',
             showTraveller: false,
             lead_traveller: '',
             title: '',
@@ -265,6 +269,22 @@ export default {
         }
     },
     methods: {
+        retrieveOrder() {
+            // if the cookie does not retrieve an active order
+            // perhaps we can do so with an email address
+            let that = this
+            axios.get(`/api/booking/findOrderByEmail/${this.email}`).then(response => {
+                const data = response.data.data
+                console.log('data', data)
+                if (data.length === 1) {
+                    console.log('setting order token', data[0])
+                    bus.$emit('setOrderToken', data[0].token, data[0].order_id)
+                }
+                alert('You have one active order retrieved.  Refresh browser')
+            }).catch(error => { 
+                console.log(error)
+            })
+        },
         setCustomer(customer) {
             this.debug && console.log('Lead Traveller customer', customer)
             let that = this

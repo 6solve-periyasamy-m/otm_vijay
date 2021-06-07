@@ -124,7 +124,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 0,
+            debug: 4,
             activated: false,
 
             token: null,

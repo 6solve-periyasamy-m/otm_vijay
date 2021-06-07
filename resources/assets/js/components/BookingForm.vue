@@ -88,24 +88,25 @@ export default {
             await axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
                 .then(response => {
                     that.debug && console.log('>>>> customer orders found', response)
-                    that.orders = response.data
-                    that.debug && console.log('Orders = ', that.orders)
-                    if (that.orders.length < 1) {
+                    that.orders = response.data.orders
+                    that.debug && console.log('Orders = ', that.orders, typeof that.orders == 'undefined')
+                    if (typeof that.orders === 'undefined') {
                         console.log('*** expired order cookie', that.bookingOrderToken)
                         that.order_id = null
                         //that.getOrderId()
                         alert('Your order appears to have expired, please rebook or contact us.')
                     } else {
-                        if (that.orders.length > 1) {
-                            that.selectOrder = that.orders
-                        } else {
-                            that.order_selected = that.orders[0].id
-                        }
+                        // if (that.orders.length > 1) {
+                        //     alert('**** more than one order found, please contact support ***')
+                        //     that.selectOrder = that.orders
+                        // } else {
+                        that.order_selected = that.orders.id
+                        // }
                         that.debug && console.log('order selected = ', that.order_selected, that.orders)
-                        bus.$emit('customerLoaded', that.orders[0].customer, that.bookingOrderToken)
-                        bus.$emit('additionalTravellersLoaded', that.orders[0].customers)
+                        bus.$emit('customerLoaded', that.orders.customer, that.bookingOrderToken)
+                        bus.$emit('additionalTravellersLoaded', that.orders.customers)
                         that.order_id = that.order_selected
-                        that.token = that.orders[0].token
+                        that.token = that.orders.token
                         that.debug && console.log('^^^^^ BookingForm set token', that.token)
                         bus.$emit('setOrderToken', that.token, that.order_id)
                     }
@@ -116,12 +117,12 @@ export default {
         } else {
             console.log('bookingOrderToken NOT detected', that.bookingOrderToken)
         }
-        if (typeof this.orders == 'undefined' || !this.orders.length) {
-            this.getOrderId();
-            this.debug && console.log('created order = ', this.orders)
-        } else {
-            this.debug && console.log('BOOKING FORM existing order = ', this.orders)
-        }
+        // if (typeof this.orders == 'undefined' || !this.orders.length) {
+        //     this.getOrderId();
+        //     this.debug && console.log('created order = ', this.orders)
+        // } else {
+        //     this.debug && console.log('BOOKING FORM existing order = ', this.orders)
+        // }
     },
     methods: {
         changeTheme(theme) {
@@ -146,7 +147,7 @@ export default {
         },
         async getOrderId() {
             let that = this
-            // console.log('BOOKING FORM: getOrderId call') 
+            console.log('BOOKING FORM: getOrderId call') 
             axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
                 event: this.event.id

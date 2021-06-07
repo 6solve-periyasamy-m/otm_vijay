@@ -19,6 +19,8 @@ use App\Models\FlightInventoryTour;
 class BookingController extends ApiController
 {
 
+    protected $logging = true;
+
     private function getFlightTour($flight_inventory_tour_id)
     {   
         $flightTours = new FlightInventoryTour();
@@ -308,13 +310,25 @@ class BookingController extends ApiController
         if ($this->logging) {
             Log::info('additionalTraveller', $request->toArray());
         }
-
         $customer = $this->storeOrUpdateCustomer($request);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, false);
 
         return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
 
+    public function removeAdditionalTraveller(Request $request)
+    {
+        $order_customer_id = $request->order_customer_id;
+        $orderCustomer = OrdersCustomer::find($order_customer_id);
+        $customer = Customer::find($orderCustomer->customer_id);
+        if ($this->logging) {
+            Log::info('removing Additional Traveller order_customer_id:' . $order_customer_id);
+        }
+        $orderCustomer->deleted_at = date('Y-m-d H:i:s');
+        $orderCustomer->save();
+        
+        return json_encode(['success' => true, 'customer' => $customer]);
+    }
         /**
      * updateOrderCustomer - adds fields to existing orderCustomer record for a single traveller
      *
