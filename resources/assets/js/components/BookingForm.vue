@@ -59,12 +59,21 @@ function getCookie(cname) {
   }
   return "";
 }
+function deleteCookie( name, path, domain ) {
+  if (getCookie(name) ) {
+      console.log('delte cookie found ', name)
+    document.cookie = name + "=" +
+      ((path) ? ";path="+path:"")+
+      ((domain)?";domain="+domain:"") +
+      ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+  }
+}
 export default {
     props: ['tour', 'event', 'name'],
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 6,
             formInfo: false,
             token: '',
             travellers: [],
@@ -83,6 +92,7 @@ export default {
         bus.$emit('debugOverride', this.debug)
 
         that.bookingOrderToken = getCookie('OTM_booking_order_token')
+        console.log('Cookie read:', that.bookingOrderToken)
         if (typeof that.bookingOrderToken != 'undefined' && that.bookingOrderToken.length) {
             this.debug>3 && console.log('BookingOrderToken', that.bookingOrderToken)
             await axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
@@ -90,25 +100,19 @@ export default {
                     that.orders = response.data.orders
                     that.debug>1 && console.log('Orders = ', that.orders)
                     if (typeof that.orders === 'undefined') {
-                        console.log('*** expired order cookie', that.bookingOrderToken)
+                        deleteCookie('OTM_booking_order_token')
                         that.order_id = null
-                        // that.getOrderId() -- maybe?
+                        that.getOrderId()
                         alert('Your order appears to have expired, please rebook or contact us.')
                     } else {
-                        // api call is only returning one order (using first() in query)
-                        // 
-                        // if (that.orders.length > 1) {
-                        //     alert('**** more than one order found, please contact support ***')
-                        //     that.selectOrder = that.orders
-                        // } else {
                         that.order_selected = that.orders.id
-                        // }
-                        that.debug && console.log('order selected = ', that.order_selected, that.orders)
                         bus.$emit('customerLoaded', that.orders.customer, that.bookingOrderToken)
                         bus.$emit('additionalTravellersLoaded', that.orders.customers)
                         that.order_id = that.order_selected
                         that.token = that.orders.token
                         bus.$emit('setOrderToken', that.token, that.order_id)
+
+                        that.debug && console.log('order selected = ', that.order_selected, that.orders)
                         that.debug>3 && console.log('BookingForm set token', that.token)
                     }
                 })
@@ -117,12 +121,6 @@ export default {
                 })
         } else {
             console.log('bookingOrderToken NOT detected', that.bookingOrderToken)
-        }
-        if (typeof this.orders_id == 'undefined' || !this.order_id) {
-            this.getOrderId();
-            this.debug && console.log('Created new order = ', this.orders)
-        } else {
-            this.debug && console.log('BOOKING FORM existing order = ', this.orders)
         }
     },
     methods: {

@@ -9,7 +9,7 @@
                     <p class="caption" v-if="!lead_traveller && !showAdditional">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
                 </h5>
             </div>
-            <div class="card-body" v-if="showAdditional">
+            <div class="card-body" v-show="showAdditional">
                 <div v-if="showInstruction">
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
@@ -24,7 +24,7 @@
                 <button
                     type="button"
                     class="btn btn-primary"
-                    @click="showAdditional=false">
+                    @click="submit">
                     All travellers entered
                 </button>
             </div>
@@ -55,6 +55,9 @@
             })
         },
         methods: {
+            submit() {
+                this.$forceUpdate();
+            },
             setCustomers(customers) {
                 this.debug && console.log('BookingFormAdditional.setCustomers(customers) customers:', customers)
                 customers.forEach(customer => {

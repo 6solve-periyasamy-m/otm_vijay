@@ -19,7 +19,7 @@
         <div class="container">
           <div class="card-options">
             <div class="ept-form">
-              <h4 v-if="!makeBooking">Accommodation selected</h4>
+              <h4 v-if="!makeBooking && accommodations.length">Accommodation selected</h4>
               <h3 v-if="makeBooking">Available accommodation options</h3>
               <section class="col a-cards accommodations" v-if="makeBooking">
                 <article
@@ -216,30 +216,33 @@ export default {
       booked: false,
     };
   },
+  async created() {
+    bus.$on('customerLoaded', (leadTraveller) => {
+      this.debug > 2 && console.log('Accommodation lead traveller loaded', leadTraveller);
+      //this.travellers.push(leadTraveller)
+    })
+    bus.$on("additionalTravellersLoaded", (travellers) => {
+      this.debug > 2 && console.log("Accommodation: travellers loaded", travellers);
+      travellers.map(traveller => this.travellers.push(traveller));
+    })
+    await this.getAccommodationOptions()
+  },
   async mounted() {
     let that = this;
     console.log(
       "Accommodation options active",
       this.order_token,
       this.occupancy
-    );
+    )
     bus.$on("bookingsLoaded", (bookings) => {
       bookings.map((b) => that.reduceOccupancy(b.accommodation));
-    });
+    })
     bus.$on("setOrderToken", (token, order_id) => {
-      this.debug > 2 && console.log(">>> ACCOMMODATION token detected ", token);
-      that.token = token;
-      that.order_id = order_id;
-      that.loadBooking();
-    });
-  },
-  async created() {
-    bus.$on("additionalTravellersLoaded", (travellers) => {
-      this.debug > 2 &&
-        console.log("Accommodation: travellers loaded", travellers);
-      this.travellers = travellers;
-    });
-    await this.getAccommodationOptions();
+      this.debug > 2 && console.log(">>> ACCOMMODATION token detected ", token)
+      that.token = token
+      that.order_id = order_id
+      that.loadBooking()
+    })
   },
   methods: {
     reduceOccupancy(accommodation) {
@@ -282,6 +285,7 @@ export default {
           that.bookings = response.data.bookings;
           console.log("loadBooking: ", this.bookings);
           that.$emit("bookingsLoaded", this.bookings);
+          that.makeBooking = this.bookings == null || typeof this.bookings == 'undefined' || this.bookings.length == 0
         })
         .catch((error) => console.log(error));
     },
@@ -328,52 +332,52 @@ export default {
         if (accommodation.pax) {
           console.log("submitted: ", accommodation.pax);
           accommodation.pax.map((booking, value) => {
-            console.log("booking", booking, value);
-          });
+            console.log("booking", booking, value)
+          })
         }
-      });
+      })
       this.travellers.map((traveller) => {
-        console.log(traveller.email);
-      });
-      this.makeBooking = false;
+        console.log(traveller.email)
+      })
+      this.makeBooking = false
     },
     fullName(t) {
-      return `${t.first_name} ${t.last_name}`;
+      return `${t.first_name} ${t.last_name}`
     },
     toggleAccommodation() {
-      this.showAccommodation = !this.showAccommodation;
+      this.showAccommodation = !this.showAccommodation
     },
     async getAccommodationOptions() {
       const that = this;
-      const url = `/api/booking/accommodation/${this.tour.id}`;
+      const url = `/api/booking/accommodation/${this.tour.id}`
       await axios
         .get(url)
         .then((response) => {
-          that.accommodations = response.data.accommodations;
+          that.accommodations = response.data.accommodations
           that.accommodations.map(
             (accommodation) =>
               (that.occupancy[accommodation.accommodation_id] =
                 accommodation.maximum_occupancy)
           );
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
     },
     getLocations() {
       axios
         .get("api/booking/tour/locations/{tour}")
         .then((response) => (this.location = response.data))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
     },
     // matching accommodation to locations seems complex
     getHotels() {
       axios
         .get("api/booking/hotels/{location}")
         .then((response) => (this.hotels = response.data))
-        .catch((error) => console.log(error.message));
+        .catch((error) => console.log(error.message))
     },
     bookingTime(s) {
       //console.log('bookingTime(s)', s)
-      return dates.bookingTime(s);
+      return dates.bookingTime(s)
     },
   },
 };

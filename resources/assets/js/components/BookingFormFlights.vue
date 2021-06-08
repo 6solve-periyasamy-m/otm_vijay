@@ -174,37 +174,6 @@ export default {
             ready: false
         }
     },
-    async mounted() {
-        let that = this
-        bus.$on('debugOverride', (debug) => that.debug = debug)
-        bus.$on('customerLoaded', (leadTraveller => that.leadTraveller = leadTraveller))
-        bus.$on('setOrderToken', (token, order_id) => {
-            that.token = token
-            that.order_id = order_id
-            this.debug && console.log('BFFlights: setOrderToken ::  ', token, order_id)
-        })
-
-        await this.getFlights(this.tour.id)
-        await this.getTourParty(this.order_id)
-
-        this.debug && console.log('MOUNTED: order_id & gettourParty', this.order_id, this.travellers)
-
-        await this.loadFlights(this.order_id)
-        this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
-        this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
-        this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
-        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out_date_time ', this.order_id)
-        this.debug > 1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
-        this.debug > 1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
-
-        this.ready = true
-        // TODO: get customer_order_details for type='flight' customer_order_id = this.order_id
-        //       select the booked flights in this.outbound_flights, this.inbound_flights
-        //       if this is a confirmed order, 
-        //          lock the flights for group
-        //          if custom flights are changed, 
-        //              add transactions to cancel previous booking and rebook
-    },
     created() {
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom) => {
             let that = this
@@ -239,6 +208,7 @@ export default {
             // leadTraveller['selected_outbound_addon'] = null
             // leadTraveller['selected_inbound_addon'] = null
             this.leadTraveller = leadTraveller
+            this.activated = true
         })
         bus.$on('additionalTravellersLoaded', (travellers) => {
             this.debug > 2 && console.log('BFF: additionalTravellers loaded', travellers)
@@ -249,6 +219,37 @@ export default {
             this.travellers = travellers
             this.activated = true
         })
+    },
+    async mounted() {
+        let that = this
+        bus.$on('debugOverride', (debug) => that.debug = debug)
+        bus.$on('customerLoaded', (leadTraveller => that.leadTraveller = leadTraveller))
+        bus.$on('setOrderToken', (token, order_id) => {
+            that.token = token
+            that.order_id = order_id
+            this.debug && console.log('BFFlights: setOrderToken ::  ', token, order_id)
+        })
+
+        await this.getFlights(this.tour.id)
+        await this.getTourParty(this.order_id)
+
+        this.debug && console.log('MOUNTED: order_id & gettourParty', this.order_id, this.travellers)
+
+        await this.loadFlights(this.order_id)
+        this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
+        this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
+        this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
+        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out_date_time ', this.order_id)
+        this.debug > 1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
+        this.debug > 1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
+
+        this.ready = true
+        // TODO: get customer_order_details for type='flight' customer_order_id = this.order_id
+        //       select the booked flights in this.outbound_flights, this.inbound_flights
+        //       if this is a confirmed order, 
+        //          lock the flights for group
+        //          if custom flights are changed, 
+        //              add transactions to cancel previous booking and rebook
     },
     computed: {
         otherairports: function() {

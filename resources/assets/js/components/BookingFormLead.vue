@@ -203,10 +203,12 @@ export default {
             console.log('EVENT customer loaded', customer)
             this.setCustomer(customer)
         })
+        bus.$on('setOrderToken', (token) => that.token = token)
     },
     data() {
         return {
             debug: 6,
+            token: null,
             email: '',
             showTraveller: false,
             lead_traveller: '',
@@ -346,6 +348,7 @@ export default {
             return false
         },
         storeTraveller() {
+            let that = this
             this.debug && console.log('BookingFormLead.storeTraveller() tour:',this.tour,this.order_id)
             if (!this.order_id) {
                 alert('No order established!');
@@ -382,6 +385,7 @@ export default {
                     const customer = response.data.customer
                     this.lead_traveller = customer.first_name + ' ' + customer.last_name
                     this.showTraveller = false
+                    bus.$emit('customerLoaded', customer, that.token)
                 })
                 .catch(e => {
                     console.log('BookingFormLead.storeTraveller() error', e)
