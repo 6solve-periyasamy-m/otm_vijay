@@ -34,13 +34,26 @@ import dates from '../utilities'
 import { bus } from '../bus'
 export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
+    data() {
+        return {
+            debug: false,
+            flightId: '',
+            tour_flight_type: '',
+            flight_selected: '',
+            tour_flight_type: {},
+            tour_flight_types: [],
+            tour_flights_filtered: [],
+            tour_flights: '',
+            flight: {}
+        }
+    },
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
         // bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
         //     console.log('&&&&&&******^^^^^ BFFS: EVENT ON setting customFlight for ', customtraveller, selected)
         // })
-        this.debug && console.log('B.F.F.S', [ this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom])
+        this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom)
     },
     created() {
         this.tour_flights = this.flights
@@ -54,23 +67,14 @@ export default {
         flightId: function(flight, oldFlight) {
             if (flight != oldFlight && flight != null) {
                 this.debug>4 && console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
-                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
+                if (oldFlight > 0) {
+                    bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
+                } else {
+                    this.debug>2 && console.log("BFFS loaded, not a change so no event emitted")
+                }
             } else {
                 this.debug>6 && console.log('BFFS Flight was NULL, flightId watch fired but not flight was selected yet')
             }
-        }
-    },
-    data() {
-        return {
-            debug: 0,
-            flightId: '',
-            tour_flight_type: '',
-            flight_selected: '',
-            tour_flight_type: {},
-            tour_flight_types: [],
-            tour_flights_filtered: [],
-            tour_flights: '',
-            flight: {}
         }
     },
     methods: {

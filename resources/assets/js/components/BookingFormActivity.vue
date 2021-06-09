@@ -23,7 +23,7 @@ export default {
     props: ['tour', 'order_id', 'order_token'],
     data() {
         return {
-            debug: 0,
+            debug: false,
             activated: false,
         }
     },

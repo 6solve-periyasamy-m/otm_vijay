@@ -200,14 +200,13 @@ export default {
 
         this.debug && console.log('OTM Booking Lead Customer form loaded', this.order_id)
         bus.$on('customerLoaded', (customer) => {
-            console.log('EVENT customer loaded', customer)
             this.setCustomer(customer)
         })
         bus.$on('setOrderToken', (token) => that.token = token)
     },
     data() {
         return {
-            debug: 6,
+            debug: false,
             token: null,
             email: '',
             showTraveller: false,
@@ -277,9 +276,7 @@ export default {
             let that = this
             axios.get(`/api/booking/findOrderByEmail/${this.email}`).then(response => {
                 const data = response.data.data
-                console.log('data', data)
                 if (data.length === 1) {
-                    console.log('setting order token', data[0])
                     bus.$emit('setOrderToken', data[0].token, data[0].order_id)
                 }
                 alert('You have one active order retrieved.  Refresh browser')

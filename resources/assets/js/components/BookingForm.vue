@@ -61,7 +61,6 @@ function getCookie(cname) {
 }
 function deleteCookie( name, path, domain ) {
   if (getCookie(name) ) {
-      console.log('delte cookie found ', name)
     document.cookie = name + "=" +
       ((path) ? ";path="+path:"")+
       ((domain)?";domain="+domain:"") +
@@ -73,7 +72,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: 6,
+            debug: false,
             formInfo: false,
             token: '',
             travellers: [],
@@ -92,7 +91,7 @@ export default {
         bus.$emit('debugOverride', this.debug)
 
         that.bookingOrderToken = getCookie('OTM_booking_order_token')
-        console.log('Cookie read:', that.bookingOrderToken)
+        this.debug && console.log('Cookie read:', that.bookingOrderToken)
         if (typeof that.bookingOrderToken != 'undefined' && that.bookingOrderToken.length) {
             this.debug>3 && console.log('BookingOrderToken', that.bookingOrderToken)
             await axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
@@ -146,7 +145,6 @@ export default {
         },
         async getOrderId() {
             let that = this
-            console.log('BOOKING FORM: getOrderId call') 
             axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
                 event: this.event.id

@@ -55,7 +55,7 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-const busEventLogging = true
+const busEventLogging = false
 
 bus.$on('click', function(id) {
     busEventLogging && console.log('added traveller', id)

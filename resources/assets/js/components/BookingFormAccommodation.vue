@@ -201,7 +201,7 @@ export default {
   props: ["tour"],
   data() {
     return {
-      debug: 5,
+      debug: false,
       token: "",
       order_id: 0,
       showAccommodation: false,
@@ -218,22 +218,18 @@ export default {
   },
   async created() {
     bus.$on('customerLoaded', (leadTraveller) => {
-      this.debug > 2 && console.log('Accommodation lead traveller loaded', leadTraveller);
+      this.debug>2 && console.log('Accommodation lead traveller loaded', leadTraveller);
       //this.travellers.push(leadTraveller)
     })
     bus.$on("additionalTravellersLoaded", (travellers) => {
-      this.debug > 2 && console.log("Accommodation: travellers loaded", travellers);
+      this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
       travellers.map(traveller => this.travellers.push(traveller));
     })
     await this.getAccommodationOptions()
   },
   async mounted() {
-    let that = this;
-    console.log(
-      "Accommodation options active",
-      this.order_token,
-      this.occupancy
-    )
+    let that = this
+    this.debug>2 && console.log("DEV: Accommodation mounted")
     bus.$on("bookingsLoaded", (bookings) => {
       bookings.map((b) => that.reduceOccupancy(b.accommodation));
     })
@@ -272,19 +268,15 @@ export default {
     },
     async loadBooking() {
       const that = this;
-      console.log(
-        "loadBooking() accommodation booking data ",
-        this.token,
-        `${this.tour.id}/${this.order_id}/${this.token}`
-      );
-      await axios
-        .get(
+      this.debug>4 && console.log("loadBooking() accommodation booking data ", this.token, `${this.tour.id}/${this.order_id}/${this.token}`)
+      await axios.get(
           `/api/booking/accommodation/customer/${this.tour.id}/${this.order_id}/${this.token}`
         )
         .then((response) => {
-          that.bookings = response.data.bookings;
-          console.log("loadBooking: ", this.bookings);
-          that.$emit("bookingsLoaded", this.bookings);
+          that.bookings = response.data.bookings
+          // TODO: why emit event here?
+          console.log('DEV: BookingFormAccommodation: bookingsLoaded EVENT emitted', this.bookings)
+          that.$emit("bookingsLoaded", this.bookings)
           that.makeBooking = this.bookings == null || typeof this.bookings == 'undefined' || this.bookings.length == 0
         })
         .catch((error) => console.log(error));
