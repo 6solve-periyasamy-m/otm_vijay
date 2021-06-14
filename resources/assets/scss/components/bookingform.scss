@@ -46,12 +46,12 @@ h3 {
 }
 .btn-link {
     color: white;
-    border-radius: 25px;
-    border: 1px solid white;
-    background: linear-gradient(to top, #007bff, #ddd);
+    border-radius: 0;
+    border: 1px solid linear-gradient(to top, #007bff, #ddd);
+    background: green;
     &:hover {
-        border: black;
-        color: blue;
+        color: green;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     }
 }
 
@@ -90,7 +90,7 @@ h3 {
         align-content: right;
     }
     .dropdown::selection {
-        border-radius: 8px;
+        border-radius: 0;
         border: thin #ddd solid;
     }
 }
@@ -101,7 +101,7 @@ h3 {
     padding: 4px;
 }
 input, .dropdown {
-    border-radius: 8px;
+    border-radius: 0;
     border: thin #ddd solid;
 }
 input[pattern]:invalid,
@@ -184,7 +184,7 @@ hr.light {
     margin: 0;
     font-size: 16px;
     border: 2px outset #01328e;
-    border-radius: 0px;
+    border-radius: 0;
     flex: 0 1 auto;
     img {
         width: 100%;

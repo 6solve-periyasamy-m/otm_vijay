@@ -16,7 +16,8 @@ use App\Models\OrdersCustomer;
 
 class FlightController extends ApiController
 {
-    protected $logging = 0;
+    protected $logging = 5;
+    
     public function getFlightInventories()
     {
         $flights = Flight::join('airlines', 'airline_id', 'airlines.id')

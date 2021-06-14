@@ -12,7 +12,7 @@ use App\Models\OrdersCustomer;
 
 class CustomerController extends ApiController
 {
-    protected $logging = 7;
+    protected $logging = false;
     /** 
      * getCustomerByToken
      * 
@@ -42,19 +42,13 @@ class CustomerController extends ApiController
             if (count($orderCustomers)) {
                 $order->customer = $orderCustomers[0];
                 $order->customers = $orderCustomers;
-                if ($this->logging) {
-                    Log::info('order data for customer retrieved ', $orderCustomers->toArray());
-                }
+                $this->logging && Log::info('order data for customer retrieved ', $orderCustomers->toArray());
                 return response()->json(['success' => true, 'orders' => $order]);
-                //return $order;
             } else {
                 return response()->json(['success' => false]);
-
-                //return null;
             }
-
         } else {
-            if ($this->logging) Log::info('no order found for token: '. $token);
+            $this->logging && Log::info('no order found for token: '. $token);
         }
         return null;
     }
