@@ -50,9 +50,9 @@ export default {
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-        // bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
-        //     console.log('&&&&&&******^^^^^ BFFS: EVENT ON setting customFlight for ', customtraveller, selected)
-        // })
+        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
+            console.log('&&&&&&******^^^^^ BFFS: EVENT ON setting customFlight for ', customtraveller, selected)
+        })
         this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom)
     },
     created() {
