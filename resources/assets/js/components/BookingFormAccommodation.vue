@@ -234,7 +234,7 @@ export default {
       bookings.map((b) => that.reduceOccupancy(b.accommodation));
     })
     bus.$on("setOrderToken", (token, order_id) => {
-      this.debug > 2 && console.log(">>> ACCOMMODATION token detected ", token)
+      this.debug>2 && console.log(">>> ACCOMMODATION token detected ", token)
       that.token = token
       that.order_id = order_id
       that.loadBooking()

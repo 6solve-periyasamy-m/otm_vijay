@@ -134,6 +134,7 @@ class BookingController extends ApiController
             ->join('orders', 'customer_order_details.order_id', 'orders.id')
             ->where('customer_order_details.orders_customer_id', $orders_customer_id)
             ->where('customer_order_details.type', $flight_type)
+            ->where('addon', $addon)
             ->where('orders.token', $reference)
             ->first();
             

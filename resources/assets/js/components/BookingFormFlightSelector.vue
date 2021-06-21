@@ -14,6 +14,7 @@
             {{tour_flight_types[0]}} 
         </div>
         <div class="col-sm-10" v-if="tour_flights_filtered">
+        {{custom}}
             <select 
                 :disabled="!enabled"
                 v-model="flightId">
@@ -36,7 +37,7 @@ export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
     data() {
         return {
-            debug: false,
+            debug: 2,
             flightId: '',
             tour_flight_type: '',
             flight_selected: '',
@@ -50,30 +51,31 @@ export default {
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
-            console.log('&&&&&&******^^^^^ BFFS: EVENT ON setting customFlight for ', customtraveller, selected)
-        })
+
         this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom)
     },
     created() {
+        let that = this
         this.tour_flights = this.flights
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
+        // BUG: this.selected_item is NULL on addons load?
         this.flightId = this.selected_item
+        console.log('BFFS: setting flight id to prop ',this.selected_item)
         this.filterFlights()
+        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
+           console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
+        })
     },
     watch: {
         flightId: function(flight, oldFlight) {
             if (flight != oldFlight && flight != null) {
                 this.debug>4 && console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
-                if (oldFlight > 0) {
-                    bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
-                } else {
-                    this.debug>2 && console.log("BFFS loaded, not a change so no event emitted")
-                }
+                this.debug>1 && console.log('changing flight from '+oldFlight+' to '+flight+' custom? ', this.custom)
+                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
             } else {
-                this.debug>6 && console.log('BFFS Flight was NULL, flightId watch fired but not flight was selected yet')
+                this.debug>6 && console.log('BFFS Flight was NULL, flightId watch fired but no flight was selected yet')
             }
         }
     },
