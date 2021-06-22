@@ -52,6 +52,18 @@ class BookingController extends ApiController
         return $orderCustomer;
     }
 
+    private function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference) {
+        $cod = new CustomerOrderDetail();
+        $result = $cod->where('orders_customer_id', $orderCustomer->id)
+            ->where('component_type', $componentType)
+            ->where('type', $type)
+            ->where('addon', $custom)
+            ->where('reference', $reference)
+            ->delete();
+
+        return $result;
+    }
+
     /**
      * bookFlightDetails
      * save flight details for a pax tour flight
@@ -71,27 +83,37 @@ class BookingController extends ApiController
         $tours = new Tour();
         $flights = new Flight();
         $flightInventory = new FlightInventory();
+        $rejection = 0;
 
-        $flightTour = $this->getFlightTour($flight_inventory_tour_id);
+        if ($flight_inventory_tour_id) {
+            $flightTour = $this->getFlightTour($flight_inventory_tour_id);
+            if(!$flightTour) {
+                $rejection = 404;
+                $status = 'Invalid Flight Tour record';
+            }
+        }
         $tour = $tours->find($tour_id);
         $order = $this->getOrder($order_id);
-        $rejection = 0;
         if ($tour->id !== $order->tour_id) {
             $rejection = 302;
-            $status = 'Invalid Order';
+            $status = 'Invalid Tour/Order';
         } else {
             $status = 'Order ';
         }
         
         $orderCustomer = $this->getOrderCustomer($order, $customer_id);
-        $result = $this->storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flight_type, $custom, $reference);
+        if ($flight_inventory_tour_id) {
+            $result = $this->storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flight_type, $custom, $reference);
+        } else {
+            $result = $this->removeCustomerOrderDetail('flight', $order, $orderCustomer, $flight_type, $custom, $reference);
+        }
         if (!$result) {
             $status .= ' error updating!';
         } else {
             $status .= ' update appears successful';
         }
 
-        if ($rejection || !$customer_id || !$flightTour->id) {
+        if ($rejection || !$customer_id ) {
             return [
                 'status' => $rejection,
                 'message' => $status

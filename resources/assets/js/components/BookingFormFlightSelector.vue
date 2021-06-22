@@ -14,7 +14,6 @@
             {{tour_flight_types[0]}} 
         </div>
         <div class="col-sm-10" v-if="tour_flights_filtered">
-        {{custom}}
             <select 
                 :disabled="!enabled"
                 v-model="flightId">
@@ -27,6 +26,7 @@
                     {{flightValue(flight)}}
                 </option>
             </select>
+            <button v-if="custom" class="delete" @click="removeBooking(flightId)">X</button>
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@ export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
     data() {
         return {
-            debug: 2,
+            debug: 9,
             flightId: '',
             tour_flight_type: '',
             flight_selected: '',
@@ -69,17 +69,34 @@ export default {
         })
     },
     watch: {
+        // why is this firing on Load??
         flightId: function(flight, oldFlight) {
-            if (flight != oldFlight && flight != null) {
-                this.debug>4 && console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, ' tour:', this.tour, ' traveller:',this.traveller)
+            console.log("***** BFFS flight:", flight, 'oldFlight', oldFlight)
+            if (flight != oldFlight && flight && flight != null) {
+                this.debug>4 && console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, oldFlight == false, ' tour:', this.tour, ' traveller:',this.traveller)
                 this.debug>1 && console.log('changing flight from '+oldFlight+' to '+flight+' custom? ', this.custom)
                 bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
             } else {
-                this.debug>6 && console.log('BFFS Flight was NULL, flightId watch fired but no flight was selected yet')
+                this.debug>1 && console.log('BFFS Flight was NULL, flightId watch fired but no flight was selected yet')
             }
         }
     },
     methods: {
+        removeBooking(booking) {
+            // props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
+            // /booking/flights/remove/flight/{order_id]/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
+            console.log('removing', booking, this.tour)
+            const order_id = 0
+            const order_customer_id = 0
+            const custom = this.custom
+            const inventory_tour_id = 0
+            const type = this.tour_flight_type
+            axios.post(`/booking/flights/remove/flight/${order_id}/${order_customer_id}/${type}/${custom}/${inventory_tour_id}`)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => console.log(error));
+        },
         filterFlights() {
             var that = this
             this.tour_flights_filtered = this.tour_flights.filter((flight) => {

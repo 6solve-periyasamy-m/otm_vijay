@@ -48,7 +48,7 @@
     
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button class="btn btn-primary" :disabled="disableCustomButton" @click="customFlights()">
+                                    <button class="btn btn-primary" @click="customFlights()">
                                         Customise
                                     </button>
                                     <button class="btn btn-primary" @click="toggleFlights">
@@ -74,13 +74,9 @@
                                 <hr class="light" />
                                 
                                 <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
-                                {{traveller}}
                                     <div v-if="debug && traveller.selected_outbound_addon">Custom outbound selected {{outbound_flights[traveller.selected_outbound_addon]}}</div>
-                                    <div v-if="debug  && traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
+                                    <div v-if="debug && traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
                                     <div class="row">
-                                        <div class="col-sm-3">
-                                            View <input class="`customer-flight-${traveller.id}`" type="checkbox" name="custom" :checked="flightChecked(traveller)" @change="flightOptionsCustomer(traveller.order_customer_id)">
-                                        </div>
                                         <div class="col-sm-3">
                                             {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
                                         </div>
@@ -89,8 +85,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             {{ traveller.last_name}}
-                                        </div>
-    
+                                        </div>    
                                     </div>
                                     <div class="flight-options" v-if="travellerFlightOptions[traveller.order_customer_id]">
                                         <h5>Flight Options for traveller</h5>
@@ -118,21 +113,6 @@
                                                     :types="inbound_type"
                                                     :selected_item="traveller.selected_inbound_addon">
                                                 </booking-form-flight-selector>
-                                            </div>
-                                        </div>
-                                        <div class="row" v-if="showOtherFlights">
-                                            <div class="col-sm-9">
-                                                <h4> Add On Flights </h4>
-                                                <div v-for="flight in other_flights" :key="flight.id">
-                                                    <booking-form-flight-selector 
-                                                        v-model="flight_selected"
-                                                        :tour="tour" 
-                                                        :traveller="traveller"
-                                                        :airports="airports" 
-                                                        :flights="flights" 
-                                                        :types="tour_flight_optional_types">
-                                                    </booking-form-flight-selector>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +150,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 0,
+            debug: 9,
             activated: false,
             showwait: false,
 
@@ -319,17 +299,10 @@ export default {
         }
     },
     methods: {
-        flightChecked(traveller) {
-            if (traveller.selected_outbound_addon || traveller.selected_inbound_addon) {
-                return true
-            }
-            return true
-        },
         dmy(s) {
             return dates.makeDateFromString(s)
         },
         async toggleFlights() {
-            
             if (this.activated) {
                 this.showFlights = !this.showFlights
             }
@@ -456,7 +429,6 @@ export default {
                     // process the addons
                     const outbound_addons = orders.filter(order => order.flight_type == 'Outbound' && order.addon == 1)
                     const inbound_addons = orders.filter(order => order.flight_type == 'Inbound' && order.addon == 1)
-console.log('><><><><><outbound_addons', outbound_addons)
                     if (outbound_addons) {
                         that.debug > 2 && console.log('loadFlightsForOrder ADDONS', outbound_addons)
                         that.travellers.map((traveller, key) => {
@@ -471,7 +443,6 @@ console.log('><><><><><outbound_addons', outbound_addons)
                             }
                         })
                     }
-console.log('><><><><><inbound_addons', inbound_addons)
                     if (inbound_addons) {
                         that.debug > 2 && console.log('ADDONS', inbound_addons)
                         that.travellers.map((traveller, key) => {
