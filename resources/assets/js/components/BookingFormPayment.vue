@@ -11,6 +11,11 @@
         <div class="card-body" v-if="paymentsActive">
             <div class="row">
                 <payment-schedule status="new" tour="1" :total_price="10000" :passengers="4"></payment-schedule>
+                <payment-installments></payment-installments>
+            </div>
+            <div class="row">
+                <hr>
+                <pdf></pdf>
             </div>
         </div>
     </div>
@@ -18,10 +23,12 @@
 </template>
 <script>
 import { bus } from '../bus'
+import PaymentInstallments from './PaymentInstallments.vue'
 export default {
     mounted() {
         let that = this
-        bus.$on('debugOverride', (debug) => that.debug = debug)
+        b
+        PaymentInstallmentsus.$on('debugOverride', (debug) => that.debug = debug)
 
         this.debug && console.log('Payments form active')
     },

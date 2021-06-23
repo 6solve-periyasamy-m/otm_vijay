@@ -27,14 +27,14 @@ window.axios.defaults.headers.common = {
  Vue.component('vue-test', require('./components/VueTest.vue').default);
 // Vue.component('booking-store', require('./components/BookingStore.vue').default);
 
-//  Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
-//  Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
+Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
+Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
 //  Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);
 //  Vue.component('donut-menu', require('./components/donut-menu.vue').default);
 //  Vue.component('tour-menu', require('./components/tour-menu.vue').default);
 //  Vue.component('details-menu', require('./components/details-menu.vue').default);
 //  Vue.component('extras-menu', require('./components/extras-menu.vue').default);
-//  Vue.component('finance-menu', require('./components/finance-menu.vue').default);
+Vue.component('finance-menu', require('./components/finance-menu.vue').default);
 Vue.component('bookingform-header', require('./components/BookingFormHeader.vue').default);
 Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
 //  Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
