@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <h1>{{ msg }}</h1>
-        <p> hello world </p>
-        <button type="button" class="btn btn-success" @click="pdfgen">Create pdf</button>
+        <h1> ATOL Certificate Generation </h1>
+        <p>{{ msg }}</p>
+        <button type="button" class="btn btn-success" @click="pdfgen">Create ATOL PDF</button>
     </div>
 </template>
 
