@@ -46,6 +46,7 @@ Route::get('/booking/flight-inventories', [FlightController::class, 'getFlightsI
 Route::get('/booking/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
 // function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
 Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
+
 // Accommodation
 Route::get('/booking/accommodation/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
 Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);

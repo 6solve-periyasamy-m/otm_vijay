@@ -74,17 +74,18 @@
                               accommodation.inventory_id
                             )
                           "
-                          :checked="traveller.id == booking.orders_customer_id"
+                          _checked="booked(traveller.id, accommodation.inventory_id)"
                           :value="accommodation.id"
                           :name="`${traveller.email_address}`"
-                          :disabled="!occupancyRemaining(accommodation)"
+                          _disabled="!occupancyRemaining(accommodation)"
                           type="radio"
                         /><br />
                       </span>
                     </div>
                   </div>
                 </article>
-                <div v-if="false" class="accommodations__summary">
+
+                <div v-if="showSummaryCards" class="accommodations__summary">
                   <div v-for="booking in bookings" :key="booking.id">
                     <div class="card">
                       <div>
@@ -114,6 +115,7 @@
                   </div>
                 </div>
               </section>
+            
               <section v-else class="col a-cards">
                 <article
                   class="a-card"
@@ -201,7 +203,7 @@ export default {
   props: ["tour"],
   data() {
     return {
-      debug: false,
+      debug: 9,
       token: "",
       order_id: 0,
       showAccommodation: false,
@@ -214,10 +216,11 @@ export default {
       bookings: [],
       occupancy: [],
       booked: false,
+      showSummaryCards: false
     };
   },
   async created() {
-    bus.$on('customerLoaded', (leadTraveller) => {
+    bus.$on("customerLoaded", (leadTraveller) => {
       this.debug>2 && console.log('Accommodation lead traveller loaded', leadTraveller);
       //this.travellers.push(leadTraveller)
     })
@@ -230,7 +233,7 @@ export default {
   async mounted() {
     let that = this
     this.debug>2 && console.log("DEV: Accommodation mounted")
-    bus.$on("bookingsLoaded", (bookings) => {
+    bus.$on("accommodationBookingsLoaded", (bookings) => {
       bookings.map((b) => that.reduceOccupancy(b.accommodation));
     })
     bus.$on("setOrderToken", (token, order_id) => {
@@ -241,6 +244,9 @@ export default {
     })
   },
   methods: {
+    booked(travellerId, accommodationId) {
+      console.log('checking if booked', travellerId, accommodationId)
+    },
     reduceOccupancy(accommodation) {
       if (this.occupancy[accommodation.accommodation_id] > 0) {
         this.occupancy[accommodation.accommodation_id] -= 1;
@@ -276,7 +282,7 @@ export default {
           that.bookings = response.data.bookings
           // TODO: why emit event here?
           console.log('DEV: BookingFormAccommodation: bookingsLoaded EVENT emitted', this.bookings)
-          that.$emit("bookingsLoaded", this.bookings)
+          that.$emit("accommodationBookingsLoaded", this.bookings)
           that.makeBooking = this.bookings == null || typeof this.bookings == 'undefined' || this.bookings.length == 0
         })
         .catch((error) => console.log(error));
@@ -290,16 +296,11 @@ export default {
       this.accommodations
         .filter((o) => o.id !== id)
         .map((o) => (o.value = false));
-      console.log("accommodation handle change", this.accommodations);
+      console.log("accommodation handle change", this.accommodations)
       this.accommodations.map((accommodation) => {
-        const customer = traveller;
-        const accommodation_id = e.target.value;
-        console.log(
-          "handleChange: customer ",
-          e.target.value,
-          customer,
-          accommodation
-        );
+        const customer = traveller
+        const accommodation_id = e.target.value
+        this.debug>1 && console.log("handleChange: customer ", e.target.value, customer, accommodation)
         if (e.target.value == accommodation.id && customer != null) {
           if (this.reduceOccupancy(accommodation)) {
             axios
@@ -308,7 +309,7 @@ export default {
               )
               .then((response) => {
                 console.log("accommodation change response:", response);
-                that.loadBooking();
+                //that.loadBooking();
               })
               .catch((error) => console.log(error));
           } else {
@@ -332,6 +333,7 @@ export default {
         console.log(traveller.email)
       })
       this.makeBooking = false
+      this.loadBooking();
     },
     fullName(t) {
       return `${t.first_name} ${t.last_name}`
@@ -374,3 +376,15 @@ export default {
   },
 };
 </script>
+<style scoped>
+  h3 {
+    background: black;
+    color: white;
+    padding: 1rem;
+  }
+  h4 {
+    background: darkgreen;
+    color: white;
+    padding: 0.5rem;
+  }
+</style>

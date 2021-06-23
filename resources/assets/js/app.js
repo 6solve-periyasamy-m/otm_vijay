@@ -76,3 +76,7 @@ bus.$on('setOrderToken', function(token, order_id) {
     busEventLogging && console.log('Event Bus: setting token cookie for order_id', token, order_id)
     setCookie('OTM_booking_order_token', token);
 })
+
+bus.$on('accommodationBookingsLoaded', function() {
+    busEventLogging && console.log('accommodationBookingsLoaded')
+})
