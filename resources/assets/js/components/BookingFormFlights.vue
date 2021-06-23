@@ -72,7 +72,6 @@
                                     </div>
                                 </div>
                                 <hr class="light" />
-                                {{outbound_flights}}
                                 <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
                                     <div v-if="debug && traveller.selected_outbound_addon">Custom outbound selected {{outbound_flights[traveller.selected_outbound_addon]}}</div>
                                     <div v-if="debug && traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
@@ -260,7 +259,7 @@ export default {
             // this method is only for removing custom (addon) flights (you can only change group bookings)
             axios.post(`/api/booking/flights/remove/flight/${item[0].order_id}/${traveller.order_customer_id}/${flight_type}/1/${item[0].inventory_tour_id}`)
                 .then(response => {
-                    console.log(response)
+                    console.log('remove flight response', response.data.flight)
                     const deleted_flight = response.data.flight
                     bus.$emit('flightRemoved', deleted_flight.id)
                 })

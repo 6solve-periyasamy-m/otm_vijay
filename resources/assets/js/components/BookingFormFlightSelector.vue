@@ -18,7 +18,7 @@
                 :disabled="!enabled"
                 @change="changeFlight"
                 v-model="flightId">
-                <option value="Flight Select" v-if="!flight_selected" selected>Flight Select</option>
+                <option value="0" v-if="!flight_selected" selected>{{caption}}</option>
                 <option 
                     v-for="flight in tour_flights_filtered" 
                     :key="flight.id" 
@@ -27,7 +27,7 @@
                     {{flightValue(flight)}}
                 </option>
             </select>
-            <button v-if="custom" class="delete" @click="removeBooking(flightId, tour_flight_type)">X</button>
+            <button v-if="custom && flight_selected" class="delete" @click="removeBooking(flightId, tour_flight_type)">Reset</button>
         </div>
     </div>
 </template>
@@ -46,7 +46,8 @@ export default {
             tour_flight_types: [],
             tour_flights_filtered: [],
             tour_flights: '',
-            flight: {}
+            flight: {},
+            caption: 'Flight Select'
         }
     },
     mounted() {
@@ -62,31 +63,36 @@ export default {
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
         // BUG: this.selected_item is NULL on addons load?
-        this.flightId = this.selected_item
-        console.log('BFFS: setting flight id to prop ',this.selected_item)
-        this.filterFlights()
-        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
-           console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
-        })
-        bus.$on('flightRemoved', (customer_detail_id) => {
-            console.log('BFFS: flight to remove', customer_detail_id)
-            // that.tour_flights_filtered = that.tour_flights_filtered.filter(flight => {
-            //     return flight.cod != customer_detail_id
-            // })
-            this.flight_selected = 0
-            console.log(that.tour_flights_filtered)
-        })
+        if (this.selected_item) {
+            this.flightId = this.selected_item
+            console.log('BFFS: setting flight id to prop ',this.selected_item)
+            bus.$on('flightRemoved', (customer_detail_id) => {
+                console.log('BFFS: flight to remove', customer_detail_id)
+                this.flight_selected = 0
+                console.log(that.tour_flights_filtered)
+            })
+        
+        }
+            this.filterFlights()
+            bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
+            console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
+            })
+         
     },
     methods: {
         changeFlight() {
-            if (typeof this.flightId != 'undefined' && this.flightId != null) {
+            if (typeof this.flightId != 'undefined' && this.flightId != null && this.flightId != 0) {
                 console.log('change flight!', this.flightId)
+                this.caption = 'Remove selection'
                 bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom)
+            } else {
+                this.caption = 'Reset to group flight, you can select a flight'
             }
         },
         removeBooking(booking, flight_type) {
             // props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
             // /booking/flights/remove/flight/{order_id]/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
+            this.caption = 'Reselect'
             console.log('removing', booking, flight_type, this.tour)
             bus.$emit('removeBooking', booking, flight_type, this.traveller);
         },
