@@ -25,6 +25,14 @@ Route::get('/', function () {
     return view('otm');
 });
 
+Route::get('/homepage', function () {
+    return view('homepage');
+});
+
+Route::get('/pdfmake', function () {
+    return view('pdfmake');
+});
+
 Route::prefix("/booking")->group(function() {
 
     // debugging routes
