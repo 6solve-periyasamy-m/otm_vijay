@@ -39,7 +39,7 @@ Vue.component('bookingform-header', require('./components/BookingFormHeader.vue'
 Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
 //  Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
 
-
+Vue.component('pdf', require('./components/pdf.vue').default);
  // deprecated
  // Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
  // Vue.component('x-accommodation-details', require('./components/x-accommodation-details.vue').default);
