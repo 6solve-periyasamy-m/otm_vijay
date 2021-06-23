@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <hr class="light" />
-                                
+                                {{outbound_flights}}
                                 <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
                                     <div v-if="debug && traveller.selected_outbound_addon">Custom outbound selected {{outbound_flights[traveller.selected_outbound_addon]}}</div>
                                     <div v-if="debug && traveller.selected_inbound_addon">Custom inbound selected {{inbound_flights[traveller.selected_inbound_addon]}}</div>
@@ -150,7 +150,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 9,
+            debug: 4,
             activated: false,
             showwait: false,
 
@@ -200,7 +200,8 @@ export default {
             selected_custom_inbound_flight: null,
             outbound_group_order: {},
             inbound_group_order: {},
-            ready: false
+            ready: false,
+            orderset: []
         }
     },
     created() {
@@ -247,6 +248,23 @@ export default {
             // })
             this.travellers = travellers
             this.activated = true
+        })
+        bus.$on('removeBooking', (booking, flight_type, traveller) => {
+            console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller)
+            const item = this.orderset.filter(ordr => ordr.inventory_tour_id === booking
+                && ordr.orders_customer_id == traveller.order_customer_id);
+            if (item.length === 1) {
+                console.log('deleting booking', item[0].cod_id)
+                
+            }
+            // this method is only for removing custom (addon) flights (you can only change group bookings)
+            axios.post(`/api/booking/flights/remove/flight/${item[0].order_id}/${traveller.order_customer_id}/${flight_type}/1/${item[0].inventory_tour_id}`)
+                .then(response => {
+                    console.log(response)
+                    const deleted_flight = response.data.flight
+                    bus.$emit('flightRemoved', deleted_flight.id)
+                })
+                .catch(error => console.log(error));
         })
     },
     async mounted() {
@@ -378,7 +396,8 @@ export default {
             let order = orders.filter(ordr => ordr.flight_type == type 
                 && ordr.addon == addon 
                 && ordr.orders_customer_id == traveller.order_customer_id)
-            that.debug > 3 && console.log('flightSelected ' + addon ? ' addon ' : ' !addon ' + ' ORDER FILTER', order)
+            that.debug > 2 && console.log('flightSelected ' + addon ? ' addon ' : ' !addon ')
+            console.log('....... ORDER FILTER', order)
             if (typeof order == 'undefined'  || order == null  || order.length == 0) {
                 console.log('WARNING: flightSelected no '+type+' order?')
                 return null
@@ -389,11 +408,13 @@ export default {
                 return flight.flight_inventory_tour_id == order_selected.inventory_tour_id
             })[0]
             this.debug>2 && console.log('flightSelected '+type+' flight being returned....', flight)
+            flight.cod = order[0].cod_id
             return flight
         },
 
         // loads current flight orders 
         async loadFlightsForOrder(order_id) {
+            this.debug = 4;
             this.debug > 2 && ('loadFlightsForOrder called for order ', order_id)
             let that = this
             let outbound = {}
@@ -401,8 +422,10 @@ export default {
             this.showwait = true
             await axios.get(`/api/booking/flight/orders/${this.order_id}`)
                 .then(response => {
-                    let orders = response.data.orders
-                    that.debug>1 && console.log('loadFlightsForOrder >>>> flights for order', orders, that.travellers[0])
+                    that.orderset = response.data.orders
+                    const orders = that.orderset
+
+                    that.debug>1 && console.log('loadFlightsForOrder >>>> flights for order', that.orders, that.travellers[0])
 
                     //this.flightSelected('Inbound', 1, orders, that.travellers[1])
                     outbound = that.flightSelected('Outbound', 0, orders, that.travellers[0])

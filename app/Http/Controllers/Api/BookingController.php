@@ -56,14 +56,44 @@ class BookingController extends ApiController
         $cod = new CustomerOrderDetail();
         $result = $cod->where('orders_customer_id', $orderCustomer->id)
             ->where('component_type', $componentType)
-            ->where('type', $type)
+            ->where('type', ucfirst($type))
             ->where('addon', $custom)
             ->where('reference', $reference)
-            ->delete();
+            ->whereNull('deleted_at')
+            ->first();
 
+        if ($result) {
+            $this->logging && Log::info('removing ', $result->toArray());
+            $result->delete();
+        } 
         return $result;
     }
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * {order_id}/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
+     * @return void
+     */
+    public function removeFlightBooking(Request $request)
+    {
+        $order_customer_id = $request->order_customer_id;
+        $orderCustomers = new OrdersCustomer();
+        $orderCustomer = $orderCustomers->find($order_customer_id);
 
+        $orders = new Order();
+        $order = $orders->find($orderCustomer->order_id);
+        $this->logging && Log::info('order for removal', $order->toArray());
+
+        $order_id = $order->id;
+        $component_type = $request->component_type;
+        $custom = $request->custom;
+        // $inventory_tour_id = $request->inventory_tour_id;
+        // $reference = $order->reference;
+        $result = $this->removeCustomerOrderDetail('flight', $order_id, $orderCustomer, $component_type, $custom, $order->token);
+    
+        return json_encode(['success' => true, 'flight' => $result, 'orderCustomer' => $orderCustomer]);
+    }
     /**
      * bookFlightDetails
      * save flight details for a pax tour flight
@@ -154,6 +184,7 @@ class BookingController extends ApiController
             ->join('flight_inventory_tour', 'flight_inventory_tour.id', 'customer_order_details.inventory_tour_id')
             ->join('tours', 'flight_inventory_tour.tour_id', 'tours.id')
             ->join('orders', 'customer_order_details.order_id', 'orders.id')
+            ->whereNull('customer_order_details.deleted_at')
             ->where('customer_order_details.orders_customer_id', $orders_customer_id)
             ->where('customer_order_details.type', $flight_type)
             ->where('addon', $addon)

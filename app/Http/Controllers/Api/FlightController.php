@@ -17,7 +17,7 @@ use App\Models\OrdersCustomer;
 class FlightController extends ApiController
 {
     protected $logging = 5;
-    
+
     public function getFlightInventories()
     {
         $flights = Flight::join('airlines', 'airline_id', 'airlines.id')
@@ -126,14 +126,15 @@ class FlightController extends ApiController
     public function loadFlightsForOrder($order_id, $type = 'Both') {
         $order = new Order();
         $orders = $order
-        ->select('customer_order_details.*', 'flight_inventory_tour.*', 'flights.*')
-            ->where('orders.id', $order_id)
+            ->select('customer_order_details.*','customer_order_details.id as cod_id', 'flight_inventory_tour.*', 'flights.*')
             ->join('orders_customers', 'orders_customers.order_id', 'order_id')
             ->join('customer_order_details', 'customer_order_details.orders_customer_id', 'orders_customers.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.id', 'customer_order_details.inventory_tour_id')
             ->join('flight_inventories','flight_inventories.id', 'flight_inventory_tour.flight_inventory_id')
             ->join('flights', 'flights.id', 'flight_inventories.flight_id')
-            ->leftJoin('airlines', 'airlines.id', 'flights.airline_id');
+            ->leftJoin('airlines', 'airlines.id', 'flights.airline_id')
+            ->where('orders.id', $order_id)
+            ->whereNull('customer_order_details.deleted_at');
             if ($type == 'Both') {
                 $orders = $orders->whereIn('customer_order_details.type', ['Outbound', 'Inbound']);
             } else {
@@ -148,10 +149,7 @@ class FlightController extends ApiController
             $ord['departure_airport'] = Airport::find($ord->departure_airport_id)->airport_name;
             $ord['arrival_airport'] = Airport::find($ord->arrival_airport_id)->airport_name;
         }
-
-        if ($this->logging > 5) {
-            Log::info('loadFlightsForOrder order '.$order_id.' data found'. print_r($orders->toArray(), 1));
-        } else if ($this->logging) {
+        if ($this->logging) {
             Log::info('loadFlightsForOrder order '. $order_id . ' found '. count($orders). ' orders');
         }
 

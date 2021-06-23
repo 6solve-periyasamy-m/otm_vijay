@@ -71,6 +71,7 @@ class AccommodationController extends ApiController
             ->whereIn('orders_customer_id', $orderCustomerIds)
             ->where('component_type', $this->component_type)
             ->where('reference', $token)
+            ->whereNull('customer_order_details.deleted_at')
             ->get();
 
         if (!$result->count()) {
@@ -89,6 +90,7 @@ class AccommodationController extends ApiController
             ->where('orders_customer_id', $ordersCustomer->id)
             ->where('component_type', $this->component_type)
             ->where('reference', $token)
+            ->whereNull('customer_order_details.deleted_at')
             ->first();
         
         return $result;
@@ -102,6 +104,7 @@ class AccommodationController extends ApiController
             ->where('order_id', $order->id)
             ->where('component_type', $this->component_type)
             ->where('reference', $token)
+            ->whereNull('customer_order_details.deleted_at')
             ->first();
         
         return $result;

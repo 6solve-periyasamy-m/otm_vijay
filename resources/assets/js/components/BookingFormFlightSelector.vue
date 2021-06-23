@@ -16,8 +16,9 @@
         <div class="col-sm-10" v-if="tour_flights_filtered">
             <select 
                 :disabled="!enabled"
+                @change="changeFlight"
                 v-model="flightId">
-                <option value="Flight Select" v-if="!selected_item" selected>Flight Select</option>
+                <option value="Flight Select" v-if="!flight_selected" selected>Flight Select</option>
                 <option 
                     v-for="flight in tour_flights_filtered" 
                     :key="flight.id" 
@@ -26,7 +27,7 @@
                     {{flightValue(flight)}}
                 </option>
             </select>
-            <button v-if="custom" class="delete" @click="removeBooking(flightId)">X</button>
+            <button v-if="custom" class="delete" @click="removeBooking(flightId, tour_flight_type)">X</button>
         </div>
     </div>
 </template>
@@ -40,7 +41,7 @@ export default {
             debug: 9,
             flightId: '',
             tour_flight_type: '',
-            flight_selected: '',
+            flight_selected: this.selected_item,
             tour_flight_type: {},
             tour_flight_types: [],
             tour_flights_filtered: [],
@@ -67,35 +68,27 @@ export default {
         bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
            console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
         })
-    },
-    watch: {
-        // why is this firing on Load??
-        flightId: function(flight, oldFlight) {
-            console.log("***** BFFS flight:", flight, 'oldFlight', oldFlight)
-            if (flight != oldFlight && flight && flight != null) {
-                this.debug>4 && console.log('BFFS ... EVENT EMIT flight-selected', `set_${this.tour_flight_type}`, 'flight set to ', flight, ' flight was ', oldFlight, oldFlight == false, ' tour:', this.tour, ' traveller:',this.traveller)
-                this.debug>1 && console.log('changing flight from '+oldFlight+' to '+flight+' custom? ', this.custom)
-                bus.$emit(`set_${this.tour_flight_type}`, flight, this.tour, this.traveller, this.custom)
-            } else {
-                this.debug>1 && console.log('BFFS Flight was NULL, flightId watch fired but no flight was selected yet')
-            }
-        }
+        bus.$on('flightRemoved', (customer_detail_id) => {
+            console.log('BFFS: flight to remove', customer_detail_id)
+            // that.tour_flights_filtered = that.tour_flights_filtered.filter(flight => {
+            //     return flight.cod != customer_detail_id
+            // })
+            this.flight_selected = 0
+            console.log(that.tour_flights_filtered)
+        })
     },
     methods: {
-        removeBooking(booking) {
+        changeFlight() {
+            if (typeof this.flightId != 'undefined' && this.flightId != null) {
+                console.log('change flight!', this.flightId)
+                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom)
+            }
+        },
+        removeBooking(booking, flight_type) {
             // props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
             // /booking/flights/remove/flight/{order_id]/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
-            console.log('removing', booking, this.tour)
-            const order_id = 0
-            const order_customer_id = 0
-            const custom = this.custom
-            const inventory_tour_id = 0
-            const type = this.tour_flight_type
-            axios.post(`/booking/flights/remove/flight/${order_id}/${order_customer_id}/${type}/${custom}/${inventory_tour_id}`)
-                .then(response => {
-                    console.log(response)
-                })
-                .catch(error => console.log(error));
+            console.log('removing', booking, flight_type, this.tour)
+            bus.$emit('removeBooking', booking, flight_type, this.traveller);
         },
         filterFlights() {
             var that = this
