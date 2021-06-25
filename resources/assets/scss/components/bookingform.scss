@@ -3,6 +3,12 @@
     --card-background: #efefef;
     --card-body-background: #dcdcdc;
     --booking-form-background: #cdcdcd;
+    --light-grey: #ccc;
+    --mid-grey: #aaa;
+    --dark-grey: #888;
+}
+select {
+    max-width: inherit;
 }
 .logo {
     width: 200px;
@@ -48,16 +54,18 @@ h3 {
     color: white;
     border-radius: 0;
     border: 1px solid linear-gradient(to top, #007bff, #ddd);
-    background: green;
+    background: var(--mid-grey);
     &:hover {
-        color: green;
+        color: var(--dark-grey);
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+    &[disabled] {
+        color: var(--light-grey);
     }
 }
 
 .ept-form {
     background: var(--booking-form-background, #cccccc);
-    margin: 1rem;
     padding: 1rem;
 }
 
@@ -153,6 +161,10 @@ hr.light {
 .accommodations {
     &__traveller {
         font-size: 11px;
+        &--single {
+            font-size: 9px;
+            font-style: italic;
+        }
     }
     &__summary {
         display: flex;

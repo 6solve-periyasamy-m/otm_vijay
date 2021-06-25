@@ -15,13 +15,27 @@
           </p>
         </h5>
       </div>
+
       <div class="card-body" v-if="showAccommodation">
         <div class="container">
           <div class="card-options">
             <div class="ept-form">
-              <h4 v-if="!makeBooking && accommodations.length">Accommodation selected</h4>
+
+              <h4 v-if="!makeBookingByRoom && !makeBooking && accommodations.length">Accommodation selected</h4>
               <h3 v-if="makeBooking">Available accommodation options</h3>
-              <section class="col a-cards accommodations" v-if="makeBooking">
+              <h3 v-if="makeBookingByRoom">Available accommodation rooms</h3>
+
+              <section-group class="col a-cards accommodations" v-if="makeBooking">
+                <section class="col listing travellers" v-if="makeBooking && !travellersOptionsSet">
+                List travellers and select options
+                </section>
+
+                <section v-if="makeBooking && travellersOptionsSet">
+                Generic booking{{accommodations}}
+                </section>
+              </section-group>
+
+              <section class="col a-cards accommodations" v-if="makeBookingByRoom">
                 <article
                   class="a-card"
                   v-for="accommodation in accommodations"
@@ -63,6 +77,9 @@
                         v-for="traveller in travellers"
                         :key="traveller.customer_id"
                       >
+                        <div class="accommodations__traveller--single">
+                          Single Room <input type="checkbox" v-model="single">
+                        </div>
                         <div class="accommodations__traveller">
                           {{ fullName(traveller) }}
                         </div>
@@ -74,7 +91,7 @@
                               accommodation.inventory_id
                             )
                           "
-                          _checked="booked(traveller.id, accommodation.inventory_id)"
+                          _checked="isBooked(traveller.id, accommodation.inventory_id)"
                           :value="accommodation.id"
                           :name="`${traveller.email_address}`"
                           _disabled="!occupancyRemaining(accommodation)"
@@ -213,10 +230,12 @@ export default {
       option: [],
       booking: {},
       makeBooking: false,
+      makeBookingByRoom: false,
       bookings: [],
       occupancy: [],
       booked: false,
-      showSummaryCards: false
+      showSummaryCards: false,
+      travellersOptionsSet: false
     };
   },
   async created() {
@@ -244,7 +263,7 @@ export default {
     })
   },
   methods: {
-    booked(travellerId, accommodationId) {
+    isBooked(travellerId, accommodationId) {
       console.log('checking if booked', travellerId, accommodationId)
     },
     reduceOccupancy(accommodation) {

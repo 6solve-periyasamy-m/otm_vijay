@@ -11,7 +11,6 @@
         <div class="card-body" v-if="paymentsActive">
             <div class="row">
                 <payment-schedule status="new" tour="1" :total_price="10000" :passengers="4"></payment-schedule>
-                <payment-installments></payment-installments>
             </div>
             <div class="row">
                 <hr>
@@ -27,8 +26,7 @@ import PaymentInstallments from './PaymentInstallments.vue'
 export default {
     mounted() {
         let that = this
-        b
-        PaymentInstallmentsus.$on('debugOverride', (debug) => that.debug = debug)
+        bus.$on('debugOverride', (debug) => that.debug = debug)
 
         this.debug && console.log('Payments form active')
     },

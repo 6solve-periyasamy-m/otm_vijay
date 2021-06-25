@@ -39,6 +39,21 @@ class AccommodationController extends ApiController
         return response()->json(["success" => true, "data" => $result]);
     }
 
+    /**
+     * getRoomAvailability for Tour
+     * 
+     *
+     * @param Tour $tour
+     * @return void
+     */
+    /**
+     * getAccommodationForTour
+     * 
+     * returns all accommodation inventory records that have been associated with this tour
+     * 
+     * @param Tour $tour
+     * @return JSON
+     */
     public function getAccommodationInventoryForTour(Tour $tour)
     {
         $inventory = new AccommodationInventory();

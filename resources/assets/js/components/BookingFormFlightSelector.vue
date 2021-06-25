@@ -86,7 +86,7 @@ export default {
                 this.caption = 'Remove selection'
                 bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom)
             } else {
-                this.caption = 'Reset to group flight, you can select a flight'
+                this.caption = 'You can select a custom flight'
             }
         },
         removeBooking(booking, flight_type) {

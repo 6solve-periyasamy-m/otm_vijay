@@ -1,6 +1,6 @@
 @extends ('layout.main')
 @section('content')
-<div class="container-fluid" id="app">
+<div class="container-fluid homepage" id="app">
     <div class="menucontainer">
         <div class="menucontainer__contact">
             <div class="row">
