@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
-                        OTM Booking Form version 0.4.0 PRERELEASE - Lead/Additionals/Flights/Accommodation
+                        OTM Booking Form version 0.4.1 PRERELEASE - Lead/Additionals/Flights/Accommodation
                         <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
                         <button class="btn btn-small btn-themed cool" @click="changeTheme('cool')">Cool</button>
                         <button class="btn btn-small btn-themed warm" @click="changeTheme('warm')">Warm</button>
@@ -23,7 +23,7 @@
                                     <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                                     <booking-form-lead :form_info="formInfo" :customer="customer" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
-                                    <div v-if="tour">
+                                    <div v-if="tour && token">
                                         <booking-form-flights :order_token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
                                         <booking-form-accommodation :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
                                         <booking-form-activity></booking-form-activity>
@@ -72,7 +72,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 3,
             formInfo: false,
             token: '',
             travellers: [],

@@ -359,7 +359,7 @@ export default {
         flightSelected(type, addon, orders, traveller) {
             const that = this
             if (traveller == null) {
-                alert('flightSelected - traveller is null')
+                console.log('WARNING: flightSelected - traveller is null')
             }
             that.debug > 3 && console.log('flightSelected SELECTED FLIGHT for ', type, addon, traveller)
             that.debug > 4 && console.log('flightSelected CHECK ORDERS', orders)

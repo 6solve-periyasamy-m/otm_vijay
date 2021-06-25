@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="col-sm-2 form-group field-separation">
                                 <select v-model="title" class="form-control">
-                                    <option value="" default>Title</option>
+                                    <option value="Title" default>Title</option>
                                     <option value="Mr">Mr</option>
                                     <option value="Ms">Ms</option>
                                     <option value="Mrs">Mrs</option>
