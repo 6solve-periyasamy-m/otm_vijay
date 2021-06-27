@@ -19,7 +19,7 @@ use App\Models\FlightInventoryTour;
 
 class BookingController extends ApiController
 {
-    protected $logging = 'flights';
+    protected $logging = 'customers';
 
     private function getFlightTour($flight_inventory_tour_id)
     {   
@@ -202,7 +202,7 @@ class BookingController extends ApiController
 
     public function storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flightType, $addon, $reference)
     {
-        $this->logging == 'orders' && Log::info('storeOrUpdateCustomerOrderDetail --- check flightTour', $flightTour->toArray());
+        $this->logging == 'customers' && Log::info('storeOrUpdateCustomerOrderDetail --- check flightTour', $flightTour->toArray());
         $customer_order_detail = $this->findCustomerOrderDetailByInventoryTourId($orderCustomer->id, $flightTour->flight_inventory_id, $flightType, $reference, $addon);
         
         // // when setting an group order, remove any addon that matches it
@@ -254,11 +254,11 @@ class BookingController extends ApiController
             $actionDescription .= $status;
             ActionsRepository::log($actionDescription, $orderCustomer->order_id, $flightTour->id, $status);
             $customer_order_detail->save();
-            $this->logging == 'orders' && Log::info('saving customer_order_detail record', $customer_order_detail->toArray());
+            $this->logging == 'customers' && Log::info('saving customer_order_detail record', $customer_order_detail->toArray());
 
             return true;
         } catch(\Exception $e) {
-            $this->logging == 'orders' && Log::info('ERROR updating customer order detail'.$e->getMessage());
+            $this->logging == 'customers' && Log::info('ERROR updating customer order detail'.$e->getMessage());
             return false;
         };
 }
@@ -365,6 +365,13 @@ class BookingController extends ApiController
         $customer = $this->storeOrUpdateCustomer($request, true);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, true);
 
+        // $flightTour = null;
+        // $flightType = null;
+        // $addon = null;
+        // $order = $request->order;
+        // $reference = $request->reference;
+        // $this->storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flightType, $addon, $reference);
+
         return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
 
@@ -379,7 +386,7 @@ class BookingController extends ApiController
         $this->logging == 'customers' && Log::info('additionalTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, false);
-
+        
         return json_encode(['success' => true, 'customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
 

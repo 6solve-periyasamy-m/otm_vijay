@@ -25,7 +25,7 @@
               <h3 v-if="makeBooking">Available accommodation options</h3>
               <h3 v-if="makeBookingByRoom">Available accommodation rooms</h3>
 
-              <section-group class="col a-cards accommodations" v-if="makeBooking">
+              <div class="section-group col a-cards accommodations" v-if="makeBooking">
                 <section class="col listing travellers" v-if="makeBooking && !travellersOptionsSet">
                 List travellers and select options
                 </section>
@@ -33,7 +33,7 @@
                 <section v-if="makeBooking && travellersOptionsSet">
                 Generic booking{{accommodations}}
                 </section>
-              </section-group>
+              </div>
 
               <section class="col a-cards accommodations" v-if="makeBookingByRoom">
                 <article
@@ -220,7 +220,7 @@ export default {
   props: ["tour"],
   data() {
     return {
-      debug: 9,
+      debug: false,
       token: "",
       order_id: 0,
       showAccommodation: false,
