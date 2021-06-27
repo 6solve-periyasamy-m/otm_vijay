@@ -90,7 +90,7 @@ export default {
                     if (that.orders.length < 1) {
                         console.log('*** expired order cookie', that.bookingOrderToken)
                         that.order_id = null
-                        //that.getOrderId()
+                        that.getOrderId()
                         alert('Your order appears to have expired, please rebook or contact us.')
                     } else {
                         if (that.orders.length > 1) {
@@ -113,18 +113,18 @@ export default {
         } else {
             console.log('bookingOrderToken NOT detected', that.bookingOrderToken)
         }
-        if (typeof this.orders == 'undefined' || !this.orders.length) {
-            this.getOrderId();
-            this.debug && console.log('created order = ', this.orders)
-        } else {
-            this.debug && console.log('BOOKING FORM existing order = ', this.orders)
-        }
+        // if (typeof this.orders == 'undefined' || !this.orders.length) {
+        //     this.getOrderId();
+        //     this.debug && console.log('created order = ', this.orders)
+        // } else {
+        //     this.debug && console.log('BOOKING FORM existing order = ', this.orders)
+        // }
     },
     methods: {
         async getOrderId() {
             let that = this
-            // console.log('BOOKING FORM: getOrderId call') 
-            axios.post('/api/booking/create-order', {
+            console.log('BOOKING FORM: getOrderId call') 
+            await axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
                 event: this.event.id
             })

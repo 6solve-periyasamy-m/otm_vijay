@@ -7,13 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Octopus Travel Matrix</title>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
-    {{-- 
-    <link href="{{ asset('/css/jquery-ui.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">

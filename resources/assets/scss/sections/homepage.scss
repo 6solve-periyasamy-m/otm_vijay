@@ -1,0 +1,197 @@
+// homepage
+:root {
+    --white: #fff;
+}
+
+* {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+}
+
+@import 'media-queries';
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+$color-primary: #00b4ff;
+$color-secondary: #8bbdff;
+$color-tertiary: #2684ff;
+$color-text-dark: #333;
+$color-text-lightgrey: rgb(189, 189, 189);
+$color-text-lightergrey: rgb(240, 240, 240);
+$color-text-darkg: rgb(107, 107, 107);
+$color-text-light: rgb(255, 255, 255);
+
+%align-center {
+    align-items: center;
+    margin: auto;
+    text-align: center;
+}
+
+body {
+    background-color: var(--white);
+}
+
+.homepage {
+    a {
+        display: block;
+        text-align: center;
+        font-size: x-large;
+        height: 8vh;
+        padding: 2vh;
+    }
+
+    h1 {
+        font-size: 3.2rem;
+        font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .fader {
+        animation-fill-mode: forwards;
+        padding-top: 5vh;
+        animation: fadein 12000ms;
+        -moz-animation: fadein 12000ms;
+        -webkit-animation: fadein 12000ms;
+        -o-animation: fadein 12000ms;
+    }
+
+    .f2 {
+        animation-delay: 1000ms;
+    }
+
+    .f3 {
+        animation-delay: 2000ms;
+        float: right;
+    }
+
+    .logotext {
+        text-align: justify;
+        color: $color-text-darkg;
+        font-size: 1.2rem;
+    }
+
+
+
+    .active {
+        display: none;
+    }
+
+    .menucontainer {
+        display: inline;
+        position: fixed;
+        width: 92vw;
+        z-index: 10;
+        padding: 0 2vw;
+
+        &__contact {
+            background-color: $color-primary;
+            color: $color-text-light;
+            border-radius: 0 0 5vw 5vw;
+        }
+
+        &__menu {
+            background-color: transparent;
+            color: $color-text-dark;
+        }
+    }
+
+    .logocontainer {
+        background-color: $color-text-light;
+        padding-bottom: 10vh;
+        padding-top: 10vh;
+    }
+
+    .gradient1 {
+        background-image: linear-gradient($color-text-light, $color-tertiary);
+        height: 15vh;
+    }
+
+    .gradient2 {
+        background-image: linear-gradient($color-tertiary, $color-text-light);
+        height: 15vh;
+    }
+
+    .testimonials {
+        background-color: $color-tertiary;
+        height: auto;
+        padding-bottom: 10vh;
+    }
+
+    .testimonial {
+        display: flex;
+        padding-bottom: 5vh;
+
+        &__text {
+            color: $color-text-light;
+            padding: 5vw;
+            padding-bottom: 0;
+            text-align: end;
+            font-style: italic;
+        }
+
+        &__author {
+            color: $color-text-light;
+            float: left;
+            padding-left: 5vw;
+        }
+    }
+
+    .avatarimg {
+        border-radius: 50%;
+        width: 50vw;
+        height: auto;
+        @extend %align-center;
+    }
+
+    .dropdown {
+        background-color: $color-secondary;
+        color: $color-text-light !important;
+        font-weight: bolder;
+        border-radius: 0 0 5vw 5vw;
+    }
+
+    .news {
+        background-color: $color-text-light;
+        padding: 5vw;
+        padding-bottom: 10vh;
+    }
+
+    .video {
+        background-color: $color-tertiary;
+        padding-bottom: 10vh;
+    }
+
+    .videoframe {
+        width: 100%;
+        height: 30vh;
+    }
+
+    .documentation {
+        background-color: $color-text-light;
+        padding: 5vw;
+        padding-bottom: 10vh;
+    }
+
+    .headertext {
+        padding-top: 10vh;
+        padding-bottom: 5vh;
+        color: $color-text-light;
+        @extend %align-center;
+    }
+
+    .alt {
+        color: $color-text-dark;
+    }
+
+    @media (min-width:780px) {}
+
+    @media (min-width:1024px) {}
+
+}

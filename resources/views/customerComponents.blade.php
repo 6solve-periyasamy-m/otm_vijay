@@ -11,7 +11,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h4>Accommodations</h4>            <div class="panel panel-bordered">
+            <h4>Accommodations</h4>
+            <div class="panel panel-bordered">
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table id="dataTable" class="table table-hover">
@@ -158,6 +159,7 @@
         </div>
     </div>
 </div>
+{{--
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -211,4 +213,5 @@
         </div>
     </div>
 </div>
+--}}
 @stop

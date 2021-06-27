@@ -35,10 +35,10 @@
 import dates from '../utilities'
 import { bus } from '../bus'
 export default {
-    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
+    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
     data() {
         return {
-            debug: 9,
+            debug: false,
             flightId: '',
             tour_flight_type: '',
             flight_selected: this.selected_item,
@@ -53,8 +53,8 @@ export default {
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-
-        this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom)
+        console.log('BFFS: this.selected_item', this.selected_item)
+        this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
     },
     created() {
         let that = this
@@ -73,20 +73,20 @@ export default {
             })
         
         }
-            this.filterFlights()
-            bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
+        this.filterFlights()
+        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
             console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
-            })
+        })
          
     },
     methods: {
         changeFlight() {
             if (typeof this.flightId != 'undefined' && this.flightId != null && this.flightId != 0) {
-                console.log('change flight!', this.flightId)
+                console.log('change flight!', this.flightId, this.traveller)
                 this.caption = 'Remove selection'
                 bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom)
             } else {
-                this.caption = 'Reset to group flight, you can select a flight'
+                this.caption = 'You can select a custom flight'
             }
         },
         removeBooking(booking, flight_type) {

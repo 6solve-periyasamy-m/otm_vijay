@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\AccommodationController;
+use App\Http\Controllers\Api\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,8 +70,8 @@ Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{c
 
 
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
-Route::get('/booking/payment-schedules', [ApiController::class, 'getPaymentSchedules']);
-Route::get('/booking/payment-schedule/{id}', [ApiController::class, 'getPaymentSchedule']);
+Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
+Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
 Route::middleware('auth:api')->group(function() {
     

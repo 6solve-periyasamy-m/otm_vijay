@@ -25,6 +25,14 @@ Route::get('/', function () {
     return view('otm');
 });
 
+Route::get('/homepage', function () {
+    return view('homepage');
+});
+
+Route::get('/pdfmake', function () {
+    return view('pdfmake');
+});
+
 Route::prefix("/booking")->group(function() {
 
     // debugging routes
@@ -59,7 +67,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'admin.user'], function () {
     Voyager::routes();
 
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');

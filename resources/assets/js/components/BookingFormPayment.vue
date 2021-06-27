@@ -12,12 +12,17 @@
             <div class="row">
                 <payment-schedule status="new" tour="1" :total_price="10000" :passengers="4"></payment-schedule>
             </div>
+            <div class="row">
+                <hr>
+                <pdf></pdf>
+            </div>
         </div>
     </div>
 </div>
 </template>
 <script>
 import { bus } from '../bus'
+import PaymentInstallments from './PaymentInstallments.vue'
 export default {
     mounted() {
         let that = this
