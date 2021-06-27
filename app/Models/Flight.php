@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 
 
 class Flight extends Model
 {
+    use HasFactory;
+
     public $additional_attributes = ['flight_details'];
 
     public function flightInventory()
@@ -40,7 +43,8 @@ class Flight extends Model
         $departs = Carbon::parse($this->departure_date)->format('d/m/Y');
         $arrives = Carbon::parse($this->arrival_date)->format('d/m/Y');
 
-        return "{$this->airline->airline_name} | Departs {$departs} from: {$this->departureAirport->location->location_name} - Arrives {$arrives} at: {$this->arrivalAirport->location->location_name} ";
+        return "{$this->airline->airline_name} | Departs from: {$this->departureAirport->location->location_name} - Arrives at: {$this->arrivalAirport->location->location_name}";
+        //return "{$this->airline->airline_name} | Departs {$departs} from: {$this->departureAirport->location->location_name} - Arrives {$arrives} at: {$this->arrivalAirport->location->location_name} ";
     }
 
 }

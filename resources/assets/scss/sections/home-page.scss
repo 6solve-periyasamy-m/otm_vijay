@@ -1,0 +1,30 @@
+// home page 
+.home-page {
+    width: 72%;
+    margin: 0 auto 0;
+    max-width: 992px;
+    .left-align {
+        text-align: left;
+    }
+    .definition {
+        text-align: left;
+        &__heading {
+            margin-left: -1rem;
+            margin-top: 1rem;
+            font-size: 1.25rem;
+        }
+        &__body {
+            font-size: 0.8rem;
+        }
+        &__subheading {
+            margin-top: 0.8rem;
+            margin-left: 1.25rem;
+            font-size: 0.95rem;
+        }
+        a { 
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 1em;
+        }
+    }
+}

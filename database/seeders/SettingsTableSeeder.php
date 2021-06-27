@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -13,7 +14,6 @@ class SettingsTableSeeder extends Seeder
      */
     public function run()
     {
-  
         
 
         \DB::table('settings')->delete();
@@ -24,7 +24,7 @@ class SettingsTableSeeder extends Seeder
                 'id' => 1,
                 'key' => 'site.title',
                 'display_name' => 'Site Title',
-                'value' => 'Site Title',
+                'value' => 'Octopus Travel',
                 'details' => '',
                 'type' => 'text',
                 'order' => 1,
@@ -35,7 +35,7 @@ class SettingsTableSeeder extends Seeder
                 'id' => 2,
                 'key' => 'site.description',
                 'display_name' => 'Site Description',
-                'value' => 'Site Description',
+                'value' => 'Demonstration Site',
                 'details' => '',
                 'type' => 'text',
                 'order' => 2,
@@ -79,7 +79,7 @@ class SettingsTableSeeder extends Seeder
                 'id' => 6,
                 'key' => 'admin.title',
                 'display_name' => 'Admin Title',
-                'value' => 'Voyager',
+                'value' => 'Octopus Travel Matrix',
                 'details' => '',
                 'type' => 'text',
                 'order' => 1,
@@ -90,7 +90,7 @@ class SettingsTableSeeder extends Seeder
                 'id' => 7,
                 'key' => 'admin.description',
                 'display_name' => 'Admin Description',
-                'value' => 'Welcome to Voyager. The Missing Admin for Laravel',
+                'value' => 'Welcome to OTM',
                 'details' => '',
                 'type' => 'text',
                 'order' => 2,
@@ -112,7 +112,7 @@ class SettingsTableSeeder extends Seeder
                 'id' => 9,
                 'key' => 'admin.icon_image',
                 'display_name' => 'Admin Icon Image',
-                'value' => 'settings/December2020/D9j9zDXJ9PUWFuj5GKCl.png',
+                'value' => 'settings/January2021/ZrHuqZfpLUDHV4DCV9gk.png',
                 'details' => '',
                 'type' => 'image',
                 'order' => 4,

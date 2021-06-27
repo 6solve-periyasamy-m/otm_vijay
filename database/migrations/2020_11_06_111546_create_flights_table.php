@@ -17,15 +17,16 @@ class CreateFlightsTable extends Migration
             $table->increments('id');
             $table->integer('airline_id')->nullable();
             $table->integer('departure_airport_id')->nullable();
-            $table->date('departure_date')->nullable();
+            //$table->date('departure_date')->nullable();
             $table->integer('arrival_airport_id')->nullable();
-            $table->date('arrival_date')->nullable();
+            //$table->date('arrival_date')->nullable();
             $table->tinyInteger('is_domestic')->nullable();
             $table->text('notes')->nullable();
             $table->tinyInteger('is_archived')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->string('currency', 5)->nullable();
+            $table->date('available_after')->nullable();
         });
     }
 

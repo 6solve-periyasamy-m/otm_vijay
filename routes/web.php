@@ -25,17 +25,34 @@ Route::get('/', function () {
     return view('otm');
 });
 
+Route::prefix("/booking")->group(function() {
+
+    // debugging routes
+    Route::get('/check/events', [TourController::class, 'getEvents']);
+    Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
+    Route::get('/vuetest', function() {
+        return view('vueTest');
+    });
+
+    Route::get('/store', function() {
+        return view('bookingStore');
+    });
+    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
+    Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
+    Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);    
+    Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);    
+    Route::get('/', [BookingController::class, 'bookingForm']);
+
+    Route::get('/{url}', [BookingController::class, 'tourBookingForm']);
+
+});
+
+Route::get('phones', function() {
+    return view('phoneValidation');
+});
 
 Route::prefix('customer')->group(function () {
     Route::get('/payment/schedule', [PaymentScheduleController::class, 'index'])->name('payment-schedule');
-});
-
-Route::get('/booking-form', function () {
-    return view('bookingForm');
-});
-
-Route::get('/booking-form2', function () {
-    return view('bookingForm2');
 });
 
 Route::get('/dashboard', function () {
@@ -50,11 +67,4 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 
-});
-
-
-Route::prefix("/booking")->group(function() {
-    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
-    Route::get('/{id}', [BookingController::class, 'bookingForm']);
-    Route::get('/', [BookingController::class, 'newBookingForm']);
 });

@@ -286,7 +286,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 10:47:42',
-                'updated_at' => '2021-02-02 22:17:00',
+                'updated_at' => '2021-02-26 08:05:15',
             ),
             15 => 
             array (
@@ -322,7 +322,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 18:21:33',
-                'updated_at' => '2021-02-03 23:44:55',
+                'updated_at' => '2021-03-06 18:12:05',
             ),
             17 => 
             array (
@@ -466,7 +466,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-16 08:43:02',
-                'updated_at' => '2021-02-09 06:22:08',
+                'updated_at' => '2021-02-22 07:38:31',
             ),
             25 => 
             array (
@@ -647,6 +647,24 @@ class DataTypesTableSeeder extends Seeder
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2021-01-22 12:11:37',
                 'updated_at' => '2021-02-03 07:32:40',
+            ),
+            35 => 
+            array (
+                'id' => 89,
+                'name' => 'flight_inventory_tour',
+                'slug' => 'flight-inventory-tour',
+                'display_name_singular' => 'Flight Inventory Tour',
+                'display_name_plural' => 'Flight Inventory Tours',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\FlightInventoryTour',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-03-06 15:11:08',
+                'updated_at' => '2021-03-08 08:44:53',
             ),
         ));
         

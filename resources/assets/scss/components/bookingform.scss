@@ -1,6 +1,66 @@
 :root {
     --payment-button-color: #007bff;
+    --card-background: #efefef;
+    --card-body-background: #dcdcdc;
+    --booking-form-background: #cdcdcd;
 }
+.logo {
+    width: 200px;
+    height: auto;
+}
+h1 {
+    font-size: 2rem;
+}
+h2 {
+    font-size: 1.5rem;
+}
+h3 {
+    font-size: 1.25rem;
+}
+.bookingform-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    &__logo {
+        margin-right: 1rem;
+    }
+    &__title {
+        font-size: 1.25rem;
+        flex: 0 1 65%;
+        &--main {
+            font-size: 0.85em;
+        }
+    }
+}
+.card-body {
+    overflow: hidden;
+    width: 100%;
+    padding: 0;
+}
+.card-options {
+    background: var(--card-background, #dcdcdc);
+    .card-body {
+        background: var(--card-body-background, #efefef);
+    }
+}
+.btn-link {
+    color: white;
+    border-radius: 0;
+    border: 1px solid linear-gradient(to top, #007bff, #ddd);
+    background: green;
+    &:hover {
+        color: green;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+}
+
+.ept-form {
+    background: var(--booking-form-background, #cccccc);
+    margin: 1rem;
+    padding: 1rem;
+}
+
 .payments {
     &__column {
         &--highlight {
@@ -22,3 +82,166 @@
         font-weight: 600;
     }
 }
+.has-dropdown {
+    top: 0.5rem;
+    width: 100%;
+    .dropdown {
+        border: none;
+        align-content: right;
+    }
+    .dropdown::selection {
+        border-radius: 0;
+        border: thin #ddd solid;
+    }
+}
+.dropdown {
+    border: thin #ddd solid;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+    padding: 4px;
+}
+input, .dropdown {
+    border-radius: 0;
+    border: thin #ddd solid;
+}
+input[pattern]:invalid,
+.invalid {
+    color: red;
+}
+.maxwidth {
+    width: 100%;
+}
+.field-separation {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.field-joining {
+    max-height: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.caption {
+    margin: 0 2rem;
+}
+.spacer {
+    margin-top: 2rem;
+}
+.cardhead {
+    text-align: left;
+}
+.flight-customise {
+    margin: 1rem 2rem;
+    overflow: hidden;
+    width: 95%;
+}
+.flight-options {
+    margin: 1rem 3rem 2rem 1rem;
+}
+hr.light {
+    margin: 1rem 0;
+    background-color: #ccc;
+}
+.compress {
+    font-size: 10px;
+}
+
+.accommodations {
+    &__traveller {
+        font-size: 11px;
+    }
+    &__summary {
+        display: flex;
+        .card {
+            padding: 1rem;
+            margin: 1rem;
+        }
+    }
+}
+.mb-1 {
+    p {
+        margin-left: 1.25em;
+    }
+}
+
+.a-cards {
+    padding: 0.5rem;
+    display: flex;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.a-card {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    border: 2px outset #01328e;
+    border-radius: 0;
+    flex: 0 1 auto;
+    img {
+        width: 100%;
+        height: auto;
+    }
+    &__content {
+        padding: 0.1em;
+    }
+    .label {
+        padding: 0.1em 0.25em;
+        font-size: 0.7rem;
+        background: grey;
+        color: white;
+    }
+    .content {
+        padding: 0 0 0.5em 0;
+        font-size: 0.85rem;
+        background: white;
+        color: indigo;
+    }
+    &:hover,
+    &:active {
+        box-shadow: 3px 3px 8px hsl(0, 0%, 80%);
+    }
+}
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.btn-small {
+    width: 3rem;
+    height: 1rem;
+    padding: 0;
+    vertical-align: inherit;
+    font-size: 12px;
+}
+@media screen and (min-width: 576px) {
+    .a-cards {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .a-card {
+        flex: 0 1 40%;
+    }
+}
+@media screen and (min-width: 768px) {
+    .a-card {
+        flex: 0 1 30%;
+    }
+}
+@media screen and (min-width: 992px) {
+    .a-card {
+        flex: 0 1 20%;
+    }
+}
+

@@ -17,10 +17,10 @@ class Airport extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public static function getAirportById($airport_id)
-    {
-        return Airport::where('id', $airport_id)->first();
-    }
+    // public static function getAirportById($airport_id)
+    // {
+    //     return Airport::where('id', $airport_id)->first();
+    // }
 
     public function flight()
     {

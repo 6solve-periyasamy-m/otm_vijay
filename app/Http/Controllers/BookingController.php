@@ -1,31 +1,74 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Tour;
+use App\Models\Event;
 
 class BookingController extends Controller
 {
     /**
-     * Display a new booking form
+     * bookingForm
+     * returns a booking form from an order with token
+     * or a new booking form that requests a tour be specified
      *
-     * @return \Illuminate\Http\Response
+     * @param [type] $token
+     * @return void
      */
-    public function newBookingForm()
+    public function bookingForm($token = null)
     {
-        return view('bookingForm');
+        if ($token) {
+            $orders = new Order;
+            $order = $orders->where('token', $token)->first();
+            if ($order) {
+                return view('bookingForm')->with(['order' => $order]);
+            }
+            abort(404);
+        }
+        if (config('app.setting.booking-selection')) {
+            return view('bookingForm');
+        }
+        abort(403);
     }
 
-    public function bookingForm($id)
+    public function eventBookingForm($url) 
     {
-
-        $orders = new Order;
-        $order = $orders->findOrFail($id);
-        
-        return view('bookingForm')->with(['order', $order]);;
+        $event = Event::where('booking_url', $url)->first();
+        if (empty($event)) {
+            abort(404);
+        }
+        $tours = Tour::where('event_id', $event->id)->get();
+        if (empty($tours)) {
+            Log::error('There are no tours for event ', $event->toArray());
+            abort(404);
+        }
+        return view('eventBookingForm')->with('event', $event);
     }
 
+    public function tourBookingForm($url)
+    {
+        $tour = Tour::where('booking_form_url', $url)->first();
+        if (empty($tour)) {
+            abort(404);
+        }
+        try {
+            $event = Event::findOrFail($tour->event_id);
+        } catch(\Exception $e) {
+            if (!config('app.setting.booking-selection')) {
+                abort(403);
+            }
+            return view('bookingForm');
+        }
+
+        if (isset($tour) && isset($event)) {
+            return view('tourBookingForm')->with(['tour' => $tour, 'event' => $event]);
+        }
+
+        abort(404);
+    }
 
     /**
      * A new booking creates an order with dependencies

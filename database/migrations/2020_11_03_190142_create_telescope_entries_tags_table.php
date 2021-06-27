@@ -17,6 +17,7 @@ class CreateTelescopeEntriesTagsTable extends Migration
             $table->char('entry_uuid', 36);
             $table->string('tag', 190)->index();
             $table->index(['entry_uuid', 'tag']);
+            $table->foreign('entry_uuid')->references('uuid')->on('telescope_entries')->onUpdate('RESTRICT')->onDelete('CASCADE');
         });
     }
 
