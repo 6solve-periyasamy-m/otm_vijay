@@ -25,7 +25,7 @@
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour && token">
                                         <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
-                                        <booking-form-accommodation :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
+                                        <booking-form-accommodation :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
                                         <booking-form-activity></booking-form-activity>
                                         <booking-form-transport></booking-form-transport>
                                         <booking-form-payment></booking-form-payment>

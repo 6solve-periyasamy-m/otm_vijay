@@ -64,7 +64,7 @@ class AccommodationController extends ApiController
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->where('accommodation_inventory_tours.tour_id', $tour->id)
             ->get();
-
+Log::info('getAccommodationInventoryForTour', $result->toArray());
         return response()->json(["success" => true, 'accommodations' => $result]);
     }
 
@@ -127,6 +127,7 @@ class AccommodationController extends ApiController
 
     public function getAccommodationBooking(Tour $tour, Order $order, $token)
     {
+        Log::info('getAccommodationBooking');
         $orderCustomerIds = $this->findCustomersForOrder($order);
         $orderCustomers = new OrdersCustomer();
         $customerOrderDetails = $this->getAccommodationBookingObject($tour, $orderCustomerIds, $token);
@@ -134,6 +135,7 @@ class AccommodationController extends ApiController
             return response()->json(['success' => false, 'bookings' => NULL]);
         }
         foreach($customerOrderDetails as $booking) {
+            Log::info('getAccommodationBooking', $booking->toArray());
             $booking->accommodation = AccommodationInventory::where('accommodation_inventories.id', $booking->inventory_id)
                 ->join('room_types', 'accommodation_inventories.room_type_id','room_types.id')
                 ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')

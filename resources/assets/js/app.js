@@ -59,6 +59,7 @@ function setCookie(cname, cvalue, exdays) {
 bus.$on('setOrderToken', function(token, order_id) {
     console.log('Event Bus: setting token cookie for order_id', token, order_id)
     setCookie('OTM_booking_order_token', token);
+    bus.$emit('setOrderToken2', token, order_id)
 })
 
 const busEventLogging = true

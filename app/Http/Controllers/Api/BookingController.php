@@ -271,7 +271,7 @@ class BookingController extends ApiController
      * @param boolean $isLead
      * @return JSON (record saved)
      */
-    private function storeOrUpdateOrderCustomer(Customer $customer, Request $request, $isLead = false) 
+    private function storeOrUpdateOrderCustomer($customer, Request $request, $isLead = false) 
     {
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
@@ -355,6 +355,7 @@ class BookingController extends ApiController
 
     /**
      * leadTraveller - save the leadTraveller data
+     * does not appear to be used???
      *
      * @param Request $request
      * @return array of what was saved in customer and orderCustomer
@@ -364,13 +365,6 @@ class BookingController extends ApiController
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, true);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, true);
-
-        // $flightTour = null;
-        // $flightType = null;
-        // $addon = null;
-        // $order = $request->order;
-        // $reference = $request->reference;
-        // $this->storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flightType, $addon, $reference);
 
         return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }
