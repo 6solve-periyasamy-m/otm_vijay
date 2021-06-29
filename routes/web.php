@@ -67,7 +67,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'admin.user'], function () {
+Route::group(['prefix' => 'admin'/*, 'middleware' => 'admin.user' */], function () {
     Voyager::routes();
 
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
