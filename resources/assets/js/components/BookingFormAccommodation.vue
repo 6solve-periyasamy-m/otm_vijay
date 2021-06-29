@@ -28,14 +28,14 @@
                         </div>
                         <div class="accommodation_traveller__options">
                             <div class="accommodation_traveller__options--single">
-                                <input type="radio" value="single" v-model="room_selection[index]">
+                                <input type="radio" value="single" @change="roomSelection" v-model="room_selection[index]">
                             </div>
                             <div class="accommodation_traveller__options--share">
-                                <input type="radio" value="share" v-model="room_selection[index]">
+                                <input type="radio" value="share" @change="roomSelection" v-model="room_selection[index]">
                             </div>
                             <div class="accommodation_traveller_options--share-with">
                                 <keep-alive>
-                                    <select @change="selectSharer" value="sharer">
+                                    <select @change="selectSharer(traveller)" value="sharer">
                                         <option selected disabled></option>
                                         <option v-for="(share,id) in getOthers()" v-bind:key="id">
                                             {{share.first_name}} {{share.last_name}}
@@ -93,9 +93,14 @@ export default {
         getOthers() {
             return this.others
         },
-        selectSharer() {
+        roomSelection() {
+            console.log(this.room_selection)
+        },
+        selectSharer(traveller) {
             console.log(this.sharer)
             this.others = this.others.filter(t => t.id != this.sharer.id)
+            console.log(this.sharer, traveller)
+            //axios.post('/api/booking/accommodation/')
         }
     }
 }
