@@ -4,47 +4,50 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
                     <button class="btn btn-link collapsed cardhead" @click="toggleAccommodation">
-                        Accommodation
-                    </button>
+                            Accommodation
+                        </button>
                     <p>
                         Accommodation options for your tour group including indication of single or shared rooms requirements.
                     </p>
                 </h5>
             </div>
-        
-        <div v-if="showAccommodation" class="card-body ept-form">
-        
-            <h2>Accommodation options</h2>
-            <div class="accommodation_travellers" v-for="traveller in travellers" v-bind:key="traveller.id">
-                <div class="accommodation_traveller">
-                    <div class="accommodation_traveller__name">
-                        {{traveller.first_name}} {{traveller.last_name}}
-                    </div>
-                    <div class="accommodation_traveller__options--labels">
-                        <div>Single Room rate</div>
-                        <div>Shared Room rate</div>
-                        <div>Share with (couples)</div>
-                    </div>
-                    <div class="accommodation_traveller__options">
-                        <div class="accommodation_traveller__options--single">
-                            <input type="radio" name="room_selection" value="single">
+            <div v-if="showAccommodation" class="card-body ept-form">
+                <h2>Accommodation options</h2>
+                <div class="accommodation_travellers"
+                    v-for="(traveller, index) in travellers"
+                    v-bind:key="index">
+                    {{index}}
+                    <div class="accommodation_traveller">
+                        <div class="accommodation_traveller__name">
+                            {{traveller.first_name}} {{traveller.last_name}}
                         </div>
-                        <div class="accommodation_traveller__options--share">
-                            <input type="radio" name="room_selection" value="share">
+                        <div class="accommodation_traveller__options--labels">
+                            <div>Single Room rate</div>
+                            <div>Shared Room rate</div>
+                            <div>Share with</div>
                         </div>
-                        <div class="accommodation_traveller_options--share-with">
-                            <select v-model="share_with">
-                                <option v-for="traveller in travellers" v-bind:key="traveller.id">
-                                {{traveller.first_name}} {{traveller.last_name}}
-                                </option>
-                            </select>                                
+                        <div class="accommodation_traveller__options">
+                            <div class="accommodation_traveller__options--single">
+                                <input type="radio" value="single" v-model="room_selection[index]">
+                            </div>
+                            <div class="accommodation_traveller__options--share">
+                                <input type="radio" value="share" v-model="room_selection[index]">
+                            </div>
+                            <div class="accommodation_traveller_options--share-with">
+                                <keep-alive>
+                                    <select @change="selectSharer" value="sharer">
+                                        <option selected disabled></option>
+                                        <option v-for="(share,id) in getOthers()" v-bind:key="id">
+                                            {{share.first_name}} {{share.last_name}}
+                                        </option>
+                                    </select>
+                                </keep-alive>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -59,20 +62,45 @@ export default {
     data() {
         return {
             debug: 3,
-            showAccommodation: false
+            showAccommodation: false,
+            traveller: {},
+            others: [],
+            sharer: [],
+            room_selection: [],
+            room_share: [],
+            room_single: []
         }
     },
     created() {
         console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id)
         let that = this
+        this.others = this.travellers
+        // bus.$on('addTraveller', this.addTraveller);
     },
     methods: {
         toggleAccommodation() {
             this.showAccommodation = !this.showAccommodation
+        },
+        countOthers(traveller) {
+            const others = this.othertravellers(traveller)
+            return others.length
+        },
+        othertravellers(traveller) {
+            let group = this.others
+            this.others = group.filter(t => t.id != traveller.id)
+            return this.others
+        },
+        getOthers() {
+            return this.others
+        },
+        selectSharer() {
+            console.log(this.sharer)
+            this.others = this.others.filter(t => t.id != this.sharer.id)
         }
     }
 }
 </script>
+
 <style scoped lang="scss">
 .accommodation_traveller {
     display: flex;
