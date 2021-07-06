@@ -51,6 +51,7 @@ Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{comp
 // Accommodation
 Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
 Route::get('/booking/accommodation/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+Route::post('/booking/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
 Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
 
 // POST routes (requires AUTH)

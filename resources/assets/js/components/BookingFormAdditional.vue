@@ -56,7 +56,8 @@
         },
         methods: {
             submit() {
-                this.$forceUpdate();
+                this.$forceUpdate()
+                this.toggleAdditional()
             },
             setCustomers(customers) {
                 this.debug && console.log('BookingFormAdditional.setCustomers(customers) customers:', customers)

@@ -3,7 +3,7 @@
     <div class="card-options" v-if="!removed">
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}} </h3>
         <div class="ept-form" :id="form_id">
-            <div v-if="edit_fields">
+            <div v-if="edit_fields || (!first_name && !last_name)">
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
                         <label type="form-label" for="first_name" v-show="first_name">First name</label>
@@ -126,6 +126,7 @@ export default {
             return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
         },
         validForm: function () {
+            console.log('validForm called')
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
         },
         mobileNumberInvalid: function () {
@@ -147,7 +148,7 @@ export default {
                     that[key] = that.customer[key]
                 }
             })
-            this.edit_fields = true
+           // this.edit_fields = false
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
@@ -206,16 +207,17 @@ export default {
                     that.debug && console.log('stored', response)
                     const customer = response.data.customer
                     const orderCustomer = response.data.orderCustomer
-                    this.id = orderCustomer.customer_id
-                    this.customer_id = orderCustomer.id
-                    this.first_name = customer.first_name
-                    this.middle_names = customer.middle_names
-                    this.last_name = customer.last_name
-                    this.email_address = customer.email_address
-                    this.mobile_number = customer.mobile_number
-                    this.other_phone_number = customer.other_phone_number
-                    this.other_phone_number_type = customer.other_phone_number_type
-                    this.date_of_birth = customer.date_of_birth
+                    that.id = orderCustomer.customer_id
+                    that.customer_id = orderCustomer.id
+                    that.first_name = customer.first_name
+                    that.middle_names = customer.middle_names
+                    that.last_name = customer.last_name
+                    that.email_address = customer.email_address
+                    that.mobile_number = customer.mobile_number
+                    that.other_phone_number = customer.other_phone_number
+                    that.other_phone_number_type = customer.other_phone_number_type
+                    that.date_of_birth = customer.date_of_birth
+                    that.edit_fields = false
                 })
                 .catch(e => {
                     console.log('submit error', e)
