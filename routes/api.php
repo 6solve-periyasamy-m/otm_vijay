@@ -54,6 +54,8 @@ Route::get('/booking/accommodation/{tour}', [AccommodationController::class, 'ge
 Route::post('/booking/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
 Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
 
+// accommodation rooms
+Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);
 // POST routes (requires AUTH)
 
 // store travellers

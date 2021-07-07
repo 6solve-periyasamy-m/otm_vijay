@@ -149,6 +149,26 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
         return response()->json(["success" => true, 'bookings' => $customerOrderDetails]);
     }
 
+    public function loadRoomsForTour(Tour $tour, $order_id) {
+        /*
+select ait.tour_id,`room_type_name`, maximum_occupancy, board_type_name, stock, ai.sales_price, ait.sales_price as tour_sales_price, ai.booking_policy
+from accommodation_inventory_tours ait 
+join accommodation_inventories ai on ait.accommodation_inventory_id=ai.id
+join room_types rt on rt.id=ai.room_type_id
+join board_types bt on bt.id=ai.board_type_id
+where tour_id=2
+        */
+        $tours = new AccommodationInventoryTour();
+        $rooms = $tours->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id','accommodation_inventories.id')
+                    ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
+                    ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
+                    ->where('accommodation_inventory_tours.tour_id', $tour->id)
+                    ->get();
+        Log::info('rooms for tour', $rooms->toArray());
+
+        return response()->json(["success" => true, 'rooms' => $rooms]);
+    }
+
     private function assignAccommodationBooking(CustomerOrderDetail &$customer_order_detail, $ordersCustomer, $reference, AccommodationInventory $accommodationInventory, AccommodationInventoryTour $accommodationInventoryTour)
     {
         $boardTypes = new BoardType();

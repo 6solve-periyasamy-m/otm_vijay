@@ -20,6 +20,7 @@ window.axios.defaults.headers.common = {
  Vue.component('booking-form-flights', require('./components/BookingFormFlights.vue').default);
  Vue.component('booking-form-flight-select', require('./components/BookingFormFlightSelector.vue').default);
  Vue.component('booking-form-accommodation', require('./components/BookingFormAccommodation.vue').default);
+ Vue.component('accommodation-room-selection', require('./components/AccommodationRoomSelection.vue').default);
  Vue.component('booking-form-activity', require('./components/BookingFormActivity.vue').default);
  Vue.component('booking-form-transport', require('./components/BookingFormTransport.vue').default);
  Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
