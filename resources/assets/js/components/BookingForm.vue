@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
-                        OTM Booking Form version 0.4.1 PRERELEASE - Lead/Additionals/Flights/Accommodation
+                        OTM Booking Form version 0.4.2 PRERELEASE - Lead/Additionals/Flights/Accommodation
                         <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
                         <button class="btn btn-small btn-themed cool" @click="changeTheme('cool')">Cool</button>
                         <button class="btn btn-small btn-themed warm" @click="changeTheme('warm')">Warm</button>
