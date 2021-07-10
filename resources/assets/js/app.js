@@ -93,3 +93,27 @@ bus.$on('accommodationBookingsLoaded', function() {
 //     busEventLogging && console.log('setOrderToken order_id', order_id)
 //     bus.$emit('setOrderToken2', token, order_id)
 // })
+
+let othertravellers = []
+bus.$on('loadOthers', function(others) {
+    othertravellers = others //.map(t => t.id)
+    console.log('init others', others)
+})
+bus.$on('setRoomShare', function(t) {
+    let removeId
+    let others = othertravellers
+    console.log('> others', others.map(t => t.first_name))
+    if (typeof t.sharer !== 'undefined') {
+        console.log('srs', t.sharer.first_name)
+        removeId = t.sharer.id
+        others = others.filter(o => {
+            return removeId != o.id
+        })
+    }
+    others = others.filter(o => {
+        return t.id != o.id
+    })
+    othertravellers = others
+    console.log('>> others', others.map(t => t.first_name))
+    //bus.$emit('setOthers', others)
+})

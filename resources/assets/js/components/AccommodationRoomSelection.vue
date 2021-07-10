@@ -30,21 +30,32 @@ export default {
         return {
             rooms: [],
             room_selected: {}, 
-            sharer: {},
+            sharer: [],
             others: [],
             selected: null
         }
     },
+    created() {
+        bus.$on('AccommodationRoomSelectorInit', (group) => {
+            this.group = group
+            this.others = this.group
+            this.init()
+        })
+    },
     mounted() {
-        this.loadRoomsForTour();
-        this.getOthers()
+        this.init();
     },
     methods: {
+        init() {
+            this.loadRoomsForTour();
+            this.getOthers()
+            this.sharer = []
+        },
         getOthers() {
             let group = this.group
             group = group.filter(t => t.id != this.traveller.id)
             console.log('getOthers', this.group, group)
-            this.others = group
+            //this.others = this.others.filter(t => t.id != this.others.id)
             //this.$forceUpdate()
             return group
         },

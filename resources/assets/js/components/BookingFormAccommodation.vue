@@ -45,62 +45,80 @@
 import dates from "../utilities";
 import { bus } from "../bus";
 import Vue from "vue";
-import AccommodationRoomSelection from './AccommodationRoomSelection.vue';
+import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
 /**
  * accommodation is found related to the tour
  */
+function initialstate() {
+    return {
+        debug: 3,
+        showAccommodation: false,
+        accommodations: [],
+        occupancy: [],
+        traveller: {},
+        group: [],
+        others: [],
+        room_selection: [],
+        room_share: [],
+        room_single: [],
+        isShare: [],
+        sharer: {},
+        type: {},
+    }
+}
 export default {
     components: { AccommodationRoomSelection },
     props: ["tour", "order_id", "order_token", "travellers"],
     data() {
-        return {
-            debug: 3,
-            showAccommodation: false,
-            accommodations: [],
-            occupancy: [],
-            traveller: {},
-            group: [],
-            others: [],
-            room_selection: [],
-            room_share: [],
-            room_single: [],
-            isShare: [],
-            sharer: {},
-            type: {}
-        }
+        return initialstate();
     },
     created() {
         console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
-        
-        let that = this
-
         this.group = this.others = this.travellers
-        this.group.map(t => t.shared = false)
-        
-        this.getAccommodationOptions()
-        bus.$on('setRoomShare', function(traveller) {
-            that.group.map(t => {
-                if (t.id == traveller.sharer.id)  {
-                    t.shared = true
-                }
-            })
-            // to reduce the others, an event hanlder in ARSelector is needed
-            // that.others = that.othertravellers(traveller.sharer.id)
-            that.$forceUpdate()
-        })
+        this.setup()
     },
     methods: {
+        setup() {
+            let that = this
+            this.group.map(t => t.shared = false)
+            this.getAccommodationOptions()
+            bus.$on('setRoomShare', function(traveller) {
+                that.group.map(t => {
+                    if (t.id == traveller.sharer.id)  {
+                        t.shared = true
+                    }
+                })
+                // to reduce the others, an event hanlder in ARSelector is needed
+                // that.others = that.othertravellers(traveller.sharer.id)
+                that.$forceUpdate()
+            })
+            bus.$emit('loadOthers', that.group)
+        },
+        init() {
+            let that = this
+            this.group = []
+            this.$forceUpdate()
+            this.group = this.others = this.travellers
+            this.group.map(t => t.shared = false)
+            this.others = this.travellers
+            this.getAccommodationOptions()
+        },
         reset() {
-        this.group = this.others = this.travellers
-        this.group.map(t => t.shared = false)
-        
-        this.getAccommodationOptions()
-            // this.group.map(t => {
-            //     t.shared = false
-            //     t.sharer = null
-            // })
-            // console.log('reset', this.group)
-            // this.$forceUpdate()
+            initialstate();
+            this.showAccommodation = false
+            this.$forceUpdate()
+            this.setup()
+            this.init()
+            bus.$emit('AccommodationRoomSelectorInit', this.group)
+            this.$forceUpdate()
+            this.showAccommodation = true
+
+                // this.group.map(t => {
+                //     t.shared = false
+                //     t.sharer = null
+                // })
+                // console.log('reset', this.group)
+                // this.$forceUpdate()
         },
         confirmAvailability() {
             this.travellers.map(traveller => {
