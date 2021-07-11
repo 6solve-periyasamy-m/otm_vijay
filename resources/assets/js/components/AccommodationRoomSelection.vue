@@ -28,6 +28,7 @@ export default {
     props: ['tour', 'order_id', 'traveller', 'group'],
     data() {
         return {
+            logging: false,
             rooms: [],
             room_selected: {}, 
             sharer: [],
@@ -40,6 +41,10 @@ export default {
             this.group = group
             this.others = this.group
             this.init()
+        })
+        bus.$on('setOthers', (others) => {
+            console.log('>>>setOthers', others)
+            this.others = others
         })
     },
     mounted() {
@@ -54,7 +59,7 @@ export default {
         getOthers() {
             let group = this.group
             group = group.filter(t => t.id != this.traveller.id)
-            console.log('getOthers', this.group, group)
+            this.logging>3 && console.log('getOthers', this.group, group)
             //this.others = this.others.filter(t => t.id != this.others.id)
             //this.$forceUpdate()
             return group
@@ -66,10 +71,10 @@ export default {
         },
         selectedRoom() {
             this.selected = this.room_selected
-            console.log('Room selection', this.room_selected)
+            this.logging>3 && console.log('Room selection', this.room_selected)
         },
         loadRoomsForTour() {
-            console.log(this.tour, this.order_id)
+            this.logging>3 && console.log(this.tour, this.order_id)
             axios.get(`/api/accommodation/rooms/tour/${this.tour.id}/${this.order_id}`)
                 .then(response => {
                     console.log('accomodation rooms for tour', response)

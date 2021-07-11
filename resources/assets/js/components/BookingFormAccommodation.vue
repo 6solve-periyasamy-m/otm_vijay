@@ -73,7 +73,7 @@ export default {
         return initialstate();
     },
     created() {
-        console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
+        this.debug>3 && console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
         this.group = this.others = this.travellers
         this.setup()
     },
@@ -122,7 +122,7 @@ export default {
         },
         confirmAvailability() {
             this.travellers.map(traveller => {
-                console.log('traveller:', traveller)
+                this.debug>3 && console.log('traveller:', traveller)
                 axios.post('/api/booking/accommodation/reserve', {
                     customer_id: traveller.id,
                     order_id: this.order_id,
@@ -182,7 +182,7 @@ export default {
             const url = `/api/booking/accommodation/${this.tour.id}`
             await axios.get(url)
             .then((response) => {
-                console.log('getAccommodationOptions', response.data)
+                this.debug>3 && console.log('getAccommodationOptions', response.data)
                 that.accommodations = response.data.accommodations
                 that.accommodations.map(
                     (accommodation) => {
@@ -195,7 +195,6 @@ export default {
     }
 }
 </script>
-
 <style scoped lang="scss">
 .accommodation_traveller {
     display: flex;

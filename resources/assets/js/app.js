@@ -95,10 +95,12 @@ bus.$on('accommodationBookingsLoaded', function() {
 // })
 
 let othertravellers = []
+// initialises the external array
 bus.$on('loadOthers', function(others) {
     othertravellers = others //.map(t => t.id)
     console.log('init others', others)
 })
+
 bus.$on('setRoomShare', function(t) {
     let removeId
     let others = othertravellers
@@ -115,5 +117,5 @@ bus.$on('setRoomShare', function(t) {
     })
     othertravellers = others
     console.log('>> others', others.map(t => t.first_name))
-    //bus.$emit('setOthers', others)
+    bus.$emit('setOthers', others)
 })
