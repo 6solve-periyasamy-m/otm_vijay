@@ -9,7 +9,7 @@
             <keep-alive>
                 <select @change="selectSharer(traveller)" v-model="sharer[traveller.id]">
                     <option selected disabled>Open</option>
-                    <option v-for="(share, id) in getOthers(traveller)" :key="id" :value="share">
+                    <option v-for="(share, id) in others /*getOthers(traveller)*/" :key="id" :value="share">
                         {{share.first_name}} {{share.last_name}}
                     </option>
                 </select>
@@ -33,19 +33,25 @@ export default {
             room_selected: {}, 
             sharer: [],
             others: [],
-            selected: null
+            selected: null,
+            share: {},
+            control: true
         }
     },
     created() {
-        bus.$on('AccommodationRoomSelectorInit', (group) => {
-            this.group = group
-            this.others = this.group
+        bus.$on('AccommodationRoomSelectorReset', (group) => {
+            //this.group = group
+            //const group = this.$root.group
+            this.others = group
             this.init()
         })
-        bus.$on('setOthers', (others) => {
+        bus.$on('setOthers', (others, traveller) => {
             console.log('>>>setOthers', others)
-            this.others = others
+            this.others = this.getOthers(traveller)
+            this.control--
         })
+        this.others = this.group
+        this.control = this.group.length
     },
     mounted() {
         this.init();
@@ -53,20 +59,49 @@ export default {
     methods: {
         init() {
             this.loadRoomsForTour();
-            this.getOthers()
+            this.others = this.group
+            this.control = this.others.length
+            this.getOthers(this.traveller)
             this.sharer = []
         },
-        getOthers() {
-            let group = this.group
-            group = group.filter(t => t.id != this.traveller.id)
-            this.logging>3 && console.log('getOthers', this.group, group)
-            //this.others = this.others.filter(t => t.id != this.others.id)
-            //this.$forceUpdate()
-            return group
+        getOthers(traveller) {
+            // let group = this.group
+            // group = group.filter(t => t.id != this.traveller.id)
+            // this.logging>3 && console.log('getOthers', this.group, group)
+            console.log('getOthers', this.control, this.others); //, Object.values(this.others))
+            // let others = this.others
+            // // if (this.others.length < 1) {
+            // //     this.others = this.$root.group
+            // // }
+            // others = others.filter(t => t.id != others.id && t.id != traveller.id)
+                // // hack - this works!  wtf is it doing?  forceUpdate calls getOthers...
+                // if (this.control > -96) {
+                //     console.log('forceUpdate control', this.control)
+                //     this.$forceUpdate()
+                //     this.control--
+                // }
+            if (this.control-- > 0) {
+                let others = this.others
+                // if (this.others.length < 1) {
+                //     this.others = this.$root.group
+                // }
+                console.log('1. getOthers: others: ', this.control, others)
+                others = others.filter(t => t.id != others.id && t.id != traveller.id)
+                console.log('2. getOthers: others: ', this.control, others)
+                this.others=others
+
+                return others
+            }
         },
-        selectSharer() {
-            this.traveller.sharer =  Object.values(this.sharer)[0]
+        selectSharer(traveller) {
+            console.log('selectSharer CHECK', traveller.first_name)
+            traveller.sharer =  Object.values(this.sharer)[0]
+            //this.share = traveller.sharer
+console.log('settin up the roomshare for ', traveller.first_name, ' being ', traveller.sharer, this.sharer)
+
             bus.$emit('setRoomShare', this.traveller)
+            this.control = this.group.length
+            // this.sharer[traveller.id] = traveller.sharer.id
             //axios.post('/api/booking/accommodation/')
         },
         selectedRoom() {

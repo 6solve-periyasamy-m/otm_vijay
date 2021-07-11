@@ -84,8 +84,10 @@ export default {
             this.getAccommodationOptions()
             bus.$on('setRoomShare', function(traveller) {
                 that.group.map(t => {
-                    if (t.id == traveller.sharer.id)  {
-                        t.shared = true
+                    if (typeof traveller.sharer != 'undefined') {
+                        if (t.id == traveller.sharer.id)  {
+                            t.shared = true
+                        }
                     }
                 })
                 // to reduce the others, an event hanlder in ARSelector is needed
@@ -109,7 +111,7 @@ export default {
             this.$forceUpdate()
             this.setup()
             this.init()
-            bus.$emit('AccommodationRoomSelectorInit', this.group)
+            bus.$emit('AccommodationRoomSelectorReset', this.group)
             this.$forceUpdate()
             this.showAccommodation = true
 

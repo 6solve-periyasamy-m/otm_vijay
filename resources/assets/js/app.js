@@ -117,5 +117,5 @@ bus.$on('setRoomShare', function(t) {
     })
     othertravellers = others
     console.log('>> others', others.map(t => t.first_name))
-    bus.$emit('setOthers', others)
+    bus.$emit('setOthers', others, t)
 })
