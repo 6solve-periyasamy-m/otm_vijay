@@ -89,11 +89,6 @@ bus.$on('accommodationBookingsLoaded', function() {
     busEventLogging && console.log('accommodationBookingsLoaded')
 })
 
-// bus.$on('setOrderToken', (token, order_id) => {
-//     busEventLogging && console.log('setOrderToken order_id', order_id)
-//     bus.$emit('setOrderToken2', token, order_id)
-// })
-
 let othertravellers = []
 // initialises the external array
 bus.$on('loadOthers', function(others) {
@@ -104,9 +99,7 @@ bus.$on('loadOthers', function(others) {
 bus.$on('setRoomShare', function(t) {
     let removeId
     let others = othertravellers
-    console.log('> others', others.map(t => t.first_name))
     if (typeof t.sharer !== 'undefined') {
-        console.log('srs', t.sharer.first_name)
         removeId = t.sharer.id
         others = others.filter(o => {
             return removeId != o.id
@@ -116,6 +109,5 @@ bus.$on('setRoomShare', function(t) {
         return t.id != o.id
     })
     othertravellers = others
-    console.log('>> others', others.map(t => t.first_name))
     bus.$emit('setOthers', others, t)
 })
