@@ -85,9 +85,12 @@ export default {
                 // if (this.others.length < 1) {
                 //     this.others = this.$root.group
                 // }
-                console.log('1. getOthers: others: ', this.control, others)
-                others = others.filter(t => t.id != others.id && t.id != traveller.id)
-                console.log('2. getOthers: others: ', this.control, others)
+                this.debug > 2 && console.log('1. getOthers: others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
+                others = others.filter(t => t.id != traveller.id)
+                if (typeof traveller.sharer != 'undefined') {
+                    others = others.filter(t => t.id != traveller.sharer.id)
+                }
+                this.debug > 2 && console.log('2. getOthers: others: ', this.control, others.map(o=>o.first_name))
                 this.others=others
 
                 return others
@@ -97,7 +100,7 @@ export default {
             console.log('selectSharer CHECK', traveller.first_name)
             traveller.sharer =  Object.values(this.sharer)[0]
             //this.share = traveller.sharer
-console.log('settin up the roomshare for ', traveller.first_name, ' being ', traveller.sharer, this.sharer)
+            this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', traveller.sharer, this.sharer)
 
             bus.$emit('setRoomShare', this.traveller)
             this.control = this.group.length
