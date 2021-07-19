@@ -205,29 +205,46 @@ where tour_id=2
         }
         return $customerOrder;
     }
-    public function updateAccommodtionReservation($order_id, $customer_id, $type, $sharer_id)
+
+
+    private function getCOD($customerOrderId, $order_id, $type)
+    {
+        $cod = new CustomerOrderDetail();
+        $existing = $cod->where('id', $customerOrderId)
+            ->where('order_id', $order_id)
+            ->where('component_type', 'Accommodation')
+            ->get();
+
+        return $existing;
+    }
+
+    public function updateAccommodationReservation($order_id, $tour, $room, $customer_id, $sharer_id) 
     {
         $customerOrder=$this->getCustomerOrder($order_id, $customer_id);
         if (!$customerOrder) {
             throw new \Exception('Missing Customer Order!');
         }
+        $existing = $this->getCOD($customer_id, $order_id, $this->component_type);
 
-        $cod = new CustomerOrderDetail();
-        $existing = $cod->where('id', $customerOrder->id)
-            ->where('order_id', $order_id)
-            ->where('component_type', 'Accommodation')
-            ->get();
-Log::info("COD existing: ". $existing->count());
+Log::info("COD found: ". $existing->count(). ' records');
+Log::info('records', $existing->toArray());
+
         if ($existing->count()) {
             $cod = $existing[0];
             $cod->status = 'update';
         } else {
+            $cod = new CustomerOrderDetail();
             $cod->status = 'created';
         }
+
         $cod->orders_customer_id = $customerOrder->id;
         $cod->order_id = $order_id;
-        $cod->component_type = 'Accommodation';
-        $cod->type = $type;
+        $cod->component_type = $this->component_type;
+        if ($room) {
+            $cod->type = $room['board_type_name'] . ' ' . $room['room_type_name'];
+        } else {
+            $cod->type = "shared room";
+        }
         $cod->date_time = date('Y-m-d H:i:s');
 
         // repurposed fields
@@ -245,21 +262,31 @@ Log::info("COD existing: ". $existing->count());
 
     public function postAccommodationReservation(Request $request)
     {
-        $order_id = $request->order_id;
-        $customer_id = $request->customer_id;
-        $type = $request->type;
-        $sharer_id = isset($request->sharer_id) ? $request->sharer_id : null;
-        Log::info('postAccommodationReservation', [$order_id, $customer_id, $request->sharer_id, $sharer_id, $type]);
 
-        if ($customer_id) {
-            Log::info('custmer_id:'.$customer_id.' ord:'.$order_id.' sharer:'.$sharer_id);
-        } else {
-            Log::info('no customer id');
+        $dataset = $request->data;
+        //Log::info('dataset', $dataset);
+
+        $results = [];
+        foreach ($dataset as $key => $data) {
+            $order_id = $data['order_id'];
+            $traveller = $data['traveller'];
+            
+            $tour = $data['tour'];
+            if (isset($data['room'])) {
+                $room = $data['room'];
+            } else {
+                $room = null;
+            }
+
+            $results[] = $this->updateAccommodationReservation(
+                $order_id,
+                $tour,
+                $room,
+                $traveller['id'],
+                $traveller['sharer']['id']
+            );
         }
-
-        $result = $this->updateAccommodtionReservation($order_id, $customer_id, $type, $sharer_id);
-
-        return response()->json(['success' => true, 'data' => $result]);
+        return response()->json(['success' => true, 'data' => $results]);
     }
 
     public function postAccommodationBooking(Tour $tour, OrdersCustomer $ordersCustomer, String $reference, AccommodationInventory $accommodationInventory, Order $order)

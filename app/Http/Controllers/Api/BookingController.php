@@ -1,5 +1,8 @@
 <?php
 
+// Booking Controller: general updating API
+// TODO: REFACTOR
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
