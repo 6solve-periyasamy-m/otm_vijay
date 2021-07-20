@@ -96,15 +96,29 @@ bus.$on('loadOthers', function(others) {
     console.log('init others', others)
 })
 
-bus.$on('setRoomShare', function(t) {
+bus.$on('setRoomShare', function(t, share) {
     let removeId
     let others = othertravellers
-    if (typeof t.sharer !== 'undefined') {
-        removeId = t.sharer.id
+    console.log('setRoomShare (app) ', share)
+    //if (typeof t.sharer !== 'undefined') {
+        //removeId = share //t.sharer.id
         others = others.filter(o => {
-            return removeId != o.id
+            return share != o.id
         })
-    }
+    //}
+    // // using array
+    // if (typeof t.sharers != 'undefined' && t.sharers.length > 1) {
+    //     console.log('>>> setRoomShare sharers',t.sharers)
+    //     t.sharers.forEach(element => {
+    //         if (typeof element != 'undefined') {
+    //             //console.log('>>>> setRoomShare filtering element', element)
+    //             others = others.filter(o => {
+    //                 ///console.log('>>>>> setRoomShare filter ', element, o.id)
+    //                 return element != o.id
+    //             })
+    //         }
+    //     })
+    // }
     others = others.filter(o => {
         return t.id != o.id
     })

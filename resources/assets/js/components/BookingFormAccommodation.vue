@@ -13,7 +13,7 @@
                 <div class="accommodation_travellers"
                     v-for="(traveller, index) in group"
                     v-bind:key="index">
-                    <div v-if="traveller.shared == false" class="accommodation_traveller">
+                    <div class="accommodation_traveller">
                         <div class="accommodation_traveller__name">
                             {{traveller.first_name}} {{traveller.last_name}}
                         </div>
@@ -82,16 +82,23 @@ export default {
             let that = this
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
-            bus.$on('setRoomShare', function(traveller) {
+            bus.$on('setRoomShare', function(traveller, sharer) {
                 that.group.map(t => {
-                    if (typeof traveller.sharer != 'undefined') {
-                        if (t.id == traveller.sharer.id)  {
+                    // if (typeof traveller.sharer != 'undefined') {
+                    //     if (t.id == traveller.sharer.id)  {
                             t.shared = true
-                        }
-                    }
+                    //     }
+                    // }
                 })
+                console.log('setRoomShare', traveller, sharer)
                 // to reduce the others, an event hanlder in ARSelector is needed
-                // that.others = that.othertravellers(traveller.sharer.id)
+                that.others = that.othertravellers(sharer.id)
+                const reduced = that.group.filter(t => {
+                    console.log('filtering ', t.id, sharer.id)
+                    return t.id != sharer.id
+                })
+                console.log(reduced)
+                that.group = reduced
                 that.$forceUpdate()
             })
             bus.$emit('loadOthers', that.group)

@@ -4,10 +4,14 @@
             <option v-for="room in rooms" :key="room.id" :value="room">{{room.board_type_name}} {{room.room_type_name}} for {{room.maximum_occupancy}} {{room.maximum_occupancy > 1 ? 'people' : 'person' }}</option>
         </select>
         <div v-if="room_selected.maximum_occupancy>1">
+
         <div v-for="index in (room_selected.maximum_occupancy - 1)" :key="index" class="accommodation_traveller_options--share-with">
             <p>Share with<br/>
                 <keep-alive>
-                    <select @change="selectSharer(traveller)" v-model="sharer[traveller.id]">
+                    <div v-if="typeof traveller.shares != 'undefined' && traveller.shares[index]"> 
+                        {{traveller.shares[index].first_name}} {{traveller.shares[index].last_name}}
+                    </div>
+                    <select v-else @change="selectSharer(traveller, index)" model0="sharer" model1="sharer[sharerIndex(traveller.id, index)]" v-model="sharer[traveller.id]">
                         <option selected disabled>Open</option>
                         <option v-for="(share, id) in others" :key="id" :value="share">
                             {{share.first_name}} {{share.last_name}}
@@ -30,6 +34,7 @@ export default {
             rooms: [],
             room_selected: {}, 
             sharer: [],
+            sharers: [],
             others: [],
             selected: null,
             share: {},
@@ -44,7 +49,7 @@ export default {
         bus.$on('setOthers', (others, traveller) => {
             this.debug>4 && console.log('>>>setOthers', others.map(o => o.first_name))
             this.others = this.getOthers(traveller)
-            this.control--
+            //this.control--
         })
         this.others = this.group
         this.control = this.group.length
@@ -59,27 +64,41 @@ export default {
             this.control = this.others.length
             this.getOthers(this.traveller)
             this.sharer = []
+            this.sharers = []
+        },
+        sharerIndex(traveller_id, index) {
+            const max = this.group.length //this.others.length
+            console.log('sharerIndex', traveller_id, index, traveller_id * max + index)
+
+            return traveller_id * max + index
         },
         getOthers(traveller) {
             this.debug>4 && console.log('getOthers', this.control, this.others); //, Object.values(this.others))
-            if (this.control-- > 0) {
+            if (this.control > 0) {
                 let others = this.others
-                this.debug>3 && console.log('getOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
+                                        this.debug>3 && console.log('getOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
                 others = others.filter(t => t.id != traveller.id)
                 const storeOthers = others
                 if (typeof traveller.sharer != 'undefined') {
                     others = others.filter(t => t.id != traveller.sharer.id)
+                    //this.control--
                 }
-                this.debug>2 && console.log('getOthers: others: ', this.control, others.map(o=>o.first_name))
+                                        this.debug>2 && console.log('getOthers: others: ', this.control, others.map(o=>o.first_name))
                 this.others = others
-
-                return storeOthers
+                this.control = others.length
+                return others //storeOthers
+            } else {
+                console.log('no others left')
             }
         },
-        selectSharer(traveller) {
-            traveller.sharer =  Object.values(this.sharer)[0]
-            this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', traveller.sharer, this.sharer)
-            bus.$emit('setRoomShare', this.traveller)
+        selectSharer(traveller, index) {
+            const sharer =  Object.values(this.sharer)[0]
+            this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', sharer)
+            bus.$emit('setRoomShare', this.traveller, sharer)
+            if (typeof this.traveller.shares == 'undefined' || this.traveller.shares.length == 0) {
+                this.traveller.shares = []
+            }
+            this.traveller.shares[index] = sharer
             this.control = this.group.length
         },
         selectedRoom() {
