@@ -49,9 +49,9 @@ import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
 /**
  * accommodation is found related to the tour
  */
-function initialstate() {
+function initialState() {
     return {
-        debug: 3,
+        debug: 0,
         showAccommodation: false,
         accommodations: [],
         occupancy: [],
@@ -70,7 +70,7 @@ export default {
     components: { AccommodationRoomSelection },
     props: ["tour", "order_id", "order_token", "travellers"],
     data() {
-        return initialstate();
+        return initialState();
     },
     created() {
         this.debug>3 && console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
@@ -101,15 +101,15 @@ export default {
                 traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
 
                 bus.$emit('setTravellerShares', traveller)
-                console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
+                this.debug>2 && console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
 
                 // to reduce the others, an event hanlder in ARSelector is needed
                 that.others = that.othertravellers(sharer.id)
                 const reduced = that.group.filter(t => {
-                    console.log('filtering ', t.id, sharer.id)
+                    this.debug>4 && console.log('filtering ', t.id, sharer.id)
                     return t.id != sharer.id
                 })
-                console.log('reduced', reduced)
+                this.debug>4 && console.log('reduced', reduced)
                 that.group = reduced
                 that.$forceUpdate()
             })
@@ -117,29 +117,37 @@ export default {
         },
         init() {
             let that = this
-            this.group = []
-            this.$forceUpdate()
+            // this.traveller.shares.length = 0
+            // this.traveller.length = 0
+            // this.group.length = 0
             this.group = this.others = this.travellers
-            this.group.map(t => t.shared = false)
-            this.others = this.travellers
+            this.group.map(t => {
+                if (t != undefined) {
+                    this.debug>4 && console.log('init', t, t.sharename, t.shares)
+                    if (t.sharename != undefined) {
+                        t.sharename.map(s => s = []);
+                    }
+                    if (t.shares != undefined) {
+                        t.shares.map(s => s = []);
+                    }
+                    t.shared = false
+                }
+            })
+            
             this.getAccommodationOptions()
         },
         reset() {
-            initialstate();
-            this.showAccommodation = false
-            this.$forceUpdate()
-            this.setup()
+            // this works well enough
+            const href=window.location.href
+            window.location.assign(href)
+
+            // unreachable: this does not quite reset things
+            Object.assign(this.$data, initialState())
             this.init()
             bus.$emit('AccommodationRoomSelectorReset', this.group)
-            this.$forceUpdate()
             this.showAccommodation = true
-
-                // this.group.map(t => {
-                //     t.shared = false
-                //     t.sharer = null
-                // })
-                // console.log('reset', this.group)
-                // this.$forceUpdate()
+            this.$forceUpdate()
+            this.setup()
         },
         confirmAvailability() {
             this.travellers.map(traveller => {
@@ -170,34 +178,6 @@ export default {
             this.others = group.filter(t => t.id != traveller_id)
             return this.others
         },
-        // getOthers(traveller_id) {
-        //     let group = this.group
-        //     group = group.filter(t => t.id != traveller_id)
-        //     console.log('getOthers', this.group, group)
-        //     this.others = group
-        //     this.$forceUpdate()
-        //     return group
-        // },
-        // roomSelection(type, traveller) {
-        //     if (type == 'single') {
-        //         Vue.set(this.isShare, traveller.id, false)
-        //     }
-        //     if (type == 'share') {
-        //         Vue.set(this.isShare, traveller.id, true)
-        //         console.log('roomSelection', this.isShare[traveller.id], type, traveller, this.room_selection)
-        //     }
-        //     const group = this.group.filter(t => t.id != traveller.id && (t.share_id != traveller.id))
-
-        //     console.log('roomSelection: group:', group)
-        //     this.others = group
-        // },
-        // selectSharer(traveller) {
-        //     console.log('selectSharer', traveller.id, this.sharer)
-            
-        //     traveller.sharer_id = this.sharer[traveller.id]
-            
-        //     //axios.post('/api/booking/accommodation/')
-        // },
         async getAccommodationOptions() {
             const that = this;
             const url = `/api/booking/accommodation/${this.tour.id}`

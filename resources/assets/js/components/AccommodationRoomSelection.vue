@@ -8,7 +8,7 @@
                 :key="index" 
                 class="accommodation-traveller__share-with">
                 Share with 
-                <keep-alive>
+              
                     <span v-if="traveller.sharename != undefined 
                             && traveller.sharename[traveller.id] != undefined
                             && traveller.sharename[traveller.id][index-1] != undefined">
@@ -21,7 +21,7 @@
                             {{share.first_name}} {{share.last_name}}
                         </option>
                     </select>
-                </keep-alive>
+              
             </div>
         </div>
     </div>
@@ -30,14 +30,13 @@
 import { bus } from "../bus";
 export default {
     props: ['tour', 'order_id', 'traveller', 'group'],
-    name: 'BFA',
+    name: 'RoomSelection',
     data() {
         return {
-            debug: 6,
+            debug: 0,
             rooms: [],
             room_selected: {}, 
             sharer: [],
-            sharers: [],
             others: [],
             selected: null,
             share: {},
@@ -45,20 +44,36 @@ export default {
         }
     },
     created() {
+        // reset event is not yet being used as it does not clear out
+        // subarrays traveller.sharename/shares
         bus.$on('AccommodationRoomSelectorReset', (group) => {
             this.others = group
+            if (this.traveller.sharename != undefined) {
+                this.traveller.sharename.map(i => {
+                    this.debug>4 && console.log('clearing ', i)
+                    i.length = 0
+                    i = []
+                })
+                this.traveller.shares.map(i => {
+                    i.length = 0
+                    i = []
+                })
+                this.traveller.sharename.length = 0
+                this.traveller.sharename = []
+                this.traveller.shares.length = 0
+                this.traveller.shares = []
+            }
             this.init()
         })
         bus.$on('setOthers', (others, traveller) => {
             this.debug>4 && console.log('>>>setOthers', others.map(o => o.first_name))
             this.others = others
             this.evalOthers(traveller)
-            //this.control--
         })
         bus.$on('setTravellerShares', traveller => {
-            console.log('>>>>>>> setTravellerShares event received traveller', traveller.first_name, ' share count:',traveller.shares.length)
-            console.log(traveller.sharename.map(share => {
-                console.log('TRAVELLER:',traveller.first_name, ' SHARE', share)
+            this.debug>4 && console.log('>>>>>>> setTravellerShares event received traveller', traveller.first_name, ' share count:',traveller.shares.length)
+            this.debug>4 && console.log(traveller.sharename.map(share => {
+                that.debug>4 && console.log('TRAVELLER:',traveller.first_name, ' SHARE', share)
             }))
             this.traveller.shares = traveller.shares
         })
@@ -70,31 +85,25 @@ export default {
     },
     methods: {
         init() {
+            this.rooms = []
+            this.room_selected = {}
             this.loadRoomsForTour();
             this.others = this.evalOthers(this.traveller)
             this.control = this.others.length
             this.sharer = []
-            this.sharers = []
         },
         sharerIndex(traveller_id, index) {
             const max = this.group.length //this.others.length
-            console.log('sharerIndex', traveller_id, index, traveller_id * max + index)
-
+            this.debug>4 && console.log('sharerIndex', traveller_id, index, traveller_id * max + index)
             return traveller_id * max + index
         },
         evalOthers(traveller) {
             let others = this.others
-                this.debug>3 && console.log('evalOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
+            this.debug>3 && console.log('evalOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
             others = others.filter(t => t.id != traveller.id)
-            const storeOthers = others
-            if (typeof traveller.sharer != 'undefined') {
-                others = others.filter(t => t.id != traveller.sharer.id)
-                //this.control--
-            }
-                this.debug>2 && console.log('evalOthers: others: ', this.control, others.map(o=>o.first_name))
+            //const storeOthers = others
+            this.debug>2 && console.log('evalOthers: others: ', this.control, others.map(o=>o.first_name))
             return others
-            //this.others = others
-            //this.control = others.length
         },
         getOthers(traveller) {
             this.debug>4 && console.log('getOthers', this.control, this.others); //, Object.values(this.others))
@@ -107,10 +116,9 @@ export default {
         },
         selectSharer(traveller) {
             const sharer =  Object.values(this.sharer)[0]
-            
             if (typeof sharer != 'undefined') {
-                    console.log('***** selectSharer', sharer.first_name)
-                    this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', sharer.first_name)
+                this.debug>4 && console.log('***** selectSharer', sharer.first_name)
+                this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', sharer.first_name)
                 bus.$emit('setRoomShare', traveller, sharer)
             }
         },

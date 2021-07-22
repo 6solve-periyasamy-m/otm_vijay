@@ -93,19 +93,19 @@ let othertravellers = []
 // initialises the external array
 bus.$on('loadOthers', function(others) {
     othertravellers = others //.map(t => t.id)
-    console.log('init others', others)
+    // console.log('init others', others)
 })
 
 bus.$on('setRoomShare', function(t, share) {
     let others = othertravellers
-    console.log('setRoomShare (global) ', t.id, share.id)
+    // console.log('setRoomShare (global) ', t.id, share.id)
     others = others.filter(o => {
         return share.id != o.id
     })
     others = others.filter(o => {
         return t.id != o.id
     })
-    console.log('global filter from from', othertravellers, ' to ', others)
+    // console.log('global filter from from', othertravellers, ' to ', others)
     othertravellers = others
     bus.$emit('setOthers', others, t)
 })
