@@ -97,31 +97,15 @@ bus.$on('loadOthers', function(others) {
 })
 
 bus.$on('setRoomShare', function(t, share) {
-    let removeId
     let others = othertravellers
-    console.log('setRoomShare (app) ', share)
-    //if (typeof t.sharer !== 'undefined') {
-        //removeId = share //t.sharer.id
-        others = others.filter(o => {
-            return share != o.id
-        })
-    //}
-    // // using array
-    // if (typeof t.sharers != 'undefined' && t.sharers.length > 1) {
-    //     console.log('>>> setRoomShare sharers',t.sharers)
-    //     t.sharers.forEach(element => {
-    //         if (typeof element != 'undefined') {
-    //             //console.log('>>>> setRoomShare filtering element', element)
-    //             others = others.filter(o => {
-    //                 ///console.log('>>>>> setRoomShare filter ', element, o.id)
-    //                 return element != o.id
-    //             })
-    //         }
-    //     })
-    // }
+    console.log('setRoomShare (global) ', t.id, share.id)
+    others = others.filter(o => {
+        return share.id != o.id
+    })
     others = others.filter(o => {
         return t.id != o.id
     })
+    console.log('global filter from from', othertravellers, ' to ', others)
     othertravellers = others
     bus.$emit('setOthers', others, t)
 })

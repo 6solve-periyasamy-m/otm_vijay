@@ -83,21 +83,33 @@ export default {
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
             bus.$on('setRoomShare', function(traveller, sharer) {
-                that.group.map(t => {
-                    // if (typeof traveller.sharer != 'undefined') {
-                    //     if (t.id == traveller.sharer.id)  {
-                            t.shared = true
-                    //     }
-                    // }
-                })
-                console.log('setRoomShare', traveller, sharer)
+
+                if (typeof traveller.shares == 'undefined') {
+                    traveller.shares = []
+                }
+                if (typeof traveller.shares[traveller.id] == 'undefined') {
+                    traveller.shares[traveller.id] = []
+                }
+                traveller.shares[traveller.id].push(sharer)
+
+                if (typeof traveller.sharename == 'undefined') {
+                    traveller.sharename = []
+                }
+                if (typeof traveller.sharename[traveller.id] == 'undefined') {
+                    traveller.sharename[traveller.id] = []
+                }
+                traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
+
+                bus.$emit('setTravellerShares', traveller)
+                console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
+
                 // to reduce the others, an event hanlder in ARSelector is needed
                 that.others = that.othertravellers(sharer.id)
                 const reduced = that.group.filter(t => {
                     console.log('filtering ', t.id, sharer.id)
                     return t.id != sharer.id
                 })
-                console.log(reduced)
+                console.log('reduced', reduced)
                 that.group = reduced
                 that.$forceUpdate()
             })
