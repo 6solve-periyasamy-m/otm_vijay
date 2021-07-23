@@ -8,7 +8,6 @@
                 :key="index" 
                 class="accommodation-traveller__share-with">
                 Share with 
-              
                     <span v-if="traveller.sharename != undefined 
                             && traveller.sharename[traveller.id] != undefined
                             && traveller.sharename[traveller.id][index-1] != undefined">
@@ -17,7 +16,7 @@
                     <select v-else @change="selectSharer(traveller)" 
                         v-model="sharer[traveller.id]" :key="traveller.id">
                         <option selected disabled>Open</option>
-                        <option v-for="(share, id) in others" :key="id" :value="share">
+                        <option v-for="(share, id) in evalOthers(traveller)" :key="id" :value="share">
                             {{share.first_name}} {{share.last_name}}
                         </option>
                     </select>
@@ -46,36 +45,32 @@ export default {
     created() {
         // reset event is not yet being used as it does not clear out
         // subarrays traveller.sharename/shares
-        bus.$on('AccommodationRoomSelectorReset', (group) => {
-            this.others = group
-            if (this.traveller.sharename != undefined) {
-                this.traveller.sharename.map(i => {
-                    this.debug>4 && console.log('clearing ', i)
-                    i.length = 0
-                    i = []
-                })
-                this.traveller.shares.map(i => {
-                    i.length = 0
-                    i = []
-                })
-                this.traveller.sharename.length = 0
-                this.traveller.sharename = []
-                this.traveller.shares.length = 0
-                this.traveller.shares = []
-            }
-            this.init()
-        })
+        // bus.$on('AccommodationRoomSelectorReset', (group) => {
+    
+        //     alert('ARS reset event deprecated')
+
+        //     this.others = group
+        //     if (this.traveller.sharename != undefined) {
+        //         this.traveller.sharename.map(i => {
+        //             this.debug>4 && console.log('clearing ', i)
+        //             i.length = 0
+        //             i = []
+        //         })
+        //         this.traveller.shares.map(i => {
+        //             i.length = 0
+        //             i = []
+        //         })
+        //         this.traveller.sharename.length = 0
+        //         this.traveller.sharename = []
+        //         this.traveller.shares.length = 0
+        //         this.traveller.shares = []
+        //     }
+        //     this.init()
+        // })
         bus.$on('setOthers', (others, traveller) => {
             this.debug>4 && console.log('>>>setOthers', others.map(o => o.first_name))
             this.others = others
             this.evalOthers(traveller)
-        })
-        bus.$on('setTravellerShares', traveller => {
-            this.debug>4 && console.log('>>>>>>> setTravellerShares event received traveller', traveller.first_name, ' share count:',traveller.shares.length)
-            this.debug>4 && console.log(traveller.sharename.map(share => {
-                that.debug>4 && console.log('TRAVELLER:',traveller.first_name, ' SHARE', share)
-            }))
-            this.traveller.shares = traveller.shares
         })
         this.others = this.group
         this.control = this.group.length
@@ -101,7 +96,6 @@ export default {
             let others = this.others
             this.debug>3 && console.log('evalOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
             others = others.filter(t => t.id != traveller.id)
-            //const storeOthers = others
             this.debug>2 && console.log('evalOthers: others: ', this.control, others.map(o=>o.first_name))
             return others
         },
@@ -115,6 +109,7 @@ export default {
             }
         },
         selectSharer(traveller) {
+            const that = this
             const sharer =  Object.values(this.sharer)[0]
             if (typeof sharer != 'undefined') {
                 this.debug>4 && console.log('***** selectSharer', sharer.first_name)
@@ -132,7 +127,7 @@ export default {
             axios.get(`/api/accommodation/rooms/tour/${this.tour.id}/${this.order_id}`)
                 .then(response => {
                     that.debug && console.log('accomodation rooms for tour', response)
-                    this.rooms = response.data.rooms
+                    that.rooms = response.data.rooms
                 })
                 .catch(error => {
                     console.log(error)

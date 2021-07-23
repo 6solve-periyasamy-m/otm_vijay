@@ -83,7 +83,7 @@ export default {
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
             bus.$on('setRoomShare', function(traveller, sharer) {
-
+                console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
                 if (typeof traveller.shares == 'undefined') {
                     traveller.shares = []
                 }
@@ -99,18 +99,22 @@ export default {
                     traveller.sharename[traveller.id] = []
                 }
                 traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
-
-                bus.$emit('setTravellerShares', traveller)
                 this.debug>2 && console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
 
-                // to reduce the others, an event hanlder in ARSelector is needed
+                // to reduce the others, an event handler in ARSelection is needed
                 that.others = that.othertravellers(sharer.id)
                 const reduced = that.group.filter(t => {
-                    this.debug>4 && console.log('filtering ', t.id, sharer.id)
+                    that.debug>4 && console.log('setRoomShare: filtering ', t.id, sharer.id, traveller.id)
+                    // reduce the group (i.e. the available traveller for selection)
                     return t.id != sharer.id
                 })
-                this.debug>4 && console.log('reduced', reduced)
+                that.debug>4 && console.log('setRoomShare - reduced group', reduced)
                 that.group = reduced
+                // can not reduce others list here
+                // const reducedOthers = that.others.filter(t => {
+                //     return t.id != traveller.id
+                // })
+                // that.others = reducedOthers
                 that.$forceUpdate()
             })
             bus.$emit('loadOthers', that.group)
@@ -140,23 +144,39 @@ export default {
             // this works well enough
             const href=window.location.href
             window.location.assign(href)
+            return
 
             // unreachable: this does not quite reset things
-            Object.assign(this.$data, initialState())
-            this.init()
-            bus.$emit('AccommodationRoomSelectorReset', this.group)
-            this.showAccommodation = true
-            this.$forceUpdate()
-            this.setup()
+            // Object.assign(this.$data, initialState())
+            // this.init()
+            // bus.$emit('AccommodationRoomSelectorReset', this.group)
+            // this.showAccommodation = true
+            // this.$forceUpdate()
+            // this.setup()
         },
         confirmAvailability() {
+            //console.log('travellers', this.travellers)
+            const data = {}
+            data.shares = []
+            data.shared = []
             this.travellers.map(traveller => {
-                this.debug>3 && console.log('traveller:', traveller)
+                if (traveller.shares != undefined) {
+                    const shares = traveller.shares.filter(s => s!=null).map(i => i.map(t => t.id))
+                    data.shares[traveller.id] = shares
+                }
+                if (traveller.sharename != undefined) {
+                    const id = traveller.id
+                    const sharename = traveller.sharename.filter(s => s!=null)
+                    data.shared[traveller.id] = { id: id, shares: sharename }
+                }
+                data.customer_id = traveller.id
+                data.order_id = this.order_id
                 axios.post('/api/booking/accommodation/reserve', {
-                    customer_id: traveller.id,
-                    order_id: this.order_id,
-                    type: this.type,
-                    sharer_id: traveller.sharer_id
+                    customer_id: data.id,
+                    order_id: data.order_id,
+                    type: 'accommodation',
+                    travellers: data,
+                    tour: this.tour,
                 })
                 .then(response => console.log(response))
                 .catch(error => console.log(error))
