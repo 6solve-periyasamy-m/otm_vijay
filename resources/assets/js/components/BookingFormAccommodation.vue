@@ -83,7 +83,7 @@ export default {
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
             bus.$on('setRoomShare', function(traveller, sharer) {
-                console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
+                that.debug>2 && console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
                 if (typeof traveller.shares == 'undefined') {
                     traveller.shares = []
                 }
@@ -99,22 +99,14 @@ export default {
                     traveller.sharename[traveller.id] = []
                 }
                 traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
-                this.debug>2 && console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
+                that.debug>2 && console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
 
-                // to reduce the others, an event handler in ARSelection is needed
                 that.others = that.othertravellers(sharer.id)
-                const reduced = that.group.filter(t => {
-                    that.debug>4 && console.log('setRoomShare: filtering ', t.id, sharer.id, traveller.id)
-                    // reduce the group (i.e. the available traveller for selection)
+                const reducedGroup = that.group.filter(t => {
                     return t.id != sharer.id
                 })
-                that.debug>4 && console.log('setRoomShare - reduced group', reduced)
-                that.group = reduced
-                // can not reduce others list here
-                // const reducedOthers = that.others.filter(t => {
-                //     return t.id != traveller.id
-                // })
-                // that.others = reducedOthers
+                that.group = reducedGroup
+
                 that.$forceUpdate()
             })
             bus.$emit('loadOthers', that.group)
@@ -141,7 +133,8 @@ export default {
             this.getAccommodationOptions()
         },
         reset() {
-            // this works well enough
+            // this works well enough for now
+            // but we can not store/restore selections for edits
             const href=window.location.href
             window.location.assign(href)
             return
