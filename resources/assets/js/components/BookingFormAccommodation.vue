@@ -51,7 +51,7 @@ import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
  */
 function initialState() {
     return {
-        debug: 0,
+        debug: 3,
         showAccommodation: false,
         accommodations: [],
         occupancy: [],
@@ -82,7 +82,7 @@ export default {
             let that = this
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
-            bus.$on('setRoomShare', function(traveller, sharer) {
+            bus.$on('setRoomShare', function(traveller, sharer, room) {
                 that.debug>2 && console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
                 if (typeof traveller.shares == 'undefined') {
                     traveller.shares = []
@@ -99,8 +99,8 @@ export default {
                     traveller.sharename[traveller.id] = []
                 }
                 traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
-                that.debug>2 && console.log('BFA: setRoomShare for ', traveller.first_name, sharer.first_name)
-
+                that.debug>2 && console.log('BFA: setRoomShare for ', room, traveller.id, traveller.first_name, sharer.first_name)
+                that.room_selection[traveller.id] = room
                 that.others = that.othertravellers(sharer.id)
                 const reducedGroup = that.group.filter(t => {
                     return t.id != sharer.id
@@ -139,7 +139,8 @@ export default {
             window.location.assign(href)
             return
 
-            // unreachable: this does not quite reset things
+            // having problem with the array in the AccommodationRoomSelector 
+            // not reinitialising
             // Object.assign(this.$data, initialState())
             // this.init()
             // bus.$emit('AccommodationRoomSelectorReset', this.group)
@@ -155,20 +156,19 @@ export default {
             this.travellers.map(traveller => {
                 if (traveller.shares != undefined) {
                     const shares = traveller.shares.filter(s => s!=null).map(i => i.map(t => t.id))
-                    data.shares[traveller.id] = shares
+                    data.shares = shares
                 }
                 if (traveller.sharename != undefined) {
                     const id = traveller.id
                     const sharename = traveller.sharename.filter(s => s!=null)
-                    data.shared[traveller.id] = { id: id, shares: sharename }
+                    data.shared = { id: id, shares: sharename }
                 }
                 data.customer_id = traveller.id
                 data.order_id = this.order_id
+                data.room = this.room_selection[traveller.id]
                 axios.post('/api/booking/accommodation/reserve', {
-                    customer_id: data.id,
-                    order_id: data.order_id,
                     type: 'accommodation',
-                    travellers: data,
+                    traveller: data,
                     tour: this.tour,
                 })
                 .then(response => console.log(response))

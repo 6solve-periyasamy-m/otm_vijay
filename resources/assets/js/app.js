@@ -96,9 +96,9 @@ bus.$on('loadOthers', function(others) {
     //console.log('init others', others)
 })
 
-bus.$on('setRoomShare', function(t, share) {
+bus.$on('setRoomShare', function(t, share, room) {
     let others = othertravellers
-    console.log('setRoomShare (global) ', t.id, share.id)
+    console.log('setRoomShare (global) ', t.id, share.id, room)
     others = others.filter(o => {
         return share.id != o.id
     })

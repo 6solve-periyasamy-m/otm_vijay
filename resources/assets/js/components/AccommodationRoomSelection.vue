@@ -26,6 +26,7 @@
     </div>
 </template>
 <script>
+import Vue from 'vue'
 import { bus } from "../bus";
 export default {
     props: ['tour', 'order_id', 'traveller', 'group'],
@@ -45,28 +46,33 @@ export default {
     created() {
         // reset event is not yet being used as it does not clear out
         // subarrays traveller.sharename/shares
-        // bus.$on('AccommodationRoomSelectorReset', (group) => {
-    
-        //     alert('ARS reset event deprecated')
-
-        //     this.others = group
-        //     if (this.traveller.sharename != undefined) {
-        //         this.traveller.sharename.map(i => {
-        //             this.debug>4 && console.log('clearing ', i)
-        //             i.length = 0
-        //             i = []
-        //         })
-        //         this.traveller.shares.map(i => {
-        //             i.length = 0
-        //             i = []
-        //         })
-        //         this.traveller.sharename.length = 0
-        //         this.traveller.sharename = []
-        //         this.traveller.shares.length = 0
-        //         this.traveller.shares = []
-        //     }
-        //     this.init()
-        // })
+        bus.$on('AccommodationRoomSelectorReset', (group) => {
+            this.others = group
+            // let c = 0
+            // console.log(this.sharer)
+            // group.map((s) => {
+            //     console.log(s, this.sharer[c])
+            //     Vue.set(this.sharer, c, 'asdf')
+            //     c++
+            // })
+            // this.sharer = undefined
+            if (this.traveller.sharename != undefined) {
+                this.traveller.sharename.map(i => {
+                    this.debug>4 && console.log('clearing ', i)
+                    i.length = 0
+                    i = []
+                })
+                this.traveller.shares.map(i => {
+                    i.length = 0
+                    i = []
+                })
+                this.traveller.sharename.length = 0
+                this.traveller.sharename = []
+                this.traveller.shares.length = 0
+                this.traveller.shares = []
+            }
+            this.init()
+        })
         bus.$on('setOthers', (others, traveller) => {
             this.debug>4 && console.log('>>>setOthers', others.map(o => o.first_name))
             this.others = others
@@ -114,7 +120,7 @@ export default {
             if (typeof sharer != 'undefined') {
                 this.debug>4 && console.log('***** selectSharer', sharer.first_name)
                 this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', sharer.first_name)
-                bus.$emit('setRoomShare', traveller, sharer)
+                bus.$emit('setRoomShare', traveller, sharer, this.room_selected)
             }
         },
         selectedRoom() {
