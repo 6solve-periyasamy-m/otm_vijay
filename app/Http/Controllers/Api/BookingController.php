@@ -238,10 +238,8 @@ class BookingController extends ApiController
         }
         try {
             $customer_order_detail->orders_customer_id = $orderCustomer->id;
-            $customer_order_detail->inventory_id = $flightTour->flight_inventory_id;
-            $customer_order_detail->order_id = $order->id;
             $customer_order_detail->component_type = 'flight';
-            $customer_order_detail->type=$flightType;
+            $customer_order_detail->type = $flightType;
             $customer_order_detail->inventory_tour_id = $flightTour->id;
             $customer_order_detail->date_time = now();
             $customer_order_detail->status = $status;
