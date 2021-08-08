@@ -33,7 +33,7 @@ export default {
     name: 'RoomSelection',
     data() {
         return {
-            debug: 0,
+            debug: 4,
             rooms: [],
             room_selected: {}, 
             sharer: [],
@@ -126,6 +126,7 @@ export default {
         selectedRoom() {
             this.selected = this.room_selected
             this.debug>3 && console.log('Room selection', this.room_selected)
+            bus.$emit('setRoomSelection', this.traveller, this.room_selected)
         },
         loadRoomsForTour() {
             let that = this

@@ -30,12 +30,8 @@
                     </div>
                 </div>
                 <button class="btn btn-default" @click="reset">Reset</button>
-                <button class="btn btn-primary" @click="confirmAvailability">Confirm Availability</button>
-                <p>Set your preferred accommodation selections and confirm availability.  
-                To restart, Reset, then close the Accommodation panel and reopen it.  Settings are only saved once confirmed.
-                Confirmed accommodation is available now, but it is not reserved until the booking is completed.
-                </p>
-
+                <button class="btn btn-primary" @click="register">register</button>
+                <p>Set your preferred accommodation selections and register to save settings. Availability of your settings is confirmed when the booking is completed.</p>
             </div>
         </div>
     </div>
@@ -82,6 +78,10 @@ export default {
             let that = this
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
+            bus.$on('setRoomSelection', function(traveller, room) {
+                console.log('setRoomSelection', traveller, room)
+                that.travellers.filter(t => t.id == traveller.id).map(t => t.room_selected = room)
+            })
             bus.$on('setRoomShare', function(traveller, sharer, room) {
                 that.debug>2 && console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
                 if (typeof traveller.shares == 'undefined') {
@@ -130,7 +130,7 @@ export default {
                 }
             })
             
-            this.getAccommodationOptions()
+            // this.getAccommodationOptions()
         },
         reset() {
             // this works well enough for now
@@ -148,28 +148,30 @@ export default {
             // this.$forceUpdate()
             // this.setup()
         },
-        confirmAvailability() {
-            //console.log('travellers', this.travellers)
+        register() {
+            console.log('register ... travellers', this.travellers)
             const data = {}
             data.shares = []
             data.shared = []
             this.travellers.map(traveller => {
                 if (traveller.shares != undefined) {
                     const shares = traveller.shares.filter(s => s!=null).map(i => i.map(t => t.id))
-                    data.shares = shares
+                    data.shares = shares[0]
                 }
                 if (traveller.sharename != undefined) {
                     const id = traveller.id
                     const sharename = traveller.sharename.filter(s => s!=null)
-                    data.shared = { id: id, shares: sharename }
+                    data.shared = { id: id, sharename: sharename[0] }
                 }
                 data.customer_id = traveller.id
                 data.order_id = this.order_id
-                data.room = this.room_selection[traveller.id]
+                data.room = traveller.room_selected //this.room_selection[traveller.id]
+                console.log('register data', data)
                 axios.post('/api/booking/accommodation/reserve', {
                     type: 'accommodation',
                     traveller: data,
                     tour: this.tour,
+                    reference: this.order_token
                 })
                 .then(response => console.log(response))
                 .catch(error => console.log(error))
