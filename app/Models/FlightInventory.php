@@ -70,7 +70,9 @@ class FlightInventory extends Model
         $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->departure_date_time)->format('d/m/Y H:i');
         $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->arrival_date_time)->format('d/m/Y H:i');
 
-        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}｜Travel Class: {$this->travelClass->title}";
+        $travel_class = is_null($this->travelClass) ? "" : "｜Travel Class: {$this->travelClass->title}";
+
+        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
     }
 
     // public function getFlightDetails()
