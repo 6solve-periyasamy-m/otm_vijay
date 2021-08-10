@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FlightInventory extends Model
 {
+    use SoftDeletes;
+
     public $additional_attributes = ['flight_for_tour'];
 
     public function flight()

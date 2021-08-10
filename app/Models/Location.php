@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Location extends Model
 {
+    use SoftDeletes;
+
     public static function getLocationById($location_id)
     {
         return Location::where('id', $location_id)->first();

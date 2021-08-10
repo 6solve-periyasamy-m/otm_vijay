@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class ActivityInventory extends Model
 {
-
+    use SoftDeletes;
 
     protected $casts = [
         'activity_start_date_time' => 'datetime',
