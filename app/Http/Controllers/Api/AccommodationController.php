@@ -303,20 +303,26 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
             throw new \Exception('Missing Customer Order!');
         }
         $customerOrderId = $customerOrder->id;
-        $COD = new CustomerOrderDetailRepository();
-        $existing = $COD->getCOD($customerOrderId , $this->component_type);
-        if ($existing->count()) {
-            $cod = $existing[0];
-            $cod->status = 'update';
-        } else {
-            $cod = new CustomerOrderDetail();
-            $cod->status = 'created';
-        }
 
         $type = json_encode(['room' => $room, 'shared' => $traveller['shared'], 'shares' => $traveller['shares']]);
         $inventoryTourId = isset($room['accommodation_inventory_tour_id']) ? $room['accommodation_inventory_tour_id'] : 0;
-
-        $COD->saveCOD($cod, $customerOrderId, $this->component_type, $inventoryTourId, $traveller, $reference, $type);
+        // only save the booking record, the share records are not required in COD\
+        if ($inventoryTourId) {
+            $COD = new CustomerOrderDetailRepository();
+            $existing = $COD->getCOD($customerOrderId , $this->component_type);
+            if ($existing->count()) {
+                $cod = $existing[0];
+                $cod = new CustomerOrderDetail();
+                $cod->status = 'update';
+                $COD->purge($customerOrderId, $this->component_type);
+            } else {
+                $cod = new CustomerOrderDetail();
+                $cod->status = 'created';
+            }
+            $COD->saveCOD($cod, $customerOrderId, $this->component_type, $inventoryTourId, $traveller, $reference, $type);
+        } else {
+            Log::info('not saving for inventoryTourId: '. $inventoryTourId);
+        }
 
         return $cod;
     }

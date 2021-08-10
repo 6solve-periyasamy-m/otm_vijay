@@ -81,6 +81,9 @@ export default {
             bus.$on('setRoomSelection', function(traveller, room) {
                 console.log('setRoomSelection', traveller, room)
                 that.travellers.filter(t => t.id == traveller.id).map(t => t.room_selected = room)
+                const others = that.others.filter(t => t.id != traveller.id)
+                bus.$emit('setOthers', others, traveller)
+                that.others = others
             })
             bus.$on('setRoomShare', function(traveller, sharer, room) {
                 that.debug>2 && console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
@@ -150,10 +153,10 @@ export default {
         },
         register() {
             console.log('register ... travellers', this.travellers)
-            const data = {}
-            data.shares = []
-            data.shared = []
             this.travellers.map(traveller => {
+                const data = {}
+                data.shares = []
+                data.shared = []
                 if (traveller.shares != undefined) {
                     const shares = traveller.shares.filter(s => s!=null).map(i => i.map(t => t.id))
                     data.shares = shares[0]

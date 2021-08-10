@@ -33,7 +33,7 @@ export default {
     name: 'RoomSelection',
     data() {
         return {
-            debug: 4,
+            debug: 5,
             rooms: [],
             room_selected: {}, 
             sharer: [],
@@ -93,6 +93,9 @@ export default {
             this.control = this.others.length
             this.sharer = []
         },
+        // roomsAvailable() {
+        //     return this.rooms.filter(r => r.maximum_occupancy <= this.others.length)
+        // },
         sharerIndex(traveller_id, index) {
             const max = this.group.length //this.others.length
             this.debug>4 && console.log('sharerIndex', traveller_id, index, traveller_id * max + index)
@@ -101,7 +104,6 @@ export default {
         evalOthers(traveller) {
             let others = this.others
             this.debug>3 && console.log('evalOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
-            others = others.filter(t => t.id != traveller.id)
             this.debug>2 && console.log('evalOthers: others: ', this.control, others.map(o=>o.first_name))
             return others
         },

@@ -9,6 +9,7 @@ use Exception;
 interface CustomerOrderDetailRepositoryInterface {
     public function getCOD($customerOrderId, $type);
     public function saveCOD($cod, $customerOrderId, $component_type, $inventory_tour_id, $traveller, $reference, $type);
+    public function purge($customerOrderId, $type);
 }
 
 class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInterface
@@ -58,5 +59,16 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
             throw new \Exception($e->getMessage());
         }
         Log::info('cod created' . $cod->id);
+    }
+
+    public function purge($customerOrderId, $type)
+    {
+        $cod = new CustomerOrderDetail();
+        Log::info('purge', [$customerOrderId, $type]);
+        $result = $cod->where('orders_customer_id', $customerOrderId)
+                ->where('component_type', $type)
+                ->forceDelete();
+
+        return $result;
     }
 }
