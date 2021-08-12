@@ -41,7 +41,11 @@ class Transport extends Model
 
     public function getInventoryRelationAttribute()
     {
-        return "{$this->name} | Operator: {$this->operator->operator_name} | Departs: {$this->departureLocation->location_name} | Arrives: {$this->arrivalLocation->location_name}";
+        $operator = !is_null($this->operator) ? $this->operator->operator_name : "Not Set";
+        $departureLocation = !is_null($this->departureLocation) ? $this->departureLocation->location_name : "Not Set";
+        $arrivalLocation = !is_null($this->arrivalLocation) ? $this->arrivalLocation->location_name : "None";
+
+        return "{$this->name} | Operator: {$operator} | Departs: {$departureLocation} | Arrives: {$arrivalLocation}";
     }
 
     public $additional_attributes = ['inventory_relation'];
