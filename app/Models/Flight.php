@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Flight extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public $additional_attributes = ['flight_details'];
 

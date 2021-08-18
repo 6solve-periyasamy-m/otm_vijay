@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use Jahondust\ModelLog\Traits\ModelLogging;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AccommodationInventory extends Model
 {
     use HasFactory;
     // use ModelLogging;
+    use SoftDeletes;
 
     protected $casts = [
         'check_in_date_time' => 'datetime',

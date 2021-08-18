@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PaymentInstallment;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentSchedule extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public $additional_attributes = ['Tour_Payment_Schedule'];
 
