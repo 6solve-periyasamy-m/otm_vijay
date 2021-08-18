@@ -15,22 +15,23 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('email_address', 255);
+            $table->string('password', 255);
+            $table->string('login_token', 255)->nullable();
+            $table->string('gender', 6);
             $table->string('title', 20)->nullable();
             $table->string('first_name', 160);
             $table->string('middle_names', 160)->nullable();
             $table->string('last_name', 160);
-            $table->date('date_of_birth')->nullable();
-            $table->string('mobile_number',120)->nullable(false);
-            $table->string('other_phone_number',120)->nullable(false);
-            $table->string('email_address', 255)->nullable();
-            $table->string('password', 255)->nullable();
-            $table->string('gender', 80)->nullable();
-            $table->string('address_line_1', 160)->nullable();
+            $table->date('date_of_birth');
+            $table->string('mobile_number',120);
+            $table->string('other_phone_number',120)->nullable();
+            $table->string('address_line_1', 160);
             $table->string('address_line_2', 120)->nullable();
             $table->string('address_line_3', 120)->nullable();
-            $table->string('town', 120)->nullable();
-            $table->string('country', 120)->nullable();
-            $table->string('postcode', 24)->nullable();
+            $table->string('town', 120);
+            $table->string('country', 120)->default('UK');
+            $table->string('postcode', 24);
             $table->boolean('same_address')->default(false);
             $table->string('billing_line_1', 160)->nullable();
             $table->string('billing_line_2', 120)->nullable();
@@ -52,7 +53,6 @@ class CreateCustomersTable extends Migration
             $table->integer('hat_size')->nullable();
             $table->text('notes')->nullable();
             $table->string('loyalty_number', 160)->nullable();
-            $table->string('login_token', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
