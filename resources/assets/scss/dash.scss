@@ -1,0 +1,100 @@
+/**
+* Quarter Circles
+*/
+
+html, body { 
+    height: 100%; 
+    padding: 0; 
+    margin: 0; 
+    overflow: auto;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.sec { 
+    width: 48vw; 
+    height: 48vh; 
+    float: left; 
+    z-index: 3; 
+}
+
+.sec1 {
+    background: #DDD;
+}
+
+.sec2{
+    background: #AAA;
+}
+
+.sec3{
+    background: #777;
+}
+
+.sec4{
+    background: #444;
+}
+
+.donutholder{
+    position: absolute;
+    width: 96vw;
+    height: 96vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.donut {
+    position: absolute;
+    width:30vw;
+    height:30vw;
+}
+
+.quarter {
+    position:absolute;
+    width:50%;
+    height:50%;
+    transition:background-color 0.2s ease-in-out;
+}
+.quarter:hover {
+    background-color:rgb(0, 14, 139);
+}
+.quarter1 {
+    top:0;
+    left:0;
+    background-color:rgb(0, 60, 255);
+    border-radius:100% 0 0 0;
+}
+.quarter2 {
+    top:0;
+    right:0;
+    background-color:rgb(45, 94, 255);
+    border-radius:0 100% 0 0 ;
+}
+.quarter3 {
+    bottom:0;
+    left:0;
+    background-color:rgb(125, 155, 255);
+    border-radius:0 0 0 100%;
+}
+.quarter4 {
+    bottom:0;
+    right:0;
+    background-color:rgb(84, 124, 253);
+    border-radius:0 0 100% 0 ;
+}
+
+.donuttext{
+    text-align: center;
+    margin: 33% 0;
+    color: white;
+}
+
+.cutout {
+    width:30%;
+    height:30%;
+    background-image:url(/assets/images//oct.png);
+    background-position: center;
+    position: absolute;
+    top: 35%;
+    left: 35%;
+    border-radius: 50%;
+    pointer-events: none;
+}
