@@ -4,8 +4,8 @@
             <div class="card-header">
                 <h5 class="mb-1">
                     <button :disabled="ready ? false : true" class="btn btn-link cardhead" @click="toggleFlights">
-                                Flights
-                            </button>
+                        Flights
+                    </button>
                 </h5>
             </div>
             <div v-if="showwait">Loading...</div>

@@ -14,9 +14,17 @@ class Customer extends Model implements AuthAuthenticatable
     use SoftDeletes;
 
     public $additional_attributes = ['customer_full_name'];
-	public function getCustomerFullNameAttribute()
-	    {
-		return "{$this->first_name} {$this->last_name}";
-	    }
+    public $full_name;
+
+    public function getFullName()
+    {
+        $this->full_name = $this->first_name . ' ' . $this->last_name;
+        return $this->full_name;
+    }
+
+    public function getCustomerFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }
 

@@ -1,5 +1,8 @@
 <?php
 
+// Booking Controller: general updating API
+// TODO: REFACTOR
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
@@ -235,10 +238,8 @@ class BookingController extends ApiController
         }
         try {
             $customer_order_detail->orders_customer_id = $orderCustomer->id;
-            $customer_order_detail->inventory_id = $flightTour->flight_inventory_id;
-            $customer_order_detail->order_id = $order->id;
             $customer_order_detail->component_type = 'flight';
-            $customer_order_detail->type=$flightType;
+            $customer_order_detail->type = $flightType;
             $customer_order_detail->inventory_tour_id = $flightTour->id;
             $customer_order_detail->date_time = now();
             $customer_order_detail->status = $status;
@@ -271,7 +272,7 @@ class BookingController extends ApiController
      * @param boolean $isLead
      * @return JSON (record saved)
      */
-    private function storeOrUpdateOrderCustomer(Customer $customer, Request $request, $isLead = false) 
+    private function storeOrUpdateOrderCustomer($customer, Request $request, $isLead = false) 
     {
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
@@ -322,6 +323,32 @@ class BookingController extends ApiController
         } else {
             $customer->email_address = $request->email_address;
         }
+
+        // validation
+        $validated = $request->validate([
+            'title' => 'required',
+            'first_name' => 'required | alpha',
+            'last_name' => 'required | alpha_dash',
+            'date_of_birth' => 'required | before: 18 years ago',
+            'mobile_number' => 'required',
+            'other_phone_number' => 'required',
+            'password' => 'required | min:6| regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/| confirmed',
+            'gender' => 'required',
+            'address_line_1' => 'required',
+            'address_line_2' => 'required',
+            'town' => 'required',
+            'country' => 'required',
+            'postcode' => 'required',
+            'billing_town' => 'required',
+            'billing_country' => 'required',
+            'billing_postcode' => 'required'
+        ]);
+        if ($validated->fails()) {
+            $messages = $validated->messages();
+            Log::info('validation fails');
+            Log::info('validation', $messages);
+            return response()->json($messages, 422);
+        }
         $customer->title = $request->title;
         $customer->first_name = $request->first_name;
         $customer->middle_names = $request->middle_names;
@@ -355,6 +382,7 @@ class BookingController extends ApiController
 
     /**
      * leadTraveller - save the leadTraveller data
+     * does not appear to be used???
      *
      * @param Request $request
      * @return array of what was saved in customer and orderCustomer
@@ -364,13 +392,6 @@ class BookingController extends ApiController
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, true);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, true);
-
-        // $flightTour = null;
-        // $flightType = null;
-        // $addon = null;
-        // $order = $request->order;
-        // $reference = $request->reference;
-        // $this->storeOrUpdateCustomerOrderDetail($order, $orderCustomer, $flightTour, $flightType, $addon, $reference);
 
         return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
     }

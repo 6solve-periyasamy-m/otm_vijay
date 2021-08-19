@@ -20,6 +20,7 @@ window.axios.defaults.headers.common = {
  Vue.component('booking-form-flights', require('./components/BookingFormFlights.vue').default);
  Vue.component('booking-form-flight-select', require('./components/BookingFormFlightSelector.vue').default);
  Vue.component('booking-form-accommodation', require('./components/BookingFormAccommodation.vue').default);
+ Vue.component('accommodation-room-selection', require('./components/AccommodationRoomSelection.vue').default);
  Vue.component('booking-form-activity', require('./components/BookingFormActivity.vue').default);
  Vue.component('booking-form-transport', require('./components/BookingFormTransport.vue').default);
  Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
@@ -59,6 +60,7 @@ function setCookie(cname, cvalue, exdays) {
 bus.$on('setOrderToken', function(token, order_id) {
     console.log('Event Bus: setting token cookie for order_id', token, order_id)
     setCookie('OTM_booking_order_token', token);
+    bus.$emit('setOrderToken2', token, order_id)
 })
 
 const busEventLogging = true
@@ -87,7 +89,24 @@ bus.$on('accommodationBookingsLoaded', function() {
     busEventLogging && console.log('accommodationBookingsLoaded')
 })
 
-// bus.$on('setOrderToken', (token, order_id) => {
-//     busEventLogging && console.log('setOrderToken order_id', order_id)
-//     bus.$emit('setOrderToken2', token, order_id)
-// })
+let othertravellers = []
+// initialises the external array
+bus.$on('loadOthers', function(others) {
+    othertravellers = others //.map(t => t.id)
+    //console.log('init others', others)
+})
+
+bus.$on('setRoomShare', function(t, share, room) {
+    let others = othertravellers
+    console.log('setRoomShare (global) ', t.id, share.id, room)
+    others = others.filter(o => {
+        return share.id != o.id
+    })
+    others = others.filter(o => {
+        console.log('filtering out traveller', t.first_name)
+        return t.id != o.id
+    })
+    console.log('global filter from from', othertravellers, ' to ', others)
+    othertravellers = others
+    bus.$emit('setOthers', others, t)
+})

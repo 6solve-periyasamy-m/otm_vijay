@@ -158,13 +158,15 @@ hr.light {
     font-size: 10px;
 }
 
-.accommodations {
-    &__traveller {
-        font-size: 11px;
-        &--single {
-            font-size: 9px;
-            font-style: italic;
-        }
+.accommodation-traveller {
+    font-size: 11px;
+    &__single {
+        font-size: 9px;
+        font-style: italic;
+    }
+    &__share-with {
+        font-size: 12px;
+        font-weight: 600;
     }
     &__summary {
         display: flex;

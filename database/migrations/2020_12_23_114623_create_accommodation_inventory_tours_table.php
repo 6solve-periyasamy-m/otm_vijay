@@ -19,8 +19,9 @@ class CreateAccommodationInventoryToursTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->float('sales_price', 10, 0)->nullable();
-            $table->integer('tour_component_type')->nullable();
-            $table->integer('id', true);
+            $table->char('tour_component_type')->nullable();
+            $table->integer('id', false, true);
+            $table->string('booking_policy', 12);
         });
     }
 
