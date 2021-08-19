@@ -26,6 +26,7 @@ class getTourComponentListAction extends AbstractAction
     {
         return [
             'class' => 'btn btn-sm btn-primary pull-right',
+            'style' => 'margin-right: 5px;',
         ];
     }
 
