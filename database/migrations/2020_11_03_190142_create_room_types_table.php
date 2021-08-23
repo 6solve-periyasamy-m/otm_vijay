@@ -15,8 +15,8 @@ class CreateRoomTypesTable extends Migration
     {
         Schema::create('room_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('room_type_name', 255)->nullable();
-            $table->integer('maximum_occupancy')->nullable();
+            $table->string('room_type_name', 255);
+            $table->integer('maximum_occupancy');
             $table->timestamps();
             $table->softDeletes();
         });
