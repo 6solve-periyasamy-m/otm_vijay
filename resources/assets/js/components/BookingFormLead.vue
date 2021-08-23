@@ -84,6 +84,13 @@
                                     <label class="form-label" for="date_of_birth">Date of Birth</label>
                                     <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
                                 </div>
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" form="gender">Gender</label>
+                                    <select name="gender">
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="row spacer">
                                 <div class="col-sm-6">
