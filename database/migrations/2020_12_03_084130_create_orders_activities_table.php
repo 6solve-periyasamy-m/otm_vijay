@@ -15,8 +15,8 @@ class CreateOrdersActivitiesTable extends Migration
     {
         Schema::create('orders_activities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_customer_id')->nullable();
-            $table->integer('activity_id')->nullable();
+            $table->integer('order_customer_id');
+            $table->integer('activity_id');
             $table->timestamps();
             $table->softDeletes();
         });
