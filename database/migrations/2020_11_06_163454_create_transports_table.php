@@ -18,12 +18,12 @@ class CreateTransportsTable extends Migration
             $table->integer('transport_type_id');
             $table->integer('operator_id');
             $table->integer('departure_location_id');
+            $table->integer('arrival_location_id');
             $table->boolean('is_domestic')->default(true);
             $table->text('name');
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->string('currency', 5)->nullable();
-            $table->integer('arrival_location_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
