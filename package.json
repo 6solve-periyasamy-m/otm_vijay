@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "dev": "mix",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
@@ -8,13 +9,22 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "arr-flatten": "^1.1.0",
+        "array-unique": "^0.3.2",
         "axios": "^0.21.1",
         "cross-env": "^7.0",
+        "decamelize": "^5.0.0",
+        "findup-sync": "^4.0.0",
         "laravel-mix": "^6.0.28",
         "lodash": "^4.17.19",
+        "repeat-string": "^1.6.1",
+        "require-main-filename": "^2.0.0",
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.32.5",
         "sass-loader": "^8.0.2",
+        "set-blocking": "^2.0.0",
+        "split-string": "^6.1.0",
+        "to-regex": "^3.0.2",
         "vue-cli": "^2.9.6",
         "vue-loader": "^15.9.8",
         "vue-template-compiler": "^2.6.12"
@@ -32,6 +42,7 @@
         "pdfmake": "^0.1.71",
         "vue": "^2.6.12",
         "vue-axios": "^3.2.2",
-        "webpack-cli": "^4.8.0"
+        "webpack-cli": "^4.8.0",
+        "which-module": "^2.0.0"
     }
 }
