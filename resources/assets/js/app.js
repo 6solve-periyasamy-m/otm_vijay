@@ -1,7 +1,7 @@
 require('./bootstrap');
 window.axios = require('axios');
 window.lodash = require('lodash');
-import { BIconNodePlus } from 'bootstrap-vue';
+//import { BIconNodePlus } from 'bootstrap-vue';
 //window.validPhone = require('./validphone');
 import Vue from 'vue'
 import { bus } from './bus'
