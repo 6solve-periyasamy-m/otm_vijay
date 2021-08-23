@@ -15,13 +15,13 @@ class CreateFlightInventoriesTable extends Migration
     {
         Schema::create('flight_inventories', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('flight_id')->nullable();
+            $table->integer('flight_id');
             $table->dateTime('check_in_date_time')->nullable();
             $table->dateTime('departure_date_time')->nullable();
             $table->dateTime('arrival_date_time')->nullable();
-            $table->string('flight_number', 255)->nullable();
-            $table->integer('travel_class_id')->nullable();
-            $table->tinyInteger('fit_selectable')->nullable();
+            $table->string('flight_number', 255);
+            $table->integer('travel_class_id');
+            $table->boolean('fit_selectable')->default(true);
             $table->integer('stock')->nullable();
             $table->float('purchase_price', 10, 0)->nullable();
             $table->float('sales_price', 10, 0)->nullable();
