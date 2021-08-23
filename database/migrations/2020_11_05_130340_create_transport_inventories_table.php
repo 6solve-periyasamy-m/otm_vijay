@@ -19,7 +19,7 @@ class CreateTransportInventoriesTable extends Migration
             $table->integer('travel_class_id');
             $table->dateTime('departure_date_time')->nullable();
             $table->dateTime('arrival_date_time')->nullable();
-            $table->tinyInteger('fit_selectable')->nullable();
+            $table->boolean('fit_selectable')->default(true);
             $table->integer('stock')->nullable();
             $table->float('purchase_price', 10, 0)->nullable();
             $table->float('sales_price', 10, 0)->nullable();
