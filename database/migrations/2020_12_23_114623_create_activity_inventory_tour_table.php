@@ -14,7 +14,7 @@ class CreateActivityInventoryTourTable extends Migration
     public function up()
     {
         Schema::create('activity_inventory_tour', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->increments('id');
             $table->integer('tour_id');
             $table->integer('activity_inventory_id');
             $table->integer('tour_component_type')->nullable();
