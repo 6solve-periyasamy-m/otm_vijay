@@ -20,7 +20,7 @@ class CreateFlightsTable extends Migration
             //$table->date('departure_date')->nullable();
             $table->integer('arrival_airport_id')->nullable();
             //$table->date('arrival_date')->nullable();
-            $table->tinyInteger('is_domestic')->nullable();
+            $table->boolean('is_domestic')->default(false);
             $table->text('notes')->nullable();
             $table->string('currency', 5)->nullable();
             $table->date('available_after')->nullable();
