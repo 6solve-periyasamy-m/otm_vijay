@@ -17,7 +17,7 @@ class CreateTransportInventoryTourTable extends Migration
             $table->increments('id');
             $table->integer('tour_id');
             $table->integer('transport_inventory_id');
-            $table->integer('tour_component_type')->nullable();
+            $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
             $table->float('sales_price', 10, 0)->nullable();
             $table->timestamps();
             $table->softDeletes();
