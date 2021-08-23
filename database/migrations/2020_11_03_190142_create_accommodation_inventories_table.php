@@ -20,7 +20,7 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->dateTime('check_out_date_time')->nullable();
             $table->integer('room_type_id');
             $table->integer('board_type_id');
-            $table->binary('fit_selectable');
+            $table->boolean('fit_selectable')->default(true);
             $table->integer('stock');
             $table->double('purchase_price')->nullable();
             $table->double('sales_price')->nullable();
