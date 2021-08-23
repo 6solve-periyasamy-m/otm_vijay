@@ -14,7 +14,7 @@ class CreateAccommodationInventoryToursTable extends Migration
     public function up()
     {
         Schema::create('accommodation_inventory_tours', function (Blueprint $table) {
-            $table->integer('id', false, true);
+            $table->increments('id');
             $table->integer('tour_id');
             $table->integer('accommodation_inventory_id');
             $table->float('sales_price', 10, 0)->nullable();
