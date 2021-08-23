@@ -15,8 +15,8 @@ class CreateOrdersAccommodationsTable extends Migration
     {
         Schema::create('orders_accommodations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_customer_id')->nullable();
-            $table->integer('accommodation_id')->nullable();
+            $table->integer('order_customer_id');
+            $table->integer('accommodation_id');
             $table->integer('share_with_user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
