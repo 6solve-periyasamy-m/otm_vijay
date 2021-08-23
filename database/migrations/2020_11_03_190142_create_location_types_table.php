@@ -15,7 +15,7 @@ class CreateLocationTypesTable extends Migration
     {
         Schema::create('location_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('location_type_name')->unique();
+            $table->text('location_type_name');
             $table->timestamps();
             $table->softDeletes();
         });
