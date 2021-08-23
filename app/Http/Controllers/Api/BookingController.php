@@ -331,7 +331,6 @@ class BookingController extends ApiController
             'last_name' => 'required | alpha_dash',
             'date_of_birth' => 'required | before: 18 years ago',
             'mobile_number' => 'required',
-            'other_phone_number' => 'required',
             'password' => 'required | min:6| regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/| confirmed',
             'gender' => 'required',
             'address_line_1' => 'required',
