@@ -27,7 +27,7 @@ class CreateToursTable extends Migration
             $table->string('booking_form_url', 255)->nullable();
             $table->integer('tour_colour_id')->nullable();
             $table->integer('tour_merchandise_id')->nullable();
-            $table->integer('is_active')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->date('date_from')->nullable();
             $table->date('date_to')->nullable();
             $table->timestamps();
