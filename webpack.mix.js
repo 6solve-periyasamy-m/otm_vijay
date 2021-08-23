@@ -12,7 +12,6 @@ const mix = require('laravel-mix');
  */
 
 mix.copy('resources/assets/js/addons', 'public/js')
-//    .extract(['vue', 'jquery', 'lodash', 'bootstrap', 'axios'])
     .sass('resources/assets/scss/app.scss', 'css')
     .js('resources/assets/js/app.js', 'js').vue()
     .copy('resources/assets/js/modules', 'public/js/modules')
