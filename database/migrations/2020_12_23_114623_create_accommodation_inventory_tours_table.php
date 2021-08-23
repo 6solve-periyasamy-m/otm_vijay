@@ -14,14 +14,14 @@ class CreateAccommodationInventoryToursTable extends Migration
     public function up()
     {
         Schema::create('accommodation_inventory_tours', function (Blueprint $table) {
+            $table->integer('id', false, true);
             $table->integer('tour_id');
             $table->integer('accommodation_inventory_id');
-            $table->timestamps();
-            $table->softDeletes();
             $table->float('sales_price', 10, 0)->nullable();
             $table->char('tour_component_type')->nullable();
-            $table->integer('id', false, true);
             $table->string('booking_policy', 12);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
