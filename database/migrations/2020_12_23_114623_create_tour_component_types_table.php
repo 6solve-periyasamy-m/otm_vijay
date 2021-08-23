@@ -15,7 +15,7 @@ class CreateTourComponentTypesTable extends Migration
     {
         Schema::create('tour_component_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('component_type_name')->nullable();
+            $table->text('component_type_name');
             $table->timestamps();
             $table->softDeletes();
         });
