@@ -17,9 +17,9 @@ class CreateOrdersAccommodationsTable extends Migration
             $table->increments('id');
             $table->integer('order_customer_id')->nullable();
             $table->integer('accommodation_id')->nullable();
+            $table->integer('share_with_user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('share_with_user_id')->nullable();
         });
     }
 
