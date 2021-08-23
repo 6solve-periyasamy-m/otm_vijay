@@ -15,10 +15,10 @@ class CreateOrdersCustomersPaymentsTable extends Migration
     {
         Schema::create('orders_customers_payments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_customer_id')->nullable();
-            $table->integer('payment_type_id')->nullable();
-            $table->integer('payment_method_id')->nullable();
-            $table->float('payment_amount', 10, 0)->nullable();
+            $table->integer('order_customer_id');
+            $table->integer('payment_type_id');
+            $table->integer('payment_method_id');
+            $table->float('payment_amount', 10, 0);
             $table->timestamps();
             $table->softDeletes();
         });
