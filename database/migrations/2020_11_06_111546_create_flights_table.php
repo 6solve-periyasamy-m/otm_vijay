@@ -23,10 +23,10 @@ class CreateFlightsTable extends Migration
             $table->tinyInteger('is_domestic')->nullable();
             $table->text('notes')->nullable();
             $table->tinyInteger('is_archived')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
             $table->string('currency', 5)->nullable();
             $table->date('available_after')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
