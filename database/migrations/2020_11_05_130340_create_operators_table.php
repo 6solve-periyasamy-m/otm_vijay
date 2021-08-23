@@ -15,7 +15,7 @@ class CreateOperatorsTable extends Migration
     {
         Schema::create('operators', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('operator_name')->nullable();
+            $table->text('operator_name');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

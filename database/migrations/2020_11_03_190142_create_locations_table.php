@@ -17,10 +17,10 @@ class CreateLocationsTable extends Migration
             $table->increments('id');
             $table->integer('region_id');
             $table->string('location_name', 255);
-            $table->timestamps();
-            $table->softDeletes();
             $table->integer('location_type_id');
             $table->text('address')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -14,14 +14,14 @@ class CreateFlightInventoryTourTable extends Migration
     public function up()
     {
         Schema::create('flight_inventory_tour', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('tour_id');
             $table->integer('flight_inventory_id');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->integer('tour_component_type_id')->nullable();
-            $table->integer('id', true);
+            $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
             $table->float('sales_price', 10, 0)->nullable();
             $table->string('flight_type', 20)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

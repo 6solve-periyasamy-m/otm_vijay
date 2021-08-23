@@ -16,21 +16,20 @@ class CreateToursTable extends Migration
         Schema::create('tours', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id')->nullable();
-            $table->string('title', 90)->nullable();
+            $table->string('title', 90);
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->float('base_price_per_person', 10, 0)->nullable();
             $table->float('margin', 10, 0)->nullable();
             $table->float('single_occupancy_surcharge', 10, 0)->nullable();
-            $table->integer('stock_control_active')->nullable();
+            $table->boolean('stock_control_active')->default(true);
             $table->integer('stock')->nullable();
             $table->string('booking_form_url', 255)->nullable();
             $table->integer('tour_colour_id')->nullable();
             $table->integer('tour_merchandise_id')->nullable();
-            $table->integer('is_active')->nullable();
-            $table->integer('archive_status')->nullable();
-            $table->date('date_from')->nullable();
-            $table->date('date_to')->nullable();
+            $table->boolean('is_active')->default(false);
+            $table->date('date_from');
+            $table->date('date_to');
             $table->timestamps();
             $table->softDeletes();
         });

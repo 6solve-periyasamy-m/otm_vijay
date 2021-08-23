@@ -15,7 +15,7 @@ class CreateTravelClassesTable extends Migration
     {
         Schema::create('travel_classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('title')->nullable();
+            $table->text('title');
             $table->timestamps();
             $table->softDeletes();
         });
