@@ -15,11 +15,11 @@ class CreateTransportsTable extends Migration
     {
         Schema::create('transports', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('transport_type_id')->nullable();
-            $table->integer('operator_id')->nullable();
-            $table->integer('departure_location_id')->nullable();
+            $table->integer('transport_type_id');
+            $table->integer('operator_id');
+            $table->integer('departure_location_id');
             $table->tinyInteger('is_domestic')->nullable();
-            $table->text('name')->nullable();
+            $table->text('name');
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
