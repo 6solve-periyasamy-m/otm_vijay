@@ -22,7 +22,7 @@ class CreateToursTable extends Migration
             $table->float('base_price_per_person', 10, 0)->nullable();
             $table->float('margin', 10, 0)->nullable();
             $table->float('single_occupancy_surcharge', 10, 0)->nullable();
-            $table->integer('stock_control_active')->nullable();
+            $table->boolean('stock_control_active')->default(true);
             $table->integer('stock')->nullable();
             $table->string('booking_form_url', 255)->nullable();
             $table->integer('tour_colour_id')->nullable();
