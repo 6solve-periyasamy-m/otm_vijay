@@ -323,7 +323,6 @@ class BookingController extends ApiController
         } else {
             $customer->email_address = $request->email_address;
         }
-
         // validation
         $validated = $request->validate([
             'title' => 'required',
@@ -331,23 +330,31 @@ class BookingController extends ApiController
             'last_name' => 'required | alpha_dash',
             'date_of_birth' => 'required | before: 18 years ago',
             'mobile_number' => 'required',
-            'other_phone_number' => 'required',
-            'password' => 'required | min:6| regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/| confirmed',
+            // 'password' => 'required | min:6| regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/| confirmed',
             'gender' => 'required',
             'address_line_1' => 'required',
             'address_line_2' => 'required',
             'town' => 'required',
             'country' => 'required',
-            'postcode' => 'required',
-            'billing_town' => 'required',
-            'billing_country' => 'required',
-            'billing_postcode' => 'required'
-        ]);
+            'postcode' => 'required']);
+
         if ($validated->fails()) {
             $messages = $validated->messages();
             Log::info('validation fails');
             Log::info('validation', $messages);
             return response()->json($messages, 422);
+        }
+        if ($request->same_address == false) {
+            $billingValidated = $request->validate([
+                'billing_town' => 'required',
+                'billing_country' => 'required',
+                'billing_postcode' => 'required',
+                'billing_address1' => 'required'
+            ]);
+            if ($billingValidated->fails()) {
+                $messages = $billingValidated->messages;
+                return response()->json($messages, 422);
+            }
         }
         $customer->title = $request->title;
         $customer->first_name = $request->first_name;
@@ -362,15 +369,18 @@ class BookingController extends ApiController
             $customer->address_line_1 = $request->address_line_1;
             $customer->address_line_2 = $request->address_line_2;
             $customer->address_line_3 = $request->address_line_3;
-            $customer->billing_line_1 = isset($request->billing_line_1) ? $request->billing_line_1 : $request->address_line_1;
-            $customer->billing_line_2 = isset($request->billing_line_2) ? $request->billing_line_2 : $request->address_line_2;
-            $customer->billing_line_3 = isset($request->billing_line_3) ? $request->billing_line_3 : $request->address_line_3;
             $customer->town = $request->town;
             $customer->country = $request->country;
             $customer->postcode = $request->postcode;
-            $customer->billing_town = isset($request->billing_town) ? $request->billing_town : $request->town;
-            $customer->billing_country = isset($request->billing_country) ? $request->billing_country : $request->country;
-            $customer->billing_postcode = isset($request->billing_postcode) ? $request->billing_postcode : $request->postcode;
+            $customer->same_address = $request->same_address;
+            if (!$customer->same_address) {
+                $customer->billing_line_1 = $request->billing_line_1;
+                $customer->billing_line_2 = $request->billing_line_2;
+                $customer->billing_line_3 = $request->billing_line_3;
+                $customer->billing_town = $request->billing_town;
+                $customer->billing_country = $request->billing_country;
+                $customer->billing_postcode = $request->billing_postcode;
+            }
         }
         if ($this->logging) {
             $this->logging == 'customers' && Log::info('saving customer details ', $customer->toArray());
