@@ -25,11 +25,14 @@ window.axios.defaults.headers.common = {
  Vue.component('booking-form-transport', require('./components/BookingFormTransport.vue').default);
  Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
  Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
- Vue.component('vue-test', require('./components/VueTest.vue').default);
+ Vue.component('validation-errors', require('./components/ValidationErrors.vue').default);
 // Vue.component('booking-store', require('./components/BookingStore.vue').default);
 
 Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
 Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
+
+Vue.component('vue-test', require('./components/VueTest.vue').default);
+
 //  Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);
 //  Vue.component('donut-menu', require('./components/donut-menu.vue').default);
 //  Vue.component('tour-menu', require('./components/tour-menu.vue').default);

@@ -102,6 +102,7 @@ export default {
                         deleteCookie('OTM_booking_order_token')
                         that.order_id = null
                         that.createOrderId();
+                        console.log('bft=',that.bookingOrderToken)
                         //bus.$on('createOrder', that.createOrderId());
                         alert('No orders found for your access code, please rebook or contact us.')
                     } else {

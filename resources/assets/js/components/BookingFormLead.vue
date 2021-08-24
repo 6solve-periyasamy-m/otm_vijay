@@ -2,6 +2,7 @@
     <div class="container">
         <div class="card card-options">
             <div class="card-header">
+                <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
                     <p v-if="!lead_traveller && !show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
@@ -86,7 +87,7 @@
                                 </div>
                                 <div class="col-sm-6 form-group field-separation">
                                     <label class="form-label" form="gender">Gender</label>
-                                    <select name="gender">
+                                    <select name="gender" v-model="gender" class="dropdown">
                                         <option>Male</option>
                                         <option>Female</option>
                                     </select>
@@ -192,7 +193,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation">
-                                    <button v-if="validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
+                                    <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                                 </div>
                             </div>
                         </div>
@@ -205,6 +206,7 @@
 
 <script>
 import { bus } from '../bus'
+import ValidationErrors from './ValidationErrors.vue'
 export default {
     props: ['form_info', 'tour', 'booked'],
     created() {
@@ -259,6 +261,7 @@ export default {
             other_phone_number_input: '',
             other_phone_number_type: '',
             date_of_birth: '',
+            gender: '',
             same_address: false,
             email_invalid: false,
             email_validation: 'Please enter a valid email address',
@@ -278,7 +281,8 @@ export default {
             addressFields: [
                 'address_line_1', 'address_line_2', 'address_line_3',
                 'town', 'country', 'postcode'
-            ]
+            ],
+            validationErrors: ''
         }
     },
     computed: {
@@ -391,6 +395,7 @@ export default {
                     other_phone_number: this.other_phone_number,
                     other_phone_number_type: this.other_phone_number_type,
                     date_of_birth: this.date_of_birth,
+                    gender: this.gender,
                     address_line_1: this.address_line_1,
                     address_line_2: this.address_line_2,
                     address_line_3: this.address_line_3,
@@ -398,6 +403,7 @@ export default {
                     county: this.county,
                     town: this.town,
                     postcode: this.postcode,
+                    same_address: this.same_address,
                     billing_address_line_1: this.billing_address_line_1,
                     billing_address_line_2: this.billing_address_line_2,
                     billing_address_line_3: this.billing_address_line_3,
@@ -415,6 +421,7 @@ export default {
                 })
                 .catch(e => {
                     console.log('BookingFormLead.storeTraveller() error', e)
+                    this.validationErrors = e.response.data.errors;
                 })
         }
     }

@@ -8,7 +8,7 @@
     --dark-grey: #888;
 }
 select {
-    max-width: inherit;
+    max-width: max-content;
 }
 .logo {
     width: 200px;
@@ -107,6 +107,9 @@ h3 {
     margin-top: 1rem;
     margin-bottom: 0.25rem;
     padding: 4px;
+}
+.dropdown-selection {
+    padding: 6px;
 }
 input, .dropdown {
     border-radius: 0;
