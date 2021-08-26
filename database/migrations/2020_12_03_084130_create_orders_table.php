@@ -21,7 +21,6 @@ class CreateOrdersTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('order_status_id')->nullable();
             $table->string('token', 255)->nullable();
         });
     }
