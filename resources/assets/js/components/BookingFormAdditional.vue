@@ -14,9 +14,8 @@
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
-                <div v-for="item in additional" :key="item.id">
-                    <booking-form-add-traveller :customer="item" :order_id="order_id" :tour="tour" :form_id="item.formId" @remove="removeTraveller"></booking-form-add-traveller>
-
+                <div v-for="item in additional" :key="item">
+                    <booking-form-add-traveller :additional="item" :order_id="order_id" :tour="tour" @remove="removeTraveller"></booking-form-add-traveller>
                 </div>
                 <button type="button" 
                     class="btn btn-primary" 
@@ -76,6 +75,7 @@
             },
             removeTraveller() {
                 this.debug  && console.log('removing additional traveller ', this.formId)
+                return false
             },
             toggleAdditional() {
                 this.showAdditional = !this.showAdditional

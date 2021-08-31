@@ -28,6 +28,7 @@ class CreateToursTable extends Migration
             $table->integer('tour_colour_id')->nullable();
             $table->integer('tour_merchandise_id')->nullable();
             $table->boolean('is_active')->default(false);
+            $table->boolean('archive_status')->default(false);
             $table->date('date_from');
             $table->date('date_to');
             $table->timestamps();

@@ -323,39 +323,44 @@ class BookingController extends ApiController
         } else {
             $customer->email_address = $request->email_address;
         }
-        // validation
-        $validated = $request->validate([
-            'title' => 'required',
-            'first_name' => 'required | alpha',
-            'last_name' => 'required | alpha_dash',
-            'date_of_birth' => 'required | before: 18 years ago',
-            'mobile_number' => 'required',
-            // 'password' => 'required | min:6| regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/| confirmed',
-            'gender' => 'required',
-            'address_line_1' => 'required',
-            'address_line_2' => 'required',
-            'town' => 'required',
-            'country' => 'required',
-            'postcode' => 'required']);
+        Log::info('validating lead traveller?', [$isLead]);
 
-        if ($validated->fails()) {
-            $messages = $validated->messages();
-            Log::info('validation fails');
-            Log::info('validation', $messages);
-            return response()->json($messages, 422);
-        }
-        if ($request->same_address == false) {
-            $billingValidated = $request->validate([
-                'billing_town' => 'required',
-                'billing_country' => 'required',
-                'billing_postcode' => 'required',
-                'billing_address1' => 'required'
+        // validation
+        if ($isLead) {
+            $validated = $request->validate([
+                'title' => 'required',
+                'first_name' => 'required | alpha',
+                'last_name' => 'required | alpha_dash',
+                'date_of_birth' => 'required | before: 18 years ago',
+                'mobile_number' => 'required',
+                'gender' => 'required',
+                'address_line_1' => 'required',
+                'address_line_2' => 'required',
+                'town' => 'required',
+                'country' => 'required',
+                'postcode' => 'required']);
+                if (!$request->same_address) {
+                    $billingValidated = $request->validate([
+                        'billing_town' => 'required',
+                        'billing_country' => 'required',
+                        'billing_postcode' => 'required',
+                        'billing_address1' => 'required'
+                    ]);
+                    if ($this->logging == 'customers') Log::info('Billing Address Customer Validation passed', $validated);
+                }
+        } else {
+            $validated = $request->validate([
+                'title' => 'required',
+                'first_name' => 'required | alpha',
+                'last_name' => 'required | alpha_dash',
+                'date_of_birth' => 'required | before: 18 years ago',
+                'mobile_number' => 'required',
+                'gender' => 'required'
             ]);
-            if ($billingValidated->fails()) {
-                $messages = $billingValidated->messages;
-                return response()->json($messages, 422);
-            }
+            Log::info('validation passed');
         }
+        if ($this->logging == 'customers') Log::info('Basic Customer Validation passed', $validated);
+
         $customer->title = $request->title;
         $customer->first_name = $request->first_name;
         $customer->middle_names = $request->middle_names;
@@ -363,7 +368,6 @@ class BookingController extends ApiController
         $customer->date_of_birth = $request->date_of_birth;
         $customer->mobile_number = $request->mobile_number;
         $customer->other_phone_number = $request->other_phone_number;
-        $customer->password = null;
         $customer->gender = $request->gender;
         if ($isLead) {
             $customer->address_line_1 = $request->address_line_1;
@@ -400,7 +404,7 @@ class BookingController extends ApiController
     public function leadTraveller(Request $request) 
     {
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
-        $customer = $this->storeOrUpdateCustomer($request, true);
+        $customer = $this->storeOrUpdateCustomer($request);
         $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, true);
 
         return json_encode(['customer' => $customer, 'orderCustomer' => $orderCustomer]);
@@ -424,9 +428,13 @@ class BookingController extends ApiController
     public function removeAdditionalTraveller(Request $request)
     {
         $order_customer_id = $request->order_customer_id;
-        $orderCustomer = OrdersCustomer::find($order_customer_id);
-        $customer = Customer::find($orderCustomer->customer_id);
         $this->logging == 'customers' && Log::info('removing Additional Traveller order_customer_id:' . $order_customer_id);
+        $orderCustomer = OrdersCustomer::find($order_customer_id);
+        if (empty($orderCustomer)) {
+            return json_encode(['success' => false, $request]);
+        }
+        $customer = Customer::find($orderCustomer->customer_id);
+
         $orderCustomer->deleted_at = date('Y-m-d H:i:s');
         $orderCustomer->save();
 
