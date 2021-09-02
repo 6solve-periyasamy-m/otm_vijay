@@ -176,11 +176,10 @@ export default {
     },
     methods: {
         setCustomerFields() {
-            const that = this
-            that['id'] = that.customer['id']
-            that.fields.forEach(function(key,value) {
-                if (that.customer[key]) {
-                    that[key] = that.customer[key]
+            this['id'] = this.customer['id']
+            this.fields.forEach(function(key,value) {
+                if (this.customer[key]) {
+                    this[key] = this.customer[key]
                 }
             })
            this.edit_fields = false
