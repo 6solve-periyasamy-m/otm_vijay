@@ -29,7 +29,7 @@ class CreateCustomersTable extends Migration
             $table->string('address_line_2', 120)->nullable();
             $table->string('address_line_3', 120)->nullable();
             $table->string('town', 60)->nullable();
-            $table->string('country', 60);
+            $table->string('country', 60)->nullable();
             $table->string('postcode', 24)->nullable();
             $table->boolean('same_address')->default(false);
             $table->string('billing_line_1', 160)->nullable();

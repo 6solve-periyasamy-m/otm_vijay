@@ -385,6 +385,8 @@ class BookingController extends ApiController
                 $customer->billing_country = $request->billing_country;
                 $customer->billing_postcode = $request->billing_postcode;
             }
+        } else {
+            $customer->country = '-';
         }
         if ($this->logging) {
             $this->logging == 'customers' && Log::info('saving customer details ', $customer->toArray());

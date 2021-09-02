@@ -14,8 +14,8 @@
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
-                <div v-for="item in additional" :key="item">
-                    <booking-form-add-traveller :additional="item" :order_id="order_id" :tour="tour" @remove="removeTraveller"></booking-form-add-traveller>
+                <div v-for="item in additional" :key="item.id">
+                    <booking-form-add-traveller :traveller="item" :order_id="order_id" :tour="tour" @remove="removeTraveller"></booking-form-add-traveller>
                 </div>
                 <button type="button" 
                     class="btn btn-primary" 
@@ -37,7 +37,7 @@
         props: ['form_info', 'order_id', 'tour'],
         data() {
             return {
-                debug: false,
+                debug: 9,
                 id: 0,
                 formId: 0,
                 lead_traveller: false, // TODO: this should be set by the event bus
@@ -46,8 +46,8 @@
                 additional: []
             }
         },
-        mounted() {
-            this.debug && console.log('Booking form Additional Customer Component mounted.', this.order_id, this.tour)
+        created() {
+            this.debug && console.log('Booking form Additional Customer Component created.', this.order_id, this.tour)
             bus.$on('additionalTravellersLoaded', (customers) => {
                 this.debug && console.log('additionalTravellersLoaded signal', customers)
                 this.setCustomers(customers)

@@ -76,9 +76,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-10 form-group field-separation">
-                        <button v-if="validForm" type="button" :formId="form_id" class="btn btn-secondary" @click="storeTraveller">Save Traveller</button>
+                        <button :disabled="!validForm" type="button" :formId="form_id" class="btn btn-secondary" @click="storeTraveller">Save Traveller</button>
                         <button v-if="emptyForm" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
-                        <p class="small" v-else>To remove an additional traveller, clear the name fields first</p>
+                        <p class="small" v-else>To remove an additional traveller, <span
+                         class="small underlined" @click="first_name='';last_name='';middle_names=''">clear the name fields first</span></p>
                     </div>
                 </div>
                 <div class="row" v-if="errors.length">
@@ -98,14 +99,14 @@
 <script>
 import { bus } from '../bus'
 export default {
-    props: ['order_id', 'additional', 'tour'],
+    props: ['order_id', 'traveller', 'tour'],
     data() {
         return {
             debug: true,
             developer: false,
             fields: [
                 'customer_id',
-                'first_name', 'middle_names', 'last_name', 
+                'title', 'first_name', 'middle_names', 'last_name', 
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type'
             ],
@@ -128,6 +129,7 @@ export default {
             other_phone_number_type: '',
             otherNumberType: '',
             additionalTraveller: 'checked',
+            customer: {},
             removed: false,
             errors: [],
             edit_fields: true,
@@ -139,8 +141,9 @@ export default {
     mounted() {
         let that = this
         this.validationErrors = ''
-        // this.setCustomerFields() - not yet defined?
-        this.debug && console.log('Additional traveller mounted: order '+this.order_id, this.tour, this.additional)
+        this.customer = this.traveller
+        this.setCustomerFields()
+        this.debug && console.log('Additional traveller mounted: order '+this.order_id, this.tour, this.traveller)
 
         bus.$on('setOrderToken', function(formId, orderId) {
             that.form_id = formId
@@ -229,6 +232,7 @@ export default {
                     customer_id: this.customer_id,
                     title: this.title,
                     first_name: this.first_name,
+                    middle_names: this.middle_names,
                     last_name: this.last_name,
                     gender: this.gender,
                     email_address: this.email_address,
@@ -244,6 +248,7 @@ export default {
                     const customer = response.data.customer
                     const orderCustomer = response.data.orderCustomer
                     that.id = orderCustomer.customer_id
+                    that.title = customer.title
                     that.customer_id = orderCustomer.id
                     that.first_name = customer.first_name
                     that.middle_names = customer.middle_names
@@ -255,6 +260,7 @@ export default {
                     that.date_of_birth = customer.date_of_birth
                     that.gender = customer.gender
                     that.validated = true
+                    that.validationErrors = ''
                 })
                 .catch(e => {
                     console.log('submit error', e)
