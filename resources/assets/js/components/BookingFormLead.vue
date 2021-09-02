@@ -231,7 +231,7 @@ export default {
     },
     data() {
         return {
-            debug: 0
+            debug: 0,
             token: null,
             order_id: null,
             email: '',
