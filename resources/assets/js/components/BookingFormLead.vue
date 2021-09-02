@@ -215,7 +215,7 @@ export default {
         })
         let that = this
         bus.$on('setOrderToken', (token, order_id) => {
-            console.log('EVENT: Lead Traveller created: setting values for order',  token, order_id)
+            that.debug && console.log('EVENT: Lead Traveller created: setting values for order',  token, order_id)
             that.token = token
             that.order_id = order_id
         })
@@ -231,7 +231,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: 0
             token: null,
             order_id: null,
             email: '',
@@ -377,7 +377,7 @@ export default {
         },
         async storeTraveller() {
             let that = this
-            console.log('BOOKING: Store Traveller', this)
+            that.debug && console.log('BOOKING: Store Traveller', this)
             if (typeof this.order_id == 'undefined' || this.order_id == null || this.order_id == 0) {
                 alert('About to store new Lead Traveller, check order code')
                 await bus.$emit('createOrder')
@@ -417,7 +417,7 @@ export default {
                     const customer = response.data.customer
                     that.lead_traveller = customer.first_name + ' ' + customer.last_name
                     that.show_traveller = false
-                    console.log('customerStored, reponse', response)
+                    that.debug && console.log('customerStored, reponse', response)
                     bus.$emit('customerLoaded', customer, that.token)
                 })
                 .catch(e => {
