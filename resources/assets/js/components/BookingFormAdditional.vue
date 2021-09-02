@@ -37,7 +37,7 @@
         props: ['form_info', 'order_id', 'tour'],
         data() {
             return {
-                debug: 9,
+                debug: 0,
                 id: 0,
                 formId: 0,
                 lead_traveller: false, // TODO: this should be set by the event bus
@@ -61,12 +61,14 @@
             setCustomers(customers) {
                 this.debug && console.log('BookingFormAdditional.setCustomers(customers) customers:', customers)
                 customers.forEach(customer => {
+                    console.log('customer', customer)
                     if (!customer.is_lead_booker) {
                         customer.formId = this.getFormId()
                         customer.customer_id = customer.id
                         this.additional.push(customer)
                     }
-                });
+                })
+                console.log('customer set', this.additional)
             },
             getFormId() {
                 return this.id++
