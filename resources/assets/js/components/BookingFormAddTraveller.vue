@@ -101,13 +101,13 @@ export default {
     props: ['order_id', 'traveller', 'tour'],
     data() {
         return {
-            debug: false,
+            debug: 0,
             developer: false,
             fields: [
                 'customer_id',
                 'title', 'first_name', 'middle_names', 'last_name', 
                 'date_of_birth', 'gender', 'email_address',
-                'mobile_number', 'other_phone_number', 'other_phone_numnber_type'
+                'mobile_number', 'other_phone_number', 'other_phone_number_type'
             ],
             title: '',
             first_name: '',
@@ -176,10 +176,11 @@ export default {
     },
     methods: {
         setCustomerFields() {
+            let that = this
             this['id'] = this.customer['id']
             this.fields.forEach(function(key,value) {
-                if (this.customer[key]) {
-                    this[key] = this.customer[key]
+                if (typeof that.customer[key] !== 'undefined') {
+                    that[key] = that.customer[key]
                 }
             })
            this.edit_fields = false
