@@ -4,7 +4,6 @@
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}} </h3>
         <div class="ept-form" :id="form_id">
             <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
-{{edit_fields ? 'Edit' : 'Add'}}
             <div v-if="edit_fields || (!first_name && !last_name)">
                 <div class="row">
                     <div class="col-md-3 form-group field-separation">
@@ -102,7 +101,7 @@ export default {
     props: ['order_id', 'traveller', 'tour'],
     data() {
         return {
-            debug: true,
+            debug: false,
             developer: false,
             fields: [
                 'customer_id',
@@ -150,20 +149,19 @@ export default {
             if (that.order_id != orderId) {
                 alert('order ID incorrect!', that.order_id, orderId)
             }
-            console.log('EVENT: additional traveller created: setting form and order', formId, orderId)
+            this.debug && console.log('EVENT: additional traveller created: setting form and order', formId, orderId)
         })
         bus.$on('addTraveller', function(formId) {
-            console.log('adding', formId)
+            this.debug && console.log('adding', formId)
             that.edit_fields = false
         })
     },
     computed: {
         emptyForm: function () {
-            // console.log('evaluation', this.first_name)
             return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
         },
         validForm: function () {
-            console.log('validForm called', this)
+            this.debug && console.log('validForm called', this)
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
         },
         mobileNumberInvalid: function () {
@@ -191,12 +189,12 @@ export default {
             // valid_uk appears to be fairly accurate
             const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
             const field = e.srcElement.name
-            console.log('validating ', field)
+            this.debug && console.log('validating ', field)
             switch (field) {
                 case 'mobile_number':
                     if (!valid_uk.test(this.mobile_number)) {
                         this.mobile_number_invalid = true
-                        console.log('Invalid!', this.mobile_number)
+                        this.debug && console.log('Invalid!', this.mobile_number)
                         return false
                     }
                     this.mobile_number_invalid = false
@@ -211,7 +209,7 @@ export default {
                 default:
                     alert(field + ' not handled in switch')
             }
-            console.log(field, 'validated')
+            this.debug && console.log(field, 'validated')
             return true
         },
         validEmail() {
@@ -220,7 +218,7 @@ export default {
             }
             const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             const valid = valid_email.test(this.email_address)
-            //console.log(this.email_address, valid)
+            //this.debug && console.log(this.email_address, valid)
             this.email_invalid = !valid
             return false
         },
@@ -271,7 +269,7 @@ export default {
         },
         removeTraveller() {
             const that = this
-//console.log('removing ', this.customer_id)
+            this.debug && console.log('removing ', this.customer_id)
             axios.post(`/api/booking/additional-traveller/remove`, {
                 order_customer_id: this.customer_id
             })
