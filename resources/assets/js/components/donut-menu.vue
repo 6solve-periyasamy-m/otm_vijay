@@ -23,7 +23,7 @@ export default {
     methods: {
       tourSelect(event) {
         alert('tour-select');
-        this.$emit('tourSelected');
+         bus.$emit('tourSelected');
       }
     }
 }

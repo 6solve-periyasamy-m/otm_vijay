@@ -16,7 +16,7 @@ class CreateCustomersTable extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('email_address', 255);
-            $table->string('password', 255);
+            $table->string('password')->nullable();
             $table->string('login_token', 255)->nullable();
             $table->string('gender', 6);
             $table->string('title', 20)->nullable();
@@ -30,7 +30,7 @@ class CreateCustomersTable extends Migration
             $table->string('address_line_2', 120)->nullable();
             $table->string('address_line_3', 120)->nullable();
             $table->string('town', 60)->nullable();
-            $table->string('country', 60);
+            $table->string('country', 60)->nullable();
             $table->string('postcode', 24)->nullable();
             $table->boolean('same_address')->default(false);
             $table->string('billing_line_1', 160)->nullable();

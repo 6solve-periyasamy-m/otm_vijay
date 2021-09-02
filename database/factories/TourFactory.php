@@ -35,7 +35,6 @@ class TourFactory extends Factory
             'tour_colour_id' => null,
             'tour_merchandise_id' => null,
             'is_active' => true,
-            'archive_status' => false,
             'date_from' => '2022-05-01',
             'date_to' => '2022-05-31'
         ];
