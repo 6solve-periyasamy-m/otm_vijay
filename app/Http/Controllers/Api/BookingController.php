@@ -303,6 +303,8 @@ class BookingController extends ApiController
 
     /**
      * storeOrUpdateCustomer
+     * NB: customer table as a password field, this is not changed or affected by this function
+     * as it is not used UNTIL the customer has a login (this may be managed by the user table)
      *
      * @param [type] $request
      * @param boolean $isLead
