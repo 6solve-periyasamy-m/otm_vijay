@@ -61,14 +61,12 @@
             setCustomers(customers) {
                 this.debug && console.log('BookingFormAdditional.setCustomers(customers) customers:', customers)
                 customers.forEach(customer => {
-                    console.log('customer', customer)
                     if (!customer.is_lead_booker) {
                         customer.formId = this.getFormId()
                         customer.customer_id = customer.id
                         this.additional.push(customer)
                     }
                 })
-                console.log('customer set', this.additional)
             },
             getFormId() {
                 return this.id++
