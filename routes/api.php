@@ -46,7 +46,8 @@ Route::get('/booking/flights/{tour_id}', [FlightController::class, 'getFlightInv
 Route::get('/booking/flight-inventories', [FlightController::class, 'getFlightsInventories']);
 Route::get('/booking/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
 // function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
-Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
+// Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
+Route::post('/booking/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
 // Accommodation
 Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
@@ -62,15 +63,15 @@ Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationControll
 Route::post('/booking/lead-traveller', [BookingController::class, 'leadTraveller']);
 Route::post('/booking/additional-traveller', [BookingController::class, 'additionalTraveller']);
 Route::post('/booking/additional-traveller/remove', [BookingController::class, 'removeAdditionalTraveller']);
+
 // create Booking Order
 Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
+
 // create Flights Order
-Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
-    BookingController::class, 'bookFlightDetails'
-]);
-
-
-
+// Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
+//     BookingController::class, 'bookFlightDetails'
+// ]);
+Route::post('/booking/flight', [BookingController::class, 'bookFlightDetails']);
 
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);

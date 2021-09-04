@@ -38,7 +38,7 @@ export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
     data() {
         return {
-            debug: 0,
+            debug: false,
             flightId: '',
             tour_flight_type: '',
             flight_selected: this.selected_item,
@@ -58,6 +58,7 @@ export default {
     },
     created() {
         let that = this
+        this.identification = this.token
         this.tour_flights = this.flights
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
@@ -71,7 +72,8 @@ export default {
                 this.flight_selected = 0
                 console.log(that.tour_flights_filtered)
             })
-        
+        } else {
+            console.log('WARNING: selected_item not set?')
         }
         this.filterFlights()
         bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
@@ -82,9 +84,9 @@ export default {
     methods: {
         changeFlight() {
             if (typeof this.flightId != 'undefined' && this.flightId != null && this.flightId != 0) {
-                console.log('change flight!', this.flightId, this.traveller)
                 this.caption = 'Remove selection'
-                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom)
+                console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveller, this.custom, this.token)
+                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom, this.token)
             } else {
                 this.caption = 'You can select a custom flight'
             }

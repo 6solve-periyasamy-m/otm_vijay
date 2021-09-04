@@ -24,7 +24,7 @@
                                     <booking-form-lead :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour && token">
-                                        <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
+                                        <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
                                         <booking-form-accommodation :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
                                         <booking-form-activity></booking-form-activity>
                                         <booking-form-transport></booking-form-transport>
@@ -72,7 +72,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: 0,
+            debug: 4,
             formInfo: false,
             token: '',
             leadTraveller: {},

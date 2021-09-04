@@ -61,6 +61,17 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
         Log::info('cod created' . $cod->id);
     }
 
+    public function storeCustomerOrderDetail(CustomerOrderDetail $customer_order_detail)
+    {
+        try {
+            $customer_order_detail->save();
+            return $customer_order_detail->id;
+        } catch(\Exception $e) {
+            Log::info('ERROR updating customer order detail'.$e->getMessage());
+            throw new Exception('ERROR updating CustomerOrderDetail'. $e->getMessage());
+        };
+    }
+
     public function purge($customerOrderId, $type)
     {
         $cod = new CustomerOrderDetail();
