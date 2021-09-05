@@ -141,8 +141,6 @@ class FlightController extends ApiController
                 $orders = $orders->where('customer_order_details.type', $type);
             }
             $orders = $orders->get();
-            // ->toSql();
-        // Log::info('SQL' . $orders);
 
         // left joins for airports requires queries as they are a pair
         foreach($orders as &$ord) {
@@ -153,6 +151,6 @@ class FlightController extends ApiController
             Log::info('loadFlightsForOrder order '. $order_id . ' found '. count($orders). ' orders');
         }
 
-        return response()->json(["success" => true, "orders" => $orders->toArray()]);
+        return response()->json(["success" => true, "orders" => $orders]);
     }
 }
