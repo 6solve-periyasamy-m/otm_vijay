@@ -302,6 +302,7 @@ export default {
                 inventory_tour_id: booking,
                 flight_type: flight_type,
                 custom: true,
+                token: that.token
             }
             console.log('REMOVAL OF ', record)
             axios.post(`/api/booking/flights/remove/flight`, record)

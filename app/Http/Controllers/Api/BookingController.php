@@ -65,7 +65,7 @@ class BookingController extends ApiController
             ->where('reference', $reference)
             ->whereNull('deleted_at')
             ->first();
-Log::info('record found for removal?', $result->toArray());
+
         if ($result) {
             $this->logging && Log::info('removing ', $result->toArray());
             $result->delete();
@@ -73,11 +73,10 @@ Log::info('record found for removal?', $result->toArray());
         return $result;
     }
     /**
-     * Undocumented function
+     * Remove flight booking 
      *
      * @param Request $request
-     * {order_id}/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
-     * @return void
+     * @return JSON response 
      */
     public function removeFlightBooking(Request $request)
     {
@@ -85,9 +84,11 @@ Log::info('record found for removal?', $result->toArray());
         $inventory_tour_id = $request->inventory_tour_id;
         $orderCustomers = new OrdersCustomer();
         $orderCustomer = $orderCustomers->find($order_customer_id);
-        Log::info('ordercust', $orderCustomer->toArray());
-        // order is removed with its token 
-        // todo : which must match the token 
+
+        $token = $_COOKIE['OTM_booking_order_token'];
+        if ($token !== $request->token) {
+            throw new \Exception('Booking token mismatch');
+        }
         if (empty($orderCustomer) || empty($orderCustomer->order_id)) {
             throw new \Exception('No order exists!');
         }
@@ -95,6 +96,9 @@ Log::info('record found for removal?', $result->toArray());
         $order = $orders->find($orderCustomer->order_id);
         $this->logging && Log::info('order for removal', $order->toArray());
 
+        if ($token !== $order->token) {
+            throw new \Exception('Order token mismatch');
+        }
         // $order_id = $order->id;
         $type = $request->flight_type;
         $custom = $request->custom;
@@ -118,20 +122,30 @@ Log::info('record found for removal?', $result->toArray());
      public function bookFlightDetails(Request $request)
     {
         // validation
-
+        $validated = $request->validate([
+            'customer_id' => 'required',
+            'tour_id' => 'required',
+            'order_id' => 'required',
+            'flight_type' => 'required',
+            'inventory_tour_id' => 'required',
+            'custom' => 'required',
+            'token' => 'required'
+        ]);
         $customer_id = $request->customer_id;
         $tour_id = $request->tour_id;
         $order_id = $request->order_id;
         $flight_type = $request->flight_type;
         $inventory_tour_id = $request->inventory_tour_id;
         $custom = $request->custom;
-        $reference = $request->token;
-        $this->logging == 'flights' && Log::info('bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $reference]);
 
-        // not used
-        // $customers = new Customer();
-        // $flights = new Flight();
-        // $flightInventory = new FlightInventory();
+        $token = $_COOKIE['OTM_booking_order_token'];
+        if ($token !== $request->token) {
+            throw new \Exception('Booking token mismatch');
+        }
+        $token = $request->token;
+
+        $this->logging == 'flights' && Log::info('bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $token]);
+
         $tours = new Tour();
         $rejection = 0;
 
@@ -156,10 +170,10 @@ Log::info('record found for removal?', $result->toArray());
         Log::info('bookFlightDetails order:', $orderCustomer->toArray());
 
         if ($inventory_tour_id) {
-            $result = $this->storeOrUpdateCustomerOrderDetail($orderCustomer, $flightTour, $flight_type, $custom, $reference);
+            $result = $this->storeOrUpdateCustomerOrderDetail($orderCustomer, $flightTour, $flight_type, $custom, $token);
             Log::info('storeOrUpdateCustomerOrderDetail returned!', $result);
         } else {
-            $result = $this->removeCustomerOrderDetail('flight', $order, $orderCustomer, $flight_type, $custom, $reference);
+            $result = $this->removeCustomerOrderDetail('flight', $order, $orderCustomer, $flight_type, $custom, $token);
             Log::info('removeCustomerOrderDetail returned!');
         }
         if (!$result) {
