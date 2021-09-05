@@ -88,7 +88,6 @@
                                 </div>
                             </div>
                             <hr class="light" />
-                             {{debug>3 ? travellers : ''}}
                             <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -101,7 +100,6 @@
                                         {{ traveller.last_name}}
                                     </div>
                                 </div>
-                                {{debug>4 ? travellerFlightOptions[traveller.order_customer_id] : ''}}
                                 <div class="flight-options" v-if="travellerFlightOptions[traveller.order_customer_id]">
                                     <h5>Flight Options for traveller</h5>
                                     <div class="row">
