@@ -233,32 +233,10 @@ export default {
         this.debug>1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
         that.ready = true
         that.activated = true
-        this.debug>1 && console.log('BFF mounted')
     },
     created() {
         let that = this
-        console.log('token=',this.token)
-        // bus.$on('setOrderToken', (token, order_id) => {
-        //     that.token = token
-        //     that.order_id = order_id
-        //     that.debug && console.log('BFFlights: setOrderToken ::  ', token, order_id)
-        // })
-        that.debug>1 && console.log('BFF MOUNTED: order_id', that.order_id)
 
-        // bus.$on('leadTravellerLoaded', leadTraveller => {
-        //     console.log('BFF Created() custmerLoaded event', leadTraveller)
-        //     that.leadTraveller = leadTraveller
-        //     this.activated = true
-        //     // that.loadFlightsForOrder(that.order_id)
-        // })
-        // bus.$on('additionalTravellersLoaded', (travellers) => {
-        //     // travellers.map(traveller => {
-        //     //     traveller['selected_outbound_addon'] = null
-        //     //     traveller['selected_inbound_addon'] = null
-        //     // })
-        //     that.travellers = travellers
-        //     // (mounted does this unconditionally) that.getTourParty(this.order_id)
-        // })
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
             that.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
             if (traveller == null) {
@@ -288,7 +266,7 @@ export default {
         })
 
         bus.$on('removeBooking', (booking, flight_type, traveller) => {
-            console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller)
+            console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.token)
             const item = this.orderset.filter(ordr => ordr.inventory_tour_id === booking &&
                 ordr.orders_customer_id == traveller.order_customer_id);
             if (item.length === 1) {
@@ -302,22 +280,15 @@ export default {
                 custom: true,
                 token: that.token
             }
-            console.log('REMOVAL OF ', record)
+            console.log('remove daat', record)
             axios.post(`/api/booking/flights/remove/flight`, record)
-                // ${item[0].order_id}/${traveller.order_customer_id}/${flight_type}/1/${item[0].inventory_tour_id}`)
-                .then(response => {
-                    console.log('remove flight response', response.data.flight)
+                 .then(response => {
+                    that.debug>3 && console.log('remove flight response', response.data.flight)
                     const deleted_flight = response.data.flight
                     bus.$emit('flightRemoved', deleted_flight.id)
                 })
                 .catch(error => console.log(error));
         })
-        // this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
-        // that.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out_date_time ', this.order_id)
-        // that.debug > 1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
-        // that.debug > 1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
-
-        that.debug>1 && console.log('BFF created')
     },
     computed: {
         otherairports: function() {
@@ -388,35 +359,38 @@ export default {
             this.showCustomFlights = !state
         },
         async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token) {
-            this.debug > 1 && console.log('[updateFlight] called', this.order_id, this.tour.id, flight_tour, 'flight_inventory_tour_id', flight_inventory_tour_id, flight_type, customer, 'token' + token)
             this.debug > 3 && console.log('updateFlight()', flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token);
             let that = this
-            if (customer != null) {
-                //const url_with = `/api/booking/flight/${customer.customer_id}/${that.tour.id}/${that.order_id}/${flight_type}/${flight_inventory_tour_id}/${custom ? 1 : 0}/${token}`
-                const url = '/api/booking/flight'
-                const data = {
-                    customer_id: customer.customer_id,
-                    tour_id: that.tour.id,
-                    order_id: that.order_id,
-                    flight_type: flight_type,
-                    inventory_tour_id: flight_inventory_tour_id,
-                    custom: custom,
-                    token: token
-                }
-                await axios.post(url, data)
-                    .then(response => {
-                        that.debug > 3 && console.log('flight booking response', response)
-                        that.loadFlightsForOrder(that.order_id)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+            if (customer == null) {
+                console.log('WARNING: updateFlight customer data missing')
+                alert('Form data missing, please refresh or contact support')
+                return
             }
+            const url = '/api/booking/flight'
+            const data = {
+                customer_id: customer.customer_id,
+                tour_id: that.tour.id,
+                order_id: that.order_id,
+                flight_type: flight_type,
+                inventory_tour_id: flight_inventory_tour_id,
+                custom: custom,
+                token: token
+            }
+            await axios.post(url, data)
+                .then(response => {
+                    that.debug > 3 && console.log('flight booking response', response)
+                    that.loadFlightsForOrder(that.order_id)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         },
         flightSelected(type, addon, orders, traveller) {
             const that = this
             if (traveller == null) {
                 console.log('WARNING: flightSelected - traveller is null')
+                alert('Form data incomplete, please refresh or contact support')
+                return
             }
             let order = orders.filter(ordr => ordr.flight_type == type &&
                 ordr.addon == addon &&
@@ -424,6 +398,7 @@ export default {
 
             if (typeof order == 'undefined' || order == null || order.length == 0) {
                 console.log('WARNING: flightSelected no ' + type + ' order?')
+             //   alert('Form data incorrect, please refresh or contact support')
                 return null
             }
             const order_selected = order[0]
@@ -439,10 +414,11 @@ export default {
         // loads current flight orders 
         async loadFlightsForOrder(order_id) {
             if (!order_id) {
-                console.log('INFO: NO ORDER YET');
+                alert('Form data seems to have missing data, please refresh or contact support')
+                console.log('WARNING: load flights for order missing an order?');
                 return
             } else {
-                console.log('INFO: loadFlightsForOrder called for order ', order_id)
+                this.debug>3 && console.log('INFO: loadFlightsForOrder called for order ', order_id)
             }
             let that = this
             let outbound = {}
@@ -552,22 +528,6 @@ export default {
                 })
                 .catch(error => console.log(error.message))
         },
-
-        /** this looks wrong and is not being called??  */
-        // addon flights
-        // addOutboundFlight(flight) {
-        //     alert('addOutboundFlight???')
-        //     this.outbound_flights.push(flight)
-        //     this.debug && console.log('addOutboundFlight: ', this.outbound_flights)
-        //     bus.$on('set_outbound', (flight_id, flight_tour, flight_traveller) => this.selected_outbound = flight_id)
-
-        // },
-        // addInboundFlight(flight) {
-        //     this.inbound_flights.push(flight)
-        //     this.debug && console.log('addInboundFlight: ', this.inbound_flights)
-        //     bus.$on('set_inbound', (flight_id, flight_tour, flight_traveller) => this.selected_outbound = flight_id)
-
-        // }
     }
 }
 </script>

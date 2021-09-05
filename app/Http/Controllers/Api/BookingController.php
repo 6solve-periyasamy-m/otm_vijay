@@ -80,6 +80,11 @@ class BookingController extends ApiController
      */
     public function removeFlightBooking(Request $request)
     {
+        $validated = $request->validate([
+            'order_customer_id' => 'required',
+            'inventory_tour_id' => 'required',
+            'token' => 'required'
+        ]);
         $order_customer_id = $request->order_customer_id;
         $inventory_tour_id = $request->inventory_tour_id;
         $orderCustomers = new OrdersCustomer();
@@ -87,7 +92,7 @@ class BookingController extends ApiController
 
         $token = $_COOKIE['OTM_booking_order_token'];
         if ($token !== $request->token) {
-            throw new \Exception('Booking token mismatch');
+            throw new \Exception('Booking token mismatch I have:'. $token . ' request has:'.$request->token);
         }
         if (empty($orderCustomer) || empty($orderCustomer->order_id)) {
             throw new \Exception('No order exists!');
@@ -167,14 +172,14 @@ class BookingController extends ApiController
         }
 
         $orderCustomer = $this->getOrderCustomer($order, $customer_id);
-        Log::info('bookFlightDetails order:', $orderCustomer->toArray());
+        $this->logging === 'flights' && Log::info('bookFlightDetails order:', $orderCustomer->toArray());
 
         if ($inventory_tour_id) {
             $result = $this->storeOrUpdateCustomerOrderDetail($orderCustomer, $flightTour, $flight_type, $custom, $token);
-            Log::info('storeOrUpdateCustomerOrderDetail returned!', $result);
+            $this->logging === 'flights' && Log::info('storeOrUpdateCustomerOrderDetail returned!', $result);
         } else {
             $result = $this->removeCustomerOrderDetail('flight', $order, $orderCustomer, $flight_type, $custom, $token);
-            Log::info('removeCustomerOrderDetail returned!');
+            $this->logging === 'flights' && Log::info('removeCustomerOrderDetail returned!');
         }
         if (!$result) {
             $status .= ' error updating!';
@@ -213,7 +218,6 @@ class BookingController extends ApiController
 
     //     return $customer_order_details;
     // }
-
     private function findCustomerOrderDetailByInventoryTourId($orders_customer_id, $inventory_tour_id, $flight_type, $reference, $addon)
     {
         $model = new CustomerOrderDetail();
