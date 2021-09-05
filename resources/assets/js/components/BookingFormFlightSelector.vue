@@ -85,7 +85,7 @@ export default {
         changeFlight() {
             if (typeof this.flightId != 'undefined' && this.flightId != null && this.flightId != 0) {
                 this.caption = 'Remove selection'
-                console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveller, this.custom, this.token)
+                this.debug>4 && console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveller, this.custom, this.token)
                 bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom, this.token)
             } else {
                 this.caption = 'You can select a custom flight'
@@ -95,7 +95,7 @@ export default {
             // props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
             // /booking/flights/remove/flight/{order_id]/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
             this.caption = 'Reselect'
-            console.log('removing', booking, flight_type, this.tour)
+            this.debug>4 && console.log('removing', booking, flight_type, this.tour)
             bus.$emit('removeBooking', booking, flight_type, this.traveller);
         },
         filterFlights() {
