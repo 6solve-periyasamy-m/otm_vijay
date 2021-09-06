@@ -118,7 +118,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
         $customer_order_detail = new CustomerOrderDetail();
         $result = $customer_order_detail
             ->where('orders_customer_id', $ordersCustomer->id)
-            ->where('component_type', $this->component_type)
+            ->where('type', $this->component_type)
             ->where('reference', $token)
             ->whereNull('customer_order_details.deleted_at')
             ->first();
@@ -132,7 +132,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
         $customer_order_detail = new CustomerOrderDetail();
         $result = $customer_order_detail
             ->where('order_id', $order->id)
-            ->where('component_type', $this->component_type)
+            ->where('type', $this->component_type)
             ->where('reference', $token)
             ->whereNull('customer_order_details.deleted_at')
             ->first();

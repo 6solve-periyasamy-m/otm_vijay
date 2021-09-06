@@ -8,7 +8,7 @@ use Exception;
 
 interface CustomerOrderDetailRepositoryInterface {
     public function getCOD($customerOrderId, $type);
-    public function saveCOD($cod, $customerOrderId, $component_type, $inventory_tour_id, $traveller, $reference, $type);
+    public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference);
     public function purge($customerOrderId, $type);
 }
 
@@ -17,23 +17,27 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
     public function getCOD($customerOrderId, $type)
     {
         $cod = new CustomerOrderDetail();
+        $existing = null;
         try {
             $existing = $cod->where('orders_customer_id', $customerOrderId)
-                ->where('component_type', $type)
+                ->where('type', $type)
                 ->get();
         } catch (Exception $e) {
             Log::info('Failed to get COD ' . $e->getMessage());
         }
+        if (is_object($existing)) {
+            Log::info('get existing COD', $existing->toArray());
+        }
         return $existing;
     }
 
-    public function saveCOD($cod, $customerOrderId, $component_type, $inventory_tour_id, $traveller, $reference, $type)
+    public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference)
     {
         $cod->orders_customer_id = $customerOrderId;
         // $cod->order_id = $order_id;
         $cod->type = $type;
 
-        $cod->component_type = $component_type;
+        $cod->type = $type;
         // if ($room) {
         //     $cod->type = $room['board_type_name'] . ' ' . $room['room_type_name'];
         // } else {

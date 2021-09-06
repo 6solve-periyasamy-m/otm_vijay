@@ -6,6 +6,21 @@
     <div>
         <h1>API Tests</h1>
         <ul>
+            <!--
+// Accommodation
+Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
+Route::get('/booking/accommodation/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+            -->
+            <li>
+                <a href="/api/booking/accommodation/1" target="test">
+                    Route::get('/booking/accommodation{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+                </a>
+            </li>
+            <li>
+                <a href="/api/booking/accommodation/1" target="test">
+                    Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
+                </a>
+            </li>
             <li>
                 <a href="/api/booking/flight/orders/1" target="test">
                     Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
