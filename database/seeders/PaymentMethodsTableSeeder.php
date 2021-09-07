@@ -13,37 +13,65 @@ class PaymentMethodsTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
         \DB::table('payment_methods')->delete();
-        
+
         \DB::table('payment_methods')->insert(array (
-            0 => 
-            array (
-                'id' => 1,
-                'name' => 'Stripe',
-                'deleted_at' => NULL,
-                'created_at' => '2021-09-07 09:34:25',
-                'updated_at' => '2021-09-07 09:34:25',
-            ),
-            1 => 
-            array (
-                'id' => 2,
-                'name' => 'Cash',
-                'deleted_at' => NULL,
-                'created_at' => '2021-09-07 09:34:30',
-                'updated_at' => '2021-09-07 09:34:30',
-            ),
-            2 => 
-            array (
-                'id' => 3,
-                'name' => 'Card over Phone',
-                'deleted_at' => NULL,
-                'created_at' => '2021-09-07 09:34:51',
-                'updated_at' => '2021-09-07 09:34:51',
-            ),
+            0 =>
+                array (
+                    'created_at' => '2021-09-07 13:03:55',
+                    'deleted_at' => NULL,
+                    'id' => 11,
+                    'name' => 'Stripe',
+                    'updated_at' => '2021-09-07 13:03:55',
+                ),
+            1 =>
+                array (
+                    'created_at' => '2021-09-07 13:04:01',
+                    'deleted_at' => NULL,
+                    'id' => 12,
+                    'name' => 'PayPal',
+                    'updated_at' => '2021-09-07 13:04:01',
+                ),
+            2 =>
+                array (
+                    'created_at' => '2021-09-07 13:04:11',
+                    'deleted_at' => NULL,
+                    'id' => 13,
+                    'name' => 'BACS',
+                    'updated_at' => '2021-09-07 13:04:11',
+                ),
+            3 =>
+                array (
+                    'created_at' => '2021-09-07 13:04:17',
+                    'deleted_at' => NULL,
+                    'id' => 14,
+                    'name' => 'Cash',
+                    'updated_at' => '2021-09-07 13:04:17',
+                ),
+            4 =>
+                array (
+                    'created_at' => '2021-09-07 13:04:23',
+                    'deleted_at' => NULL,
+                    'id' => 15,
+                    'name' => 'Cheque',
+                    'updated_at' => '2021-09-07 13:04:23',
+                ),
+            5 =>
+                array (
+                    'created_at' => '2021-09-07 13:04:33',
+                    'deleted_at' => NULL,
+                    'id' => 16,
+                    'name' => 'Debit Card by Phone',
+                    'updated_at' => '2021-09-07 13:04:33',
+                ),
+            6 =>
+                array (
+                    'created_at' => '2021-09-07 13:04:39',
+                    'deleted_at' => NULL,
+                    'id' => 17,
+                    'name' => 'Credit Card by Phone',
+                    'updated_at' => '2021-09-07 13:04:39',
+                ),
         ));
-        
-        
     }
 }
