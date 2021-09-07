@@ -19,6 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('payment_method_id');
             $table->float('amount');
             $table->dateTime('paid_on');
+            $table->string('payment_type'); // TODO: Should be enum but need to reconcile with voyager
             $table->softDeletes();
             $table->timestamps();
         });
