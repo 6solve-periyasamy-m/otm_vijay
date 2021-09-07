@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderSystemController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TourController;
@@ -75,4 +76,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
 
+});
+
+Route::prefix('orders')->group(function () {
+   Route::get('search', [OrderSystemController::class, 'index'])->name("testing-search");
 });

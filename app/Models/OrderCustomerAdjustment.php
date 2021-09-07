@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ManualAdjustment extends Model
+class OrderCustomerAdjustment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function order() {
-        return $this->belongsTo(Order::class, 'order_id');
+    public function orderCustomer() {
+        return $this->belongsTo(OrdersCustomer::class, 'order_customer_id');
     }
 }
