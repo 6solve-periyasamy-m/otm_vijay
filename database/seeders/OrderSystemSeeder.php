@@ -5,9 +5,9 @@ namespace Database\Seeders;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrdersCustomer;
+use App\Models\Payment;
 use App\Models\Quote;
 use Illuminate\Database\Seeder;
-use PaymentMethodsTableSeeder;
 
 class OrderSystemSeeder extends Seeder
 {
@@ -22,8 +22,10 @@ class OrderSystemSeeder extends Seeder
         Quote::factory()->count(10)->create();
         $this->call(PaymentMethodsTableSeeder::class);
         Order::factory()->count(10)->create()->each(function($order) {
-            $orderCustomers = OrdersCustomer::factory()->count(10)->make();
+            $orderCustomers = OrdersCustomer::factory()->count(2)->make();
             $order->orderCustomers()->saveMany($orderCustomers);
+            $payments = Payment::factory()->count(5)->make();
+            $order->payments()->saveMany($payments);
         });
     }
 }

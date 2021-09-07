@@ -28,4 +28,8 @@ class Order extends Model
     public function orderCustomers() {
         return $this->hasMany(OrdersCustomer::class, 'order_id');
     }
+
+    public function payments() {
+        return $this->hasMany(Payment::class, 'order_id');
+    }
 }
