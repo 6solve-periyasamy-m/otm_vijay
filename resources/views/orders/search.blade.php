@@ -1,0 +1,35 @@
+@extends('layout.main')
+
+@section('content')
+
+<div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
+<div class="text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
+    <div><img src="{{ asset('images/octlogo.png') }}" style="margin-left: auto; margin-right: auto; display: block; width: 30%"/></div>
+    <form action="{{ route("testing-search")}}" method="get">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="query-input" name="query" placeholder="Search Query" value="{{ $query ?? "" }}">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-amber" label="Search">Search</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-striped" style="border-radius: 10px;">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Order Date</th>
+            <th scope="col">Lead Booker</th>
+            <th scope="col">Booking Reference</th>
+            <th scope="col">Tour</th>
+        </tr>
+        </thead>
+        @foreach($data as $row)
+            <tr>
+                <td>{{$row->ordered_on}}</td>
+                <td>{{$row->first_name . ' ' . $row->last_name }}</td>
+                <td>{{$row->booking_reference}}</td>
+                <td>{{$row->title}}</td>
+            </tr>
+        @endforeach
+    </table>
+</div></div>
+@endsection
