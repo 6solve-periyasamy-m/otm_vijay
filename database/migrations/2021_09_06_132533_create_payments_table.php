@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersCustomersPaymentsTable extends Migration
+class CreatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateOrdersCustomersPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_customers_payments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('order_customer_id');
-            $table->integer('payment_type_id');
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id();
+            $table->integer('order_id');
             $table->integer('payment_method_id');
-            $table->float('payment_amount', 10, 0);
-            $table->timestamps();
+            $table->float('amount');
+            $table->dateTime('paid_on');
+            $table->string('payment_type'); // TODO: Should be enum but need to reconcile with voyager
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +32,6 @@ class CreateOrdersCustomersPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders_customers_payments');
+        Schema::dropIfExists('payments');
     }
 }
