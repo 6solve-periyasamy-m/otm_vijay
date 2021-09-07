@@ -22,7 +22,9 @@ class OrderSystemSeeder extends Seeder
         Quote::factory()->count(10)->create();
         $this->call(PaymentMethodsTableSeeder::class);
         Order::factory()->count(10)->create()->each(function($order) {
-            $orderCustomers = OrdersCustomer::factory()->count(2)->make();
+            $orderCustomers = OrdersCustomer::factory()->make(['is_lead_booker' => true]);
+            $order->orderCustomers()->save($orderCustomers);
+            $orderCustomers = OrdersCustomer::factory()->count(2)->make(['is_lead_booker' => false]);
             $order->orderCustomers()->saveMany($orderCustomers);
             $payments = Payment::factory()->count(5)->make();
             $order->payments()->saveMany($payments);
