@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Tour;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TransportTypesTableSeeder::class);
         $this->call(RoomTypesTableSeeder::class);
         $this->call(EventsTableSeeder::class);
+        Tour::factory()->createOne();
         $this->call(CountriesTableSeeder::class);
         $this->call(AirlinesTableSeeder::class);
         $this->call(TravelClassesTableSeeder::class);
