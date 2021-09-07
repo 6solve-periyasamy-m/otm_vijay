@@ -20,7 +20,6 @@ class OrderSystemSeeder extends Seeder
     {
         Customer::factory()->count(10)->create();
         Quote::factory()->count(10)->create();
-        $this->call(PaymentMethodsTableSeeder::class);
         Order::factory()->count(10)->create()->each(function($order) {
             $orderCustomers = OrdersCustomer::factory()->make(['is_lead_booker' => true]);
             $order->orderCustomers()->save($orderCustomers);
