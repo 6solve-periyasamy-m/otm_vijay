@@ -16,9 +16,12 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('quote_id')->nullable();
-            $table->integer('tour_id')->nullable();
-            $table->float('total_order_value', 10, 0)->nullable();
-            $table->text('notes')->nullable();
+            $table->integer('tour_id');
+            $table->string('booking_reference');
+            $table->float('total_order_value', 10, 0);
+            $table->dateTime('ordered_on');
+            $table->text('internal_notes')->nullable();
+            $table->text('external_notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->string('token', 255)->nullable();
