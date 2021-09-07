@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Quote;
 use Illuminate\Database\Seeder;
 
-class CustomerSeeder extends Seeder
+class OrderSystemSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,5 +16,6 @@ class CustomerSeeder extends Seeder
     public function run()
     {
         Customer::factory()->count(10)->create();
+        Quote::factory()->count(10)->create();
     }
 }
