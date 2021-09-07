@@ -21,7 +21,7 @@ class CreateQuotesTable extends Migration
             $table->integer('tour_id')->index();
             $table->integer('pax_number');
             $table->float('total_quote_value');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
