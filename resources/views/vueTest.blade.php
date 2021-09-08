@@ -3,9 +3,28 @@
 <div class="container-fluid" id="app">
     Vue and API tests <a href="/">HOME</a>
     <vue-test></vue-test>
+    <atol-certificate
+        travellers="Traveller1, Traveller2, Traveller3 and Traveller4"
+        tour="The Tour Details"
+        flightOutward="Flight Outward Details"
+        flightInward="Flight Inward Details"
+        ATOL="ATOL123123123123"
+        OTM="Octopus Travel Matrix Company"
+        msg="Customised ATOL Certificate Generator"
+    ></atol-certificate>
     <div>
         <h1>API Tests</h1>
         <ul>
+            <li>
+                <a href="/api/booking/accommodation/1" target="test">
+                    Route::get('/booking/accommodation{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+                </a>
+            </li>
+            <li>
+                <a href="/api/booking/accommodation/1" target="test">
+                    Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
+                </a>
+            </li>
             <li>
                 <a href="/api/booking/flight/orders/1" target="test">
                     Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
