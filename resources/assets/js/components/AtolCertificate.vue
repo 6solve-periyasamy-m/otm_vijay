@@ -1,33 +1,42 @@
 <template>
     <div class="container">
-        <p>{{ msg }}</p>
-        <form>
-          <div class="">
+        <form class="form-input">
+          <h1>ATOL Certificate download</h1>
+          <p>{{ msg }}</p>
+          <div class="form-row">
             <label for="travellers">Travellers</label>
-            <input type="text" :value="travellers">
+            <input class="form-control" type="text" maxlength="80" v-model="travellersForm">
           </div>
-          <div class="">
+          <div class="form-row">
+            <label for="passengers">Number of Travellers</label>
+            <input class="form-control" type="text" v-model="passengersForm" maxlength="4">
+          </div>
+          <div class="form-row">
             <label for="tour">Tour Details</label>
-            <input type="text" :value="tour">
+            <input class="form-control" type="text" maxlength="80" v-model="tourForm">
           </div>
-          <div class="">
+          <div class="form-row">
             <label for="flightOutward">Flight Outward</label>
-            <input type="text" :value="flightOutward">
+            <input class="form-control" type="text" maxlength="80" v-model="flightOutwardForm">
           </div>
-          <div class="">
+          <div class="form-row">
             <label for="flightInward">Flight Inward</label>
-            <input type="text" :value="flightInward">
+            <input class="form-control" type="text" maxlength="80" v-model="flightInwardForm">
           </div>
-          <div class="">
-            <label for="OTM">Travel Agency</label>
-            <input type="text" :value="OTM">
+          <div class="form-row">
+            <label for="issuerLong">Travel Agency (short)</label>
+            <input class="form-control" type="text" v-model="issuerForm" maxlength="20">
           </div>
-          <div class="">
+          <div class="form-row">
+            <label for="issuerLong">Travel Agency (long)</label>
+            <input class="form-control" type="text" maxlength="80" v-model="issuerLongForm">
+          </div>
+          <div class="form-row">
             <label for="ATOL">ATOL Certificate</label>
-            <input type="text" :value="ATOL">
+            <input class="form-control" type="text" maxlength="16" v-model="atolForm">
           </div>
+          <button type="button" class="btn btn-default" @click="pdfgen">Create ATOL PDF</button>
         </form>
-        <button type="button" class="btn btn-success" @click="pdfgen">Create ATOL PDF</button>
     </div>
 </template>
 <script>
@@ -38,9 +47,33 @@ export default {
     tour: String,
     flightOutward: String,
     flightInward: String,
-    ATOL: String,
-    OTM: String,
+    atol: String,
+    issuer: String,
+    issuerLong: String,
+    passengers: String,
     msg: String
+  },
+  data() {
+    return {
+      travellersForm: '',
+      tourForm: '',
+      flightOutwardForm: '',
+      flightInwardForm: '',
+      atolForm: '',
+      issuerLongForm: '',
+      issuerForm: '',
+      passengersForm: ''
+    }
+  },
+  mounted() {
+    this.travellersForm = this.travellers
+    this.tourForm = this.tour
+    this.flightOutwardForm = this.flightOutward
+    this.flightInwardForm = this.flightInward
+    this.atolForm = this.atol
+    this.issuerForm = this.issuer
+    this.issuerLongForm = this.issuerLong
+    this.passengersForm = this.passengers
   },
   methods: {
     pdfgen: function () {
@@ -55,23 +88,21 @@ export default {
           {
             text:' ', style: 'spacer'},
           {
-            text:'\n\n\n\n\n\n\n\n\n\n\n\n \u200B\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  2', style: 'header'},
+            text:'\n\n\n\n\n\n\n\n\n\n\n\n \u200B\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t  '+this.passengersForm, style: 'header'},
             {
             text:' ', style: 'spacer'},
            {
-            text:'\u200B\t  '+this.travellers, style: 'header'},
+            text:'\u200B\t  '+this.travellersForm, style: 'header'},
            {
-            text:'\n\n\n\n\n \u200B\t  '+tour+' \n \u200B\t  '+flightOutward+' \n \u200B\t  '+flightInward, style: 'header'},
+            text:'\n\n\n\n\n \u200B\t  '+this.tourForm+' \n \u200B\t  '+this.flightOutwardForm+' \n \u200B\t  '+this.flightInwardForm, style: 'header'},
           {
             text:' ', style: 'spacer'},
             {
             text:' ', style: 'spacer'},
             {
-            text:'\n\n\n\n\n \u200B\t  '+OTM, style: 'header'},
+            text:'\n\n\n\n\n \u200B\t  '+this.issuerLongForm, style: 'header'},
             {
-            text:'\n\n\n \u200B\t\t  '+OTM, style: 'header'},
-            {
-            text:' ', style: 'spacer'},
+            text:'\n\n\n \u200B\t\t  '+this.issuerLongForm, style: 'header'},
             {
             text:' ', style: 'spacer'},
             {
@@ -87,9 +118,11 @@ export default {
             {
             text:' ', style: 'spacer'},
             {
-            text:'\n\n\n\n\n \u200B\t\t\t '+OTM+' \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n', style: 'header'},
+            text:' ', style: 'spacer'},
+            {
+            text:'\n\n\n\n\n \u200B\t\t\t '+this.issuerLongForm+' \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n', style: 'header'},
              {
-            text:'\n\n \u200B\t\t\t\t\t\t\t\t\t18 \u200B\t\t\t\t\t\t\t\t\t\t\t\t   22/06/21 \u200B\t\t\t\t\t\t '+OTM+' \u200B\t\t\t\t\t  '+ATOL, style: 'footer'},
+            text:'\n\n \u200B\t\t\t\t\t\t\t\t\t18 \u200B\t\t\t\t\t\t\t\t\t\t\t\t   22/06/21 \u200B\t\t\t\t\t\t '+this.issuerForm+' \u200B\t\t\t '+this.atolForm, style: 'footer'},
          ], 
           defaultStyle:{
             fontsize: 15
@@ -119,3 +152,17 @@ export default {
   }
 }
 </script>
+<style>
+form.form-input {
+  border: 1px dotted grey;
+  padding: 1rem;
+  margin: 1rem;
+}
+label {
+  font-size: small;
+  font-weight: bold;
+}
+.form-row {
+  padding-bottom: 1rem;
+}
+</style>
