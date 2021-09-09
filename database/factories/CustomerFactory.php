@@ -33,6 +33,7 @@ class CustomerFactory extends Factory
             'address_line_1' => $this->faker->streetAddress,
             'postcode' => $this->faker->postcode,
             'same_address' => true,
+            'passport_number' => $this->faker->numberBetween(1000000, 9999999),
         ];
     }
 }
