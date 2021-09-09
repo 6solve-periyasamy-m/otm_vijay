@@ -11,4 +11,8 @@ class TransportInventoryTour extends Model
     protected $table = 'transport_inventory_tour';
     use HasFactory;
     use SoftDeletes;
+
+    public function transportInventory() {
+        return $this->belongsTo(TransportInventory::class, 'transport_inventory_id');
+    }
 }

@@ -16,14 +16,25 @@ class OrdersTransport extends Model
     {
         return $this->belongsTo(OrdersCustomer::class);
     }
+
     public function transport()
     {
-        return $this->hasOne(Transport::class,'id','transport_id');
+        $transportInventoryTour = $this->transportInventoryTour()->first();
+        if ($transportInventoryTour == null) return null;
+        $transportInventory = $transportInventoryTour->transportInventory()->first();
+        if ($transportInventory == null) return null;
+        return $transportInventory->transport();
     }
 
     public function transportInventory()
     {
-        return $this->hasOneThrough(TransportInventory::class, Transport::class, 'id', 'transport_id', 'transport_id');
+        $transportInventoryTour = $this->transportInventoryTour()->first();
+        if ($transportInventoryTour == null) return null;
+        return $transportInventoryTour->transportInventory();
+    }
+
+    public function transportInventoryTour() {
+        return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 
     public static function findByOrderCustomer($orderCustomerId)
