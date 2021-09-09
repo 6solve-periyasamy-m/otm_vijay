@@ -16,7 +16,7 @@ class CreateOrdersFlightsTable extends Migration
         Schema::create('orders_flights', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_customer_id')->nullable();
-            $table->integer('flight_id')->nullable();
+            $table->integer('flight_inventory_tour_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

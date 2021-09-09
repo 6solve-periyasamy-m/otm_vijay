@@ -18,12 +18,22 @@ class OrdersFlight extends Model
 
     public function flight()
     {
-        return $this->hasOne(Flight::class, 'id', 'flight_id');
+        $flightInventoryTour = $this->flightInventoryTour()->first();
+        if ($flightInventoryTour == null) return null;
+        $flightInventory = $flightInventoryTour->flightInventory()->first();
+        if ($flightInventory == null) return null;
+        return $flightInventory->flight();
     }
 
     public function flightInventory()
     {
-        return $this->hasOneThrough(FlightInventory::class, Flight::class, 'id', 'flight_id', 'flight_id');
+        $flightInventoryTour = $this->flightInventoryTour()->first();
+        if ($flightInventoryTour == null) return null;
+        return $flightInventoryTour->flightInventory();
+    }
+
+    public function flightInventoryTour() {
+        return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
 
     public function departureAirport()
