@@ -32,4 +32,8 @@ class Order extends Model
     public function payments() {
         return $this->hasMany(Payment::class, 'order_id');
     }
+
+    public function adjustments() {
+        return $this->hasMany(ManualAdjustment::class, 'order_id');
+    }
 }
