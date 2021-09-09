@@ -37,7 +37,7 @@
         props: ['form_info', 'order_id', 'tour'],
         data() {
             return {
-                debug: 0,
+                debug: false,
                 id: 0,
                 formId: 0,
                 lead_traveller: false, // TODO: this should be set by the event bus
@@ -66,7 +66,7 @@
                         customer.customer_id = customer.id
                         this.additional.push(customer)
                     }
-                })
+                });
             },
             getFormId() {
                 return this.id++

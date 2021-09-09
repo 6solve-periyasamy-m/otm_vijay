@@ -101,7 +101,7 @@ export default {
     props: ['order_id', 'traveller', 'tour'],
     data() {
         return {
-            debug: 0,
+            debug: false,
             developer: false,
             fields: [
                 'customer_id',
@@ -153,7 +153,7 @@ export default {
         })
         bus.$on('addTraveller', function(formId) {
             this.debug && console.log('adding', formId)
-            that.edit_fields = false
+
         })
     },
     computed: {
@@ -183,7 +183,6 @@ export default {
                     that[key] = that.customer[key]
                 }
             })
-           this.edit_fields = false
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
