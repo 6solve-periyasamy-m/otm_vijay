@@ -12,4 +12,8 @@ class ActivityInventoryTour extends Model
     use SoftDeletes;
 
     protected $table = 'activity_inventory_tour';
+
+    public function activityInventory() {
+        return $this->belongsTo(ActivityInventory::class);
+    }
 }

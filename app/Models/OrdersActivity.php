@@ -18,12 +18,23 @@ class OrdersActivity extends Model
 
     public function activity()
     {
-        return $this->hasOne(Activity::class,'id','activity_id');
+        $activityInventoryTour = $this->activityInventoryTour()->first();
+        if ($activityInventoryTour == null) return null;
+        $activityInventory = $activityInventoryTour->activityInventory()->first();
+        if ($activityInventory == null) return null;
+        return $activityInventory->activity();
     }
 
     public function activityInventory()
     {
-        return $this->hasOneThrough(ActivityInventory::class, Activity::class, 'id', 'activity_id', 'activity_id');
+        $activityInventoryTour = $this->activityInventoryTour()->first();
+        if ($activityInventoryTour == null) return null;
+        return $activityInventoryTour->activityInventory();
+    }
+
+    public function activityInventoryTour()
+    {
+        return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
     }
 
     public static function findByOrderCustomer($orderCustomerId)
