@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrdersActivity;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,7 @@ class OrderSystemController extends Controller
 
     public function show($id)
     {
-        //
+        return view('orders.view', OrderRepository::getOrderDetails($id));
     }
 
     public function edit($id)
