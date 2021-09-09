@@ -23,7 +23,23 @@ class OrdersCustomer extends Model
 
     public function orderAccommodation()
     {
-        return $this->hasMany(OrdersAccommodation::class, 'id');
+        return $this->hasMany(OrdersAccommodation::class, 'order_customer_id');
     }
 
+    public function orderActivities() {
+        return $this->hasMany(OrdersActivity::class, 'order_customer_id');
+    }
+
+    public function orderFlights() {
+        return $this->hasMany(OrdersFlight::class, 'order_customer_id');
+    }
+
+    public function orderTransports() {
+        return $this->hasMany(OrdersTransport::class, 'order_customer_id');
+    }
+
+    public function adjustments() {
+        return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
+    }
 }
+
