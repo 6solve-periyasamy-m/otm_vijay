@@ -66,7 +66,7 @@
                         customer.customer_id = customer.id
                         this.additional.push(customer)
                     }
-                });
+                })
             },
             getFormId() {
                 return this.id++

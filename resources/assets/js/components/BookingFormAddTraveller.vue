@@ -152,8 +152,8 @@ export default {
             this.debug && console.log('EVENT: additional traveller created: setting form and order', formId, orderId)
         })
         bus.$on('addTraveller', function(formId) {
-            this.debug && console.log('adding', formId)
-
+            that.debug && console.log('adding', formId)
+            that.edit_fields = false
         })
     },
     computed: {
