@@ -531,4 +531,16 @@ class BookingController extends ApiController
 
         return response()->json(["success" => true, "order" => $order]);
     }
+
+    public function getInfo() 
+    {
+        $cod = new CustomerOrderDetail();
+        $orders = $cod->select('orders_customer_id')->groupBy('orders_customer_id')->get();
+        $customers = $cod->select('orders_customer_id')->join('orders_customers', 'customer_order_details.orders_customer_id', 'orders_customers.id')
+            ->groupBy('orders_customer_id')
+            ->get();
+        $active = $orders->count();
+        $customers = $customers->count();
+        return response()->json(["success" => true, "customers" => $customers, "active" => $active]);
+    }
 }

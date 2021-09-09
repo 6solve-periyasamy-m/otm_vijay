@@ -30,7 +30,7 @@ window.axios.defaults.headers.common = {
 
 Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
 Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
-
+Vue.component('booking-info', require('./components/BookingInfo.vue').default);
 Vue.component('vue-test', require('./components/VueTest.vue').default);
 
 //  Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);

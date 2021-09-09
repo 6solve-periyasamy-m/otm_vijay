@@ -17,8 +17,10 @@
     ></atol-certificate>
     <div class="container">
         <div class="panel">
-            <h2>Vue Test</h2>
+            <h1>VueJS Components</h1>
             <vue-test></vue-test>
+            <booking-info></booking-info>
+            <div class="panel">
             <h1>API Tests</h1>
             <ul>
                 <li>
@@ -66,6 +68,7 @@
             <h3>Test output</h3>
             <iframe height="200px" width="100%" name="test">
             </iframe>
+        </div>
         </div>
     </div>
 </div>

@@ -1,7 +1,9 @@
 <template>
-    <div>
-        <h1>VueJS</h1>
-        <p>VueJS renders frontend components, this is an example and demonstrates that VueJS is working.</p>
+    <div class="panel">
+        <h3>VueJS Test</h3>
+        <p>VueJS renders frontend components, 
+        this is an example and demonstrates 
+        that VueJS is working.</p>
     </div>
 </template>
 <script>

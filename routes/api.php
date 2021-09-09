@@ -57,6 +57,8 @@ Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accomm
 
 // accommodation rooms
 Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);
+
+
 // POST routes (requires AUTH)
 
 // store travellers
@@ -77,6 +79,10 @@ Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFrom
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
+// move into auth
+Route::get('/booking/info', [BookingController::class, 'getInfo']);
+// auth routes
 Route::middleware('auth:api')->group(function() {
+
     
 });

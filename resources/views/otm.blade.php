@@ -39,6 +39,7 @@
                             <dt class="definition__subheading">Examples (open in test tab)<dt>
                             <dd class="definition__body"><a href="/booking/world-cup">Booking Form</a> tour for specific 'world-cup' event</dd>
                             <dd class="definition__body"><a href="/booking/vuetest">Frontend tests</a></dd>
+                            
                             <hr/>
                             <div class="ml-8 small">
                                 <h4>Alternative paths: deprecated</h4>
