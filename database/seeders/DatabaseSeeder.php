@@ -37,5 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PaymentMethodsTableSeeder::class);
         $this->call(AirlinesTableSeeder::class);
         $this->call(TravelClassesTableSeeder::class);
+        $this->call(BoardTypesTableSeeder::class);
     }
 }
