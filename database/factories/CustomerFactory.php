@@ -50,7 +50,7 @@ class CustomerFactory extends Factory
             'passport_last_name' => $this->faker->lastName,
             'passport_number' => $this->faker->numberBetween(1000000, 9999999),
             'passport_issue_date' => now(),
-            'passport_expiry_date' => now(),
+            'passport_expiry_date' => $this->faker->dateTimeBetween('-6 months', '+6 months'),
             'notes' => $this->faker->sentence,
             'loyalty_number' => $this->faker->randomNumber(9),
         ];
