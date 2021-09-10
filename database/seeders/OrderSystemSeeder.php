@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Accommodation;
+use App\Models\AccommodationInventory;
+use App\Models\AccommodationInventoryTour;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrdersCustomer;
@@ -27,6 +30,14 @@ class OrderSystemSeeder extends Seeder
             $order->orderCustomers()->saveMany($orderCustomers);
             $payments = Payment::factory()->count(5)->make();
             $order->payments()->saveMany($payments);
+        });
+        Accommodation::factory()->count(5)->create()->each(function($accommodation) {
+            $inventories = AccommodationInventory::factory()->count(5)->make();
+            $accommodation->inventory()->saveMany($inventories);
+            $inventories->each(function($inventory) {
+                $tourInventories = AccommodationInventoryTour::factory()->count(5)->make();
+                $inventory->tourComponents()->saveMany($tourInventories);
+            });
         });
     }
 }
