@@ -22,8 +22,8 @@ class AccommodationInventoryFactory extends Factory
     public function definition()
     {
         return [
-            'board_type' => $this->faker->numberBetween(1, 4),
-            'room_type' => $this->faker->numberBetween(1, 3),
+            'board_type_id' => $this->faker->numberBetween(1, 4),
+            'room_type_id' => $this->faker->numberBetween(1, 3),
             'check_in_date_time' => now(),
             'checkin_confirmed' => true,
             'check_out_date_time' => now(),
