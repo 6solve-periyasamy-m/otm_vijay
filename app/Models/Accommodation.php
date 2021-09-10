@@ -35,5 +35,9 @@ class Accommodation extends Model
         return "{$this->title} | {$this->region->region_name}";
     }
 
+    public function inventory() {
+        return $this->hasMany(AccommodationInventory::class, 'accommodation_id');
+    }
+
     public $additional_attributes = ['inventory_relation'];
 }
