@@ -17,6 +17,8 @@ use Illuminate\Database\Seeder;
 
 class OrderSystemSeeder extends Seeder
 {
+    protected $seedCount = 10;
+
     /**
      * Run the database seeds.
      *
@@ -24,29 +26,29 @@ class OrderSystemSeeder extends Seeder
      */
     public function run()
     {
-        Customer::factory()->count(10)->create();
-        Quote::factory()->count(10)->create();
-        Order::factory()->count(10)->create()->each(function($order) {
+        Customer::factory()->count($this->seedCount)->create();
+        Quote::factory()->count($this->seedCount)->create();
+        Order::factory()->count($this->seedCount)->create()->each(function($order) {
             $orderCustomers = OrdersCustomer::factory()->make(['is_lead_booker' => true]);
             $order->orderCustomers()->save($orderCustomers);
-            $orderCustomers = OrdersCustomer::factory()->count(2)->make(['is_lead_booker' => false]);
+            $orderCustomers = OrdersCustomer::factory()->count($this->seedCount-1)->make(['is_lead_booker' => false]);
             $order->orderCustomers()->saveMany($orderCustomers);
-            $payments = Payment::factory()->count(5)->make();
+            $payments = Payment::factory()->count($this->seedCount)->make();
             $order->payments()->saveMany($payments);
         });
-        Accommodation::factory()->count(5)->create()->each(function($accommodation) {
-            $inventories = AccommodationInventory::factory()->count(5)->make();
+        Accommodation::factory()->count($this->seedCount)->create()->each(function($accommodation) {
+            $inventories = AccommodationInventory::factory()->count($this->seedCount)->make();
             $accommodation->inventory()->saveMany($inventories);
             $inventories->each(function($inventory) {
-                $tourInventories = AccommodationInventoryTour::factory()->count(5)->make();
+                $tourInventories = AccommodationInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
             });
         });
-        Activity::factory()->count(5)->create()->each(function($activity) {
-            $inventories = ActivityInventory::factory()->count(5)->make();
+        Activity::factory()->count($this->seedCount)->create()->each(function($activity) {
+            $inventories = ActivityInventory::factory()->count($this->seedCount)->make();
             $activity->activityInventory()->saveMany($inventories);
             $inventories->each(function($inventory) {
-                $tourInventories = ActivityInventoryTour::factory()->count(5)->make();
+                $tourInventories = ActivityInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
             });
         });
