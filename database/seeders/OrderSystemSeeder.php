@@ -9,9 +9,14 @@ use App\Models\Activity;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
+use App\Models\FlightInventoryTour;
 use App\Models\Operator;
 use App\Models\Order;
+use App\Models\OrdersAccommodation;
+use App\Models\OrdersActivity;
 use App\Models\OrdersCustomer;
+use App\Models\OrdersFlight;
+use App\Models\OrdersTransport;
 use App\Models\Payment;
 use App\Models\Quote;
 use App\Models\Transport;
@@ -46,6 +51,10 @@ class OrderSystemSeeder extends Seeder
             $inventories->each(function($inventory) {
                 $tourInventories = AccommodationInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
+                $tourInventories->each(function ($tourInventory) {
+                   $orders = OrdersAccommodation::factory()->count($this->seedCount)->make();
+                   $tourInventory->orders()->saveMany($orders);
+                });
             });
         });
         Activity::factory()->count($this->seedCount)->create()->each(function($activity) {
@@ -54,6 +63,10 @@ class OrderSystemSeeder extends Seeder
             $inventories->each(function($inventory) {
                 $tourInventories = ActivityInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
+                $tourInventories->each(function ($tourInventory) {
+                    $orders = OrdersActivity::factory()->count($this->seedCount)->make();
+                    $tourInventory->orders()->saveMany($orders);
+                });
             });
         });
         Operator::factory()->count($this->seedCount)->create()->each(function($operator) {
@@ -65,8 +78,17 @@ class OrderSystemSeeder extends Seeder
               $inventories->each(function($inventory) {
                  $tourInventories = TransportInventoryTour::factory()->count($this->seedCount)->make();
                  $inventory->tourComponents()->saveMany($tourInventories);
+                  $tourInventories->each(function ($tourInventory) {
+                      // Due to how nested this is, only one will be made
+                      $orders = OrdersTransport::factory()->makeOne();
+                      $tourInventory->orders()->save($orders);
+                  });
               });
            });
+        });
+        FlightInventoryTour::all()->each(function($tourInventory) {
+            $orders = OrdersFlight::factory()->count($this->seedCount)->make();
+            $tourInventory->orders()->saveMany($orders);
         });
     }
 }
