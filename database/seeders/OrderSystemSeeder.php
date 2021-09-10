@@ -9,15 +9,19 @@ use App\Models\Activity;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
+use App\Models\Operator;
 use App\Models\Order;
 use App\Models\OrdersCustomer;
 use App\Models\Payment;
 use App\Models\Quote;
+use App\Models\Transport;
+use App\Models\TransportInventory;
+use App\Models\TransportInventoryTour;
 use Illuminate\Database\Seeder;
 
 class OrderSystemSeeder extends Seeder
 {
-    protected $seedCount = 10;
+    protected $seedCount = 5;
 
     /**
      * Run the database seeds.
@@ -51,6 +55,18 @@ class OrderSystemSeeder extends Seeder
                 $tourInventories = ActivityInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
             });
+        });
+        Operator::factory()->count($this->seedCount)->create()->each(function($operator) {
+           $transports = Transport::factory()->count($this->seedCount)->make();
+           $operator->transports()->saveMany($transports);
+           $transports->each(function($transport) {
+              $inventories = TransportInventory::factory()->count($this->seedCount)->make();
+              $transport->transportInventory()->saveMany($inventories);
+              $inventories->each(function($inventory) {
+                 $tourInventories = TransportInventoryTour::factory()->count($this->seedCount)->make();
+                 $inventory->tourComponents()->saveMany($tourInventories);
+              });
+           });
         });
     }
 }

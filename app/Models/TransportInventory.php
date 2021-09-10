@@ -48,6 +48,10 @@ class TransportInventory extends Model
         return $this->belongsTo(TravelClass::class);
     }
 
+    public function tourComponents() {
+        return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
+    }
+
     public static function findByTour($tour_id)
     {
         return TransportInventory::with(['tour' => function ($q) use ($tour_id) {
