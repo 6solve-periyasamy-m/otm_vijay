@@ -15,4 +15,8 @@ class TransportInventoryTour extends Model
     public function transportInventory() {
         return $this->belongsTo(TransportInventory::class, 'transport_inventory_id');
     }
+
+    public function orders() {
+        return $this->hasMany(OrdersTransport::class, 'transport_inventory_tour_id');
+    }
 }
