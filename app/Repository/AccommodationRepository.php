@@ -19,6 +19,13 @@ interface AccommodationRepositoryInterface {
 class AccommodationRepository implements AccommodationRepositoryInterface
 {
     protected $model;
+    private $debug = null;
+
+    public function logger($level, $message, ...$params) {
+        if ($this->debug > $level) {
+            Log::info($message, $params);
+        }
+    }
 
     // TODO: do we need to inject the model or just instantiate it?
     public function OLD__construct(Accommodation $model)
@@ -36,7 +43,6 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         // confirm order for this tour is active
         $orders = Order::where('tour_id', $tour->id)
             ->where('token', $token)
-            ->where('order_status', '1')
             ->whereNull('deleted_at')
             ->get();
         // did we find an order?
@@ -110,19 +116,34 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         return $result;
     }
 
-    public function getAccommodationBooking($customerOrderDetails)
+    /***
+     * populate the customerOrderDetails
+     * accommodation records for an inventory ID
+     */
+    public function getAccommodationBooking($customerIds)
     {
-        $orderCustomers = new OrdersCustomer();
-        foreach($customerOrderDetails as $booking) {
-            Log::info('getAccommodationBooking', $booking->toArray());
-            $booking->accommodation = AccommodationInventory::where('accommodation_inventories.id', $booking->inventory_id)
-                ->join('room_types', 'accommodation_inventories.room_type_id','room_types.id')
-                ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
-                ->first();
-            $booking->accommodation->details = Accommodation::find($booking->accommodation->accommodation_id);
-            $orderCustomer = $orderCustomers->find($booking->orders_customer_id);
-            $booking->customer = Customer::find($orderCustomer->customer_id);
-        }
+        // $orderCustomers = new OrdersCustomer();
+
+        // foreach($customerOrderDetails as &$booking) {
+        //     Log::info('getAccommodationBooking', $booking->toArray());
+        //     $booking->accommodation = AccommodationInventory::where('accommodation_inventories.id', $booking->inventory_id)
+        //         ->join('room_types', 'accommodation_inventories.room_type_id','room_types.id')
+        //         ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
+        //         ->first();
+        //     $booking->accommodation->details = Accommodation::find($booking->accommodation->accommodation_id);
+        //     $orderCustomer = $orderCustomers->find($booking->orders_customer_id);
+        //     $booking->customer = Customer::find($orderCustomer->customer_id);
+        // }
+        $customerOrderDetail = new CustomerOrderDetail();
+        $customerOrderDetails = $customerOrderDetail
+            ->join('accommodation_inventory_tours', 'customer_order_details.inventory_tour_id', 'accommodation_inventory_tours.id')
+            ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
+            ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
+            ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
+            ->whereIn('orders_customer_id', $customerIds)
+            ->where('type', 'accommodation')
+            ->get();
+        
         return $customerOrderDetails;
     }
 
@@ -137,11 +158,6 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             where tour_id=2
         */
         $tours = new AccommodationInventoryTour();
-        // $rooms = $tours->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id','accommodation_inventories.id')
-        //             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
-        //             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
-        //             ->where('accommodation_inventory_tours.tour_id', $tour->id)
-        //             ->get();
         $rooms = $tours->select(
             'accommodation_inventories.*',
             'accommodation_inventories.id as accommodation_inventory_id',
@@ -158,7 +174,59 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->where('accommodation_inventory_tours.tour_id', $tour->id)
             ->get();
-
+        
+        $this->debug > 5 && Log::info( 'rooms for tour', $rooms->toArray());
+        
         return $rooms;
+    }
+
+    private function getCustomerOrder($order_id, $customer_id)
+    {
+        $repository = new OrdersCustomerRepository();
+        $customerOrder = $repository->getCustomerOrder($order_id, $customer_id);
+
+        return $customerOrder;
+    }
+
+    public function updateAccommodationReservation(
+        $order_id,
+        $room,
+        $traveller,
+        $customer_id,
+        $reference)
+    {
+        $component_type = 'accommodation';
+        $customerOrder = $this->getCustomerOrder($order_id, $customer_id);
+        if (!$customerOrder) {
+            throw new \Exception('Missing Customer Order!');
+        }
+        $customerOrderId = $customerOrder->id;
+        $cod = null;
+        $type = json_encode(['room' => $room, 'shared' => $traveller['shared'], 'shares' => $traveller['shares']]);
+        $inventoryTourId = isset($room['accommodation_inventory_tour_id']) ? $room['accommodation_inventory_tour_id'] : 0;
+Log::info('updateAccommodation', [$inventoryTourId, $customerOrderId, $customer_id, $order_id]);
+        // only save the booking record, the share records are not required in COD\
+        if ($inventoryTourId) {
+Log::info('InventoryTourId: '.$inventoryTourId);
+            $COD = new CustomerOrderDetailRepository();
+            $existing = $COD->getCOD($customerOrderId , $component_type);
+            if ($existing->count()) {
+Log::info('Existing', $existing->toArray());
+
+                $cod = $existing[0];
+                $cod = new CustomerOrderDetail();
+                $cod->status = 'update';
+                $COD->purge($customerOrderId, $component_type);
+            } else {
+Log::info('NO Existing', $existing->toArray());
+                $cod = new CustomerOrderDetail();
+                $cod->status = 'created';
+            }
+            $COD->saveCOD($cod, $customerOrderId, $component_type, $inventoryTourId, $traveller, $reference, $type);
+        } else {
+            Log::info('not saving for inventoryTourId: '. $inventoryTourId);
+        }
+
+        return $cod;
     }
 }

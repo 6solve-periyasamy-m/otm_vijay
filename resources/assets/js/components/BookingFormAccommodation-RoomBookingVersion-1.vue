@@ -347,7 +347,7 @@ export default {
     },
     async getAccommodationOptions() {
       const that = this;
-      const url = `/api/booking/accommodation/${this.tour.id}`
+      const url = `/api/booking/accommodation/tour/${this.tour.id}`
       await axios
         .get(url)
         .then((response) => {

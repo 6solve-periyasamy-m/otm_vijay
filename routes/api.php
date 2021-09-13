@@ -26,6 +26,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+// Accommodation
+Route::get('/booking/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
+Route::get('/booking/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
+Route::get('/booking/accommodation/customer/{tour}/{order}/{token}/{travellers}', [AccommodationController::class, 'getAccommodationBooking']);
+Route::get('/booking/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+Route::post('/booking/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
+//Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
+
+
+
+
 /* valid public routes */
 Route::get('/booking/events',           [TourController::class, 'getEvents']);
 Route::get('/booking/tours/{event_id}', [TourController::class, 'getTours']);
@@ -49,15 +61,11 @@ Route::get('/booking/flights/airport/{airport}', [FlightController::class, 'getF
 // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
 Route::post('/booking/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
-// Accommodation
-Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
-Route::get('/booking/accommodation/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
-Route::post('/booking/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
-Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
+
 
 // accommodation rooms
 Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);
-
+// Route::post('/booking/get/accommodation', [AccommodationController::class, 'getAccommodationBooking']);
 
 // POST routes (requires AUTH)
 
@@ -79,10 +87,10 @@ Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFrom
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
-// move into auth
-Route::get('/booking/info', [BookingController::class, 'getInfo']);
 // auth routes
 Route::middleware('auth:api')->group(function() {
 
+// move into auth
+Route::get('/booking/info', [BookingController::class, 'getInfo']);
     
 });

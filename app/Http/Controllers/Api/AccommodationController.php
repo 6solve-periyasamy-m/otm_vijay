@@ -12,35 +12,52 @@ use App\Models\Tour;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\BoardType;
-use App\Models\Accommodation;
+// use App\Models\Accommodation;
 use App\Models\OrdersCustomer;
 use App\Models\CustomerOrderDetail;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 
 use App\Repository\ActionsRepository;
-use App\Repository\CustomerOrderDetailRepository;
+// use App\Repository\CustomerOrderDetailRepository;
 use App\Repository\AccommodationRepository;
-use App\Repository\OrdersCustomerRepository;
+// use App\Repository\OrdersCustomerRepository;
 
 class AccommodationController extends ApiController
 {
     protected $component_type = 'accommodation';
-    private $debug = 5;
+    private $debug = 4;
 
-    private function logger($level, $message, ...$params) {
-        if ($this->debug > $level) {
-            Log::info($message, $params);
-        }
+    // // this should get relational data for accomodation inventory
+    // public function getAccommodationInventoryData()
+    // {
+    //     $accommodationRepository = new AccommodationRepository();
+    //     $result = $accommodationRepository->getAccommodationInventoryData();
+
+    //     return response()->json(["success" => true, "data" => $result]);
+    // }
+
+    public function getAccommodationOptions(Tour $tour)
+    {
+        Log::info('getAccommodationOptions');
+        return response()->json(["success" => true, 'options' => $tour]);
     }
 
-    // this should get relational data for accomodation inventory
-    public function getAccommodationInventoryData()
+    public function getAccommodationSettings(Tour $tour)
     {
-        $accommodationRepository = new AccommodationRepository();
-        $result = $accommodationRepository->getAccommodationInventoryData();
+        $token = $_COOKIE['OTM_booking_order_token'];
+        if ($this->debug>3) {
+            Log::info('getAccommodationSettings for tour'. $tour->id. ' by ' . $token);
+        }
+        if (strlen($token) !== 32) {
+            return response()->json(['success' => false, 'message' => 'invalid key']);
+        }
 
-        return response()->json(["success" => true, "data" => $result]);
+        $accommodationRepository = new AccommodationRepository();
+        $orderCustomers = $accommodationRepository->getSettings($tour, $token);
+
+        $accommodationRepository->logger(5, 'getAccommodationSettings logger for customers', $orderCustomers);
+        return response()->json(['success' => true, 'travellers' => $orderCustomers]);
     }
 
     /**
@@ -77,7 +94,7 @@ class AccommodationController extends ApiController
         $customer_order_detail = new CustomerOrderDetail();
         $result = $customer_order_detail
             ->whereIn('orders_customer_id', $orderCustomerIds)
-            ->where('component_type', $this->component_type)
+            ->where('type', $this->component_type)
             ->where('reference', $token)
             ->whereNull('customer_order_details.deleted_at')
             ->get();
@@ -86,7 +103,8 @@ class AccommodationController extends ApiController
             // Log::info('getAccommodationBookingObject: No Customer Order Detail record found');
             return null;
         }
-        // Log::info('Found: '.$result->count().'COD records: ref:'.$token.' for type '.$this->component_type, $result->toArray());
+        Log::info('Found: '.$result->count().'COD records: ref:'.$token.' for type '.$this->component_type, $result->toArray());
+
         return $result;
     }
 
@@ -118,19 +136,31 @@ class AccommodationController extends ApiController
         return $result;
     }
 
-    public function getAccommodationBooking(Tour $tour, Order $order, $token)
+    // private function findAccommodationBookingFor(Customer $customer, $tour)
+    // {
+    //     Log::info('findAccommodationBookingFor:', [$customer, $tour]);
+    // }
+
+
+    public function getAccommodationBooking($tour_id, $order_id, $token, $travellers)
     {
-        Log::info('getAccommodationBooking');
-        
+        $order = Order::findOrFail($order_id);
+        $traveller_ids = explode(',', $travellers);
+        $tour = Tour::findOrFail($tour_id);
+        // establish Tour $tour, Order $order, $token
         $orderCustomerIds = $this->findCustomersForOrder($order);
 
-        $customerOrderDetails = $this->getAccommodationBookingObject($tour, $orderCustomerIds, $token);
-        if (!$customerOrderDetails) {
-            return response()->json(['success' => false, 'bookings' => NULL]);
-        }
+        // Log::info('getAccommodationBooking customer ids', $orderCustomerIds);
+        // Log::info('getAccommodationBooking traveller ids', $traveller_ids);
 
         $accommodationRepository = new AccommodationRepository();
-        $customerOrderDetails = $accommodationRepository->getAccommodationBooking($customerOrderDetails);
+        $customerOrderDetails = $accommodationRepository->getAccommodationBooking($orderCustomerIds);
+
+        // $customerOrderDetails = $this->getAccommodationBookingObject($tour, $orderCustomerIds, $token);
+        // if (!$customerOrderDetails) {
+        //     return response()->json(['success' => false, 'bookings' => NULL]);
+        // }
+Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
 
         return response()->json(["success" => true, 'bookings' => $customerOrderDetails]);
     }
@@ -139,7 +169,6 @@ class AccommodationController extends ApiController
 
         $repo = new AccommodationRepository();
         $rooms = $repo->loadRoomsForTour($tour);
-        Log::info( 'rooms for tour', $rooms->toArray());
 
         return response()->json(["success" => true, 'rooms' => $rooms]);
     }
@@ -148,82 +177,17 @@ class AccommodationController extends ApiController
     {
         $boardTypes = new BoardType();
         $boardType = $boardTypes->findOrFail($accommodationInventory->board_type_id);
-        $customer_order_detail->component_type = $this->component_type;
+        $customer_order_detail->type = $this->component_type;
         $customer_order_detail->orders_customer_id = $ordersCustomer->id;
         $customer_order_detail->inventory_tour_id = $accommodationInventoryTour->id;
-        $customer_order_detail->type = $boardType->board_type_name;
+       // $customer_order_detail->type = $boardType->board_type_name;
         $customer_order_detail->date_time = date('Y-m-d H:i:s');
         $customer_order_detail->addon = 0;
         $customer_order_detail->cost = $accommodationInventory->sales_price;
         $customer_order_detail->reference = $reference;
-        //$customer_order_detail->order_id = $ordersCustomer->order_id;
         $customer_order_detail->inventory_id = $accommodationInventory->id;
-        // Log::info('cod', $customer_order_detail->toArray());
-        //return $customer_order_detail;
     }
 
-    private function getCustomerOrder($order_id, $customer_id)
-    {
-        $repository = new OrdersCustomerRepository();
-        $customerOrder = $repository->getCustomerOrder($order_id, $customer_id);
-
-        return $customerOrder;
-    }
-
-
-    public function getAccommodationSettings(Tour $tour)
-    {
-        $token = $_COOKIE['OTM_booking_order_token'];
-        if ($this->debug>3) {
-            Log::info('getAccommodationSettings for tour'. $tour->id. ' by ' . $token);
-        }
-        if (strlen($token) !== 32) {
-            return response()->json(['success' => false, 'message' => 'invalid key']);
-        }
-
-        $accommodationRepository = new AccommodationRepository();
-        $orderCustomers = $accommodationRepository->getSettings($tour, $token);
-
-        $this->logger(5, 'getAccommodationSettings logger for customers', $orderCustomers);
-        return response()->json(['success' => true, 'travellers' => $orderCustomers]);
-    }
-
-    //public function updateAccommodationReservation($order_id, $tour, $room, $customer_id, $sharer_id) 
-    public function updateAccommodationReservation(
-        $order_id,
-        $room,
-        $traveller,
-        $customer_id,
-        $reference)
-    {
-        $customerOrder = $this->getCustomerOrder($order_id, $customer_id);
-        if (!$customerOrder) {
-            throw new \Exception('Missing Customer Order!');
-        }
-        $customerOrderId = $customerOrder->id;
-
-        $type = json_encode(['room' => $room, 'shared' => $traveller['shared'], 'shares' => $traveller['shares']]);
-        $inventoryTourId = isset($room['accommodation_inventory_tour_id']) ? $room['accommodation_inventory_tour_id'] : 0;
-        // only save the booking record, the share records are not required in COD\
-        if ($inventoryTourId) {
-            $COD = new CustomerOrderDetailRepository();
-            $existing = $COD->getCOD($customerOrderId , $this->component_type);
-            if ($existing->count()) {
-                $cod = $existing[0];
-                $cod = new CustomerOrderDetail();
-                $cod->status = 'update';
-                $COD->purge($customerOrderId, $this->component_type);
-            } else {
-                $cod = new CustomerOrderDetail();
-                $cod->status = 'created';
-            }
-            $COD->saveCOD($cod, $customerOrderId, $this->component_type, $inventoryTourId, $traveller, $reference, $type);
-        } else {
-            Log::info('not saving for inventoryTourId: '. $inventoryTourId);
-        }
-
-        return $cod;
-    }
     /**
      * postAccommodationReservation
      * accommodation is reserved loosely: it is more of a booking plan than actual reservation
@@ -254,15 +218,16 @@ class AccommodationController extends ApiController
         foreach ($shares as $key => $value) {
             $shared[$key] = $shares[$key];
         }
-        if ($this->debug) {
-            Log::info('post', [$tour, $order_id, $customer_id]);
-            Log::info('room', [$room]);
-            Log::info('shares', $shares);
-            Log::info('traveller', $traveller);
-            Log::info('reference '. $reference);
-            // Log::info('sharers', $traveller->shares);
-        }
-        $results[] = $this->updateAccommodationReservation(
+
+        Log::info('post', [$tour, $order_id, $customer_id]);
+        Log::info('room', [$room]);
+        Log::info('shares', $shares);
+        Log::info('traveller', $traveller);
+        Log::info('reference '. $reference);
+
+        $accommodationRepository = new AccommodationRepository();
+
+        $results[] = $accommodationRepository->updateAccommodationReservation(
             $order_id,
             $room,
             $traveller,

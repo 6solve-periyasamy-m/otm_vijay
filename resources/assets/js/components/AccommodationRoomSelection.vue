@@ -48,14 +48,14 @@ export default {
         // subarrays traveller.sharename/shares
         bus.$on('AccommodationRoomSelectorReset', (group) => {
             this.others = group
-            // let c = 0
-            // console.log(this.sharer)
-            // group.map((s) => {
-            //     console.log(s, this.sharer[c])
-            //     Vue.set(this.sharer, c, 'asdf')
-            //     c++
-            // })
-            // this.sharer = undefined
+            let c = 0
+            console.log(this.sharer)
+            group.map((s) => {
+                console.log(s, this.sharer[c])
+                Vue.set(this.sharer, c, 'asdf')
+                c++
+            })
+            this.sharer = undefined
             if (this.traveller.sharename != undefined) {
                 this.traveller.sharename.map(i => {
                     this.debug>4 && console.log('clearing ', i)
@@ -132,7 +132,7 @@ export default {
         },
         loadRoomsForTour() {
             let that = this
-            this.debug>3 && console.log(this.tour, this.order_id)
+            this.debug>3 && console.log('loadRoomsForTour', this.tour, this.order_id)
             axios.get(`/api/accommodation/rooms/tour/${this.tour.id}/${this.order_id}`)
                 .then(response => {
                     that.debug && console.log('accomodation rooms for tour', response)

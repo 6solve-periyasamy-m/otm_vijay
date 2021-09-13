@@ -78,6 +78,7 @@ export default {
             let that = this
             this.group.map(t => t.shared = false)
             this.getAccommodationOptions()
+            this.loadAccommodationBooking(this.travellers, this.order_id)
             bus.$on('setRoomSelection', function(traveller, room) {
                 console.log('setRoomSelection', traveller, room)
                 that.travellers.filter(t => t.id == traveller.id).map(t => t.room_selected = room)
@@ -138,18 +139,18 @@ export default {
         reset() {
             // this works well enough for now
             // but we can not store/restore selections for edits
-            const href=window.location.href
-            window.location.assign(href)
-            return
+            // const href=window.location.href
+            // window.location.assign(href)
+            // return
 
             // having problem with the array in the AccommodationRoomSelector 
             // not reinitialising
-            // Object.assign(this.$data, initialState())
-            // this.init()
-            // bus.$emit('AccommodationRoomSelectorReset', this.group)
-            // this.showAccommodation = true
-            // this.$forceUpdate()
-            // this.setup()
+            Object.assign(this.$data, initialState())
+            this.init()
+            bus.$emit('AccommodationRoomSelectorReset', this.group)
+            this.showAccommodation = true
+            this.$forceUpdate()
+            this.setup()
         },
         register() {
             console.log('register ... travellers', this.travellers)
@@ -198,7 +199,7 @@ export default {
         },
         async getAccommodationOptions() {
             const that = this;
-            const url = `/api/booking/accommodation/${this.tour.id}`
+            const url = `/api/booking/accommodation/options/${this.tour.id}`
             await axios.get(url)
             .then((response) => {
                 this.debug>3 && console.log('getAccommodationOptions', response.data)
@@ -211,6 +212,40 @@ export default {
             })
             .catch((error) => console.log(error))
         },
+        async loadAccommodationBooking(travellers, order_id) {
+            const that = this;
+            let allTravellers = this.travellers.map(t => t.id).toString()
+            let url = `/api/booking/accommodation/customer/${this.tour.id}/${this.order_id}/${this.order_token}/${allTravellers}`
+            this.debug>2 && console.log("loadBooking() accommodation booking data token=", url)
+            await axios.get(
+                url
+                )
+                .then((response) => {
+                    that.bookings = response.data.bookings
+                    // TODO: why emit event here?
+                    console.log('DEV: BookingFormAccommodation: bookingsLoaded EVENT emitted', this.bookings)
+                    that.$emit("accommodationBookingsLoaded", this.bookings)
+                    that.makeBooking = this.bookings == null || typeof this.bookings == 'undefined' || this.bookings.length == 0
+                })
+                .catch((error) => console.log(error));
+        },
+        async DEPRECATEDloadAccommodationBooking(travellers, order_id) {
+            const that = this
+            const url = `/api/booking/get/accommodation`;
+            const data = {
+                tour: that.tour,
+                travellers: travellers,
+                order_id: order_id
+            }
+            console.log('loadAccommodationBooking', data)
+            await axios.get(url, data)
+                .then(response => {
+                    console.log('loadAccommodationBooking for ', travellers, response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
     }
 }
 </script>

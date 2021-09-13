@@ -19,9 +19,11 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
         $cod = new CustomerOrderDetail();
         $existing = null;
         try {
+Log::info('getting COD', [$customerOrderId, $type]);
             $existing = $cod->where('orders_customer_id', $customerOrderId)
                 ->where('type', $type)
                 ->get();
+Log::info('COD', $existing->toArray());
         } catch (Exception $e) {
             Log::info('Failed to get COD ' . $e->getMessage());
         }
@@ -81,7 +83,7 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
         $cod = new CustomerOrderDetail();
         Log::info('purge', [$customerOrderId, $type]);
         $result = $cod->where('orders_customer_id', $customerOrderId)
-                ->where('component_type', $type)
+                ->where('type', $type)
                 ->forceDelete();
 
         return $result;

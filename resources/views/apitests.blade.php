@@ -24,13 +24,23 @@
             <h1>API Tests</h1>
             <ul>
                 <li>
-                    <a href="/api/booking/accommodation/1" target="test">
-                        Route::get('/booking/accommodation{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+                    <a href="/api/booking/accommodation/settings" target="test">
+                        Route::get('/booking/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
                     </a>
                 </li>
                 <li>
-                    <a href="/api/booking/accommodation/1" target="test">
-                        Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
+                    <a href="/api/booking/accommodation/options/1" target="test">
+                        Route::get('/booking/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
+                    </a>
+                </li>
+                <li>
+                    <a href="/api/booking/accommodation/tour/1" target="test">
+                        Route::get('/booking/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+                    </a>
+                </li>
+                <li>
+                    <a href="/api/booking/accommodation/customer/1/1/abcdefghijklmn/1,2,3,4,5" target="test">
+                        Route::get('/booking/accommodation/customer/{tour}/{order}/{token}/{travellers}', [AccommodationController::class, 'getAccommodationBooking']);
                     </a>
                 </li>
                 <li>

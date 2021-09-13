@@ -39,8 +39,8 @@ Route::prefix("/booking")->group(function() {
     // debugging routes
     Route::get('/check/events', [TourController::class, 'getEvents']);
     Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
-    Route::get('/vuetest', function() {
-        return view('vueTest');
+    Route::get('/apitests', function() {
+        return view('apitests');
     });
 
     Route::get('/store', function() {
