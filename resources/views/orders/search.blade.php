@@ -26,7 +26,7 @@
             <tr>
                 <td>{{$row->ordered_on}}</td>
                 <td>{{$row->first_name . ' ' . $row->last_name }}</td>
-                <td>{{$row->booking_reference}}</td>
+                <td><a href="{{ route('orderDetails', ['id' => $row->id]) }}" class="link-info"><u>{{$row->booking_reference}}</u></a></td>
                 <td>{{$row->title}}</td>
             </tr>
         @endforeach
