@@ -32,4 +32,8 @@ class Order extends Model
     public function payments() {
         return $this->hasMany(Payment::class, 'order_id');
     }
+
+    public function leadBooker() {
+        return $this->belongsTo(OrdersCustomer::class, 'lead_booker_id');
+    }
 }
