@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\ActivityComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,18 +19,12 @@ class OrdersActivity extends Model
 
     public function activity()
     {
-        $activityInventoryTour = $this->activityInventoryTour()->first();
-        if ($activityInventoryTour == null) return null;
-        $activityInventory = $activityInventoryTour->activityInventory()->first();
-        if ($activityInventory == null) return null;
-        return $activityInventory->activity();
+        return ActivityComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function activityInventory()
     {
-        $activityInventoryTour = $this->activityInventoryTour()->first();
-        if ($activityInventoryTour == null) return null;
-        return $activityInventoryTour->activityInventory();
+        return ActivityComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
     public function activityInventoryTour()
