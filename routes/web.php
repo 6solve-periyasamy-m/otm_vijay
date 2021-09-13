@@ -81,4 +81,5 @@ Route::group(['prefix' => 'admin'], function () {
 Route::prefix('orders')->group(function () {
    Route::get('search', [OrderSystemController::class, 'index'])->name("orderSearch");
    Route::get('order/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
+   Route::get('order/customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
 });
