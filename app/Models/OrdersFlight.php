@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\FlightComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,18 +19,12 @@ class OrdersFlight extends Model
 
     public function flight()
     {
-        $flightInventoryTour = $this->flightInventoryTour()->first();
-        if ($flightInventoryTour == null) return null;
-        $flightInventory = $flightInventoryTour->flightInventory()->first();
-        if ($flightInventory == null) return null;
-        return $flightInventory->flight();
+        return FlightComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function flightInventory()
     {
-        $flightInventoryTour = $this->flightInventoryTour()->first();
-        if ($flightInventoryTour == null) return null;
-        return $flightInventoryTour->flightInventory();
+        return FlightComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
     public function flightInventoryTour() {
