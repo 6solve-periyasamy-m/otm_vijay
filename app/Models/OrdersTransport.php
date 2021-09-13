@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\TransportComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,18 +20,12 @@ class OrdersTransport extends Model
 
     public function transport()
     {
-        $transportInventoryTour = $this->transportInventoryTour()->first();
-        if ($transportInventoryTour == null) return null;
-        $transportInventory = $transportInventoryTour->transportInventory()->first();
-        if ($transportInventory == null) return null;
-        return $transportInventory->transport();
+        return TransportComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function transportInventory()
     {
-        $transportInventoryTour = $this->transportInventoryTour()->first();
-        if ($transportInventoryTour == null) return null;
-        return $transportInventoryTour->transportInventory();
+        return TransportComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
     public function transportInventoryTour() {
