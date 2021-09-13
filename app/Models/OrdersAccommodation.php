@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\AccommodationComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,12 +19,12 @@ class OrdersAccommodation extends Model
 
     public function accommodation()
     {
-        return $this->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
+        return AccommodationComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function accommodationInventory()
     {
-        return $this->accommodationInventoryTour()->first()->accommodationInventory();
+        return AccommodationComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
     public function accommodationInventoryTour() {
@@ -33,7 +34,7 @@ class OrdersAccommodation extends Model
 
     public static function findByOrderCustomer($orderCustomerId)
     {
-    $orderAccommodations = OrdersAccommodation::where('order_customer_id',$orderCustomerId)->get();
+        $orderAccommodations = OrdersAccommodation::where('order_customer_id',$orderCustomerId)->get();
 
         return $orderAccommodations;
     }
