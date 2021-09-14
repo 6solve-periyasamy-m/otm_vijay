@@ -244,7 +244,13 @@
                                 <td>{{ $flight["inventory"]->flight_number }}</td>
                                 <td>{{ $flight["inventory"]->travelClass->title }}</td>
                                 <td>{{ $flight["tour"]->tour_component_type }}</td>
-                                <td><a href="#" class="btn btn-danger">Delete</a></td>{{-- TODO: Implement --}}
+                                <td>
+                                    <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </table>
