@@ -204,7 +204,13 @@
                                 <td>{{ $activity["component"]->title }}</td>
                                 <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
                                 <td>{{ $activity["tour"]->tour_component_type }}</td>
-                                <td><a href="#" class="btn btn-danger">Delete</a></td>{{-- TODO: Implement --}}
+                                <td>
+                                    <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </table>
