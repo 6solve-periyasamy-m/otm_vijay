@@ -15,7 +15,7 @@ interface OrderRepositoryInterface {
 
 class OrderRepository implements OrderRepositoryInterface
 {
-    public static $addonId = 2;
+    public static $addonId = "Add-on";
 
     public static function getSearchOrders($searchTerm = "", $archived = false)
     {
