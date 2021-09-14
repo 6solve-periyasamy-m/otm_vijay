@@ -168,7 +168,7 @@
                                         <form action="{{ route('orderAccommodationDelete', ['id' => $accommodationEntry['order']->id,]) }}" method="post">
                                             @csrf
                                             <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
-                                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                         </form>
                                     </td>
                                 </tr>
@@ -208,7 +208,7 @@
                                     <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
                                         @csrf
                                         <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                     </form>
                                 </td>
                             </tr>
@@ -248,7 +248,7 @@
                                     <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
                                         @csrf
                                         <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                     </form>
                                 </td>
                             </tr>
@@ -288,7 +288,7 @@
                                     <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
                                         @csrf
                                         <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                     </form>
                                 </td>
                             </tr>
