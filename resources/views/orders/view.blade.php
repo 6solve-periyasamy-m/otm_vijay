@@ -25,7 +25,11 @@
             <table style="margin-bottom: 2px;">
                 @foreach($customers as $ordersCustomer)
                 <tr>
-                    <td style="border: 1px solid black; border-left: 0; width: 30%;">{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
+                    <td style="border: 1px solid black; border-left: 0; width: 30%;">
+                        <a href="{{ route('orderCustomerDetails', ['id' => $ordersCustomer->customer->id]) }}" class="link-info"><u>
+                            {{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}
+                        </u></a>
+                    </td>
                     <td style="border: 1px solid black; width: 30%;">Born: {{ $ordersCustomer->customer->date_of_birth }}</td>
                     <td style="border: 1px solid black; width: 30%;">Passport Number: {{ $ordersCustomer->customer->passport_number }}</td>
                 </tr>

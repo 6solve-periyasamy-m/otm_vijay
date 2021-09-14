@@ -8,6 +8,7 @@ use App\Models\OrdersActivity;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
 use App\Models\Transport;
+use App\Repository\OrderRepository;
 
 class OrderCustomerController extends Controller
 {
@@ -26,5 +27,9 @@ class OrderCustomerController extends Controller
             'orderFlights' => $orderFlights,
             'orderTransports' => $orderTransports
         ]);
+    }
+
+    public function show($id) {
+        return view('orders.customer', OrderRepository::getOrderCustomerDetails($id));
     }
 }

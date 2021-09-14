@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderSystemController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,6 +80,13 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 Route::prefix('orders')->group(function () {
-   Route::get('search', [OrderSystemController::class, 'index'])->name("orderSearch");
-   Route::get('order/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
+   Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
+   Route::get('/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
+   Route::get('customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+   Route::prefix('component')->group(function () {
+       Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete');
+       Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete');
+       Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
+       Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
+   });
 });

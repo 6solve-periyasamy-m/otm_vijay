@@ -5,7 +5,7 @@
 <div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
 <div class="text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
     <div><img src="{{ asset('images/octlogo.png') }}" style="margin-left: auto; margin-right: auto; display: block; width: 30%"/></div>
-    <form action="{{ route("testing-search")}}" method="get">
+    <form action="{{ route("orderSearch")}}" method="get">
         <div class="input-group mb-3">
             <input type="text" class="form-control" id="query-input" name="query" placeholder="Search Query" value="{{ $query ?? "" }}">
             <div class="input-group-append">
@@ -26,7 +26,7 @@
             <tr>
                 <td>{{$row->ordered_on}}</td>
                 <td>{{$row->first_name . ' ' . $row->last_name }}</td>
-                <td>{{$row->booking_reference}}</td>
+                <td><a href="{{ route('orderDetails', ['id' => $row->id]) }}" class="link-info"><u>{{$row->booking_reference}}</u></a></td>
                 <td>{{$row->title}}</td>
             </tr>
         @endforeach
