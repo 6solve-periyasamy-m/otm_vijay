@@ -23,7 +23,7 @@ class OrdersCustomerFactory extends Factory
     public function definition()
     {
         return [
-            'customer_id' => $this->faker->numberBetween(1, 10), // Hack method. We know that 10 will be generated before this
+            'customer_id' => $this->faker->numberBetween(1, 5), // Hack method. We know that 5 will be generated before this
             'tour_cost' => $this->faker->numberBetween(250, 750),
             'single_occupancy_surcharge' => $this->faker->numberBetween(100, 250),
             'travel_insurer' => $this->faker->company,

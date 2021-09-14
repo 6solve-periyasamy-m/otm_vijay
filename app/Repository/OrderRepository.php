@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 interface OrderRepositoryInterface {
     public static function getSearchOrders($searchTerm = "", $archived = false);
+    public static function getOrderDetails($orderId);
 
 }
 
 class OrderRepository implements OrderRepositoryInterface
 {
+    public static $addonId = 2;
 
     public static function getSearchOrders($searchTerm = "", $archived = false)
     {
@@ -43,5 +45,62 @@ class OrderRepository implements OrderRepositoryInterface
             }
         }
         return $query->get();
+    }
+
+    public static function getOrderDetails($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        $details = ['order' => $order,];
+        $customers = [];
+        $addons = [];
+        $totalOrderValue = $order->total_order_value;
+        $customerAdjustments = [];
+        foreach ($order->orderCustomers as $customer) {
+            $customers[] = $customer;
+            // Possible TODO: Find a more elegant way to do this?
+            foreach($customer->orderAccommodation as $orderAccommodation) {
+                if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                    $addons[] = $orderAccommodation->accommodationInventoryTour;
+                    $totalOrderValue += $orderAccommodation->accommodationInventoryTour->sales_price;
+                }
+            }
+            foreach($customer->orderActivities as $orderActivity) {
+                if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                    $addons[] = $orderActivity->activityInventoryTour;
+                    $totalOrderValue += $orderActivity->activityInventoryTour->sales_price;
+                }
+            }
+            foreach($customer->orderFlights as $orderFlight) {
+                if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                    $addons[] = $orderFlight->flightInventoryTour;
+                    $totalOrderValue += $orderFlight->flightInventoryTour->sales_price;
+                }
+            }
+            foreach($customer->orderTransports as $orderTransport) {
+                if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                    $addons[] = $orderTransport->transportInventoryTour;
+                    $totalOrderValue += $orderTransport->transportInventoryTour->sales_price;
+                }
+            }
+            foreach($customer->adjustments as $adjustment) {
+                $totalOrderValue += $adjustment->amount;
+            }
+        }
+        foreach($order->adjustments as $adjustment) {
+            $totalOrderValue += $adjustment->amount;
+        }
+        $details['customers'] = $customers;
+        $details['addons'] = $addons;
+        $details['totalOrderValue'] = $totalOrderValue;
+        $payments = [];
+        $totalPaid = 0;
+        foreach($order->payments as $payment) {
+            $payments[] = $payment;
+            $totalPaid += $payment->amount;
+        }
+
+        $details['totalPaid'] = $totalPaid;
+        $details['payments'] = $payments;
+        return $details;
     }
 }

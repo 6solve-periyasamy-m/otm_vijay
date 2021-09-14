@@ -17,7 +17,7 @@ class Order extends Model
 
     public function tour()
     {
-        return $this->hasOne(Tour::class);
+        return $this->belongsTo(Tour::class, 'tour_id');
     }
 
     public function orderStatus()
@@ -35,5 +35,9 @@ class Order extends Model
 
     public function leadBooker() {
         return $this->belongsTo(OrdersCustomer::class, 'lead_booker_id');
+    }
+
+    public function adjustments() {
+        return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 }

@@ -33,9 +33,12 @@ class DatabaseSeeder extends Seeder
         $this->call(RoomTypesTableSeeder::class);
         $this->call(EventsTableSeeder::class);
         Tour::factory()->createOne();
+        $this->call(ActivityTypesTableSeeder::class);
+        $this->call(TicketTypesTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
         $this->call(PaymentMethodsTableSeeder::class);
         $this->call(AirlinesTableSeeder::class);
         $this->call(TravelClassesTableSeeder::class);
+        $this->call(BoardTypesTableSeeder::class);
     }
 }

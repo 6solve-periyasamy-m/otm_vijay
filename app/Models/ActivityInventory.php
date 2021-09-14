@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ActivityInventory extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $casts = [
         'activity_start_date_time' => 'datetime',
@@ -32,6 +34,10 @@ class ActivityInventory extends Model
     public function tour()
     {
         return $this->belongsToMany(Tour::class, 'activity_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+    }
+
+    public function tourComponents() {
+        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
     }
 
     public static function findByTour($tour_id)

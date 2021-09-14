@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Accommodation;
+use App\Models\Activity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AccommodationFactory extends Factory
+class ActivityFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Accommodation::class;
+    protected $model = Activity::class;
 
     /**
      * Define the model's default state.
@@ -22,11 +22,10 @@ class AccommodationFactory extends Factory
     public function definition()
     {
         return [
-            'region_id' => $this->faker->numberBetween(1, 8),
+            'activity_type_id' => $this->faker->numberBetween(1, 3),
+            'location_id' => $this->faker->numberBetween(1, 5),
             'title' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
-            'audit_date' => now(),
-            'address' => $this->faker->address,
         ];
     }
 }
