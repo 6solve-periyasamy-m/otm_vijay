@@ -19,12 +19,12 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
     public static function getComponentFromOrderComponent($orderComponentId)
     {
         $orderComponent = OrdersTransport::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
+        return $orderComponent->transportInventoryTour()->first()->transportInventory()->first()->transport();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
         $orderComponent = OrdersTransport::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
+        return $orderComponent->transportInventoryTour()->first()->transportInventory();
     }
 }
