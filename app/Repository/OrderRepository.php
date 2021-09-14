@@ -109,7 +109,7 @@ class OrderRepository implements OrderRepositoryInterface
     public static function getOrderCustomerDetails($id)
     {
         $orderCustomer = OrdersCustomer::findOrFail($id);
-        $details = ['order-customer' => $orderCustomer, 'customer' => $orderCustomer->customer, 'order' => $orderCustomer->order,];
+        $details = ['order_customer' => $orderCustomer, 'customer' => $orderCustomer->customer, 'order' => $orderCustomer->order,];
         $accommodationArr = [];
         foreach ($orderCustomer->orderAccommodation as $orderAccommodation) {
             $data = [];
