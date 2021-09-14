@@ -33,6 +33,10 @@ class Order extends Model
         return $this->hasMany(Payment::class, 'order_id');
     }
 
+    public function leadBooker() {
+        return $this->belongsTo(OrdersCustomer::class, 'lead_booker_id');
+    }
+
     public function adjustments() {
         return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
