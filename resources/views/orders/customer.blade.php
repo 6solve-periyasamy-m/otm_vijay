@@ -284,7 +284,13 @@
                                 <td>{{ $transport["component"]->name }}</td>
                                 <td>{{ $transport["inventory"]->travelClass->title }}</td>
                                 <td>{{ $transport["tour"]->tour_component_type }}</td>
-                                <td><a href="#" class="btn btn-danger">Delete</a></td>{{-- TODO: Implement --}}
+                                <td>
+                                    <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger">Delete</a>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                     </table>
