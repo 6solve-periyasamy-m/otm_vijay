@@ -41,7 +41,4 @@ class Order extends Model
         return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 
-    public function leadBooker() {
-        return $this->belongsTo(OrdersCustomer::class, 'lead_booker_id');
-    }
 }
