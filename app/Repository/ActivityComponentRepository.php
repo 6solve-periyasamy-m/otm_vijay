@@ -19,12 +19,12 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
     public static function getComponentFromOrderComponent($orderComponentId)
     {
         $orderComponent = OrdersActivity::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
+        return $orderComponent->activityInventoryTour()->first()->activityInventory()->first()->activity();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
         $orderComponent = OrdersActivity::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
+        return $orderComponent->activityInventoryTour()->first()->activityInventory();
     }
 }

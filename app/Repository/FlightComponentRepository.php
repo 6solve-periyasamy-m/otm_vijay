@@ -19,12 +19,12 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
     public static function getComponentFromOrderComponent($orderComponentId)
     {
         $orderComponent = OrdersFlight::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
+        return $orderComponent->flightInventoryTour()->first()->flightInventory()->first()->flight();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
         $orderComponent = OrdersFlight::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
+        return $orderComponent->flightInventoryTour()->first()->flightInventory();
     }
 }
