@@ -40,5 +40,4 @@ class Order extends Model
     public function adjustments() {
         return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
-
 }
