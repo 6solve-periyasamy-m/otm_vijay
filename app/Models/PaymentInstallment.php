@@ -11,9 +11,9 @@ class PaymentInstallment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function paymentSchedule() 
+    public function paymentPlan()
     {
-        return $this->belongsTo(PaymentSchedule::class);
+        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
     }
 
 

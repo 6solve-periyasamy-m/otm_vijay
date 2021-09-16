@@ -12,4 +12,8 @@ class PaymentPlan extends Model
     public function tours() {
         return $this->hasMany(Tour::class, 'payment_plan_id');
     }
+
+    public function installments() {
+        return $this->hasMany(PaymentInstallment::class, 'payment_plan_id');
+    }
 }
