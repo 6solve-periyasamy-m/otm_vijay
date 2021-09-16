@@ -28,5 +28,8 @@ class Customer extends Model implements AuthAuthenticatable
     {
         return "{$this->first_name} {$this->last_name}";
     }
-}
 
+    public function tShirtSize() {
+        return $this->belongsTo(TShirtSize::class, 't_shirt_size_id');
+    }
+}
