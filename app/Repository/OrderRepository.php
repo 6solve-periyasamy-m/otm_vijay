@@ -20,32 +20,23 @@ class OrderRepository implements OrderRepositoryInterface
     public static function getSearchOrders($searchTerm = "", $archived = false)
     {
         $query = DB::table('orders')
-            ->join('tours', 'tours.id', '=', 'orders.tour_id')
-            ->join('orders_customers', 'orders.id', '=', 'orders_customers.order_id')
-            ->join('customers', 'customers.id', '=', 'orders_customers.customer_id')
-            ->select('orders.id', 'tours.title', 'customers.first_name', 'customers.last_name', 'orders_customers.is_lead_booker', 'orders.booking_reference', 'orders.ordered_on')
-            ->orderBy('orders.ordered_on', 'desc');
-        if ($searchTerm === "") {
-            $query->where('orders_customers.is_lead_booker', '=', true);
-            if (!$archived) {
-                $query->whereNull('orders.deleted_at');
-            }
-        } else {
-            if ($archived) {
-                $query->where(function ($intQuery) use ($searchTerm) {
-                    $intQuery->where('customers.first_name', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('customers.last_name', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('tours.title', 'like', '%' . $searchTerm . '%');
-                });
-            } else {
-                $query->whereNull('orders.deleted_at')
-                    ->where(function ($intQuery) use ($searchTerm) {
-                        $intQuery->where('customers.first_name', 'like', '%' . $searchTerm . '%')
-                            ->orWhere('customers.last_name', 'like', '%' . $searchTerm . '%')
-                            ->orWhere('tours.title', 'like', '%' . $searchTerm . '%');
-                    });
-            }
-        }
+            ->join('orders_customers AS orders_customers_details', 'orders_customers_details.order_id', '=', 'orders.id')
+            ->join('orders_customers AS lead_booker', 'orders.lead_booker_id', '=', 'lead_booker.id')
+            ->join('customers AS customer_details', 'orders_customers_details.customer_id', '=', 'customer_details.id')
+            ->join('customers AS lead_booker_details', 'lead_booker.customer_id', '=', 'lead_booker_details.id')
+            ->join('tours', 'orders.tour_id', '=', 'tours.id')
+            ->where(function ($intQuery) use ($searchTerm) {
+                $intQuery->where('customer_details.first_name', 'like', '%' . $searchTerm . '%')
+                    ->OrWhere('customer_details.last_name', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('tours.title', 'like', '%' . $searchTerm . '%');
+            });
+        if (!$archived) $query->whereNull('orders.deleted_at');
+        $query->select('orders.id AS order_id', 'tours.title AS tour_title', 'lead_booker.id AS lead_booker_id',
+            'orders.booking_reference AS booking_reference', 'lead_booker_details.first_name AS lead_booker_first_name',
+            'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on')
+            ->groupBy('orders.id', 'tours.title', 'lead_booker.id', 'booking_reference',
+                'lead_booker_details.first_name', 'lead_booker_details.last_name', 'orders.ordered_on')
+            ->orderBy('ordered_on');
         return $query->get();
     }
 
