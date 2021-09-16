@@ -37,7 +37,7 @@ class OrderSystemSeeder extends Seeder
     {
         Customer::factory()->count($this->seedCount)->create();
         Quote::factory()->count($this->seedCount)->create();
-        Order::factory()->count($this->seedCount)->make()->each(function($order) {
+        Order::factory()->count($this->seedCount)->create()->each(function($order) {
             $orderCustomers = OrdersCustomer::factory()->count($this->seedCount)->make();
             $order->orderCustomers()->saveMany($orderCustomers);
             $order->lead_booker_id = $orderCustomers->all()[0]->id;
