@@ -30,10 +30,10 @@ class Customer extends Model implements AuthAuthenticatable
     }
 
     public function homeAddress() {
-        return $this->hasOne(Address::class, 'home_address_id');
+        return $this->belongsTo(Address::class, 'home_address_id');
     }
 
     public function billingAddress() {
-        return $this->hasOne(Address::class, 'billing_address_id');
+        return $this->belongsTo(Address::class, 'billing_address_id');
     }
 }
