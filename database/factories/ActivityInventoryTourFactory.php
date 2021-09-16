@@ -24,7 +24,7 @@ class ActivityInventoryTourFactory extends Factory
         return [
             'tour_id' => 1,
             'tour_component_type' => $this->faker->numberBetween(1, 3),
-            'sales_price' => $this->faker->numberBetween(50, 100),
+            'tour_sales_price' => $this->faker->numberBetween(50, 100),
         ];
     }
 }
