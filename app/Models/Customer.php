@@ -32,4 +32,8 @@ class Customer extends Model implements AuthAuthenticatable
     public function tShirtSize() {
         return $this->belongsTo(TShirtSize::class, 't_shirt_size_id');
     }
+
+    public function hatSize() {
+        return $this->belongsTo(HatSize::class, 'hat_size_id');
+    }
 }

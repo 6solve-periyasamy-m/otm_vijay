@@ -51,7 +51,7 @@ class CreateCustomersTable extends Migration
             $table->string('passport_country_of_issue', 60)->nullable();
             $table->string('loyalty_number', 160)->nullable();
             $table->integer('t_shirt_size_id')->nullable();
-            $table->integer('hat_size')->nullable();
+            $table->integer('hat_size_id')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
