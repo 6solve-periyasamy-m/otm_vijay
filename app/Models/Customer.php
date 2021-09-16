@@ -28,5 +28,12 @@ class Customer extends Model implements AuthAuthenticatable
     {
         return "{$this->first_name} {$this->last_name}";
     }
-}
 
+    public function homeAddress() {
+        return $this->hasOne(Address::class, 'home_address_id');
+    }
+
+    public function billingAddress() {
+        return $this->hasOne(Address::class, 'billing_address_id');
+    }
+}
