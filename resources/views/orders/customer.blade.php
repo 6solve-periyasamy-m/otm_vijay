@@ -50,6 +50,13 @@ function updateSelectFields() {
             $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
         });
     });
+
+    $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableFlightAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function(index, element) {
+            $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
+        });
+    });
 }
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
@@ -228,10 +235,6 @@ $(document).ready( function () {
             <div id="flights" role="tabpanel" class="tab-pane fade">
                 <div id="flights-new" class="new-section">
                     <select id="flights-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
                     <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
                 </div>
