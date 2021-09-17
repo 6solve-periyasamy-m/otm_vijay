@@ -83,6 +83,8 @@ Route::get('/orders/activities/{oCustomerId}/available', [TourComponentControlle
 Route::get('/orders/flights/{oCustomerId}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
 Route::get('/orders/transports/{oCustomerId}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
 
+Route::post('/orders/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('addAccommodationAddon');
+
 Route::middleware('auth:api')->group(function() {
     
 });

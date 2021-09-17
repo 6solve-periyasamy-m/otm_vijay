@@ -11,6 +11,7 @@ interface AccommodationComponentRepositoryInterface {
     public static function getInventoryFromOrderComponent($orderComponentId);
     public static function getOrderComponentFromId($orderComponentId);
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
+    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
 }
 
 class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
@@ -51,5 +52,13 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             }
         }
         return $components;
+    }
+
+    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId) {
+        return OrdersAccommodation::create([
+            'order_customer_id' => $oCustomerId,
+            'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
+            'share_with_user_id' => null
+        ]);
     }
 }
