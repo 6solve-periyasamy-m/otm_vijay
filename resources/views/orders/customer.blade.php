@@ -72,29 +72,29 @@ function addAccommodationAddon() {
     let id = $('#accommodation-select').find(':selected').val()
     if (id != null) {
         $.post('{{ route('addAccommodationAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
-        updateAccommodationSelectFields();
     }
+    location.reload();
 }
 function addActivityAddon() {
     let id = $('#activities-select').find(':selected').val()
     if (id != null) {
         $.post('{{ route('addActivityAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
-        updateActivitySelectFields();
     }
+    location.reload();
 }
 function addFlightAddon() {
     let id = $('#flights-select').find(':selected').val()
     if (id != null) {
         $.post('{{ route('addFlightAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
-        updateFlightSelectFields();
     }
+    location.reload();
 }
 function addTransportAddon() {
     let id = $('#transports-select').find(':selected').val()
     if (id != null) {
         $.post('{{ route('addTransportAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
-        updateTransportSelectFields();
     }
+    location.reload();
 }
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
