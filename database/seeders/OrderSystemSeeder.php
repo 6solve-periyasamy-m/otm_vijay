@@ -8,6 +8,7 @@ use App\Models\AccommodationInventoryTour;
 use App\Models\Activity;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
+use App\Models\Address;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Operator;
@@ -35,6 +36,7 @@ class OrderSystemSeeder extends Seeder
      */
     public function run()
     {
+        Address::factory()->count($this->seedCount)->create();
         Customer::factory()->count($this->seedCount)->create();
         Quote::factory()->count($this->seedCount)->create();
         Order::factory()->count($this->seedCount)->create()->each(function($order) {
