@@ -25,7 +25,7 @@ class FlightInventoryTourFactory extends Factory
             'tour_id' => 1,
             'flight_inventory_id' => 1,
             'tour_component_type_id' => 1,
-            'sales_price' => null,
+            'tour_sales_price' => null,
             'flight_type' => 'Outbound'
         ];
     }

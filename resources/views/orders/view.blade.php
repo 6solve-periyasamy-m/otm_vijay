@@ -132,7 +132,7 @@
                 @foreach($addons as $addon)
                     <tr>
                         <td style="border: 1px solid black; width: 20%;">Add-on</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $addon->sales_price }}</td>
+                        <td style="border: 1px solid black; width: 20%;">{{ $addon->tour_sales_price }}</td>
                     </tr>
                 @endforeach
             </table>
