@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentInstallmentsTable extends Migration
+class CreatePaymentPlansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreatePaymentInstallmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_installments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('payment_plan_id')->index();
-            $table->float('amount', 10, 2);
-            $table->date('due_on');
+        // Pivot Table, doesn't require stored information
+        Schema::create('payment_plans', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +27,6 @@ class CreatePaymentInstallmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_installments');
+        Schema::dropIfExists('payment_plans');
     }
 }

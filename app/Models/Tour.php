@@ -39,6 +39,10 @@ class Tour extends Model
         return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tour')->withPivot('sales_price', 'tour_component_type');
     }
 
+    public function paymentPlan() {
+        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
+    }
+
     // public function flightInventory()
     // {
     //     return $this->belongsTo(FlightInventory::class);
