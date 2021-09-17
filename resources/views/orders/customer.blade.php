@@ -75,6 +75,13 @@ function addAccommodationAddon() {
         updateAccommodationSelectFields();
     }
 }
+function addActivityAddon() {
+    let id = $('#activities-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addActivityAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
+        updateActivitySelectFields();
+    }
+}
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
@@ -220,7 +227,7 @@ $(document).ready( function () {
                 <div id="activities-new" class="new-section">
                     <select id="activities-select" class="form-select form-select-lg select">
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addActivityAddon()">Add</button>
                 </div>
                 <div id="activities-details">
                     <table id="activities-table" class="table table-striped table-responsive-sm">

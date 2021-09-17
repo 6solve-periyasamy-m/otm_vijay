@@ -52,4 +52,12 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         }
         return $components;
     }
+
+    public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId)
+    {
+        return OrdersActivity::create([
+            'order_customer_id' => $oCustomerId,
+            'activity_inventory_tour_id' => $activityInventoryTourId,
+        ]);
+    }
 }

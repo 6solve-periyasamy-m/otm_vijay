@@ -37,4 +37,10 @@ class TourComponentController extends Controller
         $accommodationInventoryTourId = $request->input('accommodation_id');
         return AccommodationComponentRepository::grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
     }
+
+    public function addActivityAddon(Request $request) {
+        $oCustomerId = $request->input('customer_id');
+        $activityInventoryTourId = $request->input('activity_id');
+        return ActivityComponentRepository::grantAddonToCustomer($oCustomerId, $activityInventoryTourId);
+    }
 }
