@@ -35,13 +35,22 @@
     margin-bottom: 5px;
 }
 </style>
-<script>
-    $(document).ready( function () {
-        $('#accommodation-table').DataTable({fixedHeader: true});
-        $('#activities-table').DataTable({fixedHeader: true});
-        $('#flights-table').DataTable({fixedHeader: true});
-        $('#transports-table').DataTable({fixedHeader: true});
-    } );
+<script type="text/javascript">
+function updateSelectFields() {
+    $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function(index, element) {
+            $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
+        });
+    });
+}
+$(document).ready( function () {
+    $('#accommodation-table').DataTable({fixedHeader: true});
+    $('#activities-table').DataTable({fixedHeader: true});
+    $('#flights-table').DataTable({fixedHeader: true});
+    $('#transports-table').DataTable({fixedHeader: true});
+    updateSelectFields();
+});
 </script>
 <div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
 <div class="text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
@@ -138,10 +147,6 @@
             <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                 <div id="accommodation-new" class="new-section">
                     <select id="accommodation-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
                     <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
                 </div>

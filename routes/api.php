@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TourComponentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -76,6 +77,8 @@ Route::post('/booking/flight', [BookingController::class, 'bookFlightDetails']);
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
+
+Route::get('/orders/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
 
 Route::middleware('auth:api')->group(function() {
     
