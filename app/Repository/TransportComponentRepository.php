@@ -52,4 +52,12 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         }
         return $components;
     }
+
+    public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId)
+    {
+        return OrdersTransport::create([
+            'order_customer_id' => $oCustomerId,
+            'transport_inventory_tour_id' => $transportInventoryTourId,
+        ]);
+    }
 }

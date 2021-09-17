@@ -89,6 +89,13 @@ function addFlightAddon() {
         updateFlightSelectFields();
     }
 }
+function addTransportAddon() {
+    let id = $('#transports-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addTransportAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
+        updateTransportSelectFields();
+    }
+}
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
@@ -305,12 +312,8 @@ $(document).ready( function () {
             <div id="transports" role="tabpanel" class="tab-pane fade">
                 <div id="transports-new" class="new-section">
                     <select id="transports-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addTransportAddon()">Add</button>
                 </div>
                 <div id="transports-details">
                     <table id="transports-table" class="table table-striped table-responsive-sm">
