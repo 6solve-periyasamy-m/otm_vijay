@@ -19,7 +19,6 @@ class CreateOrdersTable extends Migration
             $table->integer('tour_id');
             $table->integer('lead_booker_id')->nullable();
             $table->string('booking_reference');
-            $table->float('total_order_value', 10, 0);
             $table->dateTime('ordered_on');
             $table->text('internal_notes')->nullable();
             $table->text('external_notes')->nullable();
