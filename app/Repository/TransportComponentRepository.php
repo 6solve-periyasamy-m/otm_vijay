@@ -45,8 +45,8 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         }
         if ($oCustomer != null) {
             // Remove all components the customer already has
-            foreach ($oCustomer->orderFlights as $oComponent) {
-                $component = $oComponent->flightInventoryTour;
+            foreach ($oCustomer->orderTransports as $oComponent) {
+                $component = $oComponent->transportInventoryTour;
                 unset($components[$component->id]);
             }
         }
