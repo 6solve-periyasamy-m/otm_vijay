@@ -12,6 +12,8 @@ class OrdersFlight extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['order_customer_id', 'flight_inventory_tour_id'];
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrdersCustomer::class);

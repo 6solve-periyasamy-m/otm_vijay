@@ -82,6 +82,13 @@ function addActivityAddon() {
         updateActivitySelectFields();
     }
 }
+function addFlightAddon() {
+    let id = $('#flights-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addFlightAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
+        updateFlightSelectFields();
+    }
+}
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
@@ -263,7 +270,7 @@ $(document).ready( function () {
                 <div id="flights-new" class="new-section">
                     <select id="flights-select" class="form-select form-select-lg select">
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addFlightAddon()">Add</button>
                 </div>
                 <div id="flights-details">
                     <table id="flights-table" class="table table-striped table-responsive-sm">

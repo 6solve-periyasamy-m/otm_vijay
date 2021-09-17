@@ -52,4 +52,12 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         }
         return $components;
     }
+
+    public static function grantAddonToCustomer($oCustomerId, $flightInventoryTourId)
+    {
+        return OrdersFlight::create([
+            'order_customer_id' => $oCustomerId,
+            'flight_inventory_tour_id' => $flightInventoryTourId,
+        ]);
+    }
 }

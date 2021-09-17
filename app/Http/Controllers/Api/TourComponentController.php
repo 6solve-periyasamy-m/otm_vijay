@@ -43,4 +43,10 @@ class TourComponentController extends Controller
         $activityInventoryTourId = $request->input('activity_id');
         return ActivityComponentRepository::grantAddonToCustomer($oCustomerId, $activityInventoryTourId);
     }
+
+    public function addFlightAddon(Request $request) {
+        $oCustomerId = $request->input('customer_id');
+        $flightInventoryTourId = $request->input('flight_id');
+        return FlightComponentRepository::grantAddonToCustomer($oCustomerId, $flightInventoryTourId);
+    }
 }
