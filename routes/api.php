@@ -79,6 +79,7 @@ Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentS
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
 Route::get('/orders/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
+Route::get('/orders/activities/{oCustomerId}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
 
 Route::middleware('auth:api')->group(function() {
     

@@ -3,11 +3,14 @@
 namespace App\Repository;
 
 use App\Models\OrdersActivity;
+use App\Models\OrdersCustomer;
+use App\Models\Tour;
 
 interface ActivityComponentRepositoryInterface {
     public static function getComponentFromOrderComponent($orderComponentId);
     public static function getInventoryFromOrderComponent($orderComponentId);
     public static function getOrderComponentFromId($orderComponentId);
+    public static function getAvailableAddons($tourId, $oCustomerId = -1);
 }
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
@@ -26,5 +29,27 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
     {
         $orderComponent = OrdersActivity::findOrFail($orderComponentId);
         return $orderComponent->activityInventoryTour()->first()->activityInventory();
+    }
+
+    public static function getAvailableAddons($tourId, $oCustomerId = -1) {
+        $tour = Tour::findOrFail($tourId);
+        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $components = [];
+        foreach ($tour->activityInventoryTours as $component) {
+            if ($component->tour_component_type == "Add-on") {
+                $components[$component->id] = [];
+                $components[$component->id]['id'] = $component->id;
+                $components[$component->id]['name'] = $component->activityInventory->activity->title;
+                $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->activity_type_title;
+            }
+        }
+        if ($oCustomer != null) {
+            // Remove all components the customer already has
+            foreach ($oCustomer->orderActivities as $oComponent) {
+                $component = $oComponent->activityInventoryTour;
+                unset($components[$component->id]);
+            }
+        }
+        return $components;
     }
 }
