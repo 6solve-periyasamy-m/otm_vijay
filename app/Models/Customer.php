@@ -36,7 +36,8 @@ class Customer extends Model implements AuthAuthenticatable
 
     public function billingAddress() {
         return $this->belongsTo(Address::class, 'billing_address_id');
-
+    }
+    
     public function tShirtSize() {
         return $this->belongsTo(TShirtSize::class, 't_shirt_size_id');
     }
