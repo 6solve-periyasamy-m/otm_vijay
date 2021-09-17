@@ -21,6 +21,11 @@ class Transport extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function transportType()
+    {
+        return $this->belongsTo(TransportType::class, 'transport_type_id');
+    }
+
     public function operator()
     {
         return $this->belongsTo(Operator::class);

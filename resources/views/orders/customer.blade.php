@@ -57,6 +57,13 @@ function updateSelectFields() {
             $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
         });
     });
+
+    $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableTransportAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function(index, element) {
+            $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
+        });
+    });
 }
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});

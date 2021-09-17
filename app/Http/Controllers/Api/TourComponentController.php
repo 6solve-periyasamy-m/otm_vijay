@@ -6,6 +6,7 @@ use App\Models\OrdersCustomer;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
+use App\Repository\TransportComponentRepository;
 use Illuminate\Routing\Controller;
 
 class TourComponentController extends Controller
@@ -23,5 +24,10 @@ class TourComponentController extends Controller
     public function getAvailableFlightAddons($oCustomerId) {
         $oCustomer = OrdersCustomer::findOrFail($oCustomerId);
         return FlightComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+    }
+
+    public function getAvailableTransportAddons($oCustomerId) {
+        $oCustomer = OrdersCustomer::findOrFail($oCustomerId);
+        return TransportComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
     }
 }
