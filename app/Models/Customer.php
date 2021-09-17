@@ -29,11 +29,19 @@ class Customer extends Model implements AuthAuthenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
+
     public function homeAddress() {
         return $this->belongsTo(Address::class, 'home_address_id');
     }
 
     public function billingAddress() {
         return $this->belongsTo(Address::class, 'billing_address_id');
+
+    public function tShirtSize() {
+        return $this->belongsTo(TShirtSize::class, 't_shirt_size_id');
+    }
+
+    public function hatSize() {
+        return $this->belongsTo(HatSize::class, 'hat_size_id');
     }
 }
