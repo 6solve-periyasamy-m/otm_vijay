@@ -36,28 +36,31 @@
 }
 </style>
 <script type="text/javascript">
-function updateSelectFields() {
+function updateAccommodationSelectFields() {
     $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
     $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
-        $.each(data, function(index, element) {
+        $.each(data, function (index, element) {
             $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
         });
     });
-
+}
+function updateActivitySelectFields() {
     $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
     $.get('{{ route('getAvailableActivityAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
-        $.each(data, function(index, element) {
+        $.each(data, function (index, element) {
             $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
         });
     });
-
+}
+function updateFlightSelectFields() {
     $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
     $.get('{{ route('getAvailableFlightAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
-        $.each(data, function(index, element) {
+        $.each(data, function (index, element) {
             $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
         });
     });
-
+}
+function updateTransportSelectFields() {
     $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
     $.get('{{ route('getAvailableTransportAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
         $.each(data, function(index, element) {
@@ -70,7 +73,10 @@ $(document).ready( function () {
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
-    updateSelectFields();
+    updateAccommodationSelectFields();
+    updateActivitySelectFields();
+    updateFlightSelectFields();
+    updateTransportSelectFields();
 });
 </script>
 <div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
