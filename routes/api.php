@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TourComponentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -76,6 +77,16 @@ Route::post('/booking/flight', [BookingController::class, 'bookFlightDetails']);
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
+
+Route::get('/orders/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
+Route::get('/orders/activities/{oCustomerId}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
+Route::get('/orders/flights/{oCustomerId}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
+Route::get('/orders/transports/{oCustomerId}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
+
+Route::post('/orders/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('addAccommodationAddon');
+Route::post('/orders/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('addActivityAddon');
+Route::post('/orders/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('addFlightAddon');
+Route::post('/orders/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('addTransportAddon');
 
 Route::middleware('auth:api')->group(function() {
     

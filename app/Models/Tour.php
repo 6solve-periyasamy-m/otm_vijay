@@ -52,4 +52,20 @@ class Tour extends Model
     // {
     //     return $this->belongsToMany(ActivityInventoryTour::class)->withPivot('created_at', 'deleted_at');
     // }
+
+    public function accommodationInventoryTours() {
+        return $this->hasMany(AccommodationInventoryTour::class, 'tour_id');
+    }
+
+    public function activityInventoryTours() {
+        return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
+    }
+
+    public function flightInventoryTours() {
+        return $this->hasMany(FlightInventoryTour::class, 'tour_id');
+    }
+
+    public function transportInventoryTours() {
+        return $this->hasMany(TransportInventoryTour::class, 'tour_id');
+    }
 }

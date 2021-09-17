@@ -12,6 +12,8 @@ class OrdersActivity extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id'];
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrdersCustomer::class);

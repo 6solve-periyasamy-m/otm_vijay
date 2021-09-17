@@ -35,13 +35,77 @@
     margin-bottom: 5px;
 }
 </style>
-<script>
-    $(document).ready( function () {
-        $('#accommodation-table').DataTable({fixedHeader: true});
-        $('#activities-table').DataTable({fixedHeader: true});
-        $('#flights-table').DataTable({fixedHeader: true});
-        $('#transports-table').DataTable({fixedHeader: true});
-    } );
+<script type="text/javascript">
+function updateAccommodationSelectFields() {
+    $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function (index, element) {
+            $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
+        });
+    });
+}
+function updateActivitySelectFields() {
+    $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableActivityAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function (index, element) {
+            $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
+        });
+    });
+}
+function updateFlightSelectFields() {
+    $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableFlightAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function (index, element) {
+            $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
+        });
+    });
+}
+function updateTransportSelectFields() {
+    $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
+    $.get('{{ route('getAvailableTransportAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+        $.each(data, function(index, element) {
+            $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
+        });
+    });
+}
+function addAccommodationAddon() {
+    let id = $('#accommodation-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addAccommodationAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
+    }
+    location.reload();
+}
+function addActivityAddon() {
+    let id = $('#activities-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addActivityAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
+    }
+    location.reload();
+}
+function addFlightAddon() {
+    let id = $('#flights-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addFlightAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
+    }
+    location.reload();
+}
+function addTransportAddon() {
+    let id = $('#transports-select').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('addTransportAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
+    }
+    location.reload();
+}
+$(document).ready( function () {
+    $('#accommodation-table').DataTable({fixedHeader: true});
+    $('#activities-table').DataTable({fixedHeader: true});
+    $('#flights-table').DataTable({fixedHeader: true});
+    $('#transports-table').DataTable({fixedHeader: true});
+    updateAccommodationSelectFields();
+    updateActivitySelectFields();
+    updateFlightSelectFields();
+    updateTransportSelectFields();
+});
 </script>
 <div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
 <div class="text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
@@ -138,12 +202,8 @@
             <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                 <div id="accommodation-new" class="new-section">
                     <select id="accommodation-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addAccommodationAddon()">Add</button>
                 </div>
                 <div id="accommodation-details">
                     <table id="accommodation-table" class="table table-striped table-responsive-sm">
@@ -180,12 +240,8 @@
             <div id="activities" role="tabpanel" class="tab-pane fade">
                 <div id="activities-new" class="new-section">
                     <select id="activities-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addActivityAddon()">Add</button>
                 </div>
                 <div id="activities-details">
                     <table id="activities-table" class="table table-striped table-responsive-sm">
@@ -220,12 +276,8 @@
             <div id="flights" role="tabpanel" class="tab-pane fade">
                 <div id="flights-new" class="new-section">
                     <select id="flights-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addFlightAddon()">Add</button>
                 </div>
                 <div id="flights-details">
                     <table id="flights-table" class="table table-striped table-responsive-sm">
@@ -260,12 +312,8 @@
             <div id="transports" role="tabpanel" class="tab-pane fade">
                 <div id="transports-new" class="new-section">
                     <select id="transports-select" class="form-select form-select-lg select">
-                        <option selected>Please choose an option</option>
-                        <option value="1">Addon 1</option>
-                        <option value="2">Addon 2</option>
-                        <option value="3">Addon 3</option>
                     </select>
-                    <button class="btn btn-success add-btn">Add</button>{{-- TODO: Implement --}}
+                    <button class="btn btn-success add-btn" onclick="addTransportAddon()">Add</button>
                 </div>
                 <div id="transports-details">
                     <table id="transports-table" class="table table-striped table-responsive-sm">
