@@ -8,7 +8,7 @@ use Exception;
 
 interface CustomerOrderDetailRepositoryInterface {
     public function getCOD($customerOrderId, $type);
-    public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference);
+    public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference, $info);
     public function purge($customerOrderId, $type);
 }
 
@@ -33,11 +33,12 @@ Log::info('COD', $existing->toArray());
         return $existing;
     }
 
-    public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference)
+    public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference, $info)
     {
         $cod->orders_customer_id = $customerOrderId;
         // $cod->order_id = $order_id;
         $cod->type = $type;
+        $cod->info = $info;
 
         $cod->type = $type;
         // if ($room) {

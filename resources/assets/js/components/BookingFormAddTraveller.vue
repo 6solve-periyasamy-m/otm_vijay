@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-3 form-group field-separation">
                         <label class="form-label" for="last_name" v-show="last_name">Last name</label>
-                        <input type="text" v-model="last_name" placeholder="Last name" name="last_name" id="last_name" class="form-control maxwidth" />
+                        <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
                     </div>
                 </div>
                 <div class="row">

@@ -240,12 +240,17 @@ export default {
   },
   async mounted() {
     let that = this
-    await this.loadBooking()
-    await this.getAccommodationOptions()
     this.debug>2 && console.log("DEV: Accommodation mounted")
     bus.$on("accommodationBookingsLoaded", (bookings) => {
-      bookings.map((b) => that.reduceOccupancy(b.accommodation));
+      console.log('>>>> accommodationBookingsLoaded', bookings)
+      
+      bookings.map((b) => {
+        console.log('>>> booking loaded', b)
+        that.reduceOccupancy(b.accommodation))
+      })
     })
+    await this.loadBooking()
+    await this.getAccommodationOptions()
   },
   methods: {
     isBooked(travellerId, accommodationId) {

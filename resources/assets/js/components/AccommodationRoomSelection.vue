@@ -8,19 +8,18 @@
                 :key="index" 
                 class="accommodation-traveller__share-with">
                 Share with 
-                    <span v-if="traveller.sharename != undefined 
-                            && traveller.sharename[traveller.id] != undefined
-                            && traveller.sharename[traveller.id][index-1] != undefined">
-                            {{traveller.sharename[traveller.id][index-1]}}
-                    </span>
-                    <select v-else @change="selectSharer(traveller)" 
-                        v-model="sharer[traveller.id]" :key="traveller.id">
-                        <option selected disabled>Open</option>
-                        <option v-for="(share, id) in evalOthers(traveller)" :key="id" :value="share">
-                            {{share.first_name}} {{share.last_name}}
-                        </option>
-                    </select>
-              
+                <span v-if="traveller.sharename != undefined 
+                        && traveller.sharename[traveller.id] != undefined
+                        && traveller.sharename[traveller.id][index-1] != undefined">
+                        {{traveller.sharename[traveller.id][index-1]}}
+                </span>
+                <select v-else @change="selectSharer(traveller)" 
+                    v-model="sharer[traveller.id]" :key="traveller.id">
+                    <option selected disabled>Open</option>
+                    <option v-for="(share, id) in evalOthers(traveller)" :key="id" :value="share">
+                        {{share.first_name}} {{share.last_name}}
+                    </option>
+                </select>
             </div>
         </div>
     </div>
@@ -33,7 +32,7 @@ export default {
     name: 'RoomSelection',
     data() {
         return {
-            debug: 5,
+            debug: 1,
             rooms: [],
             room_selected: {}, 
             sharer: [],
@@ -48,29 +47,29 @@ export default {
         // subarrays traveller.sharename/shares
         bus.$on('AccommodationRoomSelectorReset', (group) => {
             this.others = group
-            let c = 0
-            console.log(this.sharer)
-            group.map((s) => {
-                console.log(s, this.sharer[c])
-                Vue.set(this.sharer, c, 'asdf')
-                c++
-            })
-            this.sharer = undefined
-            if (this.traveller.sharename != undefined) {
-                this.traveller.sharename.map(i => {
-                    this.debug>4 && console.log('clearing ', i)
-                    i.length = 0
-                    i = []
-                })
-                this.traveller.shares.map(i => {
-                    i.length = 0
-                    i = []
-                })
-                this.traveller.sharename.length = 0
-                this.traveller.sharename = []
-                this.traveller.shares.length = 0
-                this.traveller.shares = []
-            }
+            // let c = 0
+            // console.log(this.sharer)
+            // group.map((s) => {
+            //     console.log(s, this.sharer[c])
+            //     Vue.set(this.sharer, c, 'asdf')
+            //     c++
+            // })
+            // this.sharer = undefined
+            // if (this.traveller.sharename != undefined) {
+            //     this.traveller.sharename.map(i => {
+            //         this.debug>4 && console.log('clearing ', i)
+            //         i.length = 0
+            //         i = []
+            //     })
+            //     this.traveller.shares.map(i => {
+            //         i.length = 0
+            //         i = []
+            //     })
+            //     this.traveller.sharename.length = 0
+            //     this.traveller.sharename = []
+            //     this.traveller.shares.length = 0
+            //     this.traveller.shares = []
+            // }
             this.init()
         })
         bus.$on('setOthers', (others, traveller) => {
@@ -120,6 +119,7 @@ export default {
             const that = this
             const sharer =  Object.values(this.sharer)[0]
             if (typeof sharer != 'undefined') {
+                this.debug && console.log('selectSharer:', sharer, traveller )
                 this.debug>4 && console.log('***** selectSharer', sharer.first_name)
                 this.debug>4 && console.log('settin up the roomshare for ', traveller.first_name, ' being ', sharer.first_name)
                 bus.$emit('setRoomShare', traveller, sharer, this.room_selected)

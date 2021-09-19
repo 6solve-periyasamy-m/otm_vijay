@@ -136,10 +136,13 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         // }
         $customerOrderDetail = new CustomerOrderDetail();
         $customerOrderDetails = $customerOrderDetail
+            ->select('tour_component_type', 'customers.last_name', 'customers.first_name', 'room_type_name', 'board_type_name', 'info')
             ->join('accommodation_inventory_tours', 'customer_order_details.inventory_tour_id', 'accommodation_inventory_tours.id')
             ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
+            ->join('customers', 'customers.id', 'customer_order_details.orders_customer_id')
+            // ->join('accommodations', 'accommodations.id', 'accommodation_inventories.accommodation_id')
             ->whereIn('orders_customer_id', $customerIds)
             ->where('type', 'accommodation')
             ->get();
@@ -202,7 +205,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         }
         $customerOrderId = $customerOrder->id;
         $cod = null;
-        $type = json_encode(['room' => $room, 'shared' => $traveller['shared'], 'shares' => $traveller['shares']]);
+        $info = json_encode(['room' => $room, 'shared' => $traveller['shared'], 'shares' => $traveller['shares']]);
         $inventoryTourId = isset($room['accommodation_inventory_tour_id']) ? $room['accommodation_inventory_tour_id'] : 0;
 Log::info('updateAccommodation', [$inventoryTourId, $customerOrderId, $customer_id, $order_id]);
         // only save the booking record, the share records are not required in COD\
@@ -222,11 +225,16 @@ Log::info('NO Existing', $existing->toArray());
                 $cod = new CustomerOrderDetail();
                 $cod->status = 'created';
             }
-            $COD->saveCOD($cod, $customerOrderId, $component_type, $inventoryTourId, $traveller, $reference, $type);
+            $COD->saveCOD($cod, $customerOrderId, $component_type, $inventoryTourId, $traveller, $reference, $info);
         } else {
             Log::info('not saving for inventoryTourId: '. $inventoryTourId);
         }
 
         return $cod;
+    }
+    public function remove($tourIds, $groupIds) {
+        CustomerOrderDetail::whereIn('inventory_tour_id', $tourIds)
+            ->whereIn('orders_customer_id', $groupIds)
+            ->delete();
     }
 }

@@ -37,6 +37,10 @@ class AccommodationController extends ApiController
     //     return response()->json(["success" => true, "data" => $result]);
     // }
 
+    /***
+     * this tour has a range of accommodation options: 
+     * 
+     */
     public function getAccommodationOptions(Tour $tour)
     {
         Log::info('getAccommodationOptions');
@@ -147,6 +151,7 @@ class AccommodationController extends ApiController
         $order = Order::findOrFail($order_id);
         $traveller_ids = explode(',', $travellers);
         $tour = Tour::findOrFail($tour_id);
+
         // establish Tour $tour, Order $order, $token
         $orderCustomerIds = $this->findCustomersForOrder($order);
 
@@ -235,7 +240,7 @@ Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
             $reference
         );
 
-        return response()->json(['success' => true, 'data' => $results]);
+        return response()->json(['success' => true, 'accommodation' => $results]);
     }
 
     public function postAccommodationBooking(Tour $tour, OrdersCustomer $ordersCustomer, String $reference, AccommodationInventory $accommodationInventory, Order $order)
@@ -279,5 +284,18 @@ Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
         }
 
         return response()->json(["success" => true, "data" => $customer_order_detail]);
+    }
+
+    public function deleteAccommodationReservation(Request $request)
+    {
+        $groupIds = $request->groupIds;
+        $inventoryTourIds = $request->inventoryTourIds;
+        $tour_id = $request->tour_id;
+Log::info('deleting Accommodation Reservation for group', $groupIds);
+Log::info('inventory Tour IDs', $inventoryTourIds);
+Log::info('delete for tour '. $tour_id);
+        $accommodationRepository = new AccommodationRepository();
+        $accommodationRepository->remove($inventoryTourIds, $groupIds);
+        Log::info('deleteAccommodationReservation'); //, $group);
     }
 }
