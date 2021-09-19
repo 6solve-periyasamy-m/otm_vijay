@@ -12,7 +12,7 @@
 
                     <h2>Accommodation Registered</h2>
                     <div v-for="accommodation in accommodations" class="row">
-                        <div class="col">{{accommodation.tour_component_type}}</div>
+
                         <div class="col">{{accommodation.first_name}} {{accommodation.last_name}}</div>
                         <div class="col">{{accommodation.room ? accommodation.room['room_type_name'] : ''}}</div>
 
@@ -216,10 +216,14 @@ export default {
                     .then(response => {
                         that.showRegistered = true
                         let accommodation = response.data.accommodation
-                        console.log(accommodation, accommodation.length > 0, accommodation.length > 1)
-                        if (response.data.accommodation) {
-                            that.accommodations.push(response.data.accommodation);
-                        }
+                        that.loadAccommodationBooking(that.travellers, that.order_id)
+                        //that.accommodations=accommodation
+                        //console.log('registered accommodations', accommodation, accommodation.length > 0, accommodation.length > 1)
+                        // if (response.data.accommodation) {
+                        //     that.accommodations.push(response.data.accommodation);
+                        // } else {
+                        //     alert('nothing registered!')
+                        // }
                     })
                     .catch(error => console.log(error))
             })
