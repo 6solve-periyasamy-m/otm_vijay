@@ -156,23 +156,23 @@ $(document).ready( function () {
             </thead>
             <tr>
                 <th scope="row">Street Address</th>
-                <td>{{ $customer->address_line_1 }}, {{ $customer->address_line_2 }}, {{ $customer->address_line_3 }}</td>
-                <td>{{ $customer->billing_line_1 }}, {{ $customer->billing_line_2 }}, {{ $customer->billing_line_3 }}</td>
+                <td>{{ $customer->homeAddress->address_line_1 }}</td>
+                <td>{{ $customer->billingAddress->address_line_1 }}</td>
             </tr>
             <tr>
                 <th scope="row">Town</th>
-                <td>{{ $customer->town }}</td>
-                <td>{{ $customer->billing_town }}</td>
+                <td>{{ $customer->homeAddress->region }}</td>
+                <td>{{ $customer->billingAddress->region }}</td>
             </tr>
             <tr>
                 <th scope="row">Country</th>
-                <td>{{ $customer->country }}</td>
-                <td>{{ $customer->billing_country }}</td>
+                <td>{{ $customer->homeAddress->country }}</td>
+                <td>{{ $customer->billingAddress->country }}</td>
             </tr>
             <tr>
                 <th scope="row">Postcode</th>
-                <td>{{ $customer->postcode }}</td>
-                <td>{{ $customer->billing_postcode }}</td>
+                <td>{{ $customer->homeAddress->postcode }}</td>
+                <td>{{ $customer->billingAddress->postcode }}</td>
             </tr>
         </table>
     </div>

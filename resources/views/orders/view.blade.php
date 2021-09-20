@@ -127,7 +127,7 @@
                 </thead>
                 <tr>
                     <td style="border: 1px solid black; width: 20%;">Base</td>
-                    <td style="border: 1px solid black; width: 20%;">{{ $order->total_order_value }}</td>
+                    <td style="border: 1px solid black; width: 20%;">{{ $order->tour->base_price_per_person * sizeof($customers) }}</td>
                 </tr>
                 @foreach($addons as $addon)
                     <tr>
