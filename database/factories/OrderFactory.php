@@ -23,7 +23,6 @@ class OrderFactory extends Factory
     {
         return [
             'tour_id' => 1,
-            'total_order_value' => $this->faker->numberBetween(500, 1500),
             'ordered_on' => now(),
             'booking_reference' => 'OCT' . $this->faker->numberBetween(100000, 999999),
         ];
