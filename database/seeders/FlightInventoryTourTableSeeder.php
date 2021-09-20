@@ -27,7 +27,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:13:37',
                 'deleted_at' => NULL,
                 'id' => 9,
-                'sales_price' => 1499.0,
+                'tour_sales_price' => 1499.0,
                 'flight_type' => 'Inbound',
             ),
             1 => 
@@ -38,7 +38,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 08:39:16',
                 'deleted_at' => NULL,
                 'id' => 10,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Inbound',
             ),
             2 => 
@@ -49,7 +49,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 08:39:30',
                 'deleted_at' => NULL,
                 'id' => 11,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             3 => 
@@ -60,7 +60,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 08:39:00',
                 'deleted_at' => NULL,
                 'id' => 12,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             4 => 
@@ -71,7 +71,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:15:15',
                 'deleted_at' => NULL,
                 'id' => 13,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Inbound',
             ),
             5 => 
@@ -82,7 +82,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 08:38:45',
                 'deleted_at' => NULL,
                 'id' => 14,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             6 => 
@@ -93,7 +93,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:15:01',
                 'deleted_at' => NULL,
                 'id' => 15,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             7 => 
@@ -104,7 +104,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:14:48',
                 'deleted_at' => NULL,
                 'id' => 16,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             8 => 
@@ -115,7 +115,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 08:43:12',
                 'deleted_at' => NULL,
                 'id' => 17,
-                'sales_price' => 1000.0,
+                'tour_sales_price' => 1000.0,
                 'flight_type' => 'Outbound',
             ),
             9 => 
@@ -126,7 +126,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:14:21',
                 'deleted_at' => NULL,
                 'id' => 18,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             10 => 
@@ -137,7 +137,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:14:08',
                 'deleted_at' => NULL,
                 'id' => 19,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             11 => 
@@ -148,7 +148,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:13:50',
                 'deleted_at' => NULL,
                 'id' => 20,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             12 => 
@@ -159,7 +159,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-06 18:13:20',
                 'deleted_at' => NULL,
                 'id' => 23,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             13 => 
@@ -170,7 +170,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 08:28:35',
                 'deleted_at' => NULL,
                 'id' => 24,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             14 => 
@@ -181,7 +181,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 08:53:58',
                 'deleted_at' => NULL,
                 'id' => 25,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             15 => 
@@ -192,7 +192,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 08:50:09',
                 'deleted_at' => NULL,
                 'id' => 26,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             16 => 
@@ -203,7 +203,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-24 09:03:25',
                 'deleted_at' => NULL,
                 'id' => 27,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Outbound',
             ),
             17 => 
@@ -214,7 +214,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 08:54:32',
                 'deleted_at' => NULL,
                 'id' => 28,
-                'sales_price' => 500.0,
+                'tour_sales_price' => 500.0,
                 'flight_type' => 'Inbound',
             ),
             18 => 
@@ -225,7 +225,7 @@ class FlightInventoryTourTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 08:51:40',
                 'deleted_at' => NULL,
                 'id' => 29,
-                'sales_price' => NULL,
+                'tour_sales_price' => NULL,
                 'flight_type' => 'Inbound',
             ),
         ));
