@@ -80,6 +80,6 @@ class FlightInventory extends Model
 
     // public function getFlightDetails()
     // {
-    //     return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->location_name} - Arrives at: {$this->getArrivalAirport()->location->location_name} ";
+    //     return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
     // }
 }

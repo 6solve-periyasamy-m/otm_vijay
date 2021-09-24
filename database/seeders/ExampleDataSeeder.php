@@ -139,7 +139,7 @@ class ExampleDataSeeder extends Seeder
             array (
                 'id' => 1,
                 'region_id' => 2,
-                'location_name' => 'London Heathrow Airport',
+                'name' => 'London Heathrow Airport',
                 'created_at' => '2021-01-15 15:41:56',
                 'updated_at' => '2021-01-15 15:41:56',
                 'deleted_at' => NULL,
@@ -150,7 +150,7 @@ class ExampleDataSeeder extends Seeder
             array (
                 'id' => 2,
                 'region_id' => 2,
-                'location_name' => 'London Gatwick Airport',
+                'name' => 'London Gatwick Airport',
                 'created_at' => '2021-01-15 15:42:08',
                 'updated_at' => '2021-01-15 15:42:08',
                 'deleted_at' => NULL,
@@ -161,7 +161,7 @@ class ExampleDataSeeder extends Seeder
             array (
                 'id' => 3,
                 'region_id' => 3,
-                'location_name' => 'Copenhagen Airport',
+                'name' => 'Copenhagen Airport',
                 'created_at' => '2021-01-15 15:43:21',
                 'updated_at' => '2021-01-15 15:43:21',
                 'deleted_at' => NULL,
@@ -172,7 +172,7 @@ class ExampleDataSeeder extends Seeder
             array (
                 'id' => 4,
                 'region_id' => 4,
-                'location_name' => 'Amsterdam Schipol Aiport',
+                'name' => 'Amsterdam Schipol Aiport',
                 'created_at' => '2021-01-15 15:45:10',
                 'updated_at' => '2021-01-15 15:45:10',
                 'deleted_at' => NULL,
@@ -183,7 +183,7 @@ class ExampleDataSeeder extends Seeder
             array (
                 'id' => 5,
                 'region_id' => 2,
-                'location_name' => 'Premier Inn London Gatwick',
+                'name' => 'Premier Inn London Gatwick',
                 'created_at' => '2021-01-15 15:53:17',
                 'updated_at' => '2021-01-15 15:53:17',
                 'deleted_at' => NULL,
@@ -194,7 +194,7 @@ class ExampleDataSeeder extends Seeder
             array (
                 'id' => 6,
                 'region_id' => 2,
-                'location_name' => 'Hilton London Gatwick',
+                'name' => 'Hilton London Gatwick',
                 'created_at' => '2021-01-15 15:53:32',
                 'updated_at' => '2021-01-15 15:53:32',
                 'deleted_at' => NULL,
