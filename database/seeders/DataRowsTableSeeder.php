@@ -1542,7 +1542,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 167,
                 'data_type_id' => 44,
-                'field' => 'airport_name',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Airport Name',
                 'required' => 0,
@@ -1839,7 +1839,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Airport","table":"airports","type":"belongsTo","column":"departure_airport_id","key":"id","label":"airport_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Airport","table":"airports","type":"belongsTo","column":"departure_airport_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 6,
             ),
             114 => 
@@ -1855,7 +1855,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Airport","table":"airports","type":"belongsTo","column":"arrival_airport_id","key":"id","label":"airport_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Airport","table":"airports","type":"belongsTo","column":"arrival_airport_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 9,
             ),
             115 => 

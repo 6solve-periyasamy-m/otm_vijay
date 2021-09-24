@@ -110,7 +110,7 @@ export default {
                 alert('not a flight?', flight)
                 return ''
             }
-            return `${dates.makeDateFromString(flight.departure_date_time)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].airport_name} To ${this.airports[flight.arrival_airport_id].airport_name}`
+            return `${dates.makeDateFromString(flight.departure_date_time)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
         },
         dmy(s) {
             return dates.makeDateFromString(s)

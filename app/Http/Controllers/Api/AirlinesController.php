@@ -30,7 +30,7 @@ class AirlinesController extends ApiController
             $airport = $airport->where('region_id', $region_id);
         }
 
-        $airports = $airport->orderBy('airport_name', 'asc')->get()->toArray();
+        $airports = $airport->orderBy('name', 'asc')->get()->toArray();
         $airports = array_combine(array_column($airports, 'id'), $airports);
 
         return response()->json(["success" => true, "airports" => $airports]);

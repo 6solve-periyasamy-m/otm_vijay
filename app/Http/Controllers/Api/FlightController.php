@@ -42,8 +42,8 @@ class FlightController extends ApiController
                 "arrival_date_time" => $flightInventory->arrival_date_time,
                 "class" => $flightInventory->travelClass->title,
                 "airline" => $flightInventory->flight->airline->airline_name,
-                "departure_airport" => $flightInventory->flight->departureAirport->airport_name,
-                "arrival_airport" => $flightInventory->flight->arrivalAirport->airport_name,
+                "departure_airport" => $flightInventory->flight->departureAirport->name,
+                "arrival_airport" => $flightInventory->flight->arrivalAirport->name,
             ];
         })->toArray();
         return response()->json(["success" => true, "data" => $result]);
@@ -144,8 +144,8 @@ class FlightController extends ApiController
 
         // left joins for airports requires queries as they are a pair
         foreach($orders as &$ord) {
-            $ord['departure_airport'] = Airport::find($ord->departure_airport_id)->airport_name;
-            $ord['arrival_airport'] = Airport::find($ord->arrival_airport_id)->airport_name;
+            $ord['departure_airport'] = Airport::find($ord->departure_airport_id)->name;
+            $ord['arrival_airport'] = Airport::find($ord->arrival_airport_id)->name;
         }
         if ($this->logging) {
             Log::info('loadFlightsForOrder order '. $order_id . ' found '. count($orders). ' orders');

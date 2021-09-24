@@ -206,14 +206,14 @@
                                         {{ $flightInventory->flight->airline->airline_name }}
                                     </td>
                                     <td>
-                                        {{ $flightInventory->flight->departureAirport->airport_name }}
+                                        {{ $flightInventory->flight->departureAirport->name }}
                                     </td>
                                     
                                     <td>
                                         {{ Carbon\Carbon::parse($flightInventory->flight->departure_time . $flightInventory->flight->departure_date)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
-                                        {{ $flightInventory->flight->arrivalAirport->airport_name }}
+                                        {{ $flightInventory->flight->arrivalAirport->name }}
                                     </td>
                                     <td>
                                         {{ Carbon\Carbon::parse($flightInventory->flight->arrival_time . $flightInventory->flight->arrival_date)->format('d-m-Y H:i') }}

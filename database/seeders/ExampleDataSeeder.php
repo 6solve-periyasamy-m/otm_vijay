@@ -207,7 +207,7 @@ class ExampleDataSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'airport_name' => 'Amsterdam Schipol Airport',
+                'name' => 'Amsterdam Schipol Airport',
                 'location_id' => 4,
                 'iata_code' => 'AMS',
                 'created_at' => '2021-01-15 15:45:40',
@@ -217,7 +217,7 @@ class ExampleDataSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'airport_name' => 'London Gatwick Airport',
+                'name' => 'London Gatwick Airport',
                 'location_id' => 2,
                 'iata_code' => 'LGW',
                 'created_at' => '2021-01-15 15:45:54',
@@ -227,7 +227,7 @@ class ExampleDataSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'airport_name' => 'Copenhagen Airport',
+                'name' => 'Copenhagen Airport',
                 'location_id' => 3,
                 'iata_code' => 'CPH',
                 'created_at' => '2021-01-15 15:46:06',
@@ -237,7 +237,7 @@ class ExampleDataSeeder extends Seeder
             3 => 
             array (
                 'id' => 4,
-                'airport_name' => 'London Heathrow Airport',
+                'name' => 'London Heathrow Airport',
                 'location_id' => 1,
                 'iata_code' => 'LHR',
                 'created_at' => '2021-01-15 15:46:00',

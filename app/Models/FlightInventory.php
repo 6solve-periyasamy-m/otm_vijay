@@ -67,8 +67,8 @@ class FlightInventory extends Model
 
     public function getFlightForTourAttribute()
     {
-        $departure_airport = $this->getDepartureAirport()->airport_name; //Airport::getAirportById($this->flight->departure_airport_id);
-        $arrival_airport = $this->getArrivalAirport()->airport_name; //Airport::getAirportById($this->flight->arrival_airport_id);
+        $departure_airport = $this->getDepartureAirport()->name; //Airport::getAirportById($this->flight->departure_airport_id);
+        $arrival_airport = $this->getArrivalAirport()->name; //Airport::getAirportById($this->flight->arrival_airport_id);
 
         $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->departure_date_time)->format('d/m/Y H:i');
         $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->arrival_date_time)->format('d/m/Y H:i');
