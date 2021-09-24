@@ -47,7 +47,7 @@
                                 <tbody>
                                     @foreach($accommodationInventories as $accommodation)
                                     <td>
-                                        {{$accommodation->accommodation->title . ' - ' . $accommodation->accommodation->region->region_name}}
+                                        {{$accommodation->accommodation->title . ' - ' . $accommodation->accommodation->region->name}}
                                     </td>
                                     <td>
                                         {{Carbon\Carbon::parse($accommodation->check_in_date_time)->format('d-m-Y H:i')}}

@@ -806,7 +806,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 71,
                 'data_type_id' => 20,
-                'field' => 'region_name',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Region Name',
                 'required' => 0,
@@ -1231,7 +1231,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"region_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 4,
             ),
             76 => 
@@ -1407,7 +1407,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"region_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Region","table":"regions","type":"belongsTo","column":"region_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 7,
             ),
             87 => 
