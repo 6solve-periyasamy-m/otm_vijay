@@ -134,7 +134,7 @@
                                             {{ Carbon\Carbon::parse($activity->activity_end_date_time)->format('d-m-Y H:i') }}
                                         </td>
                                         <td>
-                                            {{ $activity->ticketType->ticket_type_name }}
+                                            {{ $activity->ticketType->name }}
                                         </td>
                                         <td>
                                             <input type="text"

@@ -94,7 +94,7 @@
                                         {{ Carbon\Carbon::parse($activity->activityInventory->activity_end_date_time)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
-                                        {{ $activity->activityInventory->ticketType->ticket_type_name }}
+                                        {{ $activity->activityInventory->ticketType->name }}
                                     </td>
                                 </tr>
                                 @endforeach
