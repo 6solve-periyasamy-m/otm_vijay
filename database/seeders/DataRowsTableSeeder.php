@@ -2806,7 +2806,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 267,
                 'data_type_id' => 63,
-                'field' => 'transport_type_name',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Transport Type Name',
                 'required' => 0,
@@ -3183,7 +3183,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\TransportType","table":"transport_types","type":"belongsTo","column":"transport_type_id","key":"id","label":"transport_type_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\TransportType","table":"transport_types","type":"belongsTo","column":"transport_type_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 3,
             ),
             198 => 
