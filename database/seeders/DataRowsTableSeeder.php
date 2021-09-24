@@ -1462,7 +1462,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 162,
                 'data_type_id' => 43,
-                'field' => 'airline_name',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Airline Name',
                 'required' => 0,
@@ -1823,7 +1823,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Airline","table":"airlines","type":"belongsTo","column":"airline_id","key":"id","label":"airline_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Airline","table":"airlines","type":"belongsTo","column":"airline_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 3,
             ),
             113 => 

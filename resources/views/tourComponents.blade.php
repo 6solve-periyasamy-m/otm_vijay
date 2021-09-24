@@ -203,7 +203,7 @@
                                 <?php //dump( $flightInventory, $flightInventory->flight, $flightInventory->flight->departureAirport); ?>
                                  <tr>
                                     <td>
-                                        {{ $flightInventory->flight->airline->airline_name }}
+                                        {{ $flightInventory->flight->airline->name }}
                                     </td>
                                     <td>
                                         {{ $flightInventory->flight->departureAirport->name }}

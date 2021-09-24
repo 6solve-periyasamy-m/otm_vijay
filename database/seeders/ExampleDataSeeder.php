@@ -70,15 +70,15 @@ class ExampleDataSeeder extends Seeder
         \DB::table('airlines')->insert([
             1 => [
                 'id' => '1',
-                'airline_name' => 'BA'
+                'name' => 'BA'
             ],
             2 => [
                 'id' => '2',
-                'airline_name' => 'KLM'
+                'name' => 'KLM'
             ],
             3 => [
                 'id' => '3',
-                'airline_name' => 'EasyJet'
+                'name' => 'EasyJet'
             ]
         ]);
 

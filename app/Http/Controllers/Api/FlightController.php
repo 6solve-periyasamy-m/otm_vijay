@@ -41,7 +41,7 @@ class FlightController extends ApiController
                 "departure_date_time" => $flightInventory->departure_date_time,
                 "arrival_date_time" => $flightInventory->arrival_date_time,
                 "class" => $flightInventory->travelClass->title,
-                "airline" => $flightInventory->flight->airline->airline_name,
+                "airline" => $flightInventory->flight->airline->name,
                 "departure_airport" => $flightInventory->flight->departureAirport->name,
                 "arrival_airport" => $flightInventory->flight->arrivalAirport->name,
             ];
@@ -60,7 +60,7 @@ class FlightController extends ApiController
         // $flightsRepository = new FlightsRepository($flight);
         // $flights = $flightsRepository->flights($tour_id);
 
-        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.airline_name', 'travel_classes.title as travel_class', 'flights.available_after')
+        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.title as travel_class', 'flights.available_after')
         ->join('airlines', 'airline_id', 'airlines.id')
         ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
         ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
@@ -79,7 +79,7 @@ class FlightController extends ApiController
         }
         
         $flightData = $flights
-            ->orderBy('airlines.airline_name', 'asc')
+            ->orderBy('airlines.name', 'asc')
             ->get();
         
         if ($this->logging > 5) {

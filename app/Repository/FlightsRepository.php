@@ -22,7 +22,7 @@ class FlightsRepository implements FlightsRepositoryInterface
             ->join('flight_inventory_tour', 'tour_id', $tour_id)
             ->join('flight_inventories', 'flight_inventory_tour.flight_inventory_id', 'id')
             ->where('flights.tour_id', $tour_id)
-            ->orderBy('airlines.airline_name')
+            ->orderBy('airlines.name')
             ->get();
 
         return $flights;

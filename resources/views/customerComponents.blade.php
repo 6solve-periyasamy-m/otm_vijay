@@ -135,7 +135,7 @@
                                 @foreach($orderFlights as $flight)
                                 <tr>
                                     <td>
-                                        {{($flight->flight->airline->airline_name)}}
+                                        {{($flight->flight->airline->name)}}
                                     </td>
                                     <td>
                                         {{ $flight->departureAirport->name }}

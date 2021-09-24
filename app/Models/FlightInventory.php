@@ -75,11 +75,11 @@ class FlightInventory extends Model
 
         $travel_class = is_null($this->travelClass) ? "" : "｜Travel Class: {$this->travelClass->title}";
 
-        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
+        return "{$this->flight->airline->name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
     }
 
     // public function getFlightDetails()
     // {
-    //     return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
+    //     return "{$this->flight->airline->name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
     // }
 }

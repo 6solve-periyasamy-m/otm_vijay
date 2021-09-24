@@ -12,7 +12,7 @@ class AirlinesController extends ApiController
 {
     public function getAirlines()
     {
-        $airlines = Airline::orderBy('airline_name')->get();
+        $airlines = Airline::orderBy('name')->get();
 
         return response()->json(["success" => true, "data" => $airlines->toArray()]);
     }
