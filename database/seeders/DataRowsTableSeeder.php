@@ -886,7 +886,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 77,
                 'data_type_id' => 21,
-                'field' => 'country_name',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Country Name',
                 'required' => 1,
@@ -1007,7 +1007,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Country","table":"countries","type":"belongsTo","column":"country_id","key":"id","label":"country_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Country","table":"countries","type":"belongsTo","column":"country_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 7,
             ),
             62 => 
