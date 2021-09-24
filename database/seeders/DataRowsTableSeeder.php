@@ -2214,7 +2214,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 217,
                 'data_type_id' => 52,
-                'field' => 'activity_type_title',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Activity Type Title',
                 'required' => 0,
@@ -5455,7 +5455,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\ActivityType","table":"activity_types","type":"belongsTo","column":"activity_type_id","key":"id","label":"activity_type_title","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\ActivityType","table":"activity_types","type":"belongsTo","column":"activity_type_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 5,
             ),
             340 => 
