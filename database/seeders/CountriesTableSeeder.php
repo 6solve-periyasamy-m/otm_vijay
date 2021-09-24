@@ -23,7 +23,7 @@ class CountriesTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'name' => 'United Kingdom',
-                'country_code' => 'UK',
+                'code' => 'UK',
                 'currency' => 'GBP',
                 'created_at' => '2021-01-05 10:35:51',
                 'updated_at' => '2021-01-05 10:35:51',
@@ -33,7 +33,7 @@ class CountriesTableSeeder extends Seeder
             array (
                 'id' => 2,
                 'name' => 'Denmark',
-                'country_code' => 'DK',
+                'code' => 'DK',
                 'currency' => 'DKK',
                 'created_at' => '2021-01-15 15:42:59',
                 'updated_at' => '2021-01-15 15:42:59',
@@ -43,7 +43,7 @@ class CountriesTableSeeder extends Seeder
             array (
                 'id' => 3,
                 'name' => 'The Netherlands',
-                'country_code' => 'ND',
+                'code' => 'ND',
                 'currency' => 'EUR',
                 'created_at' => '2021-01-15 15:44:00',
                 'updated_at' => '2021-01-15 15:44:23',
@@ -53,7 +53,7 @@ class CountriesTableSeeder extends Seeder
             array (
                 'id' => 4,
                 'name' => 'South Africa',
-                'country_code' => 'RSA',
+                'code' => 'RSA',
                 'currency' => 'ZAR',
                 'created_at' => '2021-01-19 10:39:00',
                 'updated_at' => '2021-01-19 10:39:14',

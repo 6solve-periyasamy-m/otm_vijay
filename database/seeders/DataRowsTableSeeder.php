@@ -902,7 +902,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 78,
                 'data_type_id' => 21,
-                'field' => 'country_code',
+                'field' => 'code',
                 'type' => 'text',
                 'display_name' => 'Country Code',
                 'required' => 1,
