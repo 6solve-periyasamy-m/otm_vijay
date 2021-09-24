@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class RolesTableSeeder extends Seeder

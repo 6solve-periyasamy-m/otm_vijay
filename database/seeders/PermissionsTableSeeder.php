@@ -1523,6 +1523,366 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2020-12-08 15:33:09',
                 'updated_at' => '2020-12-08 15:33:09',
             ),
+            188 => 
+            array (
+                'id' => 234,
+                'key' => 'browse_accommodation_inventory_tours',
+                'table_name' => 'accommodation_inventory_tours',
+                'created_at' => '2021-09-24 10:23:18',
+                'updated_at' => '2021-09-24 10:23:18',
+            ),
+            189 => 
+            array (
+                'id' => 235,
+                'key' => 'read_accommodation_inventory_tours',
+                'table_name' => 'accommodation_inventory_tours',
+                'created_at' => '2021-09-24 10:23:18',
+                'updated_at' => '2021-09-24 10:23:18',
+            ),
+            190 => 
+            array (
+                'id' => 236,
+                'key' => 'edit_accommodation_inventory_tours',
+                'table_name' => 'accommodation_inventory_tours',
+                'created_at' => '2021-09-24 10:23:18',
+                'updated_at' => '2021-09-24 10:23:18',
+            ),
+            191 => 
+            array (
+                'id' => 237,
+                'key' => 'add_accommodation_inventory_tours',
+                'table_name' => 'accommodation_inventory_tours',
+                'created_at' => '2021-09-24 10:23:18',
+                'updated_at' => '2021-09-24 10:23:18',
+            ),
+            192 => 
+            array (
+                'id' => 238,
+                'key' => 'delete_accommodation_inventory_tours',
+                'table_name' => 'accommodation_inventory_tours',
+                'created_at' => '2021-09-24 10:23:18',
+                'updated_at' => '2021-09-24 10:23:18',
+            ),
+            193 => 
+            array (
+                'id' => 239,
+                'key' => 'browse_activity_inventory_tour',
+                'table_name' => 'activity_inventory_tour',
+                'created_at' => '2021-09-24 10:31:28',
+                'updated_at' => '2021-09-24 10:31:28',
+            ),
+            194 => 
+            array (
+                'id' => 240,
+                'key' => 'read_activity_inventory_tour',
+                'table_name' => 'activity_inventory_tour',
+                'created_at' => '2021-09-24 10:31:28',
+                'updated_at' => '2021-09-24 10:31:28',
+            ),
+            195 => 
+            array (
+                'id' => 241,
+                'key' => 'edit_activity_inventory_tour',
+                'table_name' => 'activity_inventory_tour',
+                'created_at' => '2021-09-24 10:31:28',
+                'updated_at' => '2021-09-24 10:31:28',
+            ),
+            196 => 
+            array (
+                'id' => 242,
+                'key' => 'add_activity_inventory_tour',
+                'table_name' => 'activity_inventory_tour',
+                'created_at' => '2021-09-24 10:31:28',
+                'updated_at' => '2021-09-24 10:31:28',
+            ),
+            197 => 
+            array (
+                'id' => 243,
+                'key' => 'delete_activity_inventory_tour',
+                'table_name' => 'activity_inventory_tour',
+                'created_at' => '2021-09-24 10:31:28',
+                'updated_at' => '2021-09-24 10:31:28',
+            ),
+            198 => 
+            array (
+                'id' => 244,
+                'key' => 'browse_addresses',
+                'table_name' => 'addresses',
+                'created_at' => '2021-09-24 10:38:34',
+                'updated_at' => '2021-09-24 10:38:34',
+            ),
+            199 => 
+            array (
+                'id' => 245,
+                'key' => 'read_addresses',
+                'table_name' => 'addresses',
+                'created_at' => '2021-09-24 10:38:34',
+                'updated_at' => '2021-09-24 10:38:34',
+            ),
+            200 => 
+            array (
+                'id' => 246,
+                'key' => 'edit_addresses',
+                'table_name' => 'addresses',
+                'created_at' => '2021-09-24 10:38:34',
+                'updated_at' => '2021-09-24 10:38:34',
+            ),
+            201 => 
+            array (
+                'id' => 247,
+                'key' => 'add_addresses',
+                'table_name' => 'addresses',
+                'created_at' => '2021-09-24 10:38:34',
+                'updated_at' => '2021-09-24 10:38:34',
+            ),
+            202 => 
+            array (
+                'id' => 248,
+                'key' => 'delete_addresses',
+                'table_name' => 'addresses',
+                'created_at' => '2021-09-24 10:38:34',
+                'updated_at' => '2021-09-24 10:38:34',
+            ),
+            203 => 
+            array (
+                'id' => 249,
+                'key' => 'browse_hat_sizes',
+                'table_name' => 'hat_sizes',
+                'created_at' => '2021-09-24 10:47:22',
+                'updated_at' => '2021-09-24 10:47:22',
+            ),
+            204 => 
+            array (
+                'id' => 250,
+                'key' => 'read_hat_sizes',
+                'table_name' => 'hat_sizes',
+                'created_at' => '2021-09-24 10:47:22',
+                'updated_at' => '2021-09-24 10:47:22',
+            ),
+            205 => 
+            array (
+                'id' => 251,
+                'key' => 'edit_hat_sizes',
+                'table_name' => 'hat_sizes',
+                'created_at' => '2021-09-24 10:47:22',
+                'updated_at' => '2021-09-24 10:47:22',
+            ),
+            206 => 
+            array (
+                'id' => 252,
+                'key' => 'add_hat_sizes',
+                'table_name' => 'hat_sizes',
+                'created_at' => '2021-09-24 10:47:22',
+                'updated_at' => '2021-09-24 10:47:22',
+            ),
+            207 => 
+            array (
+                'id' => 253,
+                'key' => 'delete_hat_sizes',
+                'table_name' => 'hat_sizes',
+                'created_at' => '2021-09-24 10:47:22',
+                'updated_at' => '2021-09-24 10:47:22',
+            ),
+            208 => 
+            array (
+                'id' => 254,
+                'key' => 'browse_manual_adjustments',
+                'table_name' => 'manual_adjustments',
+                'created_at' => '2021-09-24 10:51:58',
+                'updated_at' => '2021-09-24 10:51:58',
+            ),
+            209 => 
+            array (
+                'id' => 255,
+                'key' => 'read_manual_adjustments',
+                'table_name' => 'manual_adjustments',
+                'created_at' => '2021-09-24 10:51:58',
+                'updated_at' => '2021-09-24 10:51:58',
+            ),
+            210 => 
+            array (
+                'id' => 256,
+                'key' => 'edit_manual_adjustments',
+                'table_name' => 'manual_adjustments',
+                'created_at' => '2021-09-24 10:51:58',
+                'updated_at' => '2021-09-24 10:51:58',
+            ),
+            211 => 
+            array (
+                'id' => 257,
+                'key' => 'add_manual_adjustments',
+                'table_name' => 'manual_adjustments',
+                'created_at' => '2021-09-24 10:51:58',
+                'updated_at' => '2021-09-24 10:51:58',
+            ),
+            212 => 
+            array (
+                'id' => 258,
+                'key' => 'delete_manual_adjustments',
+                'table_name' => 'manual_adjustments',
+                'created_at' => '2021-09-24 10:51:58',
+                'updated_at' => '2021-09-24 10:51:58',
+            ),
+            213 => 
+            array (
+                'id' => 259,
+                'key' => 'browse_order_customer_adjustments',
+                'table_name' => 'order_customer_adjustments',
+                'created_at' => '2021-09-24 10:54:16',
+                'updated_at' => '2021-09-24 10:54:16',
+            ),
+            214 => 
+            array (
+                'id' => 260,
+                'key' => 'read_order_customer_adjustments',
+                'table_name' => 'order_customer_adjustments',
+                'created_at' => '2021-09-24 10:54:16',
+                'updated_at' => '2021-09-24 10:54:16',
+            ),
+            215 => 
+            array (
+                'id' => 261,
+                'key' => 'edit_order_customer_adjustments',
+                'table_name' => 'order_customer_adjustments',
+                'created_at' => '2021-09-24 10:54:16',
+                'updated_at' => '2021-09-24 10:54:16',
+            ),
+            216 => 
+            array (
+                'id' => 262,
+                'key' => 'add_order_customer_adjustments',
+                'table_name' => 'order_customer_adjustments',
+                'created_at' => '2021-09-24 10:54:16',
+                'updated_at' => '2021-09-24 10:54:16',
+            ),
+            217 => 
+            array (
+                'id' => 263,
+                'key' => 'delete_order_customer_adjustments',
+                'table_name' => 'order_customer_adjustments',
+                'created_at' => '2021-09-24 10:54:16',
+                'updated_at' => '2021-09-24 10:54:16',
+            ),
+            218 => 
+            array (
+                'id' => 264,
+                'key' => 'browse_payments',
+                'table_name' => 'payments',
+                'created_at' => '2021-09-24 11:15:57',
+                'updated_at' => '2021-09-24 11:15:57',
+            ),
+            219 => 
+            array (
+                'id' => 265,
+                'key' => 'read_payments',
+                'table_name' => 'payments',
+                'created_at' => '2021-09-24 11:15:57',
+                'updated_at' => '2021-09-24 11:15:57',
+            ),
+            220 => 
+            array (
+                'id' => 266,
+                'key' => 'edit_payments',
+                'table_name' => 'payments',
+                'created_at' => '2021-09-24 11:15:57',
+                'updated_at' => '2021-09-24 11:15:57',
+            ),
+            221 => 
+            array (
+                'id' => 267,
+                'key' => 'add_payments',
+                'table_name' => 'payments',
+                'created_at' => '2021-09-24 11:15:57',
+                'updated_at' => '2021-09-24 11:15:57',
+            ),
+            222 => 
+            array (
+                'id' => 268,
+                'key' => 'delete_payments',
+                'table_name' => 'payments',
+                'created_at' => '2021-09-24 11:15:57',
+                'updated_at' => '2021-09-24 11:15:57',
+            ),
+            223 => 
+            array (
+                'id' => 269,
+                'key' => 'browse_t_shirt_sizes',
+                'table_name' => 't_shirt_sizes',
+                'created_at' => '2021-09-24 11:19:59',
+                'updated_at' => '2021-09-24 11:19:59',
+            ),
+            224 => 
+            array (
+                'id' => 270,
+                'key' => 'read_t_shirt_sizes',
+                'table_name' => 't_shirt_sizes',
+                'created_at' => '2021-09-24 11:19:59',
+                'updated_at' => '2021-09-24 11:19:59',
+            ),
+            225 => 
+            array (
+                'id' => 271,
+                'key' => 'edit_t_shirt_sizes',
+                'table_name' => 't_shirt_sizes',
+                'created_at' => '2021-09-24 11:19:59',
+                'updated_at' => '2021-09-24 11:19:59',
+            ),
+            226 => 
+            array (
+                'id' => 272,
+                'key' => 'add_t_shirt_sizes',
+                'table_name' => 't_shirt_sizes',
+                'created_at' => '2021-09-24 11:19:59',
+                'updated_at' => '2021-09-24 11:19:59',
+            ),
+            227 => 
+            array (
+                'id' => 273,
+                'key' => 'delete_t_shirt_sizes',
+                'table_name' => 't_shirt_sizes',
+                'created_at' => '2021-09-24 11:19:59',
+                'updated_at' => '2021-09-24 11:19:59',
+            ),
+            228 => 
+            array (
+                'id' => 274,
+                'key' => 'browse_transport_inventory_tour',
+                'table_name' => 'transport_inventory_tour',
+                'created_at' => '2021-09-24 11:22:25',
+                'updated_at' => '2021-09-24 11:22:25',
+            ),
+            229 => 
+            array (
+                'id' => 275,
+                'key' => 'read_transport_inventory_tour',
+                'table_name' => 'transport_inventory_tour',
+                'created_at' => '2021-09-24 11:22:25',
+                'updated_at' => '2021-09-24 11:22:25',
+            ),
+            230 => 
+            array (
+                'id' => 276,
+                'key' => 'edit_transport_inventory_tour',
+                'table_name' => 'transport_inventory_tour',
+                'created_at' => '2021-09-24 11:22:25',
+                'updated_at' => '2021-09-24 11:22:25',
+            ),
+            231 => 
+            array (
+                'id' => 277,
+                'key' => 'add_transport_inventory_tour',
+                'table_name' => 'transport_inventory_tour',
+                'created_at' => '2021-09-24 11:22:25',
+                'updated_at' => '2021-09-24 11:22:25',
+            ),
+            232 => 
+            array (
+                'id' => 278,
+                'key' => 'delete_transport_inventory_tour',
+                'table_name' => 'transport_inventory_tour',
+                'created_at' => '2021-09-24 11:22:25',
+                'updated_at' => '2021-09-24 11:22:25',
+            ),
         ));
         
         
