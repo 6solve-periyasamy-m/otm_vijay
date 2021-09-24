@@ -2886,7 +2886,7 @@ class DataRowsTableSeeder extends Seeder
             array (
                 'id' => 272,
                 'data_type_id' => 64,
-                'field' => 'operator_name',
+                'field' => 'name',
                 'type' => 'text',
                 'display_name' => 'Operator Name',
                 'required' => 0,
@@ -3199,7 +3199,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Operator","table":"operators","type":"belongsTo","column":"operator_id","key":"id","label":"operator_name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Operator","table":"operators","type":"belongsTo","column":"operator_id","key":"id","label":"name","pivot_table":"accommodation_inventories","pivot":"0","taggable":"0"}',
                 'order' => 5,
             ),
             199 => 
