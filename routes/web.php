@@ -70,7 +70,7 @@ Route::get('/dashboard', function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
+    //Voyager::routes();
 
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
     Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');

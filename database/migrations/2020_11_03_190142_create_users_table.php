@@ -15,7 +15,6 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('role_id')->nullable()->index('users_role_id_foreign');
             $table->string('name', 255);
             $table->string('email', 190)->unique();
             $table->string('avatar', 255)->nullable()->default('users/default.png');
@@ -24,7 +23,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->text('settings')->nullable();
             $table->timestamps();
-            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
     }
 
