@@ -25,15 +25,15 @@ use App\Http\Controllers\BookingFormLoginController;
 */
 
 Route::get('/', function () {
-    return view('otm');
+    return view('pages.otm');
 });
 
 Route::get('/homepage', function () {
-    return view('homepage');
+    return view('pages.homepage');
 });
 
 Route::get('/pdfmake', function () {
-    return view('pdfmake');
+    return view('pdf.atol');
 });
 
 Route::prefix("/booking")->group(function() {
@@ -42,11 +42,11 @@ Route::prefix("/booking")->group(function() {
     Route::get('/check/events', [TourController::class, 'getEvents']);
     Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
     Route::get('/vuetest', function() {
-        return view('vueTest');
+        return view('tests.vue');
     });
 
     Route::get('/store', function() {
-        return view('bookingStore');
+        return view('pages.booking.store');
     });
     Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
     Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
@@ -59,7 +59,7 @@ Route::prefix("/booking")->group(function() {
 });
 
 Route::get('phones', function() {
-    return view('phoneValidation');
+    return view('tests.validation.phone');
 });
 
 Route::prefix('customer')->group(function () {

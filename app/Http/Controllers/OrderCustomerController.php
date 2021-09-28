@@ -20,7 +20,7 @@ class OrderCustomerController extends Controller
         $orderFlights = OrdersFlight::findByOrderCustomer($id);
         $orderTransports = OrdersTransport::findByOrderCustomer($id);
 
-        return view('customerComponents', [
+        return view('pages.components.customer', [
             'customerOrder' => $customerOrder,
             'orderAccommodations' => $orderAccommodations,
             'orderActivities' => $orderActivities,
@@ -30,6 +30,6 @@ class OrderCustomerController extends Controller
     }
 
     public function show($id) {
-        return view('orders.customer', OrderRepository::getOrderCustomerDetails($id));
+        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($id));
     }
 }
