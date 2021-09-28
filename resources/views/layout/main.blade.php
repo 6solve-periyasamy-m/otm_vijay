@@ -23,10 +23,17 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </head>
+@include('partials.navbar')
 <body>
-
-@yield('content')
-
+<div class="d-flex">
+    @include('partials.sidebar')
+    <p></p>
+    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
+        <div id="content" class="bg-light text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
+            @yield('content')
+        </div>
+    </div>
+</div>
 <script src="{{ asset('js/manifest.js') }}"></script>
 <script src="{{ asset('js/vendor.js') }}"></script>
 <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>

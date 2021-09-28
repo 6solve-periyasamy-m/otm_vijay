@@ -1,9 +1,6 @@
 @extends('layout.main')
 
 @section('content')
-
-<div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
-<div class="text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
     <div><img src="{{ asset('images/octlogo.png') }}" style="margin-left: auto; margin-right: auto; display: block; width: 30%"/></div>
     <form action="{{ route("orderSearch")}}" method="get">
         <div class="input-group mb-3">
@@ -31,5 +28,4 @@
             </tr>
         @endforeach
     </table>
-</div></div>
 @endsection

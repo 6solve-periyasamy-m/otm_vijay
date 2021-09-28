@@ -1,0 +1,30 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: calc(100vh - 49px); position: relative; position: -webkit-sticky; position: sticky;">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link active" aria-current="page">
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white">
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white">
+                Orders
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white">
+                Products
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white">
+                Customers
+            </a>
+        </li>
+    </ul>
+    <hr>
+</div>

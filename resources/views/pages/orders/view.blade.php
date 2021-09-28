@@ -1,8 +1,6 @@
 @extends('layout.main')
 {{-- TODO: Tidy up CSS --}}
 @section('content')
-<div style="padding-left: 5%; padding-right: 5%; padding-top: 0.1%;">
-<div class="text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
 {{-- Header Details --}}
 <div id="header-details">
     <table class="table" style="border-bottom: 1px solid black; font-size: 32px">
@@ -189,6 +187,4 @@
 </div>
 
 {{-- Closing Container--}}
-</div>
-</div>
 @endsection
