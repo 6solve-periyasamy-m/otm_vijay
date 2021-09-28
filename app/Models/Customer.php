@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Customer extends Model implements AuthAuthenticatable
+class Customer extends Model
 {
-    use Authenticatable;
     use SoftDeletes;
     use HasFactory;
 

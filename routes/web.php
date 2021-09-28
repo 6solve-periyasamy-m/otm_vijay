@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderSystemController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TourController;
@@ -90,3 +91,5 @@ Route::prefix('orders')->group(function () {
        Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
    });
 });
+
+Auth::routes();
