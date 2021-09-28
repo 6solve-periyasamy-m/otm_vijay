@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DataTypesTableSeeder extends Seeder
@@ -106,7 +107,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 09:20:59',
-                'updated_at' => '2021-02-02 08:24:11',
+                'updated_at' => '2021-09-24 10:22:57',
             ),
             5 => 
             array (
@@ -124,7 +125,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-15 10:03:54',
-                'updated_at' => '2021-01-21 00:54:34',
+                'updated_at' => '2021-09-24 10:39:14',
             ),
             6 => 
             array (
@@ -172,13 +173,13 @@ class DataTypesTableSeeder extends Seeder
                 'icon' => NULL,
                 'model_name' => 'App\\Models\\Country',
                 'policy_name' => NULL,
-                'controller' => '',
+                'controller' => NULL,
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-22 12:25:43',
-                'updated_at' => '2020-10-30 12:48:38',
+                'updated_at' => '2021-09-24 10:46:32',
             ),
             9 => 
             array (
@@ -232,7 +233,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-10-22 14:27:11',
-                'updated_at' => '2021-02-03 07:35:14',
+                'updated_at' => '2021-09-24 10:27:59',
             ),
             12 => 
             array (
@@ -248,9 +249,9 @@ class DataTypesTableSeeder extends Seeder
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 1,
-                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 10:45:18',
-                'updated_at' => '2020-11-03 10:45:18',
+                'updated_at' => '2021-09-24 10:39:03',
             ),
             13 => 
             array (
@@ -322,7 +323,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-03 18:21:33',
-                'updated_at' => '2021-03-06 18:12:05',
+                'updated_at' => '2021-09-24 10:42:23',
             ),
             17 => 
             array (
@@ -340,7 +341,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-04 14:48:19',
-                'updated_at' => '2020-11-04 18:30:57',
+                'updated_at' => '2021-09-24 10:35:05',
             ),
             18 => 
             array (
@@ -376,7 +377,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-04 18:08:44',
-                'updated_at' => '2021-02-03 08:15:15',
+                'updated_at' => '2021-09-24 10:35:28',
             ),
             20 => 
             array (
@@ -448,7 +449,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-05 12:38:06',
-                'updated_at' => '2021-01-21 14:43:29',
+                'updated_at' => '2021-09-24 11:21:41',
             ),
             24 => 
             array (
@@ -466,7 +467,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-16 08:43:02',
-                'updated_at' => '2021-02-22 07:38:31',
+                'updated_at' => '2021-09-24 11:21:17',
             ),
             25 => 
             array (
@@ -484,7 +485,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-20 17:12:37',
-                'updated_at' => '2020-11-20 17:16:14',
+                'updated_at' => '2021-09-24 10:47:03',
             ),
             26 => 
             array (
@@ -520,7 +521,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-23 14:03:41',
-                'updated_at' => '2021-02-04 23:15:55',
+                'updated_at' => '2021-09-24 14:16:19',
             ),
             28 => 
             array (
@@ -538,7 +539,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-25 15:38:18',
-                'updated_at' => '2020-11-26 08:49:36',
+                'updated_at' => '2021-09-24 11:01:04',
             ),
             29 => 
             array (
@@ -556,7 +557,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-25 16:08:05',
-                'updated_at' => '2020-11-25 16:16:16',
+                'updated_at' => '2021-09-24 11:14:12',
             ),
             30 => 
             array (
@@ -592,7 +593,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2020-11-26 09:18:56',
-                'updated_at' => '2020-11-27 08:56:16',
+                'updated_at' => '2021-09-24 10:51:16',
             ),
             32 => 
             array (
@@ -646,7 +647,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 1,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2021-01-22 12:11:37',
-                'updated_at' => '2021-02-03 07:32:40',
+                'updated_at' => '2021-09-24 10:35:43',
             ),
             35 => 
             array (
@@ -665,6 +666,168 @@ class DataTypesTableSeeder extends Seeder
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2021-03-06 15:11:08',
                 'updated_at' => '2021-03-08 08:44:53',
+            ),
+            36 => 
+            array (
+                'id' => 90,
+                'name' => 'accommodation_inventory_tours',
+                'slug' => 'accommodation-inventory-tours',
+                'display_name_singular' => 'Accommodation Inventory Tour',
+                'display_name_plural' => 'Accommodation Inventory Tours',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\AccommodationInventoryTour',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-09-24 10:23:18',
+                'updated_at' => '2021-09-24 10:42:44',
+            ),
+            37 => 
+            array (
+                'id' => 91,
+                'name' => 'activity_inventory_tour',
+                'slug' => 'activity-inventory-tour',
+                'display_name_singular' => 'Activity Inventory Tour',
+                'display_name_plural' => 'Activity Inventory Tours',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\ActivityInventoryTour',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-09-24 10:31:28',
+                'updated_at' => '2021-09-24 10:43:17',
+            ),
+            38 => 
+            array (
+                'id' => 92,
+                'name' => 'addresses',
+                'slug' => 'addresses',
+                'display_name_singular' => 'Address',
+                'display_name_plural' => 'Addresses',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Address',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2021-09-24 10:38:34',
+                'updated_at' => '2021-09-24 10:38:34',
+            ),
+            39 => 
+            array (
+                'id' => 93,
+                'name' => 'hat_sizes',
+                'slug' => 'hat-sizes',
+                'display_name_singular' => 'Hat Size',
+                'display_name_plural' => 'Hat Sizes',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\HatSize',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2021-09-24 10:47:22',
+                'updated_at' => '2021-09-24 10:47:22',
+            ),
+            40 => 
+            array (
+                'id' => 94,
+                'name' => 'manual_adjustments',
+                'slug' => 'manual-adjustments',
+                'display_name_singular' => 'Manual Adjustment',
+                'display_name_plural' => 'Manual Adjustments',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\ManualAdjustment',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-09-24 10:51:58',
+                'updated_at' => '2021-09-24 10:53:56',
+            ),
+            41 => 
+            array (
+                'id' => 95,
+                'name' => 'order_customer_adjustments',
+                'slug' => 'order-customer-adjustments',
+                'display_name_singular' => 'Order Customer Adjustment',
+                'display_name_plural' => 'Order Customer Adjustments',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\OrderCustomerAdjustment',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-09-24 10:54:15',
+                'updated_at' => '2021-09-24 10:55:10',
+            ),
+            42 => 
+            array (
+                'id' => 96,
+                'name' => 'payments',
+                'slug' => 'payments',
+                'display_name_singular' => 'Payment',
+                'display_name_plural' => 'Payments',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Payment',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-09-24 11:15:57',
+                'updated_at' => '2021-09-24 11:18:52',
+            ),
+            43 => 
+            array (
+                'id' => 97,
+                'name' => 't_shirt_sizes',
+                'slug' => 't-shirt-sizes',
+                'display_name_singular' => 'T Shirt Size',
+                'display_name_plural' => 'T Shirt Sizes',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\TShirtSize',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2021-09-24 11:19:59',
+                'updated_at' => '2021-09-24 11:19:59',
+            ),
+            44 => 
+            array (
+                'id' => 98,
+                'name' => 'transport_inventory_tour',
+                'slug' => 'transport-inventory-tour',
+                'display_name_singular' => 'Transport Inventory Tour',
+                'display_name_plural' => 'Transport Inventory Tours',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\TransportInventoryTour',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2021-09-24 11:22:25',
+                'updated_at' => '2021-09-24 11:23:45',
             ),
         ));
         

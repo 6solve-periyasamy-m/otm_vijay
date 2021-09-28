@@ -294,7 +294,7 @@ export default {
         otherairports: function() {
             const airports = this.airports
             const items = airports.filter((airport) => {
-                return airport.airport_name != this.flight_from;
+                return airport.name != this.flight_from;
             })
             return items
         },

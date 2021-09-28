@@ -40,7 +40,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->activityInventory->activity->title;
-                $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->activity_type_title;
+                $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->name;
             }
         }
         if ($oCustomer != null) {

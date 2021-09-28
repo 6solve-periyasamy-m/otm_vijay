@@ -47,7 +47,7 @@
                                 <tbody>
                                     @foreach($accommodationInventories as $accommodation)
                                     <td>
-                                        {{$accommodation->accommodation->title . ' - ' . $accommodation->accommodation->region->region_name}}
+                                        {{$accommodation->accommodation->title . ' - ' . $accommodation->accommodation->region->name}}
                                     </td>
                                     <td>
                                         {{Carbon\Carbon::parse($accommodation->check_in_date_time)->format('d-m-Y H:i')}}
@@ -134,7 +134,7 @@
                                             {{ Carbon\Carbon::parse($activity->activity_end_date_time)->format('d-m-Y H:i') }}
                                         </td>
                                         <td>
-                                            {{ $activity->ticketType->ticket_type_name }}
+                                            {{ $activity->ticketType->name }}
                                         </td>
                                         <td>
                                             <input type="text"
@@ -203,17 +203,17 @@
                                 <?php //dump( $flightInventory, $flightInventory->flight, $flightInventory->flight->departureAirport); ?>
                                  <tr>
                                     <td>
-                                        {{ $flightInventory->flight->airline->airline_name }}
+                                        {{ $flightInventory->flight->airline->name }}
                                     </td>
                                     <td>
-                                        {{ $flightInventory->flight->departureAirport->airport_name }}
+                                        {{ $flightInventory->flight->departureAirport->name }}
                                     </td>
                                     
                                     <td>
                                         {{ Carbon\Carbon::parse($flightInventory->flight->departure_time . $flightInventory->flight->departure_date)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
-                                        {{ $flightInventory->flight->arrivalAirport->airport_name }}
+                                        {{ $flightInventory->flight->arrivalAirport->name }}
                                     </td>
                                     <td>
                                         {{ Carbon\Carbon::parse($flightInventory->flight->arrival_time . $flightInventory->flight->arrival_date)->format('d-m-Y H:i') }}
