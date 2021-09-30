@@ -18,7 +18,7 @@
   </div><p></p>
   <div id="form-group">
     <label for="date_of_birth-input">Date Of Birth</label>
-    <input name="date_of_birth" value="{{ $date_of_birth ?? "" }}" class="form-control" id="date_of_birth-input">
+    <input name="date_of_birth" type="date" value="{{ $date_of_birth ?? "" }}" class="form-control" id="date_of_birth-input">
   </div><p></p>
   <div id="form-group">
     <label for="mobile_number-input">Mobile Number</label>
@@ -34,7 +34,7 @@
   </div><p></p>
   <div id="form-group">
     <label for="password-input">Password</label>
-    <input name="password" value="{{ $password ?? "" }}" class="form-control" id="password-input">
+    <input name="password" type="password" value="{{ $password ?? "" }}" class="form-control" id="password-input">
   </div><p></p>
   <div id="form-group">
     <label for="gender-input">Gender</label>

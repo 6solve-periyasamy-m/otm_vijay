@@ -10,23 +10,23 @@
   </div><p></p>
   <div id="form-group">
     <label for="departure_date_time-input">Departure Date Time</label>
-    <input name="departure_date_time" value="{{ $departure_date_time ?? "" }}" class="form-control" id="departure_date_time-input">
+    <input name="departure_date_time" type="date" value="{{ $departure_date_time ?? "" }}" class="form-control" id="departure_date_time-input">
   </div><p></p>
   <div id="form-group">
     <label for="departure_confirmed-input">Departure Confirmed</label>
-    <input name="departure_confirmed" value="{{ $departure_confirmed ?? "" }}" class="form-control" id="departure_confirmed-input">
+    <input name="departure_confirmed" type="checkbox" value="{{ $departure_confirmed ?? "" }}" class="form-control" id="departure_confirmed-input">
   </div><p></p>
   <div id="form-group">
     <label for="arrival_date_time-input">Arrival Date Time</label>
-    <input name="arrival_date_time" value="{{ $arrival_date_time ?? "" }}" class="form-control" id="arrival_date_time-input">
+    <input name="arrival_date_time" type="date" value="{{ $arrival_date_time ?? "" }}" class="form-control" id="arrival_date_time-input">
   </div><p></p>
   <div id="form-group">
     <label for="arrival_confirmed-input">Arrival Confirmed</label>
-    <input name="arrival_confirmed" value="{{ $arrival_confirmed ?? "" }}" class="form-control" id="arrival_confirmed-input">
+    <input name="arrival_confirmed" type="checkbox" value="{{ $arrival_confirmed ?? "" }}" class="form-control" id="arrival_confirmed-input">
   </div><p></p>
   <div id="form-group">
     <label for="fit_selectable-input">Fit Selectable</label>
-    <input name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
+    <input name="fit_selectable" type="checkbox" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
   </div><p></p>
   <div id="form-group">
     <label for="stock-input">Stock</label>

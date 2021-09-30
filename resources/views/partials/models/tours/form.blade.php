@@ -14,11 +14,11 @@
   </div><p></p>
   <div id="form-group">
     <label for="date_from-input">Date From</label>
-    <input name="date_from" value="{{ $date_from ?? "" }}" class="form-control" id="date_from-input">
+    <input name="date_from" type="date" value="{{ $date_from ?? "" }}" class="form-control" id="date_from-input">
   </div><p></p>
   <div id="form-group">
     <label for="date_to-input">Date To</label>
-    <input name="date_to" value="{{ $date_to ?? "" }}" class="form-control" id="date_to-input">
+    <input name="date_to" type="date" value="{{ $date_to ?? "" }}" class="form-control" id="date_to-input">
   </div><p></p>
   <div id="form-group">
     <label for="base_price_per_person-input">Base Price Per Person</label>

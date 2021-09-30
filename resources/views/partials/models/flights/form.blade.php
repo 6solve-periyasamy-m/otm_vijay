@@ -14,7 +14,7 @@
   </div><p></p>
   <div id="form-group">
     <label for="is_domestic-input">Is Domestic</label>
-    <input name="is_domestic" value="{{ $is_domestic ?? "" }}" class="form-control" id="is_domestic-input">
+    <input name="is_domestic" type="checkbox" value="{{ $is_domestic ?? "" }}" class="form-control" id="is_domestic-input">
   </div><p></p>
   <div id="form-group">
     <label for="notes-input">Notes</label>
@@ -22,7 +22,7 @@
   </div><p></p>
   <div id="form-group">
     <label for="available_after-input">Available After</label>
-    <input name="available_after" value="{{ $available_after ?? "" }}" class="form-control" id="available_after-input">
+    <input name="available_after" type="date" value="{{ $available_after ?? "" }}" class="form-control" id="available_after-input">
   </div><p></p>
   <div id="form-group">
     <button type="submit" class="btn btn-primary">Submit</button>

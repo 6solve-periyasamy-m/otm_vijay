@@ -10,11 +10,11 @@
   </div><p></p>
   <div id="form-group">
     <label for="event_start_date-input">Event Start Date</label>
-    <input name="event_start_date" value="{{ $event_start_date ?? "" }}" class="form-control" id="event_start_date-input">
+    <input name="event_start_date" type="date" value="{{ $event_start_date ?? "" }}" class="form-control" id="event_start_date-input">
   </div><p></p>
   <div id="form-group">
     <label for="event_end_date-input">Event End Date</label>
-    <input name="event_end_date" value="{{ $event_end_date ?? "" }}" class="form-control" id="event_end_date-input">
+    <input name="event_end_date" type="date" value="{{ $event_end_date ?? "" }}" class="form-control" id="event_end_date-input">
   </div><p></p>
   <div id="form-group">
     <label for="booking_url-input">Booking Url</label>
