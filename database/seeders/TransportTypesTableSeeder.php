@@ -22,7 +22,7 @@ class TransportTypesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'transport_type_name' => 'Bus',
+                'name' => 'Bus',
                 'created_at' => '2021-01-15 15:58:19',
                 'updated_at' => '2021-01-15 15:58:19',
                 'deleted_at' => NULL,
@@ -30,7 +30,7 @@ class TransportTypesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'transport_type_name' => 'Train',
+                'name' => 'Train',
                 'created_at' => '2021-01-15 15:58:24',
                 'updated_at' => '2021-01-15 15:58:24',
                 'deleted_at' => NULL,
@@ -38,7 +38,7 @@ class TransportTypesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'transport_type_name' => 'Ferry',
+                'name' => 'Ferry',
                 'created_at' => '2021-01-15 15:58:29',
                 'updated_at' => '2021-01-15 15:58:29',
                 'deleted_at' => NULL,
@@ -46,7 +46,7 @@ class TransportTypesTableSeeder extends Seeder
             3 => 
             array (
                 'id' => 4,
-                'transport_type_name' => 'Coach',
+                'name' => 'Coach',
                 'created_at' => '2021-01-15 15:58:35',
                 'updated_at' => '2021-01-15 15:58:35',
                 'deleted_at' => NULL,
@@ -54,7 +54,7 @@ class TransportTypesTableSeeder extends Seeder
             4 => 
             array (
                 'id' => 5,
-                'transport_type_name' => 'Taxi',
+                'name' => 'Taxi',
                 'created_at' => '2021-01-15 15:58:41',
                 'updated_at' => '2021-01-15 15:58:41',
                 'deleted_at' => NULL,
@@ -62,7 +62,7 @@ class TransportTypesTableSeeder extends Seeder
             5 => 
             array (
                 'id' => 6,
-                'transport_type_name' => 'Minibus',
+                'name' => 'Minibus',
                 'created_at' => '2021-01-15 15:58:48',
                 'updated_at' => '2021-01-15 15:58:48',
                 'deleted_at' => NULL,
@@ -70,7 +70,7 @@ class TransportTypesTableSeeder extends Seeder
             6 => 
             array (
                 'id' => 7,
-                'transport_type_name' => 'Tuk-Tuk',
+                'name' => 'Tuk-Tuk',
                 'created_at' => '2021-01-15 15:59:08',
                 'updated_at' => '2021-01-15 15:59:08',
                 'deleted_at' => NULL,

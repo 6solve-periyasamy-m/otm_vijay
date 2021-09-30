@@ -22,7 +22,7 @@ class OperatorFactory extends Factory
     public function definition()
     {
         return [
-            'operator_name' => $this->faker->company,
+            'name' => $this->faker->company,
             'notes' => $this->faker->sentence,
         ];
     }

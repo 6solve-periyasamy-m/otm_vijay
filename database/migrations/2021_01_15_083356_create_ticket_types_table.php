@@ -15,7 +15,7 @@ class CreateTicketTypesTable extends Migration
     {
         Schema::create('ticket_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('ticket_type_name');
+            $table->text('name');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -15,9 +15,9 @@ class CreatePaymentInstallmentsTable extends Migration
     {
         Schema::create('payment_installments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('payment_plan_id')->index();
+            $table->integer('tour_id')->index();
             $table->float('amount', 10, 2);
-            $table->date('due_on');
+            $table->date('due_on')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

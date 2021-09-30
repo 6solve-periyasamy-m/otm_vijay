@@ -34,7 +34,7 @@ class Accommodation extends Model
 
     public function getInventoryRelationAttribute()
     {
-        return "{$this->title} | {$this->region->region_name}";
+        return "{$this->title} | {$this->region->name}";
     }
 
     public function inventory() {

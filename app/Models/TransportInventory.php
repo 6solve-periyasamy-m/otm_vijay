@@ -73,8 +73,8 @@ class TransportInventory extends Model
         $departure_date_time =  $this->departure_date_time->format('d/m/Y H:i');
         $arrival_date_time = $this->arrival_date_time->format('d/m/Y H:i');
 
-        return "{$this->transport->name}｜Departs from: {$departure_location->location_name} - Arrives at: {$arrival_location->location_name}｜Departs: {$departure_date_time} - Arrives: {$arrival_date_time}";
+        return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departure_date_time} - Arrives: {$arrival_date_time}";
 	// build server edit: remove transport travelClass
-        //return "{$this->transport->name}｜Departs from: {$departure_location->location_name} - Arrives at: {$arrival_location->location_name}｜Departs: {$departure_date_time} - Arrives: {$arrival_date_time}｜Travel Class: {$this->travelClass->title}";
+        //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departure_date_time} - Arrives: {$arrival_date_time}｜Travel Class: {$this->travelClass->title}";
     }
 }

@@ -40,7 +40,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->transportInventory->transport->name;
-                $components[$component->id]['transport_type'] = $component->transportInventory->transport->transportType->transport_type_name;
+                $components[$component->id]['transport_type'] = $component->transportInventory->transport->transportType->name;
             }
         }
         if ($oCustomer != null) {

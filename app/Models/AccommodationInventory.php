@@ -66,7 +66,7 @@ class AccommodationInventory extends Model
         $check_in_date_time = !is_null($this->check_in_date_time) ? $this->check_in_date_time->format('d/m/Y H:i') : "Unconfirmed";
         $check_out_date_time = !is_null($this->check_out_date_time) ? $this->check_out_date_time->format('d/m/Y H:i') : "Unconfirmed";
 
-        return "{$this->accommodation->title} - {$this->accommodation->region->region_name}｜Check in: {$check_in_date_time} - Check out: {$check_out_date_time}｜Room Type: {$this->roomType->room_type_name} - Board Type: {$this->boardType->board_type_name}";
+        return "{$this->accommodation->title} - {$this->accommodation->region->name}｜Check in: {$check_in_date_time} - Check out: {$check_out_date_time}｜Room Type: {$this->roomType->room_type_name} - Board Type: {$this->boardType->board_type_name}";
     }
 
     //TODO: move to Repo
