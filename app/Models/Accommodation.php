@@ -15,6 +15,8 @@ class Accommodation extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['region_id','title','description','audit_date','address','currency',];
+
     public function orderAccommodation()
     {
         return $this->belongsTo(OrdersAccommodation::class);

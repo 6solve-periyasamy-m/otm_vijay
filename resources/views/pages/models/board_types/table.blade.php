@@ -1,0 +1,20 @@
+@extends('layout.main')
+
+@section('title', 'Update Board Types')
+
+@section('content')
+<a class="btn btn-primary" href="{{ route('board_types.create') }}">Create New</a><table id="boardType" style="width: 100%;" class="table table-striped">
+  <thead class="thead-dark">
+  <tr>
+    <th scope="col">Board Type Name</th>
+    <th scope="col">Actions</th>
+  </tr>
+  </thead>
+  @foreach($boardTypes as $boardType)
+    @include('partials.models.board_types.row', [
+      'boardType' => $boardType,
+      'board_type_name' => $boardType->board_type_name,
+    ])
+  @endforeach
+</table>
+@endsection

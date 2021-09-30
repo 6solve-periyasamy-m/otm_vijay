@@ -12,6 +12,8 @@ class Activity extends Model
     use SoftDeletes;
     use HasFactory;
 
+    protected $fillable = ['activity_type_id','location_id','title','description','notes',];
+
     public function activityInventory()
     {
         return $this->hasMany(ActivityInventory::class);

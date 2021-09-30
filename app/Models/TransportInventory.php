@@ -11,6 +11,8 @@ class TransportInventory extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['transport_id','travel_class_id','departure_date_time','departure_confirmed','arrival_date_time','arrival_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+
     protected $casts = [
         "departure_date_time" => "datetime",
         "arrival_date_time" => "datetime"

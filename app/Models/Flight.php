@@ -15,6 +15,8 @@ class Flight extends Model
 
     public $additional_attributes = ['flight_details'];
 
+    protected $fillable = ['airline_id','departure_airport_id','arrival_airport_id','is_domestic','notes','available_after',];
+
     public function flightInventory()
     {
         return $this->hasMany(FlightInventory::class);

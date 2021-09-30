@@ -11,6 +11,8 @@ class OrdersCustomer extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['order_id','customer_id','tour_cost','single_occupancy_surcharge','travel_insurer','policy_number',];
+
     public function order() 
     {
         return $this->belongsTo(Order::class);
@@ -42,4 +44,3 @@ class OrdersCustomer extends Model
         return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
     }
 }
-

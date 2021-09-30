@@ -11,6 +11,8 @@ class Tour extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['event_id','title','description','date_from','date_to','base_price_per_person','margin','single_occupancy_surcharge','stock_control_active','stock','booking_form_url','tour_colour_id','is_active','notes',];
+
     public function event()
     {
         return $this->belongsTo(Event::class, 'event');

@@ -12,6 +12,8 @@ class FlightInventory extends Model
 
     public $additional_attributes = ['flight_for_tour'];
 
+    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in_date_time','departure_date_time','arrival_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+
     public function flight()
     {
         return $this->belongsTo(Flight::class);

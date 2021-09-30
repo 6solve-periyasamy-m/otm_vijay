@@ -11,6 +11,8 @@ class Transport extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['transport_type_id','operator_id','departure_location_id','arrival_location_id','name','description','currency','is_domestic','notes',];
+
     public function transportInventory()
     {
         return $this->hasMany(TransportInventory::class);
