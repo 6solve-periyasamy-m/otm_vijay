@@ -106,7 +106,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-Route::prefix('raw')->group(function () {
+Route::prefix('raw')->middleware('auth')->group(function () {
     Route::prefix('accommodation-inventories')->group(function () {
         Route::get('/', [AccommodationInventoryController::class, 'index'])->name('accommodation_inventories.all');
         Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation_inventories.create');
