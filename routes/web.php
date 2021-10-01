@@ -107,6 +107,15 @@ Route::get('/dashboard', function () {
 });
 
 Route::prefix('raw')->middleware('auth')->group(function () {
+    Route::prefix('accommodations')->group(function () {
+        Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
+        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
+        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
+        Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
+        Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
+        Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
+        Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
+    });
     Route::prefix('accommodation-inventories')->group(function () {
         Route::get('/', [AccommodationInventoryController::class, 'index'])->name('accommodation-inventories.all');
         Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
@@ -124,15 +133,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit');
         Route::post('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update');
         Route::post('/delete/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete');
-    });
-    Route::prefix('accommodations')->group(function () {
-        Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
-        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
-        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
-        Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
-        Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
-        Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
-        Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
     });
     Route::prefix('activities')->group(function () {
         Route::get('/', [ActivityController::class, 'index'])->name('activities.all');
@@ -233,6 +233,15 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{event}', [EventController::class, 'update'])->name('events.update');
         Route::post('/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
     });
+    Route::prefix('flights')->group(function () {
+        Route::get('/', [FlightController::class, 'index'])->name('flights.all');
+        Route::get('/create', [FlightController::class, 'create'])->name('flights.create');
+        Route::post('/create', [FlightController::class, 'store'])->name('flights.store');
+        Route::get('/{flight}', [FlightController::class, 'view'])->name('flights.view');
+        Route::get('/update/{flight}', [FlightController::class, 'edit'])->name('flights.edit');
+        Route::post('/update/{flight}', [FlightController::class, 'update'])->name('flights.update');
+        Route::post('/delete/{flight}', [FlightController::class, 'destroy'])->name('flights.delete');
+    });
     Route::prefix('flight-inventories')->group(function () {
         Route::get('/', [FlightInventoryController::class, 'index'])->name('flight-inventories.all');
         Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create');
@@ -251,15 +260,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{flightInventoryTour}', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update');
         Route::post('/delete/{flightInventoryTour}', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete');
     });
-    Route::prefix('flights')->group(function () {
-        Route::get('/', [FlightController::class, 'index'])->name('flights.all');
-        Route::get('/create', [FlightController::class, 'create'])->name('flights.create');
-        Route::post('/create', [FlightController::class, 'store'])->name('flights.store');
-        Route::get('/{flight}', [FlightController::class, 'view'])->name('flights.view');
-        Route::get('/update/{flight}', [FlightController::class, 'edit'])->name('flights.edit');
-        Route::post('/update/{flight}', [FlightController::class, 'update'])->name('flights.update');
-        Route::post('/delete/{flight}', [FlightController::class, 'destroy'])->name('flights.delete');
-    });
     Route::prefix('hat-sizes')->group(function () {
         Route::get('/', [HatSizeController::class, 'index'])->name('hat-sizes.all');
         Route::get('/create', [HatSizeController::class, 'create'])->name('hat-sizes.create');
@@ -269,15 +269,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{hatSize}', [HatSizeController::class, 'update'])->name('hat-sizes.update');
         Route::post('/delete/{hatSize}', [HatSizeController::class, 'destroy'])->name('hat-sizes.delete');
     });
-    Route::prefix('location-types')->group(function () {
-        Route::get('/', [LocationTypeController::class, 'index'])->name('location-types.all');
-        Route::get('/create', [LocationTypeController::class, 'create'])->name('location-types.create');
-        Route::post('/create', [LocationTypeController::class, 'store'])->name('location-types.store');
-        Route::get('/{locationType}', [LocationTypeController::class, 'view'])->name('location-types.view');
-        Route::get('/update/{locationType}', [LocationTypeController::class, 'edit'])->name('location-types.edit');
-        Route::post('/update/{locationType}', [LocationTypeController::class, 'update'])->name('location-types.update');
-        Route::post('/delete/{locationType}', [LocationTypeController::class, 'destroy'])->name('location-types.delete');
-    });
     Route::prefix('locations')->group(function () {
         Route::get('/', [LocationController::class, 'index'])->name('locations.all');
         Route::get('/create', [LocationController::class, 'create'])->name('locations.create');
@@ -286,6 +277,15 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/update/{location}', [LocationController::class, 'edit'])->name('locations.edit');
         Route::post('/update/{location}', [LocationController::class, 'update'])->name('locations.update');
         Route::post('/delete/{location}', [LocationController::class, 'destroy'])->name('locations.delete');
+    });
+    Route::prefix('location-types')->group(function () {
+        Route::get('/', [LocationTypeController::class, 'index'])->name('location-types.all');
+        Route::get('/create', [LocationTypeController::class, 'create'])->name('location-types.create');
+        Route::post('/create', [LocationTypeController::class, 'store'])->name('location-types.store');
+        Route::get('/{locationType}', [LocationTypeController::class, 'view'])->name('location-types.view');
+        Route::get('/update/{locationType}', [LocationTypeController::class, 'edit'])->name('location-types.edit');
+        Route::post('/update/{locationType}', [LocationTypeController::class, 'update'])->name('location-types.update');
+        Route::post('/delete/{locationType}', [LocationTypeController::class, 'destroy'])->name('location-types.delete');
     });
     Route::prefix('manual-adjustments')->group(function () {
         Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all');
@@ -305,15 +305,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{operator}', [OperatorController::class, 'update'])->name('operators.update');
         Route::post('/delete/{operator}', [OperatorController::class, 'destroy'])->name('operators.delete');
     });
-    Route::prefix('order-customer-adjustments')->group(function () {
-        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all');
-        Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create');
-        Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order-customer-adjustments.store');
-        Route::get('/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'view'])->name('order-customer-adjustments.view');
-        Route::get('/update/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'edit'])->name('order-customer-adjustments.edit');
-        Route::post('/update/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'update'])->name('order-customer-adjustments.update');
-        Route::post('/delete/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete');
-    });
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('orders.all');
         Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
@@ -332,14 +323,14 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{ordersCustomer}', [OrdersCustomerController::class, 'update'])->name('orders-customers.update');
         Route::post('/delete/{ordersCustomer}', [OrdersCustomerController::class, 'destroy'])->name('orders-customers.delete');
     });
-    Route::prefix('payment-methods')->group(function () {
-        Route::get('/', [PaymentMethodController::class, 'index'])->name('payment-methods.all');
-        Route::get('/create', [PaymentMethodController::class, 'create'])->name('payment-methods.create');
-        Route::post('/create', [PaymentMethodController::class, 'store'])->name('payment-methods.store');
-        Route::get('/{paymentMethod}', [PaymentMethodController::class, 'view'])->name('payment-methods.view');
-        Route::get('/update/{paymentMethod}', [PaymentMethodController::class, 'edit'])->name('payment-methods.edit');
-        Route::post('/update/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('payment-methods.update');
-        Route::post('/delete/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('payment-methods.delete');
+    Route::prefix('order-customer-adjustments')->group(function () {
+        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all');
+        Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create');
+        Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order-customer-adjustments.store');
+        Route::get('/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'view'])->name('order-customer-adjustments.view');
+        Route::get('/update/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'edit'])->name('order-customer-adjustments.edit');
+        Route::post('/update/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'update'])->name('order-customer-adjustments.update');
+        Route::post('/delete/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete');
     });
     Route::prefix('payments')->group(function () {
         Route::get('/', [PaymentController::class, 'index'])->name('payments.all');
@@ -349,6 +340,15 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/update/{payment}', [PaymentController::class, 'edit'])->name('payments.edit');
         Route::post('/update/{payment}', [PaymentController::class, 'update'])->name('payments.update');
         Route::post('/delete/{payment}', [PaymentController::class, 'destroy'])->name('payments.delete');
+    });
+    Route::prefix('payment-methods')->group(function () {
+        Route::get('/', [PaymentMethodController::class, 'index'])->name('payment-methods.all');
+        Route::get('/create', [PaymentMethodController::class, 'create'])->name('payment-methods.create');
+        Route::post('/create', [PaymentMethodController::class, 'store'])->name('payment-methods.store');
+        Route::get('/{paymentMethod}', [PaymentMethodController::class, 'view'])->name('payment-methods.view');
+        Route::get('/update/{paymentMethod}', [PaymentMethodController::class, 'edit'])->name('payment-methods.edit');
+        Route::post('/update/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('payment-methods.update');
+        Route::post('/delete/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('payment-methods.delete');
     });
     Route::prefix('regions')->group(function () {
         Route::get('/', [RegionController::class, 'index'])->name('regions.all');
@@ -395,6 +395,15 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{tour}', [TourController::class, 'update'])->name('tours.update');
         Route::post('/delete/{tour}', [TourController::class, 'destroy'])->name('tours.delete');
     });
+    Route::prefix('transports')->group(function () {
+        Route::get('/', [TransportController::class, 'index'])->name('transports.all');
+        Route::get('/create', [TransportController::class, 'create'])->name('transports.create');
+        Route::post('/create', [TransportController::class, 'store'])->name('transports.store');
+        Route::get('/{transport}', [TransportController::class, 'view'])->name('transports.view');
+        Route::get('/update/{transport}', [TransportController::class, 'edit'])->name('transports.edit');
+        Route::post('/update/{transport}', [TransportController::class, 'update'])->name('transports.update');
+        Route::post('/delete/{transport}', [TransportController::class, 'destroy'])->name('transports.delete');
+    });
     Route::prefix('transport-inventories')->group(function () {
         Route::get('/', [TransportInventoryController::class, 'index'])->name('transport-inventories.all');
         Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create');
@@ -421,15 +430,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/update/{transportType}', [TransportTypeController::class, 'edit'])->name('transport-types.edit');
         Route::post('/update/{transportType}', [TransportTypeController::class, 'update'])->name('transport-types.update');
         Route::post('/delete/{transportType}', [TransportTypeController::class, 'destroy'])->name('transport-types.delete');
-    });
-    Route::prefix('transports')->group(function () {
-        Route::get('/', [TransportController::class, 'index'])->name('transports.all');
-        Route::get('/create', [TransportController::class, 'create'])->name('transports.create');
-        Route::post('/create', [TransportController::class, 'store'])->name('transports.store');
-        Route::get('/{transport}', [TransportController::class, 'view'])->name('transports.view');
-        Route::get('/update/{transport}', [TransportController::class, 'edit'])->name('transports.edit');
-        Route::post('/update/{transport}', [TransportController::class, 'update'])->name('transports.update');
-        Route::post('/delete/{transport}', [TransportController::class, 'destroy'])->name('transports.delete');
     });
     Route::prefix('travel-classes')->group(function () {
         Route::get('/', [TravelClassController::class, 'index'])->name('travel-classes.all');
