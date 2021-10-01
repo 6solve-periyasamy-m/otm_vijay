@@ -1,4 +1,6 @@
-@extends('layout.app')
+@extends('layout.main')
+
+@section('title', __('Confirm Password'))
 
 @section('content')
 <div class="container">
@@ -6,7 +8,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Confirm Password') }}</div>
-
+                <p></p>
                 <div class="card-body">
                     {{ __('Please confirm your password before continuing.') }}
 

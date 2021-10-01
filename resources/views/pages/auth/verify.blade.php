@@ -1,4 +1,6 @@
-@extends('layout.app')
+@extends('layout.main')
+
+@section('title', __('Verify Your Email Address'))
 
 @section('content')
 <div class="container">
@@ -6,7 +8,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Verify Your Email Address') }}</div>
-
+                <p></p>
                 <div class="card-body">
                     @if (session('resent'))
                         <div class="alert alert-success" role="alert">

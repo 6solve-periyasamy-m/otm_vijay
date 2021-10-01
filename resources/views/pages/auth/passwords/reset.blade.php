@@ -1,4 +1,6 @@
-@extends('layout.app')
+@extends('layout.main')
+
+@section('title', __('Reset Password'))
 
 @section('content')
 <div class="container">
@@ -6,12 +8,10 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Reset Password') }}</div>
-
+                <p></p>
                 <div class="card-body">
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
-
-                        <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
