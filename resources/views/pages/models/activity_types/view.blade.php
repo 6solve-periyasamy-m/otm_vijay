@@ -3,5 +3,5 @@
 @section('title', 'View Activity Types')
 
 @section('content')
-Name: {{ $activityType->name }}<br />
+    Name: {{ $activityType->name }}<br/>
 @endsection

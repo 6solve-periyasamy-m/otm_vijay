@@ -3,5 +3,5 @@
 @section('title', 'View Transport Types')
 
 @section('content')
-Name: {{ $transportType->name }}<br />
+    Name: {{ $transportType->name }}<br/>
 @endsection

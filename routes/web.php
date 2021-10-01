@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BookingFormLoginController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
@@ -37,17 +39,15 @@ use App\Http\Controllers\Models\TransportTypeController;
 use App\Http\Controllers\Models\TravelClassController;
 use App\Http\Controllers\Models\TShirtSizeController;
 use App\Http\Controllers\OrderComponentController;
+use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
+use App\Http\Controllers\PaymentScheduleController;
+use App\Http\Controllers\TourController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\TourController;
 // use App\Http\Controllers\HomeController;
 // use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\OrderCustomerController;
-use App\Http\Controllers\PaymentScheduleController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\BookingFormLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,29 +72,29 @@ Route::get('/pdfmake', function () {
     return view('pdf.atol');
 });
 
-Route::prefix("/booking")->group(function() {
+Route::prefix("/booking")->group(function () {
 
     // debugging routes
     Route::get('/check/events', [TourController::class, 'getEvents']);
     Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
-    Route::get('/vuetest', function() {
+    Route::get('/vuetest', function () {
         return view('tests.vue');
     });
 
-    Route::get('/store', function() {
+    Route::get('/store', function () {
         return view('pages.booking.store');
     });
     Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
     Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
-    Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);    
-    Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);    
+    Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);
+    Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
     Route::get('/', [BookingController::class, 'bookingForm']);
 
     Route::get('/{url}', [BookingController::class, 'tourBookingForm']);
 
 });
 
-Route::get('phones', function() {
+Route::get('phones', function () {
     return view('tests.validation.phone');
 });
 
@@ -450,15 +450,15 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 Route::prefix('orders')->group(function () {
-   Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
-   Route::get('/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
-   Route::get('customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
-   Route::prefix('component')->group(function () {
-       Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete');
-       Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete');
-       Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
-       Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
-   });
+    Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
+    Route::get('/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
+    Route::get('customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+    Route::prefix('component')->group(function () {
+        Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete');
+        Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete');
+        Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
+        Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
+    });
 });
 
 Auth::routes();

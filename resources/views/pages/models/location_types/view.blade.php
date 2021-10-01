@@ -3,5 +3,5 @@
 @section('title', 'View Location Types')
 
 @section('content')
-Name: {{ $locationType->name }}<br />
+    Name: {{ $locationType->name }}<br/>
 @endsection

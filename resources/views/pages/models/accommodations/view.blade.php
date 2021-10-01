@@ -3,10 +3,10 @@
 @section('title', 'View Accommodations')
 
 @section('content')
-Region Id: {{ $accommodation->region_id }}<br />
-Title: {{ $accommodation->title }}<br />
-Description: {{ $accommodation->description }}<br />
-Audit Date: {{ $accommodation->audit_date }}<br />
-Address: {{ $accommodation->address }}<br />
-Currency: {{ $accommodation->currency }}<br />
+    Region Id: {{ $accommodation->region_id }}<br/>
+    Title: {{ $accommodation->title }}<br/>
+    Description: {{ $accommodation->description }}<br/>
+    Audit Date: {{ $accommodation->audit_date }}<br/>
+    Address: {{ $accommodation->address }}<br/>
+    Currency: {{ $accommodation->currency }}<br/>
 @endsection

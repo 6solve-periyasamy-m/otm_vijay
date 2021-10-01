@@ -3,8 +3,8 @@
 @section('title', 'View Payments')
 
 @section('content')
-Order Id: {{ $payment->order_id }}<br />
-Payment Method Id: {{ $payment->payment_method_id }}<br />
-Amount: {{ $payment->amount }}<br />
-Reason: {{ $payment->reason }}<br />
+    Order Id: {{ $payment->order_id }}<br/>
+    Payment Method Id: {{ $payment->payment_method_id }}<br/>
+    Amount: {{ $payment->amount }}<br/>
+    Reason: {{ $payment->reason }}<br/>
 @endsection

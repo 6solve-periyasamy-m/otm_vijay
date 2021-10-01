@@ -3,5 +3,5 @@
 @section('title', 'Create Orders')
 
 @section('content')
-  @include('partials.models.orders.form', ['action' => route('orders.store'),])
+    @include('partials.models.orders.form', ['action' => route('orders.store'),])
 @endsection

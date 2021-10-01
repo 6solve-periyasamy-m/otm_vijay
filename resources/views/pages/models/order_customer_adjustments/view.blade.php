@@ -3,7 +3,7 @@
 @section('title', 'View Order Customer Adjustments')
 
 @section('content')
-Order Customer Id: {{ $orderCustomerAdjustment->order_customer_id }}<br />
-Amount: {{ $orderCustomerAdjustment->amount }}<br />
-Reason: {{ $orderCustomerAdjustment->reason }}<br />
+    Order Customer Id: {{ $orderCustomerAdjustment->order_customer_id }}<br/>
+    Amount: {{ $orderCustomerAdjustment->amount }}<br/>
+    Reason: {{ $orderCustomerAdjustment->reason }}<br/>
 @endsection

@@ -3,5 +3,5 @@
 @section('title', 'Create Airlines')
 
 @section('content')
-  @include('partials.models.airlines.form', ['action' => route('airlines.store'),])
+    @include('partials.models.airlines.form', ['action' => route('airlines.store'),])
 @endsection

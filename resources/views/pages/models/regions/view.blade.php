@@ -3,6 +3,6 @@
 @section('title', 'View Regions')
 
 @section('content')
-Country Id: {{ $region->country_id }}<br />
-Name: {{ $region->name }}<br />
+    Country Id: {{ $region->country_id }}<br/>
+    Name: {{ $region->name }}<br/>
 @endsection

@@ -3,6 +3,6 @@
 @section('title', 'View Transport Inventory Tours')
 
 @section('content')
-Tour Id: {{ $transportInventoryTour->tour_id }}<br />
-Transport Inventory Id: {{ $transportInventoryTour->transport_inventory_id }}<br />
+    Tour Id: {{ $transportInventoryTour->tour_id }}<br/>
+    Transport Inventory Id: {{ $transportInventoryTour->transport_inventory_id }}<br/>
 @endsection
