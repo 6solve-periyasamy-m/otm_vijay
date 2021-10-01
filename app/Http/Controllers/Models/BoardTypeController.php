@@ -20,7 +20,7 @@ class BoardTypeController extends Controller {
     $boardType = BoardType::create([
       'board_type_name' => $request->input('board_type_name'),
     ]);
-    return redirect()->route('board_types.view', ['boardType' => $boardType, ]);
+    return redirect()->route('board-types.view', ['boardType' => $boardType, ]);
   }
 
   public function view(BoardType $boardType) {
@@ -35,11 +35,11 @@ class BoardTypeController extends Controller {
     $boardType->update([
       'board_type_name' => $request->input('board_type_name'),
     ]);
-    return redirect()->route('board_types.view', ['boardType' => $boardType, ]);
+    return redirect()->route('board-types.view', ['boardType' => $boardType, ]);
   }
 
   public function destroy(BoardType $boardType) {
     $boardType->delete();
-    return redirect()->route('board_types.all');
+    return redirect()->route('board-types.all');
   }
 }

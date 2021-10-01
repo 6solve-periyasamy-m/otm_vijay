@@ -3,7 +3,7 @@
 @section('title', 'Update Accommodation Inventories')
 
 @section('content')
-  @include('partials.models.accommodation_inventories.form', ['action' => route('accommodation_inventories.update', ['accommodationInventory' => $accommodationInventory,]),
+  @include('partials.models.accommodation_inventories.form', ['action' => route('accommodation-inventories.update', ['accommodationInventory' => $accommodationInventory,]),
     'accommodation_id' => $accommodationInventory->accommodation_id,
     'room_type_id' => $accommodationInventory->room_type_id,
     'board_type_id' => $accommodationInventory->board_type_id,

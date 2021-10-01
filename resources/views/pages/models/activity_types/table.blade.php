@@ -3,7 +3,7 @@
 @section('title', 'Update Activity Types')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('activity_types.create') }}">Create New</a><table id="activityType" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('activity-types.create') }}">Create New</a><table id="activityType" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Name</th>

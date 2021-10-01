@@ -24,7 +24,7 @@ class FlightInventoryTourController extends Controller {
       'flight_type' => $request->input('flight_type'),
       'tour_sales_price' => $request->input('tour_sales_price'),
     ]);
-    return redirect()->route('flight_inventory_tours.view', ['flightInventoryTour' => $flightInventoryTour, ]);
+    return redirect()->route('flight-inventory-tours.view', ['flightInventoryTour' => $flightInventoryTour, ]);
   }
 
   public function view(FlightInventoryTour $flightInventoryTour) {
@@ -43,11 +43,11 @@ class FlightInventoryTourController extends Controller {
       'flight_type' => $request->input('flight_type'),
       'tour_sales_price' => $request->input('tour_sales_price'),
     ]);
-    return redirect()->route('flight_inventory_tours.view', ['flightInventoryTour' => $flightInventoryTour, ]);
+    return redirect()->route('flight-inventory-tours.view', ['flightInventoryTour' => $flightInventoryTour, ]);
   }
 
   public function destroy(FlightInventoryTour $flightInventoryTour) {
     $flightInventoryTour->delete();
-    return redirect()->route('flight_inventory_tours.all');
+    return redirect()->route('flight-inventory-tours.all');
   }
 }

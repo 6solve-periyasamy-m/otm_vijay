@@ -20,7 +20,7 @@ class ActivityTypeController extends Controller {
     $activityType = ActivityType::create([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('activity_types.view', ['activityType' => $activityType, ]);
+    return redirect()->route('activity-types.view', ['activityType' => $activityType, ]);
   }
 
   public function view(ActivityType $activityType) {
@@ -35,11 +35,11 @@ class ActivityTypeController extends Controller {
     $activityType->update([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('activity_types.view', ['activityType' => $activityType, ]);
+    return redirect()->route('activity-types.view', ['activityType' => $activityType, ]);
   }
 
   public function destroy(ActivityType $activityType) {
     $activityType->delete();
-    return redirect()->route('activity_types.all');
+    return redirect()->route('activity-types.all');
   }
 }

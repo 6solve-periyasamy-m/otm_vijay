@@ -1,5 +1,5 @@
 <tr>
-  <td><a href="{{ route('flightInventories.view', ['flightInventory' => $flightInventory,]) }}">{{ $flight_id }}</a></td>
+  <td><a href="{{ route('flight-inventories.view', ['flightInventory' => $flightInventory,]) }}">{{ $flight_id }}</a></td>
   <td>{{ $travel_class_id }}</td>
   <td>{{ $flight_number }}</td>
   <td>{{ $check_in_date_time }}</td>
@@ -12,8 +12,8 @@
   <td>{{ $currency }}</td>
   <td>{{ $notes }}</td>
   <td>
-    <a href="{{route('flight_inventories.edit', ['flightInventory' => $flightInventory,])}}"><ion-icon name="create"></ion-icon></a>
+    <a href="{{route('flight-inventories.edit', ['flightInventory' => $flightInventory,])}}"><ion-icon name="create"></ion-icon></a>
     <a href="#" onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();"><ion-icon name="trash"></ion-icon></a>
-    <form id="flightInventory-{{ $flightInventory->id }}-delete" action="{{ route('flight_inventories.delete', ['flightInventory' => $flightInventory,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+    <form id="flightInventory-{{ $flightInventory->id }}-delete" action="{{ route('flight-inventories.delete', ['flightInventory' => $flightInventory,]) }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
   </td>
 </tr>

@@ -20,7 +20,7 @@ class TravelClassController extends Controller {
     $travelClass = TravelClass::create([
       'title' => $request->input('title'),
     ]);
-    return redirect()->route('travel_classes.view', ['travelClass' => $travelClass, ]);
+    return redirect()->route('travel-classes.view', ['travelClass' => $travelClass, ]);
   }
 
   public function view(TravelClass $travelClass) {
@@ -35,11 +35,11 @@ class TravelClassController extends Controller {
     $travelClass->update([
       'title' => $request->input('title'),
     ]);
-    return redirect()->route('travel_classes.view', ['travelClass' => $travelClass, ]);
+    return redirect()->route('travel-classes.view', ['travelClass' => $travelClass, ]);
   }
 
   public function destroy(TravelClass $travelClass) {
     $travelClass->delete();
-    return redirect()->route('travel_classes.all');
+    return redirect()->route('travel-classes.all');
   }
 }

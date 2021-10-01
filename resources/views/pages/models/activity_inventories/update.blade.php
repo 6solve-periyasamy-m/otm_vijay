@@ -3,7 +3,7 @@
 @section('title', 'Update Activity Inventories')
 
 @section('content')
-  @include('partials.models.activity_inventories.form', ['action' => route('activity_inventories.update', ['activityInventory' => $activityInventory,]),
+  @include('partials.models.activity_inventories.form', ['action' => route('activity-inventories.update', ['activityInventory' => $activityInventory,]),
     'activity_id' => $activityInventory->activity_id,
     'ticket_type_id' => $activityInventory->ticket_type_id,
     'activity_start_date_time' => $activityInventory->activity_start_date_time,

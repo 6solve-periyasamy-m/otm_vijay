@@ -3,7 +3,7 @@
 @section('title', 'Update Manual Adjustments')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('manual_adjustments.create') }}">Create New</a><table id="manualAdjustment" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('manual-adjustments.create') }}">Create New</a><table id="manualAdjustment" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Order Id</th>

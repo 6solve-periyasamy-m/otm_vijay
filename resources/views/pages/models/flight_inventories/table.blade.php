@@ -3,7 +3,7 @@
 @section('title', 'Update Flight Inventories')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('flight_inventories.create') }}">Create New</a><table id="flightInventory" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('flight-inventories.create') }}">Create New</a><table id="flightInventory" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Flight Id</th>

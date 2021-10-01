@@ -3,7 +3,7 @@
 @section('title', 'Update Accommodation Inventories')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('accommodation_inventories.create') }}">Create New</a><table id="accommodationInventory" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('accommodation-inventories.create') }}">Create New</a><table id="accommodationInventory" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Accommodation Id</th>

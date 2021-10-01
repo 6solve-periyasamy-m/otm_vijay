@@ -3,5 +3,5 @@
 @section('title', 'Create Ticket Types')
 
 @section('content')
-  @include('partials.models.ticket_types.form', ['action' => route('ticket_types.store'),])
+  @include('partials.models.ticket_types.form', ['action' => route('ticket-types.store'),])
 @endsection

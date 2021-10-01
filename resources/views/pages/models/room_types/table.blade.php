@@ -3,7 +3,7 @@
 @section('title', 'Update Room Types')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('room_types.create') }}">Create New</a><table id="roomType" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('room-types.create') }}">Create New</a><table id="roomType" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Room Type Name</th>

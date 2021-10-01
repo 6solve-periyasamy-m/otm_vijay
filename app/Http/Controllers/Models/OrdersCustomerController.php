@@ -25,7 +25,7 @@ class OrdersCustomerController extends Controller {
       'travel_insurer' => $request->input('travel_insurer'),
       'policy_number' => $request->input('policy_number'),
     ]);
-    return redirect()->route('orders_customers.view', ['ordersCustomer' => $ordersCustomer, ]);
+    return redirect()->route('orders-customers.view', ['ordersCustomer' => $ordersCustomer, ]);
   }
 
   public function view(OrdersCustomer $ordersCustomer) {
@@ -45,11 +45,11 @@ class OrdersCustomerController extends Controller {
       'travel_insurer' => $request->input('travel_insurer'),
       'policy_number' => $request->input('policy_number'),
     ]);
-    return redirect()->route('orders_customers.view', ['ordersCustomer' => $ordersCustomer, ]);
+    return redirect()->route('orders-customers.view', ['ordersCustomer' => $ordersCustomer, ]);
   }
 
   public function destroy(OrdersCustomer $ordersCustomer) {
     $ordersCustomer->delete();
-    return redirect()->route('orders_customers.all');
+    return redirect()->route('orders-customers.all');
   }
 }

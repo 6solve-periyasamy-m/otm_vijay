@@ -21,7 +21,7 @@ class RoomTypeController extends Controller {
       'room_type_name' => $request->input('room_type_name'),
       'maximum_occupancy' => $request->input('maximum_occupancy'),
     ]);
-    return redirect()->route('room_types.view', ['roomType' => $roomType, ]);
+    return redirect()->route('room-types.view', ['roomType' => $roomType, ]);
   }
 
   public function view(RoomType $roomType) {
@@ -37,11 +37,11 @@ class RoomTypeController extends Controller {
       'room_type_name' => $request->input('room_type_name'),
       'maximum_occupancy' => $request->input('maximum_occupancy'),
     ]);
-    return redirect()->route('room_types.view', ['roomType' => $roomType, ]);
+    return redirect()->route('room-types.view', ['roomType' => $roomType, ]);
   }
 
   public function destroy(RoomType $roomType) {
     $roomType->delete();
-    return redirect()->route('room_types.all');
+    return redirect()->route('room-types.all');
   }
 }

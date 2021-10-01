@@ -20,7 +20,7 @@ class LocationTypeController extends Controller {
     $locationType = LocationType::create([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('location_types.view', ['locationType' => $locationType, ]);
+    return redirect()->route('location-types.view', ['locationType' => $locationType, ]);
   }
 
   public function view(LocationType $locationType) {
@@ -35,11 +35,11 @@ class LocationTypeController extends Controller {
     $locationType->update([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('location_types.view', ['locationType' => $locationType, ]);
+    return redirect()->route('location-types.view', ['locationType' => $locationType, ]);
   }
 
   public function destroy(LocationType $locationType) {
     $locationType->delete();
-    return redirect()->route('location_types.all');
+    return redirect()->route('location-types.all');
   }
 }

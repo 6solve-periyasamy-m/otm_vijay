@@ -3,7 +3,7 @@
 @section('title', 'Update Flight Inventories')
 
 @section('content')
-  @include('partials.models.flight_inventories.form', ['action' => route('flight_inventories.update', ['flightInventory' => $flightInventory,]),
+  @include('partials.models.flight_inventories.form', ['action' => route('flight-inventories.update', ['flightInventory' => $flightInventory,]),
     'flight_id' => $flightInventory->flight_id,
     'travel_class_id' => $flightInventory->travel_class_id,
     'flight_number' => $flightInventory->flight_number,

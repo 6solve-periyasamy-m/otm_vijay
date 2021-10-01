@@ -3,7 +3,7 @@
 @section('title', 'Update Transport Inventory Tours')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('transport_inventory_tours.create') }}">Create New</a><table id="transportInventoryTour" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('transport-inventory-tours.create') }}">Create New</a><table id="transportInventoryTour" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Tour Id</th>

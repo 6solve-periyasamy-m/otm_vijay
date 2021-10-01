@@ -3,7 +3,7 @@
 @section('title', 'Update Payment Methods')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('payment_methods.create') }}">Create New</a><table id="paymentMethod" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('payment-methods.create') }}">Create New</a><table id="paymentMethod" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Name</th>

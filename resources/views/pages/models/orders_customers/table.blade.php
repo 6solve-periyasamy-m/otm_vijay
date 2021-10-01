@@ -3,7 +3,7 @@
 @section('title', 'Update Orders Customers')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('orders_customers.create') }}">Create New</a><table id="ordersCustomer" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('orders-customers.create') }}">Create New</a><table id="ordersCustomer" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Order Id</th>

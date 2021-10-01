@@ -22,7 +22,7 @@
   </div><p></p>
   <div id="form-group">
     <label for="ordered_on-input">Ordered On</label>
-    <input name="ordered_on" type="date" value="{{ $ordered_on ?? "" }}" class="form-control" id="ordered_on-input">
+    <input name="ordered_on" value="{{ $ordered_on ?? "" }}" class="form-control" id="ordered_on-input">
   </div><p></p>
   <div id="form-group">
     <label for="internal_notes-input">Internal Notes</label>

@@ -14,7 +14,7 @@
   </div><p></p>
   <div id="form-group">
     <label for="audit_date-input">Audit Date</label>
-    <input name="audit_date" type="date" value="{{ $audit_date ?? "" }}" class="form-control" id="audit_date-input">
+    <input name="audit_date" value="{{ $audit_date ?? "" }}" class="form-control" id="audit_date-input">
   </div><p></p>
   <div id="form-group">
     <label for="address-input">Address</label>

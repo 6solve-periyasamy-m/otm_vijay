@@ -3,7 +3,7 @@
 @section('title', 'Update Activity Inventories')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('activity_inventories.create') }}">Create New</a><table id="activityInventory" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('activity-inventories.create') }}">Create New</a><table id="activityInventory" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Activity Id</th>

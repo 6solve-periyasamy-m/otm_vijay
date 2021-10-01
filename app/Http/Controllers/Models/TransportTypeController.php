@@ -20,7 +20,7 @@ class TransportTypeController extends Controller {
     $transportType = TransportType::create([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('transport_types.view', ['transportType' => $transportType, ]);
+    return redirect()->route('transport-types.view', ['transportType' => $transportType, ]);
   }
 
   public function view(TransportType $transportType) {
@@ -35,11 +35,11 @@ class TransportTypeController extends Controller {
     $transportType->update([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('transport_types.view', ['transportType' => $transportType, ]);
+    return redirect()->route('transport-types.view', ['transportType' => $transportType, ]);
   }
 
   public function destroy(TransportType $transportType) {
     $transportType->delete();
-    return redirect()->route('transport_types.all');
+    return redirect()->route('transport-types.all');
   }
 }

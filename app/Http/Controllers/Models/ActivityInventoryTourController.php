@@ -23,7 +23,7 @@ class ActivityInventoryTourController extends Controller {
       'tour_component_type' => $request->input('tour_component_type'),
       'tour_sales_price' => $request->input('tour_sales_price'),
     ]);
-    return redirect()->route('activity_inventory_tours.view', ['activityInventoryTour' => $activityInventoryTour, ]);
+    return redirect()->route('activity-inventory-tours.view', ['activityInventoryTour' => $activityInventoryTour, ]);
   }
 
   public function view(ActivityInventoryTour $activityInventoryTour) {
@@ -41,11 +41,11 @@ class ActivityInventoryTourController extends Controller {
       'tour_component_type' => $request->input('tour_component_type'),
       'tour_sales_price' => $request->input('tour_sales_price'),
     ]);
-    return redirect()->route('activity_inventory_tours.view', ['activityInventoryTour' => $activityInventoryTour, ]);
+    return redirect()->route('activity-inventory-tours.view', ['activityInventoryTour' => $activityInventoryTour, ]);
   }
 
   public function destroy(ActivityInventoryTour $activityInventoryTour) {
     $activityInventoryTour->delete();
-    return redirect()->route('activity_inventory_tours.all');
+    return redirect()->route('activity-inventory-tours.all');
   }
 }

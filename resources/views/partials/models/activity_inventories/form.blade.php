@@ -10,15 +10,15 @@
   </div><p></p>
   <div id="form-group">
     <label for="activity_start_date_time-input">Activity Start Date Time</label>
-    <input name="activity_start_date_time" type="date" value="{{ $activity_start_date_time ?? "" }}" class="form-control" id="activity_start_date_time-input">
+    <input name="activity_start_date_time" value="{{ $activity_start_date_time ?? "" }}" class="form-control" id="activity_start_date_time-input">
   </div><p></p>
   <div id="form-group">
     <label for="activity_end_start_date_time-input">Activity End Start Date Time</label>
-    <input name="activity_end_start_date_time" type="date" value="{{ $activity_end_start_date_time ?? "" }}" class="form-control" id="activity_end_start_date_time-input">
+    <input name="activity_end_start_date_time" value="{{ $activity_end_start_date_time ?? "" }}" class="form-control" id="activity_end_start_date_time-input">
   </div><p></p>
   <div id="form-group">
     <label for="fit_selectable-input">Fit Selectable</label>
-    <input name="fit_selectable" type="checkbox" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
+    <input name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
   </div><p></p>
   <div id="form-group">
     <label for="stock-input">Stock</label>

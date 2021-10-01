@@ -3,7 +3,7 @@
 @section('title', 'Update Transport Types')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('transport_types.create') }}">Create New</a><table id="transportType" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('transport-types.create') }}">Create New</a><table id="transportType" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Name</th>

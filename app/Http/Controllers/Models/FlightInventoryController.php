@@ -31,7 +31,7 @@ class FlightInventoryController extends Controller {
       'currency' => $request->input('currency'),
       'notes' => $request->input('notes'),
     ]);
-    return redirect()->route('flight_inventories.view', ['flightInventory' => $flightInventory, ]);
+    return redirect()->route('flight-inventories.view', ['flightInventory' => $flightInventory, ]);
   }
 
   public function view(FlightInventory $flightInventory) {
@@ -57,11 +57,11 @@ class FlightInventoryController extends Controller {
       'currency' => $request->input('currency'),
       'notes' => $request->input('notes'),
     ]);
-    return redirect()->route('flight_inventories.view', ['flightInventory' => $flightInventory, ]);
+    return redirect()->route('flight-inventories.view', ['flightInventory' => $flightInventory, ]);
   }
 
   public function destroy(FlightInventory $flightInventory) {
     $flightInventory->delete();
-    return redirect()->route('flight_inventories.all');
+    return redirect()->route('flight-inventories.all');
   }
 }

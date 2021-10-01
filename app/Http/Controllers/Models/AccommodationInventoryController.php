@@ -31,7 +31,7 @@ class AccommodationInventoryController extends Controller {
       'sales_price' => $request->input('sales_price'),
       'notes' => $request->input('notes'),
     ]);
-    return redirect()->route('accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory, ]);
+    return redirect()->route('accommodation-inventories.view', ['accommodationInventory' => $accommodationInventory, ]);
   }
 
   public function view(AccommodationInventory $accommodationInventory) {
@@ -57,11 +57,11 @@ class AccommodationInventoryController extends Controller {
       'sales_price' => $request->input('sales_price'),
       'notes' => $request->input('notes'),
     ]);
-    return redirect()->route('accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory, ]);
+    return redirect()->route('accommodation-inventories.view', ['accommodationInventory' => $accommodationInventory, ]);
   }
 
   public function destroy(AccommodationInventory $accommodationInventory) {
     $accommodationInventory->delete();
-    return redirect()->route('accommodation_inventories.all');
+    return redirect()->route('accommodation-inventories.all');
   }
 }

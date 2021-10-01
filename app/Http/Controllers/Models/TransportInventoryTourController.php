@@ -21,7 +21,7 @@ class TransportInventoryTourController extends Controller {
       'tour_id' => $request->input('tour_id'),
       'transport_inventory_id' => $request->input('transport_inventory_id'),
     ]);
-    return redirect()->route('transport_inventory_tours.view', ['transportInventoryTour' => $transportInventoryTour, ]);
+    return redirect()->route('transport-inventory-tours.view', ['transportInventoryTour' => $transportInventoryTour, ]);
   }
 
   public function view(TransportInventoryTour $transportInventoryTour) {
@@ -37,11 +37,11 @@ class TransportInventoryTourController extends Controller {
       'tour_id' => $request->input('tour_id'),
       'transport_inventory_id' => $request->input('transport_inventory_id'),
     ]);
-    return redirect()->route('transport_inventory_tours.view', ['transportInventoryTour' => $transportInventoryTour, ]);
+    return redirect()->route('transport-inventory-tours.view', ['transportInventoryTour' => $transportInventoryTour, ]);
   }
 
   public function destroy(TransportInventoryTour $transportInventoryTour) {
     $transportInventoryTour->delete();
-    return redirect()->route('transport_inventory_tours.all');
+    return redirect()->route('transport-inventory-tours.all');
   }
 }

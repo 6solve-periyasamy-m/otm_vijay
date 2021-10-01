@@ -20,7 +20,7 @@ class TShirtSizeController extends Controller {
     $tShirtSize = TShirtSize::create([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('t_shirt_sizes.view', ['tShirtSize' => $tShirtSize, ]);
+    return redirect()->route('t-shirt-sizes.view', ['tShirtSize' => $tShirtSize, ]);
   }
 
   public function view(TShirtSize $tShirtSize) {
@@ -35,11 +35,11 @@ class TShirtSizeController extends Controller {
     $tShirtSize->update([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('t_shirt_sizes.view', ['tShirtSize' => $tShirtSize, ]);
+    return redirect()->route('t-shirt-sizes.view', ['tShirtSize' => $tShirtSize, ]);
   }
 
   public function destroy(TShirtSize $tShirtSize) {
     $tShirtSize->delete();
-    return redirect()->route('t_shirt_sizes.all');
+    return redirect()->route('t-shirt-sizes.all');
   }
 }

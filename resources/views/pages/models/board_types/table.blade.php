@@ -3,7 +3,7 @@
 @section('title', 'Update Board Types')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('board_types.create') }}">Create New</a><table id="boardType" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('board-types.create') }}">Create New</a><table id="boardType" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Board Type Name</th>

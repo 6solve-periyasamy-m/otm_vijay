@@ -20,7 +20,7 @@ class PaymentMethodController extends Controller {
     $paymentMethod = PaymentMethod::create([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('payment_methods.view', ['paymentMethod' => $paymentMethod, ]);
+    return redirect()->route('payment-methods.view', ['paymentMethod' => $paymentMethod, ]);
   }
 
   public function view(PaymentMethod $paymentMethod) {
@@ -35,11 +35,11 @@ class PaymentMethodController extends Controller {
     $paymentMethod->update([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('payment_methods.view', ['paymentMethod' => $paymentMethod, ]);
+    return redirect()->route('payment-methods.view', ['paymentMethod' => $paymentMethod, ]);
   }
 
   public function destroy(PaymentMethod $paymentMethod) {
     $paymentMethod->delete();
-    return redirect()->route('payment_methods.all');
+    return redirect()->route('payment-methods.all');
   }
 }

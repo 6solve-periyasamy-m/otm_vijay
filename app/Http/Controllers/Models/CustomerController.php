@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller {
 
@@ -27,7 +26,7 @@ class CustomerController extends Controller {
       'mobile_number' => $request->input('mobile_number'),
       'other_phone_number' => $request->input('other_phone_number'),
       'email_address' => $request->input('email_address'),
-      'password' => Hash::make($request->input('password')),
+      'password' => $request->input('password'),
       'gender' => $request->input('gender'),
       'emergency_contact_name' => $request->input('emergency_contact_name'),
       'emergency_contact_relationship' => $request->input('emergency_contact_relationship'),

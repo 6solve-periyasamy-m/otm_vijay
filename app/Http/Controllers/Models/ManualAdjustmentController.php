@@ -22,7 +22,7 @@ class ManualAdjustmentController extends Controller {
       'amount' => $request->input('amount'),
       'reason' => $request->input('reason'),
     ]);
-    return redirect()->route('manual_adjustments.view', ['manualAdjustment' => $manualAdjustment, ]);
+    return redirect()->route('manual-adjustments.view', ['manualAdjustment' => $manualAdjustment, ]);
   }
 
   public function view(ManualAdjustment $manualAdjustment) {
@@ -39,11 +39,11 @@ class ManualAdjustmentController extends Controller {
       'amount' => $request->input('amount'),
       'reason' => $request->input('reason'),
     ]);
-    return redirect()->route('manual_adjustments.view', ['manualAdjustment' => $manualAdjustment, ]);
+    return redirect()->route('manual-adjustments.view', ['manualAdjustment' => $manualAdjustment, ]);
   }
 
   public function destroy(ManualAdjustment $manualAdjustment) {
     $manualAdjustment->delete();
-    return redirect()->route('manual_adjustments.all');
+    return redirect()->route('manual-adjustments.all');
   }
 }

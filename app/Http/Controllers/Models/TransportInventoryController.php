@@ -31,7 +31,7 @@ class TransportInventoryController extends Controller {
       'currency' => $request->input('currency'),
       'notes' => $request->input('notes'),
     ]);
-    return redirect()->route('transport_inventories.view', ['transportInventory' => $transportInventory, ]);
+    return redirect()->route('transport-inventories.view', ['transportInventory' => $transportInventory, ]);
   }
 
   public function view(TransportInventory $transportInventory) {
@@ -57,11 +57,11 @@ class TransportInventoryController extends Controller {
       'currency' => $request->input('currency'),
       'notes' => $request->input('notes'),
     ]);
-    return redirect()->route('transport_inventories.view', ['transportInventory' => $transportInventory, ]);
+    return redirect()->route('transport-inventories.view', ['transportInventory' => $transportInventory, ]);
   }
 
   public function destroy(TransportInventory $transportInventory) {
     $transportInventory->delete();
-    return redirect()->route('transport_inventories.all');
+    return redirect()->route('transport-inventories.all');
   }
 }

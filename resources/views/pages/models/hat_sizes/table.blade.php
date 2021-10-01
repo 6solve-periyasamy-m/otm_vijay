@@ -3,7 +3,7 @@
 @section('title', 'Update Hat Sizes')
 
 @section('content')
-<a class="btn btn-primary" href="{{ route('hat_sizes.create') }}">Create New</a><table id="hatSize" style="width: 100%;" class="table table-striped">
+<a class="btn btn-primary" href="{{ route('hat-sizes.create') }}">Create New</a><table id="hatSize" style="width: 100%;" class="table table-striped">
   <thead class="thead-dark">
   <tr>
     <th scope="col">Name</th>

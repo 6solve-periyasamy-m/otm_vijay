@@ -3,5 +3,5 @@
 @section('title', 'Create Hat Sizes')
 
 @section('content')
-  @include('partials.models.hat_sizes.form', ['action' => route('hat_sizes.store'),])
+  @include('partials.models.hat_sizes.form', ['action' => route('hat-sizes.store'),])
 @endsection

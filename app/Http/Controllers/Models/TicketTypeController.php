@@ -20,7 +20,7 @@ class TicketTypeController extends Controller {
     $ticketType = TicketType::create([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('ticket_types.view', ['ticketType' => $ticketType, ]);
+    return redirect()->route('ticket-types.view', ['ticketType' => $ticketType, ]);
   }
 
   public function view(TicketType $ticketType) {
@@ -35,11 +35,11 @@ class TicketTypeController extends Controller {
     $ticketType->update([
       'name' => $request->input('name'),
     ]);
-    return redirect()->route('ticket_types.view', ['ticketType' => $ticketType, ]);
+    return redirect()->route('ticket-types.view', ['ticketType' => $ticketType, ]);
   }
 
   public function destroy(TicketType $ticketType) {
     $ticketType->delete();
-    return redirect()->route('ticket_types.all');
+    return redirect()->route('ticket-types.all');
   }
 }

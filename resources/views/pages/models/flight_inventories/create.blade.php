@@ -3,5 +3,5 @@
 @section('title', 'Create Flight Inventories')
 
 @section('content')
-  @include('partials.models.flight_inventories.form', ['action' => route('flight_inventories.store'),])
+  @include('partials.models.flight_inventories.form', ['action' => route('flight-inventories.store'),])
 @endsection
