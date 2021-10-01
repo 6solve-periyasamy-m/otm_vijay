@@ -107,8 +107,8 @@ Route::get('/dashboard', function () {
 });
 
 Route::prefix('raw')->group(function () {
-    Route::prefix('accommodationInventories')->group(function () {
-        Route::get('/', [AccommodationInventoryController::class, 'index'])->name('accommodationInventories.all');
+    Route::prefix('accommodation-inventories')->group(function () {
+        Route::get('/', [AccommodationInventoryController::class, 'index'])->name('accommodation_inventories.all');
         Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation_inventories.create');
         Route::post('/create', [AccommodationInventoryController::class, 'store'])->name('accommodation_inventories.store');
         Route::get('/{accommodationInventory}', [AccommodationInventoryController::class, 'view'])->name('accommodation_inventories.view');
@@ -116,8 +116,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{accommodationInventory}', [AccommodationInventoryController::class, 'update'])->name('accommodation_inventories.update');
         Route::post('/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation_inventories.delete');
     });
-    Route::prefix('accommodationInventoryTours')->group(function () {
-        Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodationInventoryTours.all');
+    Route::prefix('accommodation-inventory-tours')->group(function () {
+        Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation_inventory_tours.all');
         Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation_inventory_tours.create');
         Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation_inventory_tours.store');
         Route::get('/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'view'])->name('accommodation_inventory_tours.view');
@@ -143,8 +143,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{activity}', [ActivityController::class, 'update'])->name('activities.update');
         Route::post('/delete/{activity}', [ActivityController::class, 'destroy'])->name('activities.delete');
     });
-    Route::prefix('activityInventories')->group(function () {
-        Route::get('/', [ActivityInventoryController::class, 'index'])->name('activityInventories.all');
+    Route::prefix('activity-inventories')->group(function () {
+        Route::get('/', [ActivityInventoryController::class, 'index'])->name('activity_inventories.all');
         Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity_inventories.create');
         Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity_inventories.store');
         Route::get('/{activityInventory}', [ActivityInventoryController::class, 'view'])->name('activity_inventories.view');
@@ -152,8 +152,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{activityInventory}', [ActivityInventoryController::class, 'update'])->name('activity_inventories.update');
         Route::post('/delete/{activityInventory}', [ActivityInventoryController::class, 'destroy'])->name('activity_inventories.delete');
     });
-    Route::prefix('activityInventoryTours')->group(function () {
-        Route::get('/', [ActivityInventoryTourController::class, 'index'])->name('activityInventoryTours.all');
+    Route::prefix('activity-inventory-tours')->group(function () {
+        Route::get('/', [ActivityInventoryTourController::class, 'index'])->name('activity_inventory_tours.all');
         Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity_inventory_tours.create');
         Route::post('/create', [ActivityInventoryTourController::class, 'store'])->name('activity_inventory_tours.store');
         Route::get('/{activityInventoryTour}', [ActivityInventoryTourController::class, 'view'])->name('activity_inventory_tours.view');
@@ -161,8 +161,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{activityInventoryTour}', [ActivityInventoryTourController::class, 'update'])->name('activity_inventory_tours.update');
         Route::post('/delete/{activityInventoryTour}', [ActivityInventoryTourController::class, 'destroy'])->name('activity_inventory_tours.delete');
     });
-    Route::prefix('activityTypes')->group(function () {
-        Route::get('/', [ActivityTypeController::class, 'index'])->name('activityTypes.all');
+    Route::prefix('activity-types')->group(function () {
+        Route::get('/', [ActivityTypeController::class, 'index'])->name('activity_types.all');
         Route::get('/create', [ActivityTypeController::class, 'create'])->name('activity_types.create');
         Route::post('/create', [ActivityTypeController::class, 'store'])->name('activity_types.store');
         Route::get('/{activityType}', [ActivityTypeController::class, 'view'])->name('activity_types.view');
@@ -197,8 +197,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{airport}', [AirportController::class, 'update'])->name('airports.update');
         Route::post('/delete/{airport}', [AirportController::class, 'destroy'])->name('airports.delete');
     });
-    Route::prefix('boardTypes')->group(function () {
-        Route::get('/', [BoardTypeController::class, 'index'])->name('boardTypes.all');
+    Route::prefix('board-types')->group(function () {
+        Route::get('/', [BoardTypeController::class, 'index'])->name('board_types.all');
         Route::get('/create', [BoardTypeController::class, 'create'])->name('board_types.create');
         Route::post('/create', [BoardTypeController::class, 'store'])->name('board_types.store');
         Route::get('/{boardType}', [BoardTypeController::class, 'view'])->name('board_types.view');
@@ -233,8 +233,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{event}', [EventController::class, 'update'])->name('events.update');
         Route::post('/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
     });
-    Route::prefix('flightInventories')->group(function () {
-        Route::get('/', [FlightInventoryController::class, 'index'])->name('flightInventories.all');
+    Route::prefix('flight-inventories')->group(function () {
+        Route::get('/', [FlightInventoryController::class, 'index'])->name('flight_inventories.all');
         Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight_inventories.create');
         Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight_inventories.store');
         Route::get('/{flightInventory}', [FlightInventoryController::class, 'view'])->name('flight_inventories.view');
@@ -242,8 +242,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{flightInventory}', [FlightInventoryController::class, 'update'])->name('flight_inventories.update');
         Route::post('/delete/{flightInventory}', [FlightInventoryController::class, 'destroy'])->name('flight_inventories.delete');
     });
-    Route::prefix('flightInventoryTours')->group(function () {
-        Route::get('/', [FlightInventoryTourController::class, 'index'])->name('flightInventoryTours.all');
+    Route::prefix('flight-inventory-tours')->group(function () {
+        Route::get('/', [FlightInventoryTourController::class, 'index'])->name('flight_inventory_tours.all');
         Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight_inventory_tours.create');
         Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight_inventory_tours.store');
         Route::get('/{flightInventoryTour}', [FlightInventoryTourController::class, 'view'])->name('flight_inventory_tours.view');
@@ -260,8 +260,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{flight}', [FlightController::class, 'update'])->name('flights.update');
         Route::post('/delete/{flight}', [FlightController::class, 'destroy'])->name('flights.delete');
     });
-    Route::prefix('hatSizes')->group(function () {
-        Route::get('/', [HatSizeController::class, 'index'])->name('hatSizes.all');
+    Route::prefix('hat-sizes')->group(function () {
+        Route::get('/', [HatSizeController::class, 'index'])->name('hat_sizes.all');
         Route::get('/create', [HatSizeController::class, 'create'])->name('hat_sizes.create');
         Route::post('/create', [HatSizeController::class, 'store'])->name('hat_sizes.store');
         Route::get('/{hatSize}', [HatSizeController::class, 'view'])->name('hat_sizes.view');
@@ -269,8 +269,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{hatSize}', [HatSizeController::class, 'update'])->name('hat_sizes.update');
         Route::post('/delete/{hatSize}', [HatSizeController::class, 'destroy'])->name('hat_sizes.delete');
     });
-    Route::prefix('locationTypes')->group(function () {
-        Route::get('/', [LocationTypeController::class, 'index'])->name('locationTypes.all');
+    Route::prefix('location-types')->group(function () {
+        Route::get('/', [LocationTypeController::class, 'index'])->name('location_types.all');
         Route::get('/create', [LocationTypeController::class, 'create'])->name('location_types.create');
         Route::post('/create', [LocationTypeController::class, 'store'])->name('location_types.store');
         Route::get('/{locationType}', [LocationTypeController::class, 'view'])->name('location_types.view');
@@ -287,8 +287,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{location}', [LocationController::class, 'update'])->name('locations.update');
         Route::post('/delete/{location}', [LocationController::class, 'destroy'])->name('locations.delete');
     });
-    Route::prefix('manualAdjustments')->group(function () {
-        Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manualAdjustments.all');
+    Route::prefix('manual-adjustments')->group(function () {
+        Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual_adjustments.all');
         Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual_adjustments.create');
         Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual_adjustments.store');
         Route::get('/{manualAdjustment}', [ManualAdjustmentController::class, 'view'])->name('manual_adjustments.view');
@@ -305,8 +305,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{operator}', [OperatorController::class, 'update'])->name('operators.update');
         Route::post('/delete/{operator}', [OperatorController::class, 'destroy'])->name('operators.delete');
     });
-    Route::prefix('orderCustomerAdjustments')->group(function () {
-        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('orderCustomerAdjustments.all');
+    Route::prefix('order-customer-adjustments')->group(function () {
+        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order_customer_adjustments.all');
         Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order_customer_adjustments.create');
         Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order_customer_adjustments.store');
         Route::get('/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'view'])->name('order_customer_adjustments.view');
@@ -323,8 +323,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
         Route::post('/delete/{order}', [OrderController::class, 'destroy'])->name('orders.delete');
     });
-    Route::prefix('ordersCustomers')->group(function () {
-        Route::get('/', [OrdersCustomerController::class, 'index'])->name('ordersCustomers.all');
+    Route::prefix('orders-customers')->group(function () {
+        Route::get('/', [OrdersCustomerController::class, 'index'])->name('orders_customers.all');
         Route::get('/create', [OrdersCustomerController::class, 'create'])->name('orders_customers.create');
         Route::post('/create', [OrdersCustomerController::class, 'store'])->name('orders_customers.store');
         Route::get('/{ordersCustomer}', [OrdersCustomerController::class, 'view'])->name('orders_customers.view');
@@ -332,8 +332,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{ordersCustomer}', [OrdersCustomerController::class, 'update'])->name('orders_customers.update');
         Route::post('/delete/{ordersCustomer}', [OrdersCustomerController::class, 'destroy'])->name('orders_customers.delete');
     });
-    Route::prefix('paymentMethods')->group(function () {
-        Route::get('/', [PaymentMethodController::class, 'index'])->name('paymentMethods.all');
+    Route::prefix('payment-methods')->group(function () {
+        Route::get('/', [PaymentMethodController::class, 'index'])->name('payment_methods.all');
         Route::get('/create', [PaymentMethodController::class, 'create'])->name('payment_methods.create');
         Route::post('/create', [PaymentMethodController::class, 'store'])->name('payment_methods.store');
         Route::get('/{paymentMethod}', [PaymentMethodController::class, 'view'])->name('payment_methods.view');
@@ -359,8 +359,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{region}', [RegionController::class, 'update'])->name('regions.update');
         Route::post('/delete/{region}', [RegionController::class, 'destroy'])->name('regions.delete');
     });
-    Route::prefix('roomTypes')->group(function () {
-        Route::get('/', [RoomTypeController::class, 'index'])->name('roomTypes.all');
+    Route::prefix('room-types')->group(function () {
+        Route::get('/', [RoomTypeController::class, 'index'])->name('room_types.all');
         Route::get('/create', [RoomTypeController::class, 'create'])->name('room_types.create');
         Route::post('/create', [RoomTypeController::class, 'store'])->name('room_types.store');
         Route::get('/{roomType}', [RoomTypeController::class, 'view'])->name('room_types.view');
@@ -368,8 +368,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{roomType}', [RoomTypeController::class, 'update'])->name('room_types.update');
         Route::post('/delete/{roomType}', [RoomTypeController::class, 'destroy'])->name('room_types.delete');
     });
-    Route::prefix('tShirtSizes')->group(function () {
-        Route::get('/', [TShirtSizeController::class, 'index'])->name('tShirtSizes.all');
+    Route::prefix('t-shirt-sizes')->group(function () {
+        Route::get('/', [TShirtSizeController::class, 'index'])->name('t_shirt_sizes.all');
         Route::get('/create', [TShirtSizeController::class, 'create'])->name('t_shirt_sizes.create');
         Route::post('/create', [TShirtSizeController::class, 'store'])->name('t_shirt_sizes.store');
         Route::get('/{tShirtSize}', [TShirtSizeController::class, 'view'])->name('t_shirt_sizes.view');
@@ -377,8 +377,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{tShirtSize}', [TShirtSizeController::class, 'update'])->name('t_shirt_sizes.update');
         Route::post('/delete/{tShirtSize}', [TShirtSizeController::class, 'destroy'])->name('t_shirt_sizes.delete');
     });
-    Route::prefix('ticketTypes')->group(function () {
-        Route::get('/', [TicketTypeController::class, 'index'])->name('ticketTypes.all');
+    Route::prefix('ticket-types')->group(function () {
+        Route::get('/', [TicketTypeController::class, 'index'])->name('ticket_types.all');
         Route::get('/create', [TicketTypeController::class, 'create'])->name('ticket_types.create');
         Route::post('/create', [TicketTypeController::class, 'store'])->name('ticket_types.store');
         Route::get('/{ticketType}', [TicketTypeController::class, 'view'])->name('ticket_types.view');
@@ -395,8 +395,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{tour}', [TourController::class, 'update'])->name('tours.update');
         Route::post('/delete/{tour}', [TourController::class, 'destroy'])->name('tours.delete');
     });
-    Route::prefix('transportInventories')->group(function () {
-        Route::get('/', [TransportInventoryController::class, 'index'])->name('transportInventories.all');
+    Route::prefix('transport-inventories')->group(function () {
+        Route::get('/', [TransportInventoryController::class, 'index'])->name('transport_inventories.all');
         Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport_inventories.create');
         Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport_inventories.store');
         Route::get('/{transportInventory}', [TransportInventoryController::class, 'view'])->name('transport_inventories.view');
@@ -404,8 +404,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{transportInventory}', [TransportInventoryController::class, 'update'])->name('transport_inventories.update');
         Route::post('/delete/{transportInventory}', [TransportInventoryController::class, 'destroy'])->name('transport_inventories.delete');
     });
-    Route::prefix('transportInventoryTours')->group(function () {
-        Route::get('/', [TransportInventoryTourController::class, 'index'])->name('transportInventoryTours.all');
+    Route::prefix('transport-inventory-tours')->group(function () {
+        Route::get('/', [TransportInventoryTourController::class, 'index'])->name('transport_inventory_tours.all');
         Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport_inventory_tours.create');
         Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport_inventory_tours.store');
         Route::get('/{transportInventoryTour}', [TransportInventoryTourController::class, 'view'])->name('transport_inventory_tours.view');
@@ -413,8 +413,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{transportInventoryTour}', [TransportInventoryTourController::class, 'update'])->name('transport_inventory_tours.update');
         Route::post('/delete/{transportInventoryTour}', [TransportInventoryTourController::class, 'destroy'])->name('transport_inventory_tours.delete');
     });
-    Route::prefix('transportTypes')->group(function () {
-        Route::get('/', [TransportTypeController::class, 'index'])->name('transportTypes.all');
+    Route::prefix('transport-types')->group(function () {
+        Route::get('/', [TransportTypeController::class, 'index'])->name('transport_types.all');
         Route::get('/create', [TransportTypeController::class, 'create'])->name('transport_types.create');
         Route::post('/create', [TransportTypeController::class, 'store'])->name('transport_types.store');
         Route::get('/{transportType}', [TransportTypeController::class, 'view'])->name('transport_types.view');
@@ -431,8 +431,8 @@ Route::prefix('raw')->group(function () {
         Route::post('/update/{transport}', [TransportController::class, 'update'])->name('transports.update');
         Route::post('/delete/{transport}', [TransportController::class, 'destroy'])->name('transports.delete');
     });
-    Route::prefix('travelClasses')->group(function () {
-        Route::get('/', [TravelClassController::class, 'index'])->name('travelClasses.all');
+    Route::prefix('travel-classes')->group(function () {
+        Route::get('/', [TravelClassController::class, 'index'])->name('travel_classes.all');
         Route::get('/create', [TravelClassController::class, 'create'])->name('travel_classes.create');
         Route::post('/create', [TravelClassController::class, 'store'])->name('travel_classes.store');
         Route::get('/{travelClass}', [TravelClassController::class, 'view'])->name('travel_classes.view');
