@@ -442,6 +442,10 @@ Route::prefix('raw')->middleware('auth')->group(function () {
     });
 });
 
+Route::get('accommodation/{accommodation}', function (\App\Models\Accommodation $accommodation) {
+    return view('pages.components.accommodation', ['accommodation' => $accommodation, ]);
+});
+
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
     Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
