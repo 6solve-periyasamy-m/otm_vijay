@@ -107,10 +107,6 @@ Route::get('/dashboard', function () {
 });
 
 Route::prefix('raw')->middleware('auth')->group(function () {
-    Route::prefix('accommodations')->group(function () {
-        Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
-        Route::get('/{accommodation}', [AccommodationController::class, 'view']);
-    });
     Route::prefix('accommodation-inventory-tours')->group(function () {
         Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
         Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create');
@@ -429,6 +425,13 @@ Route::prefix('raw')->middleware('auth')->group(function () {
 });
 
 Route::prefix('accommodation')->group(function () {
+    Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
+    Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
+    Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
+    Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
+    Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
+    Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
+    Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
     Route::prefix('inventory')->group(function () {
         Route::get('/{accommodation}/view/{accommodationInventory}', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view');
         Route::get('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit');
@@ -437,12 +440,6 @@ Route::prefix('accommodation')->group(function () {
         Route::get('/{accommodation}/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
         Route::post('/{accommodation}/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
     });
-    Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
-    Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
-    Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
-    Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
-    Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
-    Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
 });
 
 Route::group(['prefix' => 'admin'], function () {
