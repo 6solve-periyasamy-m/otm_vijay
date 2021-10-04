@@ -51,7 +51,7 @@
     <p></p>
     <div id="form-group">
         <label for="check_in_date_time-input">Check In Date Time</label>
-        <input type="datetime-local" name="check_in_date_time" value="{{ $check_in_date_time->format('Y-m-d\TH:i') ?? "" }}" class="form-control"
+        <input type="datetime-local" name="check_in_date_time" value="{{ isset($check_in_date_time) ? $check_in_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
                id="check_in_date_time-input">
     </div>
     <p></p>
@@ -63,7 +63,7 @@
     <p></p>
     <div id="form-group">
         <label for="check_out_date_time-input">Check Out Date Time</label>
-        <input type="datetime-local" name="check_out_date_time" value="{{ $check_out_date_time->format('Y-m-d\TH:i') ?? "" }}" class="form-control"
+        <input type="datetime-local" name="check_out_date_time" value="{{ isset($check_out_date_time) ? $check_out_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
                id="check_out_date_time-input">
     </div>
     <p></p>
