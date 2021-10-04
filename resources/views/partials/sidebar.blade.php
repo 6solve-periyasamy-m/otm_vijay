@@ -14,13 +14,17 @@
             <a href="{{ route('accommodations.all') }}" class="nav-link text-white">Accommodation</a>
         </li>
         <li>
-            <a href="{{ route('orderSearch') }}" class="nav-link text-white">
-                Orders
-            </a>
+            <a href="{{ route('activities.all') }}" class="nav-link text-white">Activities</a>
         </li>
         <li>
-            <a href="#" class="nav-link text-white">
-                Products
+            <a href="{{ route('flights.all') }}" class="nav-link text-white">Flights</a>
+        </li>
+        <li>
+            <a href="{{ route('transports.all') }}" class="nav-link text-white">Transports</a>
+        </li>
+        <li>
+            <a href="{{ route('orderSearch') }}" class="nav-link text-white">
+                Orders
             </a>
         </li>
         <li>
