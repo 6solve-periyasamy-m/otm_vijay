@@ -38,7 +38,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
-        return view('pages.models.accommodations.view', ['accommodation' => $accommodation,]);
+        return view('pages.components.accommodation', ['accommodation' => $accommodation, ]);
     }
 
     public function edit(Accommodation $accommodation)
