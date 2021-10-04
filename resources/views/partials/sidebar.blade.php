@@ -14,7 +14,7 @@
             <a href="{{ route('accommodations.all') }}" class="nav-link text-white">Accommodation</a>
         </li>
         <li>
-            <a href="#" class="nav-link text-white">
+            <a href="{{ route('orderSearch') }}" class="nav-link text-white">
                 Orders
             </a>
         </li>
