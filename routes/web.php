@@ -424,41 +424,45 @@ Route::prefix('raw')->middleware('auth')->group(function () {
     });
 });
 
-Route::prefix('accommodation')->group(function () {
-    Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
-    Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
-    Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
-    Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
-    Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
-    Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
-    Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
-    Route::prefix('inventory')->group(function () {
-        Route::get('/{accommodation}/view/{accommodationInventory}', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view');
-        Route::get('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit');
-        Route::post('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update');
-        Route::post('/{accommodation}/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete');
-        Route::get('/{accommodation}/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
-        Route::post('/{accommodation}/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
+Route::middleware('auth')->group(function () {
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
+        Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
+        Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
+        Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
     });
-});
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
-    Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
-    Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
-    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
-});
-
-Route::prefix('orders')->group(function () {
-    Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
-    Route::get('/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
-    Route::get('customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
-    Route::prefix('component')->group(function () {
-        Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete');
-        Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete');
-        Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
-        Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
+        Route::get('/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
+        Route::get('customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+        Route::prefix('component')->group(function () {
+            Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete');
+            Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete');
+            Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
+            Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
+        });
     });
+
+    Route::prefix('accommodation')->group(function () {
+        Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
+        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
+        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
+        Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
+        Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
+        Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
+        Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
+        Route::prefix('inventory')->group(function () {
+            Route::get('/{accommodation}/view/{accommodationInventory}', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view');
+            Route::get('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit');
+            Route::post('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update');
+            Route::post('/{accommodation}/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete');
+            Route::get('/{accommodation}/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
+            Route::post('/{accommodation}/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
+        });
+    });
+
+    Route::get('/dash', function () { return view('pages.dash'); })->name('dash');
 });
 
 Auth::routes();

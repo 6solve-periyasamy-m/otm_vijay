@@ -6,12 +6,12 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('accommodations.all') }}" class="nav-link text-white">Accommodation</a>
-        </li>
-        <li>
-            <a href="#" class="nav-link text-white">
+            <a href="{{ route('dash') }}" class="nav-link text-white">
                 Dashboard
             </a>
+        </li>
+        <li>
+            <a href="{{ route('accommodations.all') }}" class="nav-link text-white">Accommodation</a>
         </li>
         <li>
             <a href="#" class="nav-link text-white">
