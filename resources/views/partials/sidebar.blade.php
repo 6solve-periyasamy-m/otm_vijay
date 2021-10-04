@@ -6,6 +6,9 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('accommodations.all') }}" class="nav-link text-white">Accommodation</a>
+        </li>
+        <li>
             <a href="#" class="nav-link text-white">
                 Dashboard
             </a>
