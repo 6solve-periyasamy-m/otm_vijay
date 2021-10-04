@@ -40,12 +40,12 @@
     @csrf
     <p></p>
     <div id="form-group">
-        <label for="room_type_id-input">Room Type Id</label>
+        <label for="room_type_id-input">Room Type</label>
         <select style="width: 100%" name="room_type_id" class="form-control" id="room_type_id-input"> </select>
     </div>
     <p></p>
     <div id="form-group">
-        <label for="board_type_id-input">Board Type Id</label>
+        <label for="board_type_id-input">Board Type</label>
         <select style="width: 100%" name="board_type_id" class="form-control" id="board_type_id-input"></select>
     </div>
     <p></p>
