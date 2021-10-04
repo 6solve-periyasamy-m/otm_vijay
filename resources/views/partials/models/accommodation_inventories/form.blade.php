@@ -40,13 +40,15 @@
     @csrf
     <p></p>
     <div id="form-group">
-        <label for="room_type_id-input">Room Type</label>
-        <select style="width: 100%" name="room_type_id" class="form-control" id="room_type_id-input"> </select>
+        <label for="room_type_id-input">Room Type</label><br />
+        <select style="width: 95%" name="room_type_id" class="form-control" id="room_type_id-input"> </select>
+        <a href="{{ route('room-types.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
-        <label for="board_type_id-input">Board Type</label>
-        <select style="width: 100%" name="board_type_id" class="form-control" id="board_type_id-input"></select>
+        <label for="board_type_id-input">Board Type</label><br />
+        <select style="width: 95%" name="board_type_id" class="form-control" id="board_type_id-input"></select>
+        <a href="{{ route('board-types.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
