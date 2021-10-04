@@ -1,3 +1,6 @@
+<script type="text/javascript">
+    $(document).ready(function () { $('#accommodationInventory').DataTable({fixedHeader: true}); });
+</script>
 <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}" class="btn btn-primary">Add Inventory</a>
 <a href="#" class="btn btn-success">Bulk Add Inventory</a>
 <table id="accommodationInventory" style="width: 100%;" class="table table-striped">
