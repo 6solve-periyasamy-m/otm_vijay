@@ -1,8 +1,13 @@
 @extends('layout.main')
 
-@section('title', 'Update Accommodations')
+@section('title', 'View Accommodations')
 
 @section('content')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#accommodation').DataTable({fixedHeader: true});
+        });
+    </script>
     <a class="btn btn-primary" href="{{ route('accommodations.create') }}">Create New</a>
     <table id="accommodation" style="width: 100%;" class="table table-striped">
         <thead class="thead-dark">
