@@ -103,7 +103,7 @@ Route::prefix('customer')->group(function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('pages.dashboard');
 });
 
 Route::prefix('raw')->middleware('auth')->group(function () {
