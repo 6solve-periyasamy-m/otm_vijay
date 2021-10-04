@@ -98,10 +98,14 @@ Route::prefix('select')->group(function () {
    Route::get('regions', [SelectController::class, 'getRegions'])->name('api.regions.select');
    Route::get('countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
    Route::get('location-types', [SelectController::class, 'getLocationTypes'])->name('api.location-types.select');
+   Route::get('room-types', [SelectController::class, 'getRoomTypes'])->name('api.room-types.select');
+   Route::get('board-types', [SelectController::class, 'getBoardTypes'])->name('api.board-types.select');
    Route::prefix('selected')->group(function () {
        Route::get('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('api.locations.selected');
        Route::get('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('api.regions.selected');
        Route::get('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('api.countries.selected');
        Route::get('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('api.location-types.selected');
+       Route::get('room-type/{id}', [SelectController::class, 'getSelectedRoomType'])->name('api.room-types.selected');
+       Route::get('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('api.board-types.selected');
    });
 });

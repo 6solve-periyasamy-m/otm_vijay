@@ -1,19 +1,52 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let roomTypeSelect = $('#room_type_id-input');
+            roomTypeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.room-types.select') }}',
+                }
+            });
+            $.ajax({ url: '{{ route('api.room-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    console.log(data);
+                    roomTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    roomTypeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+            let boardTypeSelect = $('#board_type_id-input');
+            boardTypeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.board-types.select') }}',
+                }
+            });
+            $.ajax({ url: '{{ route('api.board-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    console.log(data);
+                    boardTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    boardTypeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
-    <div id="form-group">
-        <label for="accommodation_id-input">Accommodation Id</label>
-        <input name="accommodation_id" value="{{ $accommodation_id ?? "" }}" class="form-control"
-               id="accommodation_id-input">
-    </div>
     <p></p>
     <div id="form-group">
         <label for="room_type_id-input">Room Type Id</label>
-        <input name="room_type_id" value="{{ $room_type_id ?? "" }}" class="form-control" id="room_type_id-input">
+        <select style="width: 100%" name="room_type_id" class="form-control" id="room_type_id-input"> </select>
     </div>
     <p></p>
     <div id="form-group">
         <label for="board_type_id-input">Board Type Id</label>
-        <input name="board_type_id" value="{{ $board_type_id ?? "" }}" class="form-control" id="board_type_id-input">
+        <select style="width: 100%" name="board_type_id" class="form-control" id="board_type_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">

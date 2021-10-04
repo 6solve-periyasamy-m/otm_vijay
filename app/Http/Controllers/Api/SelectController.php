@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repository\AccommodationRepository;
 use App\Repository\LocationsRepository;
-use Illuminate\Http\Request;
 
 class SelectController extends Controller
 {
@@ -38,5 +38,21 @@ class SelectController extends Controller
 
     public function getSelectedLocationType($id) {
         return LocationsRepository::getSelectedLocationType($id);
+    }
+
+    public function getRoomTypes() {
+        return AccommodationRepository::getSelectRoomTypes();
+    }
+
+    public function getSelectedRoomType($id) {
+        return AccommodationRepository::getSelectedRoomType($id);
+    }
+
+    public function getBoardTypes() {
+        return AccommodationRepository::getSelectBoardTypes();
+    }
+
+    public function getSelectedBoardType($id) {
+        return AccommodationRepository::getSelectedBoardType($id);
     }
 }
