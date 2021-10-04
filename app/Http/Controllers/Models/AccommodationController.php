@@ -21,6 +21,10 @@ class AccommodationController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'region_id' => 'required'
+        ]);
         $accommodation = Accommodation::create([
             'region_id' => $request->input('region_id'),
             'title' => $request->input('title'),
@@ -44,6 +48,9 @@ class AccommodationController extends Controller
 
     public function update(Request $request, Accommodation $accommodation)
     {
+        $request->validate([
+            'title' => 'required',
+        ]);
         $accommodation->update([
             'region_id' => $request->input('region_id'),
             'title' => $request->input('title'),

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -90,4 +91,17 @@ Route::post('/orders/transport/add', [TourComponentController::class, 'addTransp
 
 Route::middleware('auth:api')->group(function() {
     
+});
+
+Route::prefix('select')->group(function () {
+   Route::get('locations', [SelectController::class, 'getLocations'])->name('api.locations.select');
+   Route::get('regions', [SelectController::class, 'getRegions'])->name('api.regions.select');
+   Route::get('countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
+   Route::get('location-types', [SelectController::class, 'getLocationTypes'])->name('api.location-types.select');
+   Route::prefix('selected')->group(function () {
+       Route::get('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('api.locations.selected');
+       Route::get('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('api.regions.selected');
+       Route::get('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('api.countries.selected');
+       Route::get('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('api.location-types.selected');
+   });
 });

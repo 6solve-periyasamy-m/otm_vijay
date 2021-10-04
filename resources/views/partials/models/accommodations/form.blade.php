@@ -1,8 +1,29 @@
+@section('head-script')
+<script type="text/javascript">
+    $(document).ready(function() {
+        let regionSelect = $('#region_id-input');
+        regionSelect.select2({
+           ajax: {
+               url: '{{ route('api.regions.select') }}',
+           }
+        });
+        $.ajax({ url: '{{ route('api.regions.selected', ['id' => $region_id ?? 0, ]) }}', })
+            .then(function (data) {
+            regionSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+            regionSelect.trigger({
+                type: 'select2:select',
+                params: { data: data, }
+            });
+        });
+    });
+</script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="region_id-input">Region Id</label>
-        <input name="region_id" value="{{ $region_id ?? "" }}" class="form-control" id="region_id-input">
+        <label for="region_id-input">Region</label>
+        <select class="form-control" id="region_id-input" name="region_id" style="width: 100%"></select>
     </div>
     <p></p>
     <div id="form-group">
@@ -17,7 +38,7 @@
     <p></p>
     <div id="form-group">
         <label for="audit_date-input">Audit Date</label>
-        <input name="audit_date" value="{{ $audit_date ?? "" }}" class="form-control" id="audit_date-input">
+        <input type="date" name="audit_date" value="{{ $audit_date ?? "" }}" class="form-control" id="audit_date-input">
     </div>
     <p></p>
     <div id="form-group">
