@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accommodation;
 use App\Models\AccommodationInventory;
 use Illuminate\Http\Request;
 
@@ -14,62 +15,61 @@ class AccommodationInventoryController extends Controller
         return view('pages.models.accommodation_inventories.table', ['accommodationInventories' => AccommodationInventory::all(),]);
     }
 
-    public function create()
+    public function create(Accommodation $accommodation)
     {
-        return view('pages.models.accommodation_inventories.create');
+        return view('pages.models.accommodation_inventories.create', ['accommodation' => $accommodation, ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Accommodation $accommodation)
     {
-        $accommodationInventory = AccommodationInventory::create([
-            'accommodation_id' => $request->input('accommodation_id'),
+        $accommodationInventory = AccommodationInventory::make([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
             'check_in_date_time' => $request->input('check_in_date_time'),
-            'checkin_confirmed' => $request->input('checkin_confirmed'),
+            'checkin_confirmed' => $request->input('checkin_confirmed') == 'on' ? 1 : 0,
             'check_out_date_time' => $request->input('check_out_date_time'),
-            'checkout_confirmed' => $request->input('checkout_confirmed'),
-            'fit_selectable' => $request->input('fit_selectable'),
+            'checkout_confirmed' => $request->input('checkout_confirmed') == 'on' ? 1 : 0,
+            'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
             'sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('accommodation-inventories.view', ['accommodationInventory' => $accommodationInventory,]);
+        $accommodation->inventory()->save($accommodationInventory);
+        return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
-    public function view(AccommodationInventory $accommodationInventory)
+    public function view(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
         return view('pages.models.accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory,]);
     }
 
-    public function edit(AccommodationInventory $accommodationInventory)
+    public function edit(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
-        return view('pages.models.accommodation_inventories.update', ['accommodationInventory' => $accommodationInventory,]);
+        return view('pages.models.accommodation_inventories.update', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]);
     }
 
-    public function update(Request $request, AccommodationInventory $accommodationInventory)
+    public function update(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
         $accommodationInventory->update([
-            'accommodation_id' => $request->input('accommodation_id'),
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
             'check_in_date_time' => $request->input('check_in_date_time'),
-            'checkin_confirmed' => $request->input('checkin_confirmed'),
+            'checkin_confirmed' => $request->input('checkin_confirmed') == 'on' ? 1 : 0,
             'check_out_date_time' => $request->input('check_out_date_time'),
-            'checkout_confirmed' => $request->input('checkout_confirmed'),
-            'fit_selectable' => $request->input('fit_selectable'),
+            'checkout_confirmed' => $request->input('checkout_confirmed') == 'on' ? 1 : 0,
+            'fit_selectable' => $request->input('fit_selectable') == 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
             'sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('accommodation-inventories.view', ['accommodationInventory' => $accommodationInventory,]);
+        return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
-    public function destroy(AccommodationInventory $accommodationInventory)
+    public function destroy(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
         $accommodationInventory->delete();
-        return redirect()->route('accommodation-inventories.all');
+        return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 }

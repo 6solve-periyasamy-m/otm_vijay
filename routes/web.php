@@ -111,19 +111,10 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all');
         Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create');
         Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store');
-        Route::get('/{accommodation}', [AccommodationController::class, 'view'])->name('accommodations.view');
+        Route::get('/{accommodation}', [AccommodationController::class, 'view']);
         Route::get('/update/{accommodation}', [AccommodationController::class, 'edit'])->name('accommodations.edit');
         Route::post('/update/{accommodation}', [AccommodationController::class, 'update'])->name('accommodations.update');
         Route::post('/delete/{accommodation}', [AccommodationController::class, 'destroy'])->name('accommodations.delete');
-    });
-    Route::prefix('accommodation-inventories')->group(function () {
-        Route::get('/', [AccommodationInventoryController::class, 'index'])->name('accommodation-inventories.all');
-        Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
-        Route::post('/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
-        Route::get('/{accommodationInventory}', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view');
-        Route::get('/update/{accommodationInventory}', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit');
-        Route::post('/update/{accommodationInventory}', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update');
-        Route::post('/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete');
     });
     Route::prefix('accommodation-inventory-tours')->group(function () {
         Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
@@ -442,8 +433,18 @@ Route::prefix('raw')->middleware('auth')->group(function () {
     });
 });
 
-Route::get('accommodation/{accommodation}', function (\App\Models\Accommodation $accommodation) {
-    return view('pages.components.accommodation', ['accommodation' => $accommodation, ]);
+Route::prefix('accommodation')->group(function () {
+    Route::prefix('inventory')->group(function () {
+        Route::get('/{accommodation}/view/{accommodationInventory}', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view');
+        Route::get('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit');
+        Route::post('/{accommodation}/update/{accommodationInventory}', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update');
+        Route::post('/{accommodation}/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete');
+        Route::get('/{accommodation}/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
+        Route::post('/{accommodation}/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
+    });
+    Route::get('/{accommodation}', function (\App\Models\Accommodation $accommodation) {
+        return view('pages.components.accommodation', ['accommodation' => $accommodation, ]);
+    })->name('accommodations.view');
 });
 
 Route::group(['prefix' => 'admin'], function () {

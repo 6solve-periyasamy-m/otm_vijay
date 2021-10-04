@@ -1,4 +1,4 @@
-<a href="{{ route('accommodation-inventories.create') }}" class="btn btn-primary">Add Inventory</a>
+<a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}" class="btn btn-primary">Add Inventory</a>
 <a href="#" class="btn btn-success">Bulk Add Inventory</a>
 <table id="accommodationInventory" style="width: 100%;" class="table table-striped">
     <thead class="thead-dark">
@@ -31,7 +31,7 @@
             <td>{{ $accommodationInventory->sales_price }}</td>
             <td>{{ $accommodationInventory->notes }}</td>
             <td>
-                <a href="{{route('accommodation-inventories.edit', ['accommodationInventory' => $accommodationInventory,])}}">
+                <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}">
                     <ion-icon name="create"></ion-icon>
                 </a>
                 <a href="#"
@@ -39,7 +39,7 @@
                     <ion-icon name="trash"></ion-icon>
                 </a>
                 <form id="accommodationInventory-{{ $accommodationInventory->id }}-delete"
-                      action="{{ route('accommodation-inventories.delete', ['accommodationInventory' => $accommodationInventory,]) }}"
+                      action="{{ route('accommodation-inventories.delete', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]) }}"
                       method="POST" style="display: none;">{{ csrf_field() }}</form>
             </td>
         </tr>
