@@ -22,10 +22,10 @@
             <td>{{ $accommodationInventory->roomType->room_type_name }}</td>
             <td>{{ $accommodationInventory->boardType->board_type_name }}</td>
             <td>{{ $accommodationInventory->check_in_date_time }}</td>
-            <td>{{ $accommodationInventory->checkin_confirmed }}</td>
+            <td>{{ $accommodationInventory->checkin_confirmed == 1 ? 'True' : 'False' }}</td>
             <td>{{ $accommodationInventory->check_out_date_time }}</td>
-            <td>{{ $accommodationInventory->checkout_confirmed }}</td>
-            <td>{{ $accommodationInventory->fit_selectable }}</td>
+            <td>{{ $accommodationInventory->checkout_confirmed == 1 ? 'True' : 'False' }}</td>
+            <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
             <td>{{ $accommodationInventory->stock }}</td>
             <td>{{ $accommodationInventory->purchase_price }}</td>
             <td>{{ $accommodationInventory->sales_price }}</td>
