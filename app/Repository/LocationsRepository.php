@@ -25,10 +25,10 @@ class LocationsRepository implements LocationsRepositoryInterface
     {
         $data = [];
         foreach (Location::all() as $location) {
-            $lData = [];
-            $lData['id'] = $location->id;
-            $lData['text'] = $location->name . ' - ' . $location->region->name . ' - ' . $location->region->country->name;
-            $data['results'][] = $lData;
+            $subData = [];
+            $subData['id'] = $location->id;
+            $subData['text'] = $location->name . ' - ' . $location->region->name . ' - ' . $location->region->country->name;
+            $data['results'][] = $subData;
         }
         return $data;
     }
@@ -37,10 +37,10 @@ class LocationsRepository implements LocationsRepositoryInterface
     {
         $data = [];
         foreach (Region::all() as $region) {
-            $rData = [];
-            $rData['id'] = $region->id;
-            $rData['text'] = $region->name . ' - ' . $region->country->name;
-            $data['results'][] = $rData;
+            $subData = [];
+            $subData['id'] = $region->id;
+            $subData['text'] = $region->name . ' - ' . $region->country->name;
+            $data['results'][] = $subData;
         }
         return $data;
     }
@@ -49,10 +49,10 @@ class LocationsRepository implements LocationsRepositoryInterface
     {
         $data = [];
         foreach (Country::all() as $country) {
-            $cData = [];
-            $cData['id'] = $country->id;
-            $cData['text'] = $country->name;
-            $data['results'][] = $cData;
+            $subData = [];
+            $subData['id'] = $country->id;
+            $subData['text'] = $country->name;
+            $data['results'][] = $subData;
         }
         return $data;
     }
@@ -61,10 +61,10 @@ class LocationsRepository implements LocationsRepositoryInterface
     {
         $data = [];
         foreach (LocationType::all() as $locationType) {
-            $ltData = [];
-            $ltData['id'] = $locationType->id;
-            $ltData['text'] = $locationType->name;
-            $data['results'][] = $ltData;
+            $subData = [];
+            $subData['id'] = $locationType->id;
+            $subData['text'] = $locationType->name;
+            $data['results'][] = $subData;
         }
         return $data;
     }
