@@ -1,4 +1,5 @@
-
+<a href="{{ route('accommodation-inventories.create') }}" class="btn btn-primary">Add Inventory</a>
+<a href="#" class="btn btn-success">Bulk Add Inventory</a>
 <table id="accommodationInventory" style="width: 100%;" class="table table-striped">
     <thead class="thead-dark">
     <tr>
