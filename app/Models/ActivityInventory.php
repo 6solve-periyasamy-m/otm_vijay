@@ -12,7 +12,7 @@ class ActivityInventory extends Model
     use SoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_id','ticket_type_id','activity_start_date_time','activity_end_start_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['activity_id','ticket_type_id','activity_start_date_time','activity_end_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
 
     protected $casts = [
         'activity_start_date_time' => 'datetime',

@@ -1,11 +1,6 @@
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="activity_id-input">Activity Id</label>
-        <input name="activity_id" value="{{ $activity_id ?? "" }}" class="form-control" id="activity_id-input">
-    </div>
-    <p></p>
-    <div id="form-group">
         <label for="ticket_type_id-input">Ticket Type Id</label>
         <input name="ticket_type_id" value="{{ $ticket_type_id ?? "" }}" class="form-control" id="ticket_type_id-input">
     </div>
@@ -17,9 +12,9 @@
     </div>
     <p></p>
     <div id="form-group">
-        <label for="activity_end_start_date_time-input">Activity End Start Date Time</label>
-        <input name="activity_end_start_date_time" value="{{ $activity_end_start_date_time ?? "" }}"
-               class="form-control" id="activity_end_start_date_time-input">
+        <label for="activity_end_date_time-input">Activity End Date Time</label>
+        <input name="activity_end_date_time" value="{{ $activity_end_date_time ?? "" }}"
+               class="form-control" id="activity_end_date_time-input">
     </div>
     <p></p>
     <div id="form-group">
