@@ -77,7 +77,7 @@
     </div>
     <p></p>
     <div id="form-group">
-        <label for="operator_id-input">Operator</label>
+        <label for="operator_id-input">Operator</label><br/>
         <select style="width: 95%;" name="operator_id" class="form-control" id="operator_id-input"></select>
         <a href="{{ route('operators.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
