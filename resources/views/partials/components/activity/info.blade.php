@@ -6,3 +6,4 @@
     </tr>
 </table>
 {{ $activity->notes }}
+<a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">Edit Activity</a>
