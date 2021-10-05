@@ -9,7 +9,6 @@
             });
             $.ajax({ url: '{{ route('api.room-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
                 .then(function (data) {
-                    console.log(data);
                     roomTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
                     roomTypeSelect.trigger({
@@ -25,7 +24,6 @@
             });
             $.ajax({ url: '{{ route('api.board-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
                 .then(function (data) {
-                    console.log(data);
                     boardTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
                     boardTypeSelect.trigger({
