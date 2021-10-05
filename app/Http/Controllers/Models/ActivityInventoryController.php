@@ -34,7 +34,7 @@ class ActivityInventoryController extends Controller
             'notes' => $request->input('notes'),
         ]);
         $activity->activityInventory()->save($activityInventory);
-        return redirect()->route('activity-inventories.view', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
+        return redirect()->route('activities.view', ['activity' => $activity, ]);
     }
 
     public function view(Activity $activity, ActivityInventory $activityInventory)
@@ -60,7 +60,7 @@ class ActivityInventoryController extends Controller
             'currency' => $request->input('currency'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('activity-inventories.view', ['activity' => $activity, 'activityInventory' => $activityInventory,]);
+        return redirect()->route('activities.view', ['activity' => $activity, ]);
     }
 
     public function destroy(Activity $activity, ActivityInventory $activityInventory)
