@@ -35,7 +35,7 @@
     </div>
     <p></p>
     <div id="form-group">
-        <input type="checkbox" name="departure_confirmed" value="{{ $departure_confirmed ?? "" }}" class="form-check-input" @if(isset($departure_confirmed) && $departure_confirmed == 1) checked @endif
+        <input type="checkbox" name="departure_confirmed" class="form-check-input" @if(isset($departure_confirmed) && $departure_confirmed == 1) checked @endif
                id="departure_confirmed-input">
         <label for="departure_confirmed-input">Departure Confirmed</label>
     </div>
@@ -47,13 +47,13 @@
     </div>
     <p></p>
     <div id="form-group">
-        <input type="checkbox" name="arrival_confirmed" value="{{ $arrival_confirmed ?? "" }}" class="form-check-input" @if(isset($arrival_confirmed) && $arrival_confirmed == 1) checked @endif
+        <input type="checkbox" name="arrival_confirmed" class="form-check-input" @if(isset($arrival_confirmed) && $arrival_confirmed == 1) checked @endif
                id="arrival_confirmed-input">
         <label for="arrival_confirmed-input">Arrival Confirmed</label>
     </div>
     <p></p>
     <div id="form-group">
-        <input type="checkbox" name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>
+        <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>
         <label for="fit_selectable-input">Fit Selectable</label>
     </div>
     <p></p>
