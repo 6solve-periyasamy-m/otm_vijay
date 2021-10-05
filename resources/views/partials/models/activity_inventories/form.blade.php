@@ -44,7 +44,7 @@
     <p></p>
     <div id="form-group">
         <label for="fit_selectable-input">Fit Selectable</label>
-        <input name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
+        <input type="checkbox" name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>
     </div>
     <p></p>
     <div id="form-group">
