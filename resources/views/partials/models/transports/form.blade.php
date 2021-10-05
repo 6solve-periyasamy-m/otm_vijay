@@ -21,10 +21,10 @@
             let operatorsSelect = $('#operator_id-input');
             operatorsSelect.select2({
                 ajax: {
-                    url: '{{ route('api.transport-types.select') }}',
+                    url: '{{ route('api.operators.select') }}',
                 }
             });
-            $.ajax({ url: '{{ route('api.transport-types.selected', ['id' => $operator_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.operators.selected', ['id' => $operator_id ?? 0, ]) }}', })
                 .then(function (data) {
                     operatorsSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -83,12 +83,12 @@
     </div>
     <p></p>
     <div id="form-group">
-        <label for="departure_location_id-input">Departure Location Id</label>
+        <label for="departure_location_id-input">Departure Location</label>
         <select style="width: 100%;" name="departure_location_id" class="form-control" id="departure_location_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">
-        <label for="arrival_location_id-input">Arrival Location Id</label>
+        <label for="arrival_location_id-input">Arrival Location</label>
         <select style="width: 100%;" name="arrival_location_id" class="form-control" id="arrival_location_id-input"></select>
     </div>
     <p></p>
