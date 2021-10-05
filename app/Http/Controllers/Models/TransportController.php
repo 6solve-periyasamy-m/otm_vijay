@@ -37,7 +37,7 @@ class TransportController extends Controller
 
     public function view(Transport $transport)
     {
-        return view('pages.models.transports.view', ['transport' => $transport,]);
+        return view('pages.components.transport', ['transport' => $transport,]);
     }
 
     public function edit(Transport $transport)
