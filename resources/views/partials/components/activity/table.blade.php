@@ -23,7 +23,7 @@
             <td>{{ $activityInventory->ticketType->name }}</td>
             <td>{{ $activityInventory->activity_start_date_time }}</td>
             <td>{{ $activityInventory->activity_end_date_time }}</td>
-            <td>{{ $activityInventory->fit_selectable }}</td>
+            <td>{{ $activityInventory->fit_selectable ? "Yes" : "No" }}</td>
             <td>{{ $activityInventory->stock }}</td>
             <td>{{ $activityInventory->purchase_price }}</td>
             <td>{{ $activityInventory->sales_price }}</td>
