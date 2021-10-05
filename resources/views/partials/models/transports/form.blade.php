@@ -108,8 +108,8 @@
     </div>
     <p></p>
     <div id="form-group">
+        <input type="checkbox" name="is_domestic" class="form-check-input" id="is_domestic-input" @if(isset($is_domestic) && $is_domestic == 1) checked @endif>
         <label for="is_domestic-input">Is Domestic</label>
-        <input name="is_domestic" value="{{ $is_domestic ?? "" }}" class="form-control" id="is_domestic-input">
     </div>
     <p></p>
     <div id="form-group">
