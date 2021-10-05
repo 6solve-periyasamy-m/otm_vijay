@@ -5,6 +5,7 @@
             roomTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.room-types.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.room-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
@@ -20,6 +21,7 @@
             boardTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.board-types.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.board-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
