@@ -112,6 +112,6 @@ Route::prefix('select')->group(function () {
        Route::get('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('api.board-types.selected');
        Route::get('transport-type/{id}', [SelectController::class, 'getSelectedTransportType'])->name('api.transport-types.selected');
        Route::get('operator/{id}', [SelectController::class, 'getSelectedOperator'])->name('api.operators.selected');
-       Route::get('travel-class/{id}', [SelectController::class, 'getSelectedTransportType'])->name('api.travel-classes.selected');
+       Route::get('travel-class/{id}', [SelectController::class, 'getSelectedTravelClass'])->name('api.travel-classes.selected');
    });
 });
