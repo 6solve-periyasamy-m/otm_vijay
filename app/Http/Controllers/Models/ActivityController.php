@@ -33,7 +33,7 @@ class ActivityController extends Controller
 
     public function view(Activity $activity)
     {
-        return view('pages.models.activities.view', ['activity' => $activity,]);
+        return view('pages.components.activity', ['activity' => $activity,]);
     }
 
     public function edit(Activity $activity)
