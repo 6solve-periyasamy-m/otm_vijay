@@ -11,3 +11,4 @@
     </tr>
 </table>
 {{ $transport->description }}
+<a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">Edit Transport</a>
