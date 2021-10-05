@@ -32,13 +32,13 @@
     <p></p>
     <div id="form-group">
         <label for="activity_start_date_time-input">Activity Start Date Time</label>
-        <input name="activity_start_date_time" value="{{ $activity_start_date_time ?? "" }}" class="form-control"
+        <input type="datetime-local" name="activity_start_date_time" value="{{ $activity_start_date_time ?? "" }}" class="form-control"
                id="activity_start_date_time-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="activity_end_date_time-input">Activity End Date Time</label>
-        <input name="activity_end_date_time" value="{{ $activity_end_date_time ?? "" }}"
+        <input type="datetime-local" name="activity_end_date_time" value="{{ $activity_end_date_time ?? "" }}"
                class="form-control" id="activity_end_date_time-input">
     </div>
     <p></p>
