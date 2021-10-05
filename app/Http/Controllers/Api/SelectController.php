@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repository\AccommodationRepository;
+use App\Repository\ActivityRepository;
 use App\Repository\LocationsRepository;
+use Illuminate\Http\Request;
 
 class SelectController extends Controller
 {
@@ -54,5 +56,23 @@ class SelectController extends Controller
 
     public function getSelectedBoardType($id) {
         return AccommodationRepository::getSelectedBoardType($id);
+    }
+
+    public function getActivityTypes(Request $request) {
+        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        return ActivityRepository::getSelectActivityTypes($filter);
+    }
+
+    public function getTicketTypes(Request $request) {
+        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        return ActivityRepository::getSelectTicketTypes($filter);
+    }
+
+    public function getSelectedActivityType($id) {
+        return ActivityRepository::getSelectedActivityType($id);
+    }
+
+    public function getSelectedTicketTypes($id) {
+        return ActivityRepository::getSelectedTicketType($id);
     }
 }
