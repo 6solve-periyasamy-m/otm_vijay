@@ -30,31 +30,31 @@
     <p></p>
     <div id="form-group">
         <label for="departure_date_time-input">Departure Date Time</label>
-        <input name="departure_date_time" value="{{ $departure_date_time ?? "" }}" class="form-control"
+        <input type="datetime-local" name="departure_date_time" value="{{ isset($departure_date_time) ? $departure_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
                id="departure_date_time-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="departure_confirmed-input">Departure Confirmed</label>
-        <input name="departure_confirmed" value="{{ $departure_confirmed ?? "" }}" class="form-control"
+        <input type="checkbox" name="departure_confirmed" value="{{ $departure_confirmed ?? "" }}" class="form-control" @if(isset($departure_confirmed) && $departure_confirmed == 1) checked @endif
                id="departure_confirmed-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="arrival_date_time-input">Arrival Date Time</label>
-        <input name="arrival_date_time" value="{{ $arrival_date_time ?? "" }}" class="form-control"
+        <input type="datetime-local" name="arrival_date_time" value="{{ isset($arrival_date_time) ? $arrival_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
                id="arrival_date_time-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="arrival_confirmed-input">Arrival Confirmed</label>
-        <input name="arrival_confirmed" value="{{ $arrival_confirmed ?? "" }}" class="form-control"
+        <input type="checkbox" name="arrival_confirmed" value="{{ $arrival_confirmed ?? "" }}" class="form-control" @if(isset($arrival_confirmed) && $arrival_confirmed == 1) checked @endif
                id="arrival_confirmed-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="fit_selectable-input">Fit Selectable</label>
-        <input name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
+        <input type="checkbox" name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>
     </div>
     <p></p>
     <div id="form-group">
