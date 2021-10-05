@@ -6,3 +6,4 @@
     </tr>
 </table>
 {{ $accommodation->description }}
+<a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">Edit Accommodation</a>
