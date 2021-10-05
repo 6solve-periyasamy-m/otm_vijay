@@ -1,9 +1,31 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let travelClassSelect = $('#travel_class_id-input');
+            travelClassSelect.select2({
+                ajax: {
+                    url: '{{ route('api.travel-classes.select') }}',
+                }
+            });
+            $.ajax({ url: '{{ route('api.travel-classes.selected', ['id' => $travel_class_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    console.log(data);
+                    travelClassSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    travelClassSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="travel_class_id-input">Travel Class Id</label>
-        <input name="travel_class_id" value="{{ $travel_class_id ?? "" }}" class="form-control"
-               id="travel_class_id-input">
+        <label for="travel_class_id-input">Travel Class</label>
+        <select name="travel_class_id" class="form-control" id="travel_class_id-input"></select>
+        <a href="{{ route('travel-classes.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
