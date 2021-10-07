@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repository\AccommodationRepository;
 use App\Repository\LocationsRepository;
-use App\Repository\TransportRepository;
+use App\Transforms\TransportTransforms;
 use Illuminate\Http\Request;
 
 class SelectController extends Controller
@@ -60,28 +60,28 @@ class SelectController extends Controller
 
     public function getTransportTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return TransportRepository::getSelectTransportTypes($filter);
+        return TransportTransforms::getSelectTransportTypes($filter);
     }
 
     public function getOperators(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return TransportRepository::getSelectOperators($filter);
+        return TransportTransforms::getSelectOperators($filter);
     }
 
     public function getTravelClasses(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return TransportRepository::getSelectTravelClasses($filter);
+        return TransportTransforms::getSelectTravelClasses($filter);
     }
 
     public function getSelectedTransportType($id) {
-        return TransportRepository::getSelectedTransportType($id);
+        return TransportTransforms::getSelectedTransportType($id);
     }
 
     public function getSelectedOperator($id) {
-        return TransportRepository::getSelectedOperator($id);
+        return TransportTransforms::getSelectedOperator($id);
     }
 
     public function getSelectedTravelClass($id) {
-        return TransportRepository::getSelectedTravelClass($id);
+        return TransportTransforms::getSelectedTravelClass($id);
     }
 }

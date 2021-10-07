@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repository;
+namespace App\Transforms;
 
 use App\Models\Operator;
 use App\Models\TransportType;
 use App\Models\TravelClass;
 
-interface TransportRepositoryInterface {
+interface TransportTransformsInterface {
     public static function getSelectTransportTypes($filter);
     public static function getSelectOperators($filter);
     public static function getSelectTravelClasses($filter);
@@ -15,7 +15,7 @@ interface TransportRepositoryInterface {
     public static function getSelectedTravelClass($id);
 }
 
-class TransportRepository implements TransportRepositoryInterface
+class TransportTransforms implements TransportTransformsInterface
 {
 
     public static function getSelectTransportTypes($filter)
