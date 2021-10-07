@@ -21,6 +21,7 @@ class ActivityController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Activity::RULES);
         $activity = Activity::create([
             'activity_type_id' => $request->input('activity_type_id'),
             'location_id' => $request->input('location_id'),
@@ -33,7 +34,7 @@ class ActivityController extends Controller
 
     public function view(Activity $activity)
     {
-        return view('pages.models.activities.view', ['activity' => $activity,]);
+        return view('pages.components.activity', ['activity' => $activity,]);
     }
 
     public function edit(Activity $activity)
@@ -43,6 +44,7 @@ class ActivityController extends Controller
 
     public function update(Request $request, Activity $activity)
     {
+        $request->validate(Activity::RULES);
         $activity->update([
             'activity_type_id' => $request->input('activity_type_id'),
             'location_id' => $request->input('location_id'),

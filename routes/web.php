@@ -116,24 +116,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update');
         Route::post('/delete/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete');
     });
-    Route::prefix('activities')->group(function () {
-        Route::get('/', [ActivityController::class, 'index'])->name('activities.all');
-        Route::get('/create', [ActivityController::class, 'create'])->name('activities.create');
-        Route::post('/create', [ActivityController::class, 'store'])->name('activities.store');
-        Route::get('/{activity}', [ActivityController::class, 'view'])->name('activities.view');
-        Route::get('/update/{activity}', [ActivityController::class, 'edit'])->name('activities.edit');
-        Route::post('/update/{activity}', [ActivityController::class, 'update'])->name('activities.update');
-        Route::post('/delete/{activity}', [ActivityController::class, 'destroy'])->name('activities.delete');
-    });
-    Route::prefix('activity-inventories')->group(function () {
-        Route::get('/', [ActivityInventoryController::class, 'index'])->name('activity-inventories.all');
-        Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create');
-        Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store');
-        Route::get('/{activityInventory}', [ActivityInventoryController::class, 'view'])->name('activity-inventories.view');
-        Route::get('/update/{activityInventory}', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit');
-        Route::post('/update/{activityInventory}', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update');
-        Route::post('/delete/{activityInventory}', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete');
-    });
     Route::prefix('activity-inventory-tours')->group(function () {
         Route::get('/', [ActivityInventoryTourController::class, 'index'])->name('activity-inventory-tours.all');
         Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create');
@@ -459,6 +441,26 @@ Route::middleware('auth')->group(function () {
             Route::post('/{accommodation}/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete');
             Route::get('/{accommodation}/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
             Route::post('/{accommodation}/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
+        });
+    });
+
+    Route::prefix('activities')->group(function () {
+        Route::get('/', [ActivityController::class, 'index'])->name('activities.all');
+        Route::get('/create', [ActivityController::class, 'create'])->name('activities.create');
+        Route::post('/create', [ActivityController::class, 'store'])->name('activities.store');
+        Route::get('/update/{activity}', [ActivityController::class, 'edit'])->name('activities.edit');
+        Route::post('/update/{activity}', [ActivityController::class, 'update'])->name('activities.update');
+        Route::post('/delete/{activity}', [ActivityController::class, 'destroy'])->name('activities.delete');
+        Route::prefix('{activity}')->group(function () {
+            Route::get('/', [ActivityController::class, 'view'])->name('activities.view');
+            Route::prefix('inventory')->group(function () {
+                Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create');
+                Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store');
+                Route::get('/{activityInventory}', [ActivityInventoryController::class, 'view'])->name('activity-inventories.view');
+                Route::get('/update/{activityInventory}', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit');
+                Route::post('/update/{activityInventory}', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update');
+                Route::post('/delete/{activityInventory}', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete');
+            });
         });
     });
 

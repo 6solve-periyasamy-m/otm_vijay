@@ -4,7 +4,7 @@
     </td>
     <td>{{ $ticket_type_id }}</td>
     <td>{{ $activity_start_date_time }}</td>
-    <td>{{ $activity_end_start_date_time }}</td>
+    <td>{{ $activity_end_date_time }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $purchase_price }}</td>
