@@ -10,22 +10,22 @@ use Illuminate\Http\Request;
 class SelectController extends Controller
 {
     public function getLocations(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return LocationsRepository::getAvailableSelectLocations($filter);
     }
 
     public function getRegions(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return LocationsRepository::getAvailableSelectRegions($filter);
     }
 
     public function getCountries(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return LocationsRepository::getAvailableSelectCountries($filter);
     }
 
     public function getLocationTypes(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return LocationsRepository::getAvailableSelectLocationTypes($filter);
     }
 
@@ -46,7 +46,7 @@ class SelectController extends Controller
     }
 
     public function getRoomTypes(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return AccommodationRepository::getSelectRoomTypes($filter);
     }
 
@@ -55,7 +55,7 @@ class SelectController extends Controller
     }
 
     public function getBoardTypes(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return AccommodationRepository::getSelectBoardTypes($filter);
     }
 
