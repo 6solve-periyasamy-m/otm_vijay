@@ -59,12 +59,12 @@ class SelectController extends Controller
     }
 
     public function getActivityTypes(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return ActivityRepository::getSelectActivityTypes($filter);
     }
 
     public function getTicketTypes(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return ActivityRepository::getSelectTicketTypes($filter);
     }
 
