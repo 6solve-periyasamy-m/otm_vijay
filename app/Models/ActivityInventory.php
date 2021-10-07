@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,11 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActivityInventory extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
     protected $fillable = ['activity_id','ticket_type_id','activity_start_date_time','activity_end_start_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
-
+    protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'activity_start_date_time' => 'datetime',
         'activity_end_date_time' => 'datetime',
