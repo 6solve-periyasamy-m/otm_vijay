@@ -29,7 +29,7 @@ class TransportController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency' => $request->input('currency'),
-            'is_domestic' => $request->input('is_domestic') == "on" ? 1 : 0,
+            'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('transports.view', ['transport' => $transport,]);
