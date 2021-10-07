@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Transforms;
 
 use App\Models\Country;
 use App\Models\Location;
 use App\Models\LocationType;
 use App\Models\Region;
 
-interface LocationsRepositoryInterface {
+interface LocationsTransformsInterface {
     public static function getAvailableSelectLocations();
     public static function getAvailableSelectRegions();
     public static function getAvailableSelectCountries();
@@ -18,7 +18,7 @@ interface LocationsRepositoryInterface {
     public static function getSelectedLocationType($id);
 }
 
-class LocationsRepository implements LocationsRepositoryInterface
+class LocationsTransforms implements LocationsTransformsInterface
 {
 
     public static function getAvailableSelectLocations()

@@ -3,56 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repository\AccommodationRepository;
-use App\Repository\LocationsRepository;
+use App\Transforms\AccommodationTransforms;
+use App\Transforms\LocationsTransforms;
 
 class SelectController extends Controller
 {
     public function getLocations() {
-        return LocationsRepository::getAvailableSelectLocations();
+        return LocationsTransforms::getAvailableSelectLocations();
     }
 
     public function getRegions() {
-        return LocationsRepository::getAvailableSelectRegions();
+        return LocationsTransforms::getAvailableSelectRegions();
     }
 
     public function getCountries() {
-        return LocationsRepository::getAvailableSelectCountries();
+        return LocationsTransforms::getAvailableSelectCountries();
     }
 
     public function getLocationTypes() {
-        return LocationsRepository::getAvailableSelectLocationTypes();
+        return LocationsTransforms::getAvailableSelectLocationTypes();
     }
 
     public function getSelectedLocation($id) {
-        return LocationsRepository::getSelectedLocation($id);
+        return LocationsTransforms::getSelectedLocation($id);
     }
 
     public function getSelectedRegion($id) {
-        return LocationsRepository::getSelectedRegion($id);
+        return LocationsTransforms::getSelectedRegion($id);
     }
 
     public function getSelectedCountry($id) {
-        return LocationsRepository::getSelectedCountry($id);
+        return LocationsTransforms::getSelectedCountry($id);
     }
 
     public function getSelectedLocationType($id) {
-        return LocationsRepository::getSelectedLocationType($id);
+        return LocationsTransforms::getSelectedLocationType($id);
     }
 
     public function getRoomTypes() {
-        return AccommodationRepository::getSelectRoomTypes();
+        return AccommodationTransforms::getSelectRoomTypes();
     }
 
     public function getSelectedRoomType($id) {
-        return AccommodationRepository::getSelectedRoomType($id);
+        return AccommodationTransforms::getSelectedRoomType($id);
     }
 
     public function getBoardTypes() {
-        return AccommodationRepository::getSelectBoardTypes();
+        return AccommodationTransforms::getSelectBoardTypes();
     }
 
     public function getSelectedBoardType($id) {
-        return AccommodationRepository::getSelectedBoardType($id);
+        return AccommodationTransforms::getSelectedBoardType($id);
     }
 }

@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Repository;
+namespace App\Transforms;
 
 use App\Models\BoardType;
 use App\Models\RoomType;
 
-interface AccommodationRepositoryInterface {
+interface AccommodationTransformsInterface {
     public static function getSelectRoomTypes();
     public static function getSelectBoardTypes();
     public static function getSelectedRoomType($id);
     public static function getSelectedBoardType($id);
 }
 
-class AccommodationRepository implements AccommodationRepositoryInterface
+class AccommodationTransforms implements AccommodationTransformsInterface
 {
 
     public static function getSelectRoomTypes()
