@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,9 +14,10 @@ class Accommodation extends Model
 {
     //use ModelLogging;
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['region_id','title','description','audit_date','address','currency',];
+    protected $cascadeDeletes = ['inventory'];
 
     public function orderAccommodation()
     {

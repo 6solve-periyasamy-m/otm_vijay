@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use Jahondust\ModelLog\Traits\ModelLogging;
@@ -12,10 +13,10 @@ class AccommodationInventory extends Model
 {
     use HasFactory;
     // use ModelLogging;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in_date_time','checkin_confirmed','check_out_date_time','checkout_confirmed','fit_selectable','stock','purchase_price','sales_price','notes',];
-
+    protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'check_in_date_time' => 'datetime',
         'check_out_date_time' => 'datetime',
