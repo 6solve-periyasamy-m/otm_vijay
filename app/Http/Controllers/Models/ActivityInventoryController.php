@@ -22,6 +22,7 @@ class ActivityInventoryController extends Controller
 
     public function store(Request $request, Activity $activity)
     {
+        $request->validate(ActivityInventory::RULES);
         $activityInventory = ActivityInventory::make([
             'ticket_type_id' => $request->input('ticket_type_id'),
             'activity_start_date_time' => $request->input('activity_start_date_time'),
@@ -49,6 +50,7 @@ class ActivityInventoryController extends Controller
 
     public function update(Request $request, Activity $activity, ActivityInventory $activityInventory)
     {
+        $request->validate(ActivityInventory::RULES);
         $activityInventory->update([
             'ticket_type_id' => $request->input('ticket_type_id'),
             'activity_start_date_time' => $request->input('activity_start_date_time'),
