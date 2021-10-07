@@ -5,23 +5,28 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repository\AccommodationRepository;
 use App\Repository\LocationsRepository;
+use Illuminate\Http\Request;
 
 class SelectController extends Controller
 {
-    public function getLocations() {
-        return LocationsRepository::getAvailableSelectLocations();
+    public function getLocations(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsRepository::getAvailableSelectLocations($filter);
     }
 
-    public function getRegions() {
-        return LocationsRepository::getAvailableSelectRegions();
+    public function getRegions(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsRepository::getAvailableSelectRegions($filter);
     }
 
-    public function getCountries() {
-        return LocationsRepository::getAvailableSelectCountries();
+    public function getCountries(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsRepository::getAvailableSelectCountries($filter);
     }
 
-    public function getLocationTypes() {
-        return LocationsRepository::getAvailableSelectLocationTypes();
+    public function getLocationTypes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsRepository::getAvailableSelectLocationTypes($filter);
     }
 
     public function getSelectedLocation($id) {
@@ -40,16 +45,18 @@ class SelectController extends Controller
         return LocationsRepository::getSelectedLocationType($id);
     }
 
-    public function getRoomTypes() {
-        return AccommodationRepository::getSelectRoomTypes();
+    public function getRoomTypes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return AccommodationRepository::getSelectRoomTypes($filter);
     }
 
     public function getSelectedRoomType($id) {
         return AccommodationRepository::getSelectedRoomType($id);
     }
 
-    public function getBoardTypes() {
-        return AccommodationRepository::getSelectBoardTypes();
+    public function getBoardTypes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return AccommodationRepository::getSelectBoardTypes($filter);
     }
 
     public function getSelectedBoardType($id) {
