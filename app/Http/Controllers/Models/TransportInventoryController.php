@@ -22,6 +22,7 @@ class TransportInventoryController extends Controller
 
     public function store(Request $request, Transport $transport)
     {
+        $request->validate(TransportInventory::RULES);
         $transportInventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'departure_date_time' => $request->input('departure_date_time'),
@@ -51,6 +52,7 @@ class TransportInventoryController extends Controller
 
     public function update(Request $request, Transport $transport, TransportInventory $transportInventory)
     {
+        $request->validate(TransportInventory::RULES);
         $transportInventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'departure_date_time' => $request->input('departure_date_time'),
