@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Repository;
+namespace App\Transforms;
 
 use App\Models\ActivityType;
 use App\Models\TicketType;
 
-interface ActivityRepositoryInterface {
+interface ActivityTransformsInterface {
     public static function getSelectActivityTypes($filter);
     public static function getSelectTicketTypes($filter);
     public static function getSelectedActivityType($id);
     public static function getSelectedTicketType($id);
 }
 
-class ActivityRepository implements ActivityRepositoryInterface
+class ActivityTransforms implements ActivityTransformsInterface
 {
 
     public static function getSelectActivityTypes($filter)

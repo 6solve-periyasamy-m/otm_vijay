@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repository\AccommodationRepository;
-use App\Repository\ActivityRepository;
+use App\Transforms\ActivityTransforms;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 
@@ -60,19 +60,19 @@ class SelectController extends Controller
 
     public function getActivityTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return ActivityRepository::getSelectActivityTypes($filter);
+        return ActivityTransforms::getSelectActivityTypes($filter);
     }
 
     public function getTicketTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return ActivityRepository::getSelectTicketTypes($filter);
+        return ActivityTransforms::getSelectTicketTypes($filter);
     }
 
     public function getSelectedActivityType($id) {
-        return ActivityRepository::getSelectedActivityType($id);
+        return ActivityTransforms::getSelectedActivityType($id);
     }
 
     public function getSelectedTicketTypes($id) {
-        return ActivityRepository::getSelectedTicketType($id);
+        return ActivityTransforms::getSelectedTicketType($id);
     }
 }
