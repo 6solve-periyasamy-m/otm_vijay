@@ -462,7 +462,11 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::get('/tour/{id}', function ($id) { return view('pages.tour.view', \App\Repository\TourRepository::getTourDetails($id)); });
+
     Route::get('/dash', function () { return view('pages.dash'); })->name('dash');
 });
 
 Auth::routes();
+
+Route::get('/test', function () { return view('pages.tour.view', \App\Repository\TourRepository::getTourDetails(1)); });

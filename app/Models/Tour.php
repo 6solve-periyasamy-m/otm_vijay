@@ -15,7 +15,7 @@ class Tour extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event');
+        return $this->belongsTo(Event::class, 'event_id');
     }
     public function paymentSchedule() {
         return $this->hasMany(PaymentSchedule::class, 'payment_schedule');
@@ -69,5 +69,9 @@ class Tour extends Model
 
     public function transportInventoryTours() {
         return $this->hasMany(TransportInventoryTour::class, 'tour_id');
+    }
+
+    public function paymentInstallments() {
+        return $this->hasMany(PaymentInstallment::class, 'tour_id');
     }
 }
