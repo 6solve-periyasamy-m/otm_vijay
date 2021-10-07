@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
+    protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
 
     public function quote() 
     {
