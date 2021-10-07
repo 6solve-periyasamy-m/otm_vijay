@@ -59,17 +59,17 @@ class SelectController extends Controller
     }
 
     public function getTransportTypes(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return TransportRepository::getSelectTransportTypes($filter);
     }
 
     public function getOperators(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return TransportRepository::getSelectOperators($filter);
     }
 
     public function getTravelClasses(Request $request) {
-        $filter = $request->input('filter') != null ? $request->input('filter') : "";
+        $filter = $request->has('filter') ? $request->input('filter') : "";
         return TransportRepository::getSelectTravelClasses($filter);
     }
 
