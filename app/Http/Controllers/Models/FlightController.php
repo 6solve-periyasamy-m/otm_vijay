@@ -21,6 +21,7 @@ class FlightController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Flight::RULES);
         $flight = Flight::create([
             'airline_id' => $request->input('airline_id'),
             'departure_airport_id' => $request->input('departure_airport_id'),
@@ -44,6 +45,7 @@ class FlightController extends Controller
 
     public function update(Request $request, Flight $flight)
     {
+        $request->validate(Flight::RULES);
         $flight->update([
             'airline_id' => $request->input('airline_id'),
             'departure_airport_id' => $request->input('departure_airport_id'),
