@@ -35,7 +35,7 @@ class FlightController extends Controller
 
     public function view(Flight $flight)
     {
-        return view('pages.models.flights.view', ['flight' => $flight,]);
+        return view('pages.components.flight', ['flight' => $flight,]);
     }
 
     public function edit(Flight $flight)
