@@ -55,7 +55,7 @@
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="airline_id-input">Airline</label>
+        <label for="airline_id-input">Airline</label><br />
         <select style="width: 95%;" name="airline_id" class="form-control" id="airline_id-input"></select>
         <a href="{{ route('airlines.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
