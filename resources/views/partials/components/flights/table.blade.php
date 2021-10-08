@@ -6,8 +6,8 @@
 <table id="flightInventory" style="width: 100%;" class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Travel Class</th>
         <th scope="col">Flight Number</th>
+        <th scope="col">Travel Class</th>
         <th scope="col">Check In Time</th>
         <th scope="col">Departure Time</th>
         <th scope="col">Arrival Time</th>
@@ -22,8 +22,8 @@
     </thead>
     @foreach($flight->flightInventory as $flightInventory)
         <tr>
-            <td>{{ $flightInventory->travelClass->title }}</td>
             <td>{{ $flightInventory->flight_number }}</td>
+            <td>{{ $flightInventory->travelClass->title }}</td>
             <td>{{ $flightInventory->check_in_date_time }}</td>
             <td>{{ $flightInventory->departure_date_time }}</td>
             <td>{{ $flightInventory->arrival_date_time }}</td>
