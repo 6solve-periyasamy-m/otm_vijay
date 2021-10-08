@@ -33,7 +33,7 @@ class FlightTransforms implements FlightTransformsInterface
         foreach (Airport::all() as $airport) {
             $subData = [];
             $subData['id'] = $airport->id;
-            $subData['text'] = $airport->name - $airport->location->region->country->name;
+            $subData['text'] = $airport->name . ' - ' . $airport->location->region->country->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -55,7 +55,7 @@ class FlightTransforms implements FlightTransformsInterface
         $airport = Airport::findOrFail($id);
         $data = [];
         $data['id'] = $airport->id;
-        $data['text'] = $airport->name - $airport->location->region->country->name;
+        $data['text'] = $airport->name . ' - ' . $airport->location->region->country->name;
         return $data;
     }
 }
