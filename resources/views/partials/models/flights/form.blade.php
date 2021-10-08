@@ -56,19 +56,19 @@
     @csrf
     <div id="form-group">
         <label for="airline_id-input">Airline</label>
-        <select name="airline_id" class="form-control" id="airline_id-input"></select>
+        <select style="width: 95%;" name="airline_id" class="form-control" id="airline_id-input"></select>
         <a href="{{ route('airlines.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
         <label for="departure_airport_id-input">Departure Airport</label>
-        <select name="departure_airport_id" class="form-control" id="departure_airport_id-input"></select>
+        <select style="width: 95%;" name="departure_airport_id" class="form-control" id="departure_airport_id-input"></select>
         <a href="{{ route('airports.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
         <label for="arrival_airport_id-input">Arrival Airport</label>
-        <select name="arrival_airport_id" class="form-control" id="arrival_airport_id-input"></select>
+        <select style="width: 95%;" name="arrival_airport_id" class="form-control" id="arrival_airport_id-input"></select>
         <a href="{{ route('airports.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
