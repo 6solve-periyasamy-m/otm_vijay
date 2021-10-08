@@ -21,7 +21,6 @@ class ActivityInventory extends Model
         'ticket_type_id' => 'required|exists:ticket_types,id',
         'activity_start_date_time' => 'date',
         'activity_end_date_time' => 'date',
-        'fit_selectable' => 'required',
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
