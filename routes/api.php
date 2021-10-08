@@ -102,6 +102,8 @@ Route::prefix('select')->group(function () {
    Route::get('board-types', [SelectController::class, 'getBoardTypes'])->name('api.board-types.select');
    Route::get('activity-types', [SelectController::class, 'getActivityTypes'])->name('api.activity-types.select');
    Route::get('ticket-types', [SelectController::class, 'getTicketTypes'])->name('api.ticket-types.select');
+   Route::get('airports', [SelectController::class, 'getAirports'])->name('api.airports.select');
+   Route::get('airlines', [SelectController::class, 'getAirlines'])->name('api.airlines.select');
    Route::prefix('selected')->group(function () {
        Route::get('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('api.locations.selected');
        Route::get('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('api.regions.selected');
@@ -111,5 +113,6 @@ Route::prefix('select')->group(function () {
        Route::get('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('api.board-types.selected');
        Route::get('activity-type/{id}', [SelectController::class, 'getSelectedActivityType'])->name('api.activity-types.selected');
        Route::get('ticket-type/{id}', [SelectController::class, 'getSelectedTicketTypes'])->name('api.ticket-types.selected');
+       Route::get('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('api.airports.selected');
    });
 });

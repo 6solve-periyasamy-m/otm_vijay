@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repository\AccommodationRepository;
 use App\Transforms\ActivityTransforms;
 use App\Repository\LocationsRepository;
+use App\Transforms\FlightTransforms;
 use Illuminate\Http\Request;
 
 class SelectController extends Controller
@@ -80,5 +81,23 @@ class SelectController extends Controller
 
     public function getSelectedTicketTypes($id) {
         return ActivityTransforms::getSelectedTicketType($id);
+    }
+
+    public function getAirports(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return FlightTransforms::getSelectAirports($filter);
+    }
+
+    public function getAirlines(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return FlightTransforms::getSelectAirlines($filter);
+    }
+
+    public function getSelectedAirport($id) {
+        return FlightTransforms::getSelectedAirport($id);
+    }
+
+    public function getSelectedAirline($id) {
+        return FlightTransforms::getSelectedAirline($id);
     }
 }
