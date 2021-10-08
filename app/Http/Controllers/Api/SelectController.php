@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Transforms\ActivityTransforms;
+use App\Transforms\TransportTransforms;
 use Illuminate\Http\Request;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\LocationsTransforms;
@@ -63,6 +64,32 @@ class SelectController extends Controller
     public function getSelectedBoardType($id) {
         return AccommodationTransforms::getSelectedBoardType($id);
     }
+  
+    public function getTransportTypes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getSelectTransportTypes($filter);
+    }
+
+    public function getOperators(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getSelectOperators($filter);
+    }
+
+    public function getTravelClasses(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getSelectTravelClasses($filter);
+    }
+
+    public function getSelectedTransportType($id) {
+        return TransportTransforms::getSelectedTransportType($id);
+    }
+
+    public function getSelectedOperator($id) {
+        return TransportTransforms::getSelectedOperator($id);
+    }
+
+    public function getSelectedTravelClass($id) {
+        return TransportTransforms::getSelectedTravelClass($id);
 
     public function getActivityTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
