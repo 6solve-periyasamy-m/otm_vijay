@@ -40,12 +40,12 @@ class FlightInventoryController extends Controller
         return redirect()->route('flights.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
-    public function view(FlightInventory $flightInventory, Flight $flight)
+    public function view(Flight $flight, FlightInventory $flightInventory)
     {
         return view('pages.models.flight_inventories.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
-    public function edit(FlightInventory $flightInventory, Flight $flight)
+    public function edit(Flight $flight, FlightInventory $flightInventory)
     {
         return view('pages.models.flight_inventories.update', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
