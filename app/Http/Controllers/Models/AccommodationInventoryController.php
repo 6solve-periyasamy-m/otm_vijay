@@ -22,6 +22,7 @@ class AccommodationInventoryController extends Controller
 
     public function store(Request $request, Accommodation $accommodation)
     {
+        $request->validate(AccommodationInventory::RULES);
         $accommodationInventory = AccommodationInventory::make([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
@@ -51,6 +52,7 @@ class AccommodationInventoryController extends Controller
 
     public function update(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
+        $request->validate(AccommodationInventory::RULES);
         $accommodationInventory->update([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),

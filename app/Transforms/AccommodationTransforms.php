@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Repository;
+namespace App\Transforms;
 
 use App\Models\BoardType;
 use App\Models\RoomType;
 
-interface AccommodationRepositoryInterface {
-    public static function getSelectRoomTypes();
-    public static function getSelectBoardTypes();
+interface AccommodationTransformsInterface {
+    public static function getSelectRoomTypes($filter);
+    public static function getSelectBoardTypes($filter);
     public static function getSelectedRoomType($id);
     public static function getSelectedBoardType($id);
 }
 
-class AccommodationRepository implements AccommodationRepositoryInterface
+class AccommodationTransforms implements AccommodationTransformsInterface
 {
 
-    public static function getSelectRoomTypes()
+    public static function getSelectRoomTypes($filter)
     {
         $data = [];
         foreach (RoomType::all() as $roomType) {
             $subData = [];
             $subData['id'] = $roomType->id;
             $subData['text'] = $roomType->room_type_name;
-            $data['results'][] = $subData;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }
 
-    public static function getSelectBoardTypes()
+    public static function getSelectBoardTypes($filter)
     {
         $data = [];
         foreach (BoardType::all() as $boardType) {
             $subData = [];
             $subData['id'] = $boardType->id;
             $subData['text'] = $boardType->board_type_name;
-            $data['results'][] = $subData;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }

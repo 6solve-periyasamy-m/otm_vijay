@@ -12,6 +12,13 @@ class Transport extends Model
     use SoftDeletes;
 
     protected $fillable = ['transport_type_id','operator_id','departure_location_id','arrival_location_id','name','description','currency','is_domestic','notes',];
+    const RULES = [
+        'transport_type_id' => 'required|exists:transport_types,id',
+        'operator_id' => 'required|exists:operators,id',
+        'departure_location_id' => 'required|exists:locations,id',
+        'arrival_location_id' => 'required|exists:locations,id',
+        'name' => 'required',
+    ];
 
     public function transportInventory()
     {

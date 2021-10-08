@@ -5,11 +5,11 @@
             roomTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.room-types.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.room-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
                 .then(function (data) {
-                    console.log(data);
                     roomTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
                     roomTypeSelect.trigger({
@@ -21,11 +21,11 @@
             boardTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.board-types.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.board-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
                 .then(function (data) {
-                    console.log(data);
                     boardTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
                     boardTypeSelect.trigger({

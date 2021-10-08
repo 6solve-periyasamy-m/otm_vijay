@@ -1,12 +1,12 @@
 <tr>
-    <td><a href="{{ route('transports.view', ['transport' => $transport,]) }}">{{ $transport_type_id }}</a></td>
-    <td>{{ $operator_id }}</td>
-    <td>{{ $departure_location_id }}</td>
-    <td>{{ $arrival_location_id }}</td>
-    <td>{{ $name }}</td>
+    <td><a href="{{ route('transports.view', ['transport' => $transport,]) }}">{{ $name }}</a></td>
+    <td>{{ $transport->transportType->name }}</td>
+    <td>{{ $transport->operator->name }}</td>
+    <td>{{ $transport->departureLocation->name }}</td>
+    <td>{{ $transport->arrivalLocation->name }}</td>
     <td>{{ $description }}</td>
     <td>{{ $currency }}</td>
-    <td>{{ $is_domestic }}</td>
+    <td>{{ $is_domestic ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
     <td>
         <a href="{{route('transports.edit', ['transport' => $transport,])}}">
