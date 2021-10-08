@@ -5,6 +5,7 @@
         regionSelect.select2({
            ajax: {
                url: '{{ route('api.regions.select') }}',
+               data: function (params) { return {filter: params.term,}; }
            }
         });
         $.ajax({ url: '{{ route('api.regions.selected', ['id' => $region_id ?? 0, ]) }}', })
