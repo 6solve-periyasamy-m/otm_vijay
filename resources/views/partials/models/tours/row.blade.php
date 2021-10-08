@@ -1,17 +1,16 @@
 <tr>
-    <td><a href="{{ route('tours.view', ['tour' => $tour,]) }}">{{ $event_id }}</a></td>
-    <td>{{ $title }}</td>
+    <td><a href="{{ route('tours.view', ['tour' => $tour,]) }}">{{ $title }}</a></td>
+    <td>{{ $event }}</td>
     <td>{{ $description }}</td>
     <td>{{ $date_from }}</td>
     <td>{{ $date_to }}</td>
     <td>{{ $base_price_per_person }}</td>
     <td>{{ $margin }}</td>
     <td>{{ $single_occupancy_surcharge }}</td>
-    <td>{{ $stock_control_active }}</td>
+    <td>{{ $stock_control_active ? "Yes" : "No" }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $booking_form_url }}</td>
-    <td>{{ $tour_colour_id }}</td>
-    <td>{{ $is_active }}</td>
+    <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
     <td>
         <a href="{{route('tours.edit', ['tour' => $tour,])}}">
