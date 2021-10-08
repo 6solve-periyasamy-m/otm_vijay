@@ -18,7 +18,6 @@ class Transport extends Model
         'departure_location_id' => 'required|exists:locations,id',
         'arrival_location_id' => 'required|exists:locations,id',
         'name' => 'required',
-        'is_domestic' => 'required'
     ];
 
     public function transportInventory()
