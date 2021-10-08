@@ -12,6 +12,16 @@ class Tour extends Model
     use SoftDeletes;
 
     protected $fillable = ['event_id','title','description','date_from','date_to','base_price_per_person','margin','single_occupancy_surcharge','stock_control_active','stock','booking_form_url','tour_colour_id','is_active','notes',];
+    const RULES = [
+        'event_id' => 'required|exists:events,id',
+        'title' => 'required',
+        'date_from' => 'required|date',
+        'date_to' => 'required|date',
+        'base_price_per_person' => 'numeric',
+        'margin' => 'numeric',
+        'single_occupancy_surcharge' => 'numeric',
+        'stock' => 'numeric|integer',
+    ];
 
     public function event()
     {
