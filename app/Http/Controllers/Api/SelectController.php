@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Transforms\ActivityTransforms;
+use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
 use Illuminate\Http\Request;
 use App\Transforms\AccommodationTransforms;
@@ -108,5 +109,23 @@ class SelectController extends Controller
 
     public function getSelectedTicketTypes($id) {
         return ActivityTransforms::getSelectedTicketType($id);
+    }
+
+    public function getEvents(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TourTransforms::getSelectEvents($filter);
+    }
+
+    public function getTours(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TourTransforms::getSelectTours($filter);
+    }
+
+    public function getSelectedEvent($id) {
+        return TourTransforms::getSelectedEvent($id);
+    }
+
+    public function getSelectedTour($id) {
+        return TourTransforms::getSelectedTour($id);
     }
 }
