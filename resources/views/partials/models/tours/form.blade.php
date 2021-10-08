@@ -1,8 +1,31 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let eventSelect = $('#event_id-input');
+            eventSelect.select2({
+                ajax: {
+                    url: '{{ route('api.events.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.events.selected', ['id' => $event_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    eventSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    eventSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="event_id-input">Event Id</label>
-        <input name="event_id" value="{{ $event_id ?? "" }}" class="form-control" id="event_id-input">
+        <label for="event_id-input">Event</label><br />
+        <select style="width: 95%" name="event_id" class="form-control" id="event_id-input"></select>
+        <a href="{{ route('events.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
