@@ -90,6 +90,7 @@ class SelectController extends Controller
 
     public function getSelectedTravelClass($id) {
         return TransportTransforms::getSelectedTravelClass($id);
+    }
 
     public function getActivityTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
