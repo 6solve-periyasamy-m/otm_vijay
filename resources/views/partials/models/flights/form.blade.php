@@ -73,19 +73,20 @@
     </div>
     <p></p>
     <div id="form-group">
-        <label for="is_domestic-input">Is Domestic</label>
-        <input name="is_domestic" value="{{ $is_domestic ?? "" }}" class="form-control" id="is_domestic-input">
+        <input type="checkbox" name="is_domestic" class="form-check-input" @if(isset($is_domestic) && $is_domestic == 1) checked @endif
+        id="is_domestic-input">
+        <label for="is_domestic-input" class="form-check-label">Is Domestic</label>
+    </div>
+    <p></p>
+    <div id="form-group">
+        <label for="available_after-input">Available After</label>
+        <input type="date" name="available_after" value="{{ $available_after ?? "" }}" class="form-control"
+               id="available_after-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="notes-input">Notes</label>
         <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
-    </div>
-    <p></p>
-    <div id="form-group">
-        <label for="available_after-input">Available After</label>
-        <input name="available_after" value="{{ $available_after ?? "" }}" class="form-control"
-               id="available_after-input">
     </div>
     <p></p>
     <div id="form-group">
