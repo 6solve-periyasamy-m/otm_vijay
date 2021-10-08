@@ -466,8 +466,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{tour}', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
     });
 
-    Route::get('/tour/{id}', function ($id) { return view('pages.tour.view', \App\Repository\TourRepository::getTourDetails($id)); });
-
     Route::get('/dash', function () { return view('pages.dash'); })->name('dash');
 });
 

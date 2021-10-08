@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour;
+use App\Repository\TourRepository;
 use Illuminate\Http\Request;
 
 class TourController extends Controller
@@ -43,7 +44,7 @@ class TourController extends Controller
 
     public function view(Tour $tour)
     {
-        return view('pages.models.tours.view', ['tour' => $tour,]);
+        return view('pages.tour.view', TourRepository::getTourDetails($tour->id));
     }
 
     public function edit(Tour $tour)
