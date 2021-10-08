@@ -1,11 +1,6 @@
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="flight_id-input">Flight Id</label>
-        <input name="flight_id" value="{{ $flight_id ?? "" }}" class="form-control" id="flight_id-input">
-    </div>
-    <p></p>
-    <div id="form-group">
         <label for="travel_class_id-input">Travel Class Id</label>
         <input name="travel_class_id" value="{{ $travel_class_id ?? "" }}" class="form-control"
                id="travel_class_id-input">
