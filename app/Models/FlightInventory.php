@@ -27,6 +27,12 @@ class FlightInventory extends Model
         'currency' => 'required|size:3',
     ];
 
+    protected $casts = [
+        'check_in_date_time' => 'datetime',
+        'departure_date_time' => 'datetime',
+        'arrival_date_time' => 'datetime',
+    ];
+
     public function flight()
     {
         return $this->belongsTo(Flight::class);
