@@ -1,43 +1,60 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let travelClassSelect = $('#travel_class_id-input');
+            travelClassSelect.select2({
+                ajax: {
+                    url: '{{ route('api.travel-classes.select') }}',
+                }
+            });
+            $.ajax({ url: '{{ route('api.travel-classes.selected', ['id' => $travel_class_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    console.log(data);
+                    travelClassSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    travelClassSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="transport_id-input">Transport Id</label>
-        <input name="transport_id" value="{{ $transport_id ?? "" }}" class="form-control" id="transport_id-input">
-    </div>
-    <p></p>
-    <div id="form-group">
-        <label for="travel_class_id-input">Travel Class Id</label>
-        <input name="travel_class_id" value="{{ $travel_class_id ?? "" }}" class="form-control"
-               id="travel_class_id-input">
+        <label for="travel_class_id-input">Travel Class</label>
+        <select style="width: 95%" name="travel_class_id" class="form-control" id="travel_class_id-input"></select>
+        <a href="{{ route('travel-classes.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
         <label for="departure_date_time-input">Departure Date Time</label>
-        <input name="departure_date_time" value="{{ $departure_date_time ?? "" }}" class="form-control"
+        <input type="datetime-local" name="departure_date_time" value="{{ isset($departure_date_time) ? $departure_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
                id="departure_date_time-input">
     </div>
     <p></p>
     <div id="form-group">
-        <label for="departure_confirmed-input">Departure Confirmed</label>
-        <input name="departure_confirmed" value="{{ $departure_confirmed ?? "" }}" class="form-control"
+        <input type="checkbox" name="departure_confirmed" class="form-check-input" @if(isset($departure_confirmed) && $departure_confirmed == 1) checked @endif
                id="departure_confirmed-input">
+        <label for="departure_confirmed-input">Departure Confirmed</label>
     </div>
     <p></p>
     <div id="form-group">
         <label for="arrival_date_time-input">Arrival Date Time</label>
-        <input name="arrival_date_time" value="{{ $arrival_date_time ?? "" }}" class="form-control"
+        <input type="datetime-local" name="arrival_date_time" value="{{ isset($arrival_date_time) ? $arrival_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
                id="arrival_date_time-input">
     </div>
     <p></p>
     <div id="form-group">
-        <label for="arrival_confirmed-input">Arrival Confirmed</label>
-        <input name="arrival_confirmed" value="{{ $arrival_confirmed ?? "" }}" class="form-control"
+        <input type="checkbox" name="arrival_confirmed" class="form-check-input" @if(isset($arrival_confirmed) && $arrival_confirmed == 1) checked @endif
                id="arrival_confirmed-input">
+        <label for="arrival_confirmed-input">Arrival Confirmed</label>
     </div>
     <p></p>
     <div id="form-group">
+        <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>
         <label for="fit_selectable-input">Fit Selectable</label>
-        <input name="fit_selectable" value="{{ $fit_selectable ?? "" }}" class="form-control" id="fit_selectable-input">
     </div>
     <p></p>
     <div id="form-group">
