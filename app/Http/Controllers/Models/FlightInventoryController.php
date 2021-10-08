@@ -15,9 +15,9 @@ class FlightInventoryController extends Controller
         return view('pages.models.flight_inventories.table', ['flightInventories' => FlightInventory::all(),]);
     }
 
-    public function create()
+    public function create(Flight $flight)
     {
-        return view('pages.models.flight_inventories.create');
+        return view('pages.models.flight_inventories.create', ['flight' => $flight, ]);
     }
 
     public function store(Request $request, Flight $flight)
