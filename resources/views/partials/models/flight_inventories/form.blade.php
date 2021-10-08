@@ -1,7 +1,7 @@
 @section('head-script')
     <script type="text/javascript">
         $(document).ready(function() {
-            let airlineSelect = $('#airline_id-input');
+            let airlineSelect = $('#travel_class_id-input');
             airlineSelect.select2({
                 ajax: {
                     url: '{{ route('api.travel-classes.select') }}',
