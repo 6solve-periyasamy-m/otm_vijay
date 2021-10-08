@@ -120,5 +120,6 @@ Route::prefix('select')->group(function () {
        Route::get('activity-type/{id}', [SelectController::class, 'getSelectedActivityType'])->name('api.activity-types.selected');
        Route::get('ticket-type/{id}', [SelectController::class, 'getSelectedTicketTypes'])->name('api.ticket-types.selected');
        Route::get('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('api.airports.selected');
+       Route::get('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('api.airlines.selected');
    });
 });
