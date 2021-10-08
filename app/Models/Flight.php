@@ -21,7 +21,6 @@ class Flight extends Model
         'airline_id' => 'required|exists:airlines,id',
         'departure_airport_id' => 'required|exists:airports,id',
         'arrival_airport_id' => 'required|exists:airports,id',
-        'is_domestic' => 'required',
         'available_after' => 'date'
     ];
 
