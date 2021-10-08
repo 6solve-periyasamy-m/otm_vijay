@@ -3,66 +3,66 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repository\AccommodationRepository;
 use App\Transforms\ActivityTransforms;
-use App\Repository\LocationsRepository;
 use App\Transforms\TransportTransforms;
 use Illuminate\Http\Request;
+use App\Transforms\AccommodationTransforms;
+use App\Transforms\LocationsTransforms;
 
 class SelectController extends Controller
 {
     public function getLocations(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsRepository::getAvailableSelectLocations($filter);
+        return LocationsTransforms::getAvailableSelectLocations($filter);
     }
 
     public function getRegions(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsRepository::getAvailableSelectRegions($filter);
+        return LocationsTransforms::getAvailableSelectRegions($filter);
     }
 
     public function getCountries(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsRepository::getAvailableSelectCountries($filter);
+        return LocationsTransforms::getAvailableSelectCountries($filter);
     }
 
     public function getLocationTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsRepository::getAvailableSelectLocationTypes($filter);
+        return LocationsTransforms::getAvailableSelectLocationTypes($filter);
     }
 
     public function getSelectedLocation($id) {
-        return LocationsRepository::getSelectedLocation($id);
+        return LocationsTransforms::getSelectedLocation($id);
     }
 
     public function getSelectedRegion($id) {
-        return LocationsRepository::getSelectedRegion($id);
+        return LocationsTransforms::getSelectedRegion($id);
     }
 
     public function getSelectedCountry($id) {
-        return LocationsRepository::getSelectedCountry($id);
+        return LocationsTransforms::getSelectedCountry($id);
     }
 
     public function getSelectedLocationType($id) {
-        return LocationsRepository::getSelectedLocationType($id);
+        return LocationsTransforms::getSelectedLocationType($id);
     }
 
     public function getRoomTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return AccommodationRepository::getSelectRoomTypes($filter);
+        return AccommodationTransforms::getSelectRoomTypes($filter);
     }
 
     public function getSelectedRoomType($id) {
-        return AccommodationRepository::getSelectedRoomType($id);
+        return AccommodationTransforms::getSelectedRoomType($id);
     }
 
     public function getBoardTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return AccommodationRepository::getSelectBoardTypes($filter);
+        return AccommodationTransforms::getSelectBoardTypes($filter);
     }
 
     public function getSelectedBoardType($id) {
-        return AccommodationRepository::getSelectedBoardType($id);
+        return AccommodationTransforms::getSelectedBoardType($id);
     }
   
     public function getTransportTypes(Request $request) {
