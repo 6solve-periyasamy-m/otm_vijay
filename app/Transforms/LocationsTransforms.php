@@ -8,10 +8,10 @@ use App\Models\LocationType;
 use App\Models\Region;
 
 interface LocationsTransformsInterface {
-    public static function getAvailableSelectLocations();
-    public static function getAvailableSelectRegions();
-    public static function getAvailableSelectCountries();
-    public static function getAvailableSelectLocationTypes();
+    public static function getAvailableSelectLocations($filter);
+    public static function getAvailableSelectRegions($filter);
+    public static function getAvailableSelectCountries($filter);
+    public static function getAvailableSelectLocationTypes($filter);
     public static function getSelectedLocation($id);
     public static function getSelectedRegion($id);
     public static function getSelectedCountry($id);
@@ -21,50 +21,50 @@ interface LocationsTransformsInterface {
 class LocationsTransforms implements LocationsTransformsInterface
 {
 
-    public static function getAvailableSelectLocations()
+    public static function getAvailableSelectLocations($filter)
     {
         $data = [];
         foreach (Location::all() as $location) {
             $subData = [];
             $subData['id'] = $location->id;
             $subData['text'] = $location->name . ' - ' . $location->region->name . ' - ' . $location->region->country->name;
-            $data['results'][] = $subData;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }
 
-    public static function getAvailableSelectRegions()
+    public static function getAvailableSelectRegions($filter)
     {
         $data = [];
         foreach (Region::all() as $region) {
             $subData = [];
             $subData['id'] = $region->id;
             $subData['text'] = $region->name . ' - ' . $region->country->name;
-            $data['results'][] = $subData;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }
 
-    public static function getAvailableSelectCountries()
+    public static function getAvailableSelectCountries($filter)
     {
         $data = [];
         foreach (Country::all() as $country) {
             $subData = [];
             $subData['id'] = $country->id;
             $subData['text'] = $country->name;
-            $data['results'][] = $subData;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }
 
-    public static function getAvailableSelectLocationTypes()
+    public static function getAvailableSelectLocationTypes($filter)
     {
         $data = [];
         foreach (LocationType::all() as $locationType) {
             $subData = [];
             $subData['id'] = $locationType->id;
             $subData['text'] = $locationType->name;
-            $data['results'][] = $subData;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }
