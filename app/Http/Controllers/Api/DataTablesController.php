@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tour;
 use App\Transforms\TourTransforms;
 use Illuminate\Http\Request;
 
 
 class DataTablesController extends Controller
 {
-    public function getAccommodationInventoryComponents(Request $request) {
-        $tourId = $request->has('tourId') ? $request->input('tourId') : null;
+    public function getAccommodationInventoryComponents(Request $request, Tour $tour) {
         $dateFrom = $request->has('dateFrom') ? $request->input('dateFrom') : "";
         $dateTo = $request->has('dateTo') ? $request->input('dateTo') : "";
-        return TourTransforms::getAccommodationInventoryDataTable($tourId, $dateFrom, $dateTo);
+        return TourTransforms::getAccommodationInventoryDataTable($tour, $dateFrom, $dateTo);
     }
 
     public function getActivityInventoryComponents(Request $request) {

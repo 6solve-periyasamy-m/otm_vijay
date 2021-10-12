@@ -126,8 +126,8 @@ Route::prefix('select')->group(function () {
 });
 
 Route::prefix('datatables')->group(function () {
-   Route::get('accommodation-inventory', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
-   Route::get('activity-inventory', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
-   Route::get('flight-inventory', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
-   Route::get('transport-inventory', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
+   Route::get('accommodation-inventory/{tour}', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
+   Route::get('activity-inventory/{tour}', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
+   Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
+   Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
 });

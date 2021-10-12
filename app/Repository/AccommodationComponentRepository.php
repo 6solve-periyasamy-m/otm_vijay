@@ -20,7 +20,7 @@ interface AccommodationComponentRepositoryInterface
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
 
-    public static function getAvailableBetweenDates($tourId, Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
@@ -74,10 +74,9 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         ]);
     }
 
-    public static function getAvailableBetweenDates($tourId, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
         $alreadyAdded = [];
-        $tour = Tour::findOrFail($tourId);
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
             $alreadyAdded += [$inventoryTour->accommodationInventory->id,];
         }

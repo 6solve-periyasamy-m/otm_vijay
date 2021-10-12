@@ -16,10 +16,10 @@ interface TourTransformsInterface {
     public static function getSelectEvents($filter);
     public static function getSelectedTour($id);
     public static function getSelectedEvent($id);
-    public static function getAccommodationInventoryDataTable($tourId, $from = "", $to = "");
-    public static function getActivityInventoryDataTable($tourId, $from = "", $to = "");
-    public static function getTransportInventoryDataTable($tourId, $from = "", $to = "");
-    public static function getFlightInventoryDataTable($tourId, $from = "", $to = "");
+    public static function getAccommodationInventoryDataTable(Tour $tour, $from = "", $to = "");
+    public static function getActivityInventoryDataTable(Tour $tour, $from = "", $to = "");
+    public static function getTransportInventoryDataTable(Tour $tour, $from = "", $to = "");
+    public static function getFlightInventoryDataTable(Tour $tour, $from = "", $to = "");
 }
 
 class TourTransforms implements TourTransformsInterface
@@ -69,16 +69,16 @@ class TourTransforms implements TourTransformsInterface
         return $data;
     }
 
-    public static function getAccommodationInventoryDataTable($tourId, $from = "", $to = "")
+    public static function getAccommodationInventoryDataTable(Tour $tour, $from = "", $to = "")
     {
         $dateFrom = null;
         $dateTo = null;
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
-        return AccommodationComponentRepository::getAvailableBetweenDates($tourId, $dateFrom, $dateTo);
+        return AccommodationComponentRepository::getAvailableBetweenDates($tour, $dateFrom, $dateTo);
     }
 
-    public static function getActivityInventoryDataTable($tourId, $from = "", $to = "")
+    public static function getActivityInventoryDataTable(Tour $tour, $from = "", $to = "")
     {
         $dateFrom = null;
         $dateTo = null;
@@ -87,7 +87,7 @@ class TourTransforms implements TourTransformsInterface
         return ActivityComponentRepository::getBetweenDates($dateFrom, $dateTo);
     }
 
-    public static function getTransportInventoryDataTable($tourId, $from = "", $to = "")
+    public static function getTransportInventoryDataTable(Tour $tour, $from = "", $to = "")
     {
         $dateFrom = null;
         $dateTo = null;
@@ -96,7 +96,7 @@ class TourTransforms implements TourTransformsInterface
         return TransportComponentRepository::getBetweenDates($dateFrom, $dateTo);
     }
 
-    public static function getFlightInventoryDataTable($tourId, $from = "", $to = "")
+    public static function getFlightInventoryDataTable(Tour $tour, $from = "", $to = "")
     {
         $dateFrom = null;
         $dateTo = null;
