@@ -42,22 +42,12 @@ use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
-use App\Http\Controllers\TourController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-<<<<<<< HEAD
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\OrderCustomerController;
-use App\Http\Controllers\PaymentScheduleController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\BookingFormLoginController;
-=======
-// use App\Http\Controllers\HomeController;
-// use App\Http\Controllers\Auth\LoginController;
->>>>>>> main
 
 /*
 |--------------------------------------------------------------------------
@@ -116,13 +106,6 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard');
 });
 
-<<<<<<< HEAD
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
-    Route::get('/tour-components/{id}', [TourController::class, 'tourComponents'])->name('tourComponents');
-    Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
-    Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
-=======
 Route::prefix('raw')->middleware('auth')->group(function () {
     Route::prefix('accommodation-inventory-tours')->group(function () {
         Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
@@ -385,7 +368,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/tour-components/update', [TourController::class, 'tourComponentUpdate'])->name('tourComponentUpdate');
         Route::get('/orders-users-components/{id}', [OrderCustomerController::class, 'customerComponents'])->name('customerComponents');
     });
->>>>>>> main
 
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
