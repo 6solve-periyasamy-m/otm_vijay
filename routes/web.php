@@ -471,4 +471,4 @@ Route::middleware('auth')->group(function () {
 
 Auth::routes();
 
-Route::get('/test', function () { return view('pages.tour.view', \App\Repository\TourRepository::getTourDetails(1)); });
+Route::get('/test/{tour}', function (\App\Models\Tour $tour) { return view('partials.components.accommodation.tour.table', ['tour' => $tour,]); });
