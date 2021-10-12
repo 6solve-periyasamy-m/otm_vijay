@@ -131,3 +131,11 @@ Route::prefix('datatables')->group(function () {
    Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
    Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
 });
+
+Route::prefix('component')->group(function() {
+    Route::prefix('tour/{tour}')->group(function() {
+       Route::prefix('accommodation/inventory')->group(function() {
+          Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('api.tour.accommodation.inventory.add');
+       });
+    });
+});
