@@ -10,4 +10,6 @@ class Address extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = ['address_line_1','address_line_2','town','region','country','postcode',];
 }

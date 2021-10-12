@@ -13,6 +13,8 @@ class ActivityInventoryTour extends Model
 
     protected $table = 'activity_inventory_tour';
 
+    protected $fillable = ['tour_id','activity_inventory_id','tour_component_type','tour_sales_price',];
+
     public function activityInventory() {
         return $this->belongsTo(ActivityInventory::class);
     }

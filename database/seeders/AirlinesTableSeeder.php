@@ -22,7 +22,7 @@ class AirlinesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'airline_name' => 'British Airways',
+                'name' => 'British Airways',
                 'created_at' => '2021-01-15 15:36:53',
                 'updated_at' => '2021-01-15 15:36:53',
                 'deleted_at' => NULL,
@@ -30,7 +30,7 @@ class AirlinesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'airline_name' => 'EasyJet',
+                'name' => 'EasyJet',
                 'created_at' => '2021-01-15 15:43:42',
                 'updated_at' => '2021-01-15 15:43:42',
                 'deleted_at' => NULL,
@@ -38,7 +38,7 @@ class AirlinesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'airline_name' => 'KLM',
+                'name' => 'KLM',
                 'created_at' => '2021-01-15 15:43:50',
                 'updated_at' => '2021-01-15 15:43:50',
                 'deleted_at' => NULL,

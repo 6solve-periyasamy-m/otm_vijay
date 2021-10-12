@@ -10,6 +10,8 @@ class OrderCustomerAdjustment extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['order_customer_id','amount','reason',];
+
     public function orderCustomer() {
         return $this->belongsTo(OrdersCustomer::class, 'order_customer_id');
     }

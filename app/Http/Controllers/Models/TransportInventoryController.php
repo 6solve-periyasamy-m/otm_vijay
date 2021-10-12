@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\Models;
+
+use App\Http\Controllers\Controller;
+use App\Models\Transport;
+use App\Models\TransportInventory;
+use Illuminate\Http\Request;
+
+class TransportInventoryController extends Controller
+{
+
+    public function index()
+    {
+        return view('pages.models.transport_inventories.table', ['transportInventories' => TransportInventory::all(),]);
+    }
+
+    public function create(Transport $transport)
+    {
+        return view('pages.models.transport_inventories.create', ['transport' => $transport, ]);
+    }
+
+    public function store(Request $request, Transport $transport)
+    {
+        $request->validate(TransportInventory::RULES);
+        $transportInventory = TransportInventory::make([
+            'travel_class_id' => $request->input('travel_class_id'),
+            'departure_date_time' => $request->input('departure_date_time'),
+            'departure_confirmed' => $request->input('departure_confirmed') === 'on' ? 1 : 0,
+            'arrival_date_time' => $request->input('arrival_date_time'),
+            'arrival_confirmed' => $request->input('arrival_confirmed') === 'on' ? 1 : 0,
+            'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
+            'stock' => $request->input('stock'),
+            'purchase_price' => $request->input('purchase_price'),
+            'sales_price' => $request->input('sales_price'),
+            'currency' => $request->input('currency'),
+            'notes' => $request->input('notes'),
+        ]);
+        $transport->transportInventory()->save($transportInventory);
+        return redirect()->route('transports.view', ['transport' => $transport,]);
+    }
+
+    public function view(TransportInventory $transportInventory)
+    {
+        return view('pages.models.transport_inventories.view', ['transportInventory' => $transportInventory,]);
+    }
+
+    public function edit(Transport $transport, TransportInventory $transportInventory)
+    {
+        return view('pages.models.transport_inventories.update', ['transport' => $transport, 'transportInventory' => $transportInventory,]);
+    }
+
+    public function update(Request $request, Transport $transport, TransportInventory $transportInventory)
+    {
+        $request->validate(TransportInventory::RULES);
+        $transportInventory->update([
+            'travel_class_id' => $request->input('travel_class_id'),
+            'departure_date_time' => $request->input('departure_date_time'),
+            'departure_confirmed' => $request->input('departure_confirmed') === 'on' ? 1 : 0,
+            'arrival_date_time' => $request->input('arrival_date_time'),
+            'arrival_confirmed' => $request->input('arrival_confirmed') === 'on' ? 1 : 0,
+            'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
+            'stock' => $request->input('stock'),
+            'purchase_price' => $request->input('purchase_price'),
+            'sales_price' => $request->input('sales_price'),
+            'currency' => $request->input('currency'),
+            'notes' => $request->input('notes'),
+        ]);
+        return redirect()->route('transports.view', ['transport' => $transport,]);
+    }
+
+    public function destroy(Transport $transport, TransportInventory $transportInventory)
+    {
+        $transportInventory->delete();
+        return redirect()->route('transports.view', ['transport' => $transport,]);
+    }
+}

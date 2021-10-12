@@ -14,7 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+<<<<<<< HEAD
         $this->call(RolesTableSeeder::class);
+=======
+>>>>>>> main
         $this->call(LocationTypesTableSeeder::class);
         $this->call(LocationsTableSeeder::class);
         $this->call(AirportsTableSeeder::class);

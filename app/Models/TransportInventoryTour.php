@@ -12,6 +12,8 @@ class TransportInventoryTour extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['tour_id','transport_inventory_id',];
+
     public function transportInventory() {
         return $this->belongsTo(TransportInventory::class, 'transport_inventory_id');
     }

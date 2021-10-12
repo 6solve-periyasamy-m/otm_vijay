@@ -15,7 +15,7 @@ class CreateAirlinesTable extends Migration
     {
         Schema::create('airlines', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('airline_name');
+            $table->text('name');
             $table->timestamps();
             $table->softDeletes();
         });

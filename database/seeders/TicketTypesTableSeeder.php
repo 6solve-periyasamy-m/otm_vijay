@@ -21,7 +21,7 @@ class TicketTypesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'ticket_type_name' => 'Single',
+                'name' => 'Single',
                 'created_at' => '2021-09-10 09:22:22',
                 'updated_at' => '2021-09-10 09:22:22',
                 'deleted_at' => NULL,
@@ -29,7 +29,7 @@ class TicketTypesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'ticket_type_name' => 'Group',
+                'name' => 'Group',
                 'created_at' => '2021-09-10 09:22:27',
                 'updated_at' => '2021-09-10 09:22:27',
                 'deleted_at' => NULL,
@@ -37,7 +37,7 @@ class TicketTypesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'ticket_type_name' => 'All Inclusive Single',
+                'name' => 'All Inclusive Single',
                 'created_at' => '2021-09-10 09:22:38',
                 'updated_at' => '2021-09-10 09:22:38',
                 'deleted_at' => NULL,
@@ -45,7 +45,7 @@ class TicketTypesTableSeeder extends Seeder
             3 => 
             array (
                 'id' => 4,
-                'ticket_type_name' => 'All Inclusive Group',
+                'name' => 'All Inclusive Group',
                 'created_at' => '2021-09-10 09:22:46',
                 'updated_at' => '2021-09-10 09:22:46',
                 'deleted_at' => NULL,

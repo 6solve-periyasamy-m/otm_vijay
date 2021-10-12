@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class LocationType extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['name',];
 }

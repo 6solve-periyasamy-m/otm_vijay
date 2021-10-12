@@ -1,0 +1,50 @@
+<script type="text/javascript">
+    $(document).ready(function () { $('#flightInventory').DataTable({fixedHeader: true}); });
+</script>
+<a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}" class="btn btn-primary">Add Inventory</a>
+<a href="#" class="btn btn-success">Bulk Add Inventory</a>
+<table id="flightInventory" style="width: 100%;" class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Flight Number</th>
+        <th scope="col">Travel Class</th>
+        <th scope="col">Check In Time</th>
+        <th scope="col">Departure Time</th>
+        <th scope="col">Arrival Time</th>
+        <th scope="col">Fit Selectable</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Purchase Price</th>
+        <th scope="col">Sales Price</th>
+        <th scope="col">Currency</th>
+        <th scope="col">Notes</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    @foreach($flight->flightInventory as $flightInventory)
+        <tr>
+            <td>{{ $flightInventory->flight_number }}</td>
+            <td>{{ $flightInventory->travelClass->title }}</td>
+            <td>{{ $flightInventory->check_in_date_time }}</td>
+            <td>{{ $flightInventory->departure_date_time }}</td>
+            <td>{{ $flightInventory->arrival_date_time }}</td>
+            <td>{{ $flightInventory->fit_selectable ? "Yes" : "No" }}</td>
+            <td>{{ $flightInventory->stock }}</td>
+            <td>{{ $flightInventory->purchase_price }}</td>
+            <td>{{ $flightInventory->sales_price }}</td>
+            <td>{{ $flightInventory->currency }}</td>
+            <td>{{ $flightInventory->notes }}</td>
+            <td>
+                <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}">
+                    <ion-icon name="create"></ion-icon>
+                </a>
+                <a href="#"
+                   onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();">
+                    <ion-icon name="trash"></ion-icon>
+                </a>
+                <form id="flightInventory-{{ $flightInventory->id }}-delete"
+                      action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $flightInventory,]) }}" method="POST"
+                      style="display: none;">{{ csrf_field() }}</form>
+            </td>
+        </tr>
+    @endforeach
+</table>

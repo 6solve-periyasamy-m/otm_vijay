@@ -21,7 +21,7 @@ class ActivityTypesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'activity_type_title' => 'POI Visit',
+                'name' => 'POI Visit',
                 'created_at' => '2021-09-10 09:22:56',
                 'updated_at' => '2021-09-10 09:22:56',
                 'deleted_at' => NULL,
@@ -29,7 +29,7 @@ class ActivityTypesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'activity_type_title' => 'Restaurant Visit',
+                'name' => 'Restaurant Visit',
                 'created_at' => '2021-09-10 09:23:12',
                 'updated_at' => '2021-09-10 09:23:12',
                 'deleted_at' => NULL,
@@ -37,7 +37,7 @@ class ActivityTypesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'activity_type_title' => 'Sports Event',
+                'name' => 'Sports Event',
                 'created_at' => '2021-09-10 09:23:19',
                 'updated_at' => '2021-09-10 09:23:19',
                 'deleted_at' => NULL,

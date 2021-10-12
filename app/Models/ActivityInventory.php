@@ -12,10 +12,21 @@ class ActivityInventory extends Model
     use SoftDeletes;
     use HasFactory;
 
+    protected $fillable = ['activity_id','ticket_type_id','activity_start_date_time','activity_end_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
     protected $casts = [
         'activity_start_date_time' => 'datetime',
         'activity_end_date_time' => 'datetime',
     ];
+    const RULES = [
+        'ticket_type_id' => 'required|exists:ticket_types,id',
+        'activity_start_date_time' => 'date',
+        'activity_end_date_time' => 'date',
+        'stock' => 'required|numeric|integer',
+        'purchase_price' => 'required|numeric',
+        'sales_price' => 'required|numeric',
+        'currency' => 'required|size:3',
+    ];
+
     public function activity()
     {
         return $this->belongsTo(Activity::class);
@@ -52,7 +63,7 @@ class ActivityInventory extends Model
         $activity_start_date_time =  $this->activity_start_date_time->format('d/m/Y H:i');
         $activity_end_date_time = $this->activity_end_date_time->format('d/m/Y H:i');
 
-        return "{$this->activity->title}｜Activity Start: {$activity_start_date_time}｜Activity End: {$activity_end_date_time}｜Ticket Type: {$this->ticketType->ticket_type_name}";
+        return "{$this->activity->title}｜Activity Start: {$activity_start_date_time}｜Activity End: {$activity_end_date_time}｜Ticket Type: {$this->ticketType->name}";
     }
 
     public $additional_attributes = ['Activity_for_tour'];

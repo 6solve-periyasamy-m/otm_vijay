@@ -12,6 +12,26 @@ class FlightInventory extends Model
 
     public $additional_attributes = ['flight_for_tour'];
 
+    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in_date_time','departure_date_time','arrival_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+
+    const RULES = [
+        'travel_class_id' => 'required|exists:travel_classes,id',
+        'flight_number' => 'required',
+        'check_in_date_time' => 'date',
+        'departure_date_time' => 'date',
+        'arrival_date_time' => 'date',
+        'stock' => 'required|numeric|integer',
+        'purchase_price' => 'required|numeric',
+        'sales_price' => 'required|numeric',
+        'currency' => 'required|size:3',
+    ];
+
+    protected $casts = [
+        'check_in_date_time' => 'datetime',
+        'departure_date_time' => 'datetime',
+        'arrival_date_time' => 'datetime',
+    ];
+
     public function flight()
     {
         return $this->belongsTo(Flight::class);
@@ -67,19 +87,19 @@ class FlightInventory extends Model
 
     public function getFlightForTourAttribute()
     {
-        $departure_airport = $this->getDepartureAirport()->airport_name; //Airport::getAirportById($this->flight->departure_airport_id);
-        $arrival_airport = $this->getArrivalAirport()->airport_name; //Airport::getAirportById($this->flight->arrival_airport_id);
+        $departure_airport = $this->getDepartureAirport()->name; //Airport::getAirportById($this->flight->departure_airport_id);
+        $arrival_airport = $this->getArrivalAirport()->name; //Airport::getAirportById($this->flight->arrival_airport_id);
 
         $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->departure_date_time)->format('d/m/Y H:i');
         $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->arrival_date_time)->format('d/m/Y H:i');
 
         $travel_class = is_null($this->travelClass) ? "" : "｜Travel Class: {$this->travelClass->title}";
 
-        return "{$this->flight->airline->airline_name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
+        return "{$this->flight->airline->name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
     }
 
     // public function getFlightDetails()
     // {
-    //     return "{$this->flight->airline->airline_name} | Departs from: {$this->getDepartureAirport()->location->location_name} - Arrives at: {$this->getArrivalAirport()->location->location_name} ";
+    //     return "{$this->flight->airline->name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
     // }
 }

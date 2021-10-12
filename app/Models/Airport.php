@@ -10,6 +10,8 @@ class Airport extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['name','iata_code',];
+
     public function flightInventory()
     {
         return $this->hasManyThrough(FlightInventory::class, Flight::class);
