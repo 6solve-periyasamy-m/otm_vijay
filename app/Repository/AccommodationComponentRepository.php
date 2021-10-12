@@ -20,7 +20,7 @@ interface AccommodationComponentRepositoryInterface
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getAvailableBetweenDates($tourId, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
@@ -74,8 +74,13 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         ]);
     }
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates($tourId, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
+        $alreadyAdded = [];
+        $tour = Tour::findOrFail($tourId);
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $alreadyAdded += [$inventoryTour->accommodationInventory->id,];
+        }
         $query = DB::table('accommodation_inventories');
         $query->join('accommodations', 'accommodation_inventories.accommodation_id', '=', 'accommodations.id');
         $query->join('regions', 'accommodations.region_id', '=', 'regions.id');
@@ -99,6 +104,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'accommodation_inventories.sales_price AS sales_price',
             'accommodation_inventories.notes as notes'
         );
+        $query->whereNotIn('accommodation_inventories.id', $alreadyAdded);
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
         return  ["data" => $query->get(),];
