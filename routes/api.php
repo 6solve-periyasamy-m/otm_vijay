@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use Illuminate\Http\Request;
@@ -122,4 +123,11 @@ Route::prefix('select')->group(function () {
        Route::get('event/{id}', [SelectController::class, 'getSelectedEvent'])->name('api.events.selected');
        Route::get('tour/{id}', [SelectController::class, 'getSelectedTour'])->name('api.tours.selected');
    });
+});
+
+Route::prefix('datatables')->group(function () {
+   Route::get('accommodation-inventory', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
+   Route::get('activity-inventory', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
+   Route::get('flight-inventory', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
+   Route::get('transport-inventory', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
 });
