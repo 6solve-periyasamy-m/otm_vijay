@@ -14,6 +14,18 @@ class AccommodationInventory extends Model
     // use ModelLogging;
     use SoftDeletes;
 
+    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in_date_time','checkin_confirmed','check_out_date_time','checkout_confirmed','fit_selectable','stock','purchase_price','sales_price','notes',];
+    const RULES = [
+        'room_type_id' => 'required|exists:room_types,id',
+        'board_type_id' => 'required|exists:board_types,id',
+        'check_in_date_time' => 'date',
+        'check_out_date_time' => 'date',
+        'stock' => 'required|numeric|integer',
+        'purchase_price' => 'required|numeric',
+        'sales_price' => 'required|numeric',
+        'currency' => 'required|size:3',
+    ];
+
     protected $casts = [
         'check_in_date_time' => 'datetime',
         'check_out_date_time' => 'datetime',

@@ -24,12 +24,12 @@ class BookingController extends Controller
             $orders = new Order;
             $order = $orders->where('token', $token)->first();
             if ($order) {
-                return view('bookingForm')->with(['order' => $order]);
+                return view('pages.booking.form')->with(['order' => $order]);
             }
             abort(404);
         }
         if (config('app.setting.booking-selection')) {
-            return view('bookingForm');
+            return view('pages.booking.form');
         }
         abort(403);
     }
@@ -45,7 +45,7 @@ class BookingController extends Controller
             Log::error('There are no tours for event ', $event->toArray());
             abort(404);
         }
-        return view('eventBookingForm')->with('event', $event);
+        return view('pages.booking.event.form')->with('event', $event);
     }
 
     public function tourBookingForm($url)
@@ -60,11 +60,11 @@ class BookingController extends Controller
             if (!config('app.setting.booking-selection')) {
                 abort(403);
             }
-            return view('bookingForm');
+            return view('pages.booking.form');
         }
 
         if (isset($tour) && isset($event)) {
-            return view('tourBookingForm')->with(['tour' => $tour, 'event' => $event]);
+            return view('pages.booking.tour.form')->with(['tour' => $tour, 'event' => $event]);
         }
 
         abort(404);

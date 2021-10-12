@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Airline extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['name',];
 }

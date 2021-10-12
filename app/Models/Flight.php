@@ -15,6 +15,15 @@ class Flight extends Model
 
     public $additional_attributes = ['flight_details'];
 
+    protected $fillable = ['airline_id','departure_airport_id','arrival_airport_id','is_domestic','notes','available_after',];
+
+    const RULES = [
+        'airline_id' => 'required|exists:airlines,id',
+        'departure_airport_id' => 'required|exists:airports,id',
+        'arrival_airport_id' => 'required|exists:airports,id',
+        'available_after' => 'date'
+    ];
+
     public function flightInventory()
     {
         return $this->hasMany(FlightInventory::class);

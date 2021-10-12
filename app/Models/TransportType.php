@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TransportType extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['name',];
 }

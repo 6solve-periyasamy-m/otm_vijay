@@ -10,6 +10,8 @@ class Order extends Model
 {
     use SoftDeletes, HasFactory;
 
+    protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
+
     public function quote() 
     {
         return $this->hasOne(Quote::class);

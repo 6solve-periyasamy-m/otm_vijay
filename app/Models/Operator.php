@@ -12,6 +12,8 @@ class Operator extends Model
     use SoftDeletes;
     use HasFactory;
 
+    protected $fillable = ['name','notes',];
+
     public function transports() {
         return $this->hasMany(Transport::class, 'operator_id');
     }
