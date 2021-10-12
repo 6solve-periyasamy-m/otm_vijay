@@ -78,7 +78,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     {
         $alreadyAdded = [];
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            $alreadyAdded += [$inventoryTour->accommodationInventory->id,];
+            $alreadyAdded[$inventoryTour->accommodationInventory->id] = $inventoryTour->accommodationInventory->id;
         }
         $query = DB::table('accommodation_inventories');
         $query->join('accommodations', 'accommodation_inventories.accommodation_id', '=', 'accommodations.id');
