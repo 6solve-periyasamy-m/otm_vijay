@@ -8,17 +8,23 @@ use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-interface ActivityComponentRepositoryInterface {
+interface ActivityComponentRepositoryInterface
+{
     public static function getComponentFromOrderComponent($orderComponentId);
+
     public static function getInventoryFromOrderComponent($orderComponentId);
+
     public static function getOrderComponentFromId($orderComponentId);
+
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
+
     public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
 {
-    public static function getOrderComponentFromId($orderComponentId) {
+    public static function getOrderComponentFromId($orderComponentId)
+    {
         return OrdersActivity::findOrFail($orderComponentId);
     }
 
@@ -34,7 +40,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $orderComponent->activityInventoryTour()->first()->activityInventory();
     }
 
-    public static function getAvailableAddons($tourId, $oCustomerId = -1) {
+    public static function getAvailableAddons($tourId, $oCustomerId = -1)
+    {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
         $components = [];
@@ -87,8 +94,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             'activity_inventories.sales_price AS sales_price',
             'activity_inventories.notes AS notes'
         );
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`" );
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`" );
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
         return $query->get();
     }
 }

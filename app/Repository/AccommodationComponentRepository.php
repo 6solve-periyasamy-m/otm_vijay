@@ -2,26 +2,31 @@
 
 namespace App\Repository;
 
-use App\Models\Accommodation;
-use App\Models\AccommodationInventory;
 use App\Models\OrdersAccommodation;
 use App\Models\OrdersCustomer;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-interface AccommodationComponentRepositoryInterface {
+interface AccommodationComponentRepositoryInterface
+{
     public static function getComponentFromOrderComponent($orderComponentId);
+
     public static function getInventoryFromOrderComponent($orderComponentId);
+
     public static function getOrderComponentFromId($orderComponentId);
+
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
+
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
+
     public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
 {
-    public static function getOrderComponentFromId($orderComponentId) {
+    public static function getOrderComponentFromId($orderComponentId)
+    {
         return OrdersAccommodation::findOrFail($orderComponentId);
     }
 
@@ -37,7 +42,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
     }
 
-    public static function getAvailableAddons($tourId, $oCustomerId = -1) {
+    public static function getAvailableAddons($tourId, $oCustomerId = -1)
+    {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
         $components = [];
@@ -59,7 +65,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId) {
+    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
+    {
         return OrdersAccommodation::create([
             'order_customer_id' => $oCustomerId,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
@@ -89,8 +96,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'accommodation_inventories.sales_price AS sales_price',
             'accommodation_inventories.notes as notes'
         );
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`" );
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`" );
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
         return $query->get();
     }
 }
