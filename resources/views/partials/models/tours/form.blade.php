@@ -1,8 +1,31 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let eventSelect = $('#event_id-input');
+            eventSelect.select2({
+                ajax: {
+                    url: '{{ route('api.events.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.events.selected', ['id' => $event_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    eventSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    eventSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="event_id-input">Event Id</label>
-        <input name="event_id" value="{{ $event_id ?? "" }}" class="form-control" id="event_id-input">
+        <label for="event_id-input">Event</label><br />
+        <select style="width: 95%" name="event_id" class="form-control" id="event_id-input"></select>
+        <a href="{{ route('events.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div id="form-group">
@@ -17,12 +40,12 @@
     <p></p>
     <div id="form-group">
         <label for="date_from-input">Date From</label>
-        <input name="date_from" value="{{ $date_from ?? "" }}" class="form-control" id="date_from-input">
+        <input type="date" name="date_from" value="{{ $date_from ?? "" }}" class="form-control" id="date_from-input">
     </div>
     <p></p>
     <div id="form-group">
         <label for="date_to-input">Date To</label>
-        <input name="date_to" value="{{ $date_to ?? "" }}" class="form-control" id="date_to-input">
+        <input type="date" name="date_to" value="{{ $date_to ?? "" }}" class="form-control" id="date_to-input">
     </div>
     <p></p>
     <div id="form-group">
@@ -43,9 +66,9 @@
     </div>
     <p></p>
     <div id="form-group">
-        <label for="stock_control_active-input">Stock Control Active</label>
-        <input name="stock_control_active" value="{{ $stock_control_active ?? "" }}" class="form-control"
-               id="stock_control_active-input">
+        <input type="checkbox" name="stock_control_active" class="form-check-input" @if(isset($stock_control_active) && $stock_control_active == 1) checked @endif
+        id="stock_control_active-input">
+        <label for="checkout_confirmed-input" class="form-check-label">Stock Control Active</label>
     </div>
     <p></p>
     <div id="form-group">
