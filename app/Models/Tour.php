@@ -11,9 +11,21 @@ class Tour extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['event_id','title','description','date_from','date_to','base_price_per_person','margin','single_occupancy_surcharge','stock_control_active','stock','booking_form_url','tour_colour_id','is_active','notes',];
+    const RULES = [
+        'event_id' => 'required|exists:events,id',
+        'title' => 'required',
+        'date_from' => 'required|date',
+        'date_to' => 'required|date',
+        'base_price_per_person' => 'numeric',
+        'margin' => 'numeric',
+        'single_occupancy_surcharge' => 'numeric',
+        'stock' => 'numeric|integer',
+    ];
+
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event');
+        return $this->belongsTo(Event::class, 'event_id');
     }
     public function paymentSchedule() {
         return $this->hasMany(PaymentSchedule::class, 'payment_schedule');
@@ -39,6 +51,10 @@ class Tour extends Model
         return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tour')->withPivot('sales_price', 'tour_component_type');
     }
 
+    public function paymentPlan() {
+        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
+    }
+
     // public function flightInventory()
     // {
     //     return $this->belongsTo(FlightInventory::class);
@@ -48,4 +64,24 @@ class Tour extends Model
     // {
     //     return $this->belongsToMany(ActivityInventoryTour::class)->withPivot('created_at', 'deleted_at');
     // }
+
+    public function accommodationInventoryTours() {
+        return $this->hasMany(AccommodationInventoryTour::class, 'tour_id');
+    }
+
+    public function activityInventoryTours() {
+        return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
+    }
+
+    public function flightInventoryTours() {
+        return $this->hasMany(FlightInventoryTour::class, 'tour_id');
+    }
+
+    public function transportInventoryTours() {
+        return $this->hasMany(TransportInventoryTour::class, 'tour_id');
+    }
+
+    public function paymentInstallments() {
+        return $this->hasMany(PaymentInstallment::class, 'tour_id');
+    }
 }

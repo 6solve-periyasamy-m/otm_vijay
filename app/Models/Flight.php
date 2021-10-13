@@ -15,6 +15,15 @@ class Flight extends Model
 
     public $additional_attributes = ['flight_details'];
 
+    protected $fillable = ['airline_id','departure_airport_id','arrival_airport_id','is_domestic','notes','available_after',];
+
+    const RULES = [
+        'airline_id' => 'required|exists:airlines,id',
+        'departure_airport_id' => 'required|exists:airports,id',
+        'arrival_airport_id' => 'required|exists:airports,id',
+        'available_after' => 'date'
+    ];
+
     public function flightInventory()
     {
         return $this->hasMany(FlightInventory::class);
@@ -45,8 +54,8 @@ class Flight extends Model
         $departs = Carbon::parse($this->departure_date)->format('d/m/Y');
         $arrives = Carbon::parse($this->arrival_date)->format('d/m/Y');
 
-        return "{$this->airline->airline_name} | Departs from: {$this->departureAirport->location->location_name} - Arrives at: {$this->arrivalAirport->location->location_name}";
-        //return "{$this->airline->airline_name} | Departs {$departs} from: {$this->departureAirport->location->location_name} - Arrives {$arrives} at: {$this->arrivalAirport->location->location_name} ";
+        return "{$this->airline->name} | Departs from: {$this->departureAirport->location->name} - Arrives at: {$this->arrivalAirport->location->name}";
+        //return "{$this->airline->name} | Departs {$departs} from: {$this->departureAirport->location->name} - Arrives {$arrives} at: {$this->arrivalAirport->location->name} ";
     }
 
 }

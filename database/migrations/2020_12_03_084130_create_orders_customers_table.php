@@ -17,7 +17,6 @@ class CreateOrdersCustomersTable extends Migration
             $table->increments('id');
             $table->integer('order_id')->nullable();
             $table->integer('customer_id')->nullable();
-            $table->integer('is_lead_booker')->nullable();
             $table->float('tour_cost', 10, 0)->nullable();
             $table->float('single_occupancy_surcharge', 10, 0)->nullable();
             $table->string('travel_insurer', 255)->nullable();

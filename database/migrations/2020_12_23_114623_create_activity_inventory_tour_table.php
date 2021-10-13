@@ -18,7 +18,7 @@ class CreateActivityInventoryTourTable extends Migration
             $table->integer('tour_id');
             $table->integer('activity_inventory_id');
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
-            $table->float('sales_price', 10, 0)->nullable();
+            $table->float('tour_sales_price', 10, 0)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

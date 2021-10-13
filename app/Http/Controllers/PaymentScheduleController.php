@@ -16,7 +16,7 @@ class PaymentScheduleController extends Controller
     public function index()
     {
         $payments = PaymentSchedule::get();
-        return view('payments.schedule', compact('payments'));
+        return view('pages.payments.schedule', compact('payments'));
     }
 
     /**

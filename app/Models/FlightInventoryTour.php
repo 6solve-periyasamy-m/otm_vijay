@@ -14,6 +14,8 @@ class FlightInventoryTour extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['tour_id','flight_inventory_id','tour_component_type','flight_type','tour_sales_price',];
+
     public function flightInventory() 
     {
         return $this->belongsTo(FlightInventory::class);
@@ -23,5 +25,10 @@ class FlightInventoryTour extends Model
     {
         return "{$this->flight_type} {$this->flight->flight_number}";
     }
+
+    public function orders() {
+        return $this->hasMany(OrdersFlight::class, 'flight_inventory_tour_id');
+    }
+
 
 }

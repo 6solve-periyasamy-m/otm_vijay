@@ -8,6 +8,7 @@ use App\Models\OrdersActivity;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
 use App\Models\Transport;
+use App\Repository\OrderRepository;
 
 class OrderCustomerController extends Controller
 {
@@ -19,12 +20,16 @@ class OrderCustomerController extends Controller
         $orderFlights = OrdersFlight::findByOrderCustomer($id);
         $orderTransports = OrdersTransport::findByOrderCustomer($id);
 
-        return view('customerComponents', [
+        return view('pages.components.customer', [
             'customerOrder' => $customerOrder,
             'orderAccommodations' => $orderAccommodations,
             'orderActivities' => $orderActivities,
             'orderFlights' => $orderFlights,
             'orderTransports' => $orderTransports
         ]);
+    }
+
+    public function show($id) {
+        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($id));
     }
 }

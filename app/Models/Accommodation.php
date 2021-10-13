@@ -15,6 +15,14 @@ class Accommodation extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['region_id','title','description','audit_date','address','currency',];
+    const RULES = [
+        'title' => 'required',
+        'region_id' => 'required|exists:regions,id',
+        'audit_date' => 'date',
+        'currency' => 'size:3'
+    ];
+
     public function orderAccommodation()
     {
         return $this->belongsTo(OrdersAccommodation::class);
@@ -32,7 +40,11 @@ class Accommodation extends Model
 
     public function getInventoryRelationAttribute()
     {
-        return "{$this->title} | {$this->region->region_name}";
+        return "{$this->title} | {$this->region->name}";
+    }
+
+    public function inventory() {
+        return $this->hasMany(AccommodationInventory::class, 'accommodation_id');
     }
 
     public $additional_attributes = ['inventory_relation'];

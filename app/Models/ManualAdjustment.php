@@ -10,6 +10,8 @@ class ManualAdjustment extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['order_id','amount','reason',];
+
     public function order() {
         return $this->belongsTo(Order::class, 'order_id');
     }

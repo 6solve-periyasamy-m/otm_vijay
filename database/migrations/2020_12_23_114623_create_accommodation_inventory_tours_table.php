@@ -17,9 +17,9 @@ class CreateAccommodationInventoryToursTable extends Migration
             $table->increments('id');
             $table->integer('tour_id');
             $table->integer('accommodation_inventory_id');
-            $table->float('sales_price', 10, 0)->nullable();
+            $table->float('tour_sales_price', 10, 0)->nullable();
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
-            $table->varchar('booking_policy',12)->default('overbook');
+            $table->string('booking_policy',12)->default('overbook');
             $table->timestamps();
             $table->softDeletes();
         });

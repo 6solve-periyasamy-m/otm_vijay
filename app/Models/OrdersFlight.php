@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\FlightComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,8 @@ class OrdersFlight extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['order_customer_id', 'flight_inventory_tour_id'];
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrdersCustomer::class);
@@ -18,12 +21,16 @@ class OrdersFlight extends Model
 
     public function flight()
     {
-        return $this->hasOne(Flight::class, 'id', 'flight_id');
+        return FlightComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function flightInventory()
     {
-        return $this->hasOneThrough(FlightInventory::class, Flight::class, 'id', 'flight_id', 'flight_id');
+        return FlightComponentRepository::getInventoryFromOrderComponent($this->id);
+    }
+
+    public function flightInventoryTour() {
+        return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
 
     public function departureAirport()

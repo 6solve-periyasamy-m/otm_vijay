@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\TransportComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,19 +12,25 @@ class OrdersTransport extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['order_customer_id', 'transport_inventory_tour_id'];
 
     public function orderCustomers()
     {
         return $this->belongsTo(OrdersCustomer::class);
     }
+
     public function transport()
     {
-        return $this->hasOne(Transport::class,'id','transport_id');
+        return TransportComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function transportInventory()
     {
-        return $this->hasOneThrough(TransportInventory::class, Transport::class, 'id', 'transport_id', 'transport_id');
+        return TransportComponentRepository::getInventoryFromOrderComponent($this->id);
+    }
+
+    public function transportInventoryTour() {
+        return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 
     public static function findByOrderCustomer($orderCustomerId)

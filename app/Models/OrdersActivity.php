@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\ActivityComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,8 @@ class OrdersActivity extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id'];
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrdersCustomer::class);
@@ -18,12 +21,17 @@ class OrdersActivity extends Model
 
     public function activity()
     {
-        return $this->hasOne(Activity::class,'id','activity_id');
+        return ActivityComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
     public function activityInventory()
     {
-        return $this->hasOneThrough(ActivityInventory::class, Activity::class, 'id', 'activity_id', 'activity_id');
+        return ActivityComponentRepository::getInventoryFromOrderComponent($this->id);
+    }
+
+    public function activityInventoryTour()
+    {
+        return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
     }
 
     public static function findByOrderCustomer($orderCustomerId)

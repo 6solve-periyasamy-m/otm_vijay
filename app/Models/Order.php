@@ -10,6 +10,8 @@ class Order extends Model
 {
     use SoftDeletes, HasFactory;
 
+    protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
+
     public function quote() 
     {
         return $this->hasOne(Quote::class);
@@ -17,7 +19,7 @@ class Order extends Model
 
     public function tour()
     {
-        return $this->hasOne(Tour::class);
+        return $this->belongsTo(Tour::class, 'tour_id');
     }
 
     public function orderStatus()
@@ -31,5 +33,13 @@ class Order extends Model
 
     public function payments() {
         return $this->hasMany(Payment::class, 'order_id');
+    }
+
+    public function leadBooker() {
+        return $this->belongsTo(OrdersCustomer::class, 'lead_booker_id');
+    }
+
+    public function adjustments() {
+        return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 }
