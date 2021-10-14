@@ -20,7 +20,7 @@ class ActivityController extends ApiController
                         'tour_component_type' => $request->input('type'),
                         'tour_sales_price' => $inventory->sales_price,
                     ]);
-                    $tour->accommodationInventoryTours()->save($inventoryTour);
+                    $tour->activityInventoryTours()->save($inventoryTour);
                 }
             }
             return 'Any listed components have been successfully added';
