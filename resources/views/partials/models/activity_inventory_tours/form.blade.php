@@ -13,8 +13,11 @@
     <p></p>
     <div id="form-group">
         <label for="tour_component_type-input">Tour Component Type</label>
-        <input name="tour_component_type" value="{{ $tour_component_type ?? "" }}" class="form-control"
-               id="tour_component_type-input">
+        <select class="form-select accommodation-component-type-select" name="tour_component_type" id="tour_component_type-input">
+            <option value="Included" selected>Included</option>
+            <option value="Upgrade">Upgrade</option>
+            <option value="Add-on">Add-on</option>
+        </select>
     </div>
     <p></p>
     <div id="form-group">
