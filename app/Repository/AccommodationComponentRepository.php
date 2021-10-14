@@ -106,6 +106,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query->whereNotIn('accommodation_inventories.id', $alreadyAdded);
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
-        return  ["data" => $query->get(),];
+        return  $query->get();
     }
 }
