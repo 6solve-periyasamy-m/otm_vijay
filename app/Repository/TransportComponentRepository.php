@@ -16,7 +16,7 @@ interface TransportComponentRepositoryInterface
 
     public static function getOrderComponentFromId($orderComponentId);
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class TransportComponentRepository implements TransportComponentRepositoryInterface
@@ -69,8 +69,12 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         ]);
     }
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
+        $alreadyAdded = [];
+        foreach ($tour->transportInventoryTours as $inventoryTour) {
+            $alreadyAdded[$inventoryTour->transportInventory->id] = $inventoryTour->transportInventory->id;
+        }
         $query = DB::table('transport_inventories');
         $query->join('transports', 'transport_inventories.transport_id', '=', 'transports.id');
         $query->join('operators', 'transports.operator_id', '=', 'operators.id');
@@ -97,6 +101,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             'transport_inventories.sales_price AS sales_price',
             'transport_inventories.notes AS notes'
         );
+        $query->whereNotIn('transport_inventories.id', $alreadyAdded);
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departure_date_time` AND `transport_inventories`.`arrival_date_time`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departure_date_time` AND `transport_inventories`.`arrival_date_time`");
         return $query->get();

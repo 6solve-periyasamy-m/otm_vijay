@@ -16,24 +16,21 @@ class DataTablesController extends Controller
         return TourTransforms::getAccommodationInventoryDataTable($tour, $dateFrom, $dateTo);
     }
 
-    public function getActivityInventoryComponents(Request $request) {
-        $tourId = $request->has('tourId') ? $request->input('tourId') : null;
+    public function getActivityInventoryComponents(Request $request, Tour $tour) {
         $dateFrom = $request->has('dateFrom') ? $request->input('dateFrom') : "";
         $dateTo = $request->has('dateTo') ? $request->input('dateTo') : "";
-        return TourTransforms::getActivityInventoryDataTable($tourId, $dateFrom, $dateTo);
+        return TourTransforms::getActivityInventoryDataTable($tour, $dateFrom, $dateTo);
     }
 
-    public function getFlightInventoryComponents(Request $request) {
-        $tourId = $request->has('tourId') ? $request->input('tourId') : null;
+    public function getFlightInventoryComponents(Request $request, Tour $tour) {
         $dateFrom = $request->has('dateFrom') ? $request->input('dateFrom') : "";
         $dateTo = $request->has('dateTo') ? $request->input('dateTo') : "";
-        return TourTransforms::getFlightInventoryDataTable($tourId, $dateFrom, $dateTo);
+        return TourTransforms::getFlightInventoryDataTable($tour, $dateFrom, $dateTo);
     }
 
-    public function getTransportInventoryComponents(Request $request) {
-        $tourId = $request->has('tourId') ? $request->input('tourId') : null;
+    public function getTransportInventoryComponents(Request $request, Tour $tour) {
         $dateFrom = $request->has('dateFrom') ? $request->input('dateFrom') : "";
         $dateTo = $request->has('dateTo') ? $request->input('dateTo') : "";
-        return TourTransforms::getTransportInventoryDataTable($tourId, $dateFrom, $dateTo);
+        return TourTransforms::getTransportInventoryDataTable($tour, $dateFrom, $dateTo);
     }
 }

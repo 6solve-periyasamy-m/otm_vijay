@@ -18,7 +18,7 @@ interface ActivityComponentRepositoryInterface
 
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
@@ -71,8 +71,12 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         ]);
     }
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
+        $alreadyAdded = [];
+        foreach ($tour->activityInventoryTours as $inventoryTour) {
+            $alreadyAdded[$inventoryTour->activityInventory->id] = $inventoryTour->activityInventory->id;
+        }
         $query = DB::table('activity_inventories');
         $query->join('activities', 'activity_inventories.activity_id', '=', 'activities.id');
         $query->join('activity_types', 'activities.activity_type_id', '=', 'activity_types.id');
@@ -94,6 +98,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             'activity_inventories.sales_price AS sales_price',
             'activity_inventories.notes AS notes'
         );
+        $query->whereNotIn('activity_inventories.id', $alreadyAdded);
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
         return $query->get();
