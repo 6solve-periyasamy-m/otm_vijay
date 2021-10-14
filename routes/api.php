@@ -109,6 +109,12 @@ Route::prefix('select')->group(function () {
    Route::get('tours', [SelectController::class, 'getTours'])->name('api.tours.select');
    Route::get('airports', [SelectController::class, 'getAirports'])->name('api.airports.select');
    Route::get('airlines', [SelectController::class, 'getAirlines'])->name('api.airlines.select');
+   Route::prefix('inventory')->group(function () {
+       Route::get('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('api.inventory.accommodation.select');
+       Route::get('activity', [SelectController::class, 'getActivityInventory'])->name('api.inventory.activity.select');
+       Route::get('flight', [SelectController::class, 'getFlightInventory'])->name('api.inventory.flight.select');
+       Route::get('transport', [SelectController::class, 'getTransportInventory'])->name('api.inventory.transport.select');
+   });
    Route::prefix('selected')->group(function () {
        Route::get('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('api.locations.selected');
        Route::get('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('api.regions.selected');
@@ -125,5 +131,11 @@ Route::prefix('select')->group(function () {
        Route::get('tour/{id}', [SelectController::class, 'getSelectedTour'])->name('api.tours.selected');
        Route::get('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('api.airports.selected');
        Route::get('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('api.airlines.selected');
+       Route::prefix('inventory/{id}')->group(function () {
+           Route::get('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('api.inventory.accommodation.selected');
+           Route::get('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('api.inventory.activity.selected');
+           Route::get('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('api.inventory.flight.selected');
+           Route::get('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('api.inventory.transport.selected');
+       });
    });
 });

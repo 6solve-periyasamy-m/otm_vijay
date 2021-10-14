@@ -2,6 +2,7 @@
 
 namespace App\Transforms;
 
+use App\Models\ActivityInventory;
 use App\Models\ActivityType;
 use App\Models\TicketType;
 
@@ -10,6 +11,8 @@ interface ActivityTransformsInterface {
     public static function getSelectTicketTypes($filter);
     public static function getSelectedActivityType($id);
     public static function getSelectedTicketType($id);
+    public static function getSelectInventory($filter);
+    public static function getSelectedInventory($filter);
 }
 
 class ActivityTransforms implements ActivityTransformsInterface
@@ -56,6 +59,28 @@ class ActivityTransforms implements ActivityTransformsInterface
         $data = [];
         $data['id'] = $ticketType->id;
         $data['text'] = $ticketType->name;
+        return $data;
+    }
+
+    public static function getSelectInventory($filter)
+    {
+        $data = [];
+        foreach (ActivityInventory::all() as $inventory) {
+            $subData = [];
+            $subData['id'] = $inventory->id;
+            $subData['text'] = $inventory->activity->title . ' - ' . $inventory->activity->activityType->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedInventory($id)
+    {
+        if ($id == 0) return null;
+        $inventory = ActivityInventory::findOrFail($id);
+        $data = [];
+        $data['id'] = $inventory->id;
+        $data['text'] = $inventory->activity->title . ' - ' . $inventory->activity->activityType->name;
         return $data;
     }
 }
