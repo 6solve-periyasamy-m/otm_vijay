@@ -39,11 +39,11 @@
                 200: function () { alert('Components added successfully'); table.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".component-type-select").find(":selected").val(), "ids": ids },
+            data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids },
         });
     }
 </script>
-<select class="form-select component-type-select">
+<select class="form-select accommodation-component-type-select">
     <option value="Included" selected>Included</option>
     <option value="Upgrade">Upgrade</option>
     <option value="Add-on">Add-on</option>
