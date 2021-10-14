@@ -465,10 +465,25 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'index'])->name('tours.all');
         Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create');
         Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store');
-        Route::get('/{tour}', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view');
-        Route::get('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
-        Route::post('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
-        Route::post('/delete/{tour}', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
+        Route::prefix('{tour}')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view');
+            Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
+            Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
+            Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
+            Route::prefix('inventory')->group(function () {
+                Route::prefix('accommodation')->group(function () {
+                    Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
+                    Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create');
+                    Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store');
+                    Route::prefix('{accommodationInventoryTour}')->group(function () {
+                        Route::get('/', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view');
+                        Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit');
+                        Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update');
+                        Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete');
+                    });
+                });
+            });
+        });
     });
 
     Route::get('/dash', function () { return view('pages.dash'); })->name('dash');
