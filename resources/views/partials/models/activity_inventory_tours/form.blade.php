@@ -24,7 +24,7 @@
     @csrf
     <div id="form-group">
         <label for="activity_inventory_id-input">Activity Inventory</label>
-        <select name="activity_inventory_id" class="form-control" id="activity_inventory_id-input"></select>
+        <select style="width: 100%" name="activity_inventory_id" class="form-control" id="activity_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">

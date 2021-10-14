@@ -24,7 +24,7 @@
     @csrf
     <div id="form-group">
         <label for="transport_inventory_id-input">Transport Inventory</label>
-        <select name="transport_inventory_id" class="form-control" id="transport_inventory_id-input"></select>
+        <select style="width: 100%" name="transport_inventory_id" class="form-control" id="transport_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">

@@ -24,7 +24,7 @@
     @csrf
     <div id="form-group">
         <label for="flight_inventory_id-input">Flight Inventory</label>
-        <select name="flight_inventory_id" class="form-control" id="flight_inventory_id-input"></select>
+        <select style="width: 100%" name="flight_inventory_id" class="form-control" id="flight_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">
