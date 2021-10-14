@@ -1,0 +1,69 @@
+@extends('layout.main')
+
+@section('content')
+<script type="text/javascript">
+    let table;
+    $(document).ready(function () {
+        table = $('.activity-inventory-table').DataTable({
+            fixedHeader: true,
+            select: { style: "multi+shift" },
+            "ajax": "{{ route('api.activity-inventory.datatables', ['tour' => $tour,]) }}",
+            "columns": [
+                { "data": "name" },
+                { "data": "location" },
+                { "data": "activity_type" },
+                { "data": "ticket_type" },
+                { "data": "description" },
+                { "data": "start_date" },
+                { "data": "end_date" },
+                { "data": "fit_selectable" },
+                { "data": "stock" },
+                { "data": "purchase_price" },
+                { "data": "sales_price" },
+                { "data": "notes" },
+            ]
+        });
+    });
+    function getSelectedAccommodationInventory() {
+        let ids = [];
+        table.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
+            let row = table.row(rowIdx);
+            ids.push(row.data().id);
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{ route('api.tour.activity.inventory.add', ['tour' => $tour,]) }}",
+            dataType: "json",
+            statusCode: {
+                200: function () { alert('Components added successfully'); table.ajax.reload(); },
+                400: function () { alert('An incorrect component type has been provided'); }
+            },
+            data: { "type": $(".activity-component-type-select").find(":selected").val(), "ids": ids },
+        });
+    }
+</script>
+<select class="form-select activity-component-type-select">
+    <option value="Included" selected>Included</option>
+    <option value="Upgrade">Upgrade</option>
+    <option value="Add-on">Add-on</option>
+</select>
+<a href="javascript:getSelectedAccommodationInventory()" class="btn btn-success">Add Components</a>
+<table style="width: 100%;" class="table table-striped activity-inventory-table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Activity</th>
+        <th scope="col">Location</th>
+        <th scope="col">Activity Type</th>
+        <th scope="col">Ticket Type</th>
+        <th scope="col">Description</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Fit Selectable</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Purchase Price</th>
+        <th scope="col">Sales Price</th>
+        <th scope="col">Notes</th>
+    </tr>
+    </thead>
+</table>
+@endsection

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\ActivityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -141,5 +142,8 @@ Route::prefix('component')->group(function() {
        Route::prefix('accommodation/inventory')->group(function() {
           Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('api.tour.accommodation.inventory.add');
        });
+        Route::prefix('activity/inventory')->group(function() {
+            Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('api.tour.activity.inventory.add');
+        });
     });
 });
