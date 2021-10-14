@@ -179,15 +179,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{event}', [EventController::class, 'update'])->name('events.update');
         Route::post('/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
     });
-    Route::prefix('flight-inventory-tours')->group(function () {
-        Route::get('/', [FlightInventoryTourController::class, 'index'])->name('flight-inventory-tours.all');
-        Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create');
-        Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store');
-        Route::get('/{flightInventoryTour}', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view');
-        Route::get('/update/{flightInventoryTour}', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit');
-        Route::post('/update/{flightInventoryTour}', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update');
-        Route::post('/delete/{flightInventoryTour}', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete');
-    });
     Route::prefix('hat-sizes')->group(function () {
         Route::get('/', [HatSizeController::class, 'index'])->name('hat-sizes.all');
         Route::get('/create', [HatSizeController::class, 'create'])->name('hat-sizes.create');
@@ -474,6 +465,18 @@ Route::middleware('auth')->group(function () {
                         Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update');
                         Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete');
                     });
+                });
+                Route::prefix('flight')->group(function () {
+                    Route::get('/', [FlightInventoryTourController::class, 'index'])->name('flight-inventory-tours.all');
+                    Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create');
+                    Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store');
+                    Route::prefix('{flightInventoryTour}')->group(function () {
+                        Route::get('/', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view');
+                        Route::get('/update', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit');
+                        Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update');
+                        Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete');
+                    });
+
                 });
             });
         });
