@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Flight;
 use App\Models\FlightInventory;
 use Illuminate\Http\Request;
 
@@ -14,62 +15,63 @@ class FlightInventoryController extends Controller
         return view('pages.models.flight_inventories.table', ['flightInventories' => FlightInventory::all(),]);
     }
 
-    public function create()
+    public function create(Flight $flight)
     {
-        return view('pages.models.flight_inventories.create');
+        return view('pages.models.flight_inventories.create', ['flight' => $flight, ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Flight $flight)
     {
-        $flightInventory = FlightInventory::create([
-            'flight_id' => $request->input('flight_id'),
+        $request->validate(FlightInventory::RULES);
+        $flightInventory = FlightInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
             'check_in_date_time' => $request->input('check_in_date_time'),
             'departure_date_time' => $request->input('departure_date_time'),
             'arrival_date_time' => $request->input('arrival_date_time'),
-            'fit_selectable' => $request->input('fit_selectable'),
+            'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
             'sales_price' => $request->input('sales_price'),
             'currency' => $request->input('currency'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('flight-inventories.view', ['flightInventory' => $flightInventory,]);
+        $flight->flightInventory()->save($flightInventory);
+        return redirect()->route('flights.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
-    public function view(FlightInventory $flightInventory)
+    public function view(Flight $flight, FlightInventory $flightInventory)
     {
-        return view('pages.models.flight_inventories.view', ['flightInventory' => $flightInventory,]);
+        return view('pages.models.flight_inventories.view', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
-    public function edit(FlightInventory $flightInventory)
+    public function edit(Flight $flight, FlightInventory $flightInventory)
     {
-        return view('pages.models.flight_inventories.update', ['flightInventory' => $flightInventory,]);
+        return view('pages.models.flight_inventories.update', ['flight' => $flight, 'flightInventory' => $flightInventory,]);
     }
 
-    public function update(Request $request, FlightInventory $flightInventory)
+    public function update(Request $request, Flight $flight, FlightInventory $flightInventory)
     {
+        $request->validate(FlightInventory::RULES);
         $flightInventory->update([
-            'flight_id' => $request->input('flight_id'),
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
             'check_in_date_time' => $request->input('check_in_date_time'),
             'departure_date_time' => $request->input('departure_date_time'),
             'arrival_date_time' => $request->input('arrival_date_time'),
-            'fit_selectable' => $request->input('fit_selectable'),
+            'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
             'sales_price' => $request->input('sales_price'),
             'currency' => $request->input('currency'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('flight-inventories.view', ['flightInventory' => $flightInventory,]);
+        return redirect()->route('flights.view', ['flight' => $flight, ]);
     }
 
-    public function destroy(FlightInventory $flightInventory)
+    public function destroy(Flight $flight, FlightInventory $flightInventory)
     {
         $flightInventory->delete();
-        return redirect()->route('flight-inventories.all');
+        return redirect()->route('flights.view', ['flight' => $flight, ]);
     }
 }
