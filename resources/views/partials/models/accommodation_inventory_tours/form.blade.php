@@ -1,9 +1,30 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let inventorySelect = $('#accommodation_inventory_id-input');
+            inventorySelect.select2({
+                ajax: {
+                    url: '{{ route('api.inventory.accommodation.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.inventory.accommodation.selected', ['id' => $accommodation_inventory_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    inventorySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    inventorySelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="accommodation_inventory_id-input">Accommodation Inventory Id</label>
-        <input name="accommodation_inventory_id" value="{{ $accommodation_inventory_id ?? "" }}" class="form-control"
-               id="accommodation_inventory_id-input">
+        <label for="accommodation_inventory_id-input">Accommodation Inventory</label>
+        <select name="accommodation_inventory_id" class="form-control" id="accommodation_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">

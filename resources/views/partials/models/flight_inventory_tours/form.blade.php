@@ -1,9 +1,30 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let inventorySelect = $('#flight_inventory_id-input');
+            inventorySelect.select2({
+                ajax: {
+                    url: '{{ route('api.inventory.flight.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.inventory.flight.selected', ['id' => $flight_inventory_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    inventorySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    inventorySelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="flight_inventory_id-input">Flight Inventory Id</label>
-        <input name="flight_inventory_id" value="{{ $flight_inventory_id ?? "" }}" class="form-control"
-               id="flight_inventory_id-input">
+        <label for="flight_inventory_id-input">Flight Inventory</label>
+        <select name="flight_inventory_id" class="form-control" id="flight_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">

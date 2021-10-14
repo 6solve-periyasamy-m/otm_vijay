@@ -1,9 +1,30 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let inventorySelect = $('#transport_inventory_id-input');
+            inventorySelect.select2({
+                ajax: {
+                    url: '{{ route('api.inventory.transport.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.inventory.transport.selected', ['id' => $transport_inventory_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    inventorySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    inventorySelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="transport_inventory_id-input">Transport Inventory Id</label>
-        <input name="transport_inventory_id" value="{{ $transport_inventory_id ?? "" }}" class="form-control"
-               id="transport_inventory_id-input">
+        <label for="transport_inventory_id-input">Transport Inventory</label>
+        <select name="transport_inventory_id" class="form-control" id="transport_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">
