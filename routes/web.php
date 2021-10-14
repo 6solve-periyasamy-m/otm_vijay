@@ -107,15 +107,6 @@ Route::get('/dashboard', function () {
 });
 
 Route::prefix('raw')->middleware('auth')->group(function () {
-    Route::prefix('accommodation-inventory-tours')->group(function () {
-        Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
-        Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create');
-        Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store');
-        Route::get('/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view');
-        Route::get('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit');
-        Route::post('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update');
-        Route::post('/delete/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete');
-    });
     Route::prefix('activity-inventory-tours')->group(function () {
         Route::get('/', [ActivityInventoryTourController::class, 'index'])->name('activity-inventory-tours.all');
         Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create');
