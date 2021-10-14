@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\FlightInventoryTour;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -152,5 +154,26 @@ class FlightController extends ApiController
         }
 
         return response()->json(["success" => true, "orders" => $orders]);
+    }
+
+
+    public function addFlightInventoryToTour(Request $request, Tour $tour) {
+        // TODO: Get actual enum values
+        if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
+            if ($request->has('ids')) {
+                foreach ($request->input('ids') as $id) {
+                    $inventory = FlightInventory::findOrFail($id);
+                    $inventoryTour = FlightInventoryTour::make([
+                        'flight_inventory_id' => $id,
+                        'tour_component_type' => $request->input('type'),
+                        'tour_sales_price' => $inventory->sales_price,
+                    ]);
+                    $tour->flightInventoryTours()->save($inventoryTour);
+                }
+            }
+            return 'Any listed components have been successfully added';
+        }
+        abort(400, 'Invalid component type has been provided');
+        return null;
     }
 }

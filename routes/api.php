@@ -139,11 +139,14 @@ Route::prefix('datatables')->group(function () {
 
 Route::prefix('component')->group(function() {
     Route::prefix('tour/{tour}')->group(function() {
-       Route::prefix('accommodation/inventory')->group(function() {
-          Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('api.tour.accommodation.inventory.add');
-       });
+        Route::prefix('accommodation/inventory')->group(function() {
+           Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('api.tour.accommodation.inventory.add');
+        });
         Route::prefix('activity/inventory')->group(function() {
             Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('api.tour.activity.inventory.add');
+        });
+        Route::prefix('flight/inventory')->group(function() {
+            Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('api.tour.flight.inventory.add');
         });
     });
 });
