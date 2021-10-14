@@ -305,15 +305,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{ticketType}', [TicketTypeController::class, 'update'])->name('ticket-types.update');
         Route::post('/delete/{ticketType}', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete');
     });
-    Route::prefix('transport-inventory-tours')->group(function () {
-        Route::get('/', [TransportInventoryTourController::class, 'index'])->name('transport-inventory-tours.all');
-        Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create');
-        Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store');
-        Route::get('/{transportInventoryTour}', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view');
-        Route::get('/update/{transportInventoryTour}', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit');
-        Route::post('/update/{transportInventoryTour}', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update');
-        Route::post('/delete/{transportInventoryTour}', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete');
-    });
     Route::prefix('transport-types')->group(function () {
         Route::get('/', [TransportTypeController::class, 'index'])->name('transport-types.all');
         Route::get('/create', [TransportTypeController::class, 'create'])->name('transport-types.create');
@@ -476,7 +467,17 @@ Route::middleware('auth')->group(function () {
                         Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update');
                         Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete');
                     });
-
+                });
+                Route::prefix('transport')->group(function () {
+                    Route::get('/', [TransportInventoryTourController::class, 'index'])->name('transport-inventory-tours.all');
+                    Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create');
+                    Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store');
+                    Route::prefix('{transportInventoryTour}')->group(function () {
+                        Route::get('/', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view');
+                        Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit');
+                        Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update');
+                        Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete');
+                    });
                 });
             });
         });
