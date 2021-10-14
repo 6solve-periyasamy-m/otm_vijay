@@ -1,10 +1,7 @@
-@extends('layout.main')
-
-@section('content')
 <script type="text/javascript">
-    let table;
+    let flightTable;
     $(document).ready(function () {
-        table = $('.flight-inventory-table').DataTable({
+        flightTable = $('.flight-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
             "ajax": "{{ route('api.flight-inventory.datatables', ['tour' => $tour,]) }}",
@@ -26,8 +23,8 @@
     });
     function getSelectedFlightInventory() {
         let ids = [];
-        table.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
-            let row = table.row(rowIdx);
+        flightTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
+            let row = flightTable.row(rowIdx);
             ids.push(row.data().id);
         });
         $.ajax({
@@ -35,7 +32,7 @@
             url: "{{ route('api.tour.flight.inventory.add', ['tour' => $tour,]) }}",
             dataType: "json",
             statusCode: {
-                200: function () { alert('Components added successfully'); table.ajax.reload(); },
+                200: function () { alert('Components added successfully'); flightTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
             data: { "type": $(".flight-component-type-select").find(":selected").val(), "ids": ids },
@@ -66,4 +63,3 @@
     </tr>
     </thead>
 </table>
-@endsection

@@ -1,10 +1,7 @@
-@extends('layout.main')
-
-@section('content')
 <script type="text/javascript">
-    let table;
+    let activityTable;
     $(document).ready(function () {
-        table = $('.activity-inventory-table').DataTable({
+        activityTable = $('.activity-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
             "ajax": "{{ route('api.activity-inventory.datatables', ['tour' => $tour,]) }}",
@@ -13,7 +10,6 @@
                 { "data": "location" },
                 { "data": "activity_type" },
                 { "data": "ticket_type" },
-                { "data": "description" },
                 { "data": "start_date" },
                 { "data": "end_date" },
                 { "data": "fit_selectable" },
@@ -26,8 +22,8 @@
     });
     function getSelectedActivityInventory() {
         let ids = [];
-        table.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
-            let row = table.row(rowIdx);
+        activityTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
+            let row = activityTable.row(rowIdx);
             ids.push(row.data().id);
         });
         $.ajax({
@@ -35,7 +31,7 @@
             url: "{{ route('api.tour.activity.inventory.add', ['tour' => $tour,]) }}",
             dataType: "json",
             statusCode: {
-                200: function () { alert('Components added successfully'); table.ajax.reload(); },
+                200: function () { alert('Components added successfully'); activityTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
             data: { "type": $(".activity-component-type-select").find(":selected").val(), "ids": ids },
@@ -55,7 +51,6 @@
         <th scope="col">Location</th>
         <th scope="col">Activity Type</th>
         <th scope="col">Ticket Type</th>
-        <th scope="col">Description</th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
         <th scope="col">Fit Selectable</th>
@@ -66,4 +61,3 @@
     </tr>
     </thead>
 </table>
-@endsection

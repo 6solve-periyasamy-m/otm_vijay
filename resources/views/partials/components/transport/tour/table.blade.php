@@ -1,10 +1,7 @@
-@extends('layout.main')
-
-@section('content')
 <script type="text/javascript">
-    let table;
+    let transportTable;
     $(document).ready(function () {
-        table = $('.transport-inventory-table').DataTable({
+        transportTable = $('.transport-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
             "ajax": "{{ route('api.transport-inventory.datatables', ['tour' => $tour,]) }}",
@@ -27,8 +24,8 @@
     });
     function getSelectedTransportInventory() {
         let ids = [];
-        table.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
-            let row = table.row(rowIdx);
+        transportTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
+            let row = transportTable.row(rowIdx);
             ids.push(row.data().id);
         });
         $.ajax({
@@ -36,7 +33,7 @@
             url: "{{ route('api.tour.transport.inventory.add', ['tour' => $tour,]) }}",
             dataType: "json",
             statusCode: {
-                200: function () { alert('Components added successfully'); table.ajax.reload(); },
+                200: function () { alert('Components added successfully'); transportTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
             data: { "type": $(".transport-component-type-select").find(":selected").val(), "ids": ids },
@@ -68,4 +65,3 @@
     </tr>
     </thead>
 </table>
-@endsection

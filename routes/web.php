@@ -466,6 +466,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create');
         Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store');
         Route::get('/{tour}', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view');
+        Route::get('/{tour}/add', function (\App\Models\Tour $tour) { return view('pages.tour.components.add', ['tour' => $tour, ]); })->name('tours.add');
         Route::get('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
         Route::post('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
         Route::post('/delete/{tour}', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
@@ -475,5 +476,3 @@ Route::middleware('auth')->group(function () {
 });
 
 Auth::routes();
-
-Route::get('/test/{tour}', function (\App\Models\Tour $tour) { return view('partials.components.accommodation.tour.table', ['tour' => $tour,]); });
