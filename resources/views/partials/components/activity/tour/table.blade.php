@@ -24,7 +24,7 @@
             ]
         });
     });
-    function getSelectedAccommodationInventory() {
+    function getSelectedActivityInventory() {
         let ids = [];
         table.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
             let row = table.row(rowIdx);
@@ -47,7 +47,7 @@
     <option value="Upgrade">Upgrade</option>
     <option value="Add-on">Add-on</option>
 </select>
-<a href="javascript:getSelectedAccommodationInventory()" class="btn btn-success">Add Components</a>
+<a href="javascript:getSelectedActivityInventory()" class="btn btn-success">Add Components</a>
 <table style="width: 100%;" class="table table-striped activity-inventory-table">
     <thead class="thead-dark">
     <tr>
