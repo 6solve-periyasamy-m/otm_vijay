@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\TransportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -147,6 +148,9 @@ Route::prefix('component')->group(function() {
         });
         Route::prefix('flight/inventory')->group(function() {
             Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('api.tour.flight.inventory.add');
+        });
+        Route::prefix('transport/inventory')->group(function() {
+            Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('api.tour.transport.inventory.add');
         });
     });
 });
