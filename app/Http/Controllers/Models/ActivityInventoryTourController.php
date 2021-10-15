@@ -22,6 +22,7 @@ class ActivityInventoryTourController extends Controller
 
     public function store(Request $request, Tour $tour)
     {
+        $request->validate(ActivityInventoryTour::getValidationRules());
         $activityInventoryTour = ActivityInventoryTour::make([
             'activity_inventory_id' => $request->input('activity_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
@@ -43,6 +44,7 @@ class ActivityInventoryTourController extends Controller
 
     public function update(Request $request, Tour $tour, ActivityInventoryTour $activityInventoryTour)
     {
+        $request->validate(ActivityInventoryTour::getValidationRules());
         $activityInventoryTour->update([
             'activity_inventory_id' => $request->input('activity_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),

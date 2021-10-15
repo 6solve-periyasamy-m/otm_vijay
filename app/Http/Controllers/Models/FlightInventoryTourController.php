@@ -22,6 +22,7 @@ class FlightInventoryTourController extends Controller
 
     public function store(Request $request, Tour $tour)
     {
+        $request->validate(FlightInventoryTour::getValidationRules());
         $flightInventoryTour = FlightInventoryTour::make([
             'flight_inventory_id' => $request->input('flight_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
@@ -44,6 +45,7 @@ class FlightInventoryTourController extends Controller
 
     public function update(Request $request, Tour $tour, FlightInventoryTour $flightInventoryTour)
     {
+        $request->validate(FlightInventoryTour::getValidationRules());
         $flightInventoryTour->update([
             'flight_inventory_id' => $request->input('flight_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),

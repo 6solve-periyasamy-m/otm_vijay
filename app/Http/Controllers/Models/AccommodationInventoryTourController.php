@@ -22,6 +22,7 @@ class AccommodationInventoryTourController extends Controller
 
     public function store(Request $request, Tour $tour)
     {
+        $request->validate(AccommodationInventoryTour::getValidationRules());
         $accommodationInventoryTour = AccommodationInventoryTour::make([
             'accommodation_inventory_id' => $request->input('accommodation_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
@@ -43,6 +44,7 @@ class AccommodationInventoryTourController extends Controller
 
     public function update(Request $request, Tour $tour, AccommodationInventoryTour $accommodationInventoryTour)
     {
+        $request->validate(AccommodationInventoryTour::getValidationRules());
         $accommodationInventoryTour->update([
             'accommodation_inventory_id' => $request->input('accommodation_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),

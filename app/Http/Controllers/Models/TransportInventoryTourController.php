@@ -22,6 +22,7 @@ class TransportInventoryTourController extends Controller
 
     public function store(Request $request, Tour $tour)
     {
+        $request->validate(TransportInventoryTour::getValidationRules());
         $transportInventoryTour = TransportInventoryTour::make([
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
@@ -43,6 +44,7 @@ class TransportInventoryTourController extends Controller
 
     public function update(Request $request, Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
+        $request->validate(TransportInventoryTour::getValidationRules());
         $transportInventoryTour->update([
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
