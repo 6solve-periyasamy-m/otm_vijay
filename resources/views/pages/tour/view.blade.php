@@ -81,7 +81,7 @@
                             <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                             <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('accommodation-inventory-tours.delete', ['accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
+                                <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
                                     @csrf
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
@@ -108,10 +108,10 @@
                         <tr>
                             <td>{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
                             <td>{{ $activity["component"]->title }}</td>
-                            <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
+                            <td>{{ $activity["component"]->activityType->name }}</td>
                             <td>{{ $activity["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('activity-inventory-tours.delete', ['activityInventoryTour' => $activity["tour"],]) }}" method="post">
+                                <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post">
                                     @csrf
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
@@ -141,7 +141,7 @@
                             <td>{{ $flight["inventory"]->travelClass->title }}</td>
                             <td>{{ $flight["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('flight-inventory-tours.delete', ['flightInventoryTour' => $flight["tour"],]) }}" method="post">
+                                <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post">
                                     @csrf
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
@@ -171,7 +171,7 @@
                             <td>{{ $transport["inventory"]->travelClass->title }}</td>
                             <td>{{ $transport["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('transport-inventory-tours.delete', ['transportInventoryTour' => $transport["tour"],]) }}" method="post">
+                                <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post">
                                     @csrf
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
