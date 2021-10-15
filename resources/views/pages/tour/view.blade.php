@@ -81,9 +81,10 @@
                             <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                             <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                             <td>
+                                <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
@@ -111,9 +112,10 @@
                             <td>{{ $activity["component"]->activityType->name }}</td>
                             <td>{{ $activity["tour"]->tour_component_type }}</td>
                             <td>
+                                <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
@@ -141,9 +143,10 @@
                             <td>{{ $flight["inventory"]->travelClass->title }}</td>
                             <td>{{ $flight["tour"]->tour_component_type }}</td>
                             <td>
+                                <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
@@ -171,9 +174,10 @@
                             <td>{{ $transport["inventory"]->travelClass->title }}</td>
                             <td>{{ $transport["tour"]->tour_component_type }}</td>
                             <td>
+                                <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
