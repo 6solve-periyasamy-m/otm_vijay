@@ -68,7 +68,6 @@
                         <th scope="col">Date</th>
                         <th scope="col">Name</th>
                         <th scope="col">Room Type</th>
-                        <th scope="col">Shared With</th>
                         <th scope="col">Component Type</th>
                         <th scope="col">Actions</th>
                     </tr>
@@ -78,7 +77,6 @@
                             <td>{{ $accommodationEntry["inventory"]->check_in_date_time }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
                             <td>{{ $accommodationEntry["component"]->title }}</td>
                             <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
-                            <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                             <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                             <td>
                                 <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
