@@ -1,20 +1,39 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let inventorySelect = $('#accommodation_inventory_id-input');
+            inventorySelect.select2({
+                ajax: {
+                    url: '{{ route('api.inventory.accommodation.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.inventory.accommodation.selected', ['id' => $accommodation_inventory_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    inventorySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    inventorySelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="tour_id-input">Tour Id</label>
-        <input name="tour_id" value="{{ $tour_id ?? "" }}" class="form-control" id="tour_id-input">
-    </div>
-    <p></p>
-    <div id="form-group">
-        <label for="accommodation_inventory_id-input">Accommodation Inventory Id</label>
-        <input name="accommodation_inventory_id" value="{{ $accommodation_inventory_id ?? "" }}" class="form-control"
-               id="accommodation_inventory_id-input">
+        <label for="accommodation_inventory_id-input">Accommodation Inventory</label>
+        <select style="width: 100%" name="accommodation_inventory_id" class="form-control" id="accommodation_inventory_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">
         <label for="tour_component_type-input">Tour Component Type</label>
-        <input name="tour_component_type" value="{{ $tour_component_type ?? "" }}" class="form-control"
-               id="tour_component_type-input">
+        <select class="form-select accommodation-component-type-select" name="tour_component_type" id="tour_component_type-input">
+            <option value="Included" selected>Included</option>
+            <option value="Upgrade">Upgrade</option>
+            <option value="Add-on">Add-on</option>
+        </select>
     </div>
     <p></p>
     <div id="form-group">

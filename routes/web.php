@@ -107,24 +107,6 @@ Route::get('/dashboard', function () {
 });
 
 Route::prefix('raw')->middleware('auth')->group(function () {
-    Route::prefix('accommodation-inventory-tours')->group(function () {
-        Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
-        Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create');
-        Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store');
-        Route::get('/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view');
-        Route::get('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit');
-        Route::post('/update/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update');
-        Route::post('/delete/{accommodationInventoryTour}', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete');
-    });
-    Route::prefix('activity-inventory-tours')->group(function () {
-        Route::get('/', [ActivityInventoryTourController::class, 'index'])->name('activity-inventory-tours.all');
-        Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create');
-        Route::post('/create', [ActivityInventoryTourController::class, 'store'])->name('activity-inventory-tours.store');
-        Route::get('/{activityInventoryTour}', [ActivityInventoryTourController::class, 'view'])->name('activity-inventory-tours.view');
-        Route::get('/update/{activityInventoryTour}', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit');
-        Route::post('/update/{activityInventoryTour}', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update');
-        Route::post('/delete/{activityInventoryTour}', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete');
-    });
     Route::prefix('activity-types')->group(function () {
         Route::get('/', [ActivityTypeController::class, 'index'])->name('activity-types.all');
         Route::get('/create', [ActivityTypeController::class, 'create'])->name('activity-types.create');
@@ -196,15 +178,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/update/{event}', [EventController::class, 'edit'])->name('events.edit');
         Route::post('/update/{event}', [EventController::class, 'update'])->name('events.update');
         Route::post('/delete/{event}', [EventController::class, 'destroy'])->name('events.delete');
-    });
-    Route::prefix('flight-inventory-tours')->group(function () {
-        Route::get('/', [FlightInventoryTourController::class, 'index'])->name('flight-inventory-tours.all');
-        Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create');
-        Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store');
-        Route::get('/{flightInventoryTour}', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view');
-        Route::get('/update/{flightInventoryTour}', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit');
-        Route::post('/update/{flightInventoryTour}', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update');
-        Route::post('/delete/{flightInventoryTour}', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete');
     });
     Route::prefix('hat-sizes')->group(function () {
         Route::get('/', [HatSizeController::class, 'index'])->name('hat-sizes.all');
@@ -332,15 +305,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{ticketType}', [TicketTypeController::class, 'update'])->name('ticket-types.update');
         Route::post('/delete/{ticketType}', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete');
     });
-    Route::prefix('transport-inventory-tours')->group(function () {
-        Route::get('/', [TransportInventoryTourController::class, 'index'])->name('transport-inventory-tours.all');
-        Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create');
-        Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store');
-        Route::get('/{transportInventoryTour}', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view');
-        Route::get('/update/{transportInventoryTour}', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit');
-        Route::post('/update/{transportInventoryTour}', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update');
-        Route::post('/delete/{transportInventoryTour}', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete');
-    });
     Route::prefix('transport-types')->group(function () {
         Route::get('/', [TransportTypeController::class, 'index'])->name('transport-types.all');
         Route::get('/create', [TransportTypeController::class, 'create'])->name('transport-types.create');
@@ -465,10 +429,58 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'index'])->name('tours.all');
         Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create');
         Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store');
-        Route::get('/{tour}', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view');
-        Route::get('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
-        Route::post('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
-        Route::post('/delete/{tour}', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
+        Route::prefix('{tour}')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view');
+            Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
+            Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
+            Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
+            Route::prefix('inventory')->group(function () {
+                Route::prefix('accommodation')->group(function () {
+                    Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
+                    Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create');
+                    Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store');
+                    Route::prefix('{accommodationInventoryTour}')->group(function () {
+                        Route::get('/', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view');
+                        Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit');
+                        Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update');
+                        Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete');
+                    });
+                });
+                Route::prefix('activity')->group(function () {
+                    Route::get('/', [ActivityInventoryTourController::class, 'index'])->name('activity-inventory-tours.all');
+                    Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create');
+                    Route::post('/create', [ActivityInventoryTourController::class, 'store'])->name('activity-inventory-tours.store');
+                    Route::prefix('{activityInventoryTour}')->group(function () {
+                        Route::get('/', [ActivityInventoryTourController::class, 'view'])->name('activity-inventory-tours.view');
+                        Route::get('/update', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit');
+                        Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update');
+                        Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete');
+                    });
+                });
+                Route::prefix('flight')->group(function () {
+                    Route::get('/', [FlightInventoryTourController::class, 'index'])->name('flight-inventory-tours.all');
+                    Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create');
+                    Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store');
+                    Route::prefix('{flightInventoryTour}')->group(function () {
+                        Route::get('/', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view');
+                        Route::get('/update', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit');
+                        Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update');
+                        Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete');
+                    });
+                });
+                Route::prefix('transport')->group(function () {
+                    Route::get('/', [TransportInventoryTourController::class, 'index'])->name('transport-inventory-tours.all');
+                    Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create');
+                    Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store');
+                    Route::prefix('{transportInventoryTour}')->group(function () {
+                        Route::get('/', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view');
+                        Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit');
+                        Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update');
+                        Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete');
+                    });
+                });
+            });
+        });
     });
 
     Route::get('/dash', function () { return view('pages.dash'); })->name('dash');

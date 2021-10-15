@@ -4,12 +4,15 @@ namespace App\Transforms;
 
 use App\Models\Airline;
 use App\Models\Airport;
+use App\Models\FlightInventory;
 
 interface FlightTransformsInterface {
     public static function getSelectAirlines($filter);
     public static function getSelectAirports($filter);
     public static function getSelectedAirline($id);
     public static function getSelectedAirport($id);
+    public static function getSelectInventory($filter);
+    public static function getSelectedInventory($filter);
 }
 
 class FlightTransforms implements FlightTransformsInterface
@@ -56,6 +59,28 @@ class FlightTransforms implements FlightTransformsInterface
         $data = [];
         $data['id'] = $airport->id;
         $data['text'] = $airport->name . ' - ' . $airport->location->region->country->name;
+        return $data;
+    }
+
+    public static function getSelectInventory($filter)
+    {
+        $data = [];
+        foreach (FlightInventory::all() as $inventory) {
+            $subData = [];
+            $subData['id'] = $inventory->id;
+            $subData['text'] = $inventory->flight_number . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedInventory($id)
+    {
+        if ($id == 0) return null;
+        $inventory = FlightInventory::findOrFail($id);
+        $data = [];
+        $data['id'] = $inventory->id;
+        $data['text'] = $inventory->flight_number . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
         return $data;
     }
 }
