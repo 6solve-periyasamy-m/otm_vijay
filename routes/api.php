@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\TransportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -138,4 +141,28 @@ Route::prefix('select')->group(function () {
            Route::get('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('api.inventory.transport.selected');
        });
    });
+});
+
+Route::prefix('datatables')->group(function () {
+   Route::get('accommodation-inventory/{tour}', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
+   Route::get('activity-inventory/{tour}', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
+   Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
+   Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
+});
+
+Route::prefix('component')->group(function() {
+    Route::prefix('tour/{tour}')->group(function() {
+        Route::prefix('accommodation/inventory')->group(function() {
+           Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('api.tour.accommodation.inventory.add');
+        });
+        Route::prefix('activity/inventory')->group(function() {
+            Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('api.tour.activity.inventory.add');
+        });
+        Route::prefix('flight/inventory')->group(function() {
+            Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('api.tour.flight.inventory.add');
+        });
+        Route::prefix('transport/inventory')->group(function() {
+            Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('api.tour.transport.inventory.add');
+        });
+    });
 });

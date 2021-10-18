@@ -40,7 +40,7 @@
     </table>
     {{ $tour->description }}
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
-    <h1>Components</h1>
+    <h1 class="d-inline">Components</h1><a href="{{ route('tours.add', ['tour' => $tour, ]) }}" class="btn btn-success d-inline">Add Components</a>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     {{-- Tabs Definition --}}
     <ul class="nav nav-tabs">

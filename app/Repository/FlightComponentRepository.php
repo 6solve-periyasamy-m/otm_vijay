@@ -16,7 +16,7 @@ interface FlightComponentRepositoryInterface
 
     public static function getOrderComponentFromId($orderComponentId);
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class FlightComponentRepository implements FlightComponentRepositoryInterface
@@ -69,8 +69,12 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         ]);
     }
 
-    public static function getBetweenDates(Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
+        $alreadyAdded = [];
+        foreach ($tour->flightInventoryTours as $inventoryTour) {
+            $alreadyAdded[$inventoryTour->flightInventory->id] = $inventoryTour->flightInventory->id;
+        }
         $query = DB::table('flight_inventories');
         $query->join('flights', 'flight_inventories.flight_id', '=', 'flights.id');
         $query->join('travel_classes', 'flight_inventories.travel_class_id', '=', 'travel_classes.id');
@@ -95,6 +99,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
             'flight_inventories.sales_price AS sales_price',
             'flight_inventories.notes AS notes'
         );
+        $query->whereNotIn('flight_inventories.id', $alreadyAdded);
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departure_date_time` AND `flight_inventories`.`arrival_date_time`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departure_date_time` AND `flight_inventories`.`arrival_date_time`");
         return $query->get();
