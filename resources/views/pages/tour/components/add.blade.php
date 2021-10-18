@@ -3,6 +3,30 @@
 @section('title', 'Add Components to Tour')
 
 @section('content')
+    <table style="width: 100%">
+        <tr>
+            <td style="border: 1px solid black">{{ $tour->title }}</td>
+            <td style="border: 1px solid black">Price per Person: {{ $tour->base_price_per_person }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black">Event: {{ $tour->event->event_title }}</td>
+            <td style="border: 1px solid black">Single Occupancy Surcharge: {{ $tour->single_occupancy_surcharge }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black">From: {{ $tour->date_from }}</td>
+            <td style="border: 1px solid black">To: {{ $tour->date_to }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black">Margin: {{ $tour->margin }}</td>
+            <td style="border: 1px solid black">Is Active: {{ $tour->is_active ? "Yes" : "No" }}</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black">Internal Notes: {{ $tour->notes }}</td>
+            <td style="border: 1px solid black">External Notes: {{ $tour->notes }}</td>
+        </tr>
+    </table>
+    {{ $tour->description }}
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     {{-- Tabs Definition --}}
     <ul class="nav nav-tabs">
         <li class="nav-item">
