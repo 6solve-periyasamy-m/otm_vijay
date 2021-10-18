@@ -33,7 +33,7 @@ export default {
 </script>
 <style>
 .box {
-    margin: 1rem;
+    margin: 1rem 2rem 1rem;
     padding: 1rem;
     border: 1rem grey double;
 }
