@@ -206,15 +206,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{locationType}', [LocationTypeController::class, 'update'])->name('location-types.update');
         Route::post('/delete/{locationType}', [LocationTypeController::class, 'destroy'])->name('location-types.delete');
     });
-    Route::prefix('manual-adjustments')->group(function () {
-        Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all');
-        Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create');
-        Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual-adjustments.store');
-        Route::get('/{manualAdjustment}', [ManualAdjustmentController::class, 'view'])->name('manual-adjustments.view');
-        Route::get('/update/{manualAdjustment}', [ManualAdjustmentController::class, 'edit'])->name('manual-adjustments.edit');
-        Route::post('/update/{manualAdjustment}', [ManualAdjustmentController::class, 'update'])->name('manual-adjustments.update');
-        Route::post('/delete/{manualAdjustment}', [ManualAdjustmentController::class, 'destroy'])->name('manual-adjustments.delete');
-    });
     Route::prefix('operators')->group(function () {
         Route::get('/', [OperatorController::class, 'index'])->name('operators.all');
         Route::get('/create', [OperatorController::class, 'create'])->name('operators.create');
@@ -343,6 +334,15 @@ Route::middleware('auth')->group(function () {
             Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
             Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
         });
+        Route::prefix('{order}/adjustments')->group(function () {
+            Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all');
+            Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create');
+            Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual-adjustments.store');
+            Route::get('/{manualAdjustment}', [ManualAdjustmentController::class, 'view'])->name('manual-adjustments.view');
+            Route::get('/update/{manualAdjustment}', [ManualAdjustmentController::class, 'edit'])->name('manual-adjustments.edit');
+            Route::post('/update/{manualAdjustment}', [ManualAdjustmentController::class, 'update'])->name('manual-adjustments.update');
+            Route::post('/delete/{manualAdjustment}', [ManualAdjustmentController::class, 'destroy'])->name('manual-adjustments.delete');
+        });
     });
 
     Route::prefix('accommodation')->group(function () {
@@ -382,7 +382,6 @@ Route::middleware('auth')->group(function () {
             });
         });
     });
-
 
     Route::prefix('flights')->group(function () {
         Route::get('/', [FlightController::class, 'index'])->name('flights.all');
