@@ -96,6 +96,11 @@
     </div>
     <p></p>
     <div id="form-group">
+        <label for="currency-input">Currency</label>
+        <input name="currency" value="{{ $currency ?? "" }}" class="form-control" id="currency-input">
+    </div>
+    <p></p>
+    <div id="form-group">
         <label for="notes-input">Notes</label>
         <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
     </div>
