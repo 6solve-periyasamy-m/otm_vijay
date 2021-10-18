@@ -82,10 +82,10 @@ Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFrom
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
-Route::get('/orders/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
-Route::get('/orders/activities/{oCustomerId}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
-Route::get('/orders/flights/{oCustomerId}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
-Route::get('/orders/transports/{oCustomerId}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
+Route::get('/orders/accommodation/{orderCustomer}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
+Route::get('/orders/activities/{orderCustomer}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
+Route::get('/orders/flights/{orderCustomer}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
+Route::get('/orders/transports/{orderCustomer}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
 
 Route::post('/orders/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('addAccommodationAddon');
 Route::post('/orders/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('addActivityAddon');

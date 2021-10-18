@@ -12,24 +12,20 @@ use Illuminate\Routing\Controller;
 
 class TourComponentController extends Controller
 {
-    public function getAvailableAccommodationAddons($oCustomerId) {
-        $oCustomer = OrdersCustomer::findOrFail($oCustomerId);
-        return AccommodationComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+    public function getAvailableAccommodationAddons(OrdersCustomer $orderCustomer) {
+        return AccommodationComponentRepository::getAvailableAddons($orderCustomer->order->tour, $orderCustomer);
     }
 
-    public function getAvailableActivityAddons($oCustomerId) {
-        $oCustomer = OrdersCustomer::findOrFail($oCustomerId);
-        return ActivityComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+    public function getAvailableActivityAddons(OrdersCustomer $orderCustomer) {
+        return ActivityComponentRepository::getAvailableAddons($orderCustomer->order->tour, $orderCustomer);
     }
 
-    public function getAvailableFlightAddons($oCustomerId) {
-        $oCustomer = OrdersCustomer::findOrFail($oCustomerId);
-        return FlightComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+    public function getAvailableFlightAddons(OrdersCustomer $orderCustomer) {
+        return FlightComponentRepository::getAvailableAddons($orderCustomer->order->tour, $orderCustomer);
     }
 
-    public function getAvailableTransportAddons($oCustomerId) {
-        $oCustomer = OrdersCustomer::findOrFail($oCustomerId);
-        return TransportComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+    public function getAvailableTransportAddons(OrdersCustomer $orderCustomer) {
+        return TransportComponentRepository::getAvailableAddons($orderCustomer->order->tour, $orderCustomer);
     }
 
     public function addAccommodationAddon(Request $request) {

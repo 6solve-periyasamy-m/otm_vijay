@@ -36,9 +36,10 @@
 }
 </style>
 <script type="text/javascript">
+    {{-- TODO: Upgrade to Select2 --}}
 function updateAccommodationSelectFields() {
     $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('getAvailableAccommodationAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
         $.each(data, function (index, element) {
             $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
         });
@@ -46,7 +47,7 @@ function updateAccommodationSelectFields() {
 }
 function updateActivitySelectFields() {
     $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableActivityAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('getAvailableActivityAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
         $.each(data, function (index, element) {
             $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
         });
@@ -54,7 +55,7 @@ function updateActivitySelectFields() {
 }
 function updateFlightSelectFields() {
     $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableFlightAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('getAvailableFlightAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
         $.each(data, function (index, element) {
             $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
         });
@@ -62,7 +63,7 @@ function updateFlightSelectFields() {
 }
 function updateTransportSelectFields() {
     $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableTransportAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('getAvailableTransportAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
         $.each(data, function(index, element) {
             $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
         });
