@@ -326,23 +326,32 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderSystemController::class, 'index'])->name("orderSearch");
-        Route::get('/{id}', [OrderSystemController::class, 'show'])->name("orderDetails");
-        Route::get('customer/{id}', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+        Route::prefix('{order}')->group(function () {
+            Route::get('/', [OrderSystemController::class, 'show'])->name("orderDetails");
+            Route::prefix('adjustments')->group(function () {
+                Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all');
+                Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create');
+                Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual-adjustments.store');
+                Route::prefix('{manualAdjustment}')->group(function () {
+                    Route::get('/', [ManualAdjustmentController::class, 'view'])->name('manual-adjustments.view');
+                    Route::get('/update', [ManualAdjustmentController::class, 'edit'])->name('manual-adjustments.edit');
+                    Route::post('/update', [ManualAdjustmentController::class, 'update'])->name('manual-adjustments.update');
+                    Route::post('/delete', [ManualAdjustmentController::class, 'destroy'])->name('manual-adjustments.delete');
+                });
+            });
+            Route::prefix('customer')->group(function () {
+                Route::prefix('{orderCustomer}')->group(function () {
+                    Route::get('/', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+                });
+            });
+        });
         Route::prefix('component')->group(function () {
             Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete');
             Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete');
             Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
             Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
         });
-        Route::prefix('{order}/adjustments')->group(function () {
-            Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all');
-            Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create');
-            Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual-adjustments.store');
-            Route::get('/{manualAdjustment}', [ManualAdjustmentController::class, 'view'])->name('manual-adjustments.view');
-            Route::get('/update/{manualAdjustment}', [ManualAdjustmentController::class, 'edit'])->name('manual-adjustments.edit');
-            Route::post('/update/{manualAdjustment}', [ManualAdjustmentController::class, 'update'])->name('manual-adjustments.update');
-            Route::post('/delete/{manualAdjustment}', [ManualAdjustmentController::class, 'destroy'])->name('manual-adjustments.delete');
-        });
+
     });
 
     Route::prefix('accommodation')->group(function () {
