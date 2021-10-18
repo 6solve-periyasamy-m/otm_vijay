@@ -3,53 +3,59 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tour;
 use App\Models\TransportInventoryTour;
 use Illuminate\Http\Request;
 
 class TransportInventoryTourController extends Controller
 {
 
-    public function index()
+    public function index(Tour $tour)
     {
-        return view('pages.models.transport_inventory_tours.table', ['transportInventoryTours' => TransportInventoryTour::all(),]);
+        return view('pages.models.transport_inventory_tours.table', ['tour' => $tour, 'transportInventoryTours' => TransportInventoryTour::all(),]);
     }
 
-    public function create()
+    public function create(Tour $tour)
     {
-        return view('pages.models.transport_inventory_tours.create');
+        return view('pages.models.transport_inventory_tours.create', ['tour' => $tour, ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Tour $tour)
     {
-        $transportInventoryTour = TransportInventoryTour::create([
-            'tour_id' => $request->input('tour_id'),
+        $request->validate(TransportInventoryTour::getValidationRules());
+        $transportInventoryTour = TransportInventoryTour::make([
             'transport_inventory_id' => $request->input('transport_inventory_id'),
+            'tour_component_type' => $request->input('tour_component_type'),
+            'tour_sales_price' => $request->input('tour_sales_price'),
         ]);
-        return redirect()->route('transport-inventory-tours.view', ['transportInventoryTour' => $transportInventoryTour,]);
+        $tour->transportInventoryTours()->save($transportInventoryTour);
+        return redirect()->route('tours.view', ['tour' => $tour, ]);
     }
 
-    public function view(TransportInventoryTour $transportInventoryTour)
+    public function view(Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
-        return view('pages.models.transport_inventory_tours.view', ['transportInventoryTour' => $transportInventoryTour,]);
+        return view('pages.models.transport_inventory_tours.view', ['tour' => $tour, 'transportInventoryTour' => $transportInventoryTour,]);
     }
 
-    public function edit(TransportInventoryTour $transportInventoryTour)
+    public function edit(Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
-        return view('pages.models.transport_inventory_tours.update', ['transportInventoryTour' => $transportInventoryTour,]);
+        return view('pages.models.transport_inventory_tours.update', ['tour' => $tour, 'transportInventoryTour' => $transportInventoryTour,]);
     }
 
-    public function update(Request $request, TransportInventoryTour $transportInventoryTour)
+    public function update(Request $request, Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
+        $request->validate(TransportInventoryTour::getValidationRules());
         $transportInventoryTour->update([
-            'tour_id' => $request->input('tour_id'),
             'transport_inventory_id' => $request->input('transport_inventory_id'),
+            'tour_component_type' => $request->input('tour_component_type'),
+            'tour_sales_price' => $request->input('tour_sales_price'),
         ]);
-        return redirect()->route('transport-inventory-tours.view', ['transportInventoryTour' => $transportInventoryTour,]);
+        return redirect()->route('tours.view', ['tour' => $tour, ]);
     }
 
-    public function destroy(TransportInventoryTour $transportInventoryTour)
+    public function destroy(Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
         $transportInventoryTour->delete();
-        return redirect()->route('transport-inventory-tours.all');
+        return redirect()->route('tours.view', ['tour' => $tour, ]);
     }
 }

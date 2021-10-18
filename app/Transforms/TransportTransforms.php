@@ -3,6 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Operator;
+use App\Models\TransportInventory;
 use App\Models\TransportType;
 use App\Models\TravelClass;
 
@@ -13,6 +14,8 @@ interface TransportTransformsInterface {
     public static function getSelectedTransportType($id);
     public static function getSelectedOperator($id);
     public static function getSelectedTravelClass($id);
+    public static function getSelectInventory($filter);
+    public static function getSelectedInventory($filter);
 }
 
 class TransportTransforms implements TransportTransformsInterface
@@ -80,6 +83,28 @@ class TransportTransforms implements TransportTransformsInterface
         $data = [];
         $data['id'] = $travelClass->id;
         $data['text'] = $travelClass->title;
+        return $data;
+    }
+
+    public static function getSelectInventory($filter)
+    {
+        $data = [];
+        foreach (TransportInventory::all() as $inventory) {
+            $subData = [];
+            $subData['id'] = $inventory->id;
+            $subData['text'] = $inventory->transport->name . ' - ' . $inventory->departureLocation->name . ' to ' . $inventory->arrivalLocation->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedInventory($id)
+    {
+        if ($id == 0) return null;
+        $inventory = TransportInventory::findOrFail($id);
+        $data = [];
+        $data['id'] = $inventory->id;
+        $data['text'] = $inventory->transport->name . ' - ' . $inventory->departureLocation->name . ' to ' . $inventory->arrivalLocation->name;
         return $data;
     }
 }
