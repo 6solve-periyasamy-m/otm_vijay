@@ -23,7 +23,7 @@ class ActivityController extends ApiController
                     $tour->activityInventoryTours()->save($inventoryTour);
                 }
             }
-            return 'Any listed components have been successfully added';
+            return response('Any listed components have been successfully added', 200);
         }
         abort(400, 'Invalid component type has been provided');
         return null;
