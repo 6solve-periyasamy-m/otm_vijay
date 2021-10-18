@@ -429,11 +429,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'index'])->name('tours.all');
         Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create');
         Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store');
+        Route::get('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
+        Route::post('/update/{tour}', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
+        Route::post('/delete/{tour}', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
         Route::prefix('{tour}')->group(function () {
             Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view');
             Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit');
             Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update');
             Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete');
+            Route::get('/add', function (\App\Models\Tour $tour) { return view('pages.tour.components.add', ['tour' => $tour, ]); })->name('tours.add');
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {
                     Route::get('/', [AccommodationInventoryTourController::class, 'index'])->name('accommodation-inventory-tours.all');
@@ -487,5 +491,3 @@ Route::middleware('auth')->group(function () {
 });
 
 Auth::routes();
-
-Route::get('/test', function () { return view('pages.tour.view', \App\Repository\TourRepository::getTourDetails(1)); });

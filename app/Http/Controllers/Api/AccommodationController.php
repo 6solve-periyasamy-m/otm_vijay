@@ -417,4 +417,24 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
 
         return response()->json(["success" => true, "data" => $customer_order_detail]);
     }
+
+    public function addAccommodationInventoryToTour(Request $request, Tour $tour) {
+        // TODO: Get actual enum values
+        if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
+            if ($request->has('ids')) {
+                foreach ($request->input('ids') as $id) {
+                    $inventory = AccommodationInventory::findOrFail($id);
+                    $inventoryTour = AccommodationInventoryTour::make([
+                        'accommodation_inventory_id' => $id,
+                        'tour_component_type' => $request->input('type'),
+                        'tour_sales_price' => $inventory->sales_price,
+                    ]);
+                    $tour->accommodationInventoryTours()->save($inventoryTour);
+                }
+            }
+            return response('Any listed components have been successfully added', 200);
+        }
+        abort(400, 'Invalid component type has been provided');
+        return null;
+    }
 }
