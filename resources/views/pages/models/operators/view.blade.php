@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Operators')
+@section('title', 'View Operator')
 
 @section('content')
     Name: {{ $operator->name }}<br/>

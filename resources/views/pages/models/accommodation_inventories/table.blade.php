@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Accommodation Inventories')
+@section('title', 'All Accommodation Inventories')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('accommodation-inventories.create') }}">Create New</a>

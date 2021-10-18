@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Room Types')
+@section('title', 'All Room Types')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('room-types.create') }}">Create New</a>

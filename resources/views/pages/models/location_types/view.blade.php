@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Location Types')
+@section('title', 'View Location Type')
 
 @section('content')
     Name: {{ $locationType->name }}<br/>

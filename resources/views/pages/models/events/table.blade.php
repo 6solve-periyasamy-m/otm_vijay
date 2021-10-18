@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Events')
+@section('title', 'All Events')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('events.create') }}">Create New</a>

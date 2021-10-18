@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Locations')
+@section('title', 'View Location')
 
 @section('content')
     Region Id: {{ $location->region_id }}<br/>

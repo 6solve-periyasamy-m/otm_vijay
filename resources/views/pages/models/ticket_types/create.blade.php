@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Create Ticket Types')
+@section('title', 'Create Ticket Type')
 
 @section('content')
     @include('partials.models.ticket_types.form', ['action' => route('ticket-types.store'),])

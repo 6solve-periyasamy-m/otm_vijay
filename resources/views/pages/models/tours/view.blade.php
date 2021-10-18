@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Tours')
+@section('title', 'View Tour')
 
 @section('content')
     Event Id: {{ $tour->event_id }}<br/>

@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Activity Inventories')
+@section('title', 'View Activity Inventory')
 
 @section('content')
     Activity Id: {{ $activityInventory->activity_id }}<br/>

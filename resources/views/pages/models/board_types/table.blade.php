@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Board Types')
+@section('title', 'All Board Types')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('board-types.create') }}">Create New</a>

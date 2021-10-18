@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Orders Customers')
+@section('title', 'All Orders Customers')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('orders-customers.create') }}">Create New</a>

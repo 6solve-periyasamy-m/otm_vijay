@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Addresses')
+@section('title', 'View Address')
 
 @section('content')
     Address Line 1: {{ $address->address_line_1 }}<br/>
