@@ -233,15 +233,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{ordersCustomer}', [OrdersCustomerController::class, 'update'])->name('orders-customers.update');
         Route::post('/delete/{ordersCustomer}', [OrdersCustomerController::class, 'destroy'])->name('orders-customers.delete');
     });
-    Route::prefix('order-customer-adjustments')->group(function () {
-        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all');
-        Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create');
-        Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order-customer-adjustments.store');
-        Route::get('/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'view'])->name('order-customer-adjustments.view');
-        Route::get('/update/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'edit'])->name('order-customer-adjustments.edit');
-        Route::post('/update/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'update'])->name('order-customer-adjustments.update');
-        Route::post('/delete/{orderCustomerAdjustment}', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete');
-    });
     Route::prefix('payments')->group(function () {
         Route::get('/', [PaymentController::class, 'index'])->name('payments.all');
         Route::get('/create', [PaymentController::class, 'create'])->name('payments.create');
@@ -342,6 +333,17 @@ Route::middleware('auth')->group(function () {
             Route::prefix('customer')->group(function () {
                 Route::prefix('{orderCustomer}')->group(function () {
                     Route::get('/', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+                    Route::prefix('adjustment')->group(function () {
+                        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all');
+                        Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create');
+                        Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order-customer-adjustments.store');
+                        Route::prefix('{orderCustomerAdjustment}')->group(function () {
+                            Route::get('/', [OrderCustomerAdjustmentController::class, 'view'])->name('order-customer-adjustments.view');
+                            Route::get('/update', [OrderCustomerAdjustmentController::class, 'edit'])->name('order-customer-adjustments.edit');
+                            Route::post('/update', [OrderCustomerAdjustmentController::class, 'update'])->name('order-customer-adjustments.update');
+                            Route::post('/delete', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete');
+                        });
+                    });
                 });
             });
         });
@@ -351,7 +353,6 @@ Route::middleware('auth')->group(function () {
             Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete');
             Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete');
         });
-
     });
 
     Route::prefix('accommodation')->group(function () {
