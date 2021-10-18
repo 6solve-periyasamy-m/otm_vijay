@@ -139,8 +139,8 @@
     {{-- Manual Adjustments Table --}}
     <div id="costs-section">
         <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
-            <div id="customers-header" style="max-width: 35%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Order Adjustments
+            <div id="customers-header" style="max-width: 50%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
+                Order Adjustments <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="d-inline btn btn-success">Add Adjustment</a>
             </div>
             <table style="min-width: 100%; margin-bottom: 1px">
                 <thead>
