@@ -4,6 +4,7 @@
     <h5>Octopus Travel Matrix</h5>
     <h1>Frontend Tests</h1>
     <a href="/">HOME</a>
+    <vue-test></vue-test>
     <atol-certificate
         travellers="Traveller1, Traveller2, Traveller3 and Traveller4"
         passengers="4"
@@ -17,8 +18,7 @@
     ></atol-certificate>
     <div class="container">
         <div class="panel">
-            <h2>Vue Test</h2>
-            <vue-test></vue-test>
+
             <h1>API Tests</h1>
             <ul>
                 <li>

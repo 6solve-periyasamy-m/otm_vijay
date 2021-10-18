@@ -1,11 +1,24 @@
 require('./bootstrap');
 window.axios = require('axios');
 window.lodash = require('lodash');
+var $ = require( "jquery" );
 //import { BIconNodePlus } from 'bootstrap-vue';
 //window.validPhone = require('./validphone');
 import Vue from 'vue'
 import { bus } from './bus'
+//import $ from 'jquery'
 //import { validPhone } from './validphone'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faUserSecret)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+Vue.config.productionTip = false
+
 
 window.axios.defaults.headers.common = {
      'X-Requested-With': 'XMLHttpRequest',
