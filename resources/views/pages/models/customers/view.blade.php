@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Customers')
+@section('title', 'View Customer')
 
 @section('content')
     Title: {{ $customer->title }}<br/>

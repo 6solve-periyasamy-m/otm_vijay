@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Transports')
+@section('title', 'Update Transport')
 
 @section('content')
     @include('partials.models.transports.form', ['action' => route('transports.update', ['transport' => $transport,]),

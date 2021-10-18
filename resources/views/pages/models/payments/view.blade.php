@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Payments')
+@section('title', 'View Payment')
 
 @section('content')
     Order Id: {{ $payment->order_id }}<br/>

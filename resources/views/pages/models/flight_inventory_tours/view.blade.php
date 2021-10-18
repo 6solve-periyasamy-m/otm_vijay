@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Flight Inventory Tours')
+@section('title', 'View Flight Inventory Tour')
 
 @section('content')
     Tour Id: {{ $flightInventoryTour->tour_id }}<br/>

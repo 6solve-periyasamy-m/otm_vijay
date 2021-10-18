@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Orders')
+@section('title', 'View Order')
 
 @section('content')
     Quote Id: {{ $order->quote_id }}<br/>

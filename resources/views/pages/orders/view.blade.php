@@ -1,4 +1,6 @@
 @extends('layout.main')
+
+@section('title', 'View Order')
 {{-- TODO: Tidy up CSS --}}
 @section('content')
 {{-- Header Details --}}

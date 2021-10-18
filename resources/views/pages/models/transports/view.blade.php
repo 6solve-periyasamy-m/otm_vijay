@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Transports')
+@section('title', 'View Transport')
 
 @section('content')
     Transport Type Id: {{ $transport->transport_type_id }}<br/>

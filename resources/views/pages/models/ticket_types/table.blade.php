@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Ticket Types')
+@section('title', 'All Ticket Types')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('ticket-types.create') }}">Create New</a>
