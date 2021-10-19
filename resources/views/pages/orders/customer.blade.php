@@ -228,7 +228,7 @@ $(document).ready( function () {
                                 <td>
                                     <form action="{{ route('orderAccommodationDelete', ['id' => $accommodationEntry['order']->id,]) }}" method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" />
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                     </form>
                                 </td>
@@ -264,7 +264,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
@@ -300,7 +300,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
@@ -336,7 +336,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>

@@ -29,7 +29,7 @@ class OrderCustomerController extends Controller
         ]);
     }
 
-    public function show(OrdersCustomer $ordersCustomer) {
-        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($ordersCustomer->id));
+    public function show($order, OrdersCustomer $orderCustomer) {
+        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($orderCustomer));
     }
 }
