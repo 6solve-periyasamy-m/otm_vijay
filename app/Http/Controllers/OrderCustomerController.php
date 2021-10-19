@@ -30,6 +30,6 @@ class OrderCustomerController extends Controller
     }
 
     public function show(OrdersCustomer $ordersCustomer) {
-        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($ordersCustomer));
+        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($ordersCustomer->id));
     }
 }

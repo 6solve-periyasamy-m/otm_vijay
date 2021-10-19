@@ -16,8 +16,6 @@ interface TransportComponentRepositoryInterface
 
     public static function getOrderComponentFromId($orderComponentId);
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null);
-
     public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
@@ -40,8 +38,10 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         return $orderComponent->transportInventoryTour()->first()->transportInventory();
     }
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null)
+    public static function getAvailableAddons($tourId, $oCustomerId)
     {
+        $tour = Tour::findOrFail($tourId);
+        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->transportInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
@@ -51,9 +51,9 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
                 $components[$component->id]['transport_type'] = $component->transportInventory->transport->transportType->name;
             }
         }
-        if ($orderCustomer != null) {
+        if ($oCustomer != null) {
             // Remove all components the customer already has
-            foreach ($orderCustomer->orderTransports as $oComponent) {
+            foreach ($oCustomer->orderTransports as $oComponent) {
                 $component = $oComponent->transportInventoryTour;
                 unset($components[$component->id]);
             }

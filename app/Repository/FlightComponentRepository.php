@@ -16,8 +16,6 @@ interface FlightComponentRepositoryInterface
 
     public static function getOrderComponentFromId($orderComponentId);
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null);
-
     public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
@@ -40,8 +38,10 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         return $orderComponent->flightInventoryTour()->first()->flightInventory();
     }
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null)
+    public static function getAvailableAddons($tourId, $oCustomerId)
     {
+        $tour = Tour::findOrFail($tourId);
+        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->flightInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
@@ -51,9 +51,9 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
                 $components[$component->id]['travel_class'] = $component->flightInventory->travelClass->title;
             }
         }
-        if ($orderCustomer != null) {
+        if ($oCustomer != null) {
             // Remove all components the customer already has
-            foreach ($orderCustomer->orderFlights as $oComponent) {
+            foreach ($oCustomer->orderFlights as $oComponent) {
                 $component = $oComponent->flightInventoryTour;
                 unset($components[$component->id]);
             }

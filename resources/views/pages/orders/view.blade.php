@@ -26,7 +26,7 @@
                 @foreach($customers as $ordersCustomer)
                 <tr>
                     <td style="border: 1px solid black; border-left: 0; width: 30%;">
-                        <a href="{{ route('orderCustomerDetails', ['order' => $order, 'orderCustomer' => $ordersCustomer]) }}" class="link-info"><u>
+                        <a href="{{ route('orderCustomerDetails', ['id' => $ordersCustomer->customer->id]) }}" class="link-info"><u>
                             {{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}
                         </u></a>
                     </td>

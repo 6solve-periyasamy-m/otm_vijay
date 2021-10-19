@@ -16,7 +16,7 @@ interface ActivityComponentRepositoryInterface
 
     public static function getOrderComponentFromId($orderComponentId);
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null);
+    public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
     public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
@@ -40,8 +40,10 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $orderComponent->activityInventoryTour()->first()->activityInventory();
     }
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null)
+    public static function getAvailableAddons($tourId, $oCustomerId = -1)
     {
+        $tour = Tour::findOrFail($tourId);
+        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
@@ -51,9 +53,9 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
                 $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->name;
             }
         }
-        if ($orderCustomer != null) {
+        if ($oCustomer != null) {
             // Remove all components the customer already has
-            foreach ($orderCustomer->orderActivities as $oComponent) {
+            foreach ($oCustomer->orderActivities as $oComponent) {
                 $component = $oComponent->activityInventoryTour;
                 unset($components[$component->id]);
             }

@@ -16,7 +16,7 @@ interface AccommodationComponentRepositoryInterface
 
     public static function getOrderComponentFromId($orderComponentId);
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null);
+    public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
 
@@ -42,8 +42,10 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
     }
 
-    public static function getAvailableAddons(Tour $tour, OrdersCustomer $orderCustomer = null)
+    public static function getAvailableAddons($tourId, $oCustomerId = -1)
     {
+        $tour = Tour::findOrFail($tourId);
+        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->accommodationInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
@@ -53,9 +55,9 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
                 $components[$component->id]['room_type'] = $component->accommodationInventory->roomType->room_type_name;
             }
         }
-        if ($orderCustomer != null) {
+        if ($oCustomer != null) {
             // Remove all components the customer already has
-            foreach ($orderCustomer->orderAccommodation as $oComponent) {
+            foreach ($oCustomer->orderAccommodation as $oComponent) {
                 $component = $oComponent->accommodationInventoryTour;
                 unset($components[$component->id]);
             }
