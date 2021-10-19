@@ -3,7 +3,7 @@
 @section('title', 'Update Orders Customer')
 
 @section('content')
-    @include('partials.models.orders_customers.form', ['action' => route('orders-customers.update', ['ordersCustomer' => $ordersCustomer,]),
+    @include('partials.models.orders_customers.form', ['action' => route('orders-customers.update', ['order' => $order, 'ordersCustomer' => $ordersCustomer,]),
       'order_id' => $ordersCustomer->order_id,
       'customer_id' => $ordersCustomer->customer_id,
       'tour_cost' => $ordersCustomer->tour_cost,

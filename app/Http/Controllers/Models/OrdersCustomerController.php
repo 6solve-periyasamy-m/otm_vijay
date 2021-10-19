@@ -18,7 +18,7 @@ class OrdersCustomerController extends Controller
 
     public function create(Order $order)
     {
-        return view('pages.models.orders_customers.create');
+        return view('pages.models.orders_customers.create', ['order' => $order, ]);
     }
 
     public function store(Request $request, Order $order)
