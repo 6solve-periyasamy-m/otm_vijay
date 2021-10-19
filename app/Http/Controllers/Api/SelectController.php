@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Transforms\ActivityTransforms;
+use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
 use App\Transforms\FlightTransforms;
@@ -182,6 +183,15 @@ class SelectController extends Controller
 
     public function getSelectedTransportInventory($id) {
         return TransportTransforms::getSelectedInventory($id);
+    }
+
+    public function getQuotes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getSelectQuotes($filter);
+    }
+
+    public function getSelectedQuote($id) {
+        return OrderTransforms::getSelectedQuote($id);
     }
 
 }
