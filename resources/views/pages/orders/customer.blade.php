@@ -38,6 +38,7 @@
 }
 </style>
 <script type="text/javascript">
+    {{-- TODO: Upgrade to Select2 --}}
 function updateAccommodationSelectFields() {
     $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
     $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
@@ -175,6 +176,7 @@ $(document).ready( function () {
             <td>{{ $customer->billingAddress->postcode }}</td>
         </tr>
     </table>
+    <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
 </div>
 {{-- Components Section --}}
 <div id="billing-section" style="border: 1px solid black">
@@ -227,7 +229,7 @@ $(document).ready( function () {
                                 <td>
                                     <form action="{{ route('orderAccommodationDelete', ['id' => $accommodationEntry['order']->id,]) }}" method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" />
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                     </form>
                                 </td>
@@ -263,7 +265,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
@@ -299,7 +301,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
@@ -335,7 +337,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>

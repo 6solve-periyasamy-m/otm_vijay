@@ -1,11 +1,6 @@
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="order_id-input">Order Id</label>
-        <input name="order_id" value="{{ $order_id ?? "" }}" class="form-control" id="order_id-input">
-    </div>
-    <p></p>
-    <div id="form-group">
         <label for="amount-input">Amount</label>
         <input name="amount" value="{{ $amount ?? "" }}" class="form-control" id="amount-input">
     </div>
