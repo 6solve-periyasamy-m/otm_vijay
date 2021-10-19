@@ -26,7 +26,7 @@
             <a href="{{ route('transports.all') }}" class="nav-link text-white">Transports</a>
         </li>
         <li>
-            <a href="{{ route('orderSearch') }}" class="nav-link text-white">
+            <a href="{{ route('orders.all') }}" class="nav-link text-white">
                 Orders
             </a>
         </li>
