@@ -17,9 +17,14 @@
     <h5>Octopus Travel Matrix</h5>
     <h1>Frontend Tests</h1>
     <a href="/">HOME</a>
+    <div>
+        <font-awesome-icon icon="user-secret" /> fontawesome is working 
+    </div>
+    <span>
+        <font-awesome-icon icon="user-secret" /> fontawesome is working 
+    </span>
     <vue-test></vue-test>
     <div class="addredbordertest">
-        <font-awesome-icon icon="user-secret" /> 
         This div will have a double red border added by jQuery
         <div class="row bordered">
             <div class="col">
