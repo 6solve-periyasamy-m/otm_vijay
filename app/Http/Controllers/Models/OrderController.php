@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrdersCustomer;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -24,13 +25,20 @@ class OrderController extends Controller
         $order = Order::create([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
-            'lead_booker_id' => $request->input('lead_booker_id'),
             'token' => $request->input('token'),
             'booking_reference' => $request->input('booking_reference'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
         ]);
+        $orderCustomer = OrdersCustomer::make([
+            'customer_id' => $request->input('customer_id'),
+            'tour_cost' => $order->tour->base_price_per_person,
+            'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
+        ]);
+        $order->orderCustomers()->save($orderCustomer);
+        $order->lead_booker_id = $orderCustomer->id;
+        $order->save();
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -49,7 +57,6 @@ class OrderController extends Controller
         $order->update([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
-            'lead_booker_id' => $request->input('lead_booker_id'),
             'token' => $request->input('token'),
             'booking_reference' => $request->input('booking_reference'),
             'ordered_on' => $request->input('ordered_on'),

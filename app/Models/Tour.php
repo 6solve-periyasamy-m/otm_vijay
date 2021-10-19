@@ -84,4 +84,8 @@ class Tour extends Model
     public function paymentInstallments() {
         return $this->hasMany(PaymentInstallment::class, 'tour_id');
     }
+
+    public function orders() {
+        return $this->hasMany(Order::class, 'tour_id');
+    }
 }
