@@ -194,4 +194,12 @@ class SelectController extends Controller
         return OrderTransforms::getSelectedQuote($id);
     }
 
+    public function getCustomers(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getSelectCustomers($filter);
+    }
+
+    public function getSelectedCustomer($id) {
+        return OrderTransforms::getSelectedCustomer($id);
+    }
 }
