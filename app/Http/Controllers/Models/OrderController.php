@@ -22,6 +22,7 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Order::getValidationRules());
         $order = Order::create([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
@@ -54,6 +55,7 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
+        $request->validate(Order::getValidationRules());
         $order->update([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),

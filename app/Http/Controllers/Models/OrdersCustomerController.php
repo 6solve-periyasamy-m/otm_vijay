@@ -23,6 +23,7 @@ class OrdersCustomerController extends Controller
 
     public function store(Request $request, Order $order)
     {
+        $request->validate(OrdersCustomer::getValidationRules());
         $ordersCustomer = OrdersCustomer::make([
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $request->input('tour_cost'),
@@ -41,6 +42,7 @@ class OrdersCustomerController extends Controller
 
     public function update(Request $request, Order $order, OrdersCustomer $ordersCustomer)
     {
+        $request->validate(OrdersCustomer::getValidationRules());
         $ordersCustomer->update([
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $request->input('tour_cost'),
