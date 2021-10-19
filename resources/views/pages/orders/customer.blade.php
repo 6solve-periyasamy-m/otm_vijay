@@ -41,7 +41,7 @@
     {{-- TODO: Upgrade to Select2 --}}
 function updateAccommodationSelectFields() {
     $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableAccommodationAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
+    $.get("{{ route('getAvailableAccommodationAddons', ['orderCustomer' => $order_customer,]) }}", function (data) {
         $.each(data, function (index, element) {
             $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
         });
@@ -49,7 +49,7 @@ function updateAccommodationSelectFields() {
 }
 function updateActivitySelectFields() {
     $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableActivityAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
+    $.get("{{ route('getAvailableActivityAddons', ['orderCustomer' => $order_customer,]) }}", function (data) {
         $.each(data, function (index, element) {
             $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
         });
@@ -57,7 +57,7 @@ function updateActivitySelectFields() {
 }
 function updateFlightSelectFields() {
     $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableFlightAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
+    $.get("{{ route('getAvailableFlightAddons', ['orderCustomer' => $order_customer,]) }}", function (data) {
         $.each(data, function (index, element) {
             $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
         });
@@ -65,7 +65,7 @@ function updateFlightSelectFields() {
 }
 function updateTransportSelectFields() {
     $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableTransportAddons', ['orderCustomer' => $order_customer,]) }}', function (data) {
+    $.get("{{ route('getAvailableTransportAddons', ['orderCustomer' => $order_customer,]) }}", function (data) {
         $.each(data, function(index, element) {
             $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
         });
@@ -228,7 +228,7 @@ $(document).ready( function () {
                                 <td>
                                     <form action="{{ route('orderAccommodationDelete', ['id' => $accommodationEntry['order']->id,]) }}" method="post">
                                         @csrf
-                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                        <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" />
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                     </form>
                                 </td>
@@ -264,7 +264,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
@@ -300,7 +300,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
@@ -336,7 +336,7 @@ $(document).ready( function () {
                             <td>
                                 <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['id' => $order_customer->id]) }}" />
+                                    <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" />
                                     <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
