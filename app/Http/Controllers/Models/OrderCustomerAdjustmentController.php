@@ -28,7 +28,7 @@ class OrderCustomerAdjustmentController extends Controller
             'reason' => $request->input('reason'),
         ]);
         $orderCustomer->adjustments()->save($orderCustomerAdjustment);
-        return redirect()->route('orderCustomerDetails', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
     }
 
     public function view(Order $order, OrdersCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
@@ -47,12 +47,12 @@ class OrderCustomerAdjustmentController extends Controller
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
         ]);
-        return redirect()->route('orderCustomerDetails', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
     }
 
     public function destroy(Order $order, OrdersCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
     {
         $orderCustomerAdjustment->delete();
-        return redirect()->route('orderCustomerDetails', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
     }
 }

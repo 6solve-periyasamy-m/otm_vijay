@@ -215,15 +215,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{operator}', [OperatorController::class, 'update'])->name('operators.update');
         Route::post('/delete/{operator}', [OperatorController::class, 'destroy'])->name('operators.delete');
     });
-    Route::prefix('orders-customers')->group(function () {
-        Route::get('/', [OrdersCustomerController::class, 'index'])->name('orders-customers.all');
-        Route::get('/create', [OrdersCustomerController::class, 'create'])->name('orders-customers.create');
-        Route::post('/create', [OrdersCustomerController::class, 'store'])->name('orders-customers.store');
-        Route::get('/{ordersCustomer}', [OrdersCustomerController::class, 'view'])->name('orders-customers.view');
-        Route::get('/update/{ordersCustomer}', [OrdersCustomerController::class, 'edit'])->name('orders-customers.edit');
-        Route::post('/update/{ordersCustomer}', [OrdersCustomerController::class, 'update'])->name('orders-customers.update');
-        Route::post('/delete/{ordersCustomer}', [OrdersCustomerController::class, 'destroy'])->name('orders-customers.delete');
-    });
     Route::prefix('payments')->group(function () {
         Route::get('/', [PaymentController::class, 'index'])->name('payments.all');
         Route::get('/create', [PaymentController::class, 'create'])->name('payments.create');
@@ -327,8 +318,15 @@ Route::middleware('auth')->group(function () {
                 });
             });
             Route::prefix('customer')->group(function () {
+                Route::get('/', [OrdersCustomerController::class, 'index'])->name('orders-customers.all');
+                Route::get('/create', [OrdersCustomerController::class, 'create'])->name('orders-customers.create');
+                Route::post('/create', [OrdersCustomerController::class, 'store'])->name('orders-customers.store');
                 Route::prefix('{orderCustomer}')->group(function () {
-                    Route::get('/', [OrderCustomerController::class, 'show'])->name("orderCustomerDetails");
+                    // This is staying in the OrderCustomerController, as moving it out breaks it somehow
+                    Route::get('/', [OrderCustomerController::class, 'show'])->name("orders-customers.view");
+                    Route::get('/update', [OrdersCustomerController::class, 'edit'])->name('orders-customers.edit');
+                    Route::post('/update', [OrdersCustomerController::class, 'update'])->name('orders-customers.update');
+                    Route::post('/delete', [OrdersCustomerController::class, 'destroy'])->name('orders-customers.delete');
                     Route::prefix('adjustment')->group(function () {
                         Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all');
                         Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create');
