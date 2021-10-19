@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Activity Inventories')
+@section('title', 'Update Activity Inventory')
 
 @section('content')
     @include('partials.models.activity_inventories.form', ['action' => route('activity-inventories.update', ['activity' => $activity, 'activityInventory' => $activityInventory,]),

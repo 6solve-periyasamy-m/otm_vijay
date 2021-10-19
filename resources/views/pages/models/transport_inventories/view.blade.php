@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Transport Inventories')
+@section('title', 'View Transport Inventory')
 
 @section('content')
     Transport Id: {{ $transportInventory->transport_id }}<br/>

@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Manual Adjustments')
+@section('title', 'View Manual Adjustment')
 
 @section('content')
     Order Id: {{ $manualAdjustment->order_id }}<br/>

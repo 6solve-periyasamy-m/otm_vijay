@@ -1,5 +1,7 @@
 @extends('layout.main')
 
+@section('title', 'View Order Customer')
+
 @section('content')
 <style>
 .header-cell {

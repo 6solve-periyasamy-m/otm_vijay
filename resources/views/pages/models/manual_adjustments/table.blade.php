@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Manual Adjustments')
+@section('title', 'All Manual Adjustment')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}">Create New</a>

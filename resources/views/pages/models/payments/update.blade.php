@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Payments')
+@section('title', 'Update Payment')
 
 @section('content')
     @include('partials.models.payments.form', ['action' => route('payments.update', ['payment' => $payment,]),

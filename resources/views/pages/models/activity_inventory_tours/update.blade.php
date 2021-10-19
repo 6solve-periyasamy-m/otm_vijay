@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Activity Inventory Tours')
+@section('title', 'Update Activity Inventory Tour')
 
 @section('content')
     @include('partials.models.activity_inventory_tours.form', ['action' => route('activity-inventory-tours.update', ['tour' => $tour, 'activityInventoryTour' => $activityInventoryTour,]),

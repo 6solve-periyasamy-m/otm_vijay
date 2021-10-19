@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Order Customer Adjustments')
+@section('title', 'Update Order Customer Adjustment')
 
 @section('content')
     @include('partials.models.order_customer_adjustments.form', ['action' => route('order-customer-adjustments.update', ['order' => $order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $orderCustomerAdjustment,]),

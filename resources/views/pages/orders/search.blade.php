@@ -1,5 +1,7 @@
 @extends('layout.main')
 
+@section('title', 'All Orders')
+
 @section('content')
     <div><img src="{{ asset('images/octlogo.png') }}" style="margin-left: auto; margin-right: auto; display: block; width: 30%"/></div>
     <form action="{{ route("orderSearch")}}" method="get">
