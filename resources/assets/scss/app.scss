@@ -4,7 +4,14 @@ npm run dev creates the files in public that the website can use
 */
 
 // @import 'sections/laravel';
-@import 'sections/listing';
-@import 'sections/home-page';
-@import 'sections/homepage';
+// @import 'sections/listing';
+// @import 'sections/home-page';
+// @import 'sections/homepage';
 @import 'components/bookingform';
+@import 'bootstrap/app.scss';
+
+// @import '~@fortawesome/fontawesome-free/scss/fontawesome';
+// @import '~@fortawesome/fontawesome-free/scss/brands';
+// @import '~@fortawesome/fontawesome-free/scss/regular';
+// @import '~@fortawesome/fontawesome-free/scss/solid';
+

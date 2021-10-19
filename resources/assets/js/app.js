@@ -1,17 +1,24 @@
 require('./bootstrap');
-window.axios = require('axios');
-window.lodash = require('lodash');
-//import { BIconNodePlus } from 'bootstrap-vue';
-//window.validPhone = require('./validphone');
 import Vue from 'vue'
 import { bus } from './bus'
-//import { validPhone } from './validphone'
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+library.add(faUserSecret)
+
+Vue.config.productionTip = false
+
+// jquery is working ... validation
+$('.addredbordertest').addClass('red-border');
+
 
 window.axios.defaults.headers.common = {
      'X-Requested-With': 'XMLHttpRequest',
      'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
      'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
  };
+ Vue.component('font-awesome-icon', FontAwesomeIcon)
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
  Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
  Vue.component('booking-form-lead', require('./components/BookingFormLead.vue').default);
