@@ -23,7 +23,7 @@ class QuoteFactory extends Factory
     {
         return [
             'tour_id' => 1,
-            'customer_id' => $this->faker->numberBetween(1, 10),
+            'customer_id' => $this->faker->numberBetween(1, 5),
             'is_converted' => true,
             'pax_number' => $this->faker->numberBetween(1, 1000000),
             'total_quote_value' => $this->faker->numberBetween(1, 10000),

@@ -1,13 +1,30 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let customerSelect = $('#customer_id-input');
+            customerSelect.select2({
+                ajax: {
+                    url: '{{ route('api.customers.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({url: '{{ route('api.customers.selected', ['id' => $customer_id ?? 0, ]) }}',})
+                .then(function (data) {
+                    customerSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    customerSelect.trigger({
+                        type: 'select2:select',
+                        params: {data: data,}
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div id="form-group">
-        <label for="order_id-input">Order Id</label>
-        <input name="order_id" value="{{ $order_id ?? "" }}" class="form-control" id="order_id-input">
-    </div>
-    <p></p>
-    <div id="form-group">
         <label for="customer_id-input">Customer Id</label>
-        <input name="customer_id" value="{{ $customer_id ?? "" }}" class="form-control" id="customer_id-input">
+        <select style="width: 100%" name="customer_id"  class="form-control" id="customer_id-input"></select>
     </div>
     <p></p>
     <div id="form-group">
