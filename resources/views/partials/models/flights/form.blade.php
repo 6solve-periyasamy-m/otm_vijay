@@ -54,42 +54,42 @@
 @endsection
 <form action="{{ $action }}" method="post">
     @csrf
-    <div id="form-group">
+    <div class="form-group">
         <label for="airline_id-input">Airline</label><br />
         <select style="width: 95%;" name="airline_id" class="form-control" id="airline_id-input"></select>
         <a href="{{ route('airlines.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
-    <div id="form-group">
+    <div class="form-group">
         <label for="departure_airport_id-input">Departure Airport</label>
         <select style="width: 95%;" name="departure_airport_id" class="form-control" id="departure_airport_id-input"></select>
         <a href="{{ route('airports.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
-    <div id="form-group">
+    <div class="form-group">
         <label for="arrival_airport_id-input">Arrival Airport</label>
         <select style="width: 95%;" name="arrival_airport_id" class="form-control" id="arrival_airport_id-input"></select>
         <a href="{{ route('airports.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
-    <div id="form-group">
+    <div class="form-group">
         <input type="checkbox" name="is_domestic" class="form-check-input" @if(isset($is_domestic) && $is_domestic == 1) checked @endif
         id="is_domestic-input">
         <label for="is_domestic-input" class="form-check-label">Is Domestic</label>
     </div>
     <p></p>
-    <div id="form-group">
+    <div class="form-group">
         <label for="available_after-input">Available After</label>
         <input type="date" name="available_after" value="{{ $available_after ?? "" }}" class="form-control"
                id="available_after-input">
     </div>
     <p></p>
-    <div id="form-group">
+    <div class="form-group">
         <label for="notes-input">Notes</label>
         <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
     </div>
     <p></p>
-    <div id="form-group">
+    <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
