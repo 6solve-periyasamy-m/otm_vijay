@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
-    <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet"> -->
     <!-- <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <!-- jQuery & Bootstrap JS -->
@@ -33,7 +33,7 @@
 <div class="d-flex">
     @include('partials.sidebar')
     <p></p>
-    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
+    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 54px);">
         @if ($errors->any())
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
