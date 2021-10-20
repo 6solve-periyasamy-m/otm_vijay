@@ -1,10 +1,13 @@
-<div class="navbar navbar-expand-md navbar-dark bg-dark text-light sticky-top otm-navbar">
-    <div class="navbar-brand abs"><a class="text-light" href="#">Octopus Travel Matrix</a></div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="navbar-collapse collapse" id="collapsingNavbar">
-        {{-- Add any nav links here --}}
-    </div>
+<div class="navbar navbar-expand text-light sticky-top otm-navbar px-md-3 flex-column flex-md-row">
+    <div class="navbar-brand abs">
+        <a class="text-light fw-bold" href="#">Octopus Travel Matrix</a>
+    </div> 
+    <div class="navbar-nav flex-row ms-auto">
+        <div class="nav-item">
+            <a class="nav-item nav-link" href="#">
+                <span class='text-light'>Nick</span>
+                <img src="{{ asset('images/exampleavatar2.jpg') }}" class="img-thumbnail">                
+            </a>
+        </div>
+    </div>       
 </div>
