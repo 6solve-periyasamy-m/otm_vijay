@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.master')
 
 @section('title', 'All Tours')
 
@@ -59,5 +59,4 @@
             </table>
         </div>
     </div>
->>>>>>> main
 @endsection
