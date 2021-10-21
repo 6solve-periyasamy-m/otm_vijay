@@ -1,6 +1,7 @@
 /* Nav Bar Styling */
 
 @import "colors";
+@import "datatables";
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');
 
@@ -16,7 +17,11 @@ a {
     .nav-link {
         img {
             width: 2rem;
-            height: 2rem;
+            height: 2rem;            
+        }
+
+        img.img-thumbnail {
+            padding: 0.05rem;
         }
 
         &:hover span {
@@ -30,7 +35,7 @@ a {
     background-color: $sideBarColor;
 
     .nav-link {
-        padding: 1.25rem 1.3rem;
+        padding: 1rem 1.3rem;
         color: #151515;
         font-size: 1rem;
         position: relative;
@@ -67,7 +72,7 @@ a {
             float: right;
             position: absolute;
             right: 0;
-            top: 16px;
+            top: 12px;
             background: 0 0;
             width: 0;
             height: 0;
