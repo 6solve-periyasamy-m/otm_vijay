@@ -7,11 +7,34 @@
     --mid-grey: #aaa;
     --dark-grey: #888;
 }
+
+.booking-page {
+    padding: 2rem 1rem 1rem;
+    min-width: calc(100vw - 4rem); 
+    min-height: calc(100vh - 2rem);
+    .btn {
+        border: 2px solid aliceblue;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        &:hover {
+            box-shadow: 3px -2px 9px 1px rgba(0,0,0,0.76);
+        }
+        &.btn-primary {
+            color: white;
+            background-color: blue;
+        }
+        &.btn-link {
+            color: white;
+            background-color: green;
+        }
+    }
+}
 select {
     max-width: max-content;
 }
 .logo {
-    width: 200px;
+    width: 96px;
     height: auto;
 }
 h1 {
@@ -27,13 +50,15 @@ h3 {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     &__logo {
-        margin-right: 1rem;
+        width: 25%;
+        margin: 1rem 4rem 0 2rem;
     }
     &__title {
+        margin: 1rem 0 0;
         font-size: 1.25rem;
-        flex: 0 1 65%;
+        flex: 0 1 85%;
         &--main {
             font-size: 0.85em;
         }

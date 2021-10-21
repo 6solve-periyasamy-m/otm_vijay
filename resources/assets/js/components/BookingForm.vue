@@ -4,11 +4,11 @@
             <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
-                        OTM Booking Form version 0.4.2 PRERELEASE - Lead/Additionals/Flights/Accommodation
-                        <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
+                        OTM Booking Form version 0.5 PRERELEASE - Lead/Additionals/Flights/Accommodation
+                        <!-- <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
                         <button class="btn btn-small btn-themed cool" @click="changeTheme('cool')">Cool</button>
                         <button class="btn btn-small btn-themed warm" @click="changeTheme('warm')">Warm</button>
-                        <button class="btn btn-small btn-themed action" @click="changeTheme('action')">Action</button>
+                        <button class="btn btn-small btn-themed action" @click="changeTheme('action')">Action</button> -->
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
