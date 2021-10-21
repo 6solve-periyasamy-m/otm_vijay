@@ -18,8 +18,8 @@
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>    
     @yield('head-script')
 </head>
-@include('partials.navbar')
 <body>
+@include('partials.navbar')
 <div class="d-flex">
     @include('partials.sidebar')
     <p></p>
