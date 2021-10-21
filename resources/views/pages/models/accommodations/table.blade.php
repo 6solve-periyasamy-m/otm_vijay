@@ -2,7 +2,7 @@
 
 @section('title', 'View Accommodation')
 
-@section('head-script')
+@section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () {
         $('#accommodation').DataTable({fixedHeader: true});
