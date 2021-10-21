@@ -6,7 +6,14 @@
     <script type="text/javascript">
         $(document).ready( function () { $('#tour').DataTable({fixedHeader: true}); });
     </script>
-    <a class="btn btn-success sbold pull-right" href="{{ route('tours.create') }}">Create New</a>
+    <div class='card'>
+        <div class="card-body">
+            <a class="btn btn-success float-end" href="{{ route('tours.create') }}">
+                <i class='icon-plus'></i>
+                <span>Create New</span>
+            </a>
+        </div>
+    </div>
     <div class="card"><div class='card-body'>
         <table id="tour" style="width: 100%;" class="table table-striped">
             <thead class="thead-dark">
