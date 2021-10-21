@@ -1,11 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <div class="panel">
-        <h3>VueJS Test</h3>
-        <p>VueJS renders frontend components, 
-        this is an example and demonstrates 
-        that VueJS is working.</p>
-=======
     <div id="app-tests" class="box">
         <h1>VueJS with font-awesome, bootstrap and jquery</h1>
         <div class="row">
@@ -22,7 +15,6 @@
                 <p class="blackground">This is has a black background, jQuery is changing it to blue</p>
             </div>
         </div>
->>>>>>> main
     </div>
 </template>
 <script>
