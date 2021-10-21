@@ -2,7 +2,7 @@
 
 @section('title', 'All Tours')
 
-@section('head-script')
+@section('footer-script')
 <script type="text/javascript">
     $(document).ready( function () { $('#tour').DataTable({fixedHeader: true}); });
 </script>
