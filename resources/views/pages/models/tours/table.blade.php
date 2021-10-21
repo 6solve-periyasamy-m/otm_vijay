@@ -1,11 +1,13 @@
 @extends('layout.main')
 
 @section('title', 'All Tours')
+
 @section('head-script')
 <script type="text/javascript">
     $(document).ready( function () { $('#tour').DataTable({fixedHeader: true}); });
 </script>
 @endsection
+
 @section('content')
     <a class="btn btn-primary" href="{{ route('tours.create') }}">Create New</a>
     <table id="tour" style="width: 100%;" class="table table-striped">
