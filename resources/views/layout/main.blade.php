@@ -28,8 +28,8 @@
     @yield('head-script')
 </head>
 <body>
-<div class="d-flex">
     @include('partials.navbar')
+<div class="d-flex">
     @include('partials.sidebar')
     <p></p>
     <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
