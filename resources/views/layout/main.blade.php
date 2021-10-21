@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- THIS LAYOUT IS NOT TO BE CHANGED EXCEPT BY Celeste -->
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -11,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <!-- jQuery & Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Events')
+@section('title', 'View Event')
 
 @section('content')
     Event Title: {{ $event->event_title }}<br/>

@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Room Types')
+@section('title', 'View Room Type')
 
 @section('content')
     Room Type Name: {{ $roomType->room_type_name }}<br/>

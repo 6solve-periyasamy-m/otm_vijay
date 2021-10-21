@@ -4,54 +4,54 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\ManualAdjustment;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class ManualAdjustmentController extends Controller
 {
 
-    public function index()
+    public function index(Order $order)
     {
-        return view('pages.models.manual_adjustments.table', ['manualAdjustments' => ManualAdjustment::all(),]);
+        return view('pages.models.manual_adjustments.table', ['order' => $order, 'manualAdjustments' => ManualAdjustment::all(),]);
     }
 
-    public function create()
+    public function create(Order $order)
     {
-        return view('pages.models.manual_adjustments.create');
+        return view('pages.models.manual_adjustments.create', ['order' => $order, ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Order $order)
     {
-        $manualAdjustment = ManualAdjustment::create([
-            'order_id' => $request->input('order_id'),
+        $manualAdjustment = ManualAdjustment::make([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
         ]);
-        return redirect()->route('manual-adjustments.view', ['manualAdjustment' => $manualAdjustment,]);
+        $order->adjustments()->save($manualAdjustment);
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 
-    public function view(ManualAdjustment $manualAdjustment)
+    public function view(Order $order, ManualAdjustment $manualAdjustment)
     {
-        return view('pages.models.manual_adjustments.view', ['manualAdjustment' => $manualAdjustment,]);
+        return view('pages.models.manual_adjustments.view', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]);
     }
 
-    public function edit(ManualAdjustment $manualAdjustment)
+    public function edit(Order $order, ManualAdjustment $manualAdjustment)
     {
-        return view('pages.models.manual_adjustments.update', ['manualAdjustment' => $manualAdjustment,]);
+        return view('pages.models.manual_adjustments.update', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]);
     }
 
-    public function update(Request $request, ManualAdjustment $manualAdjustment)
+    public function update(Request $request, Order $order, ManualAdjustment $manualAdjustment)
     {
         $manualAdjustment->update([
-            'order_id' => $request->input('order_id'),
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
         ]);
-        return redirect()->route('manual-adjustments.view', ['manualAdjustment' => $manualAdjustment,]);
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 
-    public function destroy(ManualAdjustment $manualAdjustment)
+    public function destroy(Order $order, ManualAdjustment $manualAdjustment)
     {
         $manualAdjustment->delete();
-        return redirect()->route('manual-adjustments.all');
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 }

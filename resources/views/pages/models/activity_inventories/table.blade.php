@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Activity Inventories')
+@section('title', 'All Activity Inventories')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('activity-inventories.create') }}">Create New</a>

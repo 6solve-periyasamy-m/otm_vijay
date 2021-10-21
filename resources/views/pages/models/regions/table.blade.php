@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Regions')
+@section('title', 'All Regions')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('regions.create') }}">Create New</a>

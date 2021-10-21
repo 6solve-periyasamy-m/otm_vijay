@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Accommodation Inventories')
+@section('title', 'Update Accommodation Inventory')
 
 @section('content')
     @include('partials.models.accommodation_inventories.form', ['action' => route('accommodation-inventories.update', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]),

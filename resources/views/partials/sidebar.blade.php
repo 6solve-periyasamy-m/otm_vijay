@@ -1,40 +1,53 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: calc(100vh - 49px); position: relative; position: -webkit-sticky; position: sticky;">
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-                Home
+<div class="col-12 col-md-3 col-xl-2 d-flex flex-column p-0  otm-sidebar py-3">
+    <ul class="nav flex-column mb-auto">        
+        <li>            
+            <a href="{{ route('dash') }}" class="nav-link">
+                <i class="icon-list"></i>
+                <span>Dashboard</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('dash') }}" class="nav-link text-white">
-                Dashboard
+            <a href="{{ route('tours.all') }}" class="nav-link active">
+                <i class='icon-globe'></i>
+                <span>Tours</span>
+                <span class="selected"></span>
             </a>
         </li>
         <li>
-            <a href="{{ route('tours.all') }}" class="nav-link text-white">Tours</a>
-        </li>
-        <li>
-            <a href="{{ route('accommodations.all') }}" class="nav-link text-white">Accommodation</a>
-        </li>
-        <li>
-            <a href="{{ route('activities.all') }}" class="nav-link text-white">Activities</a>
-        </li>
-        <li>
-            <a href="{{ route('flights.all') }}" class="nav-link text-white">Flights</a>
-        </li>
-        <li>
-            <a href="{{ route('transports.all') }}" class="nav-link text-white">Transports</a>
-        </li>
-        <li>
-            <a href="{{ route('orderSearch') }}" class="nav-link text-white">
-                Orders
+            <a href="{{ route('accommodations.all') }}" class="nav-link">
+                <i class='icon-home'></i>
+                <span>Accommodation</span>
             </a>
         </li>
         <li>
-            <a href="#" class="nav-link text-white">
-                Customers
+            <a href="{{ route('activities.all') }}" class="nav-link">
+                <i class="icon-settings"></i>
+                <span>Activities</span>
             </a>
         </li>
-    </ul>
-    <hr>
+        <li>
+            <a href="{{ route('flights.all') }}" class="nav-link">
+                <i class="icon-plane"></i>
+                <span>Flights</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('transports.all') }}" class="nav-link">
+                <i class="icon-directions"></i>
+                <span>Transports</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('orders.all') }}" class="nav-link">
+                <i class="icon-credit-card"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link ">
+                <i class="icon-user"></i>
+                <span>Customers</span>
+            </a>
+        </li>
+    </ul>    
 </div>

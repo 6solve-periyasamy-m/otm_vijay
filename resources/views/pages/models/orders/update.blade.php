@@ -1,9 +1,9 @@
 @extends('layout.main')
 
-@section('title', 'Update Orders')
+@section('title', 'Update Order')
 
 @section('content')
-    @include('partials.models.orders.form', ['action' => route('orders.update', ['order' => $order,]),
+    @include('partials.models.orders.forms.update', ['action' => route('orders.update', ['order' => $order,]),
       'quote_id' => $order->quote_id,
       'tour_id' => $order->tour_id,
       'lead_booker_id' => $order->lead_booker_id,

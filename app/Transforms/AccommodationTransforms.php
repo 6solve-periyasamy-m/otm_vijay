@@ -2,6 +2,7 @@
 
 namespace App\Transforms;
 
+use App\Models\AccommodationInventory;
 use App\Models\BoardType;
 use App\Models\RoomType;
 
@@ -10,6 +11,8 @@ interface AccommodationTransformsInterface {
     public static function getSelectBoardTypes($filter);
     public static function getSelectedRoomType($id);
     public static function getSelectedBoardType($id);
+    public static function getSelectInventory($filter);
+    public static function getSelectedInventory($filter);
 }
 
 class AccommodationTransforms implements AccommodationTransformsInterface
@@ -56,6 +59,28 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $data = [];
         $data['id'] = $boardType->id;
         $data['text'] = $boardType->board_type_name;
+        return $data;
+    }
+
+    public static function getSelectInventory($filter)
+    {
+        $data = [];
+        foreach (AccommodationInventory::all() as $inventory) {
+            $subData = [];
+            $subData['id'] = $inventory->id;
+            $subData['text'] = $inventory->accommodation->title . " - " . $inventory->roomType->room_type_name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedInventory($id)
+    {
+        if ($id == 0) return null;
+        $inventory = AccommodationInventory::findOrFail($id);
+        $data = [];
+        $data['id'] = $inventory->id;
+        $data['text'] = $inventory->accommodation->title . " - " . $inventory->roomType->room_type_name;
         return $data;
     }
 }

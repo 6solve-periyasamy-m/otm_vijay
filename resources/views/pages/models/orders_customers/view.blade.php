@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Orders Customers')
+@section('title', 'View Orders Customer')
 
 @section('content')
     Order Id: {{ $ordersCustomer->order_id }}<br/>

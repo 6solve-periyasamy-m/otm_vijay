@@ -40,7 +40,7 @@
     </table>
     {{ $tour->description }}
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
-    <h1>Components</h1>
+    <h1 class="d-inline">Components</h1><a href="{{ route('tours.add', ['tour' => $tour, ]) }}" class="btn btn-success d-inline">Add Components</a>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     {{-- Tabs Definition --}}
     <ul class="nav nav-tabs">
@@ -68,7 +68,6 @@
                         <th scope="col">Date</th>
                         <th scope="col">Name</th>
                         <th scope="col">Room Type</th>
-                        <th scope="col">Shared With</th>
                         <th scope="col">Component Type</th>
                         <th scope="col">Actions</th>
                     </tr>
@@ -78,12 +77,12 @@
                             <td>{{ $accommodationEntry["inventory"]->check_in_date_time }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
                             <td>{{ $accommodationEntry["component"]->title }}</td>
                             <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
-                            <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                             <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('accommodation-inventory-tours.delete', ['accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
+                                <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
+                                <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
@@ -108,12 +107,13 @@
                         <tr>
                             <td>{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
                             <td>{{ $activity["component"]->title }}</td>
-                            <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
+                            <td>{{ $activity["component"]->activityType->name }}</td>
                             <td>{{ $activity["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('activity-inventory-tours.delete', ['activityInventoryTour' => $activity["tour"],]) }}" method="post">
+                                <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
+                                <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
@@ -141,9 +141,10 @@
                             <td>{{ $flight["inventory"]->travelClass->title }}</td>
                             <td>{{ $flight["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('flight-inventory-tours.delete', ['flightInventoryTour' => $flight["tour"],]) }}" method="post">
+                                <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
+                                <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>
@@ -171,9 +172,10 @@
                             <td>{{ $transport["inventory"]->travelClass->title }}</td>
                             <td>{{ $transport["tour"]->tour_component_type }}</td>
                             <td>
-                                <form action="{{ route('transport-inventory-tours.delete', ['transportInventoryTour' => $transport["tour"],]) }}" method="post">
+                                <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-primary"><ion-icon name="create-outline"></ion-icon></a>
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
+                                <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post">
                                     @csrf
-                                    <a href="#" onclick="this.parentNode.submit()" class="btn btn-danger"><ion-icon name="trash-outline"></ion-icon></a>
                                 </form>
                             </td>
                         </tr>

@@ -291,11 +291,31 @@ Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
         $groupIds = $request->groupIds;
         $inventoryTourIds = $request->inventoryTourIds;
         $tour_id = $request->tour_id;
-Log::info('deleting Accommodation Reservation for group', $groupIds);
-Log::info('inventory Tour IDs', $inventoryTourIds);
-Log::info('delete for tour '. $tour_id);
+        Log::info('deleting Accommodation Reservation for group', $groupIds);
+        Log::info('inventory Tour IDs', $inventoryTourIds);
+        Log::info('delete for tour '. $tour_id);
         $accommodationRepository = new AccommodationRepository();
         $accommodationRepository->remove($inventoryTourIds, $groupIds);
         Log::info('deleteAccommodationReservation'); //, $group);
+    }
+
+    public function addAccommodationInventoryToTour(Request $request, Tour $tour) {
+        // TODO: Get actual enum values
+        if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
+            if ($request->has('ids')) {
+                foreach ($request->input('ids') as $id) {
+                    $inventory = AccommodationInventory::findOrFail($id);
+                    $inventoryTour = AccommodationInventoryTour::make([
+                        'accommodation_inventory_id' => $id,
+                        'tour_component_type' => $request->input('type'),
+                        'tour_sales_price' => $inventory->sales_price,
+                    ]);
+                    $tour->accommodationInventoryTours()->save($inventoryTour);
+                }
+            }
+            return response('Any listed components have been successfully added', 200);
+        }
+        abort(400, 'Invalid component type has been provided');
+        return null;
     }
 }

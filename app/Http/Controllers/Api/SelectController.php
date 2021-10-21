@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Transforms\ActivityTransforms;
+use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
 use App\Transforms\FlightTransforms;
@@ -146,5 +147,59 @@ class SelectController extends Controller
 
     public function getSelectedAirline($id) {
         return FlightTransforms::getSelectedAirline($id);
+    }
+
+    public function getAccommodationInventory(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return AccommodationTransforms::getSelectInventory($filter);
+    }
+
+    public function getSelectedAccommodationInventory($id) {
+        return AccommodationTransforms::getSelectedInventory($id);
+    }
+
+    public function getActivityInventory(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return ActivityTransforms::getSelectInventory($filter);
+    }
+
+    public function getSelectedActivityInventory($id) {
+        return ActivityTransforms::getSelectedInventory($id);
+    }
+
+    public function getFlightInventory(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return FlightTransforms::getSelectInventory($filter);
+    }
+
+    public function getSelectedFlightInventory($id) {
+        return FlightTransforms::getSelectedInventory($id);
+    }
+
+    public function getTransportInventory(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getSelectInventory($filter);
+    }
+
+    public function getSelectedTransportInventory($id) {
+        return TransportTransforms::getSelectedInventory($id);
+    }
+
+    public function getQuotes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getSelectQuotes($filter);
+    }
+
+    public function getSelectedQuote($id) {
+        return OrderTransforms::getSelectedQuote($id);
+    }
+
+    public function getCustomers(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getSelectCustomers($filter);
+    }
+
+    public function getSelectedCustomer($id) {
+        return OrderTransforms::getSelectedCustomer($id);
     }
 }

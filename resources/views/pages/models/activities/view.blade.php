@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Activities')
+@section('title', 'View Activity')
 
 @section('content')
     Activity Type Id: {{ $activity->activity_type_id }}<br/>

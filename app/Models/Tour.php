@@ -20,7 +20,7 @@ class Tour extends Model
         'base_price_per_person' => 'numeric',
         'margin' => 'numeric',
         'single_occupancy_surcharge' => 'numeric',
-        'stock' => 'numeric|integer',
+        'stock' => 'required_with:stock_control_active|nullable|numeric|integer',
     ];
 
     public function event()
@@ -83,5 +83,9 @@ class Tour extends Model
 
     public function paymentInstallments() {
         return $this->hasMany(PaymentInstallment::class, 'tour_id');
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class, 'tour_id');
     }
 }

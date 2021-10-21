@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update T Shirt Sizes')
+@section('title', 'All T Shirt Sizes')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('t-shirt-sizes.create') }}">Create New</a>

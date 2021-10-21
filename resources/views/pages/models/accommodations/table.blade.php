@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Accommodations')
+@section('title', 'View Accommodation')
 
 @section('content')
     <script type="text/javascript">

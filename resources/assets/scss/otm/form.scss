@@ -1,0 +1,21 @@
+.form-group {
+    margin-bottom: 1rem;
+
+    .form-control {
+        height: 2.5rem;
+        box-shadow: none!important;
+        border-radius: 0px;
+        background-color: white;
+    }
+    
+    .form-check-input[type=checkbox] {
+        width: 1rem;
+        height: 1rem;
+        box-shadow: none!important;        
+        border-radius: 0px;
+    }
+    
+    textarea.form-control {
+        height: auto;
+    }
+}
