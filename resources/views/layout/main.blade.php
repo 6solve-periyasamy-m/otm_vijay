@@ -32,7 +32,7 @@
 <div class="d-flex">
     @include('partials.sidebar')
     <p></p>
-    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
+    <div class="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
         @if ($errors->any())
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -43,7 +43,7 @@
                 </div>
             @endforeach
         @endif
-        <div id="content" class="bg-light text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
+        <div class="bg-light text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
             @yield('content')
         </div>
     </div>
