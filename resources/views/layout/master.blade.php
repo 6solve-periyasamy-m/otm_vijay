@@ -28,24 +28,25 @@
     --}}
     @yield('head-script')
 </head>
-@include('partials.navbar')
 <body>
-<div class="d-flex">
-    @include('partials.sidebar')
-    <p></p>
-    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ $error }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <ion-icon name="close"></ion-icon>
-                    </button>
-                </div>
-            @endforeach
-        @endif
-        <div id="content" class="bg-light text-dark">
-            @yield('content')
+@include('partials.navbar')
+<div class="container-fluid">
+    <div class='row flex-xl-nowrap'>
+        @include('partials.sidebar')    
+        <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 ps-md-4 otm-content'>
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ $error }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <ion-icon name="close"></ion-icon>
+                        </button>
+                    </div>
+                @endforeach
+            @endif
+            <div id="content" class="bg-light text-dark">
+                @yield('content')
+            </div>
         </div>
     </div>
 </div>
