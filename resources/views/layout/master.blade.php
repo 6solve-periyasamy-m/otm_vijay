@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
-    <!-- <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet"> -->
+    <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
     <!-- <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <!-- jQuery & Bootstrap JS -->
@@ -28,8 +28,8 @@
     --}}
     @yield('head-script')
 </head>
-@include('partials.navbar')
 <body>
+@include('partials.navbar')
 <div class="container-fluid">
     <div class='row flex-xl-nowrap'>
         @include('partials.sidebar')    
