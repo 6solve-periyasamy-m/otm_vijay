@@ -10,6 +10,8 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> 
     <!-- Styles -->
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
     <!-- <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"> -->
@@ -17,15 +19,13 @@
     <!-- jQuery & Bootstrap JS -->
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>    
     <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.js"></script>
     {{-- <!-- IonIcons -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <!-- Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> 
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     --}}
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @yield('head-script')
 </head>
 <body>
@@ -33,7 +33,7 @@
 <div class="container-fluid">
     <div class='row flex-xl-nowrap'>
         @include('partials.sidebar')    
-        <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 ps-md-4 otm-content'>
+        <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 px-md-4 otm-content'>
             @if ($errors->any())
                 @foreach ($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -44,7 +44,10 @@
                     </div>
                 @endforeach
             @endif
-            <div id="content" class="bg-light text-dark">
+            <div id="content" class="">
+                <div class="heading pt-md-4 pb-md-3 pt-3">
+                    <h2 class="fw-bold">@yield('title')</h2>
+                </div>
                 @yield('content')
             </div>
         </div>
