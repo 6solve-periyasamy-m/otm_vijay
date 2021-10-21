@@ -13,11 +13,12 @@
     <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
     <td>
-        <a href="{{route('tours.edit', ['tour' => $tour,])}}">
-            <ion-icon name="create"></ion-icon>
+        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class='btn btn-outline-success btn-sm' style='margin-bottom: 4px;'>
+            <i class='icon-note'></i>            
         </a>
-        <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();">
-            <ion-icon name="trash"></ion-icon>
+        <br>
+        <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class='btn btn-outline-danger btn-sm' style='margin-bottom: 4px;'>
+            <i class="icon-trash"></i>
         </a>
         <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"
               style="display: none;">{{ csrf_field() }}</form>

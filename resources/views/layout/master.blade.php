@@ -12,7 +12,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
-    <!-- <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"> -->
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.js"></script>
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <!-- jQuery & Bootstrap JS -->
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>    
@@ -20,22 +25,23 @@
 </head>
 <body>
 @include('partials.navbar')
-<div class="d-flex">
-    @include('partials.sidebar')
-    <p></p>
-    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ $error }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <ion-icon name="close"></ion-icon>
-                    </button>
-                </div>
-            @endforeach
-        @endif
-        <div id="content" class="bg-light text-dark">
-            @yield('content')
+<div class="container-fluid">
+    <div class='row flex-xl-nowrap'>
+        @include('partials.sidebar')    
+        <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 ps-md-4 otm-content'>
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ $error }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <ion-icon name="close"></ion-icon>
+                        </button>
+                    </div>
+                @endforeach
+            @endif
+            <div id="content" class="bg-light text-dark">
+                @yield('content')
+            </div>
         </div>
     </div>
 </div>
