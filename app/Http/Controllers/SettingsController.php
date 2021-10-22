@@ -11,6 +11,9 @@ class SettingsController extends Controller
     public static function getValidationRules() {
         return [
             'company_name' => 'required',
+            'company_email' => 'required|email',
+            'company_phone' => 'required',
+            'company_vat' => 'required',
             'address_line_1' => 'required',
             'address_line_2' => 'required',
             'city' => 'required',
@@ -30,6 +33,9 @@ class SettingsController extends Controller
         $request->validate(SettingsController::getValidationRules());
         SettingsRepository::setAll([
             'company.name' => $request->input('company_name'),
+            'company.contact.email' => $request->input('company_email'),
+            'company.contact.phone' => $request->input('company_phone'),
+            'company.vat' => $request->input('company_vat'),
             'company.address.line_1' => $request->input('address_line_1'),
             'company.address.line_2' => $request->input('address_line_2'),
             'company.address.city' => $request->input('city'),

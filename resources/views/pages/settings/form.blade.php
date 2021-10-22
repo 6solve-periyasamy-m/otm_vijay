@@ -9,6 +9,22 @@
         <label for="company_name-input">Company Name</label>
         <input name="company_name" value="{{ old('company_name') ?? \App\Repository\SettingsRepository::getOrDefault('company.name', '') }}" class="form-control" id="company_name-input">
     </div>
+    <p></p>
+    <div class="form-group">
+        <label for="company_email-input">Company Email</label>
+        <input name="company_email" value="{{ old('company_email') ?? \App\Repository\SettingsRepository::getOrDefault('company.contact.email', '') }}" class="form-control" id="company_email-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="company_phone-input">Company Phone Number</label>
+        <input name="company_phone" value="{{ old('company_phone') ?? \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', '') }}" class="form-control" id="company_phone-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="company_vat-input">Company VAT</label>
+        <input name="company_vat" value="{{ old('company_vat') ?? \App\Repository\SettingsRepository::getOrDefault('company.vat', '') }}" class="form-control" id="company_vat-input">
+    </div>
+    <p></p>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <p></p>
     <div class="form-group">
