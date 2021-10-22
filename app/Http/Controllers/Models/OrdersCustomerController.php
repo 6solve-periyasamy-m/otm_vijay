@@ -13,7 +13,7 @@ class OrdersCustomerController extends Controller
 
     public function index(Order $order)
     {
-        return view('pages.models.orders_customers.table', ['order' => $order, 'ordersCustomers' => OrdersCustomer::all(),]);
+        return view('pages.models.orders_customers.table', ['order' => $order, 'orderCustomers' => OrdersCustomer::all(),]);
     }
 
     public function create(Order $order)
@@ -32,12 +32,13 @@ class OrdersCustomerController extends Controller
             'policy_number' => $request->input('policy_number'),
         ]);
         $order->orderCustomers()->save($ordersCustomer);
-        return redirect()->route('orders-customers.view', ['order' => $order, 'ordersCustomer' => $ordersCustomer,]);
+        OrderRepository::addIncludedToCustomer($ordersCustomer, $order);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
     }
 
     public function edit(Order $order, OrdersCustomer $ordersCustomer)
     {
-        return view('pages.models.orders_customers.update', ['order' => $order, 'ordersCustomer' => $ordersCustomer,]);
+        return view('pages.models.orders_customers.update', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
     }
 
     public function update(Request $request, Order $order, OrdersCustomer $ordersCustomer)
@@ -50,7 +51,7 @@ class OrdersCustomerController extends Controller
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
         ]);
-        return redirect()->route('orders-customers.view', ['order' => $order, 'ordersCustomer' => $ordersCustomer,]);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
     }
 
     public function destroy(Order $order, OrdersCustomer $ordersCustomer)
