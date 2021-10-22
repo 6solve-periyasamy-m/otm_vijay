@@ -2,11 +2,11 @@
     <div class="container">
         <div class="card card-options">
             <div class="card-header" id="headingTwo">
-                <h5 class="mb-1">
+                <h5 class="dropdown-button">
+                    <p v-if="!lead_traveller && !showAdditional">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
                     <button class="btn btn-link collapsed cardhead" @click="toggleAdditional">
                         Additional Travellers <div v-if="form_info">on order {{order_id}}</div>
                     </button>
-                    <p class="caption" v-if="!lead_traveller && !showAdditional">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
                 </h5>
             </div>
             <div class="card-body" v-show="showAdditional">

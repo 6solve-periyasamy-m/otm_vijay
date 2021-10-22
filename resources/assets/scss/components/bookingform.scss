@@ -10,15 +10,20 @@
 
 .booking-page {
     padding: 2rem 1rem 1rem;
-    min-width: calc(100vw - 4rem); 
+    min-width: calc(100vw - 2rem); 
     min-height: calc(100vh - 2rem);
+    background: #A5C4CE;
+    background: -moz-radial-gradient(center, #A5C4CE 0%, #FFFFFF 100%, #4FB8C5 100%);
+    background: -webkit-radial-gradient(center, #A5C4CE 0%, #FFFFFF 100%, #4FB8C5 100%);
+    background: radial-gradient(ellipse at center, #A5C4CE 0%, #FFFFFF 100%, #4FB8C5 100%);
     .btn {
         border: 2px solid aliceblue;
         border-radius: 5px;
         font-weight: bold;
         text-decoration: none;
         &:hover {
-            box-shadow: 3px -2px 9px 1px rgba(0,0,0,0.76);
+            border: 2px dotted white;
+            box-shadow: -1px -1px 8px 4px rgba(0,0,5,0.76)
         }
         &.btn-primary {
             color: white;
@@ -27,6 +32,11 @@
         &.btn-link {
             color: white;
             background-color: green;
+        }
+    }
+    .dropdown-button {
+        p {
+            margin: 1rem 0 0;
         }
     }
 }
@@ -68,6 +78,22 @@ h3 {
     overflow: hidden;
     width: 100%;
     padding: 0;
+    .card-info {
+        font-size: small;
+        font-style: italic;
+        color: grey;
+        padding: 0 1rem 0;
+        p {
+            padding: 0;
+            margin: 1rem 0 0;
+        }
+        input {
+            margin-bottom: 0.5rem;
+        }
+        button {
+            margin-left: 2rem;
+        }
+    }
 }
 .card-options {
     background: var(--card-background, #dcdcdc);

@@ -9,13 +9,12 @@
                         Lead Traveller details {{lead_traveller? ": " + lead_traveller : '' }}
                         <div v-if="form_info">on order {{order_id}}</div>
                     </button>
-    
                 </h5>
                 <div v-if="lead_traveller">
-                    You can continue with your booking, please fill in all sections
+                    <font-awesome-icon icon="fa-regular fa-angle-right" />You can continue with your booking, please fill in all sections
                 </div>
-                <div class="mt-5" v-if="!lead_traveller && !show_traveller">
-                    <p>No active booking. You may be able to retrieve your booking by email address.</p>
+                <div class="card-info" v-if="!lead_traveller && !show_traveller">
+                    <p><font-awesome-icon icon="fa-regular fa-angle-right" />No active booking. You may be able to retrieve your booking by email address.</p>
                     <input v-model="email" style="width: 100%" type="email" placeholder="Retrive booking by email" />
                     <button @click="retrieveOrder()" class="btn btn-primary">Check</button>
                 </div>

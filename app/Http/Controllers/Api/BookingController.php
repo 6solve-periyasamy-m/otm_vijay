@@ -517,8 +517,8 @@ class BookingController extends ApiController
         $order = new Order();
         $order->quote_id = null;
         $order->tour_id = $request->tour;
-        $order->total_order_value = null;
-        $order->notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
+        //$order->total_order_value = null;
+        $order->internal_notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
         $order->order_status_id = 1;
         $order->token = md5(uniqId());
         $order->save();

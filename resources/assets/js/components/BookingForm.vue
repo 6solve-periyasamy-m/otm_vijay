@@ -168,7 +168,7 @@ export default {
                 bus.$emit('setOrderToken', that.token, that.order_id)
             })
             .catch(err => {
-                console.log('error creating an order', e)
+                console.log('error creating an order', err)
             })
         },
     }
