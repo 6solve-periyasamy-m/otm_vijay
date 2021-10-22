@@ -2,10 +2,13 @@
 
 @section('title', 'All Tours')
 
+@section('footer-script')
+<script type="text/javascript">
+    $(document).ready( function () { $('#tour').DataTable({fixedHeader: true}); });
+</script>
+@endsection
+
 @section('content')
-    <script type="text/javascript">
-        $(document).ready( function () { $('#tour').DataTable({fixedHeader: true}); });
-    </script>
     <div class='card'>
         <div class="card-body">
             <a class="btn btn-success float-end" href="{{ route('tours.create') }}">

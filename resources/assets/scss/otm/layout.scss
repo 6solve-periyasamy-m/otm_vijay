@@ -4,6 +4,8 @@
 @import "datatables";
 @import "button";
 @import "card";
+@import "select2";
+@import "form";
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');
 
@@ -90,11 +92,16 @@ a {
         position: sticky;
         top: 4rem;
         z-index: 1000;        
-        height: calc(100vh - 4rem);       
-        max-width: 240px;
+        height: calc(100vh - 4rem);                       
+    }
+}
+
+@media only screen and (min-width: 1320px) {
+    .otm-sidebar {
+        width: 15%;
     }
 
     .otm-content {
-        min-width: calc(100vw - 240px);
+        width: 85%;
     }
 }
