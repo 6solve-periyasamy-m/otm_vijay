@@ -22,6 +22,8 @@ class SettingsController extends Controller
             'booking_prefix' => 'required',
             'atol_issuer' => 'required',
             'atol_number' => 'required',
+            'company_logo' => 'nullable|image',
+            'atol_stamp' => 'nullable|image',
         ];
     }
 
@@ -45,6 +47,16 @@ class SettingsController extends Controller
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
         ]);
+        if ($request->has('company_logo')  && $request->file('company_logo') != null) {
+            SettingsRepository::set('company.logo', $this->saveImage($request->file('company_logo')));
+        }
+        if ($request->has('atol_stamp') && $request->file('atol_stamp') != null) {
+            SettingsRepository::set('atol.stamp', $this->saveImage($request->file('atol_stamp')));
+        }
         return redirect()->route('dash');
+    }
+
+    private function saveImage($file) {
+        return $file->storePublicly('uploads/images');
     }
 }

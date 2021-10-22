@@ -3,7 +3,7 @@
 @section('title', 'Edit Settings')
 
 @section('content')
-<form action="{{ route('settings.update') }}" method="post">
+<form action="{{ route('settings.update') }}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="company_name-input">Company Name</label>
@@ -69,6 +69,18 @@
         <input name="atol_number" value="{{ old('atol_number') ?? \App\Repository\SettingsRepository::getOrDefault('atol.number', '') }}" class="form-control" id="atol_number-input">
     </div>
     <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="form-group">
+        <label for="company_logo-input">Company Logo</label>
+        <input name="company_logo" type="file" class="form-control-file w-100" id="company_logo-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="atol_stamp-input">ATOL Stamp</label>
+        <input name="atol_stamp" type="file" class="form-control-file w-100" id="atol_stamp-input">
+    </div>
+    <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
