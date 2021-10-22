@@ -155,20 +155,28 @@ class OrderRepository implements OrderRepositoryInterface
 
     public static function addIncludedToCustomer(OrdersCustomer $ordersCustomer, Order $order) {
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
-            $orderInventory = OrdersAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
-            $ordersCustomer->orderAccommodation()->save($orderInventory);
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderAccommodation()->save($orderInventory);
+            }
         }
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
-            $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
-            $ordersCustomer->orderActivities()->save($orderInventory);
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderActivities()->save($orderInventory);
+            }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
-            $orderInventory = OrdersFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
-            $ordersCustomer->orderFlights()->save($orderInventory);
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderFlights()->save($orderInventory);
+            }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
-            $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
-            $ordersCustomer->orderTransports()->save($orderInventory);
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderTransports()->save($orderInventory);
+            }
         }
     }
 }
