@@ -18,6 +18,23 @@ a {
     background-color: $primaryColor;
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 10%);
 
+    .navbar-brand {
+        font-size: 1.4rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+
+        :hover, :focus {
+            color: white;
+        }
+
+        img.logo {
+            height: 40px;
+            width: 40px;
+            margin-top: -5px;
+        }
+    }
+    
+
     .nav-link {
         img {
             width: 2rem;
@@ -69,7 +86,7 @@ a {
 
     .nav-link.active {        
         background-color: $primaryColor;
-        color: black;
+        color: white;
 
         span.selected {
             display: block;
@@ -96,12 +113,12 @@ a {
     }
 }
 
-@media only screen and (min-width: 1320px) {
+@media only screen and (min-width: 1500px) {
     .otm-sidebar {
-        width: 15%;
+        width: 13%;
     }
 
     .otm-content {
-        width: 85%;
+        width: 87%;
     }
 }
