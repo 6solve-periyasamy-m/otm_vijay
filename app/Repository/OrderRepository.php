@@ -162,11 +162,11 @@ class OrderRepository implements OrderRepositoryInterface
             $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
             $ordersCustomer->orderActivities()->save($orderInventory);
         }
-        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
+        foreach ($order->tour->flightInventoryTours as $inventoryTour) {
             $orderInventory = OrdersFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
             $ordersCustomer->orderFlights()->save($orderInventory);
         }
-        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
+        foreach ($order->tour->transportInventoryTours as $inventoryTour) {
             $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
             $ordersCustomer->orderTransports()->save($orderInventory);
         }

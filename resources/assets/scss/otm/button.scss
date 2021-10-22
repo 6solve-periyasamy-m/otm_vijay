@@ -1,0 +1,26 @@
+.btn {
+    border-radius: 0px;
+    box-shadow: none!important; 
+    font-size: 1rem;
+    margin: 0px;
+    text-transform: initial;
+
+    i[class*="icon-"] {
+        font-size: 0.9rem;
+    }
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7875rem;
+
+    i[class*="icon-"] {
+        font-size: 0.7875rem;
+    }
+}
+
+.btn[class*="btn-outline-"].btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7875rem;
+    border-width: 1px;
+}
