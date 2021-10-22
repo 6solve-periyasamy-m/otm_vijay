@@ -1,4 +1,4 @@
-<div class="col-12 col-md-3 col-xl-2 d-flex flex-column p-0  otm-sidebar py-3">
+<div class="col-12 col-md-3 col-xl-2 p-0  otm-sidebar collapse py-3">
     <ul class="nav flex-column mb-auto">        
         <li>            
             <a href="{{ route('dash') }}" class="nav-link">
