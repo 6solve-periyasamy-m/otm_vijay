@@ -42,10 +42,12 @@ use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TourController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\TourController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 
@@ -493,6 +495,11 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/dash', function () { return view('pages.dash'); })->name('dash');
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::post('/', [SettingsController::class, 'update'])->name('settings.update');
+    });
 });
 
 Auth::routes();

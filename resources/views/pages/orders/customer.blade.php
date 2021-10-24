@@ -2,7 +2,7 @@
 
 @section('title', 'View Order Customer')
 
-@section('content')
+@section('head-script')
 <style>
 .header-cell {
     border: 1px solid black !important;
@@ -110,6 +110,8 @@ $(document).ready( function () {
     updateTransportSelectFields();
 });
 </script>
+@endsection
+@section('content')
 {{-- Header Details --}}
 <div id="header-details">
     <table class="table" style="font-size: 32px">

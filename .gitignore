@@ -6,6 +6,7 @@
 /public/build
 /public/mix-manifest.json
 /public/storage
+/public/uploads
 /storage/*.key
 /vendor
 /db
@@ -20,3 +21,4 @@ yarn-error.log
 .env.example
 .editorconfig
 /.idea
+Archived
