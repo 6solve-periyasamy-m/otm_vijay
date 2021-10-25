@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
@@ -11,10 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Flight extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     public $additional_attributes = ['flight_details'];
-
+    protected $cascadeDeletes = ['flightInventory'];
     protected $fillable = ['airline_id','departure_airport_id','arrival_airport_id','is_domestic','notes','available_after',];
 
     const RULES = [
