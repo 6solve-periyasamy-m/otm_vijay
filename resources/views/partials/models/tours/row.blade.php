@@ -13,11 +13,11 @@
     <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
     <td>
-        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class='btn btn-outline-success btn-sm' style='margin-bottom: 4px;'>
-            <i class='icon-note'></i>            
+        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+            <i class="icon-note"></i>            
         </a>
         <br>
-        <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class='btn btn-outline-danger btn-sm' style='margin-bottom: 4px;'>
+        <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
             <i class="icon-trash"></i>
         </a>
         <form id="tour-{{ $tour->id }}-delete" action="{{ route('tours.delete', ['tour' => $tour,]) }}" method="POST"

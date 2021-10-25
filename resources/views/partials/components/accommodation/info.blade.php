@@ -4,7 +4,7 @@
     <p>{{ $accommodation->address }}</p>
     <p>{{ $accommodation->description }}</p><br>    
     <a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
-        <i class='icon-note'></i>
+        <i class="icon-note"></i>
         <span>Edit Accommodation</span>
     </a>
 </div>
