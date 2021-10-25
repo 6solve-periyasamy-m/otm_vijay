@@ -35,6 +35,7 @@
                 </tr>
                 @endforeach
             </table>
+            <a href="{{ route('orders-customers.create', ['order' => $order, ]) }}" class="btn btn-success">Add Customer</a>
         </div>
     </div>
     {{-- Order Overview Table --}}
