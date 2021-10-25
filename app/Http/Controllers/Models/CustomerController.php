@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Hash;
 class CustomerController extends Controller
 {
 
+    const HOME_RULES = ['home_address_line_1' => 'required', 'home_country' => 'required', 'home_postcode' => 'required'];
+    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,on', 'billing_postcode' => 'required_unless:home_is_billing,on'];
+
     public function index()
     {
         return view('pages.models.customers.table', ['customers' => Customer::all(),]);
@@ -23,6 +26,9 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Customer::getValidationRules());
+        $request->validate(self::HOME_RULES);
+        $request->validate(self::BILLING_RULES);
         $customer = Customer::make([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),
@@ -87,6 +93,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
+        $request->validate(Customer::getValidationRules());
         $customer->update([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),
