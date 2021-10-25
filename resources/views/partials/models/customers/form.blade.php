@@ -150,13 +150,13 @@
     <p></p>
     <div class="form-group">
         <label for="passport_issue_date-input">Passport Issue Date</label>
-        <input name="passport_issue_date" value="{{ $passport_issue_date ?? "" }}" class="form-control"
+        <input type="date" name="passport_issue_date" value="{{ $passport_issue_date ?? "" }}" class="form-control"
                id="passport_issue_date-input">
     </div>
     <p></p>
     <div class="form-group">
         <label for="passport_expiry_date-input">Passport Expiry Date</label>
-        <input name="passport_expiry_date" value="{{ $passport_expiry_date ?? "" }}" class="form-control"
+        <input type="date" name="passport_expiry_date" value="{{ $passport_expiry_date ?? "" }}" class="form-control"
                id="passport_expiry_date-input">
     </div>
     <p></p>
