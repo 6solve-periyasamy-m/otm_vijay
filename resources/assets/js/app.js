@@ -3,10 +3,10 @@ import Vue from 'vue'
 import { bus } from './bus'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faUserSecret)
+library.add(faUserSecret, faArrowRight, faBookReader, faCheck)
 
 Vue.config.productionTip = false
 

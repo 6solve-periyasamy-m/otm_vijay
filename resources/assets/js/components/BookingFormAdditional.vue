@@ -5,7 +5,7 @@
                 <h5 class="dropdown-button">
                     <p v-if="!lead_traveller && !showAdditional">{{ additional.length ? `Group Size: ${additional.length+1}`: 'Please add all travellers to your tour party'}}</p>
                     <button class="btn btn-link collapsed cardhead" @click="toggleAdditional">
-                        Additional Travellers <div v-if="form_info">on order {{order_id}}</div>
+                        <font-awesome-icon icon="book-reader" /> Additional Travellers <div v-if="form_info">on order {{order_id}}</div>
                     </button>
                 </h5>
             </div>

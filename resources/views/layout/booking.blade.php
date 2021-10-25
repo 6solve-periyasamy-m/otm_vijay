@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
+    <script src="/js/appbootstrap.js"></script>
     @yield('head-script')
 </head>
 <body>

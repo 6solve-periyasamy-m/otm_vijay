@@ -6,17 +6,22 @@
                 <h5 class="dropdown-button">
                     <p v-if="!lead_traveller && !show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
+                        <font-awesome-icon icon="book-reader" />
                         Lead Traveller details {{lead_traveller? ": " + lead_traveller : '' }}
                         <div v-if="form_info">on order {{order_id}}</div>
                     </button>
                 </h5>
                 <div v-if="lead_traveller">
-                    <font-awesome-icon icon="fa-regular fa-angle-right" />You can continue with your booking, please fill in all sections
+                    <font-awesome-icon icon="arrow-right" />
+                    You can continue with your booking, please fill in all sections
                 </div>
                 <div class="card-info" v-if="!lead_traveller && !show_traveller">
-                    <p><font-awesome-icon icon="fa-regular fa-angle-right" />No active booking. You may be able to retrieve your booking by email address.</p>
-                    <input v-model="email" style="width: 100%" type="email" placeholder="Retrive booking by email" />
-                    <button @click="retrieveOrder()" class="btn btn-primary">Check</button>
+                     <p><font-awesome-icon icon="arrow-right" />
+                     No active booking. You may be able to retrieve your booking by email address.</p>
+                     <input v-model="email" style="width: 100%" type="email" placeholder="Retrive booking by email" />
+                    <button @click="retrieveOrder()" class="btn btn-primary">
+                        <font-awesome-icon icon="check" /> Check
+                    </button>
                 </div>
             </div>
             {{debug ? 'DEBUG MODE: Order retrieved by cookie: '+order_id +' / token: '+ token : ''}}
