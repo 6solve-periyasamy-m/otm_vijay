@@ -7,7 +7,7 @@
     <div class="card-body ">
         <a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>
         <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}" class="btn btn-primary float-end me-1">
-            <i class='icon-plus'></i>
+            <i class="icon-plus"></i>
             <span>Add Inventory</span>
         </a>
     </div>
@@ -49,7 +49,7 @@
                     <td>
                         <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" 
                             class="btn btn-outline-success btn-sm mb-1">
-                            <i class='icon-note'></i>
+                            <i class="icon-note"></i>
                         </a>
                         <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                         onclick="event.preventDefault();document.getElementById('accommodationInventory-{{ $accommodationInventory->id }}-delete').submit();">
