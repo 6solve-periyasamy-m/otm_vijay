@@ -162,15 +162,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{country}', [CountryController::class, 'update'])->name('countries.update');
         Route::post('/delete/{country}', [CountryController::class, 'destroy'])->name('countries.delete');
     });
-    Route::prefix('customers')->group(function () {
-        Route::get('/', [CustomerController::class, 'index'])->name('customers.all');
-        Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
-        Route::post('/create', [CustomerController::class, 'store'])->name('customers.store');
-        Route::get('/{customer}', [CustomerController::class, 'view'])->name('customers.view');
-        Route::get('/update/{customer}', [CustomerController::class, 'edit'])->name('customers.edit');
-        Route::post('/update/{customer}', [CustomerController::class, 'update'])->name('customers.update');
-        Route::post('/delete/{customer}', [CustomerController::class, 'destroy'])->name('customers.delete');
-    });
     Route::prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('events.all');
         Route::get('/create', [EventController::class, 'create'])->name('events.create');
@@ -493,6 +484,17 @@ Route::middleware('auth')->group(function () {
     Route::prefix('settings')->group(function () {
         Route::get('/', [SettingsController::class, 'edit'])->name('settings.edit');
         Route::post('/', [SettingsController::class, 'update'])->name('settings.update');
+    });
+    Route::prefix('customers')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('customers.all');
+        Route::get('/create', [CustomerController::class, 'create'])->name('customers.create');
+        Route::post('/create', [CustomerController::class, 'store'])->name('customers.store');
+        Route::prefix('{customer}')->group(function () {
+            Route::get('/', [CustomerController::class, 'view'])->name('customers.view');
+            Route::get('/update', [CustomerController::class, 'edit'])->name('customers.edit');
+            Route::post('/update', [CustomerController::class, 'update'])->name('customers.update');
+            Route::post('/delete', [CustomerController::class, 'destroy'])->name('customers.delete');
+        });
     });
 });
 
