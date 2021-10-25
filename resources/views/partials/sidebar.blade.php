@@ -8,14 +8,14 @@
         </li>
         <li>
             <a href="{{ route('tours.all') }}" class="nav-link active">
-                <i class='icon-globe'></i>
+                <i class="icon-globe"></i>
                 <span>Tours</span>
                 <span class="selected"></span>
             </a>
         </li>
         <li>
             <a href="{{ route('accommodations.all') }}" class="nav-link">
-                <i class='icon-home'></i>
+                <i class="icon-home"></i>
                 <span>Accommodation</span>
             </a>
         </li>
