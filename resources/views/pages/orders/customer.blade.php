@@ -178,7 +178,10 @@ $(document).ready( function () {
             <td>{{ $customer->billingAddress->postcode }}</td>
         </tr>
     </table>
-    <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
+    <div>
+        <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
+        <a href="{{ route('orders-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
+    </div>
 </div>
 {{-- Components Section --}}
 <div id="billing-section" style="border: 1px solid black">
