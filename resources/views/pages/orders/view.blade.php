@@ -8,7 +8,7 @@
     <table class="table" style="border-bottom: 1px solid black; font-size: 32px">
         <tr>
             <td style="border: 1px solid black; font-size: 24px">{{ $order->booking_reference }}</td>
-            <td style="border: 1px solid black; font-size: 24px">{{ $order->tour->title }} <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-amber">Edit</a></td>
+            <td style="border: 1px solid black; font-size: 24px">{{ $order->tour->title }}</td>
             <td style="border: 1px solid black; font-size: 24px">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</td>
             <td style="border: 1px solid black; background-color: {{ $totalPaid >= $totalOrderValue ? "#33ff99" : "#ffff99" }}; font-size: 24px">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</td>
         </tr>
