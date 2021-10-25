@@ -3,30 +3,49 @@
 @section('title', 'View Customer')
 
 @section('content')
-    Title: {{ $customer->title }}<br/>
-    First Name: {{ $customer->first_name }}<br/>
-    Middle Names: {{ $customer->middle_names }}<br/>
-    Last Name: {{ $customer->last_name }}<br/>
-    Date Of Birth: {{ $customer->date_of_birth }}<br/>
-    Mobile Number: {{ $customer->mobile_number }}<br/>
-    Other Phone Number: {{ $customer->other_phone_number }}<br/>
-    Email Address: {{ $customer->email_address }}<br/>
-    Password: {{ $customer->password }}<br/>
-    Gender: {{ $customer->gender }}<br/>
-    Emergency Contact Name: {{ $customer->emergency_contact_name }}<br/>
-    Emergency Contact Relationship: {{ $customer->emergency_contact_relationship }}<br/>
-    Emergency Contact Telephone: {{ $customer->emergency_contact_telephone }}<br/>
-    Passport First Name: {{ $customer->passport_first_name }}<br/>
-    Passport Middle Name: {{ $customer->passport_middle_name }}<br/>
-    Passport Last Name: {{ $customer->passport_last_name }}<br/>
-    Passport Number: {{ $customer->passport_number }}<br/>
-    Passport Issue Date: {{ $customer->passport_issue_date }}<br/>
-    Passport Expiry Date: {{ $customer->passport_expiry_date }}<br/>
-    T Shirt Size Id: {{ $customer->t_shirt_size_id }}<br/>
-    Hat Size Id: {{ $customer->hat_size_id }}<br/>
-    Notes: {{ $customer->notes }}<br/>
-    Loyalty Number: {{ $customer->loyalty_number }}<br/>
-    Login Token: {{ $customer->login_token }}<br/>
-    Home Address Id: {{ $customer->home_address_id }}<br/>
-    Billing Address Id: {{ $customer->billing_address_id }}<br/>
+    <div class="id-card w-100">
+        <div class="d-inline align-top">
+            <img src="{{ asset('images/exampleavatar.jpg') }}" style="width: 150px; height: 150px;">
+        </div>
+        <div class="d-inline-flex align-top" style="font-size: 16px; font-weight: 1000;">
+            <table>
+                <tr class="border-bottom">
+                    <th scope="row">Personal Details:</th>
+                    <td>
+                        {{ $customer->title }} {{ $customer->first_name }} {{ $customer->middle_names }} {{ $customer->last_name }} ({{ $customer->gender }})
+                    </td>
+                </tr>
+                <tr class="border-bottom">
+                    <th scope="row">Contact Information:</th>
+                    <td>
+                        <a href="mailto:{{ $customer->email_address }}">{{ $customer->email_address }}</a>, {{ $customer->mobile_number }}
+                        @if(isset($customer->other_phone_number))
+                            ({{ $customer->other_phone_number }})
+                        @endif
+                    </td>
+                </tr>
+                <tr class="border-bottom">
+                    <th scope="row">Address:</th>
+                    <td>
+                        {{ $customer->homeAddress }}
+                        @if($customer->home_address_id != $customer->billing_address_id)
+                            (Billing: {{ $customer->billingAddress }})
+                        @endif
+                    </td>
+                </tr>
+                <tr class="border-bottom">
+                    <th scope="row">Passport Details:</th>
+                    <td>
+                        {{ $customer->passport_first_name }} {{ $customer->passport_middle_names }} {{ $customer->passport_last_name }}, {{ $customer->passport_number }}, {{ $customer->passport_issue_date }} to {{ $customer->passport_expiry_date }}
+                    </td>
+                </tr>
+                <tr class="border-bottom">
+                    <th scope="row">Emergency Contact:</th>
+                    <td>
+                        {{ $customer->emergency_contact_name }} ({{ $customer->emergency_contact_relationship }}) {{ $customer->emergency_contact_telephone }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 @endsection
