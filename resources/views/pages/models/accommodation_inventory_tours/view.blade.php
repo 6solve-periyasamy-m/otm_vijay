@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Accommodation Inventory Tours')
+@section('title', 'View Accommodation Inventory Tour')
 
 @section('content')
     Tour Id: {{ $accommodationInventoryTour->tour_id }}<br/>

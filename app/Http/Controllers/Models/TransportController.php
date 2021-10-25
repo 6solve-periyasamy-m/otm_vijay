@@ -21,6 +21,7 @@ class TransportController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Transport::RULES);
         $transport = Transport::create([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
@@ -29,7 +30,7 @@ class TransportController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency' => $request->input('currency'),
-            'is_domestic' => $request->input('is_domestic'),
+            'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('transports.view', ['transport' => $transport,]);
@@ -37,7 +38,7 @@ class TransportController extends Controller
 
     public function view(Transport $transport)
     {
-        return view('pages.models.transports.view', ['transport' => $transport,]);
+        return view('pages.components.transport', ['transport' => $transport,]);
     }
 
     public function edit(Transport $transport)
@@ -47,6 +48,7 @@ class TransportController extends Controller
 
     public function update(Request $request, Transport $transport)
     {
+        $request->validate(Transport::RULES);
         $transport->update([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
@@ -55,7 +57,7 @@ class TransportController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency' => $request->input('currency'),
-            'is_domestic' => $request->input('is_domestic'),
+            'is_domestic' => $request->input('is_domestic') == "on" ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('transports.view', ['transport' => $transport,]);

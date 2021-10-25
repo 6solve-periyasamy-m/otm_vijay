@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Accommodation Inventories')
+@section('title', 'View Accommodation Inventory')
 
 @section('content')
     Accommodation Id: {{ $accommodationInventory->accommodation_id }}<br/>

@@ -14,6 +14,14 @@ class Order extends Model
     protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
 
+    public static function getValidationRules() {
+        return [
+            'quote_id' => 'exists:quotes,id',
+            'tour_id'=> 'required|exists:tours,id',
+            'booking_reference' => 'required',
+        ];
+    }
+
     public function quote() 
     {
         return $this->hasOne(Quote::class);

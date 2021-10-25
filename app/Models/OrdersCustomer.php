@@ -15,6 +15,14 @@ class OrdersCustomer extends Model
     protected $fillable = ['order_id','customer_id','tour_cost','single_occupancy_surcharge','travel_insurer','policy_number',];
     protected $cascadeDeletes = ['orderAccommodation', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
 
+    public static function getValidationRules() {
+        return [
+            'customer_id' => 'exists:customers,id',
+            'tour_cost' => 'numeric',
+            'single_occupancy_surcharge' => 'numeric',
+        ];
+    }
+
     public function order() 
     {
         return $this->belongsTo(Order::class);

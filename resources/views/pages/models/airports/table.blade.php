@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Airports')
+@section('title', 'All Airports')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('airports.create') }}">Create New</a>

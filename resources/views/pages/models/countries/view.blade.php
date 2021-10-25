@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Countries')
+@section('title', 'View Country')
 
 @section('content')
     Name: {{ $country->name }}<br/>

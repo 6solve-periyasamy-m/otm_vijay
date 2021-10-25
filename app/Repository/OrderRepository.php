@@ -3,13 +3,18 @@
 namespace App\Repository;
 
 use App\Models\Order;
+use App\Models\OrdersAccommodation;
+use App\Models\OrdersActivity;
 use App\Models\OrdersCustomer;
+use App\Models\OrdersFlight;
+use App\Models\OrdersTransport;
 use Illuminate\Support\Facades\DB;
 
 interface OrderRepositoryInterface {
     public static function getSearchOrders($searchTerm = "", $archived = false);
-    public static function getOrderDetails($orderId);
-    public static function getOrderCustomerDetails($id);
+    public static function getOrderDetails(Order $order);
+    public static function getOrderCustomerDetails(OrdersCustomer $orderCustomer);
+    public static function addIncludedToCustomer(OrdersCustomer $ordersCustomer, Order $order);
 
 }
 
@@ -40,9 +45,8 @@ class OrderRepository implements OrderRepositoryInterface
         return $query->get();
     }
 
-    public static function getOrderDetails($orderId)
+    public static function getOrderDetails(Order $order)
     {
-        $order = Order::findOrFail($orderId);
         $details = ['order' => $order,];
         $customers = [];
         $addons = [];
@@ -98,9 +102,8 @@ class OrderRepository implements OrderRepositoryInterface
         return $details;
     }
 
-    public static function getOrderCustomerDetails($id)
+    public static function getOrderCustomerDetails(OrdersCustomer $orderCustomer)
     {
-        $orderCustomer = OrdersCustomer::findOrFail($id);
         $details = ['order_customer' => $orderCustomer, 'customer' => $orderCustomer->customer, 'order' => $orderCustomer->order,];
         $accommodationArr = [];
         foreach ($orderCustomer->orderAccommodation as $orderAccommodation) {
@@ -147,5 +150,33 @@ class OrderRepository implements OrderRepositoryInterface
         $details['transports'] = $transports;
 
         return $details;
+    }
+
+
+    public static function addIncludedToCustomer(OrdersCustomer $ordersCustomer, Order $order) {
+        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderAccommodation()->save($orderInventory);
+            }
+        }
+        foreach ($order->tour->activityInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderActivities()->save($orderInventory);
+            }
+        }
+        foreach ($order->tour->flightInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderFlights()->save($orderInventory);
+            }
+        }
+        foreach ($order->tour->transportInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Included") {
+                $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
+                $ordersCustomer->orderTransports()->save($orderInventory);
+            }
+        }
     }
 }

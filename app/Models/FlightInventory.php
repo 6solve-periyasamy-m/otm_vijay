@@ -15,6 +15,24 @@ class FlightInventory extends Model
     protected $cascadeDeletes = ['flightInventoryTour'];
     protected $fillable = ['flight_id','travel_class_id','flight_number','check_in_date_time','departure_date_time','arrival_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
 
+    const RULES = [
+        'travel_class_id' => 'required|exists:travel_classes,id',
+        'flight_number' => 'required',
+        'check_in_date_time' => 'date',
+        'departure_date_time' => 'date',
+        'arrival_date_time' => 'date',
+        'stock' => 'required|numeric|integer',
+        'purchase_price' => 'required|numeric',
+        'sales_price' => 'required|numeric',
+        'currency' => 'required|size:3',
+    ];
+
+    protected $casts = [
+        'check_in_date_time' => 'datetime',
+        'departure_date_time' => 'datetime',
+        'arrival_date_time' => 'datetime',
+    ];
+
     public function flight()
     {
         return $this->belongsTo(Flight::class);

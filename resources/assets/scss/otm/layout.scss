@@ -1,0 +1,156 @@
+/* Nav Bar Styling */
+
+@import "colors";
+@import "datatables";
+@import "button";
+@import "card";
+@import "select2";
+@import "form";
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');
+
+a {
+    text-decoration: none!important;
+}
+
+.otm-navbar {
+    min-height: 4rem;
+    background-color: $primaryColor;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 30%);
+    padding-bottom: 0px;
+
+    .navbar-nav {     
+        width: 100%;   
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .sidebar-toggler {            
+            display: block;
+
+            .nav-link {
+                color: white;
+            }
+        }
+    }
+
+    .navbar-brand {
+        font-size: 1.4rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+
+        :hover, :focus {
+            color: white;
+        }
+
+        img.logo {
+            height: 40px;
+            width: 40px;
+            margin-top: -5px;
+        }
+    }
+    
+
+    .nav-link {
+        img {
+            width: 2rem;
+            height: 2rem;            
+        }
+
+        img.img-thumbnail {
+            padding: 0.05rem;
+        }
+
+        &:hover span {
+            font-weight: 600;
+        }
+    }
+    
+}
+
+.otm-sidebar {    
+    background-color: $sideBarColor;
+
+    .nav-link {
+        padding: 1rem 1.3rem;
+        color: #151515;
+        font-size: 1rem;
+        position: relative;
+        line-height: 1rem;
+        font-weight: 500;
+        display: flex;
+        
+
+        &:hover {            
+            background-color: $secondColor;
+            color: black;
+        }
+
+        &:focus {
+            background-color: $secondColor;
+        }
+
+        i {
+            margin-left: 1px;
+            margin-right: 10px;
+        }
+
+        span {
+            margin-top: 1px
+        };
+    }
+
+    .nav-link.active {        
+        background-color: $primaryColor;
+        color: white;
+
+        span.selected {
+            display: block;
+            float: right;
+            position: absolute;
+            right: 0;
+            top: 12px;
+            background: 0 0;
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 12px solid #f8fafc;
+        }
+    }
+}
+
+@media screen and (min-width: 768px){
+    .otm-navbar {        
+        padding-bottom: 0.5rem;
+
+        .navbar-nav {
+            width: auto;
+
+            .sidebar-toggler {
+                display: none;
+            }
+        }
+    }
+
+    .otm-sidebar {        
+        position: sticky;
+        top: 4rem;
+        z-index: 1000;        
+        height: calc(100vh - 4rem);                       
+    }
+
+    .collapse:not(.show) {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 1500px) {
+    .otm-sidebar {
+        width: 13%;
+    }
+
+    .otm-content {
+        width: 87%;
+    }
+}

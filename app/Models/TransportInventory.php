@@ -18,6 +18,15 @@ class TransportInventory extends Model
         "departure_date_time" => "datetime",
         "arrival_date_time" => "datetime"
     ];
+    const RULES = [
+        'travel_class_id' => 'required|exists:travel_classes,id',
+        'departure_date_time' => 'date',
+        'arrival_date_time' => 'date',
+        'stock' => 'required|numeric|integer',
+        'purchase_price' => 'required|numeric',
+        'sales_price' => 'required|numeric',
+        'currency' => 'required|size:3',
+    ];
 
     public $additional_attributes = ['Transport_for_tour'];
 

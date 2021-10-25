@@ -1,9 +1,9 @@
 @extends('layout.main')
 
-@section('title', 'Update Transport Inventories')
+@section('title', 'Update Transport Inventory')
 
 @section('content')
-    @include('partials.models.transport_inventories.form', ['action' => route('transport-inventories.update', ['transportInventory' => $transportInventory,]),
+    @include('partials.models.transport_inventories.form', ['action' => route('transport-inventories.update', ['transport' => $transport, 'transportInventory' => $transportInventory,]),
       'transport_id' => $transportInventory->transport_id,
       'travel_class_id' => $transportInventory->travel_class_id,
       'departure_date_time' => $transportInventory->departure_date_time,

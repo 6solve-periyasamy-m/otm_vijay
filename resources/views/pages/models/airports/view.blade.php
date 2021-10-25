@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Airports')
+@section('title', 'View Airport')
 
 @section('content')
     Name: {{ $airport->name }}<br/>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\FlightInventory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Validation\Rule;
 
 class FlightInventoryTour extends Model
 {
@@ -17,6 +18,17 @@ class FlightInventoryTour extends Model
 
     protected $fillable = ['tour_id','flight_inventory_id','tour_component_type','flight_type','tour_sales_price',];
     protected $cascadeDeletes = ['orders'];
+
+    public static function getValidationRules() {
+        return [
+            'tour_component_type' => [
+                'required',
+                Rule::in(['Included', 'Upgrade', 'Add-on'])
+            ],
+            'tour_sales_price' => 'required|numeric',
+            'flight_inventory_id' => 'required|exists:flight_inventories,id'
+        ];
+    }
 
     public function flightInventory() 
     {

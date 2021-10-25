@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Payment Methods')
+@section('title', 'All Payment Methods')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('payment-methods.create') }}">Create New</a>

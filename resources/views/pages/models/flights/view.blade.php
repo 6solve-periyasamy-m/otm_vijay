@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'View Flights')
+@section('title', 'View Flight')
 
 @section('content')
     Airline Id: {{ $flight->airline_id }}<br/>

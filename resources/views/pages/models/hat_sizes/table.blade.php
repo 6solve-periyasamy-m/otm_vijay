@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Hat Sizes')
+@section('title', 'All Hat Sizes')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('hat-sizes.create') }}">Create New</a>

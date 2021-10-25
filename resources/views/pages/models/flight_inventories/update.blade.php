@@ -1,9 +1,9 @@
 @extends('layout.main')
 
-@section('title', 'Update Flight Inventories')
+@section('title', 'Update Flight Inventory')
 
 @section('content')
-    @include('partials.models.flight_inventories.form', ['action' => route('flight-inventories.update', ['flightInventory' => $flightInventory,]),
+    @include('partials.models.flight_inventories.form', ['action' => route('flight-inventories.update', ['flight' => $flight, 'flightInventory' => $flightInventory,]),
       'flight_id' => $flightInventory->flight_id,
       'travel_class_id' => $flightInventory->travel_class_id,
       'flight_number' => $flightInventory->flight_number,

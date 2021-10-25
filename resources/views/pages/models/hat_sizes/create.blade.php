@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Create Hat Sizes')
+@section('title', 'Create Hat Size')
 
 @section('content')
     @include('partials.models.hat_sizes.form', ['action' => route('hat-sizes.store'),])

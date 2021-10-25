@@ -1,4 +1,6 @@
 @extends('layout.main')
+
+@section('title', 'View Order')
 {{-- TODO: Tidy up CSS --}}
 @section('content')
 {{-- Header Details --}}
@@ -24,8 +26,8 @@
                 @foreach($customers as $ordersCustomer)
                 <tr>
                     <td style="border: 1px solid black; border-left: 0; width: 30%;">
-                        <a href="{{ route('orderCustomerDetails', ['id' => $ordersCustomer->customer->id]) }}" class="link-info"><u>
-                            {{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}
+                        <a href="{{ route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info"><u>
+                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                         </u></a>
                     </td>
                     <td style="border: 1px solid black; width: 30%;">Born: {{ $ordersCustomer->customer->date_of_birth }}</td>
@@ -139,8 +141,8 @@
     {{-- Manual Adjustments Table --}}
     <div id="costs-section">
         <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
-            <div id="customers-header" style="max-width: 35%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Order Adjustments
+            <div id="customers-header" style="max-width: 50%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
+                Order Adjustments <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="d-inline btn btn-success">Add Adjustment</a>
             </div>
             <table style="min-width: 100%; margin-bottom: 1px">
                 <thead>

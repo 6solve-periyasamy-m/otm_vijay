@@ -3,61 +3,60 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\OrdersCustomer;
+use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
 class OrdersCustomerController extends Controller
 {
 
-    public function index()
+    public function index(Order $order)
     {
-        return view('pages.models.orders_customers.table', ['ordersCustomers' => OrdersCustomer::all(),]);
+        return view('pages.models.orders_customers.table', ['order' => $order, 'orderCustomers' => OrdersCustomer::all(),]);
     }
 
-    public function create()
+    public function create(Order $order)
     {
-        return view('pages.models.orders_customers.create');
+        return view('pages.models.orders_customers.create', ['order' => $order, ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Order $order)
     {
-        $ordersCustomer = OrdersCustomer::create([
-            'order_id' => $request->input('order_id'),
+        $request->validate(OrdersCustomer::getValidationRules());
+        $ordersCustomer = OrdersCustomer::make([
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $request->input('tour_cost'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
         ]);
-        return redirect()->route('orders-customers.view', ['ordersCustomer' => $ordersCustomer,]);
+        $order->orderCustomers()->save($ordersCustomer);
+        OrderRepository::addIncludedToCustomer($ordersCustomer, $order);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
     }
 
-    public function view(OrdersCustomer $ordersCustomer)
+    public function edit(Order $order, OrdersCustomer $ordersCustomer)
     {
-        return view('pages.models.orders_customers.view', ['ordersCustomer' => $ordersCustomer,]);
+        return view('pages.models.orders_customers.update', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
     }
 
-    public function edit(OrdersCustomer $ordersCustomer)
+    public function update(Request $request, Order $order, OrdersCustomer $ordersCustomer)
     {
-        return view('pages.models.orders_customers.update', ['ordersCustomer' => $ordersCustomer,]);
-    }
-
-    public function update(Request $request, OrdersCustomer $ordersCustomer)
-    {
+        $request->validate(OrdersCustomer::getValidationRules());
         $ordersCustomer->update([
-            'order_id' => $request->input('order_id'),
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $request->input('tour_cost'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
         ]);
-        return redirect()->route('orders-customers.view', ['ordersCustomer' => $ordersCustomer,]);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
     }
 
-    public function destroy(OrdersCustomer $ordersCustomer)
+    public function destroy(Order $order, OrdersCustomer $ordersCustomer)
     {
         $ordersCustomer->delete();
-        return redirect()->route('orders-customers.all');
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 }

@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Update Flight Inventories')
+@section('title', 'All Flight Inventories')
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('flight-inventories.create') }}">Create New</a>
