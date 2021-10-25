@@ -12,6 +12,7 @@
             </div>
         </div>
     </form>
+    <a href="{{ route('orders.create') }}" class="btn btn-success">Create Order</a>
     <table class="table table-striped" style="border-radius: 10px;">
         <thead class="thead-dark">
         <tr>
