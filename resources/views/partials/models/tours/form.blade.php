@@ -20,84 +20,78 @@
         });
     </script>
 @endsection
-<form action="{{ $action }}" method="post">
-    @csrf
-    <div class="form-group">
-        <label for="event_id-input">Event</label><br />
-        <select style="width: 95%" name="event_id" class="form-control" id="event_id-input"></select>
-        <a href="{{ route('events.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
+<div class='card'>
+    <div class='card-body'>
+        <form action="{{ $action }}" method="post">
+            @csrf
+            <div class="row">
+                <div class="form-group col-12">
+                    <label for="event_id-input">Event</label><br />
+                    <div class="d-flex">
+                        <select name="event_id" class="form-control" id="event_id-input"></select>
+                        <a href="{{ route('events.create') }}" target="_blank" class="btn btn-success d-inline mt-0 ms-1">+</a>
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="title-input">Title</label>
+                    <input name="title" value="{{ $title ?? "" }}" class="form-control" id="title-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="description-input">Description</label>
+                    <input name="description" value="{{ $description ?? "" }}" class="form-control" id="description-input">
+                </div>                
+                <div class="form-group col-xl-6">
+                    <label for="date_from-input">Date From</label>
+                    <input type="date" name="date_from" value="{{ $date_from ?? "" }}" class="form-control" id="date_from-input">
+                </div>                
+                <div class="form-group col-xl-6">
+                    <label for="date_to-input">Date To</label>
+                    <input type="date" name="date_to" value="{{ $date_to ?? "" }}" class="form-control" id="date_to-input">
+                </div>                
+                <div class="form-group col-xl-6">
+                    <label for="base_price_per_person-input">Base Price Per Person</label>
+                    <input name="base_price_per_person" value="{{ $base_price_per_person ?? "" }}" class="form-control"
+                        id="base_price_per_person-input">
+                </div>                
+                <div class="form-group col-xl-6">
+                    <label for="margin-input">Margin</label>
+                    <input name="margin" value="{{ $margin ?? "" }}" class="form-control" id="margin-input" type="number">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="single_occupancy_surcharge-input">Single Occupancy Surcharge</label>
+                    <input name="single_occupancy_surcharge" value="{{ $single_occupancy_surcharge ?? "" }}" class="form-control"
+                        id="single_occupancy_surcharge-input">
+                </div>                
+                <div class="form-group col-12">
+                    <input type="checkbox" name="stock_control_active" class="form-check-input" @if(isset($stock_control_active) && $stock_control_active == 1) checked @endif
+                    id="stock_control_active-input">
+                    <label for="stock_control_active-input" class="form-check-label">Stock Control Active</label>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="stock-input">Stock</label>
+                    <input name="stock" value="{{ $stock ?? "" }}" class="form-control" id="stock-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="booking_form_url-input">Booking Form Url</label>
+                    <input name="booking_form_url" value="{{ $booking_form_url ?? "" }}" class="form-control"
+                        id="booking_form_url-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="tour_colour_id-input">Tour Colour Id</label>
+                    <input name="tour_colour_id" value="{{ $tour_colour_id ?? "" }}" class="form-control" id="tour_colour_id-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="is_active-input">Is Active</label>
+                    <input name="is_active" value="{{ $is_active ?? "" }}" class="form-control" id="is_active-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="notes-input">Notes</label>
+                    <textarea rows="2" class='form-control' id="notes-input" name="notes">{{ $notes ?? "" }}</textarea>                    
+                </div>                
+                <div class="form-group col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <p></p>
-    <div class="form-group">
-        <label for="title-input">Title</label>
-        <input name="title" value="{{ $title ?? "" }}" class="form-control" id="title-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="description-input">Description</label>
-        <input name="description" value="{{ $description ?? "" }}" class="form-control" id="description-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="date_from-input">Date From</label>
-        <input type="date" name="date_from" value="{{ $date_from ?? "" }}" class="form-control" id="date_from-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="date_to-input">Date To</label>
-        <input type="date" name="date_to" value="{{ $date_to ?? "" }}" class="form-control" id="date_to-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="base_price_per_person-input">Base Price Per Person</label>
-        <input name="base_price_per_person" value="{{ $base_price_per_person ?? "" }}" class="form-control"
-               id="base_price_per_person-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="margin-input">Margin</label>
-        <input name="margin" value="{{ $margin ?? "" }}" class="form-control" id="margin-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="single_occupancy_surcharge-input">Single Occupancy Surcharge</label>
-        <input name="single_occupancy_surcharge" value="{{ $single_occupancy_surcharge ?? "" }}" class="form-control"
-               id="single_occupancy_surcharge-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <input type="checkbox" name="stock_control_active" class="form-check-input" @if(isset($stock_control_active) && $stock_control_active == 1) checked @endif
-        id="stock_control_active-input">
-        <label for="checkout_confirmed-input" class="form-check-label">Stock Control Active</label>
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="stock-input">Stock</label>
-        <input name="stock" value="{{ $stock ?? "" }}" class="form-control" id="stock-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="booking_form_url-input">Booking Form Url</label>
-        <input name="booking_form_url" value="{{ $booking_form_url ?? "" }}" class="form-control"
-               id="booking_form_url-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="tour_colour_id-input">Tour Colour Id</label>
-        <input name="tour_colour_id" value="{{ $tour_colour_id ?? "" }}" class="form-control" id="tour_colour_id-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="is_active-input">Is Active</label>
-        <input name="is_active" value="{{ $is_active ?? "" }}" class="form-control" id="is_active-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="notes-input">Notes</label>
-        <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+</div>

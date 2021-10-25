@@ -4,6 +4,8 @@
 @import "datatables";
 @import "button";
 @import "card";
+@import "select2";
+@import "form";
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');
 
@@ -14,7 +16,40 @@ a {
 .otm-navbar {
     min-height: 4rem;
     background-color: $primaryColor;
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 10%);
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 30%);
+    padding-bottom: 0px;
+
+    .navbar-nav {     
+        width: 100%;   
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .sidebar-toggler {            
+            display: block;
+
+            .nav-link {
+                color: white;
+            }
+        }
+    }
+
+    .navbar-brand {
+        font-size: 1.4rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+
+        :hover, :focus {
+            color: white;
+        }
+
+        img.logo {
+            height: 40px;
+            width: 40px;
+            margin-top: -5px;
+        }
+    }
+    
 
     .nav-link {
         img {
@@ -67,7 +102,7 @@ a {
 
     .nav-link.active {        
         background-color: $primaryColor;
-        color: black;
+        color: white;
 
         span.selected {
             display: block;
@@ -86,15 +121,36 @@ a {
 }
 
 @media screen and (min-width: 768px){
+    .otm-navbar {        
+        padding-bottom: 0.5rem;
+
+        .navbar-nav {
+            width: auto;
+
+            .sidebar-toggler {
+                display: none;
+            }
+        }
+    }
+
     .otm-sidebar {        
         position: sticky;
         top: 4rem;
         z-index: 1000;        
-        height: calc(100vh - 4rem);       
-        max-width: 240px;
+        height: calc(100vh - 4rem);                       
+    }
+
+    .collapse:not(.show) {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 1500px) {
+    .otm-sidebar {
+        width: 13%;
     }
 
     .otm-content {
-        min-width: calc(100vw - 240px);
+        width: 87%;
     }
 }
