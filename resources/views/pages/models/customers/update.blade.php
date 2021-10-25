@@ -30,5 +30,17 @@
       'login_token' => $customer->login_token,
       'home_address_id' => $customer->home_address_id,
       'billing_address_id' => $customer->billing_address_id,
+      'home_address_line_1' => $customer->homeAddress->address_line_1,
+      'home_address_line_2' => $customer->homeAddress->address_line_2,
+      'home_town' => $customer->homeAddress->town,
+      'home_region' => $customer->homeAddress->region,
+      'home_country' => $customer->homeAddress->country,
+      'home_postcode' => $customer->homeAddress->postcode,
+      'billing_address_line_1' => $customer->billingAddress->address_line_1,
+      'billing_address_line_2' => $customer->billingAddress->address_line_2,
+      'billing_town' => $customer->billingAddress->town,
+      'billing_region' => $customer->billingAddress->region,
+      'billing_country' => $customer->billingAddress->country,
+      'billing_postcode' => $customer->billingAddress->postcode,
     ])
 @endsection

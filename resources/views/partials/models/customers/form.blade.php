@@ -33,7 +33,12 @@
                         params: { data: data, }
                     });
                 });
+            changeBillingForm();
         });
+        function changeBillingForm() {
+            let disable = $('#home_is_billing-input').is(':checked');
+            if (disable) { $('.billing-address').hide() } else { $('.billing-address').show() }
+        }
     </script>
 @endsection
 <form action="{{ $action }}" method="post">
@@ -81,17 +86,75 @@
     <p></p>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
-        <label for="home_address_id-input">Home Address</label>
-        <input name="home_address_id" value="{{ $home_address_id ?? "" }}" class="form-control"
-               id="home_address_id-input">
+        <label for="home_address_line_1-input">Home Address Line 1</label>
+        <input name="home_address_line_1" value="{{ $home_address_line_1 ?? "" }}" class="form-control" id="home_address_line_1-input">
     </div>
     <p></p>
     <div class="form-group">
-        <label for="billing_address_id-input">Billing Address</label>
-        <input name="billing_address_id" value="{{ $billing_address_id ?? "" }}" class="form-control"
-               id="billing_address_id-input">
+        <label for="home_address_line_2-input">Home Address Line 2</label>
+        <input name="home_address_line_2" value="{{ $home_address_line_2 ?? "" }}" class="form-control" id="home_address_line_2-input">
     </div>
     <p></p>
+    <div class="form-group">
+        <label for="home_town-input">Home Town</label>
+        <input name="home_town" value="{{ $home_town ?? "" }}" class="form-control" id="home_town-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="region-input">Home Region</label>
+        <input name="region" value="{{ $home_region ?? "" }}" class="form-control" id="home_region-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="home_country-input">Home Country</label>
+        <input name="home_country" value="{{ $home_country ?? "" }}" class="form-control" id="home_country-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="home_postcode-input">Home Postcode</label>
+        <input name="home_postcode" value="{{ $home_postcode ?? "" }}" class="form-control" id="home_postcode-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <input type="checkbox" name="home_is_billing" class="form-check-input"
+               @if(isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) checked @endif
+        id="home_is_billing-input" onchange="changeBillingForm()">
+        <label for="home_is_billing-input" class="form-check-label">Billing Address is Same As Home</label>
+    </div>
+    <p></p>
+    <div class="billing-address">
+        <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+        <div class="form-group">
+            <label for="billing_address_line_1-input">Billing Address Line 1</label>
+            <input name="billing_address_line_1" value="{{ $billing_address_line_1 ?? "" }}" class="form-control" id="billing_address_line_1-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_address_line_2-input">Billing Address Line 2</label>
+            <input name="billing_address_line_2" value="{{ $billing_address_line_2 ?? "" }}" class="form-control" id="billing_address_line_2-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_town-input">Billing Town</label>
+            <input name="billing_town" value="{{ $billing_town ?? "" }}" class="form-control" id="billing_town-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="region-input">Billing Region</label>
+            <input name="region" value="{{ $billing_region ?? "" }}" class="form-control" id="billing_region-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_country-input">Billing Country</label>
+            <input name="billing_country" value="{{ $billing_country ?? "" }}" class="form-control" id="billing_country-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_postcode-input">Billing Postcode</label>
+            <input name="billing_postcode" value="{{ $billing_postcode ?? "" }}" class="form-control" id="billing_postcode-input">
+        </div>
+        <p></p>
+    </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <label for="mobile_number-input">Mobile Number</label>

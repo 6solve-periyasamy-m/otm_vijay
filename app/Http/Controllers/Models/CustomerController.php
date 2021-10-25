@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,7 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        $customer = Customer::create([
+        $customer = Customer::make([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),
             'middle_names' => $request->input('middle_names'),
@@ -46,9 +47,31 @@ class CustomerController extends Controller
             'hat_size_id' => $request->input('hat_size_id'),
             'notes' => $request->input('notes'),
             'loyalty_number' => $request->input('loyalty_number'),
-            'home_address_id' => $request->input('home_address_id'),
-            'billing_address_id' => $request->input('billing_address_id'),
         ]);
+        $homeAddress = Address::create([
+            'address_line_1' => $request->input('home_address_line_1'),
+            'address_line_2' => $request->input('home_address_line_2'),
+            'town' => $request->input('home_town'),
+            'region' => $request->input('home_region'),
+            'country' => $request->input('home_country'),
+            'postcode' => $request->input('home_postcode'),
+        ]);
+        $customer->home_address_id = $homeAddress->id;
+        if ($request->input('home_is_billing') == 'on') {
+            $customer->billing_address_id = $homeAddress->id;
+        }
+        else {
+            $billingAddress = Address::create([
+                'address_line_1' => $request->input('home_address_line_1'),
+                'address_line_2' => $request->input('home_address_line_2'),
+                'town' => $request->input('home_town'),
+                'region' => $request->input('home_region'),
+                'country' => $request->input('home_country'),
+                'postcode' => $request->input('home_postcode'),
+            ]);
+            $customer->billing_address_id = $billingAddress->id;
+        }
+        $customer->save();
         return redirect()->route('customers.view', ['customer' => $customer,]);
     }
 
@@ -88,9 +111,40 @@ class CustomerController extends Controller
             'hat_size_id' => $request->input('hat_size_id'),
             'notes' => $request->input('notes'),
             'loyalty_number' => $request->input('loyalty_number'),
-            'home_address_id' => $request->input('home_address_id'),
-            'billing_address_id' => $request->input('billing_address_id'),
         ]);
+        $customer->homeAddress->update([
+            'address_line_1' => $request->input('home_address_line_1'),
+            'address_line_2' => $request->input('home_address_line_2'),
+            'town' => $request->input('home_town'),
+            'region' => $request->input('home_region'),
+            'country' => $request->input('home_country'),
+            'postcode' => $request->input('home_postcode'),
+        ]);
+        if ($request->input('home_is_billing') == 'on') {
+            $customer->billing_address_id = $customer->home_address_id;
+        }
+        else if ($customer->billing_address_id == $customer->home_address_id) {
+            $billingAddress = Address::create([
+                'address_line_1' => $request->input('billing_address_line_1'),
+                'address_line_2' => $request->input('billing_address_line_2'),
+                'town' => $request->input('billing_town'),
+                'region' => $request->input('billing_region'),
+                'country' => $request->input('billing_country'),
+                'postcode' => $request->input('billing_postcode'),
+            ]);
+            $customer->billing_address_id = $billingAddress->id;
+        }
+        else {
+            $customer->billingAddress->update([
+                'address_line_1' => $request->input('billing_address_line_1'),
+                'address_line_2' => $request->input('billing_address_line_2'),
+                'town' => $request->input('billing_town'),
+                'region' => $request->input('billing_region'),
+                'country' => $request->input('billing_country'),
+                'postcode' => $request->input('billing_postcode'),
+            ]);
+        }
+        $customer->save();
         return redirect()->route('customers.view', ['customer' => $customer,]);
     }
 
