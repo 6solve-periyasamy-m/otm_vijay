@@ -1,3 +1,41 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let hatSizeSelect = $('#hat_size_id-input');
+            hatSizeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.hat-size.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.hat-size.selected', ['id' => $hat_size_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    hatSizeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    hatSizeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+            let tShirtSizeSelect = $('#t_shirt_size_id-input');
+            tShirtSizeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.t-shirt-size.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.t-shirt-size.selected', ['id' => $t_shirt_size_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    tShirtSizeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    tShirtSizeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div class="form-group">
@@ -125,13 +163,14 @@
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <label for="t_shirt_size_id-input">T Shirt Size</label>
-        <input name="t_shirt_size_id" value="{{ $t_shirt_size_id ?? "" }}" class="form-control"
-               id="t_shirt_size_id-input">
+        <select name="t_shirt_size_id" class="form-control" id="t_shirt_size_id-input"></select>
+        <a href="{{ route('t-shirt-sizes.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div class="form-group">
         <label for="hat_size_id-input">Hat Size</label>
-        <input name="hat_size_id" value="{{ $hat_size_id ?? "" }}" class="form-control" id="hat_size_id-input">
+        <select name="hat_size_id" class="form-control" id="hat_size_id-input"></select>
+        <a href="{{ route('hat-sizes.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
