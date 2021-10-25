@@ -117,7 +117,7 @@ $(document).ready( function () {
     <table class="table" style="font-size: 32px">
         <tr>
             <td class="header-cell">{{ $order->booking_reference }}</td>
-            <td style="border: 1px solid black; font-size: 24px">{{ $order->tour->title }} <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-amber">Edit</a></td>
+            <td class="header-cell">{{ $order->tour->title }}</td>
             <td class="header-cell">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</td>
             <td class="header-cell" style="background-color: {{ true ? "#33ff99" : "#ffff99" }}">{{ true ? "Paid in Full" : "Balance Outstanding" }}</td>
         </tr>
@@ -178,11 +178,8 @@ $(document).ready( function () {
             <td>{{ $customer->billingAddress->postcode }}</td>
         </tr>
     </table>
-    <div>
-        <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
-        <a href="{{ route('orders-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
-    </div>
- </div>
+    <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
+</div>
 {{-- Components Section --}}
 <div id="billing-section" style="border: 1px solid black">
     <div id="billing-header" class="header">
