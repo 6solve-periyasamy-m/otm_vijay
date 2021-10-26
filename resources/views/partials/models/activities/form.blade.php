@@ -47,6 +47,7 @@
     <div class="form-group">
         <label for="location_id-input">Location</label>
         <select style="width: 100%;" name="location_id" class="form-control" id="location_id-input"></select>
+        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div class="form-group">
