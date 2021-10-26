@@ -24,39 +24,39 @@ class OrdersCustomerController extends Controller
     public function store(Request $request, Order $order)
     {
         $request->validate(OrdersCustomer::getValidationRules());
-        $ordersCustomer = OrdersCustomer::make([
+        $orderCustomer = OrdersCustomer::make([
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $request->input('tour_cost'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
         ]);
-        $order->orderCustomers()->save($ordersCustomer);
-        OrderRepository::addIncludedToCustomer($ordersCustomer, $order);
-        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
+        $order->orderCustomers()->save($orderCustomer);
+        OrderRepository::addIncludedToCustomer($orderCustomer, $order);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
-    public function edit(Order $order, OrdersCustomer $ordersCustomer)
+    public function edit(Order $order, OrdersCustomer $orderCustomer)
     {
-        return view('pages.models.orders_customers.update', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
+        return view('pages.models.orders_customers.update', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
-    public function update(Request $request, Order $order, OrdersCustomer $ordersCustomer)
+    public function update(Request $request, Order $order, OrdersCustomer $orderCustomer)
     {
         $request->validate(OrdersCustomer::getValidationRules());
-        $ordersCustomer->update([
+        $orderCustomer->update([
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $request->input('tour_cost'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
         ]);
-        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer,]);
+        return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
-    public function destroy(Order $order, OrdersCustomer $ordersCustomer)
+    public function destroy(Order $order, OrdersCustomer $orderCustomer)
     {
-        $ordersCustomer->delete();
+        $orderCustomer->delete();
         return redirect()->route('orders.view', ['order' => $order, ]);
     }
 }
