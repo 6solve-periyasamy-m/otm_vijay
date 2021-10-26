@@ -68,7 +68,7 @@
     <div id="payments-section">
         <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
             <div id="customers-header" style="max-width: 35%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Payments
+                Payments <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success">New</a>
             </div>
             <table style="min-width: 100%; margin-bottom: 1px">
                 <thead>
@@ -81,7 +81,7 @@
                 </thead>
                 @foreach($payments as $payment)
                     <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $payment->payment_type }}</td>
+                        <td style="border: 1px solid black; width: 20%;">{{ $payment->paymentMethod->name }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $payment->amount }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
                         <td style="border: 1px solid black; width: 20%;">{{ $payment->paid_on }}</td>
