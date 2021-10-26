@@ -23,7 +23,7 @@
 <form action="{{ $action }}" method="post">
     @csrf
     <div class="form-group">
-        <label for="customer_id-input">Customer Id</label>
+        <label for="customer_id-input">Customer</label>
         <select style="width: 100%" name="customer_id"  class="form-control" id="customer_id-input"></select>
     </div>
     <p></p>
