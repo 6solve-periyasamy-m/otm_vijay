@@ -25,6 +25,7 @@ class ManualAdjustmentController extends Controller
         $manualAdjustment = ManualAdjustment::make([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
+            'date' => $request->input('date'),
         ]);
         $order->adjustments()->save($manualAdjustment);
         return redirect()->route('orders.view', ['order' => $order, ]);
@@ -45,6 +46,8 @@ class ManualAdjustmentController extends Controller
         $manualAdjustment->update([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
+            'date' => $request->input('date'),
+
         ]);
         return redirect()->route('orders.view', ['order' => $order, ]);
     }

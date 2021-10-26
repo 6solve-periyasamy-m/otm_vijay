@@ -26,6 +26,7 @@ class OrderCustomerAdjustmentController extends Controller
         $orderCustomerAdjustment = OrderCustomerAdjustment::make([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
+            'date' => $request->input('date'),
         ]);
         $orderCustomer->adjustments()->save($orderCustomerAdjustment);
         return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
@@ -46,6 +47,7 @@ class OrderCustomerAdjustmentController extends Controller
         $orderCustomerAdjustment->update([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
+            'date' => $request->input('date'),
         ]);
         return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
     }
