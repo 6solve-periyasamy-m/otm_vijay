@@ -207,15 +207,6 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::post('/update/{operator}', [OperatorController::class, 'update'])->name('operators.update');
         Route::post('/delete/{operator}', [OperatorController::class, 'destroy'])->name('operators.delete');
     });
-    Route::prefix('payments')->group(function () {
-        Route::get('/', [PaymentController::class, 'index'])->name('payments.all');
-        Route::get('/create', [PaymentController::class, 'create'])->name('payments.create');
-        Route::post('/create', [PaymentController::class, 'store'])->name('payments.store');
-        Route::get('/{payment}', [PaymentController::class, 'view'])->name('payments.view');
-        Route::get('/update/{payment}', [PaymentController::class, 'edit'])->name('payments.edit');
-        Route::post('/update/{payment}', [PaymentController::class, 'update'])->name('payments.update');
-        Route::post('/delete/{payment}', [PaymentController::class, 'destroy'])->name('payments.delete');
-    });
     Route::prefix('payment-methods')->group(function () {
         Route::get('/', [PaymentMethodController::class, 'index'])->name('payment-methods.all');
         Route::get('/create', [PaymentMethodController::class, 'create'])->name('payment-methods.create');
@@ -330,6 +321,17 @@ Route::middleware('auth')->group(function () {
                             Route::post('/delete', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete');
                         });
                     });
+                });
+            });
+            Route::prefix('payments')->group(function () {
+                Route::get('/', [PaymentController::class, 'index'])->name('payments.all');
+                Route::get('/create', [PaymentController::class, 'create'])->name('payments.create');
+                Route::post('/create', [PaymentController::class, 'store'])->name('payments.store');
+                Route::prefix('{payment}')->group(function () {
+                    Route::get('/', [PaymentController::class, 'view'])->name('payments.view');
+                    Route::get('/update', [PaymentController::class, 'edit'])->name('payments.edit');
+                    Route::post('/update', [PaymentController::class, 'update'])->name('payments.update');
+                    Route::post('/delete', [PaymentController::class, 'destroy'])->name('payments.delete');
                 });
             });
         });

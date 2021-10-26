@@ -3,57 +3,57 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
 
-    public function index()
+    public function index(Order $order)
     {
-        return view('pages.models.payments.table', ['payments' => Payment::all(),]);
+        return view('pages.models.payments.table', ['order' => $order, 'payments' => Payment::all(),]);
     }
 
-    public function create()
+    public function create(Order $order)
     {
-        return view('pages.models.payments.create');
+        return view('pages.models.payments.create', ['order' => $order, ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Order $order)
     {
-        $payment = Payment::create([
-            'order_id' => $request->input('order_id'),
+        $payment = Payment::make([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
         ]);
-        return redirect()->route('payments.view', ['payment' => $payment,]);
+        $order->payments()->save($payment);
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 
-    public function view(Payment $payment)
+    public function view(Order $order, Payment $payment)
     {
-        return view('pages.models.payments.view', ['payment' => $payment,]);
+        return view('pages.models.payments.view', ['order' => $order, 'payment' => $payment,]);
     }
 
-    public function edit(Payment $payment)
+    public function edit(Order $order, Payment $payment)
     {
-        return view('pages.models.payments.update', ['payment' => $payment,]);
+        return view('pages.models.payments.update', ['order' => $order, 'payment' => $payment,]);
     }
 
-    public function update(Request $request, Payment $payment)
+    public function update(Request $request, Order $order, Payment $payment)
     {
         $payment->update([
-            'order_id' => $request->input('order_id'),
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
         ]);
-        return redirect()->route('payments.view', ['payment' => $payment,]);
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 
-    public function destroy(Payment $payment)
+    public function destroy(Order $order, Payment $payment)
     {
         $payment->delete();
-        return redirect()->route('payments.all');
+        return redirect()->route('orders.view', ['order' => $order, ]);
     }
 }
