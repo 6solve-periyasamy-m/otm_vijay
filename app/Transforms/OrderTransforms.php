@@ -3,6 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Customer;
+use App\Models\PaymentMethod;
 use App\Models\Quote;
 
 interface OrderTransformsInterface
@@ -14,6 +15,10 @@ interface OrderTransformsInterface
     public static function getSelectCustomers($filter);
 
     public static function getSelectedCustomer($id);
+
+    public static function getSelectPaymentMethods($filter);
+
+    public static function getSelectedPaymentMethod($id);
 }
 
 class OrderTransforms implements OrderTransformsInterface
@@ -62,6 +67,29 @@ class OrderTransforms implements OrderTransformsInterface
         $data = [];
         $data['id'] = $quote->id;
         $data['text'] = $quote->pax_number . ' - ' . $quote->customer->first_name . ' ' . $quote->customer->last_name;
+        return $data;
+    }
+
+    public static function getSelectPaymentMethods($filter)
+    {
+        $data = [];
+        foreach (PaymentMethod::all() as $method) {
+            $subData = [];
+            $subData['id'] = $method->id;
+            $subData['text'] = $method->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+
+    public static function getSelectedPaymentMethod($id)
+    {
+        if ($id == 0) return null;
+        $method = PaymentMethod::findOrFail($id);
+        $data = [];
+        $data['id'] = $method->id;
+        $data['text'] = $method->name;
         return $data;
     }
 }

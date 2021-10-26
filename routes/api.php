@@ -116,6 +116,7 @@ Route::prefix('select')->group(function () {
    Route::get('customer', [SelectController::class, 'getCustomers'])->name('api.customers.select');
    Route::get('hat-size', [SelectController::class, 'getHatSizes'])->name('api.hat-size.select');
    Route::get('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('api.t-shirt-size.select');
+   Route::get('payment-method', [SelectController::class, 'getPaymentMethods'])->name('api.payment-method.select');
    Route::prefix('inventory')->group(function () {
        Route::get('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('api.inventory.accommodation.select');
        Route::get('activity', [SelectController::class, 'getActivityInventory'])->name('api.inventory.activity.select');
@@ -142,6 +143,7 @@ Route::prefix('select')->group(function () {
        Route::get('customers/{id}', [SelectController::class, 'getSelectedCustomer'])->name('api.customers.selected');
        Route::get('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('api.hat-size.selected');
        Route::get('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('api.t-shirt-size.selected');
+       Route::get('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('api.payment-method.selected');
        Route::prefix('inventory/{id}')->group(function () {
            Route::get('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('api.inventory.accommodation.selected');
            Route::get('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('api.inventory.activity.selected');

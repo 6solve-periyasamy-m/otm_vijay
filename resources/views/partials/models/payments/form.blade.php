@@ -1,9 +1,31 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let methodSelect = $('#payment_method_id-input');
+            methodSelect.select2({
+                ajax: {
+                    url: '{{ route('api.payment-method.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.payment-method.selected', ['id' => $payment_method_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    methodSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    methodSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div class="form-group">
         <label for="payment_method_id-input">Payment Method</label>
-        <input name="payment_method_id" value="{{ $payment_method_id ?? "" }}" class="form-control"
-               id="payment_method_id-input">
+        <select style="width: 100%" name="payment_method_id" class="form-control"
+                id="payment_method_id-input"></select>
     </div>
     <p></p>
     <div class="form-group">
