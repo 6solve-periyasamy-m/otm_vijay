@@ -35,7 +35,11 @@
     <p></p>
     <div class="form-group">
         <label for="payment_type-input">Payment Type</label>
-        <input name="payment_type" value="{{ $payment_type ?? "" }}" class="form-control" id="payment_type-input">
+        <select name="payment_type" class="form-control" id="payment_type-input">
+            <option value="Deposit" @if(isset($payment_type) && $payment_type == "Deposit") selected @endif>Deposit</option>
+            <option value="Installment" @if(isset($payment_type) && $payment_type == "Installment") selected @endif>Installment</option>
+            <option value="Refund" @if(isset($payment_type) && $payment_type == "Refund") selected @endif>Refund</option>
+        </select>
     </div>
     <p></p>
     <div class="form-group">
