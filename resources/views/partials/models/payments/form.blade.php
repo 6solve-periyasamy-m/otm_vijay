@@ -1,7 +1,7 @@
 <form action="{{ $action }}" method="post">
     @csrf
     <div class="form-group">
-        <label for="payment_method_id-input">Payment Method Id</label>
+        <label for="payment_method_id-input">Payment Method</label>
         <input name="payment_method_id" value="{{ $payment_method_id ?? "" }}" class="form-control"
                id="payment_method_id-input">
     </div>
@@ -12,8 +12,8 @@
     </div>
     <p></p>
     <div class="form-group">
-        <label for="reason-input">Reason</label>
-        <input name="reason" value="{{ $reason ?? "" }}" class="form-control" id="reason-input">
+        <label for="payment_type-input">Payment Type</label>
+        <input name="payment_type" value="{{ $payment_type ?? "" }}" class="form-control" id="payment_type-input">
     </div>
     <p></p>
     <div class="form-group">

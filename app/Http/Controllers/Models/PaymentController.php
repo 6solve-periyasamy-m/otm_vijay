@@ -25,7 +25,7 @@ class PaymentController extends Controller
         $payment = Payment::make([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $request->input('amount'),
-            'reason' => $request->input('reason'),
+            'payment_type' => $request->input('payment_type'),
         ]);
         $order->payments()->save($payment);
         return redirect()->route('orders.view', ['order' => $order, ]);
@@ -46,7 +46,7 @@ class PaymentController extends Controller
         $payment->update([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $request->input('amount'),
-            'reason' => $request->input('reason'),
+            'payment_type' => $request->input('payment_type'),
         ]);
         return redirect()->route('orders.view', ['order' => $order, ]);
     }
