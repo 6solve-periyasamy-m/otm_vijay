@@ -40,6 +40,7 @@
     <div class="form-group">
         <label for="customer_id-input">Lead Booker</label>
         <select style="width: 100%" name="customer_id" class="form-control" id="customer_id-input"></select>
+        <a href="{{ route('customers.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div class="form-group">
