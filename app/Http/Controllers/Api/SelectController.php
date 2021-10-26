@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Transforms\ActivityTransforms;
+use App\Transforms\CustomerTransforms;
 use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
@@ -201,5 +202,23 @@ class SelectController extends Controller
 
     public function getSelectedCustomer($id) {
         return OrderTransforms::getSelectedCustomer($id);
+    }
+
+    public function getHatSizes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return CustomerTransforms::getSelectHatSizes($filter);
+    }
+
+    public function getSelectedHatSize($id) {
+        return CustomerTransforms::getSelectedHatSize($id);
+    }
+
+    public function getTShirtSizes(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return CustomerTransforms::getSelectTShirtSizes($filter);
+    }
+
+    public function getSelectedTShirtSize($id) {
+        return CustomerTransforms::getSelectedTShirtSize($id);
     }
 }
