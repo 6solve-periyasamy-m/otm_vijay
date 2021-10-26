@@ -28,6 +28,7 @@
                 <div class="form-group col-12">
                     <label for="region_id-input">Region</label>                    
                     <select class="form-control" id="region_id-input" name="region_id"></select>
+                    <a href="{{ route('regions.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
                 </div>                
                 <div class="form-group col-12">
                     <label for="title-input">Title</label>
