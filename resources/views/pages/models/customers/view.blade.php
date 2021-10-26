@@ -80,6 +80,7 @@
             </table>
         </div>
     </div>
+    <a href="{{ route('customers.edit', ['customer' => $customer,]) }}" class="btn btn-success">Edit</a>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <table class="table table-striped order-table">
         <thead>
