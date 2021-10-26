@@ -17,6 +17,27 @@ class Customer extends Model
 
     protected $fillable = ['title','first_name','middle_names','last_name','date_of_birth','mobile_number','other_phone_number','email_address','password','gender','emergency_contact_name','emergency_contact_relationship','emergency_contact_telephone','passport_first_name','passport_middle_name','passport_last_name','passport_number','passport_issue_date','passport_expiry_date','t_shirt_size_id','hat_size_id','notes','loyalty_number','login_token','home_address_id','billing_address_id',];
 
+    public static function getValidationRules() {
+        return [
+            'title' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'date_of_birth' => 'required|date',
+            'mobile_number' => 'required',
+            'email_address' => 'required|email',
+            'password' => 'required',
+            'gender' => 'required',
+            'emergency_contact_name' => 'required',
+            'emergency_contact_relationship' => 'required',
+            'emergency_contact_telephone' => 'required',
+            'passport_first_name' => 'required',
+            'passport_last_name' => 'required',
+            'passport_number' => 'required',
+            'passport_issue_date' => 'required|date',
+            'passport_expiry_date' => 'required|date',
+        ];
+    }
+
     public function getFullName()
     {
         $this->full_name = $this->first_name . ' ' . $this->last_name;
@@ -43,5 +64,9 @@ class Customer extends Model
 
     public function hatSize() {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
+    }
+
+    public function orderCustomers() {
+        return $this->hasMany(OrdersCustomer::class, 'customer_id');
     }
 }

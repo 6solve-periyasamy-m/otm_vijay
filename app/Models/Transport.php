@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,9 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Transport extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['transport_type_id','operator_id','departure_location_id','arrival_location_id','name','description','currency','is_domestic','notes',];
+    protected $cascadeDeletes = ['transportInventory'];
     const RULES = [
         'transport_type_id' => 'required|exists:transport_types,id',
         'operator_id' => 'required|exists:operators,id',

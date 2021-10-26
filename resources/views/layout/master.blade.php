@@ -16,8 +16,7 @@
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
     <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
-    <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>  
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>      
     @yield('head-script')
 </head>
 <body>

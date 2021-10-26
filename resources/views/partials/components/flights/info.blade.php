@@ -6,13 +6,14 @@
     }
 </style>
 
-<table style="width: 100%;">
-    <tr>
-        <td class="info-col"><h2>{{ $flight->airline->name }}</h2></td>
-        <td class="info-col"><h2>{{ $flight->arrivalAirport->name }}</h2></td>
-        <td class="info-col"><h2>{{ $flight->departureAirport->name }}</h2></td>
-        <td class="info-col"><h2>{{ $flight->is_domestic ? "Domestic" : "International" }}</h2></td>
-    </tr>
-</table>
-{{ $flight->notes }}
-<a class="btn btn-success" href="{{route('flights.edit', ['flight' => $flight,])}}">Edit Flight</a>
+<div class="otm-callout">
+    <h3 class="fw-bold">{{ $flight->airline->name }}</h3>
+    <p class="fw-bold">{{ $flight->arrivalAirport->name }}</p>
+    <p class="fw-bold">{{ $flight->departureAirport->name }}</p>
+    <p class="fw-bold">{{ $flight->is_domestic ? "Domestic" : "International" }}</p>
+    <p>{{ $flight->notes }} </p><br>    
+    <a class="btn btn-success" href="{{route('flights.edit', ['flight' => $flight,])}}">
+        <i class="icon-note"></i>
+        <span>Edit Accommodation</span>
+    </a>
+</div>

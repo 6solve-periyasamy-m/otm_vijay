@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,9 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TransportInventory extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['transport_id','travel_class_id','departure_date_time','departure_confirmed','arrival_date_time','arrival_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         "departure_date_time" => "datetime",
         "arrival_date_time" => "datetime"

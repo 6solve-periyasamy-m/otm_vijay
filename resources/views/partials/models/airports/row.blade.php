@@ -2,12 +2,12 @@
     <td><a href="{{ route('airports.view', ['airport' => $airport,]) }}">{{ $name }}</a></td>
     <td>{{ $iata_code }}</td>
     <td>
-        <a href="{{route('airports.edit', ['airport' => $airport,])}}">
-            <ion-icon name="create"></ion-icon>
+        <a href="{{route('airports.edit', ['airport' => $airport,])}}" class="btn btn-outline-success mb-1 btn-sm">
+            <i class="icon-note"></i>
         </a>
-        <a href="#"
+        <a href="#" class="btn btn-outline-danger mb-1 btn-sm"
            onclick="event.preventDefault();document.getElementById('airport-{{ $airport->id }}-delete').submit();">
-            <ion-icon name="trash"></ion-icon>
+            <i class="icon-trash"></i>
         </a>
         <form id="airport-{{ $airport->id }}-delete" action="{{ route('airports.delete', ['airport' => $airport,]) }}"
               method="POST" style="display: none;">{{ csrf_field() }}</form>
