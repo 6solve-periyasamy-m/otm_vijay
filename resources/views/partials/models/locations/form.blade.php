@@ -41,11 +41,13 @@
     <div class="form-group">
         <label for="region_id-input">Region</label>
         <select name="region_id" class="form-control" id="region_id-input"></select>
+        <a href="{{ route('regions.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
     </div>
     <p></p>
     <div class="form-group">
         <label for="location_type_id-input">Location Type</label>
         <select name="location_type_id" class="form-control" id="location_type_id-input"></select>
+        <a href="{{ route('location-types.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
     </div>
     <p></p>
     <div class="form-group">
