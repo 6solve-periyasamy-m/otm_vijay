@@ -44,7 +44,7 @@
             </a>
         </li>
         <li>
-            <a href="#" class="nav-link ">
+            <a href="{{ route('customers.all') }}" class="nav-link ">
                 <i class="icon-user"></i>
                 <span>Customers</span>
             </a>

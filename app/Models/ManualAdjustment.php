@@ -12,6 +12,10 @@ class ManualAdjustment extends Model
 
     protected $fillable = ['order_id','amount','reason',];
 
+    public static function getValidationRules() {
+        return ['date' => 'required|date', 'amount' => 'required|numeric', ];
+    }
+
     public function order() {
         return $this->belongsTo(Order::class, 'order_id');
     }

@@ -1,3 +1,46 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let hatSizeSelect = $('#hat_size_id-input');
+            hatSizeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.hat-size.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.hat-size.selected', ['id' => $hat_size_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    hatSizeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    hatSizeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+            let tShirtSizeSelect = $('#t_shirt_size_id-input');
+            tShirtSizeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.t-shirt-size.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.t-shirt-size.selected', ['id' => $t_shirt_size_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    tShirtSizeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    tShirtSizeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+            changeBillingForm();
+        });
+        function changeBillingForm() {
+            let disable = $('#home_is_billing-input').is(':checked');
+            if (disable) { $('.billing-address').hide() } else { $('.billing-address').show() }
+        }
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div class="form-group">
@@ -21,10 +64,98 @@
     </div>
     <p></p>
     <div class="form-group">
-        <label for="date_of_birth-input">Date Of Birth</label>
-        <input name="date_of_birth" value="{{ $date_of_birth ?? "" }}" class="form-control" id="date_of_birth-input">
+        <label for="gender-input">Gender</label>
+        <input name="gender" value="{{ $gender ?? "" }}" class="form-control" id="gender-input">
     </div>
     <p></p>
+    <div class="form-group">
+        <label for="date_of_birth-input">Date Of Birth</label>
+        <input type="date" name="date_of_birth" value="{{ $date_of_birth ?? "" }}" class="form-control" id="date_of_birth-input">
+    </div>
+    <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="form-group">
+        <label for="email_address-input">Email Address</label>
+        <input name="email_address" value="{{ $email_address ?? "" }}" class="form-control" id="email_address-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="password-input">Password</label>
+        <input type="password" name="password" class="form-control" id="password-input">
+    </div>
+    <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="form-group">
+        <label for="home_address_line_1-input">Home Address Line 1</label>
+        <input name="home_address_line_1" value="{{ $home_address_line_1 ?? "" }}" class="form-control" id="home_address_line_1-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="home_address_line_2-input">Home Address Line 2</label>
+        <input name="home_address_line_2" value="{{ $home_address_line_2 ?? "" }}" class="form-control" id="home_address_line_2-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="home_town-input">Home Town</label>
+        <input name="home_town" value="{{ $home_town ?? "" }}" class="form-control" id="home_town-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="region-input">Home Region</label>
+        <input name="region" value="{{ $home_region ?? "" }}" class="form-control" id="home_region-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="home_country-input">Home Country</label>
+        <input name="home_country" value="{{ $home_country ?? "" }}" class="form-control" id="home_country-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="home_postcode-input">Home Postcode</label>
+        <input name="home_postcode" value="{{ $home_postcode ?? "" }}" class="form-control" id="home_postcode-input">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <input type="checkbox" name="home_is_billing" class="form-check-input"
+               @if(isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) checked @endif
+        id="home_is_billing-input" onchange="changeBillingForm()">
+        <label for="home_is_billing-input" class="form-check-label">Billing Address is Same As Home</label>
+    </div>
+    <p></p>
+    <div class="billing-address">
+        <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+        <div class="form-group">
+            <label for="billing_address_line_1-input">Billing Address Line 1</label>
+            <input name="billing_address_line_1" value="{{ $billing_address_line_1 ?? "" }}" class="form-control" id="billing_address_line_1-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_address_line_2-input">Billing Address Line 2</label>
+            <input name="billing_address_line_2" value="{{ $billing_address_line_2 ?? "" }}" class="form-control" id="billing_address_line_2-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_town-input">Billing Town</label>
+            <input name="billing_town" value="{{ $billing_town ?? "" }}" class="form-control" id="billing_town-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="region-input">Billing Region</label>
+            <input name="region" value="{{ $billing_region ?? "" }}" class="form-control" id="billing_region-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_country-input">Billing Country</label>
+            <input name="billing_country" value="{{ $billing_country ?? "" }}" class="form-control" id="billing_country-input">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="billing_postcode-input">Billing Postcode</label>
+            <input name="billing_postcode" value="{{ $billing_postcode ?? "" }}" class="form-control" id="billing_postcode-input">
+        </div>
+        <p></p>
+    </div>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <label for="mobile_number-input">Mobile Number</label>
         <input name="mobile_number" value="{{ $mobile_number ?? "" }}" class="form-control" id="mobile_number-input">
@@ -36,21 +167,7 @@
                id="other_phone_number-input">
     </div>
     <p></p>
-    <div class="form-group">
-        <label for="email_address-input">Email Address</label>
-        <input name="email_address" value="{{ $email_address ?? "" }}" class="form-control" id="email_address-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="password-input">Password</label>
-        <input name="password" value="{{ $password ?? "" }}" class="form-control" id="password-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="gender-input">Gender</label>
-        <input name="gender" value="{{ $gender ?? "" }}" class="form-control" id="gender-input">
-    </div>
-    <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <label for="emergency_contact_name-input">Emergency Contact Name</label>
         <input name="emergency_contact_name" value="{{ $emergency_contact_name ?? "" }}" class="form-control"
@@ -69,6 +186,7 @@
                id="emergency_contact_telephone-input">
     </div>
     <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <label for="passport_first_name-input">Passport First Name</label>
         <input name="passport_first_name" value="{{ $passport_first_name ?? "" }}" class="form-control"
@@ -95,52 +213,38 @@
     <p></p>
     <div class="form-group">
         <label for="passport_issue_date-input">Passport Issue Date</label>
-        <input name="passport_issue_date" value="{{ $passport_issue_date ?? "" }}" class="form-control"
+        <input type="date" name="passport_issue_date" value="{{ $passport_issue_date ?? "" }}" class="form-control"
                id="passport_issue_date-input">
     </div>
     <p></p>
     <div class="form-group">
         <label for="passport_expiry_date-input">Passport Expiry Date</label>
-        <input name="passport_expiry_date" value="{{ $passport_expiry_date ?? "" }}" class="form-control"
+        <input type="date" name="passport_expiry_date" value="{{ $passport_expiry_date ?? "" }}" class="form-control"
                id="passport_expiry_date-input">
     </div>
     <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
-        <label for="t_shirt_size_id-input">T Shirt Size Id</label>
-        <input name="t_shirt_size_id" value="{{ $t_shirt_size_id ?? "" }}" class="form-control"
-               id="t_shirt_size_id-input">
+        <label for="t_shirt_size_id-input">T Shirt Size</label>
+        <select name="t_shirt_size_id" class="form-control" id="t_shirt_size_id-input"></select>
+        <a href="{{ route('t-shirt-sizes.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div class="form-group">
-        <label for="hat_size_id-input">Hat Size Id</label>
-        <input name="hat_size_id" value="{{ $hat_size_id ?? "" }}" class="form-control" id="hat_size_id-input">
+        <label for="hat_size_id-input">Hat Size</label>
+        <select name="hat_size_id" class="form-control" id="hat_size_id-input"></select>
+        <a href="{{ route('hat-sizes.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
-    <div class="form-group">
-        <label for="notes-input">Notes</label>
-        <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
-    </div>
-    <p></p>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="form-group">
         <label for="loyalty_number-input">Loyalty Number</label>
         <input name="loyalty_number" value="{{ $loyalty_number ?? "" }}" class="form-control" id="loyalty_number-input">
     </div>
     <p></p>
     <div class="form-group">
-        <label for="login_token-input">Login Token</label>
-        <input name="login_token" value="{{ $login_token ?? "" }}" class="form-control" id="login_token-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="home_address_id-input">Home Address Id</label>
-        <input name="home_address_id" value="{{ $home_address_id ?? "" }}" class="form-control"
-               id="home_address_id-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="billing_address_id-input">Billing Address Id</label>
-        <input name="billing_address_id" value="{{ $billing_address_id ?? "" }}" class="form-control"
-               id="billing_address_id-input">
+        <label for="notes-input">Notes</label>
+        <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
     </div>
     <p></p>
     <div class="form-group">
