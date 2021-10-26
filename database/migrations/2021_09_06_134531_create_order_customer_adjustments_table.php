@@ -18,6 +18,7 @@ class CreateOrderCustomerAdjustmentsTable extends Migration
             $table->integer('order_customer_id');
             $table->float('amount');
             $table->text('reason');
+            $table->dateTime('date');
             $table->softDeletes();
             $table->timestamps();
         });

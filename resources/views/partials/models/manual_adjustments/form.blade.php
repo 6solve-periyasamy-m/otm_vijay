@@ -11,6 +11,11 @@
     </div>
     <p></p>
     <div class="form-group">
+        <label for="date-input">Date</label>
+        <input type="datetime-local" name="date" value="{{ $date ?? "" }}" class="form-control" id="date-input">
+    </div>
+    <p></p>
+    <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>

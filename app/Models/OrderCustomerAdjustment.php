@@ -12,6 +12,10 @@ class OrderCustomerAdjustment extends Model
 
     protected $fillable = ['order_customer_id','amount','reason',];
 
+    public static function getValidationRules() {
+        return ['date' => 'required|date', 'amount' => 'required|numeric', ];
+    }
+
     public function orderCustomer() {
         return $this->belongsTo(OrdersCustomer::class, 'order_customer_id');
     }
