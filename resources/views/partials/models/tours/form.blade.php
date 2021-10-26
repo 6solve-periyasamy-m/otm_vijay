@@ -81,8 +81,9 @@
                     <input name="tour_colour_id" value="{{ $tour_colour_id ?? "" }}" class="form-control" id="tour_colour_id-input">
                 </div>                
                 <div class="form-group col-12">
+                    <input type="checkbox" name="is_active" class="form-check-input" @if(isset($is_active) && $is_active == 1) checked @endif
+                    id="is_active-input">
                     <label for="is_active-input">Is Active</label>
-                    <input name="is_active" value="{{ $is_active ?? "" }}" class="form-control" id="is_active-input">
                 </div>                
                 <div class="form-group col-12">
                     <label for="notes-input">Notes</label>
