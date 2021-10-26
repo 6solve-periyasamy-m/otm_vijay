@@ -23,6 +23,7 @@ class OrderCustomerAdjustmentController extends Controller
 
     public function store(Request $request, Order $order, OrdersCustomer $orderCustomer)
     {
+        $request->validate(OrderCustomerAdjustment::getValidationRules());
         $orderCustomerAdjustment = OrderCustomerAdjustment::make([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
@@ -44,6 +45,7 @@ class OrderCustomerAdjustmentController extends Controller
 
     public function update(Request $request, Order $order, OrdersCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
     {
+        $request->validate(OrderCustomerAdjustment::getValidationRules());
         $orderCustomerAdjustment->update([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),

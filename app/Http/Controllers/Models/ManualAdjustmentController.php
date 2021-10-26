@@ -22,6 +22,7 @@ class ManualAdjustmentController extends Controller
 
     public function store(Request $request, Order $order)
     {
+        $request->validate(ManualAdjustment::getValidationRules());
         $manualAdjustment = ManualAdjustment::make([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
@@ -43,6 +44,7 @@ class ManualAdjustmentController extends Controller
 
     public function update(Request $request, Order $order, ManualAdjustment $manualAdjustment)
     {
+        $request->validate(ManualAdjustment::getValidationRules());
         $manualAdjustment->update([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
