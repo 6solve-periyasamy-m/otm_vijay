@@ -11,10 +11,14 @@ class PaymentInstallment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function paymentPlan()
-    {
-        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
+    protected $fillable = ['due_on','amount',];
+
+    public static function getValidationRules() {
+        return ['due_on' => 'required|date', 'amount' => 'required|numeric', ];
     }
 
-
+    public function paymentPlan()
+    {
+        return $this->belongsTo(Tour::class, 'tour_id');
+    }
 }
