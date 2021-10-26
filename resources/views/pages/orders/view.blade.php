@@ -81,7 +81,7 @@
                 </thead>
                 @foreach($payments as $payment)
                     <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $payment->payment_type }}</td>
+                        <td style="border: 1px solid black; width: 20%;">{{ $payment->paymentMethod->name }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $payment->amount }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
                         <td style="border: 1px solid black; width: 20%;">{{ $payment->paid_on }}</td>
