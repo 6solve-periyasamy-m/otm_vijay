@@ -65,4 +65,8 @@ class Customer extends Model
     public function hatSize() {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
     }
+
+    public function orderCustomers() {
+        return $this->hasMany(OrdersCustomer::class, 'customer_id');
+    }
 }
