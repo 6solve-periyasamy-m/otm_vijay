@@ -26,6 +26,7 @@ class PaymentController extends Controller
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $request->input('amount'),
             'payment_type' => $request->input('payment_type'),
+            'paid_on' => $request->input('paid_on'),
         ]);
         $order->payments()->save($payment);
         return redirect()->route('orders.view', ['order' => $order, ]);
@@ -47,6 +48,7 @@ class PaymentController extends Controller
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $request->input('amount'),
             'payment_type' => $request->input('payment_type'),
+            'paid_on' => $request->input('paid_on'),
         ]);
         return redirect()->route('orders.view', ['order' => $order, ]);
     }

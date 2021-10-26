@@ -34,6 +34,11 @@
     </div>
     <p></p>
     <div class="form-group">
+        <label for="paid_on-input">Paid On</label>
+        <input type="datetime-local" name="paid_on" value="{{ $paid_on ?? "" }}" class="form-control" id="paid_on-input">
+    </div>
+    <p></p>
+    <div class="form-group">
         <label for="payment_type-input">Payment Type</label>
         <select name="payment_type" class="form-control" id="payment_type-input">
             <option value="Deposit" @if(isset($payment_type) && $payment_type == "Deposit") selected @endif>Deposit</option>
