@@ -88,13 +88,13 @@
                         ['quantity' => "",
                         'description' => "<strong>Base Cost of Package, including:</strong>\n" . $oCustomer['included'],
                         'cost' => $order->tour->base_price_per_person,
-                        'negative' => true])
+                        'class' => $order->tour->base_price_per_person > 0  ? "amount-negative" : "amount-positive"])
             @foreach($oCustomer['items'] as $item)
                 @include('partials.pdf.invoices.row',
                         ['quantity' => $item['quantity'],
                         'description' => $item['description'],
                         'cost' => $item['cost'],
-                        'negative' => $item['cost'] > 0])
+                        'class' => $item['cost'] > 0  ? "amount-negative" : "amount-positive"])
             @endforeach
             <tr>
                 <td></td>
@@ -111,7 +111,7 @@
                     ['quantity' => "",
                     'description' => $adjustment['reason'] . ' (' . $adjustment['date'] . ')',
                     'cost' => $adjustment['amount'],
-                    'negative' => $adjustment['amount'] > 0])
+                    'class' => $adjustment['amount'] > 0  ? "amount-negative" : "amount-positive"])
         @endforeach
         <tr>
             <td></td>
@@ -139,7 +139,7 @@
                     ['quantity' => $payment['date'],
                     'description' => $payment['method'],
                     'cost' => $payment['amount'],
-                    'negative' => $payment['amount'] > 0])
+                    'class' => "amount",])
         @endforeach
     </table>
 </div>
