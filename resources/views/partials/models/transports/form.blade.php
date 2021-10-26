@@ -85,11 +85,13 @@
     <div class="form-group">
         <label for="departure_location_id-input">Departure Location</label>
         <select style="width: 100%;" name="departure_location_id" class="form-control" id="departure_location_id-input"></select>
+        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div class="form-group">
         <label for="arrival_location_id-input">Arrival Location</label>
         <select style="width: 100%;" name="arrival_location_id" class="form-control" id="arrival_location_id-input"></select>
+        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
     </div>
     <p></p>
     <div class="form-group">
