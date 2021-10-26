@@ -1,14 +1,51 @@
+@section('head-script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let regionSelect = $('#region_id-input');
+            regionSelect.select2({
+                ajax: {
+                    url: '{{ route('api.regions.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.regions.selected', ['id' => $region_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    regionSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    regionSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+            let locationTypeSelect = $('#location_type_id-input');
+            locationTypeSelect.select2({
+                ajax: {
+                    url: '{{ route('api.location-types.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
+                }
+            });
+            $.ajax({ url: '{{ route('api.location-types.selected', ['id' => $location_type_id ?? 0, ]) }}', })
+                .then(function (data) {
+                    locationTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
+
+                    locationTypeSelect.trigger({
+                        type: 'select2:select',
+                        params: { data: data, }
+                    });
+                });
+        });
+    </script>
+@endsection
 <form action="{{ $action }}" method="post">
     @csrf
     <div class="form-group">
-        <label for="region_id-input">Region Id</label>
-        <input name="region_id" value="{{ $region_id ?? "" }}" class="form-control" id="region_id-input">
+        <label for="region_id-input">Region</label>
+        <select name="region_id" class="form-control" id="region_id-input"></select>
     </div>
     <p></p>
     <div class="form-group">
-        <label for="location_type_id-input">Location Type Id</label>
-        <input name="location_type_id" value="{{ $location_type_id ?? "" }}" class="form-control"
-               id="location_type_id-input">
+        <label for="location_type_id-input">Location Type</label>
+        <select name="location_type_id" class="form-control" id="location_type_id-input"></select>
     </div>
     <p></p>
     <div class="form-group">
