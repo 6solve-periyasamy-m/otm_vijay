@@ -96,7 +96,7 @@
                 <table style="float: right; margin-bottom: 2px;">
                     <tr>
                         <td style="width: 70%;">
-                            <button class="btn btn-primary float-right" onclick="alert('This is non-functional')">View Invoice</button>
+                            <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" class="btn btn-primary float-right">View Invoice</a>
                         </td>
                     </tr>
                     <tr>

@@ -15,6 +15,7 @@ interface OrderRepositoryInterface {
     public static function getOrderDetails(Order $order);
     public static function getOrderCustomerDetails(OrdersCustomer $orderCustomer);
     public static function addIncludedToCustomer(OrdersCustomer $ordersCustomer, Order $order);
+    public static function getInvoiceDetails(Order $order);
 
 }
 
@@ -178,5 +179,135 @@ class OrderRepository implements OrderRepositoryInterface
                 $ordersCustomer->orderTransports()->save($orderInventory);
             }
         }
+    }
+
+    public static function getInvoiceDetails(Order $order) {
+        $data = ['order' => $order, ];
+        $data['orderCustomers'] = [];
+        $data['payments'] = [];
+        $adjustments = [];
+        $payments = [];
+        $data['totals']['orderValue'] = 0;
+        $data['totals']['paid'] = 0;
+        $data['totals']['adjusted'] = 0;
+
+        foreach($order->orderCustomers as $orderCustomer) {
+            $data['orderCustomers'][$orderCustomer->id] = [];
+            $data['orderCustomers'][$orderCustomer->id]['customer'] = $orderCustomer;
+            $data['orderCustomers'][$orderCustomer->id]['items'] = [];
+            $data['orderCustomers'][$orderCustomer->id]['cost'] = $order->tour->base_price_per_person;
+            $included = "";
+            foreach ($orderCustomer->orderAccommodation as $orderInventory) {
+                $tourInventory = $orderInventory->accommodationInventoryTour;
+                if ($tourInventory->tour_component_type !== "Included") {
+                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id])) {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] + 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
+                    } else {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id] = [];
+                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['description'] =
+                            $tourInventory->accommodationInventory->accommodation->title . ' - ' .
+                            $tourInventory->accommodationInventory->roomType->room_type_name . ' - ' .
+                            $tourInventory->accommodationInventory->boardType->board_type_name;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] = 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
+                    }
+                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
+                } else {
+                    $included .= $tourInventory->accommodationInventory->accommodation->title . ' - ' .
+                        $tourInventory->accommodationInventory->roomType->room_type_name . ' - ' .
+                        $tourInventory->accommodationInventory->boardType->board_type_name . "\n";
+                }
+            }
+            foreach ($orderCustomer->orderActivities as $orderInventory) {
+                $tourInventory = $orderInventory->activityInventoryTour;
+                if ($tourInventory->tour_component_type !== "Included") {
+                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id])) {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] + 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
+                    } else {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id] = [];
+                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['description'] =
+                            $tourInventory->activityInventory->activity->title . ' - ' .
+                            $tourInventory->activityInventory->activity->activityType->name . ' - ' .
+                            $tourInventory->activityInventory->ticketType->name;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] = 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
+                    }
+                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
+                } else {
+                    $included .= $tourInventory->activityInventory->activity->title . ' - ' .
+                        $tourInventory->activityInventory->activity->activityType->name . ' - ' .
+                        $tourInventory->activityInventory->ticketType->name . "\n";
+                }
+            }
+            foreach ($orderCustomer->orderFlights as $orderInventory) {
+                $tourInventory = $orderInventory->flightInventoryTour;
+                if ($tourInventory->tour_component_type !== "Included") {
+                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id])) {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] + 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
+                    } else {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id] = [];
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['description'] =
+                            $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
+                            $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
+                            $tourInventory->flightInventory->travelClass->title;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
+                    }
+                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
+                } else {
+                    $included .= $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
+                        $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
+                        $tourInventory->flightInventory->travelClass->title . "\n";
+                }
+            }
+            foreach ($orderCustomer->orderTransports as $orderInventory) {
+                $tourInventory = $orderInventory->transportInventoryTour;
+                if ($tourInventory->tour_component_type !== "Included") {
+                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id])) {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['quantity'] + 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
+                    } else {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id] = [];
+                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['description'] =
+                            $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
+                            $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
+                            $tourInventory->transportInventory->transport->transportType->name . ' - ' .
+                            $tourInventory->transportInventory->travelClass->title;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
+                    }
+                } else {
+                    $included .= $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
+                        $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
+                        $tourInventory->transportInventory->transport->transportType->name . ' - ' .
+                        $tourInventory->transportInventory->travelClass->title . "\n";
+                }
+                $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
+            }
+            $data['totals']['orderValue'] += $data['orderCustomers'][$orderCustomer->id]['cost'];
+            $data['orderCustomers'][$orderCustomer->id]['included'] = $included;
+            foreach ($orderCustomer->adjustments as $adjustment) {
+                $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount, 'reason' => $adjustment->reason,];
+                $data['totals']['adjusted'] += $adjustment->amount;
+            }
+        }
+
+        foreach ($order->payments as $payment) {
+            $payments[] = ['date' => $payment->paid_on, 'amount' => $payment->amount, 'method' => $payment->paymentMethod->name,];
+            $data['totals']['paid'] += $payment->amount;
+        }
+
+        foreach ($order->adjustments as $adjustment) {
+            $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount, 'reason' => $adjustment->reason,];
+            $data['totals']['adjusted'] += $adjustment->amount;
+        }
+
+        $data['adjustments'] = collect($adjustments)->sortBy('date')->toArray();
+        $data['payments'] = collect($payments)->sortBy('date')->toArray();
+        $data['totals']['combined'] = $data['totals']['orderValue'] - $data['totals']['paid'] + $data['totals']['adjusted'];
+        return $data;
     }
 }

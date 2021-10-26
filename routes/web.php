@@ -307,6 +307,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit');
             Route::post('/update/', [OrderController::class, 'update'])->name('orders.update');
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete');
+            Route::get('/invoice', function (\App\Models\Order $order) { return view('pdf.invoices.columns', \App\Repository\OrderRepository::getInvoiceDetails($order)); })->name('orders.invoice.latest');
             Route::prefix('adjustments')->group(function () {
                 Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all');
                 Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create');
