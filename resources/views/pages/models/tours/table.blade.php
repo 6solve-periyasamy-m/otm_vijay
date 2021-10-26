@@ -12,7 +12,7 @@
     <div class='card'>
         <div class="card-body">
             <a class="btn btn-success float-end" href="{{ route('tours.create') }}">
-                <i class='icon-plus'></i>
+                <i class="icon-plus"></i>
                 <span>Create New</span>
             </a>
         </div>

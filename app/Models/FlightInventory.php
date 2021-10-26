@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FlightInventory extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     public $additional_attributes = ['flight_for_tour'];
-
+    protected $cascadeDeletes = ['flightInventoryTour'];
     protected $fillable = ['flight_id','travel_class_id','flight_number','check_in_date_time','departure_date_time','arrival_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
 
     const RULES = [

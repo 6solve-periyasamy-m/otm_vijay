@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\FlightInventory;
@@ -13,9 +14,10 @@ class FlightInventoryTour extends Model
     protected $table = 'flight_inventory_tour';
     public $additional_attributes = ['flight_inventory_for_tour'];
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['tour_id','flight_inventory_id','tour_component_type','flight_type','tour_sales_price',];
+    protected $cascadeDeletes = ['orders'];
 
     public static function getValidationRules() {
         return [
