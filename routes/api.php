@@ -66,9 +66,9 @@ Route::post('/booking/flights/remove/flight', [BookingController::class, 'remove
 // POST routes (requires token auth)
 
 // store travellers
-Route::post('/booking/lead-traveller', [BookingController::class, 'leadTraveller']);
-Route::post('/booking/additional-traveller', [BookingController::class, 'additionalTraveller']);
-Route::post('/booking/additional-traveller/remove', [BookingController::class, 'removeAdditionalTraveller']);
+Route::post('/booking/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
+Route::post('/booking/additional-traveller', [BookingCustomerController::class, 'additionalTraveller']);
+Route::post('/booking/additional-traveller/remove', [BookingCustomerController::class, 'removeAdditionalTraveller']);
 
 // create Booking Order
 Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
@@ -77,7 +77,7 @@ Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
 // Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
 //     BookingController::class, 'bookFlightDetails'
 // ]);
-Route::post('/booking/flight', [BookingController::class, 'bookFlightDetails']);
+Route::post('/booking/flight', [BookFlightDetailsController::class, 'bookFlightDetails']);
 
 // Booking Orders in Customer Order Details
 Route::get('/booking/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
