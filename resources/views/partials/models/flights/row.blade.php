@@ -6,12 +6,12 @@
     <td>{{ $available_after }}</td>
     <td>{{ $notes }}</td>
     <td>
-        <a href="{{route('flights.edit', ['flight' => $flight,])}}">
-            <ion-icon name="create"></ion-icon>
+        <a href="{{route('flights.edit', ['flight' => $flight,])}}" class="btn btn-outline-success btn-sm mb-1">
+            <i class="icon-note"></i>
         </a>
-        <a href="#"
+        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
            onclick="event.preventDefault();document.getElementById('flight-{{ $flight->id }}-delete').submit();">
-            <ion-icon name="trash"></ion-icon>
+            <i class="icon-trash"></i>            
         </a>
         <form id="flight-{{ $flight->id }}-delete" action="{{ route('flights.delete', ['flight' => $flight,]) }}"
               method="POST" style="display: none;">{{ csrf_field() }}</form>
