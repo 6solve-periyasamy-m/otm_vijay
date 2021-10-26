@@ -290,18 +290,19 @@ class OrderRepository implements OrderRepositoryInterface
             $data['totals']['orderValue'] += $data['orderCustomers'][$orderCustomer->id]['cost'];
             $data['orderCustomers'][$orderCustomer->id]['included'] = $included;
             foreach ($orderCustomer->adjustments as $adjustment) {
-                $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount, 'reason' => $adjustment->reason,];
+                $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount,
+                    'reason' => 'Customer Adjustment (' . $orderCustomer->customer->first_name . ' ' . $orderCustomer->customer->last_name . '): ' . $adjustment->reason,];
                 $data['totals']['adjusted'] += $adjustment->amount;
             }
         }
 
         foreach ($order->payments as $payment) {
-            $payments[] = ['date' => $payment->paid_on, 'amount' => $payment->amount, 'method' => $payment->paymentMethod->name,];
+            $payments[] = ['date' => $payment->paid_on, 'amount' => $payment->amount, 'method' => $payment->payment_type . ': ' . $payment->paymentMethod->name,];
             $data['totals']['paid'] += $payment->amount;
         }
 
         foreach ($order->adjustments as $adjustment) {
-            $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount, 'reason' => $adjustment->reason,];
+            $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount, 'reason' => 'Manual Adjustment: ' . $adjustment->reason,];
             $data['totals']['adjusted'] += $adjustment->amount;
         }
 

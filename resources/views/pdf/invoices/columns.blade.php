@@ -94,41 +94,33 @@
                         ['quantity' => $item['quantity'],
                         'description' => $item['description'],
                         'cost' => $item['cost'],
-                        'negative' => true])
+                        'negative' => $item['cost'] > 0])
             @endforeach
             <tr>
                 <td></td>
                 <td colspan="2" class="t-align-right"><strong>Total: {{ $oCustomer['cost'] }}</strong></td>
             </tr>
         @endforeach
-    </table>
-</div>
-<div class="section t-align-right">
-    <h2>Total Amount Owed: {{ $totals['orderValue'] }}</h2>
-</div>
-<div class="section t-align-center">
-    <h2>Adjustments</h2>
-</div>
-<div class="section">
-    <table>
-        <thead>
         <tr>
-            <th scope="col" class="date">Date</th>
-            <th scope="col" class="description">Reason</th>
-            <th scope="col" class="amount">Amount</th>
+            <td colspan="3" class="t-align-center">
+                <strong>Order Adjustments</strong>
+            </td>
         </tr>
-        </thead>
         @foreach($adjustments as $adjustment)
             @include('partials.pdf.invoices.row',
-                    ['quantity' => $adjustment['date'],
-                    'description' => $adjustment['reason'],
+                    ['quantity' => "",
+                    'description' => $adjustment['reason'] . ' (' . $adjustment['date'] . ')',
                     'cost' => $adjustment['amount'],
                     'negative' => $adjustment['amount'] > 0])
         @endforeach
+        <tr>
+            <td></td>
+            <td colspan="2" class="t-align-right"><strong>Total: {{ $totals['adjusted'] }}</strong></td>
+        </tr>
     </table>
 </div>
 <div class="section t-align-right">
-    <h2>Total Adjustment Amount: {{ $totals['adjusted'] }}</h2>
+    <h2>Total Amount Owed: {{ $totals['orderValue'] + $totals['adjusted'] }}</h2>
 </div>
 <div class="section t-align-center">
     <h2>Payments</h2>
@@ -147,7 +139,7 @@
                     ['quantity' => $payment['date'],
                     'description' => $payment['method'],
                     'cost' => $payment['amount'],
-                    'negative' => $payment['amount'] < 0])
+                    'negative' => $payment['amount'] > 0])
         @endforeach
     </table>
 </div>
