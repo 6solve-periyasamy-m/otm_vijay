@@ -9,12 +9,12 @@
     <td>{{ $is_domestic ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
     <td>
-        <a href="{{route('transports.edit', ['transport' => $transport,])}}">
-            <ion-icon name="create"></ion-icon>
+        <a href="{{route('transports.edit', ['transport' => $transport,])}}" class="btn btn-sm btn-outline-success mb-1">            
+            <i class="icon-note"></i>
         </a>
-        <a href="#"
+        <a href="#" class="btn btn-sm btn-outline-danger mb-1"
            onclick="event.preventDefault();document.getElementById('transport-{{ $transport->id }}-delete').submit();">
-            <ion-icon name="trash"></ion-icon>
+            <i class="icon-trash"></i>
         </a>
         <form id="transport-{{ $transport->id }}-delete"
               action="{{ route('transports.delete', ['transport' => $transport,]) }}" method="POST"
