@@ -36,31 +36,37 @@
         });
     </script>
 @endsection
-<form action="{{ $action }}" method="post">
-    @csrf
-    <div class="form-group">
-        <label for="region_id-input">Region</label>
-        <select name="region_id" class="form-control" id="region_id-input"></select>
-        <a href="{{ route('regions.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
+<div class="card">
+    <div class="card-body">
+        <form action="{{ $action }}" method="post">
+            @csrf
+            <div class="row">
+                <div class="form-group col-12">
+                    <label for="region_id-input">Region</label>
+                    <div class="d-flex">
+                        <select name="region_id" class="form-control" id="region_id-input"></select>
+                        <a href="{{ route('regions.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a> 
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="location_type_id-input">Location Type</label>
+                    <div class="d-flex">
+                        <select name="location_type_id" class="form-control" id="location_type_id-input"></select>
+                        <a href="{{ route('location-types.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="name-input">Name</label>
+                    <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="address-input">Address</label>
+                    <input name="address" value="{{ $address ?? "" }}" class="form-control" id="address-input">
+                </div>                
+                <div class="form-group col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <p></p>
-    <div class="form-group">
-        <label for="location_type_id-input">Location Type</label>
-        <select name="location_type_id" class="form-control" id="location_type_id-input"></select>
-        <a href="{{ route('location-types.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="name-input">Name</label>
-        <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="address-input">Address</label>
-        <input name="address" value="{{ $address ?? "" }}" class="form-control" id="address-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+</div>
