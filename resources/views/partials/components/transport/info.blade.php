@@ -1,14 +1,37 @@
-<table style="width: 100%;">
-    <tr>
-        <td style="width: 20%; text-align: center; border: 1px solid black"><h2>{{ $transport->name }}</h2></td>
-        <td style="width: 20%; text-align: center; border: 1px solid black"><h2>{{ $transport->transportType->name }}</h2></td>
-        <td style="width: 60%; text-align: center; border: 1px solid black"><h2>{{ $transport->operator->name }}</h2></td>
-    </tr>
-    <tr>
-        <td style="width: 20%; text-align: center; border: 1px solid black"><h2>{{ $transport->departureLocation->name }}</h2></td>
-        <td style="width: 20%; text-align: center; border: 1px solid black"><h2>{{ $transport->arrivalLocation->name }}</h2></td>
-        <td style="width: 60%; text-align: center; border: 1px solid black"><h2>{{ $transport->currency }}</h2></td>
-    </tr>
-</table>
-{{ $transport->description }}
-<a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">Edit Transport</a>
+<div class="otm-callout">
+    <div class="row">
+        <div class="col-12 text-capitalize">
+            <h4 class="fw-bold">{{ $transport->name }}</h4>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Transport Type</p>
+            <h6 class="fw-bold">{{ $transport->transportType->name }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Operator</p>
+            <h6 class="fw-bold">{{ $transport->operator->name }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Departure Location</p>
+            <h6 class="fw-bold">{{ $transport->departureLocation->name }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Arrival Location</p>
+            <h6 class="fw-bold">{{ $transport->arrivalLocation->name }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Currency</p>
+            <h6 class="fw-bold">{{ $transport->currency }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Description</p>
+            <h6 class="fw-bold">{{ $transport->description }}</h6>
+        </div>
+        <div class="col-12">
+            <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">
+                <i class="icon-note"></i>
+                <span>Edit Transport</span>
+            </a>
+        </div>
+    </div>
+</div>
