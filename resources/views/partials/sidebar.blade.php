@@ -59,9 +59,16 @@
             </a>
         </li>
         <li>
+            @if(strpos(Request::url(), 'transports') !== false)
+            <a href="{{ route('transports.all') }}" class="nav-link active">
+            @else
             <a href="{{ route('transports.all') }}" class="nav-link">
+            @endif
                 <i class="icon-directions"></i>
                 <span>Transports</span>
+                @if(strpos(Request::url(), 'transports') !== false)
+                <span class="selected"></span>
+                @endif
             </a>
         </li>
         <li>
