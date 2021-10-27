@@ -63,10 +63,10 @@ class OrderTransforms implements OrderTransformsInterface
     public static function getSelectedCustomer($id)
     {
         if ($id == 0) return null;
-        $quote = Customer::findOrFail($id);
+        $customer = Customer::findOrFail($id);
         $data = [];
-        $data['id'] = $quote->id;
-        $data['text'] = $quote->pax_number . ' - ' . $quote->customer->first_name . ' ' . $quote->customer->last_name;
+        $data['id'] = $customer->id;
+        $data['text'] = $customer->first_name . ' ' . $customer->last_name . ' - ' . $customer->email_address;
         return $data;
     }
 

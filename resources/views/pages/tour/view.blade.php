@@ -185,19 +185,32 @@
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
-    <h1>Payment Installments</h1>
+    <h1>Payment Installments <a href="{{ route('payment-installments.create', ['tour' => $tour,]) }}" class="btn btn-success">Create</a></h1>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <table id="installments-table" class="table table-striped">
         <thead>
         <tr>
             <th scope="col">Due Date</th>
             <th scope="col">Amount Due</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         @foreach($tour->paymentInstallments as $installment)
             <tr>
                 <td>{{ $installment->due_on }}</td>
                 <td>{{ $installment->amount }}</td>
+                <td>
+                    <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}">
+                        <ion-icon name="create"></ion-icon>
+                    </a>
+                    <a href="#"
+                       onclick="event.preventDefault();document.getElementById('paymentInstallment-{{ $installment->id }}-delete').submit();">
+                        <ion-icon name="trash"></ion-icon>
+                    </a>
+                    <form id="paymentInstallment-{{ $installment->id }}-delete"
+                          action="{{ route('payment-installments.delete', ['tour' => $tour, 'paymentInstallment' => $installment,]) }}"
+                          method="POST" style="display: none;">{{ csrf_field() }}</form>
+                </td>
             </tr>
         @endforeach
     </table>

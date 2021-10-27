@@ -28,6 +28,7 @@ use App\Http\Controllers\Models\OrderController;
 use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
 use App\Http\Controllers\Models\OrdersCustomerController;
 use App\Http\Controllers\Models\PaymentController;
+use App\Http\Controllers\Models\PaymentInstallmentController;
 use App\Http\Controllers\Models\PaymentMethodController;
 use App\Http\Controllers\Models\RegionController;
 use App\Http\Controllers\Models\RoomTypeController;
@@ -477,6 +478,17 @@ Route::middleware('auth')->group(function () {
                         Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update');
                         Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete');
                     });
+                });
+            });
+            Route::prefix('payment-installments')->group(function () {
+                Route::get('/', [PaymentInstallmentController::class, 'index'])->name('payment-installments.all');
+                Route::get('/create', [PaymentInstallmentController::class, 'create'])->name('payment-installments.create');
+                Route::post('/create', [PaymentInstallmentController::class, 'store'])->name('payment-installments.store');
+                Route::prefix('{paymentInstallment}')->group(function () {
+                    Route::get('/', [PaymentInstallmentController::class, 'view'])->name('payment-installments.view');
+                    Route::get('/update', [PaymentInstallmentController::class, 'edit'])->name('payment-installments.edit');
+                    Route::post('/update', [PaymentInstallmentController::class, 'update'])->name('payment-installments.update');
+                    Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete');
                 });
             });
         });

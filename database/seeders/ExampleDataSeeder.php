@@ -87,7 +87,7 @@ class ExampleDataSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'location_type_name' => 'Airport',
+                'name' => 'Airport',
                 'created_at' => '2021-01-15 15:40:29',
                 'updated_at' => '2021-01-15 15:40:29',
                 'deleted_at' => NULL,
@@ -95,7 +95,7 @@ class ExampleDataSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'location_type_name' => 'Sea Port',
+                'name' => 'Sea Port',
                 'created_at' => '2021-01-15 15:40:38',
                 'updated_at' => '2021-01-15 15:40:38',
                 'deleted_at' => NULL,
@@ -103,7 +103,7 @@ class ExampleDataSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'location_type_name' => 'Train Station',
+                'name' => 'Train Station',
                 'created_at' => '2021-01-15 15:40:47',
                 'updated_at' => '2021-01-15 15:40:47',
                 'deleted_at' => NULL,
@@ -111,7 +111,7 @@ class ExampleDataSeeder extends Seeder
             3 => 
             array (
                 'id' => 4,
-                'location_type_name' => 'Bus Station',
+                'name' => 'Bus Station',
                 'created_at' => '2021-01-15 15:40:53',
                 'updated_at' => '2021-01-15 15:40:53',
                 'deleted_at' => NULL,
@@ -119,7 +119,7 @@ class ExampleDataSeeder extends Seeder
             4 => 
             array (
                 'id' => 5,
-                'location_type_name' => 'Accommodation',
+                'name' => 'Accommodation',
                 'created_at' => '2021-01-15 15:41:00',
                 'updated_at' => '2021-01-15 15:41:16',
                 'deleted_at' => NULL,
@@ -127,7 +127,7 @@ class ExampleDataSeeder extends Seeder
             5 => 
             array (
                 'id' => 6,
-                'location_type_name' => 'Point of Interest',
+                'name' => 'Point of Interest',
                 'created_at' => '2021-01-15 15:41:27',
                 'updated_at' => '2021-01-15 15:41:27',
                 'deleted_at' => NULL,
