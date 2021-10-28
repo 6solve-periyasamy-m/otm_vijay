@@ -20,6 +20,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\AirlinesController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\BookingCustomerController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\AccommodationController;

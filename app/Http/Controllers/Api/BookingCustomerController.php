@@ -6,31 +6,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ApiController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use App\Models\OrdersCustomer;
+
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\ApiController;
+use App\Repository\OrdersCustomerRepository;
 
 class BookingCustomerController extends ApiController
 {
-    /**
-     * updateOrderCustomer - adds fields to existing orderCustomer record for a single traveller
-     *
-     * @param [type] $ordersCustomer (object)
-     * @param Request $request
-     * @return void
-     */
-    private function updateOrderCustomerFields($ordersCustomer, Request $request)
-    {
-        if (!empty($request->tour['base_price_per_person'])) {
-            $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
-        }
-        if (!empty($request->tour['single_occupancy_surcharge'])) {
-            $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
-        }
-    }
+    protected $logging = 'customer';
 
     /**
      * storeOrUpdateOrderCustomer - stores the orderCustomer data from the booking form
@@ -45,26 +31,9 @@ class BookingCustomerController extends ApiController
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
         }
-        $ordersCustomer = new OrdersCustomer();
-        $this->logging == 'orders' && Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer->id);
-        $ordersCustomerExists = $ordersCustomer
-            ->where('order_id', $request->order_id)
-            ->where('customer_id', $customer->id)
-            ->first();
-        if ($ordersCustomerExists) {
-            $ordersCustomer = $ordersCustomerExists;
-            $this->logging == 'orders' && Log::info('orderCustomer record', $ordersCustomerExists->toArray());
-            $this->updateOrderCustomerFields($ordersCustomer, $request);
-        // Log::info('ordercustomer exists, updating');
-        } else {
-            $ordersCustomer->order_id = $request->order_id;
-            $ordersCustomer->customer_id = $customer->id;
-            $this->logging == 'orders' && Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer->id);
-        }
-        $ordersCustomer->is_lead_booker = $isLead;
-        $ordersCustomer->travel_insurer = null;
-        $ordersCustomer->policy_number = null;
-        $ordersCustomer->save();
+
+        $ordersCustomerRepository = new OrdersCustomerRepository;
+        $ordersCustomer = $ordersCustomerRepository->storeOrderCustomer($customer, $request, $isLead);
 
         return $ordersCustomer;
     }
