@@ -3,10 +3,10 @@
 @section('title', 'Update Payment')
 
 @section('content')
-    @include('partials.models.payments.form', ['action' => route('payments.update', ['payment' => $payment,]),
-      'order_id' => $payment->order_id,
+    @include('partials.models.payments.form', ['action' => route('payments.update', ['order' => $order, 'payment' => $payment,]),
       'payment_method_id' => $payment->payment_method_id,
       'amount' => $payment->amount,
-      'reason' => $payment->reason,
+      'payment_type' => $payment->payment_type,
+      'paid_on' => $payment->paid_on,
     ])
 @endsection

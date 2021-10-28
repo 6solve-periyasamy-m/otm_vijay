@@ -23,9 +23,11 @@ class OrderCustomerAdjustmentController extends Controller
 
     public function store(Request $request, Order $order, OrdersCustomer $orderCustomer)
     {
+        $request->validate(OrderCustomerAdjustment::getValidationRules());
         $orderCustomerAdjustment = OrderCustomerAdjustment::make([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
+            'date' => $request->input('date'),
         ]);
         $orderCustomer->adjustments()->save($orderCustomerAdjustment);
         return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
@@ -43,9 +45,11 @@ class OrderCustomerAdjustmentController extends Controller
 
     public function update(Request $request, Order $order, OrdersCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
     {
+        $request->validate(OrderCustomerAdjustment::getValidationRules());
         $orderCustomerAdjustment->update([
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
+            'date' => $request->input('date'),
         ]);
         return redirect()->route('orders-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]);
     }

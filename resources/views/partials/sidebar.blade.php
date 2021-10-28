@@ -33,9 +33,16 @@
             </a>
         </li>
         <li>
+            @if(strpos(Request::url(), 'activities') !== false)
+            <a href="{{ route('activities.all') }}" class="nav-link active">
+            @else
             <a href="{{ route('activities.all') }}" class="nav-link">
+            @endif
                 <i class="icon-settings"></i>
                 <span>Activities</span>
+                @if(strpos(Request::url(), 'activities') !== false)
+                <span class="selected"></span>
+                @endif
             </a>
         </li>
         <li>
@@ -52,9 +59,16 @@
             </a>
         </li>
         <li>
+            @if(strpos(Request::url(), 'transports') !== false)
+            <a href="{{ route('transports.all') }}" class="nav-link active">
+            @else
             <a href="{{ route('transports.all') }}" class="nav-link">
+            @endif
                 <i class="icon-directions"></i>
                 <span>Transports</span>
+                @if(strpos(Request::url(), 'transports') !== false)
+                <span class="selected"></span>
+                @endif
             </a>
         </li>
         <li>

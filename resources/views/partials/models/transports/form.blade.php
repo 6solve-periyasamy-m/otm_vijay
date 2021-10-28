@@ -68,56 +68,63 @@
         });
     </script>
 @endsection
-<form action="{{ $action }}" method="post">
-    @csrf
-    <div class="form-group">
-        <label for="transport_type_id-input">Transport Type</label>
-        <select style="width: 95%;" name="transport_type_id" class="form-control" id="transport_type_id-input"></select>
-        <a href="{{ route('transport-types.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
+<div class="card">
+    <div class="card-body">
+        <form action="{{ $action }}" method="post">
+            @csrf
+            <div class="row">
+                <div class="form-group col-12">
+                    <label for="transport_type_id-input">Transport Type</label>
+                    <div class="d-flex">
+                        <select name="transport_type_id" class="form-control" id="transport_type_id-input"></select>
+                        <a href="{{ route('transport-types.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="operator_id-input">Operator</label><br/>
+                    <div class="d-flex">
+                        <select name="operator_id" class="form-control" id="operator_id-input"></select>
+                        <a href="{{ route('operators.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="departure_location_id-input">Departure Location</label>
+                    <div class="d-flex">
+                        <select name="departure_location_id" class="form-control" id="departure_location_id-input"></select>
+                        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="arrival_location_id-input">Arrival Location</label>
+                    <div class="d-flex">
+                        <select name="arrival_location_id" class="form-control" id="arrival_location_id-input"></select>
+                        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
+                    </div>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="name-input">Name</label>
+                    <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="description-input">Description</label>
+                    <input name="description" value="{{ $description ?? "" }}" class="form-control" id="description-input">
+                </div>                
+                <div class="form-group col-12">
+                    <label for="currency-input">Currency</label>
+                    <input name="currency" value="{{ $currency ?? "" }}" class="form-control" id="currency-input">
+                </div>
+                <div class="form-group col-12">
+                    <input type="checkbox" name="is_domestic" class="form-check-input" id="is_domestic-input" @if(isset($is_domestic) && $is_domestic == 1) checked @endif>
+                    <label for="is_domestic-input">Is Domestic</label>
+                </div>                
+                <div class="form-group col-12">
+                    <label for="notes-input">Notes</label>
+                    <textarea name="notes" class="form-control" id="notes-input">{{ $notes ?? "" }}</textarea>                    
+                </div>                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <p></p>
-    <div class="form-group">
-        <label for="operator_id-input">Operator</label><br/>
-        <select style="width: 95%;" name="operator_id" class="form-control" id="operator_id-input"></select>
-        <a href="{{ route('operators.create') }}" target="_blank" class="btn btn-success d-inline">+</a>
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="departure_location_id-input">Departure Location</label>
-        <select style="width: 100%;" name="departure_location_id" class="form-control" id="departure_location_id-input"></select>
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="arrival_location_id-input">Arrival Location</label>
-        <select style="width: 100%;" name="arrival_location_id" class="form-control" id="arrival_location_id-input"></select>
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="name-input">Name</label>
-        <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="description-input">Description</label>
-        <input name="description" value="{{ $description ?? "" }}" class="form-control" id="description-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="currency-input">Currency</label>
-        <input name="currency" value="{{ $currency ?? "" }}" class="form-control" id="currency-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <input type="checkbox" name="is_domestic" class="form-check-input" id="is_domestic-input" @if(isset($is_domestic) && $is_domestic == 1) checked @endif>
-        <label for="is_domestic-input">Is Domestic</label>
-    </div>
-    <p></p>
-    <div class="form-group">
-        <label for="notes-input">Notes</label>
-        <input name="notes" value="{{ $notes ?? "" }}" class="form-control" id="notes-input">
-    </div>
-    <p></p>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+</div>

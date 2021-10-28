@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrdersCustomer;
+use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -40,6 +41,7 @@ class OrderController extends Controller
         $order->orderCustomers()->save($orderCustomer);
         $order->lead_booker_id = $orderCustomer->id;
         $order->save();
+        OrderRepository::addIncludedToCustomer($orderCustomer, $order);
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

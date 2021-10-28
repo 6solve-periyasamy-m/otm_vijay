@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.master')
 
 @section('title', 'Update Transport Inventory')
 

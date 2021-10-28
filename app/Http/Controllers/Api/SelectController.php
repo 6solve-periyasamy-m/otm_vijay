@@ -221,4 +221,13 @@ class SelectController extends Controller
     public function getSelectedTShirtSize($id) {
         return CustomerTransforms::getSelectedTShirtSize($id);
     }
+
+    public function getPaymentMethods(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getSelectPaymentMethods($filter);
+    }
+
+    public function getSelectedPaymentMethod($id) {
+        return OrderTransforms::getSelectedPaymentMethod($id);
+    }
 }
