@@ -39,12 +39,17 @@
         });
     }
 </script>
-<select class="form-select flight-component-type-select">
-    <option value="Included" selected>Included</option>
-    <option value="Upgrade">Upgrade</option>
-    <option value="Add-on">Add-on</option>
-</select>
-<a href="javascript:getSelectedFlightInventory()" class="btn btn-success">Add Components</a>
+<div class="d-flex justify-content-between mb-3">
+    <select class="form-select flight-component-type-select">
+        <option value="Included" selected>Included</option>
+        <option value="Upgrade">Upgrade</option>
+        <option value="Add-on">Add-on</option>
+    </select>    
+    <a href="javascript:getSelectedFlightInventory()" class="btn btn-primary ms-3 text-white">
+        <i class="icon-plus"></i>
+        <span>Add Components</span>
+    </a>
+</div>
 <table style="width: 100%;" class="table table-striped flight-inventory-table">
     <thead class="thead-dark">
     <tr>
