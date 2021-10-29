@@ -26,5 +26,5 @@ table.dataTable tbody > tr > .selected {
 table.dataTable tbody tr.selected, 
 table.dataTable tbody th.selected, 
 table.dataTable tbody td.selected {
-    color: #212529;
+    color: $textColor;
 }
