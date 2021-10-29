@@ -78,9 +78,16 @@
             </a>
         </li>
         <li>
+            @if(strpos(Request::url(), 'customers') !== false)
+            <a href="{{ route('customers.all') }}" class="nav-link active">
+            @else
             <a href="{{ route('customers.all') }}" class="nav-link ">
+            @endif
                 <i class="icon-user"></i>
                 <span>Customers</span>
+                @if(strpos(Request::url(), 'customers') !== false)
+                <span class="selected"></span>
+                @endif
             </a>
         </li>
     </ul>    
