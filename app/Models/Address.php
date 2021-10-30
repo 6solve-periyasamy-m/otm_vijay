@@ -13,6 +13,11 @@ class Address extends Model
 
     protected $fillable = ['address_line_1','address_line_2','town','region','country','postcode',];
 
+    public function getFillable()
+    {
+        return $this->fillable;
+    }
+
     public function __toString()
     {
         $addrString = $this->address_line_1;

@@ -13,15 +13,27 @@
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
                             <div v-if="selectOrder.length>1 && order_selected === null">
-                                <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected">
-                                    <option value="">Select an Order</option>
-                                    <option :value="key">{{order.id}}</option>
-                                </select>
+                                <div class="orders-active">
+                                    <h3>Active User</h3>
+                                    <label for="email_address">Enter your email address</label>
+                                    <input v-model="login">
+                                    <input v-model="password">
+                                    <div v-if="authenticated">
+                                        <h4>Active Orders</h4>
+                                        <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected">
+                                            <option value="">Select an Order</option>
+                                            <option :value="key">{{order.id}}</option>
+                                        </select>
+                                    </div>
+                                    <div v-else>
+                                        <h5>You need to login to access your active orders</h5>
+                                    </div>
+                                </div>
                             </div>
                             <div v-else>
                                     <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                                     <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                                    <booking-form-lead :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                                    <booking-form-lead :lead_traveller="leadTraveller" :booking_token="bookingOrderToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour && token">
                                         <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
@@ -82,53 +94,63 @@ export default {
             booked: {},
             selectOrder: [],
             order_selected: null,
-            bookingOrderToken: ''
+            bookingOrderToken: '',
+            login: '',
+            password: '',
+            authenticated: false,
+            tokenId: 'OTM_booking_token'
         }
     },
     created() {
         let that = this
-        this.debug && console.log('BookingForm created for tour:', this.tour, this.order_id, this.order_id.length)
+        this.debug && console.log('BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
 
-        that.bookingOrderToken = getCookie('OTM_booking_order_token')
+        that.bookingOrderToken = getCookie(that.tokenId); 
         this.debug && console.log('Cookie read:', that.bookingOrderToken)
+    
         if (typeof that.bookingOrderToken != 'undefined' && that.bookingOrderToken.length) {
             this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingOrderToken)
             axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
                 .then(response => {
-                    that.orderData = response.data.orders
-                    that.debug>2 && console.log('Found booking orders = ', that.orderData)
-                    if (typeof that.orderData === 'undefined' || that.orderData == null || that.orderData.length == 0) {
-                        deleteCookie('OTM_booking_order_token')
-                        that.order_id = null
-                        that.createOrderId();
-                        console.log('bft=',that.bookingOrderToken)
-                        //bus.$on('createOrder', that.createOrderId());
-                        alert('No orders found for your access code, please rebook or contact us.')
+                    const customer = response.data.customer
+                    console.log('customer retrieved', customer)
+                    if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
+                        deleteCookie(that.tokenId)
+                        // that.order_id = null
+                        // alert('creating an order');
+                        // that.createOrderId();
+                        // console.log('bft=',that.bookingOrderToken)
+                        // bus.$on('createOrder', that.createOrderId());
+                        that.authenticated = false
+                        that.login = ''
                     } else {
-                        that.order_selected = that.orderData.id
-                        that.order_id = that.order_selected
-                        that.token = that.orderData.token
-                        that.debug>1 && 
-                            console.log('Booking '+that.token+' continuing with current order selected = ',
-                            'order_selected='+that.order_selected, 
-                            that.orderData)
-                        that.debug>3 && console.log('BookingForm emit setOrderToken', that.token)
-                        bus.$emit('setOrderToken', that.token, that.order_id)
-                        //bus.$emit('customerLoaded', that.orderData.customer, that.orderData.token)
-                        bus.$emit('leadTravellerLoaded', that.orderData.customer, that.orderData.token)
-                        bus.$emit('additionalTravellersLoaded', that.orderData.customers)
-                        that.leadTraveller = that.orderData.customer
-                        that.travellers = that.orderData.customers
+                        //that.order_selected = that.orderData.id
+                        //that.order_id = that.order_selected
+                        //that.token = that.orderData.token
+                        //that.debug>1 && 
+                        //    console.log('Booking '+that.token+' continuing with current order selected = ',
+                        //    'order_selected='+that.order_selected, 
+                        //    that.orderData)
+                        //that.debug>3 && console.log('BookingForm emit setBookingToken', that.token)
+                        bus.$emit('setBookingToken', that.bookingOrderToken)
+                        // bus.$emit('customerLoaded', that.orderData.customer, that.orderData.token)
+                        bus.$emit('leadTravellerLoaded', customer)
+                        // bus.$emit('additionalTravellersLoaded', that.orderData.customers)
+                        that.leadTraveller = customer
+                    console.log('leadTraveller is set to ', customer)
+                        // that.travellers = that.orderData.customers
+                        that.login = that.leadTraveller.email_address
                     }
                 })
                 .catch(error => {
                     console.log('get current customer', error)
                 })
         } else {
-            that.order_id = null
-            that.createOrderId()
-            console.log('bookingOrderToken NOT detected CREATED ', that.bookingOrderToken)
+            that.token = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+            bus.$emit('setBookingToken', that.token)
+            that.bookingOrderToken = getCookie(that.tokenId);
+            console.log('bookingOrderToken CREATED ', that.bookingOrderToken)
         }
     },
     mounted() {
@@ -155,7 +177,11 @@ export default {
                     break;
             }
         },
+        // TODO: do not create an order until we place an order at end of booking
         async createOrderId() {
+            alert('createOrderId call!')
+            return;
+            
             let that = this
             axios.post('/api/booking/create-order', {
                 tour: this.tour.id,
@@ -165,7 +191,7 @@ export default {
                 that.debug && console.log('bookingForm - create order_id', response)
                 that.order_id = response.data.order.id
                 that.token = response.data.order.token
-                bus.$emit('setOrderToken', that.token, that.order_id)
+                bus.$emit('setBookingToken', that.token)
             })
             .catch(err => {
                 console.log('error creating an order', err)

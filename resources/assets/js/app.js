@@ -19,6 +19,68 @@ window.axios.defaults.headers.common = {
      'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
      'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
  };
+
+ console.log('app.js marker 3')
+
+ // operational 
+ bus.$on('setBookingToken', function(token) {
+     console.log('Event Handler: setBookingToken:', token)
+     setCookie('OTM_booking_token', token);
+     // alert('apps: setCookie', token);
+     // bus.$emit('setBookingToken2', token, order_id)
+ })
+ 
+ const busEventLogging = true
+ 
+ bus.$on('click', function(id) {
+     busEventLogging && console.log('added traveller', id)
+ })
+ 
+ bus.$on('saveLeadCustomer', function(name) {
+      bus.booking.name = name
+  })
+ 
+ bus.$on('customerLoaded', function(customer) {
+     busEventLogging && console.log('** Event Bus: Customer Loaded', customer)
+ })
+ 
+ bus.$on('leadTravellerLoaded', function(customer) {
+     busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)
+ })
+ 
+ bus.$on('removeTraveller', function(id) {
+      busEventLogging && console.log('Event Bus: removed traveller ',id)
+ })
+ 
+ bus.$on('accommodationBookingsLoaded', function() {
+     busEventLogging && console.log('accommodationBookingsLoaded')
+ })
+ 
+ let othertravellers = []
+ // initialises the external array
+ bus.$on('loadOthers', function(others) {
+     othertravellers = others //.map(t => t.id)
+     //console.log('init others', others)
+ })
+ 
+ bus.$on('setRoomShare', function(t, share, room) {
+     let others = othertravellers
+     console.log('setRoomShare (global) ', t.id, share.id, room)
+     others = others.filter(o => {
+         return share.id != o.id
+     })
+     others = others.filter(o => {
+         console.log('filtering out traveller', t.first_name)
+         return t.id != o.id
+     })
+     console.log('global filter from from', othertravellers, ' to ', others)
+     othertravellers = others
+     bus.$emit('setOthers', others, t)
+ })
+ 
+
+
+
  Vue.component('font-awesome-icon', FontAwesomeIcon)
  Vue.component('booking-form', require('./components/BookingForm.vue').default);
  Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
@@ -55,10 +117,11 @@ Vue.component('AtolCertificate', require('./components/AtolCertificate.vue').def
  // deprecated
  // Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
  // Vue.component('x-accommodation-details', require('./components/x-accommodation-details.vue').default);
-
+console.log('app.js marker 1')
 const app = new Vue({
     el: '#app'
 });
+console.log('app.js marker 2')
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -66,58 +129,3 @@ function setCookie(cname, cvalue, exdays) {
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
-
-// operational 
-bus.$on('setOrderToken', function(token, order_id) {
-    console.log('Event Bus: setting token cookie for order_id', token, order_id)
-    setCookie('OTM_booking_order_token', token);
-    bus.$emit('setOrderToken2', token, order_id)
-})
-
-const busEventLogging = true
-
-bus.$on('click', function(id) {
-    busEventLogging && console.log('added traveller', id)
-})
-
-bus.$on('saveLeadCustomer', function(name) {
-     bus.booking.name = name
- })
-
-bus.$on('customerLoaded', function(customer) {
-    busEventLogging && console.log('Event Bus: Customer Loaded', customer)
-})
-
-bus.$on('leadTravellerLoaded', function(customer) {
-    busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)
-})
-
-bus.$on('removeTraveller', function(id) {
-     busEventLogging && console.log('Event Bus: removed traveller ',id)
-})
-
-bus.$on('accommodationBookingsLoaded', function() {
-    busEventLogging && console.log('accommodationBookingsLoaded')
-})
-
-let othertravellers = []
-// initialises the external array
-bus.$on('loadOthers', function(others) {
-    othertravellers = others //.map(t => t.id)
-    //console.log('init others', others)
-})
-
-bus.$on('setRoomShare', function(t, share, room) {
-    let others = othertravellers
-    console.log('setRoomShare (global) ', t.id, share.id, room)
-    others = others.filter(o => {
-        return share.id != o.id
-    })
-    others = others.filter(o => {
-        console.log('filtering out traveller', t.first_name)
-        return t.id != o.id
-    })
-    console.log('global filter from from', othertravellers, ' to ', others)
-    othertravellers = others
-    bus.$emit('setOthers', others, t)
-})

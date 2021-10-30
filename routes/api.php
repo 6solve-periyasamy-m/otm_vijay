@@ -52,7 +52,7 @@ Route::get('/booking/airports',         [AirlinesController::class, 'getAirports
 
 // Travellers
 Route::get('/booking/tourparty', [CustomerController::class, 'getTravellers']);
-Route::get('/booking/customer/{token}', [CustomerController::class, 'getCustomerOrderByToken']);
+Route::get('/booking/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
 
 // Flights
 Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
@@ -71,7 +71,14 @@ Route::post('/booking/lead-traveller', [BookingCustomerController::class, 'leadT
 Route::post('/booking/additional-traveller', [BookingCustomerController::class, 'additionalTraveller']);
 Route::post('/booking/additional-traveller/remove', [BookingCustomerController::class, 'removeAdditionalTraveller']);
 
+// is email registered 
+Route::get('/booking/email/registered/{email}', [BookingCustomerController::class, 'checkActiveUser']);
+Route::post('/booking/email/login', [BookingCustomerController::class, 'loginActiveUser']);
+Route::post('/booking/authenticate/user', [BookingCustomerController::class, 'authenticate']);
+
 // create Booking Order
+Route::get('/booking/auth/token/{email}', [BookingCustomerController::class, 'salt']);
+Route::post('/booking/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
 Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
 
 // create Flights Order
@@ -81,7 +88,8 @@ Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
 Route::post('/booking/flight', [BookFlightDetailsController::class, 'bookFlightDetails']);
 
 // Booking Orders in Customer Order Details
-Route::get('/booking/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
+// Route::get('/booking/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
+// Route::post('/booking/recover/token', [CustomerController::class, 'getTokenLink']);
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);

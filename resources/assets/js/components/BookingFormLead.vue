@@ -2,13 +2,13 @@
     <div class="container">
         <div class="card card-options">
             <div class="card-header">
+          
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
                     <p v-if="!lead_traveller && !show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                         <font-awesome-icon icon="book-reader" />
-                        Lead Traveller details {{lead_traveller? ": " + lead_traveller : '' }}
-                        <div v-if="form_info">on order {{order_id}}</div>
+                        Lead Traveller details
                     </button>
                 </h5>
                 <div v-if="lead_traveller">
@@ -16,20 +16,40 @@
                     You can continue with your booking, please fill in all sections
                 </div>
                 <div class="card-info" v-if="!lead_traveller && !show_traveller">
-                     <p><font-awesome-icon icon="arrow-right" />
-                     No active booking. You may be able to retrieve your booking by email address.</p>
-                     <input v-model="email" style="width: 100%" type="email" placeholder="Retrive booking by email" />
-                    <button @click="retrieveOrder()" class="btn btn-primary">
-                        <font-awesome-icon icon="check" /> Check
-                    </button>
+                    <p><font-awesome-icon icon="arrow-right" />
+                    No active booking. You may be able to retrieve your booking by email address.</p>
+                    <input v-model="email" style="width: 100%" type="email" placeholder="Retrieve booking by email" />
+                    <div v-if="!getPassword">
+                       <button @click="retrieveOrder()" class="btn btn-primary"><font-awesome-icon icon="check" /> Check </button>
+                    </div>
+                    <div v-else>
+                        <p>Active User</p>
+                        <label for="password">Enter your password</label>
+                        <input type="password" v-model="password" @change="loginUser">
+                        <button @click="loginUser" class="btn btn-primary"><font-awesome-icon icon="check" />Login</button>
+                    </div>
                 </div>
             </div>
-            {{debug ? 'DEBUG MODE: Order retrieved by cookie: '+order_id +' / token: '+ token : ''}}
+            {{debug ? 'DEBUG MODE: Order retrieved by cookie: token: '+ token : ''}}
             <div class="card-body" v-if="show_traveller">
                 <div class="container">
                     <div class="card-options">
                         <div class="ept-form">
                             <h4>Your Details</h4>
+                            <div class="row">
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
+                                    <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
+                                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
+                                    <label v-else class="valid">Email address</label>
+                                </div>
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
+                                    <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
+                                    <label :class="{invalid: mobile_number_invalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
+                                    <label class="valid" v-else>{{mobile_number_validation}}</label>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-3 form-group field-separation">
                                     <select v-model="title" class="form-control form-select form-select-lg">
@@ -56,20 +76,7 @@
                                 </div>
                             </div>
     
-                            <div class="row">
-                                <div class="col-sm-6 form-group field-separation">
-                                    <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
-                                    <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
-                                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                                    <label v-else class="valid">Email address</label>
-                                </div>
-                                <div class="col-sm-6 form-group field-separation">
-                                    <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                                    <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
-                                    <label :class="{invalid: mobile_number_invalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                                    <label class="valid" v-else>{{mobile_number_validation}}</label>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation has-dropdown">
                                     <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
@@ -197,6 +204,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation">
+                                    <input type="hidden" name="login_token" :value="booking_token" />
                                     <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                                 </div>
                             </div>
@@ -209,38 +217,21 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { bus } from '../bus'
 import ValidationErrors from './ValidationErrors.vue'
 export default {
-    props: ['form_info', 'tour', 'booked'],
-    created() {
-        bus.$on('leadTravellerLoaded', (customer) => {
-            this.setCustomer(customer)
-        })
-        let that = this
-        bus.$on('setOrderToken', (token, order_id) => {
-            that.debug && console.log('EVENT: Lead Traveller created: setting values for order',  token, order_id)
-            that.token = token
-            that.order_id = order_id
-        })
-    },
-    mounted() {
-        let that = this
-        this.validationErrors = ''
-        bus.$on('debugOverride', (debug) => that.debug = debug)
-
-        if (this.order_id) {
-            this.debug && console.log('OTM Booking Lead Customer form loaded for order ', this.order_id)
-        }
-    },
+    props: ['form_info', 'tour', 'booked', 'booking_token', 'lead_traveller'],
     data() {
         return {
-            debug: 0,
+            debug: 6,
             token: null,
-            order_id: null,
+            // order_id: null,
             email: '',
+            password: '',
+            auth: false,
+            getPassword: false,
             show_traveller: false,
-            lead_traveller: '',
             title: '',
             first_name: '',
             last_name: '',
@@ -290,6 +281,26 @@ export default {
             validationErrors: ''
         }
     },
+    created() {
+        let that = this
+        console.log('leadTraveller:::', this.lead_traveller)
+        bus.$on('leadTravellerLoaded', (customer) => {
+            console.log('leadTravellerLoaded', customer);
+            this.setCustomer(customer)
+        })
+        /*
+        bus.$on('setBookingToken', (token) => {
+            that.debug && console.log('EVENT: Lead Traveller created: setting token',  token)
+            that.token = token
+        })
+        */
+    },
+    mounted() {
+        let that = this
+        this.validationErrors = ''
+        bus.$on('debugOverride', (debug) => that.debug = debug)
+
+    },
     computed: {
         otherNumberType: function() {
             if (typeof this.other_phone_number_type.name == 'undefined') {
@@ -302,22 +313,89 @@ export default {
         }
     },
     methods: {
+        base64(arg) {
+            return Buffer.from(`${arg}`, 'utf8').toString('base64')
+        },
+        loginUser() {
+            let that = this
+            const username = this.email
+            const password = this.password
+            const t = new Date()
+            // todo: request the salt from the server
+            // or just use a server based login in an iframe
+            // const salt = (11+ Math.floor(t.getTime() / 1000) % 1757) ** 5;
+            axios.get(`/api/booking/auth/token/${username}`)
+                .then(response => {
+                    const salt = response.data.auth
+                    let token = this.base64(`${salt}:${username}:${password}`)
+                    token = this.base64(token)
+                    const url = '/api/booking/authenticate/user'
+                    const data = this.email
+                    axios.post(url, data, {
+                        headers: {
+                            'Authorization': `Basic ${token}`
+                        },
+                    })
+                    .then(response => {
+                        that.auth = false
+                        console.log('authorised', response)
+                        if (response.authorised) {
+                            that.auth = true
+                        }
+                    })
+                    .catch(error => {
+                        console.log('auth error', error)
+                    })
+                })
+                .catch(error => {
+                    console.log('can not obtain token');
+                    return;
+                })
+
+        },
         retrieveOrder() {
             // if the cookie does not retrieve an active order
             // perhaps we can do so with an email address
             let that = this
-            axios.get(`/api/booking/findOrderByEmail/${this.email}`).then(response => {
+            // is it a registered user?
+            if (!this.auth) {
+                axios.get(`/api/booking/email/registered/${this.email}`)
+                    .then(response => {
+                        console.log('email registered? response', response)
+                        this.getPassword = response.data.existing
+                        return
+                    })
+                    .catch(error => console.log(error));
+            }
+            // get login_token for the user
+            axios.post('/api/booking/recover/token', this.email)
+            .then(response => {
+                console.log(response);
+                bus.$emit('setBookingToken', response.data.token)
+                alert('token retrieved for ' + that.email,response.data.token, that.token);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            // are there orders associated to this user?
+            /*
+            axios.get(`/api/booking/findOrderByEmail/${this.email}`)
+            .then(response => {
                 const data = response.data.data
-                if (data.length === 1) {
-                    bus.$emit('setOrderToken', data[0].token, data[0].order_id)
+                console.log('find order by email, data', data)
+                if (data) {
+                    bus.$emit('setBookingToken', data[0].token, data[0].order_id)
                     alert('You have one active order retrieved.  Refresh browser')
+                    
                 } else {
                     alert('You do not have an active order.  Please enter your details.')
                     this.show_traveller = true
                 }
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.log(error)
             })
+            */
         },
         setCustomer(customer) {
             this.debug && console.log('Lead Traveller customer', customer)
@@ -377,20 +455,21 @@ export default {
             const valid = valid_email.test(this.email_address)
             this.debug && console.log(this.email, valid)
             this.email_invalid = !valid
-            return false
         },
         async storeTraveller() {
             let that = this
             that.debug && console.log('BOOKING: Store Traveller', this)
+            /*
             if (typeof this.order_id == 'undefined' || this.order_id == null || this.order_id == 0) {
                 alert('About to store new Lead Traveller, check order code')
                 await bus.$emit('createOrder')
                 alert('Check one order code created')
             }
-            this.debug && console.log('BookingFormLead.storeTraveller() tour:', this.tour, this.order_id)
+            */
+            this.debug && console.log('BookingFormLead.storeTraveller() tour:', this.tour)
             axios.post('/api/booking/lead-traveller', {
                     tour: this.tour,
-                    order_id: this.order_id,
+                    // order_id: this.order_id,
                     title: this.title,
                     first_name: this.first_name,
                     middle_names: this.middle_names,
@@ -415,14 +494,23 @@ export default {
                     billing_country: this.billing_country,
                     billing_county: this.billing_county,
                     billing_town: this.billing_town,
-                    billing_postcode: this.billing_postcode
+                    billing_postcode: this.billing_postcode,
+                    login_token: this.booking_token
                 })
                 .then(response => {
                     const customer = response.data.customer
                     that.lead_traveller = customer.first_name + ' ' + customer.last_name
                     that.show_traveller = false
                     that.debug && console.log('customerStored, reponse', response)
-                    bus.$emit('customerLoaded', customer, that.token)
+                    
+                    axios.post('/api/booking/set-login-token', {
+                        email: that.email_address,
+                        token: that.bookingToken
+                    })
+                    .then(response => {
+                        bus.$emit('customerLoaded', response)
+                    })
+
                 })
                 .catch(e => {
                     console.log('BookingFormLead.storeTraveller() error', e)
