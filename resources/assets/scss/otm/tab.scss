@@ -1,0 +1,46 @@
+.otm-tab {
+    border-bottom: solid $primaryColor 2px;
+
+    .nav-item {
+        border-style: solid;
+        border-color: $primaryColor;
+        border-top-width: 1px;
+        border-left-width: 1px;
+        border-bottom-width: 0px;    
+        border-right-width: 0px;
+    }
+
+    .nav-item:last-child {
+        border-right-width: 1px;
+    }
+
+    .nav-link {
+        color: $primaryColor;
+        font-size: 1rem;
+        width: 100%;
+        border-radius: 0px;
+    }
+
+    .nav-link.active {
+        background: $primaryColor;
+    }
+}
+
+.otm-tab-content {
+    padding: 0rem;
+    padding-top: 1rem;
+}
+
+@media screen and (max-width: 768px){
+    .otm-tab {
+        .nav-item:nth-child(2) {
+            border-right-width: 1px;
+        }
+
+        .nav-link {
+            i {
+                display: block;
+            }
+        }
+    }
+}

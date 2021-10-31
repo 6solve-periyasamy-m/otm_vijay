@@ -13,7 +13,18 @@
 
     td {
         a {
-            color: #3490dc;
+            color: $primaryColor;
         }
     }
+}
+
+table.dataTable tbody > tr.selected, 
+table.dataTable tbody > tr > .selected {
+    background: $sideBarColor;
+}
+
+table.dataTable tbody tr.selected, 
+table.dataTable tbody th.selected, 
+table.dataTable tbody td.selected {
+    color: $textColor;
 }
