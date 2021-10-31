@@ -8,13 +8,16 @@ use App\Models\Customer;
 interface CustomerRepositoryInterface
 {
     public function __construct();
+    public function isRegistered($email);
     public function create(array $customer);
+    public function update(array $customer);
 }
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
     protected $model;
     private $fields;
+    private $logging = false;
 
     public function __construct()
     {
@@ -30,6 +33,14 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function create(array $customer)
     {
+        $email = $customer['email_address'];
+        if (empty($email)) {
+            throw new \Exception('Can not create a customer without an email address');
+        }
+        $emailUsed = $this->model->where('email_address', $email)->get();
+        if ($emailUsed->count()) {
+            throw new \Exception('Can not create a customer with an email address that already exists');
+        }
         foreach ($this->fields as $field) {
             if (isset($customer[$field])) {
                 $this->model->$field = $customer[$field];
@@ -45,15 +56,23 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     public function update(array $customer) {
+        $customerRecord = $this->model->where('email_address', $customer['email_address'])->first();
+        if ($customerRecord->count() === 0) {
+            throw new \Exception('Can not update a customer with an email address does not exist');
+        }
         foreach ($this->fields as $field) {
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
-                $this->model->field = $customer[$field];
+                $this->model->$field = $customer[$field];
+                $this->logging && Log::info('check model', [$field, $customer[$field], $this->model->$field]);
             }
         }
         try {
-            $this->model->save();
+            $customerRecord->save();
+            $this->logging && Log::info('customer saved: ', $this->model->toArray());
+            return $this->model;
         } catch (\Exception $e) {
             Log::debug('error updating customer' . $e->getMessage());
         }
+        return null;
     }
 }

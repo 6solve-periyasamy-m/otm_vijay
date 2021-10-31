@@ -108,31 +108,37 @@
                                 <div class="col-sm-6">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <h4>Home/Delivery Address</h4>
+                                            <h4>Home/Home Address</h4>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12 form-group field-separation">
-                                            <label class="form-label" for="adl1" v-show="address_line_1">Delivery Address line 1</label>
-                                            <input v-model="address_line_1" type="text" placeholder="Delivery Address Line 1" class="form-control">
+                                            <label class="form-label" for="adl1" v-show="address_line_1">Home Address line 1</label>
+                                            <input v-model="address_line_1" type="text" placeholder="Home Address Line 1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12 form-group field-separation">
-                                            <label class="form-label" for="adl1" v-show="address_line_2">Delivery Address line 2</label>
-                                            <input v-model="address_line_2" type="text" placeholder="Delivery Address Line 2" class="form-control">
+                                            <label class="form-label" for="adl1" v-show="address_line_2">Home Address line 2</label>
+                                            <input v-model="address_line_2" type="text" placeholder="Home Address Line 2" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12 form-group field-separation">
-                                            <label class="form-label" for="adl1" v-show="address_line_3">Delivery Address line 3</label>
-                                            <input v-model="address_line_3" type="text" placeholder="Delivery Address Line 3" class="form-control">
+                                            <label class="form-label" for="adl1" v-show="address_line_3">Home Address line 3</label>
+                                            <input v-model="address_line_3" type="text" placeholder="Home Address Line 3" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="town" v-show="town">Town</label>
                                             <input type="text" v-model="town" name="town" placeholder="Town" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="region" v-show="region">Region</label>
+                                            <input type="text" v-model="region" name="region" placeholder="Region" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -190,6 +196,12 @@
                                     </div>
                                     <div class="row">
                                         <div v-if="!same_address" class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="billing_region" v-show="billing_region">Region</label>
+                                            <input type="text" v-model="billing_region" name="billing_region" placeholder="Region" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div v-if="!same_address" class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="billing_postcode" v-show="billing_postcode">Billing Postcode</label>
                                             <input type="text" v-model="billing_postcode" name="billing_postcode" placeholder="Postcode" class="form-control">
                                         </div>
@@ -236,20 +248,21 @@ export default {
             first_name: '',
             last_name: '',
             middle_names: '',
+            full_name: '',
             email_address: '',
             mobile_number: '',
             address_line_1: '',
             address_line_2: '',
             address_line_3: '',
             country: '',
-            county: '',
+            region: '',
             town: '',
             postcode: '',
             billing_line_1: '',
             billing_line_2: '',
             billing_line_3: '',
             billing_country: '',
-            billing_county: '',
+            billing_region: '',
             billing_town: '',
             billing_postcode: '',
             mobile_number: '',
@@ -269,14 +282,14 @@ export default {
                 'title', 'first_name', 'middle_names', 'last_name',
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
-                'address_line_1', 'address_line_2', 'address_line_3',
-                'town', 'country', 'postcode',
-                'billing_line_1', 'billing_line_2', 'billing_line_3',
-                'billing_town', 'billing_country', 'billing_postcode',
             ],
-            addressFields: [
+            billingAddressFields: [
+                'billing_line_1', 'billing_line_2', 'billing_line_3',
+                'billing_town', 'billing_region', 'billing_country', 'billing_postcode',
+            ],
+            homeAddressFields: [
                 'address_line_1', 'address_line_2', 'address_line_3',
-                'town', 'country', 'postcode'
+                'town', 'region', 'country', 'postcode'
             ],
             validationErrors: ''
         }
@@ -406,6 +419,18 @@ export default {
                 }
             })
             let allSame = true
+            console.log(customer)
+            if (customer.homeAddressFields) {
+                customer.homeAddressFields.map(field => {
+                    field = customer.homeAddressFields.field
+                })
+            }
+            if (customer.businessAddressFields) {
+                customer.businessAddressFields.map(field => {
+                    field = customer.businessAddressFields.field
+                })
+            }
+            /*
             this.addressFields.forEach(function(key, value) {
                 let addresskey = key.replace('address_', '')
                 let billingKey = `billing_${addresskey}`
@@ -416,7 +441,8 @@ export default {
             })
             this.debug && console.log('billing address matches', allSame)
             this.same_address = allSame
-            this.lead_traveller = customer.first_name + ' ' + customer.last_name
+            */
+            this.full_name = customer.first_name + ' ' + customer.last_name
         },
         toggleTraveller() {
             this.show_traveller = !this.show_traveller
@@ -456,6 +482,15 @@ export default {
             this.debug && console.log(this.email, valid)
             this.email_invalid = !valid
         },
+        setLoginToken(email_address, login_token) {
+            axios.post('/api/booking/set-login-token', {
+                email: email_address,
+                login_token: login_token
+            })
+            .then(response => {
+                bus.$emit('customerLoaded', response)
+            })
+        },
         async storeTraveller() {
             let that = this
             that.debug && console.log('BOOKING: Store Traveller', this)
@@ -469,7 +504,6 @@ export default {
             this.debug && console.log('BookingFormLead.storeTraveller() tour:', this.tour)
             axios.post('/api/booking/lead-traveller', {
                     tour: this.tour,
-                    // order_id: this.order_id,
                     title: this.title,
                     first_name: this.first_name,
                     middle_names: this.middle_names,
@@ -484,7 +518,7 @@ export default {
                     address_line_2: this.address_line_2,
                     address_line_3: this.address_line_3,
                     country: this.country,
-                    county: this.county,
+                    region: this.region,
                     town: this.town,
                     postcode: this.postcode,
                     same_address: this.same_address,
@@ -492,29 +526,23 @@ export default {
                     billing_address_line_2: this.billing_address_line_2,
                     billing_address_line_3: this.billing_address_line_3,
                     billing_country: this.billing_country,
-                    billing_county: this.billing_county,
+                    billing_region: this.billing_region,
                     billing_town: this.billing_town,
                     billing_postcode: this.billing_postcode,
                     login_token: this.booking_token
                 })
                 .then(response => {
-                    const customer = response.data.customer
-                    that.lead_traveller = customer.first_name + ' ' + customer.last_name
-                    that.show_traveller = false
                     that.debug && console.log('customerStored, reponse', response)
-                    
-                    axios.post('/api/booking/set-login-token', {
-                        email: that.email_address,
-                        token: that.bookingToken
-                    })
-                    .then(response => {
-                        bus.$emit('customerLoaded', response)
-                    })
-
+                    const customer = response.data.customer
+                    that.login_token = customer.login_token
+                    that.full_name = customer.first_name + ' ' + customer.last_name
+                    that.show_traveller = false
+                    that.validationErrors = null
                 })
                 .catch(e => {
                     console.log('BookingFormLead.storeTraveller() error', e)
-                    that.validationErrors = e.response.data.errors;
+                    // that.errors.push(e.response.data.errors)
+                    that.validationErrors = e.response.data.errors
                 })
         }
     }

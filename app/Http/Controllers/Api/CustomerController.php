@@ -10,6 +10,7 @@ use Cookie;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\OrdersCustomer;
+use App\Repository\AddressRepository;
 
 class CustomerController extends ApiController
 {
@@ -33,6 +34,13 @@ class CustomerController extends ApiController
             Log::info('getCustomerByToken', $customer->toArray());
         } else {
             Log::info('no data retrieved for token: '. $token);
+        }
+        $addressRepo = new AddressRepository();
+        if (isset($customer->home_address_id)) {
+            $customer->home_address = $addressRepo->get($customer->home_address_id);
+        }
+        if (isset($customer->business_address_id)) {
+            $customer->business_address = $addressRepo->get($customer->business_address_id);
         }
 
         return response()->json(['success' => true, 'customer' => $customer]);

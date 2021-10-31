@@ -161,33 +161,53 @@ class BookingCustomerController extends ApiController
             Log::info('Basic Customer Validation passed', $validated);
         }
         if ($isLead) {
+Log::info('address fields in request', [$request->address_line_1]);
             $addressRepo = new AddressRepository();
-            $home_address = $addressRepo->create(
-                [
-                    'address_line_1' => $request->address_line_1,
-                    'address_line_2' => $request->address_line_2,
-                    'address_line_3' => $request->address_line_3,
-                    'town' => $request->town,
-                    'country' => $request->country,
-                    'postcode' => $request->postcode,
-                    'same_adress' => $request->same_address
-                ]
-            );
-            $customer->home_address_id = $home_address->id;
-            if (!$request->same_address) {
-                $billing_address = $addressRepo->create(
+            if (isset($customerExists) && $customerExists->home_address_id) {
+                Log::info('**** getting home address for ', $customerExists->toArray());
+                $currentAddress = $addressRepo->get($customerExists->home_address_id);
+                if (empty($currentAddress)) {
+                    throw new \Exception('???current address is null after a get???');
+                }
+                Log::info('what I found ', $currentAddress);
+                $home_address = $addressRepo->update($currentAddress);
+            } else {
+                $home_address = $addressRepo->create(
                     [
-                        'address_line_1' => $request->billing_line_1,
-                        'address_line_2' => $request->billing_line_2,
-                        'address_line_3' => $request->billing_line_3,
+                        'address_line_1' => $request->address_line_1,
+                        'address_line_2' => $request->address_line_2,
+                        'address_line_3' => $request->address_line_3,
                         'town' => $request->town,
+                        'region' => $request->region,
                         'country' => $request->country,
-                        'postcode' => $request->postcode
+                        'postcode' => $request->postcode,
+                        'same_adress' => $request->same_address
                     ]
                 );
+                Log::info('Creating Home_address', $home_address->toArray());
+            }
+
+            $customer->home_address_id = $home_address->id;
+
+            if (!$request->same_address) {
+                if ($customerExists->business_address_id) {
+                    $billing_address = $addressRepo->get($customerExists->business_address_id);
+                } else {
+                    $billing_address = $addressRepo->create(
+                        [
+                            'address_line_1' => $request->billing_line_1,
+                            'address_line_2' => $request->billing_line_2,
+                            'address_line_3' => $request->billing_line_3,
+                            'town' => $request->billing_town,
+                            'region' => $request->billing_region,
+                            'country' => $request->billing_country,
+                            'postcode' => $request->billing_postcode
+                        ]
+                    );
+                }
                 $customer->billing_address_id = $billing_address->id;
             } else {
-                $customer->billing_address_id = $customer->home_address->id;
+                $customer->billing_address_id = $customer->home_address_id;
             }
         } else {
             $customer->home_address_id = 0;
@@ -215,13 +235,21 @@ class BookingCustomerController extends ApiController
         if ($customerExists) {
             $this->logging == 'customers' && Log::info('customer exists record ', $customerExists->toArray());
             $customer = $customerExists;
-            // should we update customer info here? Possibly not.
-            return $customer;
+            $customer = $customerRepo->update($customerData);
         } else {
             // $customer->email_address = $request->email_address;
             Log::info('create customer with ', $customerData);
             $customer = $customerRepo->create($customerData);
         }
+        if (isset($home_address)) {
+            Log::info('check address vars ', [$home_address]);
+            $customer->home_address = $home_address;
+        }
+        if (isset($business_address)) {
+            Log::info('check business address vars ', [$business_address]);
+            $customer->business_address = $business_address;
+        }
+        return $customer;
     }
 
     public function updateLoginToken(Request $request) 
@@ -237,11 +265,12 @@ class BookingCustomerController extends ApiController
         }
         $customer->login_token = $login_token;
         Log::info('setting login token'. $login_token, $customer->toArray());
-if ($customer->login_token) {
-    $customer->save();
-} else {
-    Log::info('NO LOGIN TOKEN TO UPDATE:' . $request->login_token);
-}
+
+        if ($customer->login_token) {
+            $customer->save();
+        } else {
+            Log::info('NO LOGIN TOKEN TO UPDATE:' . $request->login_token);
+        }
 
         return json_encode(['success' => true, 'customer' => $customer]);
     }
@@ -256,10 +285,10 @@ if ($customer->login_token) {
     public function leadTraveller(Request $request)
     {
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
-        $customer = $this->storeOrUpdateCustomer($request);
+        $customer = $this->storeOrUpdateCustomer($request, true);
        // $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, true);
 
-        return json_encode(['customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
+        return json_encode(['success' => true, 'customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
     }
 
     /**
@@ -271,7 +300,7 @@ if ($customer->login_token) {
     public function additionalTraveller(Request $request)
     {
         $this->logging == 'customers' && Log::info('additionalTraveller', $request->toArray());
-        $customer = $this->storeOrUpdateCustomer($request);
+        $customer = $this->storeOrUpdateCustomer($request, false);
        // $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, false);
         
         return json_encode(['success' => true, 'customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
