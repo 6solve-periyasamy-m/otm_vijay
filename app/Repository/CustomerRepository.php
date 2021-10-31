@@ -17,7 +17,7 @@ class CustomerRepository implements CustomerRepositoryInterface
 {
     protected $model;
     private $fields;
-    private $logging = false;
+    private $logging = true;
 
     public function __construct()
     {
@@ -57,7 +57,8 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function update(array $customer) {
         $customerRecord = $this->model->where('email_address', $customer['email_address'])->first();
-        if ($customerRecord->count() === 0) {
+    Log::debug('%%%%% 1. updating this customer', [$customerRecord]);
+        if (empty($customerRecord) || $customerRecord->count() === 0) {
             throw new \Exception('Can not update a customer with an email address does not exist');
         }
         foreach ($this->fields as $field) {
@@ -66,10 +67,11 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $this->logging && Log::info('check model', [$field, $customer[$field], $this->model->$field]);
             }
         }
+    Log::debug('%%%%% 2. updating this customer', [$customerRecord]);
         try {
             $customerRecord->save();
             $this->logging && Log::info('customer saved: ', $this->model->toArray());
-            return $this->model;
+            return $customerRecord; //$this->model;
         } catch (\Exception $e) {
             Log::debug('error updating customer' . $e->getMessage());
         }

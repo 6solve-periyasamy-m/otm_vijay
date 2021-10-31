@@ -30,6 +30,8 @@ class BookingController extends ApiController
      */
     public function createOrder(Request $request)
     {
+        throw new \Exception('Booking:createOrder deprecated call');
+    
         $order = new Order();
         $order->quote_id = null;
         $order->tour_id = $request->tour;

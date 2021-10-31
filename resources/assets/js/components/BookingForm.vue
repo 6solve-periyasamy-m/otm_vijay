@@ -5,10 +5,6 @@
                 <div class="card card-default">
                     <div class="card-header">
                         OTM Booking Form version 0.5 PRERELEASE - Lead/Additionals/Flights/Accommodation
-                        <!-- <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
-                        <button class="btn btn-small btn-themed cool" @click="changeTheme('cool')">Cool</button>
-                        <button class="btn btn-small btn-themed warm" @click="changeTheme('warm')">Warm</button>
-                        <button class="btn btn-small btn-themed action" @click="changeTheme('action')">Action</button> -->
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -33,7 +29,7 @@
                             <div v-else>
                                     <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                                     <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                                    <booking-form-lead :lead_traveller="leadTraveller" :booking_token="bookingOrderToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                                    <booking-form-lead :lead_traveller="leadTraveller" :home_address="home_address" :billing_address="billing_address" :booking_token="bookingOrderToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour && token">
                                         <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
@@ -88,6 +84,8 @@ export default {
             formInfo: false,
             token: '',
             leadTraveller: {},
+            home_address: {},
+            billing_address: {},
             travellers: [],
             orders: [],
             order_id: 0,
@@ -114,32 +112,22 @@ export default {
             axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
                 .then(response => {
                     const customer = response.data.customer
+
                     console.log('customer retrieved', customer)
                     if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
                         deleteCookie(that.tokenId)
-                        // that.order_id = null
-                        // alert('creating an order');
-                        // that.createOrderId();
-                        // console.log('bft=',that.bookingOrderToken)
-                        // bus.$on('createOrder', that.createOrderId());
                         that.authenticated = false
                         that.login = ''
                     } else {
-                        //that.order_selected = that.orderData.id
-                        //that.order_id = that.order_selected
-                        //that.token = that.orderData.token
-                        //that.debug>1 && 
-                        //    console.log('Booking '+that.token+' continuing with current order selected = ',
-                        //    'order_selected='+that.order_selected, 
-                        //    that.orderData)
-                        //that.debug>3 && console.log('BookingForm emit setBookingToken', that.token)
-                        bus.$emit('setBookingToken', that.bookingOrderToken)
-                        // bus.$emit('customerLoaded', that.orderData.customer, that.orderData.token)
-                        bus.$emit('leadTravellerLoaded', customer)
-                        // bus.$emit('additionalTravellersLoaded', that.orderData.customers)
                         that.leadTraveller = customer
-                    console.log('leadTraveller is set to ', customer)
-                        // that.travellers = that.orderData.customers
+                        const home_address = response.data.home_address
+                        const billing_address = response.data.billing_address
+                        bus.$emit('setBookingToken', that.bookingOrderToken)
+                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                        bus.$emit('homeAddressLoaded', home_address)
+                        if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
+                            bus.$emit('businessAddressLoaded', billing_address)
+                        }
                         that.login = that.leadTraveller.email_address
                     }
                 })

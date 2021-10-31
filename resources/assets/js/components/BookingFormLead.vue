@@ -172,20 +172,20 @@
                                     </div>
                                     <div class="row">
                                         <div v-if="!same_address" class="col-sm-12 form-group field-separation">
-                                            <label class="form-label" v-show="billing_line_1">Billing Address line 1</label>
-                                            <input type="text" v-model="billing_line_1" placeholder="Billing Address Line 1" class="form-control">
+                                            <label class="form-label" v-show="billing_address_line_1">Billing Address line 1</label>
+                                            <input type="text" v-model="billing_address_line_1" placeholder="Billing Address Line 1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div v-if="!same_address" class="col-sm-12 form-group field-separation">
-                                            <label class="form-label" v-show="billing_line_2">Billing Address line 2</label>
-                                            <input type="text" v-model="billing_line_2" placeholder="Billing Address Line 2" class="form-control">
+                                            <label class="form-label" v-show="billing_address_line_2">Billing Address line 2</label>
+                                            <input type="text" v-model="billing_address_line_2" placeholder="Billing Address Line 2" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div v-if="!same_address" class="col-sm-12 form-group field-separation">
-                                            <label class="form-label" v-show="billing_line_3">Billing Address line 3</label>
-                                            <input type="text" v-model="billing_line_3" placeholder="Billing Address Line 3" class="form-control">
+                                            <label class="form-label" v-show="billing_address_line_3">Billing Address line 3</label>
+                                            <input type="text" v-model="billing_address_line_3" placeholder="Billing Address Line 3" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -258,9 +258,9 @@ export default {
             region: '',
             town: '',
             postcode: '',
-            billing_line_1: '',
-            billing_line_2: '',
-            billing_line_3: '',
+            billing_address_line_1: '',
+            billing_address_line_2: '',
+            billing_address_line_3: '',
             billing_country: '',
             billing_region: '',
             billing_town: '',
@@ -284,7 +284,7 @@ export default {
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
             ],
             billingAddressFields: [
-                'billing_line_1', 'billing_line_2', 'billing_line_3',
+                'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
                 'billing_town', 'billing_region', 'billing_country', 'billing_postcode',
             ],
             homeAddressFields: [
@@ -297,10 +297,37 @@ export default {
     created() {
         let that = this
         console.log('leadTraveller:::', this.lead_traveller)
+        /*
+         *
+        this.homeAddressFields.map(field => {
+            console.log('>>>>', field, that.lead_traveller)
+        //    this[field] = this.lead_traveller.home_address[field]
+        })
+        */
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('leadTravellerLoaded', customer);
-            this.setCustomer(customer)
+            that.setCustomer(customer)
+            that.same_address = customer.home_address_id === customer.billing_address_id
         })
+        bus.$on('homeAddressLoaded', home_address => {
+            that.address_line_1 = home_address.address_line_1
+            that.address_line_2 = home_address.address_line_2
+            that.address_line_3 = home_address.address_line_3
+            that.town = home_address.town
+            that.region = home_address.region
+            that.postcode = home_address.postcode
+            that.country = home_address.country
+        })
+        bus.$on('businessAddressLoaded', billing_address => {
+            that.billing_address_line_1 = billing_address.address_line_1
+            that.billing_address_line_2 = billing_address.address_line_2
+            that.billing_address_line_3 = billing_address.address_line_3
+            that.business_town = billing_address.town
+            that.business_region = billing_address.region
+            that.business_postcode = billing_address.postcode
+            that.business_country = billing_address.country
+        })
+        
         /*
         bus.$on('setBookingToken', (token) => {
             that.debug && console.log('EVENT: Lead Traveller created: setting token',  token)

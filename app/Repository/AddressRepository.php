@@ -14,7 +14,7 @@ interface AddressRepositoryInterface
 
 class AddressRepository implements AddressRepositoryInterface
 {
-    protected $model;
+    private $model;
     private $fields;
 
     public function __construct()
@@ -27,21 +27,23 @@ class AddressRepository implements AddressRepositoryInterface
     public function get($address_id)
     {
         $address = $this->model->find($address_id);
+        Log::info('****** address-repo ID, address record : ' . $address_id, $address->toArray());
         if (isset($address)) {
             return $address->toArray();
         }
         return null;
     }
 
-    public function create(Array $address)
+    public function create(Array $address, $type = 'home')
     {
-        Log::info('Create address', $address);
+        Log::info('Create ['.$type.'] address', $address);
         foreach($this->fields as $field) {
+            $typedField = $type . '_' . $field;
             $this->model->$field = $address[$field];
         }
         try {
             $this->model->save();
-            Log::info('** saved address', $address);
+            Log::info('** saved address', [$this->model]);
             return $this->model;
         } catch (\Exception $e) {
             Log::error("!!! Can not save an address, data: ", implode($address));
