@@ -18,7 +18,7 @@ class Activity extends Model
     const RULES = [
         'activity_type_id' => 'required|exists:activity_types,id',
         'location_id' => 'required|exists:locations,id',
-        'title' => 'required',
+        'name' => 'required',
     ];
 
     public function activityInventory()

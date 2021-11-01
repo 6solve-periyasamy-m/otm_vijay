@@ -19,7 +19,7 @@ class Accommodation extends Model
     protected $fillable = ['region_id','name','description','audit_date','address','currency',];
     protected $cascadeDeletes = ['inventory'];
     const RULES = [
-        'title' => 'required',
+        'name' => 'required',
         'region_id' => 'required|exists:regions,id',
         'audit_date' => 'date',
         'currency' => 'size:3'
