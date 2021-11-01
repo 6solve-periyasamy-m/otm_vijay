@@ -15,13 +15,15 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->integer('activity_type_id')->index();
+            $table->foreignId('activity_type_id')->index();
             $table->text('description')->nullable();
-            $table->integer('location_id')->index();
+            $table->foreignId('location_id')->index();
             $table->text('name')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('activity_type_id')->references('id')->on('activity_types')->onDelete('cascade');
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
         });
     }
 
