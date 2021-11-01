@@ -85,7 +85,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
             'flight_inventories.id AS id',
             'flights.id AS flight_id',
             'flight_inventories.flight_number AS flight_number',
-            'travel_classes.title AS travel_class',
+            'travel_classes.name AS travel_class',
             DB::raw('CASE WHEN `flights`.`is_domestic` = 1 THEN \'Yes\' ELSE \'No\' END AS is_domestic'),
             'flights.available_after AS available_after',
             'flight_inventories.check_in AS check_in',

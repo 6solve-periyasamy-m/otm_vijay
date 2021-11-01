@@ -89,7 +89,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query->select(
             'accommodation_inventories.id AS id',
             'accommodations.id AS accommodation_id',
-            'accommodations.title AS accommodation_name',
+            'accommodations.name AS accommodation_name',
             DB::raw('CONCAT(`regions`.`name`, \' - \', `countries`.`name`) AS location'),
             'accommodation_inventories.check_in AS check_in',
             'accommodation_inventories.check_out AS check_out_time',

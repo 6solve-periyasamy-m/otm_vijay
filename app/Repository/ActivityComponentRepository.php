@@ -85,7 +85,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $query->select(
             'activity_inventories.id AS id',
             'activities.id AS activity_id',
-            'activities.title AS name',
+            'activities.name AS name',
             'activities.description AS description',
             'locations.name AS location',
             'ticket_types.name AS ticket_type',
