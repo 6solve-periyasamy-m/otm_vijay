@@ -24,7 +24,7 @@ class AccommodationController extends Controller
         $request->validate(Accommodation::RULES);
         $accommodation = Accommodation::create([
             'region_id' => $request->input('region_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
             'address' => $request->input('address'),
@@ -48,7 +48,7 @@ class AccommodationController extends Controller
         $request->validate(Accommodation::RULES);
         $accommodation->update([
             'region_id' => $request->input('region_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
             'address' => $request->input('address'),
