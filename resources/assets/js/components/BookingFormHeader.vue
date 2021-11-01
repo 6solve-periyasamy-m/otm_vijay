@@ -7,7 +7,7 @@
             </div>
             <div class="bookingform-header__title">
                 <h1 class="bookingform-header__title--main">Octopus Travel Matrix Booking Form</h1>
-                <h2 v-if="event != null">{{event.event_title}}</h2>
+                <h2 v-if="event != null">{{event.name}}</h2>
                 <h3 v-if="tour != null">{{tour.name}} <br/>from {{ startDate(event) }} To {{endDate(event) }}</h3>
             </div>
         </div>
@@ -28,10 +28,10 @@ export default {
     },
     methods: {
         startDate(event) {
-            return dates.makeDateFromString(event.event_start_date)
+            return dates.makeDateFromString(event.starts_at)
         },
         endDate(event) {
-            return dates.makeDateFromString(event.event_end_date)
+            return dates.makeDateFromString(event.ends_at)
         },
     }
 }

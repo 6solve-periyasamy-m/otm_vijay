@@ -16,7 +16,7 @@
                         <select v-model="event" @change="getTourData">
                                 <option default value="">Select</option>
                                 <option v-for="event in events.data" :key="event.id" :value="event.id">
-                                    {{ event.event_title }} 
+                                    {{ event.name }}
                                     From: {{ startDate(event) }} To: {{ endDate(event) }}
                                 </option>
                             </select>
@@ -68,11 +68,11 @@ export default {
     },
     methods: {
         startDate(event) {
-            console.log(event.event_start_date)
-            return dates.makeDateFromString(event.event_start_date)
+            console.log(event.starts_at)
+            return dates.makeDateFromString(event.starts_at)
         },
         endDate(event) {
-            return dates.makeDateFromString(event.event_end_date)
+            return dates.makeDateFromString(event.ends_at)
         },
         toggleTours() {
             this.showTours = !this.showTours

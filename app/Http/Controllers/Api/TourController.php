@@ -11,7 +11,7 @@ use App\Models\OrdersCustomer;
 class TourController extends ApiController
 {
     public function getEvents() {
-        $events = Event::where('event_start_date', '>', date('Y-m-d'))->get();
+        $events = Event::where('starts_at', '>', date('Y-m-d'))->get();
 
         return response()->json(['success' => true, 'data' => $events->toArray()]);
     }

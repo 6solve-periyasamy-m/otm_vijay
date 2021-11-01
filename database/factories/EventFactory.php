@@ -22,10 +22,10 @@ class EventFactory extends Factory
     public function definition()
     {
         return [
-            'event_title' => $this->faker->sentence,
+            'name' => $this->faker->sentence,
             'booking_url' => $this->faker->url,
-            'event_start_date' => $this->faker->date,
-            'event_end_date' => $this->faker->date
+            'starts_at' => $this->faker->date,
+            'ends_at' => $this->faker->date
         ];
     }
 }
