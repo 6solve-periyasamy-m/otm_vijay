@@ -38,7 +38,7 @@
                     <td>{{ $accommodationInventory->boardType->board_type_name }}</td>
                     <td>{{ $accommodationInventory->check_in }}</td>
                     <td>{{ $accommodationInventory->checked_in == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ $accommodationInventory->check_out_date_time }}</td>
+                    <td>{{ $accommodationInventory->check_out }}</td>
                     <td>{{ $accommodationInventory->checked_out == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->stock }}</td>

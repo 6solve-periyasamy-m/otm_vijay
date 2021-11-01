@@ -17,7 +17,7 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->increments('id');
             $table->integer('accommodation_id');
             $table->dateTime('check_in')->nullable();
-            $table->dateTime('check_out_date_time')->nullable();
+            $table->dateTime('check_out')->nullable();
             $table->integer('room_type_id');
             $table->integer('board_type_id');
             $table->boolean('fit_selectable')->default(true);

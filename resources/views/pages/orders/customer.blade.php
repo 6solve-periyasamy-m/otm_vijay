@@ -226,7 +226,7 @@ $(document).ready( function () {
                         </thead>
                         @foreach($accommodation as $accommodationEntry)
                             <tr>
-                                <td>{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
+                                <td>{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
                                 <td>{{ $accommodationEntry["component"]->title }}</td>
                                 <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
                                 <td>TBI</td> {{-- TODO: Discuss and Implement--}}

@@ -228,7 +228,7 @@ export default {
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         // this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
-        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out_date_time ', this.order_id)
+        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out ', this.order_id)
         this.debug>1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
         this.debug>1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
         that.ready = true

@@ -12,7 +12,7 @@
             <th scope="col">Board Type Id</th>
             <th scope="col">Check In Date Time</th>
             <th scope="col">Checkin Confirmed</th>
-            <th scope="col">Check Out Date Time</th>
+            <th scope="col">Check Out</th>
             <th scope="col">Checkout Confirmed</th>
             <th scope="col">Fit Selectable</th>
             <th scope="col">Stock</th>
@@ -30,7 +30,7 @@
               'board_type_id' => $accommodationInventory->board_type_id,
               'check_in' => $accommodationInventory->check_in,
               'checked_in' => $accommodationInventory->checked_in,
-              'check_out_date_time' => $accommodationInventory->check_out_date_time,
+              'check_out' => $accommodationInventory->check_out,
               'checked_out' => $accommodationInventory->checked_out,
               'fit_selectable' => $accommodationInventory->fit_selectable,
               'stock' => $accommodationInventory->stock,

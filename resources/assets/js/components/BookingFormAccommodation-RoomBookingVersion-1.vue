@@ -43,7 +43,7 @@
                     </div>
                     <div class="label">Checkout</div>
                     <div class="content">
-                      {{ bookingTime(accommodation.check_out_date_time) }}
+                      {{ bookingTime(accommodation.check_out) }}
                     </div>
                     <div class="label">Room type</div>
                     <div class="content">
@@ -142,7 +142,7 @@
                     <div class="label">Checkout</div>
                     <div class="content">
                       {{
-                        bookingTime(booking.accommodation.check_out_date_time)
+                        bookingTime(booking.accommodation.check_out)
                       }}
                     </div>
                     <div class="label">Room type</div>

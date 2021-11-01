@@ -38,7 +38,7 @@ class AccommodationController extends ApiController
                 "id" => $accommodationInventory->id,
                 "accommodation_id" => $accommodationInventory->accommodation->id,
                 "check_in" => $accommodationInventory->check_in->format('Y-m-d H:i:s'),
-                "check_out_date_time" => $accommodationInventory->check_out_date_time->format('Y-m-d H:i:s'),
+                "check_out" => $accommodationInventory->check_out->format('Y-m-d H:i:s'),
                 "accommodation_name" => $accommodationInventory->accommodation->title,
                 "accommodation_address" => $accommodationInventory->accommodation->address,
                 "room_type" => $accommodationInventory->roomType->room_type_name,

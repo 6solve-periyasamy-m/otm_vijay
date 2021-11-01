@@ -6,7 +6,7 @@
     <td>{{ $board_type_id }}</td>
     <td>{{ $check_in }}</td>
     <td>{{ $checked_in }}</td>
-    <td>{{ $check_out_date_time }}</td>
+    <td>{{ $check_out }}</td>
     <td>{{ $checked_out }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>

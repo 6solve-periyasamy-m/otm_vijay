@@ -116,7 +116,7 @@
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
                                     <td>{{ $accommodationEntry["component"]->title }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>

@@ -66,9 +66,9 @@
                     <label for="checked_in-input" class="form-check-label">Checked In</label>
                 </div>                                                
                 <div class="form-group col-xl-6">
-                    <label for="check_out_date_time-input">Check Out Date Time</label>
-                    <input type="datetime-local" name="check_out_date_time" value="{{ isset($check_out_date_time) ? $check_out_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="check_out_date_time-input">
+                    <label for="check_out-input">Check Out</label>
+                    <input type="datetime-local" name="check_out" value="{{ isset($check_out) ? $check_out->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="check_out-input">
                     <p></p>
                     <input type="checkbox" name="checked_out" class="form-check-input" @if(isset($checked_out) && $checked_out == 1) checked @endif
                         id="checked_out-input">
