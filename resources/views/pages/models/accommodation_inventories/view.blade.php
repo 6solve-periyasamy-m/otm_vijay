@@ -9,7 +9,7 @@
     Check In Date Time: {{ $accommodationInventory->check_in_date_time }}<br/>
     Checkin Confirmed: {{ $accommodationInventory->checked_in }}<br/>
     Check Out Date Time: {{ $accommodationInventory->check_out_date_time }}<br/>
-    Checkout Confirmed: {{ $accommodationInventory->checkout_confirmed }}<br/>
+    Checkout Confirmed: {{ $accommodationInventory->checked_out }}<br/>
     Fit Selectable: {{ $accommodationInventory->fit_selectable }}<br/>
     Stock: {{ $accommodationInventory->stock }}<br/>
     Purchase Price: {{ $accommodationInventory->purchase_price }}<br/>

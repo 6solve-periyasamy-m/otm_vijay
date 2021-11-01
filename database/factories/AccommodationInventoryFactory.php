@@ -27,7 +27,7 @@ class AccommodationInventoryFactory extends Factory
             'check_in_date_time' => now(),
             'checked_in' => true,
             'check_out_date_time' => now(),
-            'checkout_confirmed' => false,
+            'checked_out' => false,
             'fit_selectable' => true,
             'stock' => $this->faker->numberBetween(1, 10),
             'purchase_price' => $this->faker->numberBetween(10, 50),

@@ -31,7 +31,7 @@
               'check_in_date_time' => $accommodationInventory->check_in_date_time,
               'checked_in' => $accommodationInventory->checked_in,
               'check_out_date_time' => $accommodationInventory->check_out_date_time,
-              'checkout_confirmed' => $accommodationInventory->checkout_confirmed,
+              'checked_out' => $accommodationInventory->checked_out,
               'fit_selectable' => $accommodationInventory->fit_selectable,
               'stock' => $accommodationInventory->stock,
               'purchase_price' => $accommodationInventory->purchase_price,

@@ -39,7 +39,7 @@
                     <td>{{ $accommodationInventory->check_in_date_time }}</td>
                     <td>{{ $accommodationInventory->checked_in == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->check_out_date_time }}</td>
-                    <td>{{ $accommodationInventory->checkout_confirmed == 1 ? 'True' : 'False' }}</td>
+                    <td>{{ $accommodationInventory->checked_out == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->stock }}</td>
                     <td>{{ $accommodationInventory->purchase_price }}</td>

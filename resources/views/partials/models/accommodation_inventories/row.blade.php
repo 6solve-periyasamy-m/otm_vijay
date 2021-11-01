@@ -7,7 +7,7 @@
     <td>{{ $check_in_date_time }}</td>
     <td>{{ $checked_in }}</td>
     <td>{{ $check_out_date_time }}</td>
-    <td>{{ $checkout_confirmed }}</td>
+    <td>{{ $checked_out }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $purchase_price }}</td>
