@@ -24,7 +24,7 @@
             <table id="accommodation" style="width: 100%;" class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Title</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Region</th>
                     <th scope="col">Description</th>
                     <th scope="col">Audit Date</th>
