@@ -14,7 +14,7 @@ class CreateFlightsTable extends Migration
     public function up()
     {
         Schema::create('flights', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('airline_id')->nullable();
             $table->integer('departure_airport_id')->nullable();
             //$table->date('departure_date')->nullable();

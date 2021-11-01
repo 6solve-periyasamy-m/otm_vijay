@@ -14,7 +14,7 @@ class CreateOrdersActivitiesTable extends Migration
     public function up()
     {
         Schema::create('orders_activities', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('order_customer_id');
             $table->integer('activity_inventory_tour_id');
             $table->timestamps();

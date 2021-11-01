@@ -15,7 +15,7 @@ class CreateCustomerOrderDetailTable extends Migration
     public function up()
     {
         Schema::create('customer_order_details', function(Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('orders_customer_id')->index();
             $table->string('type')->index(); // flight / accommodation / activity / transport
             $table->integer('inventory_tour_id')->index(); // e.g. flight_inventory_tour_id

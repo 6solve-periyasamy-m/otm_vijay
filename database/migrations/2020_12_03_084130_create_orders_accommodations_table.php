@@ -14,7 +14,7 @@ class CreateOrdersAccommodationsTable extends Migration
     public function up()
     {
         Schema::create('orders_accommodations', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('order_customer_id');
             $table->integer('accommodation_inventory_tour_id');
             $table->integer('share_with_user_id')->nullable();

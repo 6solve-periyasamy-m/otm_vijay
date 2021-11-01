@@ -14,7 +14,7 @@ class CreateBoardTypesTable extends Migration
     public function up()
     {
         Schema::create('board_types', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name', 255);
             $table->timestamps();
             $table->softDeletes();

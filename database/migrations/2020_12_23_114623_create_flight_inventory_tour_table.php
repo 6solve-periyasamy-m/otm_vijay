@@ -14,7 +14,7 @@ class CreateFlightInventoryTourTable extends Migration
     public function up()
     {
         Schema::create('flight_inventory_tour', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('tour_id');
             $table->integer('flight_inventory_id');
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');

@@ -14,7 +14,7 @@ class CreateTransportInventoriesTable extends Migration
     public function up()
     {
         Schema::create('transport_inventories', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('transport_id');
             $table->integer('travel_class_id');
             $table->dateTime('departs_at')->nullable();

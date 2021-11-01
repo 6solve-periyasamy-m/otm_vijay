@@ -14,7 +14,7 @@ class CreateOrdersCustomersTable extends Migration
     public function up()
     {
         Schema::create('orders_customers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('order_id')->nullable();
             $table->integer('customer_id')->nullable();
             $table->float('tour_cost', 10, 0)->nullable();

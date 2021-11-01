@@ -15,7 +15,7 @@ class CreateQuotesTable extends Migration
     {
         Schema::create('quotes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->id();
             $table->boolean('is_converted');
             $table->integer('customer_id')->index();
             $table->integer('tour_id')->index();

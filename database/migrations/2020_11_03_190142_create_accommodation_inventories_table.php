@@ -14,20 +14,20 @@ class CreateAccommodationInventoriesTable extends Migration
     public function up()
     {
         Schema::create('accommodation_inventories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('accommodation_id');
-            $table->dateTime('check_in')->nullable();
-            $table->dateTime('check_out')->nullable();
+            $table->id();
+            $table->foreignId('accommodation_id')->index();
             $table->integer('room_type_id');
             $table->integer('board_type_id');
+            $table->dateTime('check_in')->nullable();
+            $table->boolean('checked_in')->default(false);
+            $table->dateTime('check_out')->nullable();
+            $table->boolean('checked_out')->default(false);
             $table->boolean('fit_selectable')->default(true);
             $table->integer('stock');
             $table->double('purchase_price')->nullable();
             $table->double('sales_price')->nullable();
             $table->text('currency')->nullable();
             $table->text('notes')->nullable();
-            $table->boolean('checked_in')->default(false);
-            $table->boolean('checked_out')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

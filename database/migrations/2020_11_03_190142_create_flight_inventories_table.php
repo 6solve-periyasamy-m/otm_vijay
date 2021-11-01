@@ -14,7 +14,7 @@ class CreateFlightInventoriesTable extends Migration
     public function up()
     {
         Schema::create('flight_inventories', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('flight_id');
             $table->dateTime('check_in')->nullable();
             $table->dateTime('departs_at')->nullable();

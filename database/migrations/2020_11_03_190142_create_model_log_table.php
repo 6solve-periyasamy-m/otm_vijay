@@ -14,7 +14,7 @@ class CreateModelLogTable extends Migration
     public function up()
     {
         Schema::create('model_log', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('table_name', 255);
             $table->unsignedInteger('row_id')->index();
             $table->string('event', 100)->index();

@@ -14,7 +14,7 @@ class CreatePaymentInstallmentsTable extends Migration
     public function up()
     {
         Schema::create('payment_installments', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('tour_id')->index();
             $table->float('amount', 10, 2);
             $table->date('due_on')->nullable();
