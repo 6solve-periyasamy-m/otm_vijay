@@ -15,13 +15,15 @@ class CreateFlightInventoryTourTable extends Migration
     {
         Schema::create('flight_inventory_tour', function (Blueprint $table) {
             $table->id();
-            $table->integer('tour_id');
-            $table->integer('flight_inventory_id');
+            $table->foreignId('tour_id');
+            $table->foreignId('flight_inventory_id');
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
             $table->float('tour_sales_price', 10, 0)->nullable();
             $table->string('flight_type', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
+            $table->foreign('flight_inventory_id')->references('id')->on('flight_inventories')->onDelete('cascade');
         });
     }
 
