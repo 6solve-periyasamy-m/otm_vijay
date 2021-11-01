@@ -252,7 +252,7 @@ class OrderRepository implements OrderRepositoryInterface
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['description'] =
                             $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
                             $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
-                            $tourInventory->flightInventory->travelClass->title;
+                            $tourInventory->flightInventory->travelClass->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
@@ -260,7 +260,7 @@ class OrderRepository implements OrderRepositoryInterface
                 } else {
                     $included .= $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
                         $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
-                        $tourInventory->flightInventory->travelClass->title . "\n";
+                        $tourInventory->flightInventory->travelClass->name . "\n";
                 }
             }
             foreach ($orderCustomer->orderTransports as $orderInventory) {
@@ -275,7 +275,7 @@ class OrderRepository implements OrderRepositoryInterface
                             $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
                             $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
                             $tourInventory->transportInventory->transport->transportType->name . ' - ' .
-                            $tourInventory->transportInventory->travelClass->title;
+                            $tourInventory->transportInventory->travelClass->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
@@ -283,7 +283,7 @@ class OrderRepository implements OrderRepositoryInterface
                     $included .= $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
                         $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
                         $tourInventory->transportInventory->transport->transportType->name . ' - ' .
-                        $tourInventory->transportInventory->travelClass->title . "\n";
+                        $tourInventory->transportInventory->travelClass->name . "\n";
                 }
                 $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
             }

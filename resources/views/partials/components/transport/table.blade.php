@@ -38,7 +38,7 @@ $(document).ready(function() {
             </thead>
             @foreach($transport->transportInventory as $transportInventory)
             <tr>
-                <td>{{ $transportInventory->travelClass->title }}</td>
+                <td>{{ $transportInventory->travelClass->name }}</td>
                 <td>{{ $transportInventory->departure_date_time }}</td>
                 <td>{{ $transportInventory->departure_confirmed ? "Yes" : "No" }}</td>
                 <td>{{ $transportInventory->arrival_date_time }}</td>

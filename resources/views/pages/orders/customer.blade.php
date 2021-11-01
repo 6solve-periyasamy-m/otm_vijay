@@ -301,7 +301,7 @@ $(document).ready( function () {
                         <tr>
                             <td>{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
                             <td>{{ $flight["inventory"]->flight_number }}</td>
-                            <td>{{ $flight["inventory"]->travelClass->title }}</td>
+                            <td>{{ $flight["inventory"]->travelClass->name }}</td>
                             <td>{{ $flight["tour"]->tour_component_type }}</td>
                             <td>
                                 <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
@@ -337,7 +337,7 @@ $(document).ready( function () {
                         <tr>
                             <td>{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
                             <td>{{ $transport["component"]->name }}</td>
-                            <td>{{ $transport["inventory"]->travelClass->title }}</td>
+                            <td>{{ $transport["inventory"]->travelClass->name }}</td>
                             <td>{{ $transport["tour"]->tour_component_type }}</td>
                             <td>
                                 <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">

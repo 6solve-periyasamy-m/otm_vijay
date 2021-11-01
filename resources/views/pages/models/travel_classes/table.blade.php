@@ -7,14 +7,14 @@
     <table id="travelClass" style="width: 100%;" class="table table-striped">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">Title</th>
+            <th scope="col">Name</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         @foreach($travelClasses as $travelClass)
             @include('partials.models.travel_classes.row', [
               'travelClass' => $travelClass,
-              'title' => $travelClass->title,
+              'name' => $travelClass->name,
             ])
         @endforeach
     </table>

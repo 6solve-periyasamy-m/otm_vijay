@@ -42,7 +42,7 @@ class FlightController extends ApiController
                 "check_in" => $flightInventory->check_in,
                 "departure_date_time" => $flightInventory->departure_date_time,
                 "arrival_date_time" => $flightInventory->arrival_date_time,
-                "class" => $flightInventory->travelClass->title,
+                "class" => $flightInventory->travelClass->name,
                 "airline" => $flightInventory->flight->airline->name,
                 "departure_airport" => $flightInventory->flight->departureAirport->name,
                 "arrival_airport" => $flightInventory->flight->arrivalAirport->name,

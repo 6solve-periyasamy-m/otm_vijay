@@ -180,7 +180,7 @@
                                 <tr>
                                     <td style="min-width: 200px">{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
-                                    <td>{{ $flight["inventory"]->travelClass->title }}</td>
+                                    <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
                                     <td>
                                         <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -211,7 +211,7 @@
                                 <tr>
                                     <td style="min-width: 200px">{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
-                                    <td>{{ $transport["inventory"]->travelClass->title }}</td>
+                                    <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
                                     <td>
                                         <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

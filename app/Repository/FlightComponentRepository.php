@@ -48,7 +48,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->flightInventory->flight_number;
-                $components[$component->id]['travel_class'] = $component->flightInventory->travelClass->title;
+                $components[$component->id]['travel_class'] = $component->flightInventory->travelClass->name;
             }
         }
         if ($oCustomer != null) {

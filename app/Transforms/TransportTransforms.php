@@ -50,7 +50,7 @@ class TransportTransforms implements TransportTransformsInterface
         foreach (TravelClass::all() as $travelClass) {
             $subData = [];
             $subData['id'] = $travelClass->id;
-            $subData['text'] = $travelClass->title;
+            $subData['text'] = $travelClass->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -82,7 +82,7 @@ class TransportTransforms implements TransportTransformsInterface
         $travelClass = TravelClass::findOrFail($id);
         $data = [];
         $data['id'] = $travelClass->id;
-        $data['text'] = $travelClass->title;
+        $data['text'] = $travelClass->name;
         return $data;
     }
 
