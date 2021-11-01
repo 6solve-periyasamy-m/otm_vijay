@@ -16,7 +16,7 @@ class Accommodation extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['region_id','title','description','audit_date','address','currency',];
+    protected $fillable = ['region_id','name','description','audit_date','address','currency',];
     protected $cascadeDeletes = ['inventory'];
     const RULES = [
         'title' => 'required',

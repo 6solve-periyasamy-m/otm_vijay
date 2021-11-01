@@ -51,7 +51,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             if ($component->tour_component_type == "Add-on") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
-                $components[$component->id]['name'] = $component->accommodationInventory->accommodation->title;
+                $components[$component->id]['name'] = $component->accommodationInventory->accommodation->name;
                 $components[$component->id]['room_type'] = $component->accommodationInventory->roomType->name;
             }
         }

@@ -36,7 +36,7 @@
                             <tbody>
                                 @foreach($orderAccommodations as $accommodation)
                                 <td>
-                                    {{($accommodation->accommodation->title)}}
+                                    {{($accommodation->accommodation->name)}}
                                 </td>
                                 <td>
                                     {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_in)->format('d-m-Y H:i')}}

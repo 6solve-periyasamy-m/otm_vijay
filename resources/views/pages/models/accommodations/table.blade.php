@@ -37,7 +37,7 @@
                     @include('partials.models.accommodations.row', [
                     'accommodation' => $accommodation,
                     'region_id' => $accommodation->region_id,
-                    'title' => $accommodation->title,
+                    'title' => $accommodation->name,
                     'description' => $accommodation->description,
                     'audit_date' => $accommodation->audit_date,
                     'address' => $accommodation->address,

@@ -30,12 +30,12 @@
                   <aside>
                     <img
                       src="https://picsum.photos/300/200"
-                      :alt="accommodation.title"
+                      :alt="accommodation.name"
                     />
                   </aside>
                   <div class="a-card__content">
                     <div class="active content">
-                      {{ accommodation.title }}
+                      {{ accommodation.name }}
                     </div>
                     <div class="label">Check-in</div>
                     <div class="content">
