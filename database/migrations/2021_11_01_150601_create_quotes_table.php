@@ -17,12 +17,15 @@ class CreateQuotesTable extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->boolean('is_converted');
-            $table->integer('customer_id')->index();
-            $table->integer('tour_id')->index();
+            $table->foreignId('customer_id')->index();
+            $table->foreignId('tour_id')->index();
             $table->integer('pax_number');
             $table->float('total_quote_value');
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

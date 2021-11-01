@@ -15,11 +15,12 @@ class CreatePaymentInstallmentsTable extends Migration
     {
         Schema::create('payment_installments', function (Blueprint $table) {
             $table->id();
-            $table->integer('tour_id')->index();
+            $table->foreignId('tour_id')->index();
             $table->float('amount', 10, 2);
             $table->date('due_on')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
         });
     }
 

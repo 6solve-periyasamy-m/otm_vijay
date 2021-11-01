@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentsTable extends Migration
+class CreateManualAdjustmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('manual_adjustments', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id');
-            $table->integer('payment_method_id');
+            $table->foreignId('order_id');
             $table->float('amount');
-            $table->dateTime('paid_on');
-            $table->string('payment_type'); // TODO: Should be enum but need to reconcile with voyager
+            $table->text('reason');
+            $table->dateTime('date');
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ class CreatePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('manual_adjustments');
     }
 }
