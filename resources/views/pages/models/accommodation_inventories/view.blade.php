@@ -6,7 +6,7 @@
     Accommodation Id: {{ $accommodationInventory->accommodation_id }}<br/>
     Room Type Id: {{ $accommodationInventory->room_type_id }}<br/>
     Board Type Id: {{ $accommodationInventory->board_type_id }}<br/>
-    Check In Date Time: {{ $accommodationInventory->check_in_date_time }}<br/>
+    Check In Date Time: {{ $accommodationInventory->check_in }}<br/>
     Checkin Confirmed: {{ $accommodationInventory->checked_in }}<br/>
     Check Out Date Time: {{ $accommodationInventory->check_out_date_time }}<br/>
     Checkout Confirmed: {{ $accommodationInventory->checked_out }}<br/>

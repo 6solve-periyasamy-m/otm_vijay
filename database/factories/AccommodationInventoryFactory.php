@@ -24,7 +24,7 @@ class AccommodationInventoryFactory extends Factory
         return [
             'board_type_id' => $this->faker->numberBetween(1, 4),
             'room_type_id' => $this->faker->numberBetween(1, 3),
-            'check_in_date_time' => now(),
+            'check_in' => now(),
             'checked_in' => true,
             'check_out_date_time' => now(),
             'checked_out' => false,

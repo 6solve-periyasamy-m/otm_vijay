@@ -7,7 +7,7 @@
       'accommodation_id' => $accommodationInventory->accommodation_id,
       'room_type_id' => $accommodationInventory->room_type_id,
       'board_type_id' => $accommodationInventory->board_type_id,
-      'check_in_date_time' => $accommodationInventory->check_in_date_time,
+      'check_in' => $accommodationInventory->check_in,
       'checked_in' => $accommodationInventory->checked_in,
       'check_out_date_time' => $accommodationInventory->check_out_date_time,
       'checked_out' => $accommodationInventory->checked_out,

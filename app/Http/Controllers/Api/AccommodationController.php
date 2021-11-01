@@ -37,7 +37,7 @@ class AccommodationController extends ApiController
             return [
                 "id" => $accommodationInventory->id,
                 "accommodation_id" => $accommodationInventory->accommodation->id,
-                "check_in_date_time" => $accommodationInventory->check_in_date_time->format('Y-m-d H:i:s'),
+                "check_in" => $accommodationInventory->check_in->format('Y-m-d H:i:s'),
                 "check_out_date_time" => $accommodationInventory->check_out_date_time->format('Y-m-d H:i:s'),
                 "accommodation_name" => $accommodationInventory->accommodation->title,
                 "accommodation_address" => $accommodationInventory->accommodation->address,
@@ -334,7 +334,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
      * tour: id, event_id
      * traveller: customer_id, order_id, room, shared, shares
      * customer_id is the key for order_customer
-     * room: accommodation_inventory_id, board_type_id/_name, check_in_date_time, maximum_occupancy, 
+     * room: accommodation_inventory_id, board_type_id/_name, check_in, maximum_occupancy, 
      * shared: { traveller_id: shares[names]}
      * shares: [[IDs (match with names)]]
      * Create a COD record but associate a secondary record for accommodation intent

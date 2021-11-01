@@ -13,12 +13,12 @@ class FlightInventory extends Model
 
     public $additional_attributes = ['flight_for_tour'];
     protected $cascadeDeletes = ['flightInventoryTour'];
-    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in_date_time','departure_date_time','arrival_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in','departure_date_time','arrival_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
 
     const RULES = [
         'travel_class_id' => 'required|exists:travel_classes,id',
         'flight_number' => 'required',
-        'check_in_date_time' => 'date',
+        'check_in' => 'date',
         'departure_date_time' => 'date',
         'arrival_date_time' => 'date',
         'stock' => 'required|numeric|integer',
@@ -28,7 +28,7 @@ class FlightInventory extends Model
     ];
 
     protected $casts = [
-        'check_in_date_time' => 'datetime',
+        'check_in' => 'datetime',
         'departure_date_time' => 'datetime',
         'arrival_date_time' => 'datetime',
     ];

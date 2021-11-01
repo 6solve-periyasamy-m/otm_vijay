@@ -19,10 +19,10 @@
             <tr>
                 <th scope="col">Room Type</th>
                 <th scope="col">Board Type</th>
-                <th scope="col">Check In Date Time</th>
-                <th scope="col">Checkin Confirmed</th>
-                <th scope="col">Check Out Date Time</th>
-                <th scope="col">Checkout Confirmed</th>
+                <th scope="col">Check In Time</th>
+                <th scope="col">Checked In</th>
+                <th scope="col">Check Out Time</th>
+                <th scope="col">Checked Out</th>
                 <th scope="col">Fit Selectable</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
@@ -36,7 +36,7 @@
                 <tr>
                     <td>{{ $accommodationInventory->roomType->room_type_name }}</td>
                     <td>{{ $accommodationInventory->boardType->board_type_name }}</td>
-                    <td>{{ $accommodationInventory->check_in_date_time }}</td>
+                    <td>{{ $accommodationInventory->check_in }}</td>
                     <td>{{ $accommodationInventory->checked_in == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->check_out_date_time }}</td>
                     <td>{{ $accommodationInventory->checked_out == 1 ? 'True' : 'False' }}</td>

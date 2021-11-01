@@ -26,7 +26,7 @@ class FlightInventoryController extends Controller
         $flightInventory = FlightInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
-            'check_in_date_time' => $request->input('check_in_date_time'),
+            'check_in' => $request->input('check_in'),
             'departure_date_time' => $request->input('departure_date_time'),
             'arrival_date_time' => $request->input('arrival_date_time'),
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
@@ -56,7 +56,7 @@ class FlightInventoryController extends Controller
         $flightInventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
-            'check_in_date_time' => $request->input('check_in_date_time'),
+            'check_in' => $request->input('check_in'),
             'departure_date_time' => $request->input('departure_date_time'),
             'arrival_date_time' => $request->input('arrival_date_time'),
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,

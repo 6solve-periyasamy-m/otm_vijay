@@ -23,7 +23,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 14,
                 'flight_id' => 10,
-                'check_in_date_time' => '2022-02-24 11:18:00',
+                'check_in' => '2022-02-24 11:18:00',
                 'departure_date_time' => '2022-02-24 12:18:00',
                 'arrival_date_time' => '2021-02-25 16:16:00',
                 'flight_number' => 'K6677',
@@ -42,7 +42,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 15,
                 'flight_id' => 7,
-                'check_in_date_time' => '2021-02-23 23:57:00',
+                'check_in' => '2021-02-23 23:57:00',
                 'departure_date_time' => '2021-02-24 02:57:00',
                 'arrival_date_time' => '2021-02-25 19:01:00',
                 'flight_number' => 'BA33',
@@ -61,7 +61,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 16,
                 'flight_id' => 8,
-                'check_in_date_time' => '2021-02-24 23:50:00',
+                'check_in' => '2021-02-24 23:50:00',
                 'departure_date_time' => '2021-02-24 23:50:00',
                 'arrival_date_time' => '2021-02-24 23:50:00',
                 'flight_number' => 'KLM7883',
@@ -80,7 +80,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 17,
                 'flight_id' => 8,
-                'check_in_date_time' => '2021-03-18 00:03:00',
+                'check_in' => '2021-03-18 00:03:00',
                 'departure_date_time' => '2021-03-18 00:03:00',
                 'arrival_date_time' => '2021-03-18 00:03:00',
                 'flight_number' => 'K7733',
@@ -99,7 +99,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 18,
                 'flight_id' => 10,
-                'check_in_date_time' => '2021-02-26 00:57:00',
+                'check_in' => '2021-02-26 00:57:00',
                 'departure_date_time' => '2021-02-26 00:57:00',
                 'arrival_date_time' => '2021-02-26 00:57:00',
                 'flight_number' => 'K6677',
@@ -118,7 +118,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 19,
                 'flight_id' => 8,
-                'check_in_date_time' => '2021-03-06 01:17:00',
+                'check_in' => '2021-03-06 01:17:00',
                 'departure_date_time' => '2021-02-26 01:17:00',
                 'arrival_date_time' => '2021-02-26 01:17:00',
                 'flight_number' => '3213',
@@ -137,7 +137,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 20,
                 'flight_id' => 8,
-                'check_in_date_time' => '2021-03-18 19:43:00',
+                'check_in' => '2021-03-18 19:43:00',
                 'departure_date_time' => '2021-03-03 19:43:00',
                 'arrival_date_time' => '2021-03-03 19:43:00',
                 'flight_number' => 'K7733',
@@ -156,7 +156,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 21,
                 'flight_id' => 7,
-                'check_in_date_time' => '2021-03-17 20:10:00',
+                'check_in' => '2021-03-17 20:10:00',
                 'departure_date_time' => '2021-03-03 20:10:00',
                 'arrival_date_time' => '2021-03-03 20:10:00',
                 'flight_number' => 'BA123321',
@@ -175,7 +175,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 22,
                 'flight_id' => 8,
-                'check_in_date_time' => '2021-03-03 20:11:00',
+                'check_in' => '2021-03-03 20:11:00',
                 'departure_date_time' => '2021-03-03 20:11:00',
                 'arrival_date_time' => '2021-03-03 20:11:00',
                 'flight_number' => 'BA123321',
@@ -194,7 +194,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 23,
                 'flight_id' => 7,
-                'check_in_date_time' => '2021-04-01 17:35:00',
+                'check_in' => '2021-04-01 17:35:00',
                 'departure_date_time' => '2021-04-01 18:36:00',
                 'arrival_date_time' => '2021-03-06 19:35:00',
                 'flight_number' => 'BA9999',
@@ -213,7 +213,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 24,
                 'flight_id' => 7,
-                'check_in_date_time' => '2021-04-01 17:35:00',
+                'check_in' => '2021-04-01 17:35:00',
                 'departure_date_time' => '2021-04-01 18:36:00',
                 'arrival_date_time' => '2021-03-06 19:35:00',
                 'flight_number' => 'BA9999',
@@ -232,7 +232,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 25,
                 'flight_id' => 7,
-                'check_in_date_time' => '2021-04-01 17:35:00',
+                'check_in' => '2021-04-01 17:35:00',
                 'departure_date_time' => '2021-04-01 18:36:00',
                 'arrival_date_time' => '2021-03-06 19:35:00',
                 'flight_number' => 'BA9999',
@@ -251,7 +251,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 26,
                 'flight_id' => 7,
-                'check_in_date_time' => '2021-04-01 17:35:00',
+                'check_in' => '2021-04-01 17:35:00',
                 'departure_date_time' => '2021-04-01 18:36:00',
                 'arrival_date_time' => '2021-03-06 19:35:00',
                 'flight_number' => 'BA9999',
@@ -270,7 +270,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 27,
                 'flight_id' => 12,
-                'check_in_date_time' => '2021-04-01 07:51:00',
+                'check_in' => '2021-04-01 07:51:00',
                 'departure_date_time' => '2021-03-08 07:51:00',
                 'arrival_date_time' => '2021-03-08 07:51:00',
                 'flight_number' => 'EJ6655',
@@ -289,7 +289,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 28,
                 'flight_id' => 12,
-                'check_in_date_time' => '2021-04-01 07:58:00',
+                'check_in' => '2021-04-01 07:58:00',
                 'departure_date_time' => '2021-03-08 07:58:00',
                 'arrival_date_time' => '2021-03-08 07:58:00',
                 'flight_number' => 'EJ7890',
@@ -308,7 +308,7 @@ class FlightInventoriesTableSeeder extends Seeder
             array (
                 'id' => 29,
                 'flight_id' => 14,
-                'check_in_date_time' => '2021-04-15 07:59:00',
+                'check_in' => '2021-04-15 07:59:00',
                 'departure_date_time' => '2021-03-08 07:59:00',
                 'arrival_date_time' => '2021-03-08 07:59:00',
                 'flight_number' => 'EJ1234',

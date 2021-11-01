@@ -3,7 +3,7 @@
     </td>
     <td>{{ $travel_class_id }}</td>
     <td>{{ $flight_number }}</td>
-    <td>{{ $check_in_date_time }}</td>
+    <td>{{ $check_in }}</td>
     <td>{{ $departure_date_time }}</td>
     <td>{{ $arrival_date_time }}</td>
     <td>{{ $fit_selectable }}</td>

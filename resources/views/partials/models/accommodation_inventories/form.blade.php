@@ -56,9 +56,9 @@
                     </div>
                 </div>                
                 <div class="form-group col-xl-6">
-                    <label for="check_in_date_time-input">Check In Date Time</label>
-                    <input type="datetime-local" name="check_in_date_time" value="{{ isset($check_in_date_time) ? $check_in_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="check_in_date_time-input">
+                    <label for="check_in-input">Check In Date Time</label>
+                    <input type="datetime-local" name="check_in" value="{{ isset($check_in) ? $check_in->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="check_in-input">
 
                     <p></p>
                     <input type="checkbox" name="checked_in" class="form-check-input" @if(isset($checked_in) && $checked_in == 1) checked @endif

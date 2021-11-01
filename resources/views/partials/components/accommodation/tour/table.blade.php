@@ -10,7 +10,7 @@
                 { "data": "location" },
                 { "data": "room_type" },
                 { "data": "board_type" },
-                { "data": "check_in_time" },
+                { "data": "check_in" },
                 { "data": "checked_in" },
                 { "data": "check_out_time" },
                 { "data": "check_out_confirmed" },

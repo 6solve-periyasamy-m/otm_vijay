@@ -35,7 +35,7 @@
                 <tr>
                     <td>{{ $flightInventory->flight_number }}</td>
                     <td>{{ $flightInventory->travelClass->title }}</td>
-                    <td>{{ $flightInventory->check_in_date_time }}</td>
+                    <td>{{ $flightInventory->check_in }}</td>
                     <td>{{ $flightInventory->departure_date_time }}</td>
                     <td>{{ $flightInventory->arrival_date_time }}</td>
                     <td>{{ $flightInventory->fit_selectable ? "Yes" : "No" }}</td>

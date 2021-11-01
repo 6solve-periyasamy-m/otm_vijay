@@ -7,7 +7,7 @@
       'flight_id' => $flightInventory->flight_id,
       'travel_class_id' => $flightInventory->travel_class_id,
       'flight_number' => $flightInventory->flight_number,
-      'check_in_date_time' => $flightInventory->check_in_date_time,
+      'check_in' => $flightInventory->check_in,
       'departure_date_time' => $flightInventory->departure_date_time,
       'arrival_date_time' => $flightInventory->arrival_date_time,
       'fit_selectable' => $flightInventory->fit_selectable,

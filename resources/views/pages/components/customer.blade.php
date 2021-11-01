@@ -39,7 +39,7 @@
                                     {{($accommodation->accommodation->title)}}
                                 </td>
                                 <td>
-                                    {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_in_date_time)->format('d-m-Y H:i')}}
+                                    {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_in)->format('d-m-Y H:i')}}
                                 </td>
                                 <td>
                                     {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_out_date_time)->format('d-m-Y H:i')}}

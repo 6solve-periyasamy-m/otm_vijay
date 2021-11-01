@@ -50,7 +50,7 @@
                                         {{$accommodation->accommodation->title . ' - ' . $accommodation->accommodation->region->name}}
                                     </td>
                                     <td>
-                                        {{Carbon\Carbon::parse($accommodation->check_in_date_time)->format('d-m-Y H:i')}}
+                                        {{Carbon\Carbon::parse($accommodation->check_in)->format('d-m-Y H:i')}}
                                     </td>
                                     <td>
                                         {{Carbon\Carbon::parse($accommodation->check_out_date_time)->format('d-m-Y H:i')}}

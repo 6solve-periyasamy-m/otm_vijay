@@ -37,9 +37,9 @@
                     <input name="flight_number" value="{{ $flight_number ?? "" }}" class="form-control" id="flight_number-input">
                 </div>                
                 <div class="form-group col-12">
-                    <label for="check_in_date_time-input">Check In Date Time</label>
-                    <input type="datetime-local" name="check_in_date_time" value="{{ isset($check_in_date_time) ? $check_in_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="check_in_date_time-input">
+                    <label for="check_in-input">Check In Date Time</label>
+                    <input type="datetime-local" name="check_in" value="{{ isset($check_in) ? $check_in->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="check_in-input">
                 </div>                
                 <div class="form-group col-12">
                     <label for="departure_date_time-input">Departure Date Time</label>

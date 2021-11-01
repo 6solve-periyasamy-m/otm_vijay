@@ -15,12 +15,12 @@ class AccommodationInventory extends Model
     // use ModelLogging;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in_date_time','checked_in','check_out_date_time','checked_out','fit_selectable','stock','purchase_price','sales_price','notes',];
+    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in','checked_in','check_out_date_time','checked_out','fit_selectable','stock','purchase_price','sales_price','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     const RULES = [
         'room_type_id' => 'required|exists:room_types,id',
         'board_type_id' => 'required|exists:board_types,id',
-        'check_in_date_time' => 'date',
+        'check_in' => 'date',
         'check_out_date_time' => 'date',
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
@@ -29,7 +29,7 @@ class AccommodationInventory extends Model
     ];
 
     protected $casts = [
-        'check_in_date_time' => 'datetime',
+        'check_in' => 'datetime',
         'check_out_date_time' => 'datetime',
     ];
     public $additional_attributes = ['Accommodation_for_tour'];
@@ -75,10 +75,10 @@ class AccommodationInventory extends Model
 
     public function getAccommodationForTourAttribute()
     {
-        $check_in_date_time = !is_null($this->check_in_date_time) ? $this->check_in_date_time->format('d/m/Y H:i') : "Unconfirmed";
+        $check_in = !is_null($this->check_in) ? $this->check_in->format('d/m/Y H:i') : "Unconfirmed";
         $check_out_date_time = !is_null($this->check_out_date_time) ? $this->check_out_date_time->format('d/m/Y H:i') : "Unconfirmed";
 
-        return "{$this->accommodation->title} - {$this->accommodation->region->name}｜Check in: {$check_in_date_time} - Check out: {$check_out_date_time}｜Room Type: {$this->roomType->room_type_name} - Board Type: {$this->boardType->board_type_name}";
+        return "{$this->accommodation->title} - {$this->accommodation->region->name}｜Check in: {$check_in} - Check out: {$check_out_date_time}｜Room Type: {$this->roomType->room_type_name} - Board Type: {$this->boardType->board_type_name}";
     }
 
     //TODO: move to Repo

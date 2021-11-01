@@ -91,7 +91,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'accommodations.id AS accommodation_id',
             'accommodations.title AS accommodation_name',
             DB::raw('CONCAT(`regions`.`name`, \' - \', `countries`.`name`) AS location'),
-            'accommodation_inventories.check_in_date_time AS check_in_time',
+            'accommodation_inventories.check_in AS check_in',
             'accommodation_inventories.check_out_date_time AS check_out_time',
             DB::raw('CASE WHEN `accommodation_inventories`.`checked_in` = 1 THEN \'Yes\' ELSE \'No\' END  AS checked_in'),
             DB::raw('CASE WHEN `accommodation_inventories`.`checked_out` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_out_confirmed'),
@@ -104,8 +104,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'accommodation_inventories.notes as notes'
         );
         $query->whereNotIn('accommodation_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in` AND `accommodation_inventories`.`check_out_date_time`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in` AND `accommodation_inventories`.`check_out_date_time`");
         return  $query->get();
     }
 }

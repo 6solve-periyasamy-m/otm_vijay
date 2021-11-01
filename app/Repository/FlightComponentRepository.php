@@ -88,7 +88,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
             'travel_classes.title AS travel_class',
             DB::raw('CASE WHEN `flights`.`is_domestic` = 1 THEN \'Yes\' ELSE \'No\' END AS is_domestic'),
             'flights.available_after AS available_after',
-            'flight_inventories.check_in_date_time AS check_in_time',
+            'flight_inventories.check_in AS check_in',
             'flight_inventories.departure_date_time AS departure_time',
             'departure_airports.name AS departure_airport',
             'flight_inventories.arrival_date_time AS arrival_time',
