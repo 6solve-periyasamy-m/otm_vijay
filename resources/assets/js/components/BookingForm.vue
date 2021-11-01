@@ -29,7 +29,7 @@
                             <div v-else>
                                     <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                                     <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                                    <booking-form-lead :lead_traveller="leadTraveller" :home_address="home_address" :billing_address="billing_address" :booking_token="bookingOrderToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                                    <booking-form-lead :booking_token="bookingOrderToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
                                     <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                                     <div v-if="tour && token">
                                         <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>

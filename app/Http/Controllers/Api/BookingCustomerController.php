@@ -147,7 +147,10 @@ class BookingCustomerController extends ApiController
                     Log::info('Billing Address Customer Validation passed', $billingValidated);
                 }
             } else {
-                $customer->billing_address_id = $customer->home_address_id;
+                // only switches for a customer update
+                if (isset($customer)) {
+                    $customer->billing_address_id = $customer->home_address_id;
+                }
             }
         } else {
             $validated = $request->validate([
@@ -194,6 +197,7 @@ class BookingCustomerController extends ApiController
             // $customer->email_address = $request->email_address;
             Log::debug('<<<<< create customer with ', $customerData);
             $customer = $customerRepo->create($customerData);
+
             if ($isLead) {
                 $customer = $this->create_addresses($request, $customer);
             }
@@ -282,6 +286,7 @@ Log::debug('.......about to save customer', [$customer]);
         //Log::debug('check address id ', [$home_address->id]);
         //Log::debug('check customer', [$customer]);
         if ($request->same_address) {
+            $customer->billing_address_id = $customer->home_address_id;
             return $customer;
         }
 

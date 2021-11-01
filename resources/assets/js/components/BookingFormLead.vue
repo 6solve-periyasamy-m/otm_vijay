@@ -2,17 +2,16 @@
     <div class="container">
         <div class="card card-options">
             <div class="card-header">
-          
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
-                    <p v-if="!lead_traveller && !show_traveller">Click this button to start your booking</p>
+                    <p v-if="!show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                         <font-awesome-icon icon="book-reader" />
                         Lead Traveller details
                     </button>
                 </h5>
 
-                <div class="card-info" v-if="!lead_traveller && !show_traveller">
+                <div class="card-info" v-if="!show_traveller">
                     <p><font-awesome-icon icon="arrow-right" />
                     No active booking. You may be able to retrieve your booking by email address.</p>
                     <input v-model="email" style="width: 100%" type="email" placeholder="Retrieve booking by email" />
@@ -26,7 +25,7 @@
                         <button @click="loginUser" class="btn btn-primary"><font-awesome-icon icon="check" />Login</button>
                     </div>
                 </div>
-                <div v-else>
+                <div v-if="token">
                     <font-awesome-icon icon="arrow-right" />
                     You can continue with your booking, please fill in all sections
                 </div>
@@ -234,7 +233,7 @@ import axios from 'axios'
 import { bus } from '../bus'
 import ValidationErrors from './ValidationErrors.vue'
 export default {
-    props: ['form_info', 'tour', 'booked', 'booking_token', 'lead_traveller'],
+    props: ['form_info', 'tour', 'booked', 'booking_token'],
     data() {
         return {
             debug: 6,
@@ -297,14 +296,6 @@ export default {
     },
     created() {
         let that = this
-        console.log('leadTraveller:::', this.lead_traveller)
-        /*
-         *
-        this.homeAddressFields.map(field => {
-            console.log('>>>>', field, that.lead_traveller)
-        //    this[field] = this.lead_traveller.home_address[field]
-        })
-        */
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('leadTravellerLoaded', customer)
             that.setCustomer(customer)
@@ -329,13 +320,6 @@ export default {
             that.billing_postcode = billing_address.postcode
             that.billing_country = billing_address.country
         })
-        
-        /*
-        bus.$on('setBookingToken', (token) => {
-            that.debug && console.log('EVENT: Lead Traveller created: setting token',  token)
-            that.token = token
-        })
-        */
     },
     mounted() {
         let that = this
