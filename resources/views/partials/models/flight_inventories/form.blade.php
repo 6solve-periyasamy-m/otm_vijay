@@ -42,14 +42,14 @@
                         id="check_in-input">
                 </div>                
                 <div class="form-group col-12">
-                    <label for="departs_at-input">Departure Date Time</label>
+                    <label for="departs_at-input">Departs At</label>
                     <input type="datetime-local" name="departs_at" value="{{ isset($departs_at) ? $departs_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
                         id="departs_at-input">
                 </div>
                 <div class="form-group col-12">
-                    <label for="arrival_date_time-input">Arrival Date Time</label>
-                    <input type="datetime-local" name="arrival_date_time" value="{{ isset($arrival_date_time) ? $arrival_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="arrival_date_time-input">
+                    <label for="arrives_at-input">Arrives At</label>
+                    <input type="datetime-local" name="arrives_at" value="{{ isset($arrives_at) ? $arrives_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="arrives_at-input">
                 </div>
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif >

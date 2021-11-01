@@ -29,7 +29,7 @@
               'travel_class_id' => $transportInventory->travel_class_id,
               'departs_at' => $transportInventory->departs_at,
               'departure_confirmed' => $transportInventory->departure_confirmed,
-              'arrival_date_time' => $transportInventory->arrival_date_time,
+              'arrives_at' => $transportInventory->arrives_at,
               'arrival_confirmed' => $transportInventory->arrival_confirmed,
               'fit_selectable' => $transportInventory->fit_selectable,
               'stock' => $transportInventory->stock,

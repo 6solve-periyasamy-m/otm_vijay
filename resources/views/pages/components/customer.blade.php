@@ -201,7 +201,7 @@
                                         {{ $transport->transport->departureLocation->name }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($transport->transportInventory->arrival_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($transport->transportInventory->arrives_at)->format('d-m-Y H:i') }}
                                     </td>
                                 </tr>
                                 @endforeach

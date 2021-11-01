@@ -25,7 +25,7 @@ class TransportInventoryFactory extends Factory
             'travel_class_id' => $this->faker->numberBetween(1, 2),
             'departs_at' => now(),
             'departure_confirmed' => true,
-            'arrival_date_time' => now(),
+            'arrives_at' => now(),
             'arrival_confirmed' => false,
             'fit_selectable' => true,
             'stock' => $this->faker->numberBetween(1, 10),

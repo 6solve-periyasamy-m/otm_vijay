@@ -9,7 +9,7 @@
       'flight_number' => $flightInventory->flight_number,
       'check_in' => $flightInventory->check_in,
       'departs_at' => $flightInventory->departs_at,
-      'arrival_date_time' => $flightInventory->arrival_date_time,
+      'arrives_at' => $flightInventory->arrives_at,
       'fit_selectable' => $flightInventory->fit_selectable,
       'stock' => $flightInventory->stock,
       'purchase_price' => $flightInventory->purchase_price,

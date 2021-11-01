@@ -41,7 +41,7 @@ $(document).ready(function() {
                 <td>{{ $transportInventory->travelClass->name }}</td>
                 <td>{{ $transportInventory->departs_at }}</td>
                 <td>{{ $transportInventory->departure_confirmed ? "Yes" : "No" }}</td>
-                <td>{{ $transportInventory->arrival_date_time }}</td>
+                <td>{{ $transportInventory->arrives_at }}</td>
                 <td>{{ $transportInventory->arrival_confirmed ? "Yes" : "No" }}</td>
                 <td>{{ $transportInventory->fit_selectable ? "Yes" : "No" }}</td>
                 <td>{{ $transportInventory->stock }}</td>

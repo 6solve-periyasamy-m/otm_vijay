@@ -5,7 +5,7 @@
     <td>{{ $flight_number }}</td>
     <td>{{ $check_in }}</td>
     <td>{{ $departs_at }}</td>
-    <td>{{ $arrival_date_time }}</td>
+    <td>{{ $arrives_at }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $purchase_price }}</td>

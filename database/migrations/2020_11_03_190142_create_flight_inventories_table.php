@@ -18,7 +18,7 @@ class CreateFlightInventoriesTable extends Migration
             $table->integer('flight_id');
             $table->dateTime('check_in')->nullable();
             $table->dateTime('departs_at')->nullable();
-            $table->dateTime('arrival_date_time')->nullable();
+            $table->dateTime('arrives_at')->nullable();
             $table->string('flight_number', 255);
             $table->integer('travel_class_id');
             $table->boolean('fit_selectable')->default(true);

@@ -278,7 +278,7 @@
     {{ $transport->arrivalLocation }}
 </td>
 <td>
-    {{ Carbon\Carbon::parse($transport->arrival_date_time)->format('d-m-Y H:i') }}
+    {{ Carbon\Carbon::parse($transport->arrives_at)->format('d-m-Y H:i') }}
 </td>
 <td>
     <input type="text"

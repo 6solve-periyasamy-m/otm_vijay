@@ -93,7 +93,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             'transport_inventories.departs_at AS departure_date',
             DB::raw('CASE WHEN `transport_inventories`.`departure_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END AS departure_confirmed'),
             'arrival_locations.name AS arrival_location',
-            'transport_inventories.arrival_date_time AS arrival_date',
+            'transport_inventories.arrives_at AS arrival_date',
             DB::raw('CASE WHEN `transport_inventories`.`arrival_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END AS arrival_confirmed'),
             DB::raw('CASE WHEN `transport_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END AS fit_selectable'),
             'transport_inventories.stock AS stock',
@@ -102,8 +102,8 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             'transport_inventories.notes AS notes'
         );
         $query->whereNotIn('transport_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrival_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrival_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrives_at`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrives_at`");
         return $query->get();
     }
 }
