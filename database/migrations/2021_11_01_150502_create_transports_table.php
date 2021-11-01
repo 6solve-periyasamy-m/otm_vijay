@@ -15,10 +15,10 @@ class CreateTransportsTable extends Migration
     {
         Schema::create('transports', function (Blueprint $table) {
             $table->id();
-            $table->integer('transport_type_id');
-            $table->integer('operator_id');
-            $table->integer('departure_location_id');
-            $table->integer('arrival_location_id');
+            $table->foreignId('transport_type_id');
+            $table->foreignId('operator_id');
+            $table->foreignId('departure_location_id');
+            $table->foreignId('arrival_location_id');
             $table->boolean('is_domestic')->default(true);
             $table->text('name');
             $table->text('description')->nullable();
@@ -26,6 +26,10 @@ class CreateTransportsTable extends Migration
             $table->string('currency', 5)->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('transport_type_id')->references('id')->on('transport_types')->onDelete('cascade');
+            $table->foreign('operator_id')->references('id')->on('operators')->onDelete('cascade');
+            $table->foreign('departure_location_id')->references('id')->on('locations')->onDelete('cascade');
+            $table->foreign('arrival_location_id')->references('id')->on('locations')->onDelete('cascade');
         });
     }
 
