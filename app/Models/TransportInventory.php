@@ -12,15 +12,15 @@ class TransportInventory extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_id','travel_class_id','departure_date_time','departure_confirmed','arrival_date_time','arrival_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['transport_id','travel_class_id','departs_at','departure_confirmed','arrival_date_time','arrival_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
-        "departure_date_time" => "datetime",
+        "departs_at" => "datetime",
         "arrival_date_time" => "datetime"
     ];
     const RULES = [
         'travel_class_id' => 'required|exists:travel_classes,id',
-        'departure_date_time' => 'date',
+        'departs_at' => 'date',
         'arrival_date_time' => 'date',
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
@@ -80,11 +80,11 @@ class TransportInventory extends Model
         $departure_location = Location::getLocationById($this->transport->departure_location_id);
         $arrival_location = Location::getLocationById($this->transport->arrival_location_id);
  
-        $departure_date_time =  $this->departure_date_time->format('d/m/Y H:i');
+        $departs_at =  $this->departs_at->format('d/m/Y H:i');
         $arrival_date_time = $this->arrival_date_time->format('d/m/Y H:i');
 
-        return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departure_date_time} - Arrives: {$arrival_date_time}";
+        return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrival_date_time}";
 	// build server edit: remove transport travelClass
-        //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departure_date_time} - Arrives: {$arrival_date_time}｜Travel Class: {$this->travelClass->name}";
+        //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrival_date_time}｜Travel Class: {$this->travelClass->name}";
     }
 }

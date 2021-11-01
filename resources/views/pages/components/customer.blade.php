@@ -195,7 +195,7 @@
                                         {{ $transport->transport->departureLocation->name }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($transport->transportInventory->departure_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($transport->transportInventory->departs_at)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
                                         {{ $transport->transport->departureLocation->name }}

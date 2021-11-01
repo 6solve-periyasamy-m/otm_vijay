@@ -33,9 +33,9 @@
                     </div>
                 </div>                
                 <div class="form-group col-12 col-xl-6">
-                    <label for="departure_date_time-input">Departure Date Time</label>
-                    <input type="datetime-local" name="departure_date_time" value="{{ isset($departure_date_time) ? $departure_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="departure_date_time-input">
+                    <label for="departs_at-input">Departure Date Time</label>
+                    <input type="datetime-local" name="departs_at" value="{{ isset($departs_at) ? $departs_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="departs_at-input">
                     <p></p>
                     <input type="checkbox" name="departure_confirmed" class="form-check-input" @if(isset($departure_confirmed) && $departure_confirmed == 1) checked @endif
                         id="departure_confirmed-input">

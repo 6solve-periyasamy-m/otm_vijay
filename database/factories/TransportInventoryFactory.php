@@ -23,7 +23,7 @@ class TransportInventoryFactory extends Factory
     {
         return [
             'travel_class_id' => $this->faker->numberBetween(1, 2),
-            'departure_date_time' => now(),
+            'departs_at' => now(),
             'departure_confirmed' => true,
             'arrival_date_time' => now(),
             'arrival_confirmed' => false,

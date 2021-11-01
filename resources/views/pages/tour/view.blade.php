@@ -178,7 +178,7 @@
                             </thead>
                             @foreach($flights as $flight)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrival_date_time }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
@@ -209,7 +209,7 @@
                             </thead>
                             @foreach($transports as $transport)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrival_date_time }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>

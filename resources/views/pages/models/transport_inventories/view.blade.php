@@ -5,7 +5,7 @@
 @section('content')
     Transport Id: {{ $transportInventory->transport_id }}<br/>
     Travel Class Id: {{ $transportInventory->travel_class_id }}<br/>
-    Departure Date Time: {{ $transportInventory->departure_date_time }}<br/>
+    Departure Date Time: {{ $transportInventory->departs_at }}<br/>
     Departure Confirmed: {{ $transportInventory->departure_confirmed }}<br/>
     Arrival Date Time: {{ $transportInventory->arrival_date_time }}<br/>
     Arrival Confirmed: {{ $transportInventory->arrival_confirmed }}<br/>

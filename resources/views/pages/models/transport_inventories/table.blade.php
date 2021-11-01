@@ -27,7 +27,7 @@
               'transportInventory' => $transportInventory,
               'transport_id' => $transportInventory->transport_id,
               'travel_class_id' => $transportInventory->travel_class_id,
-              'departure_date_time' => $transportInventory->departure_date_time,
+              'departs_at' => $transportInventory->departs_at,
               'departure_confirmed' => $transportInventory->departure_confirmed,
               'arrival_date_time' => $transportInventory->arrival_date_time,
               'arrival_confirmed' => $transportInventory->arrival_confirmed,

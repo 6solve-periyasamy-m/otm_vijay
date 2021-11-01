@@ -272,7 +272,7 @@
     {{ $transport->departureLocation }}
 </td>
 <td>
-    {{ Carbon\Carbon::parse($transport->departure_date_time)->format('d-m-Y H:i') }}
+    {{ Carbon\Carbon::parse($transport->departs_at)->format('d-m-Y H:i') }}
 </td>
 <td>
     {{ $transport->arrivalLocation }}
