@@ -29,7 +29,7 @@ class CustomerController extends ApiController
         }
 
         $home_address = null;
-        $business_address = null;
+        $billing_address = null;
         $customers = new Customer();
         $customer = $customers->where('login_token', $token)->first();
         if (empty($customer)) {
@@ -45,13 +45,13 @@ class CustomerController extends ApiController
         if (isset($customer->home_address_id)) {
             $home_address = $addressRepo->get($customer->home_address_id);
         }
-        if (isset($customer->business_address_id)) {
-            $business_address = $addressRepo->get($customer->business_address_id);
+        if (isset($customer->billing_address_id)) {
+            $billing_address = $addressRepo->get($customer->billing_address_id);
         }
 Log::info('ADDRESS present?', $customer->toArray());
 isset($home_address) && Log::info('check home_address', $home_address);
-isset($business_address) && Log::info('business', $business_address);
-        return response()->json(['success' => true, 'customer' => $customer, 'home_address' => $home_address, 'business_address' => $business_address]);
+isset($billing_address) && Log::info('business', $billing_address);
+        return response()->json(['success' => true, 'customer' => $customer, 'home_address' => $home_address, 'billing_address' => $billing_address]);
     }
 
     public function DEPRECATE_getCustomerOrderByToken($token = null)

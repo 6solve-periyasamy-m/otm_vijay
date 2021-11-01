@@ -27,7 +27,6 @@ class AddressRepository implements AddressRepositoryInterface
     public function get($address_id)
     {
         $address = $this->model->find($address_id);
-        Log::info('****** address-repo ID, address record : ' . $address_id, $address->toArray());
         if (isset($address)) {
             return $address->toArray();
         }
@@ -55,9 +54,10 @@ class AddressRepository implements AddressRepositoryInterface
      * update 
      *
      * @param array $address (array of new fields to update model)
-     * @return void
+     * @return Object
      */
     public function update(array $address) {
+        Log::debug('&&&& address update with ', [$address]);
         if (empty($address['id'])) {
             throw new \Exception('address update does not see an address_id');
         }
@@ -65,18 +65,20 @@ class AddressRepository implements AddressRepositoryInterface
         if (empty($currentAddress)) {
             throw new \Exception('address update can not load the current address');
         }
+        Log::debug('&&&& checking address fields');
         foreach ($this->fields as $field) {
             if (isset($address[$field]) && $address[$field] !== $currentAddress->$field) {
                 $currentAddress->$field = $address[$field];
                 Log::info('check address model', [$field, $address[$field], $this->model->$field]);
+            } else {
+                Log::debug('&&& field not set or not changed', [$field, $address[$field]]);
             }
         }
         try {
             $currentAddress->save();
-            return $currentAddress;
         } catch (\Exception $e) {
             Log::debug('error updating customer' . $e->getMessage());
         }
-        return null;
+        return $currentAddress;
     }
 }

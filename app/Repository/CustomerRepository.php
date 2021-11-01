@@ -57,23 +57,24 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function update(array $customer) {
         $customerRecord = $this->model->where('email_address', $customer['email_address'])->first();
-    Log::debug('%%%%% 1. updating this customer', [$customerRecord]);
         if (empty($customerRecord) || $customerRecord->count() === 0) {
             throw new \Exception('Can not update a customer with an email address does not exist');
         }
         foreach ($this->fields as $field) {
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
-                $this->model->$field = $customer[$field];
+                // $this->model->$field = $customer[$field];
+                $customerRecord->$field = $customer[$field];
                 $this->logging && Log::info('check model', [$field, $customer[$field], $this->model->$field]);
             }
         }
-    Log::debug('%%%%% 2. updating this customer', [$customerRecord]);
+        // force the billing_address_id (as it is not in the request) 
+        $customerRecord->billing_address_id = $customer['billing_address_id'];
         try {
             $customerRecord->save();
             $this->logging && Log::info('customer saved: ', $this->model->toArray());
-            return $customerRecord; //$this->model;
+            return $customerRecord;
         } catch (\Exception $e) {
-            Log::debug('error updating customer' . $e->getMessage());
+            Log::error('error updating customer' . $e->getMessage());
         }
         return null;
     }

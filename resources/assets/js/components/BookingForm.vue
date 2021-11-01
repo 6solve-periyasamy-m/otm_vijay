@@ -122,11 +122,14 @@ export default {
                         that.leadTraveller = customer
                         const home_address = response.data.home_address
                         const billing_address = response.data.billing_address
+console.log(response.data)
                         bus.$emit('setBookingToken', that.bookingOrderToken)
                         bus.$emit('leadTravellerLoaded', that.leadTraveller)
                         bus.$emit('homeAddressLoaded', home_address)
+
                         if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
-                            bus.$emit('businessAddressLoaded', billing_address)
+                            console.log('BILLING loading...', customer, billing_address)
+                            bus.$emit('billingAddressLoaded', billing_address)
                         }
                         that.login = that.leadTraveller.email_address
                     }

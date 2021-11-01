@@ -11,10 +11,7 @@
                         Lead Traveller details
                     </button>
                 </h5>
-                <div v-if="lead_traveller">
-                    <font-awesome-icon icon="arrow-right" />
-                    You can continue with your booking, please fill in all sections
-                </div>
+
                 <div class="card-info" v-if="!lead_traveller && !show_traveller">
                     <p><font-awesome-icon icon="arrow-right" />
                     No active booking. You may be able to retrieve your booking by email address.</p>
@@ -29,6 +26,10 @@
                         <button @click="loginUser" class="btn btn-primary"><font-awesome-icon icon="check" />Login</button>
                     </div>
                 </div>
+                <div v-else>
+                    <font-awesome-icon icon="arrow-right" />
+                    You can continue with your booking, please fill in all sections
+                </div>
             </div>
             {{debug ? 'DEBUG MODE: Order retrieved by cookie: token: '+ token : ''}}
             <div class="card-body" v-if="show_traveller">
@@ -36,20 +37,6 @@
                     <div class="card-options">
                         <div class="ept-form">
                             <h4>Your Details</h4>
-                            <div class="row">
-                                <div class="col-sm-6 form-group field-separation">
-                                    <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
-                                    <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
-                                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                                    <label v-else class="valid">Email address</label>
-                                </div>
-                                <div class="col-sm-6 form-group field-separation">
-                                    <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                                    <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
-                                    <label :class="{invalid: mobile_number_invalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                                    <label class="valid" v-else>{{mobile_number_validation}}</label>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-3 form-group field-separation">
                                     <select v-model="title" class="form-control form-select form-select-lg">
@@ -75,7 +62,21 @@
                                     <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
                                 </div>
                             </div>
-    
+                            <div class="row">
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="email_address" v-show="email_address">E-mail <span v-if="email" class="small">(You can not change your email address in this form)</span></label>
+                                    <input v-if="email" readonly type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
+                                    <input v-else type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
+                                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
+                                    <label v-else class="valid">Email address</label>
+                                </div>
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
+                                    <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
+                                    <label :class="{invalid: mobile_number_invalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
+                                    <label class="valid" v-else>{{mobile_number_validation}}</label>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation has-dropdown">
@@ -305,9 +306,10 @@ export default {
         })
         */
         bus.$on('leadTravellerLoaded', (customer) => {
-            console.log('leadTravellerLoaded', customer);
+            console.log('leadTravellerLoaded', customer)
             that.setCustomer(customer)
             that.same_address = customer.home_address_id === customer.billing_address_id
+            that.email = that.email_address
         })
         bus.$on('homeAddressLoaded', home_address => {
             that.address_line_1 = home_address.address_line_1
@@ -318,14 +320,14 @@ export default {
             that.postcode = home_address.postcode
             that.country = home_address.country
         })
-        bus.$on('businessAddressLoaded', billing_address => {
+        bus.$on('billingAddressLoaded', billing_address => {
             that.billing_address_line_1 = billing_address.address_line_1
             that.billing_address_line_2 = billing_address.address_line_2
             that.billing_address_line_3 = billing_address.address_line_3
-            that.business_town = billing_address.town
-            that.business_region = billing_address.region
-            that.business_postcode = billing_address.postcode
-            that.business_country = billing_address.country
+            that.billing_town = billing_address.town
+            that.billing_region = billing_address.region
+            that.billing_postcode = billing_address.postcode
+            that.billing_country = billing_address.country
         })
         
         /*
@@ -361,9 +363,7 @@ export default {
             const username = this.email
             const password = this.password
             const t = new Date()
-            // todo: request the salt from the server
-            // or just use a server based login in an iframe
-            // const salt = (11+ Math.floor(t.getTime() / 1000) % 1757) ** 5;
+            // request a salt value from the server which is then used in the encryption
             axios.get(`/api/booking/auth/token/${username}`)
                 .then(response => {
                     const salt = response.data.auth
@@ -445,8 +445,6 @@ export default {
                     that[key] = customer[key]
                 }
             })
-            let allSame = true
-            console.log(customer)
             if (customer.homeAddressFields) {
                 customer.homeAddressFields.map(field => {
                     field = customer.homeAddressFields.field
@@ -457,18 +455,6 @@ export default {
                     field = customer.businessAddressFields.field
                 })
             }
-            /*
-            this.addressFields.forEach(function(key, value) {
-                let addresskey = key.replace('address_', '')
-                let billingKey = `billing_${addresskey}`
-                that.debug && console.log(key, billingKey, customer[key], customer[billingKey])
-                if (customer[key] != customer[billingKey]) {
-                    allSame = false
-                }
-            })
-            this.debug && console.log('billing address matches', allSame)
-            this.same_address = allSame
-            */
             this.full_name = customer.first_name + ' ' + customer.last_name
         },
         toggleTraveller() {
@@ -508,6 +494,10 @@ export default {
             const valid = valid_email.test(this.email_address)
             this.debug && console.log(this.email, valid)
             this.email_invalid = !valid
+            if (this.email && this.email_address !== this.email) {
+                alert('you can not change your email address in this form, contact support');
+                this.email_address = this.email
+            }
         },
         setLoginToken(email_address, login_token) {
             axios.post('/api/booking/set-login-token', {
