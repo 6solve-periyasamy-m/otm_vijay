@@ -16,7 +16,6 @@ class CreateToursTable extends Migration
         Schema::create('tours', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('event_id')->nullable();
-            $table->integer('payment_plan_id')->nullable();
             $table->string('title', 90);
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
