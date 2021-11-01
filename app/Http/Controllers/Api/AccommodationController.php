@@ -391,7 +391,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
             ->first();
 
         //$ordersCustomer = OrdersCustomer::where('customer_id', $customer->id)->where('order_id', $order->id)->firstOrFail();
-        ActionsRepository::log('Accommodation Booking', $ordersCustomer->customer_id, $ordersCustomer->order_id, $reference, 'Customer Order '.$ordersCustomer->id . ' for tour '.$tour->title);
+        ActionsRepository::log('Accommodation Booking', $ordersCustomer->customer_id, $ordersCustomer->order_id, $reference, 'Customer Order '.$ordersCustomer->id . ' for tour '.$tour->name);
         
         $customer_order_detail = $this->getAccommodationBookingForCustomer($tour, $ordersCustomer, $reference);
         if (isset($customer_order_detail)) {

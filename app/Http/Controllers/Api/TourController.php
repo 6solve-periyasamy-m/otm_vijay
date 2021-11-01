@@ -35,7 +35,7 @@ class TourController extends ApiController
 
         return response()->json([
             "success" => true,
-            "title" => $tour->title,
+            "title" => $tour->name,
             "description" => $tour->description,
             "base_price_per_person" => $tour->base_price_per_person,
             // tour_colour - is an ID so i'm assuming there would be a relationship, doesn't exist yet

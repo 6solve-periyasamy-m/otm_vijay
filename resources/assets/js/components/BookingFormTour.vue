@@ -27,7 +27,7 @@
                         <select v-model="tour">
                                 <option default value="">Select</option>
                                 <option v-for="tour in tours.data" :key="tour.id">
-                                    {{ tour.title }}
+                                    {{ tour.name }}
                                 </option>
                             </select>
                         </label>

@@ -8,7 +8,7 @@
             <div class="bookingform-header__title">
                 <h1 class="bookingform-header__title--main">Octopus Travel Matrix Booking Form</h1>
                 <h2 v-if="event != null">{{event.event_title}}</h2>
-                <h3 v-if="tour != null">{{tour.title}} <br/>from {{ startDate(event) }} To {{endDate(event) }}</h3>
+                <h3 v-if="tour != null">{{tour.name}} <br/>from {{ startDate(event) }} To {{endDate(event) }}</h3>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <tr>
-    <td><a href="{{ route('tours.view', ['tour' => $tour,]) }}">{{ $title }}</a></td>
+    <td><a href="{{ route('tours.view', ['tour' => $tour,]) }}">{{ $name }}</a></td>
     <td>{{ $event }}</td>
     <td>{{ $description }}</td>
     <td>{{ $date_from }}</td>

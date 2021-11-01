@@ -7,7 +7,7 @@
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
                             <h1 v-if="event != null">{{event.event_title}}</h1>
-                            <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
+                            <h2 v-if="tour != null">{{tour.name}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
                             <div v-if="selectOrder.length>1 && order_selected === null">
                                 <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected" >
                                     <option value="">Select an Order</option>
