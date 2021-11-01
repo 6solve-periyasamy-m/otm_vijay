@@ -5,7 +5,7 @@
     <td>{{ $room_type_id }}</td>
     <td>{{ $board_type_id }}</td>
     <td>{{ $check_in_date_time }}</td>
-    <td>{{ $checkin_confirmed }}</td>
+    <td>{{ $checked_in }}</td>
     <td>{{ $check_out_date_time }}</td>
     <td>{{ $checkout_confirmed }}</td>
     <td>{{ $fit_selectable }}</td>

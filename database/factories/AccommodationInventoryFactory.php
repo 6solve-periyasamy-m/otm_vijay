@@ -25,7 +25,7 @@ class AccommodationInventoryFactory extends Factory
             'board_type_id' => $this->faker->numberBetween(1, 4),
             'room_type_id' => $this->faker->numberBetween(1, 3),
             'check_in_date_time' => now(),
-            'checkin_confirmed' => true,
+            'checked_in' => true,
             'check_out_date_time' => now(),
             'checkout_confirmed' => false,
             'fit_selectable' => true,

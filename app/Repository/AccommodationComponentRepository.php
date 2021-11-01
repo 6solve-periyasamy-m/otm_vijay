@@ -93,7 +93,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             DB::raw('CONCAT(`regions`.`name`, \' - \', `countries`.`name`) AS location'),
             'accommodation_inventories.check_in_date_time AS check_in_time',
             'accommodation_inventories.check_out_date_time AS check_out_time',
-            DB::raw('CASE WHEN `accommodation_inventories`.`checkin_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_in_confirmed'),
+            DB::raw('CASE WHEN `accommodation_inventories`.`checked_in` = 1 THEN \'Yes\' ELSE \'No\' END  AS checked_in'),
             DB::raw('CASE WHEN `accommodation_inventories`.`checkout_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_out_confirmed'),
             'room_types.room_type_name AS room_type',
             'board_types.board_type_name AS board_type',

@@ -26,7 +26,7 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->double('sales_price')->nullable();
             $table->text('currency')->nullable();
             $table->text('notes')->nullable();
-            $table->boolean('checkin_confirmed')->default(false);
+            $table->boolean('checked_in')->default(false);
             $table->boolean('checkout_confirmed')->default(false);
             $table->timestamps();
             $table->softDeletes();

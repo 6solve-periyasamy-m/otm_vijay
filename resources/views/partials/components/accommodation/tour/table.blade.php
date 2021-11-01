@@ -11,7 +11,7 @@
                 { "data": "room_type" },
                 { "data": "board_type" },
                 { "data": "check_in_time" },
-                { "data": "check_in_confirmed" },
+                { "data": "checked_in" },
                 { "data": "check_out_time" },
                 { "data": "check_out_confirmed" },
                 { "data": "fit_selectable" },

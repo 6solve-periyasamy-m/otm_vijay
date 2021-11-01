@@ -61,9 +61,9 @@
                         id="check_in_date_time-input">
 
                     <p></p>
-                    <input type="checkbox" name="checkin_confirmed" class="form-check-input" @if(isset($checkin_confirmed) && $checkin_confirmed == 1) checked @endif
-                        id="checkin_confirmed-input">
-                    <label for="checkin_confirmed-input" class="form-check-label">Checkin Confirmed</label>
+                    <input type="checkbox" name="checked_in" class="form-check-input" @if(isset($checked_in) && $checked_in == 1) checked @endif
+                        id="checked_in-input">
+                    <label for="checked_in-input" class="form-check-label">Checked In</label>
                 </div>                                                
                 <div class="form-group col-xl-6">
                     <label for="check_out_date_time-input">Check Out Date Time</label>
@@ -72,7 +72,7 @@
                     <p></p>
                     <input type="checkbox" name="checkout_confirmed" class="form-check-input" @if(isset($checkout_confirmed) && $checkout_confirmed == 1) checked @endif
                         id="checkout_confirmed-input">
-                    <label for="checkout_confirmed-input" class="form-check-label">Checkout Confirmed</label>
+                    <label for="checkout_confirmed-input" class="form-check-label">Checked Out</label>
                 </div>                
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif >
