@@ -22,7 +22,7 @@ class BoardTypeController extends Controller
     public function store(Request $request)
     {
         $boardType = BoardType::create([
-            'board_type_name' => $request->input('board_type_name'),
+            'name' => $request->input('name'),
         ]);
         return redirect()->route('board-types.view', ['boardType' => $boardType,]);
     }
@@ -40,7 +40,7 @@ class BoardTypeController extends Controller
     public function update(Request $request, BoardType $boardType)
     {
         $boardType->update([
-            'board_type_name' => $request->input('board_type_name'),
+            'name' => $request->input('name'),
         ]);
         return redirect()->route('board-types.view', ['boardType' => $boardType,]);
     }

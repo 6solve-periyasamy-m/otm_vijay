@@ -36,7 +36,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         foreach (BoardType::all() as $boardType) {
             $subData = [];
             $subData['id'] = $boardType->id;
-            $subData['text'] = $boardType->board_type_name;
+            $subData['text'] = $boardType->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -58,7 +58,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $boardType = BoardType::findOrFail($id);
         $data = [];
         $data['id'] = $boardType->id;
-        $data['text'] = $boardType->board_type_name;
+        $data['text'] = $boardType->name;
         return $data;
     }
 

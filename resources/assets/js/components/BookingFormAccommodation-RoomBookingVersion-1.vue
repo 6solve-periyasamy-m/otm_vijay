@@ -148,6 +148,7 @@
                     <div class="label">Room type</div>
                     <div class="content">
                       {{ booking.accommodation.board_type_name }}
+                      <!-- TODO: Nic, may need rename. board_type_name -> name. -->
                       <br />
                       <span v-if="shared(booking)">Shared</span>
                       {{ booking.accommodation.room_type_name }}

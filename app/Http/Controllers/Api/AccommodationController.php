@@ -42,7 +42,7 @@ class AccommodationController extends ApiController
                 "accommodation_name" => $accommodationInventory->accommodation->title,
                 "accommodation_address" => $accommodationInventory->accommodation->address,
                 "room_type" => $accommodationInventory->roomType->name,
-                "board_type" => $accommodationInventory->boardType->board_type_name,
+                "board_type" => $accommodationInventory->boardType->name,
                 "booking_policy" => $accommodationInventory->booking_policy,
             ];
         })->toArray();
@@ -164,7 +164,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
 
     public function loadRoomsForTour(Tour $tour, $order_id) {
         /*
-            select ait.tour_id,`name`, maximum_occupancy, board_type_name, stock, ai.sales_price, ait.sales_price as tour_sales_price, ai.booking_policy
+            select ait.tour_id,`name`, maximum_occupancy, name, stock, ai.sales_price, ait.sales_price as tour_sales_price, ai.booking_policy
             from accommodation_inventory_tours ait 
             join accommodation_inventories ai on ait.accommodation_inventory_id=ai.id
             join room_types rt on rt.id=ai.room_type_id
@@ -185,7 +185,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
             'room_types.name',
             'room_types.maximum_occupancy',
             'board_types.id as board_type_id', 
-            'board_types.board_type_name');
+            'board_types.name');
         $rooms = $rooms->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id','accommodation_inventories.id')
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
@@ -203,7 +203,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
         $customer_order_detail->component_type = $this->component_type;
         $customer_order_detail->orders_customer_id = $ordersCustomer->id;
         $customer_order_detail->inventory_tour_id = $accommodationInventoryTour->id;
-        $customer_order_detail->type = $boardType->board_type_name;
+        $customer_order_detail->type = $boardType->name;
         $customer_order_detail->date_time = date('Y-m-d H:i:s');
         $customer_order_detail->addon = 0;
         $customer_order_detail->cost = $accommodationInventory->sales_price;

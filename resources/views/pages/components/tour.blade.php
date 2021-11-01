@@ -59,7 +59,7 @@
                                         {{ $accommodation->roomType->name }}
                                     </td>
                                     <td>
-                                        {{ $accommodation->boardType->board_type_name }}
+                                        {{ $accommodation->boardType->name }}
                                     </td>
                                     <td>
                                         <input type="text"

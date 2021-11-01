@@ -20,7 +20,7 @@ class BoardTypesTableSeeder extends Seeder
         \DB::table('board_types')->insert(array (
             0 => 
             array (
-                'board_type_name' => 'Full Board',
+                'name' => 'Full Board',
                 'created_at' => '2021-09-10 08:58:48',
                 'deleted_at' => NULL,
                 'id' => 1,
@@ -28,7 +28,7 @@ class BoardTypesTableSeeder extends Seeder
             ),
             1 => 
             array (
-                'board_type_name' => 'Half Board',
+                'name' => 'Half Board',
                 'created_at' => '2021-09-10 08:58:57',
                 'deleted_at' => NULL,
                 'id' => 2,
@@ -36,7 +36,7 @@ class BoardTypesTableSeeder extends Seeder
             ),
             2 => 
             array (
-                'board_type_name' => 'Self Catered',
+                'name' => 'Self Catered',
                 'created_at' => '2021-09-10 08:59:00',
                 'deleted_at' => NULL,
                 'id' => 3,
@@ -44,7 +44,7 @@ class BoardTypesTableSeeder extends Seeder
             ),
             3 => 
             array (
-                'board_type_name' => 'Bed & Breakfast',
+                'name' => 'Bed & Breakfast',
                 'created_at' => '2021-09-10 08:59:20',
                 'deleted_at' => NULL,
                 'id' => 4,

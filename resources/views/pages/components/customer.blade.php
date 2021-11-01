@@ -48,7 +48,7 @@
                                     {{ $accommodation->accommodationInventory->roomType->name }}
                                 </td>
                                 <td>
-                                    {{ $accommodation->accommodationInventory->boardType->board_type_name }}
+                                    {{ $accommodation->accommodationInventory->boardType->name }}
                                 </td>
                                 @endforeach
                             </tbody>

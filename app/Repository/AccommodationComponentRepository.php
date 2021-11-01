@@ -96,7 +96,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             DB::raw('CASE WHEN `accommodation_inventories`.`checked_in` = 1 THEN \'Yes\' ELSE \'No\' END  AS checked_in'),
             DB::raw('CASE WHEN `accommodation_inventories`.`checked_out` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_out_confirmed'),
             'room_types.name AS room_type',
-            'board_types.board_type_name AS board_type',
+            'board_types.name AS board_type',
             DB::raw('CASE WHEN `accommodation_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END  AS fit_selectable'),
             'accommodation_inventories.stock AS stock',
             'accommodation_inventories.purchase_price AS purchase_price',
