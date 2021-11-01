@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocationsTable extends Migration
+class CreateRegionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->integer('region_id');
-            $table->string('name', 255);
-            $table->integer('location_type_id');
-            $table->text('address')->nullable();
+            $table->text('name');
+            $table->foreignId('country_id');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('regions');
     }
 }
