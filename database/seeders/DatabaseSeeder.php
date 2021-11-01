@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(EventsTableSeeder::class);
         Tour::factory()->createOne();
         $this->call(LocationTypesTableSeeder::class);
         $this->call(CountriesTableSeeder::class);
@@ -27,7 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FlightInventoryTourTableSeeder::class);
         $this->call(TransportTypesTableSeeder::class);
         $this->call(RoomTypesTableSeeder::class);
-        $this->call(EventsTableSeeder::class);
         $this->call(ActivityTypesTableSeeder::class);
         $this->call(TicketTypesTableSeeder::class);
         $this->call(PaymentMethodsTableSeeder::class);
