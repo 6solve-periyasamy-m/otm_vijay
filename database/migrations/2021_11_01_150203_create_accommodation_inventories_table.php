@@ -15,9 +15,9 @@ class CreateAccommodationInventoriesTable extends Migration
     {
         Schema::create('accommodation_inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('accommodation_id')->index();
-            $table->integer('room_type_id');
-            $table->integer('board_type_id');
+            $table->foreignId('accommodation_id');
+            $table->foreignId('room_type_id');
+            $table->foreignId('board_type_id');
             $table->dateTime('check_in')->nullable();
             $table->boolean('checked_in')->default(false);
             $table->dateTime('check_out')->nullable();
@@ -30,6 +30,9 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('accommodation_id')->references('id')->on('accommodations')->onDelete('cascade');
+            $table->foreign('room_type_id')->references('id')->on('room_types')->onDelete('cascade');
+            $table->foreign('board_type_id')->references('id')->on('board_types')->onDelete('cascade');
         });
     }
 

@@ -15,7 +15,7 @@ class CreateAccommodationsTable extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
-            $table->integer('region_id');
+            $table->foreignId('region_id');
             $table->string('name', 190)->index();
             $table->text('description')->nullable();
             $table->date('audit_date')->nullable();
@@ -23,6 +23,7 @@ class CreateAccommodationsTable extends Migration
             $table->string('currency', 5)->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
         });
     }
 

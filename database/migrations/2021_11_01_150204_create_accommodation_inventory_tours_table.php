@@ -15,13 +15,15 @@ class CreateAccommodationInventoryToursTable extends Migration
     {
         Schema::create('accommodation_inventory_tours', function (Blueprint $table) {
             $table->id();
-            $table->integer('tour_id');
-            $table->integer('accommodation_inventory_id');
+            $table->foreignId('tour_id');
+            $table->foreignId('accommodation_inventory_id');
             $table->float('tour_sales_price', 10, 0)->nullable();
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
-            $table->string('booking_policy',12)->default('overbook');
+            $table->string('booking_policy', 12)->default('overbook');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
+            $table->foreign('accommodation_inventory_id')->references('id')->on('accommodation_inventories')->onDelete('cascade');
         });
     }
 
