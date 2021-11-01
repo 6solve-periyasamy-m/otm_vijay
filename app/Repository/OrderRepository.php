@@ -207,7 +207,7 @@ class OrderRepository implements OrderRepositoryInterface
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id] = [];
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['description'] =
                             $tourInventory->accommodationInventory->accommodation->title . ' - ' .
-                            $tourInventory->accommodationInventory->roomType->room_type_name . ' - ' .
+                            $tourInventory->accommodationInventory->roomType->name . ' - ' .
                             $tourInventory->accommodationInventory->boardType->board_type_name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
@@ -215,7 +215,7 @@ class OrderRepository implements OrderRepositoryInterface
                     $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
                 } else {
                     $included .= $tourInventory->accommodationInventory->accommodation->title . ' - ' .
-                        $tourInventory->accommodationInventory->roomType->room_type_name . ' - ' .
+                        $tourInventory->accommodationInventory->roomType->name . ' - ' .
                         $tourInventory->accommodationInventory->boardType->board_type_name . "\n";
                 }
             }

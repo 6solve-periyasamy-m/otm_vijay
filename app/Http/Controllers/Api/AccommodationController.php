@@ -41,7 +41,7 @@ class AccommodationController extends ApiController
                 "check_out" => $accommodationInventory->check_out->format('Y-m-d H:i:s'),
                 "accommodation_name" => $accommodationInventory->accommodation->title,
                 "accommodation_address" => $accommodationInventory->accommodation->address,
-                "room_type" => $accommodationInventory->roomType->room_type_name,
+                "room_type" => $accommodationInventory->roomType->name,
                 "board_type" => $accommodationInventory->boardType->board_type_name,
                 "booking_policy" => $accommodationInventory->booking_policy,
             ];
@@ -61,7 +61,7 @@ class AccommodationController extends ApiController
     public function getAccommodationInventoryForTour(Tour $tour)
     {
         $inventory = new AccommodationInventory();
-        $resultOLD = $inventory->select('accommodations.title', 'accommodation_inventories.*', 'room_types.room_type_name as room_type', 'room_types.maximum_occupancy')
+        $resultOLD = $inventory->select('accommodations.title', 'accommodation_inventories.*', 'room_types.name as room_type', 'room_types.maximum_occupancy')
             ->join('accommodations', 'accommodation_inventories.accommodation_id', 'accommodations.id')
             ->join('accommodation_inventory_tours', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
             ->join('room_types', 'accommodation_inventories.room_type_id','room_types.id')
@@ -71,7 +71,7 @@ class AccommodationController extends ApiController
         $result = $inventory->select('accommodations.title', 
             'accommodation_inventory_tours.id as accommodation_inventory_tour_id', 
             'accommodation_inventories.*', 
-            'room_types.room_type_name as room_type', 
+            'room_types.name as room_type',
             'room_types.maximum_occupancy')
             ->join('accommodations', 'accommodation_inventories.accommodation_id', 'accommodations.id')
             ->join('accommodation_inventory_tours', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
@@ -164,7 +164,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
 
     public function loadRoomsForTour(Tour $tour, $order_id) {
         /*
-            select ait.tour_id,`room_type_name`, maximum_occupancy, board_type_name, stock, ai.sales_price, ait.sales_price as tour_sales_price, ai.booking_policy
+            select ait.tour_id,`name`, maximum_occupancy, board_type_name, stock, ai.sales_price, ait.sales_price as tour_sales_price, ai.booking_policy
             from accommodation_inventory_tours ait 
             join accommodation_inventories ai on ait.accommodation_inventory_id=ai.id
             join room_types rt on rt.id=ai.room_type_id
@@ -182,7 +182,7 @@ Log::info('getAccommodationInventoryForTour', $result->toArray());
             'accommodation_inventory_tours.tour_id',
             'accommodation_inventory_tours.id as accommodation_inventory_tour_id', 
             'room_types.id as room_type_id', 
-            'room_types.room_type_name', 
+            'room_types.name',
             'room_types.maximum_occupancy',
             'board_types.id as board_type_id', 
             'board_types.board_type_name');

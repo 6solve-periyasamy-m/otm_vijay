@@ -24,7 +24,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         foreach (RoomType::all() as $roomType) {
             $subData = [];
             $subData['id'] = $roomType->id;
-            $subData['text'] = $roomType->room_type_name;
+            $subData['text'] = $roomType->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -48,7 +48,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $roomType = RoomType::findOrFail($id);
         $data = [];
         $data['id'] = $roomType->id;
-        $data['text'] = $roomType->room_type_name;
+        $data['text'] = $roomType->name;
         return $data;
     }
 
@@ -68,7 +68,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         foreach (AccommodationInventory::all() as $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
-            $subData['text'] = $inventory->accommodation->title . " - " . $inventory->roomType->room_type_name;
+            $subData['text'] = $inventory->accommodation->title . " - " . $inventory->roomType->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -80,7 +80,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $inventory = AccommodationInventory::findOrFail($id);
         $data = [];
         $data['id'] = $inventory->id;
-        $data['text'] = $inventory->accommodation->title . " - " . $inventory->roomType->room_type_name;
+        $data['text'] = $inventory->accommodation->title . " - " . $inventory->roomType->name;
         return $data;
     }
 }

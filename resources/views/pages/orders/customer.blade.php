@@ -228,7 +228,7 @@ $(document).ready( function () {
                             <tr>
                                 <td>{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
                                 <td>{{ $accommodationEntry["component"]->title }}</td>
-                                <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
+                                <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                 <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                                 <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                 <td>

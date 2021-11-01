@@ -178,6 +178,7 @@
                       <br />
                       <span v-if="shared(booking)">Shared</span>
                       {{ booking.accommodation.room_type_name }}
+                      <!-- TODO: Nic, may need rename. room_type_name -> name. -->
                     </div>
                     <div class="label">Max occupancy</div>
                     <div class="content">

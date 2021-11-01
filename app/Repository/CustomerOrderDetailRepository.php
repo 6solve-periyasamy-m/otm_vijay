@@ -35,7 +35,7 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
 
         $cod->component_type = $component_type;
         // if ($room) {
-        //     $cod->type = $room['board_type_name'] . ' ' . $room['room_type_name'];
+        //     $cod->type = $room['board_type_name'] . ' ' . $room['name'];
         // } else {
         //     $cod->type = "shared room";
         //}

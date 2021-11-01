@@ -56,7 +56,7 @@
                                         {{Carbon\Carbon::parse($accommodation->check_out)->format('d-m-Y H:i')}}
                                     </td>
                                     <td>
-                                        {{ $accommodation->roomType->room_type_name }}
+                                        {{ $accommodation->roomType->name }}
                                     </td>
                                     <td>
                                         {{ $accommodation->boardType->board_type_name }}

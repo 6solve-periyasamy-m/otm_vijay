@@ -22,7 +22,7 @@ class RoomTypesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'room_type_name' => 'Single Room',
+                'name' => 'Single Room',
                 'maximum_occupancy' => 1,
                 'created_at' => '2021-01-15 15:51:15',
                 'updated_at' => '2021-01-15 15:51:15',
@@ -31,7 +31,7 @@ class RoomTypesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'room_type_name' => 'Double Room',
+                'name' => 'Double Room',
                 'maximum_occupancy' => 2,
                 'created_at' => '2021-01-15 15:51:22',
                 'updated_at' => '2021-01-15 15:51:22',
@@ -40,7 +40,7 @@ class RoomTypesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'room_type_name' => 'Twin Room',
+                'name' => 'Twin Room',
                 'maximum_occupancy' => 2,
                 'created_at' => '2021-01-15 15:51:27',
                 'updated_at' => '2021-01-15 15:51:27',

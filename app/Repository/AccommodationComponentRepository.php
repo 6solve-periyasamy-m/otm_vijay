@@ -52,7 +52,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->accommodationInventory->accommodation->title;
-                $components[$component->id]['room_type'] = $component->accommodationInventory->roomType->room_type_name;
+                $components[$component->id]['room_type'] = $component->accommodationInventory->roomType->name;
             }
         }
         if ($oCustomer != null) {
@@ -95,7 +95,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'accommodation_inventories.check_out AS check_out_time',
             DB::raw('CASE WHEN `accommodation_inventories`.`checked_in` = 1 THEN \'Yes\' ELSE \'No\' END  AS checked_in'),
             DB::raw('CASE WHEN `accommodation_inventories`.`checked_out` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_out_confirmed'),
-            'room_types.room_type_name AS room_type',
+            'room_types.name AS room_type',
             'board_types.board_type_name AS board_type',
             DB::raw('CASE WHEN `accommodation_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END  AS fit_selectable'),
             'accommodation_inventories.stock AS stock',

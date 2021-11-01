@@ -34,7 +34,7 @@
             </thead>
             @foreach($accommodation->inventory as $accommodationInventory)
                 <tr>
-                    <td>{{ $accommodationInventory->roomType->room_type_name }}</td>
+                    <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->board_type_name }}</td>
                     <td>{{ $accommodationInventory->check_in }}</td>
                     <td>{{ $accommodationInventory->checked_in == 1 ? 'True' : 'False' }}</td>
