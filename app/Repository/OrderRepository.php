@@ -34,13 +34,13 @@ class OrderRepository implements OrderRepositoryInterface
             ->where(function ($intQuery) use ($searchTerm) {
                 $intQuery->where('customer_details.first_name', 'like', '%' . $searchTerm . '%')
                     ->OrWhere('customer_details.last_name', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('tours.title', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('tours.name', 'like', '%' . $searchTerm . '%');
             });
         if (!$archived) $query->whereNull('orders.deleted_at');
-        $query->select('orders.id AS order_id', 'tours.title AS tour_title', 'lead_booker.id AS lead_booker_id',
+        $query->select('orders.id AS order_id', 'tours.name AS tour_title', 'lead_booker.id AS lead_booker_id',
             'orders.booking_reference AS booking_reference', 'lead_booker_details.first_name AS lead_booker_first_name',
             'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on')
-            ->groupBy('orders.id', 'tours.title', 'lead_booker.id', 'booking_reference',
+            ->groupBy('orders.id', 'tours.name', 'lead_booker.id', 'booking_reference',
                 'lead_booker_details.first_name', 'lead_booker_details.last_name', 'orders.ordered_on')
             ->orderBy('ordered_on');
         return $query->get();
