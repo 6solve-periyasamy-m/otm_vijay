@@ -27,7 +27,6 @@ class CreateOrdersTable extends Migration
             $table->string('token', 255)->nullable();
             $table->foreign('quote_id')->references('id')->on('quotes')->onDelete('cascade');
             $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
-            $table->foreign('lead_booker_id')->references('id')->on('orders_customers')->onDelete('cascade');
         });
     }
 

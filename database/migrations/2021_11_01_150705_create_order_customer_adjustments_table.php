@@ -15,12 +15,13 @@ class CreateOrderCustomerAdjustmentsTable extends Migration
     {
         Schema::create('order_customer_adjustments', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_customer_id');
+            $table->foreignId('order_customer_id');
             $table->float('amount');
             $table->text('reason');
             $table->dateTime('date');
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('order_customer_id')->references('id')->on('orders_customers')->onDelete('cascade');
         });
     }
 
