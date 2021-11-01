@@ -15,7 +15,7 @@ class CreateToursTable extends Migration
     {
         Schema::create('tours', function (Blueprint $table) {
             $table->id();
-            $table->integer('event_id')->nullable();
+            $table->foreignId('event_id')->nullable();
             $table->string('name', 90);
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
@@ -25,13 +25,14 @@ class CreateToursTable extends Migration
             $table->boolean('stock_control_active')->default(true);
             $table->integer('stock')->nullable();
             $table->string('booking_form_url', 255)->nullable();
-            $table->integer('tour_colour_id')->nullable();
-            $table->integer('tour_merchandise_id')->nullable();
+            $table->foreignId('tour_colour_id')->nullable();
+            $table->foreignId('tour_merchandise_id')->nullable();
             $table->boolean('is_active')->default(false);
             $table->date('date_from');
             $table->date('date_to');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
         });
     }
 
