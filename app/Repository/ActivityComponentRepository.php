@@ -49,7 +49,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             if ($component->tour_component_type == "Add-on") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
-                $components[$component->id]['name'] = $component->activityInventory->activity->title;
+                $components[$component->id]['name'] = $component->activityInventory->activity->name;
                 $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->name;
             }
         }

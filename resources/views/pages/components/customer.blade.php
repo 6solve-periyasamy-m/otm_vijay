@@ -85,7 +85,7 @@
                                 @foreach($orderActivities as $activity)
                                 <tr>
                                     <td>
-                                        {{($activity->activity->title)}}
+                                        {{($activity->activity->name)}}
                                     </td>
                                     <td>
                                         {{ Carbon\Carbon::parse($activity->activityInventory->activity_start_date_time)->format('d-m-Y H:i') }}

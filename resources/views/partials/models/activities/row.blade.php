@@ -1,5 +1,5 @@
 <tr>
-    <td><a href="{{ route('activities.view', ['activity' => $activity,]) }}">{{ $title }}</a></td>
+    <td><a href="{{ route('activities.view', ['activity' => $activity,]) }}">{{ $name }}</a></td>
     <td>{{ $activity->activityType->name }}</td>
     <td>{{ $activity->location->name }}</td>
     <td>{{ $description }}</td>

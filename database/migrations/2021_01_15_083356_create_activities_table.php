@@ -18,7 +18,7 @@ class CreateActivitiesTable extends Migration
             $table->integer('activity_type_id')->index();
             $table->text('description')->nullable();
             $table->integer('location_id')->index();
-            $table->text('title')->nullable();
+            $table->text('name')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

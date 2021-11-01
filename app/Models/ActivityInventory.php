@@ -65,7 +65,7 @@ class ActivityInventory extends Model
         $activity_start_date_time =  $this->activity_start_date_time->format('d/m/Y H:i');
         $activity_end_date_time = $this->activity_end_date_time->format('d/m/Y H:i');
 
-        return "{$this->activity->title}｜Activity Start: {$activity_start_date_time}｜Activity End: {$activity_end_date_time}｜Ticket Type: {$this->ticketType->name}";
+        return "{$this->activity->name}｜Activity Start: {$activity_start_date_time}｜Activity End: {$activity_end_date_time}｜Ticket Type: {$this->ticketType->name}";
     }
 
     public $additional_attributes = ['Activity_for_tour'];
