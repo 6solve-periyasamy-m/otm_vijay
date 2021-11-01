@@ -16,11 +16,13 @@ class CreateActionsTable extends Migration
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
             $table->string('action');
-            $table->integer('customer_id')->index();
-            $table->integer('order_id')->index();
+            $table->foreignId('customer_id')->index();
+            $table->foreignId('order_id')->index();
             $table->string('reference')->nullable();
             $table->text('detail')->nullable();
             $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 
