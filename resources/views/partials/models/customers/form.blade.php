@@ -109,33 +109,33 @@
                         @if(isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) checked @endif
                     id="home_is_billing-input" onchange="changeBillingForm()">
                     <label for="home_is_billing-input" class="form-check-label">Billing Address is Same As Home</label>
-                </div>                
-                <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>                
-                <div class="form-group col-12 col-xl-6">
+                </div>
+                <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;" class="billing-address"/>
+                <div class="form-group col-12 col-xl-6 billing-address">
                     <label for="billing_address_line_1-input">Billing Address Line 1</label>
                     <input name="billing_address_line_1" value="{{ $billing_address_line_1 ?? "" }}" class="form-control" id="billing_address_line_1-input">
-                </div>                    
-                <div class="form-group col-12 col-xl-6">
+                </div>
+                <div class="form-group col-12 col-xl-6 billing-address">
                     <label for="billing_address_line_2-input">Billing Address Line 2</label>
                     <input name="billing_address_line_2" value="{{ $billing_address_line_2 ?? "" }}" class="form-control" id="billing_address_line_2-input">
-                </div>                    
-                <div class="form-group col-12 col-xl-6">
+                </div>
+                <div class="form-group col-12 col-xl-6 billing-address">
                     <label for="billing_town-input">Billing Town</label>
                     <input name="billing_town" value="{{ $billing_town ?? "" }}" class="form-control" id="billing_town-input">
-                </div>                    
-                <div class="form-group col-12 col-xl-6">
+                </div>
+                <div class="form-group col-12 col-xl-6 billing-address">
                     <label for="region-input">Billing Region</label>
                     <input name="region" value="{{ $billing_region ?? "" }}" class="form-control" id="billing_region-input">
-                </div>                    
-                <div class="form-group col-12 col-xl-6">
+                </div>
+                <div class="form-group col-12 col-xl-6 billing-address">
                     <label for="billing_country-input">Billing Country</label>
                     <input name="billing_country" value="{{ $billing_country ?? "" }}" class="form-control" id="billing_country-input">
-                </div>                    
-                <div class="form-group col-12 col-xl-6">
+                </div>
+                <div class="form-group col-12 col-xl-6 billing-address">
                     <label for="billing_postcode-input">Billing Postcode</label>
                     <input name="billing_postcode" value="{{ $billing_postcode ?? "" }}" class="form-control" id="billing_postcode-input">
-                </div>                    
-                
+                </div>
+
                 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
                 <div class="form-group col-12 col-xl-6">
                     <label for="mobile_number-input">Mobile Number</label>
