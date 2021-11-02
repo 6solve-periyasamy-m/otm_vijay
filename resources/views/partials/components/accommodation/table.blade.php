@@ -20,9 +20,9 @@
                 <th scope="col">Room Type</th>
                 <th scope="col">Board Type</th>
                 <th scope="col">Check In Time</th>
-                <th scope="col">Checked In</th>
+                <th scope="col">Confirmed</th>
                 <th scope="col">Check Out Time</th>
-                <th scope="col">Checked Out</th>
+                <th scope="col">Confirmed</th>
                 <th scope="col">Fit Selectable</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
