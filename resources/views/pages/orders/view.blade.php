@@ -23,15 +23,15 @@
         </div>
         <div id="customers-details" style="width: 100%">
             <table style="margin-bottom: 2px;">
-                @foreach($customers as $ordercustomer)
+                @foreach($customers as $orderCustomer)
                 <tr>
                     <td style="border: 1px solid black; border-left: 0; width: 30%;">
-                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordercustomer, ]) }}" class="link-info"><u>
-                            {{ $ordercustomer->customer->first_name . " " . $ordercustomer->customer->last_name }}
+                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]) }}" class="link-info"><u>
+                            {{ $orderCustomer->customer->first_name . " " . $orderCustomer->customer->last_name }}
                         </u></a>
                     </td>
-                    <td style="border: 1px solid black; width: 30%;">Born: {{ $ordercustomer->customer->date_of_birth }}</td>
-                    <td style="border: 1px solid black; width: 30%;">Passport Number: {{ $ordercustomer->customer->passport_number }}</td>
+                    <td style="border: 1px solid black; width: 30%;">Born: {{ $orderCustomer->customer->date_of_birth }}</td>
+                    <td style="border: 1px solid black; width: 30%;">Passport Number: {{ $orderCustomer->customer->passport_number }}</td>
                 </tr>
                 @endforeach
             </table>
@@ -175,10 +175,10 @@
                     <th scope="col" style="border: 1px solid black; width: 50%;">Reason</th>
                 </tr>
                 </thead>
-                @foreach($customers as $ordercustomer)
-                    @foreach($ordercustomer->adjustments as $adjustment)
+                @foreach($customers as $orderCustomer)
+                    @foreach($orderCustomer->adjustments as $adjustment)
                     <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $ordercustomer->customer->first_name .  " " . $ordercustomer->customer->last_name }}</td>
+                        <td style="border: 1px solid black; width: 20%;">{{ $orderCustomer->customer->first_name .  " " . $orderCustomer->customer->last_name }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $adjustment->amount }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $adjustment->reason }}</td>
                     </tr>

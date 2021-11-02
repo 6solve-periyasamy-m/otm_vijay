@@ -4,7 +4,7 @@
 
 @section('content')
     <a class="btn btn-primary" href="{{ route('order-customers.create') }}">Create New</a>
-    <table id="ordercustomer" style="width: 100%;" class="table table-striped">
+    <table id="orderCustomer" style="width: 100%;" class="table table-striped">
         <thead class="thead-dark">
         <tr>
             <th scope="col">Order Id</th>
@@ -16,15 +16,15 @@
             <th scope="col">Actions</th>
         </tr>
         </thead>
-        @foreach($ordercustomers as $ordercustomer)
+        @foreach($orderCustomers as $orderCustomer)
             @include('partials.models.order_customers.row', [
-              'ordercustomer' => $ordercustomer,
-              'order_id' => $ordercustomer->order_id,
-              'customer_id' => $ordercustomer->customer_id,
-              'tour_cost' => $ordercustomer->tour_cost,
-              'single_occupancy_surcharge' => $ordercustomer->single_occupancy_surcharge,
-              'travel_insurer' => $ordercustomer->travel_insurer,
-              'policy_number' => $ordercustomer->policy_number,
+              'orderCustomer' => $orderCustomer,
+              'order_id' => $orderCustomer->order_id,
+              'customer_id' => $orderCustomer->customer_id,
+              'tour_cost' => $orderCustomer->tour_cost,
+              'single_occupancy_surcharge' => $orderCustomer->single_occupancy_surcharge,
+              'travel_insurer' => $orderCustomer->travel_insurer,
+              'policy_number' => $orderCustomer->policy_number,
             ])
         @endforeach
     </table>

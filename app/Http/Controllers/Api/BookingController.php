@@ -319,28 +319,28 @@ class BookingController extends ApiController
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
         }
-        $ordercustomer = new OrderCustomer();
-        $this->logging == 'orders' && Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer->id);
-        $ordercustomerExists = $ordercustomer
+        $orderCustomer = new OrderCustomer();
+        $this->logging == 'orders' && Log::info('loading orderCustomer  order '. $request->order_id.' customer: '.$customer->id);
+        $orderCustomerExists = $orderCustomer
             ->where('order_id', $request->order_id)
             ->where('customer_id', $customer->id)
             ->first();
-        if ($ordercustomerExists) {
-            $ordercustomer = $ordercustomerExists;
-            $this->logging == 'orders' && Log::info('orderCustomer record', $ordercustomerExists->toArray());
-            $this->updateOrderCustomerFields($ordercustomer, $request);
-            // Log::info('ordercustomer exists, updating');
+        if ($orderCustomerExists) {
+            $orderCustomer = $orderCustomerExists;
+            $this->logging == 'orders' && Log::info('orderCustomer record', $orderCustomerExists->toArray());
+            $this->updateOrderCustomerFields($orderCustomer, $request);
+            // Log::info('orderCustomer exists, updating');
         } else {
-            $ordercustomer->order_id = $request->order_id;
-            $ordercustomer->customer_id = $customer->id;
-            $this->logging == 'orders' && Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer->id);
+            $orderCustomer->order_id = $request->order_id;
+            $orderCustomer->customer_id = $customer->id;
+            $this->logging == 'orders' && Log::info('creating orderCustomer for order '. $request->order_id.' customer: '.$customer->id);
         }
-        $ordercustomer->is_lead_booker = $isLead;
-        $ordercustomer->travel_insurer = null;
-        $ordercustomer->policy_number = null;
-        $ordercustomer->save();
+        $orderCustomer->is_lead_booker = $isLead;
+        $orderCustomer->travel_insurer = null;
+        $orderCustomer->policy_number = null;
+        $orderCustomer->save();
 
-        return $ordercustomer;
+        return $orderCustomer;
     }
 
     /**
@@ -489,17 +489,17 @@ class BookingController extends ApiController
         /**
      * updateOrderCustomer - adds fields to existing orderCustomer record for a single traveller
      *
-     * @param [type] $ordercustomer (object)
+     * @param [type] $orderCustomer (object)
      * @param Request $request
      * @return void
      */
-    private function updateOrderCustomerFields($ordercustomer, Request $request)
+    private function updateOrderCustomerFields($orderCustomer, Request $request)
     {
         if (!empty($request->tour['base_price_per_person'])) {
-            $ordercustomer->tour_cost = $request->tour['base_price_per_person'];
+            $orderCustomer->tour_cost = $request->tour['base_price_per_person'];
         }
         if (!empty($request->tour['single_occupancy_surcharge'])) {
-            $ordercustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+            $orderCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
         }
     }
     

@@ -154,29 +154,29 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public static function addIncludedToCustomer(OrderCustomer $ordercustomer, Order $order) {
+    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order) {
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
-                $ordercustomer->orderAccommodation()->save($orderInventory);
+                $orderCustomer->orderAccommodation()->save($orderInventory);
             }
         }
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
-                $ordercustomer->orderActivities()->save($orderInventory);
+                $orderCustomer->orderActivities()->save($orderInventory);
             }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrdersFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
-                $ordercustomer->orderFlights()->save($orderInventory);
+                $orderCustomer->orderFlights()->save($orderInventory);
             }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
-                $ordercustomer->orderTransports()->save($orderInventory);
+                $orderCustomer->orderTransports()->save($orderInventory);
             }
         }
     }

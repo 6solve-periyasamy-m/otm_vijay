@@ -30,8 +30,8 @@ class CustomerController extends ApiController
         $order = $orders->where('token', $token)->first();
         if (isset($order)) {
             if ($this->logging) Log::info('orders are ', $order->toArray());
-            $ordercustomer = new OrderCustomer();
-            $orderCustomers = $ordercustomer
+            $orderCustomer = new OrderCustomer();
+            $orderCustomers = $orderCustomer
                 ->select('customers.*', 'order_customers.*', 'order_customers.id as order_customer_id')
                 ->join('customers', 'order_customers.customer_id', 'customers.id')
                 ->where('order_id', $order->id)
