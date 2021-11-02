@@ -8,7 +8,7 @@ use App\Models\OrderCustomer;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
-class OrdercustomerController extends Controller
+class OrderCustomerModelController extends Controller
 {
 
     public function index(Order $order)
