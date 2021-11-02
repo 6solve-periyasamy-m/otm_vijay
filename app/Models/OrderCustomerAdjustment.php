@@ -10,7 +10,7 @@ class OrderCustomerAdjustment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['order_customer_id','amount','reason',];
+    protected $fillable = ['order_customer_id','amount','reason','date'];
 
     public static function getValidationRules() {
         return ['date' => 'required|date', 'amount' => 'required|numeric', ];
