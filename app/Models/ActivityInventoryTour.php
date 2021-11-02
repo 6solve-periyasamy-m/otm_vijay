@@ -33,6 +33,6 @@ class ActivityInventoryTour extends Model
     }
 
     public function orders() {
-        return $this->hasMany(OrdersActivity::class, 'activity_inventory_tour_id');
+        return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
     }
 }

@@ -14,7 +14,7 @@ use App\Models\FlightInventoryTour;
 use App\Models\Operator;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
-use App\Models\OrdersActivity;
+use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
@@ -66,7 +66,7 @@ class OrderSystemSeeder extends Seeder
                 $tourInventories = ActivityInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
                 $tourInventories->each(function ($tourInventory) {
-                    $orders = OrdersActivity::factory()->count($this->seedCount)->make();
+                    $orders = OrderActivity::factory()->count($this->seedCount)->make();
                     $tourInventory->orders()->saveMany($orders);
                 });
             });

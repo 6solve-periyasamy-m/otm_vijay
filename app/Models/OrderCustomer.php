@@ -39,7 +39,7 @@ class OrderCustomer extends Model
     }
 
     public function orderActivities() {
-        return $this->hasMany(OrdersActivity::class, 'order_customer_id');
+        return $this->hasMany(OrderActivity::class, 'order_customer_id');
     }
 
     public function orderFlights() {

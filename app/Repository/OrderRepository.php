@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Models\Order;
 use App\Models\OrderAccommodation;
-use App\Models\OrdersActivity;
+use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
@@ -163,7 +163,7 @@ class OrderRepository implements OrderRepositoryInterface
         }
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderActivities()->save($orderInventory);
             }
         }

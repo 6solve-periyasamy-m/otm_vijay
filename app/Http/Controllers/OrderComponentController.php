@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OrderAccommodation;
-use App\Models\OrdersActivity;
+use App\Models\OrderActivity;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class OrderComponentController extends Controller
     }
 
     public function deleteActivity(Request $request, $id) {
-        OrdersActivity::findOrFail($id)->delete();
+        OrderActivity::findOrFail($id)->delete();
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OrdersActivity extends Model
+class OrderActivity extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -36,7 +36,7 @@ class OrdersActivity extends Model
 
     public static function findByOrderCustomer($orderCustomerId)
     {
-        $orderActivities = OrdersActivity::where('order_customer_id',$orderCustomerId)->get();
+        $orderActivities = OrderActivity::where('order_customer_id',$orderCustomerId)->get();
 
 
         return $orderActivities;

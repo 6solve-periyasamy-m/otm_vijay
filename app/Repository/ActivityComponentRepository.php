@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersActivity;
+use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\Tour;
 use Carbon\Carbon;
@@ -25,18 +25,18 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersActivity::findOrFail($orderComponentId);
+        return OrderActivity::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersActivity::findOrFail($orderComponentId);
+        $orderComponent = OrderActivity::findOrFail($orderComponentId);
         return $orderComponent->activityInventoryTour()->first()->activityInventory()->first()->activity();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersActivity::findOrFail($orderComponentId);
+        $orderComponent = OrderActivity::findOrFail($orderComponentId);
         return $orderComponent->activityInventoryTour()->first()->activityInventory();
     }
 
@@ -65,7 +65,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
 
     public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId)
     {
-        return OrdersActivity::create([
+        return OrderActivity::create([
             'order_customer_id' => $oCustomerId,
             'activity_inventory_tour_id' => $activityInventoryTourId,
         ]);

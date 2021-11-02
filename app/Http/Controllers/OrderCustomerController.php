@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderCustomer;
 use App\Models\OrderAccommodation;
-use App\Models\OrdersActivity;
+use App\Models\OrderActivity;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
 use App\Models\Transport;
@@ -16,7 +16,7 @@ class OrderCustomerController extends Controller
     {
         $customerOrder = OrderCustomer::findOrFail($id);
         $orderAccommodations = OrderAccommodation::findByOrderCustomer($id);
-        $orderActivities = OrdersActivity::findByOrderCustomer($id);
+        $orderActivities = OrderActivity::findByOrderCustomer($id);
         $orderFlights = OrdersFlight::findByOrderCustomer($id);
         $orderTransports = OrdersTransport::findByOrderCustomer($id);
 
