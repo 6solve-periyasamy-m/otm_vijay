@@ -15,14 +15,12 @@ class CreateActivityInventoryToursTable extends Migration
     {
         Schema::create('activity_inventory_tours', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tour_id');
-            $table->foreignId('activity_inventory_id');
+            $table->foreignId('tour_id')->constrained()->onDelete('cascade');
+            $table->foreignId('activity_inventory_id')->constrained()->onDelete('cascade');
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
             $table->float('tour_sales_price', 10, 0)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
-            $table->foreign('activity_inventory_id')->references('id')->on('activity_inventories')->onDelete('cascade');
         });
     }
 

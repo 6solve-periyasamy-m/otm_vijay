@@ -15,12 +15,10 @@ class CreateOrderFlightsTable extends Migration
     {
         Schema::create('order_flights', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_customer_id')->nullable();
-            $table->foreignId('flight_inventory_tour_id')->nullable();
+            $table->foreignId('order_customer_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('flight_inventory_tour_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('order_customer_id')->references('id')->on('order_customers')->onDelete('cascade');
-            $table->foreign('flight_inventory_tour_id')->references('id')->on('flight_inventory_tours')->onDelete('cascade');
         });
     }
 

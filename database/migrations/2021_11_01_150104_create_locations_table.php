@@ -15,14 +15,12 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('region_id');
-            $table->foreignId('location_type_id');
+            $table->foreignId('region_id')->constrained()->onDelete('cascade');
+            $table->foreignId('location_type_id')->constrained()->onDelete('cascade');
             $table->string('name', 255);
             $table->text('address')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
-            $table->foreign('location_type_id')->references('id')->on('location_types')->onDelete('cascade');
         });
     }
 

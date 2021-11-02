@@ -15,12 +15,10 @@ class CreateOrderActivitiesTable extends Migration
     {
         Schema::create('order_activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_customer_id');
-            $table->foreignId('activity_inventory_tour_id');
+            $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('activity_inventory_tour_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('order_customer_id')->references('id')->on('order_customers')->onDelete('cascade');
-            $table->foreign('activity_inventory_tour_id')->references('id')->on('activity_inventory_tours')->onDelete('cascade');
         });
     }
 

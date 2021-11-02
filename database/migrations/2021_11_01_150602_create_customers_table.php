@@ -26,8 +26,8 @@ class CreateCustomersTable extends Migration
             $table->date('date_of_birth');
             $table->string('mobile_number', 25);
             $table->string('other_phone_number', 25)->nullable();
-            $table->foreignId('home_address_id');
-            $table->foreignId('billing_address_id');
+            $table->foreignId('home_address_id')->constrained('addresses')->onDelete('cascade');
+            $table->foreignId('billing_address_id')->constrained('addresses')->onDelete('cascade');
             $table->string('emergency_contact_name', 160)->nullable();
             $table->string('emergency_contact_relationship', 80)->nullable();
             $table->string('emergency_contact_telephone', 120)->nullable();
@@ -39,15 +39,11 @@ class CreateCustomersTable extends Migration
             $table->date('passport_expiry_date')->nullable();
             $table->string('passport_country_of_issue', 60)->nullable();
             $table->string('loyalty_number', 160)->nullable();
-            $table->foreignId('t_shirt_size_id')->nullable();
-            $table->foreignId('hat_size_id')->nullable();
+            $table->foreignId('t_shirt_size_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('hat_size_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('home_address_id')->references('id')->on('addresses')->onDelete('cascade');
-            $table->foreign('billing_address_id')->references('id')->on('addresses')->onDelete('cascade');
-            $table->foreign('t_shirt_size_id')->references('id')->on('t_shirt_sizes')->onDelete('cascade');
-            $table->foreign('hat_size_id')->references('id')->on('hat_sizes')->onDelete('cascade');
 
         });
     }

@@ -16,11 +16,10 @@ class CreateAirportsTable extends Migration
         Schema::create('airports', function (Blueprint $table) {
             $table->id();
             $table->text('name');
-            $table->foreignId('location_id');
+            $table->foreignId('location_id')->constrained()->onDelete('cascade');
             $table->text('iata_code')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
         });
     }
 

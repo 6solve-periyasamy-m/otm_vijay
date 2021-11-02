@@ -15,18 +15,15 @@ class CreateFlightsTable extends Migration
     {
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('airline_id')->nullable();
-            $table->foreignId('departure_airport_id')->nullable();
-            $table->foreignId('arrival_airport_id')->nullable();
+            $table->foreignId('airline_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('departure_airport_id')->nullable()->constrained('airports')->onDelete('cascade');
+            $table->foreignId('arrival_airport_id')->nullable()->constrained('airports')->onDelete('cascade');
             $table->boolean('is_domestic')->default(false);
             $table->text('notes')->nullable();
             $table->string('currency', 5)->nullable();
             $table->date('available_after')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('airline_id')->references('id')->on('airlines')->onDelete('cascade');
-            $table->foreign('departure_airport_id')->references('id')->on('airports')->onDelete('cascade');
-            $table->foreign('arrival_airport_id')->references('id')->on('airports')->onDelete('cascade');
         });
     }
 
