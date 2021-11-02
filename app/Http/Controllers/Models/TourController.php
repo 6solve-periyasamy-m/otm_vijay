@@ -68,7 +68,7 @@ class TourController extends Controller
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_colour_id' => $request->input('tour_colour_id'),
-            'is_active' => $request->input('is_active'),
+            'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
