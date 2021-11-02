@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\Event;
 use App\Models\Tour;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 
 class TourController extends ApiController
 {

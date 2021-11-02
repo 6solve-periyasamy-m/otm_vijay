@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFlightInventoryTourTable extends Migration
+class CreateActivityInventoryToursTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateFlightInventoryTourTable extends Migration
      */
     public function up()
     {
-        Schema::create('flight_inventory_tour', function (Blueprint $table) {
+        Schema::create('activity_inventory_tours', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tour_id');
-            $table->foreignId('flight_inventory_id');
+            $table->foreignId('tour_id')->constrained()->onDelete('cascade');
+            $table->foreignId('activity_inventory_id')->constrained()->onDelete('cascade');
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
             $table->float('tour_sales_price', 10, 0)->nullable();
-            $table->string('flight_type', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
-            $table->foreign('flight_inventory_id')->references('id')->on('flight_inventories')->onDelete('cascade');
         });
     }
 
@@ -34,6 +31,6 @@ class CreateFlightInventoryTourTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('flight_inventory_tour');
+        Schema::dropIfExists('activity_inventory_tours');
     }
 }

@@ -12,7 +12,7 @@ class TransportInventory extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_id','travel_class_id','departs_at','departure_confirmed','arrives_at','arrival_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['transport_id','travel_class_id','departs_at','departure_time_confirmed','arrives_at','arrival_time_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         "departs_at" => "datetime",

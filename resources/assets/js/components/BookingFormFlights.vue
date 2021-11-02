@@ -268,7 +268,7 @@ export default {
         bus.$on('removeBooking', (booking, flight_type, traveller) => {
             console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.token)
             const item = this.orderset.filter(ordr => ordr.inventory_tour_id === booking &&
-                ordr.orders_customer_id == traveller.order_customer_id);
+                ordr.order_customer_id == traveller.order_customer_id);
             if (item.length === 1) {
                 console.log('deleting booking', item[0].cod_id)
             }
@@ -394,7 +394,7 @@ export default {
             }
             let order = orders.filter(ordr => ordr.flight_type == type &&
                 ordr.addon == addon &&
-                ordr.orders_customer_id == traveller.order_customer_id)
+                ordr.order_customer_id == traveller.order_customer_id)
 
             if (typeof order == 'undefined' || order == null || order.length == 0) {
                 console.log('WARNING: flightSelected no ' + type + ' order?')

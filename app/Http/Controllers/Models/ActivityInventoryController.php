@@ -25,8 +25,8 @@ class ActivityInventoryController extends Controller
         $request->validate(ActivityInventory::RULES);
         $activityInventory = ActivityInventory::make([
             'ticket_type_id' => $request->input('ticket_type_id'),
-            'activity_start_date_time' => $request->input('activity_start_date_time'),
-            'activity_end_date_time' => $request->input('activity_end_date_time'),
+            'starts_at' => $request->input('starts_at'),
+            'ends_at' => $request->input('ends_at'),
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
@@ -53,8 +53,8 @@ class ActivityInventoryController extends Controller
         $request->validate(ActivityInventory::RULES);
         $activityInventory->update([
             'ticket_type_id' => $request->input('ticket_type_id'),
-            'activity_start_date_time' => $request->input('activity_start_date_time'),
-            'activity_end_date_time' => $request->input('activity_end_date_time'),
+            'starts_at' => $request->input('starts_at'),
+            'ends_at' => $request->input('ends_at'),
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),

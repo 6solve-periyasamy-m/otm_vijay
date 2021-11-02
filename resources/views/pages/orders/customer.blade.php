@@ -180,7 +180,7 @@ $(document).ready( function () {
     </table>
     <div>
         <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
-        <a href="{{ route('orders-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
+        <a href="{{ route('order-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
     </div>
 </div>
 {{-- Components Section --}}
@@ -263,7 +263,7 @@ $(document).ready( function () {
                     </thead>
                     @foreach($activities as $activity)
                         <tr>
-                            <td>{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
+                            <td>{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
                             <td>{{ $activity["component"]->title }}</td>
                             <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
                             <td>{{ $activity["tour"]->tour_component_type }}</td>

@@ -13,7 +13,6 @@ class ActivityInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $table = 'activity_inventory_tour';
     protected $cascadeDeletes = ['orders'];
     protected $fillable = ['tour_id','activity_inventory_id','tour_component_type','tour_sales_price',];
 
@@ -33,6 +32,6 @@ class ActivityInventoryTour extends Model
     }
 
     public function orders() {
-        return $this->hasMany(OrdersActivity::class, 'activity_inventory_tour_id');
+        return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
     }
 }

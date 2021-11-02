@@ -15,7 +15,7 @@ class CreateToursTable extends Migration
     {
         Schema::create('tours', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->nullable();
+            $table->foreignId('event_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name', 90);
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
@@ -32,7 +32,6 @@ class CreateToursTable extends Migration
             $table->date('date_to');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
         });
     }
 

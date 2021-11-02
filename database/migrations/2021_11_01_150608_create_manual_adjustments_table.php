@@ -15,13 +15,12 @@ class CreateManualAdjustmentsTable extends Migration
     {
         Schema::create('manual_adjustments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->float('amount');
             $table->text('reason');
             $table->dateTime('date');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 

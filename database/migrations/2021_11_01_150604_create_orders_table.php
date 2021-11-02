@@ -15,8 +15,8 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quote_id')->nullable();
-            $table->foreignId('tour_id');
+            $table->foreignId('quote_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('tour_id')->constrained()->onDelete('cascade');
             $table->foreignId('lead_booker_id')->nullable();
             $table->string('booking_reference');
             $table->dateTime('ordered_on');
@@ -25,8 +25,6 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->string('token', 255)->nullable();
-            $table->foreign('quote_id')->references('id')->on('quotes')->onDelete('cascade');
-            $table->foreign('tour_id')->references('id')->on('tours')->onDelete('cascade');
         });
     }
 

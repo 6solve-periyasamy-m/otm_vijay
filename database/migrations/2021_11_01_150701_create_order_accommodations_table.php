@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAirportsTable extends Migration
+class CreateOrderAccommodationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateAirportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('airports', function (Blueprint $table) {
+        Schema::create('order_accommodations', function (Blueprint $table) {
             $table->id();
-            $table->text('name');
-            $table->foreignId('location_id')->constrained()->onDelete('cascade');
-            $table->text('iata_code')->nullable();
+            $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('accommodation_inventory_tour_id')->constrained()->onDelete('cascade');
+            $table->foreignId('share_with_user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ class CreateAirportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('airports');
+        Schema::dropIfExists('order_accommodations');
     }
 }

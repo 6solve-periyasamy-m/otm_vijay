@@ -15,15 +15,13 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
-            $table->foreignId('payment_method_id');
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('payment_method_id')->constrained()->onDelete('cascade');
             $table->float('amount');
             $table->dateTime('paid_on');
             $table->string('payment_type'); // TODO: Should be enum but need to reconcile with voyager
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
         });
     }
 

@@ -14,7 +14,7 @@ use App\Models\Airport;
 use App\Models\Order;
 use App\Models\CustomerOrderDetail;
 use App\Models\FlightInventory;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 
 class FlightController extends ApiController
 {
@@ -129,8 +129,8 @@ class FlightController extends ApiController
         $order = new Order();
         $orders = $order
             ->select('customer_order_details.*','customer_order_details.id as cod_id', 'flight_inventory_tour.*', 'flights.*')
-            ->join('orders_customers', 'orders_customers.order_id', 'order_id')
-            ->join('customer_order_details', 'customer_order_details.orders_customer_id', 'orders_customers.id')
+            ->join('order_customers', 'order_customers.order_id', 'order_id')
+            ->join('customer_order_details', 'customer_order_details.order_customer_id', 'order_customers.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.id', 'customer_order_details.inventory_tour_id')
             ->join('flight_inventories','flight_inventories.id', 'flight_inventory_tour.flight_inventory_id')
             ->join('flights', 'flights.id', 'flight_inventories.flight_id')

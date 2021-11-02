@@ -18,7 +18,7 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
     {
         $cod = new CustomerOrderDetail();
         try {
-            $existing = $cod->where('orders_customer_id', $customerOrderId)
+            $existing = $cod->where('order_customer_id', $customerOrderId)
                 ->where('component_type', $type)
                 ->get();
         } catch (Exception $e) {
@@ -29,7 +29,7 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
 
     public function saveCOD($cod, $customerOrderId, $component_type, $inventory_tour_id, $traveller, $reference, $type)
     {
-        $cod->orders_customer_id = $customerOrderId;
+        $cod->order_customer_id = $customerOrderId;
         // $cod->order_id = $order_id;
         $cod->type = $type;
 
@@ -76,7 +76,7 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
     {
         $cod = new CustomerOrderDetail();
         Log::info('purge', [$customerOrderId, $type]);
-        $result = $cod->where('orders_customer_id', $customerOrderId)
+        $result = $cod->where('order_customer_id', $customerOrderId)
                 ->where('component_type', $type)
                 ->forceDelete();
 

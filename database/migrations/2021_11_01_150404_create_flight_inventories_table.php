@@ -15,8 +15,8 @@ class CreateFlightInventoriesTable extends Migration
     {
         Schema::create('flight_inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('flight_id');
-            $table->foreignId('travel_class_id');
+            $table->foreignId('flight_id')->constrained()->onDelete('cascade');
+            $table->foreignId('travel_class_id')->constrained()->onDelete('cascade');
             $table->dateTime('check_in')->nullable();
             $table->dateTime('departs_at')->nullable();
             $table->dateTime('arrives_at')->nullable();
@@ -29,8 +29,6 @@ class CreateFlightInventoriesTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('flight_id')->references('id')->on('flights')->onDelete('cascade');
-            $table->foreign('travel_class_id')->references('id')->on('travel_classes')->onDelete('cascade');
         });
     }
 

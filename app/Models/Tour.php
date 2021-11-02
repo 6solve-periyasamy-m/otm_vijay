@@ -33,7 +33,7 @@ class Tour extends Model
 
     public function flightInventory()
     {
-        return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+        return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
     public function accommodationInventory()
@@ -43,12 +43,12 @@ class Tour extends Model
 
     public function activityInventory()
     {
-        return $this->belongsToMany(ActivityInventory::class, 'activity_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+        return $this->belongsToMany(ActivityInventory::class, 'activity_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
     public function transportInventory()
     {
-        return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+        return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
     public function paymentPlan() {

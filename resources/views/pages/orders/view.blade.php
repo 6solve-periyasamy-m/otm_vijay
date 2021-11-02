@@ -23,19 +23,19 @@
         </div>
         <div id="customers-details" style="width: 100%">
             <table style="margin-bottom: 2px;">
-                @foreach($customers as $ordersCustomer)
+                @foreach($customers as $orderCustomer)
                 <tr>
                     <td style="border: 1px solid black; border-left: 0; width: 30%;">
-                        <a href="{{ route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info"><u>
-                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]) }}" class="link-info"><u>
+                            {{ $orderCustomer->customer->first_name . " " . $orderCustomer->customer->last_name }}
                         </u></a>
                     </td>
-                    <td style="border: 1px solid black; width: 30%;">Born: {{ $ordersCustomer->customer->date_of_birth }}</td>
-                    <td style="border: 1px solid black; width: 30%;">Passport Number: {{ $ordersCustomer->customer->passport_number }}</td>
+                    <td style="border: 1px solid black; width: 30%;">Born: {{ $orderCustomer->customer->date_of_birth }}</td>
+                    <td style="border: 1px solid black; width: 30%;">Passport Number: {{ $orderCustomer->customer->passport_number }}</td>
                 </tr>
                 @endforeach
             </table>
-            <a href="{{ route('orders-customers.create', ['order' => $order, ]) }}" class="btn btn-success">Add Customer</a>
+            <a href="{{ route('order-customers.create', ['order' => $order, ]) }}" class="btn btn-success">Add Customer</a>
         </div>
     </div>
     {{-- Order Overview Table --}}
@@ -175,10 +175,10 @@
                     <th scope="col" style="border: 1px solid black; width: 50%;">Reason</th>
                 </tr>
                 </thead>
-                @foreach($customers as $ordersCustomer)
-                    @foreach($ordersCustomer->adjustments as $adjustment)
+                @foreach($customers as $orderCustomer)
+                    @foreach($orderCustomer->adjustments as $adjustment)
                     <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
+                        <td style="border: 1px solid black; width: 20%;">{{ $orderCustomer->customer->first_name .  " " . $orderCustomer->customer->last_name }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $adjustment->amount }}</td>
                         <td style="border: 1px solid black; width: 20%;">{{ $adjustment->reason }}</td>
                     </tr>

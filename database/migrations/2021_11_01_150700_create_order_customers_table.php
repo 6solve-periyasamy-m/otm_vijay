@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersCustomersTable extends Migration
+class CreateOrderCustomersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateOrdersCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_customers', function (Blueprint $table) {
+        Schema::create('order_customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->nullable();
-            $table->foreignId('customer_id')->nullable();
+            $table->foreignId('order_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('cascade');
             $table->float('tour_cost', 10, 0)->nullable();
             $table->float('single_occupancy_surcharge', 10, 0)->nullable();
             $table->string('travel_insurer', 255)->nullable();
             $table->string('policy_number', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 
@@ -35,6 +33,6 @@ class CreateOrdersCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders_customers');
+        Schema::dropIfExists('order_customers');
     }
 }

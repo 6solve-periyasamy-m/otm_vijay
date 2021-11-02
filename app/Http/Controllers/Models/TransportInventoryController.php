@@ -26,9 +26,9 @@ class TransportInventoryController extends Controller
         $transportInventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'departs_at' => $request->input('departs_at'),
-            'departure_confirmed' => $request->input('departure_confirmed') === 'on' ? 1 : 0,
+            'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
             'arrives_at' => $request->input('arrives_at'),
-            'arrival_confirmed' => $request->input('arrival_confirmed') === 'on' ? 1 : 0,
+            'arrival_time_confirmed' => $request->input('arrival_time_confirmed') === 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
@@ -56,9 +56,9 @@ class TransportInventoryController extends Controller
         $transportInventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'departs_at' => $request->input('departs_at'),
-            'departure_confirmed' => $request->input('departure_confirmed') === 'on' ? 1 : 0,
+            'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
             'arrives_at' => $request->input('arrives_at'),
-            'arrival_confirmed' => $request->input('arrival_confirmed') === 'on' ? 1 : 0,
+            'arrival_time_confirmed' => $request->input('arrival_time_confirmed') === 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),

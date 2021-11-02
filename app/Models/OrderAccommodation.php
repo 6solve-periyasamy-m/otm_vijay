@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OrdersAccommodation extends Model
+class OrderAccommodation extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -16,7 +16,7 @@ class OrdersAccommodation extends Model
 
     public function orderCustomers()
     {
-        return $this->belongsTo(OrdersCustomer::class);
+        return $this->belongsTo(OrderCustomer::class);
     }
 
     public function accommodation()
@@ -36,7 +36,7 @@ class OrdersAccommodation extends Model
 
     public static function findByOrderCustomer($orderCustomerId)
     {
-        $orderAccommodations = OrdersAccommodation::where('order_customer_id',$orderCustomerId)->get();
+        $orderAccommodations = OrderAccommodation::where('order_customer_id',$orderCustomerId)->get();
 
         return $orderAccommodations;
     }

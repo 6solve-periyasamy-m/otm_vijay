@@ -88,10 +88,10 @@
                                         {{($activity->activity->name)}}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($activity->activityInventory->activity_start_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($activity->activityInventory->starts_at)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($activity->activityInventory->activity_end_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($activity->activityInventory->ends_at)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
                                         {{ $activity->activityInventory->ticketType->name }}

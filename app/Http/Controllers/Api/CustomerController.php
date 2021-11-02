@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\Order;
 use App\Models\Customer;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 
 class CustomerController extends ApiController
 {
@@ -30,14 +30,14 @@ class CustomerController extends ApiController
         $order = $orders->where('token', $token)->first();
         if (isset($order)) {
             if ($this->logging) Log::info('orders are ', $order->toArray());
-            $ordersCustomer = new OrdersCustomer();
-            $orderCustomers = $ordersCustomer
-                ->select('customers.*', 'orders_customers.*', 'orders_customers.id as order_customer_id')
-                ->join('customers', 'orders_customers.customer_id', 'customers.id')
+            $orderCustomer = new OrderCustomer();
+            $orderCustomers = $orderCustomer
+                ->select('customers.*', 'order_customers.*', 'order_customers.id as order_customer_id')
+                ->join('customers', 'order_customers.customer_id', 'customers.id')
                 ->where('order_id', $order->id)
-                ->whereNull('orders_customers.deleted_at')
+                ->whereNull('order_customers.deleted_at')
                 // order by isLead desc so lead is first
-                ->orderBy('orders_customers.is_lead_booker', 'desc')
+                ->orderBy('order_customers.is_lead_booker', 'desc')
                 ->get();
             if (count($orderCustomers)) {
                 $order->customer = $orderCustomers[0];
@@ -55,20 +55,20 @@ class CustomerController extends ApiController
 
     public function getCustomerOrdersByEmail($email)
     {
-        $customerOrders = OrdersCustomer::select('orders.token', 'orders_customers.order_id')
-            ->join('customers', 'orders_customers.customer_id', 'customers.id')
-            ->join('orders', 'orders_customers.order_id', 'orders.id')
+        $customerOrders = OrderCustomer::select('orders.token', 'order_customers.order_id')
+            ->join('customers', 'order_customers.customer_id', 'customers.id')
+            ->join('orders', 'order_customers.order_id', 'orders.id')
             ->where('customers.email_address', $email)
-            ->whereNull('orders_customers.deleted_at')
+            ->whereNull('order_customers.deleted_at')
             ->get();
         // Log::info('getOrderByEmail: ', $customerOrders->toArray());
         return response()->json(['success' => true,
             'data' => $customerOrders]);
-            // select * from `orders_customers` 
-            // inner join `customers` on `orders_customers`.`customer_id` = `customers`.`id` 
-            // inner join `orders` on `orders_customers`.`order_id` = `orders`.`id` 
-            // where `orders_customer.customer_id` = ? and `customer`.`email_address` = ? 
-            // deleted_at `orders_customers` is null";
+            // select * from `order_customers`
+            // inner join `customers` on `order_customers`.`customer_id` = `customers`.`id`
+            // inner join `orders` on `order_customers`.`order_id` = `orders`.`id`
+            // where `order_customer.customer_id` = ? and `customer`.`email_address` = ?
+            // deleted_at `order_customers` is null";
     }
 
     /**
@@ -84,9 +84,9 @@ class CustomerController extends ApiController
         }
         $customer = new Customer();
         $customers = $customer
-            ->select('orders.id as order_id', 'orders_customers.id as order_customer_id', 'orders_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
-            ->join('orders_customers', 'orders_customers.customer_id', 'customers.id')
-            ->join('orders', 'orders.id', 'orders_customers.order_id')
+            ->select('orders.id as order_id', 'order_customers.id as order_customer_id', 'order_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
+            ->join('order_customers', 'order_customers.customer_id', 'customers.id')
+            ->join('orders', 'orders.id', 'order_customers.order_id')
             ->where('orders.id', $request->order_id)->get();
         
             return $customers->toJson();
