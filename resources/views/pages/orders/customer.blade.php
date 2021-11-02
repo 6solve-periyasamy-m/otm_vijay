@@ -134,7 +134,7 @@ $(document).ready( function () {
         </thead>
         <tr>
             <th scope="row">Full Name:</th>
-            <td>{{ $customer->first_name }} {{ $customer->middle_names ?? "" }} {{ $customer->last_name }}</td>
+            <td><a class="link-primary" href="{{ route('customers.view', ['customer' => $customer,]) }}">{{ $customer->first_name }} {{ $customer->middle_names ?? "" }} {{ $customer->last_name }}</a></td>
         </tr>
         <tr>
             <th scope="row">Date of Birth:</th>
