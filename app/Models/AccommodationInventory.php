@@ -15,7 +15,7 @@ class AccommodationInventory extends Model
     // use ModelLogging;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in','checked_in','check_out','checked_out','fit_selectable','stock','purchase_price','sales_price','notes',];
+    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in','strict_check_in','check_out','strict_check_out','fit_selectable','stock','purchase_price','sales_price','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     const RULES = [
         'room_type_id' => 'required|exists:room_types,id',

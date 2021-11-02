@@ -19,9 +19,9 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->foreignId('room_type_id');
             $table->foreignId('board_type_id');
             $table->dateTime('check_in')->nullable();
-            $table->boolean('checked_in')->default(false);
+            $table->boolean('strict_check_in')->default(false);
             $table->dateTime('check_out')->nullable();
-            $table->boolean('checked_out')->default(false);
+            $table->boolean('strict_check_out')->default(false);
             $table->boolean('fit_selectable')->default(true);
             $table->integer('stock');
             $table->double('purchase_price')->nullable();
