@@ -17,7 +17,7 @@ use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderTransport;
 use App\Models\Payment;
 use App\Models\Quote;
 use App\Models\Transport;
@@ -82,7 +82,7 @@ class OrderSystemSeeder extends Seeder
                  $inventory->tourComponents()->saveMany($tourInventories);
                   $tourInventories->each(function ($tourInventory) {
                       // Due to how nested this is, only one will be made
-                      $orders = OrdersTransport::factory()->makeOne();
+                      $orders = OrderTransport::factory()->makeOne();
                       $tourInventory->orders()->save($orders);
                   });
               });

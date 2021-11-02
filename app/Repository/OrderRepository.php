@@ -7,7 +7,7 @@ use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderTransport;
 use Illuminate\Support\Facades\DB;
 
 interface OrderRepositoryInterface {
@@ -175,7 +175,7 @@ class OrderRepository implements OrderRepositoryInterface
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderTransports()->save($orderInventory);
             }
         }

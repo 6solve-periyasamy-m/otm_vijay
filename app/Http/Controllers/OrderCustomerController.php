@@ -6,7 +6,7 @@ use App\Models\OrderCustomer;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderTransport;
 use App\Models\Transport;
 use App\Repository\OrderRepository;
 
@@ -18,7 +18,7 @@ class OrderCustomerController extends Controller
         $orderAccommodations = OrderAccommodation::findByOrderCustomer($id);
         $orderActivities = OrderActivity::findByOrderCustomer($id);
         $orderFlights = OrderFlight::findByOrderCustomer($id);
-        $orderTransports = OrdersTransport::findByOrderCustomer($id);
+        $orderTransports = OrderTransport::findByOrderCustomer($id);
 
         return view('pages.components.customer', [
             'customerOrder' => $customerOrder,

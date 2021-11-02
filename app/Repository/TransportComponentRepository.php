@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\OrderCustomer;
-use App\Models\OrdersTransport;
+use App\Models\OrderTransport;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,18 +23,18 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersTransport::findOrFail($orderComponentId);
+        return OrderTransport::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersTransport::findOrFail($orderComponentId);
+        $orderComponent = OrderTransport::findOrFail($orderComponentId);
         return $orderComponent->transportInventoryTour()->first()->transportInventory()->first()->transport();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersTransport::findOrFail($orderComponentId);
+        $orderComponent = OrderTransport::findOrFail($orderComponentId);
         return $orderComponent->transportInventoryTour()->first()->transportInventory();
     }
 
@@ -63,7 +63,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
 
     public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId)
     {
-        return OrdersTransport::create([
+        return OrderTransport::create([
             'order_customer_id' => $oCustomerId,
             'transport_inventory_tour_id' => $transportInventoryTourId,
         ]);

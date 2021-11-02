@@ -47,7 +47,7 @@ class OrderCustomer extends Model
     }
 
     public function orderTransports() {
-        return $this->hasMany(OrdersTransport::class, 'order_customer_id');
+        return $this->hasMany(OrderTransport::class, 'order_customer_id');
     }
 
     public function adjustments() {

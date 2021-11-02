@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderTransport;
 use Illuminate\Http\Request;
 
 class OrderComponentController extends Controller
@@ -26,7 +26,7 @@ class OrderComponentController extends Controller
     }
 
     public function deleteTransport(Request $request, $id) {
-        OrdersTransport::findOrFail($id)->delete();
+        OrderTransport::findOrFail($id)->delete();
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 

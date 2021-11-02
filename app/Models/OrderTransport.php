@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OrdersTransport extends Model
+class OrderTransport extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -35,7 +35,7 @@ class OrdersTransport extends Model
 
     public static function findByOrderCustomer($orderCustomerId)
     {
-        $orderTransports = OrdersTransport::where('order_customer_id',$orderCustomerId)->get();
+        $orderTransports = OrderTransport::where('order_customer_id',$orderCustomerId)->get();
 
         return $orderTransports;
     }

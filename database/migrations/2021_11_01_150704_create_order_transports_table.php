@@ -13,7 +13,7 @@ class CreateOrdersTransportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_transports', function (Blueprint $table) {
+        Schema::create('order_transports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_customer_id')->nullable();
             $table->foreignId('transport_inventory_tour_id')->nullable();
@@ -31,6 +31,6 @@ class CreateOrdersTransportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders_transports');
+        Schema::dropIfExists('order_transports');
     }
 }
