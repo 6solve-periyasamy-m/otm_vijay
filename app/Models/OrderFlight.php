@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OrdersFlight extends Model
+class OrderFlight extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -45,7 +45,7 @@ class OrdersFlight extends Model
 
     public static function findByOrderCustomer($orderCustomerId)
     {
-        $orderFlights = OrdersFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
+        $orderFlights = OrderFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
 
         return $orderFlights;
     }

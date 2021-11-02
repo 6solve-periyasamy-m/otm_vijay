@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\OrderCustomer;
-use App\Models\OrdersFlight;
+use App\Models\OrderFlight;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,18 +23,18 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersFlight::findOrFail($orderComponentId);
+        return OrderFlight::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersFlight::findOrFail($orderComponentId);
+        $orderComponent = OrderFlight::findOrFail($orderComponentId);
         return $orderComponent->flightInventoryTour()->first()->flightInventory()->first()->flight();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersFlight::findOrFail($orderComponentId);
+        $orderComponent = OrderFlight::findOrFail($orderComponentId);
         return $orderComponent->flightInventoryTour()->first()->flightInventory();
     }
 
@@ -63,7 +63,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
 
     public static function grantAddonToCustomer($oCustomerId, $flightInventoryTourId)
     {
-        return OrdersFlight::create([
+        return OrderFlight::create([
             'order_customer_id' => $oCustomerId,
             'flight_inventory_tour_id' => $flightInventoryTourId,
         ]);

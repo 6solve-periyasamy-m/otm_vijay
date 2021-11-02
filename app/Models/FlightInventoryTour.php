@@ -41,7 +41,7 @@ class FlightInventoryTour extends Model
     }
 
     public function orders() {
-        return $this->hasMany(OrdersFlight::class, 'flight_inventory_tour_id');
+        return $this->hasMany(OrderFlight::class, 'flight_inventory_tour_id');
     }
 
 

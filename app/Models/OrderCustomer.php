@@ -43,7 +43,7 @@ class OrderCustomer extends Model
     }
 
     public function orderFlights() {
-        return $this->hasMany(OrdersFlight::class, 'order_customer_id');
+        return $this->hasMany(OrderFlight::class, 'order_customer_id');
     }
 
     public function orderTransports() {

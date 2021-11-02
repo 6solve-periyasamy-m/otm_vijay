@@ -16,7 +16,7 @@ use App\Models\Order;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
-use App\Models\OrdersFlight;
+use App\Models\OrderFlight;
 use App\Models\OrdersTransport;
 use App\Models\Payment;
 use App\Models\Quote;
@@ -89,7 +89,7 @@ class OrderSystemSeeder extends Seeder
            });
         });
         FlightInventoryTour::all()->each(function($tourInventory) {
-            $orders = OrdersFlight::factory()->count($this->seedCount)->make();
+            $orders = OrderFlight::factory()->count($this->seedCount)->make();
             $tourInventory->orders()->saveMany($orders);
         });
     }
