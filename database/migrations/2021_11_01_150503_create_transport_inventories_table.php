@@ -25,8 +25,8 @@ class CreateTransportInventoriesTable extends Migration
             $table->float('sales_price', 10, 0)->nullable();
             $table->string('currency', 5)->nullable();
             $table->text('notes')->nullable();
-            $table->boolean('arrival_confirmed')->default(false);
-            $table->boolean('departure_confirmed')->default(false);
+            $table->boolean('arrival_time_confirmed')->default(false);
+            $table->boolean('departure_time_confirmed')->default(false);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('transport_id')->references('id')->on('transports')->onDelete('cascade');

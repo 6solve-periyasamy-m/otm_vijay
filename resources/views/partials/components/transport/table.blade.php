@@ -40,9 +40,9 @@ $(document).ready(function() {
             <tr>
                 <td>{{ $transportInventory->travelClass->name }}</td>
                 <td>{{ $transportInventory->departs_at }}</td>
-                <td>{{ $transportInventory->departure_confirmed ? "Yes" : "No" }}</td>
+                <td>{{ $transportInventory->departure_time_confirmed ? "Yes" : "No" }}</td>
                 <td>{{ $transportInventory->arrives_at }}</td>
-                <td>{{ $transportInventory->arrival_confirmed ? "Yes" : "No" }}</td>
+                <td>{{ $transportInventory->arrival_time_confirmed ? "Yes" : "No" }}</td>
                 <td>{{ $transportInventory->fit_selectable ? "Yes" : "No" }}</td>
                 <td>{{ $transportInventory->stock }}</td>
                 <td>{{ $transportInventory->purchase_price }}</td>

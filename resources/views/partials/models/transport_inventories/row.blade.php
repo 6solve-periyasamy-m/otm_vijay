@@ -4,9 +4,9 @@
     </td>
     <td>{{ $travel_class_id }}</td>
     <td>{{ $departs_at }}</td>
-    <td>{{ $departure_confirmed }}</td>
+    <td>{{ $departure_time_confirmed }}</td>
     <td>{{ $arrives_at }}</td>
-    <td>{{ $arrival_confirmed }}</td>
+    <td>{{ $arrival_time_confirmed }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $purchase_price }}</td>
