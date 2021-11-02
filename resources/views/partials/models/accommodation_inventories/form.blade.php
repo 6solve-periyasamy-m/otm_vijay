@@ -61,18 +61,18 @@
                         id="check_in-input">
 
                     <p></p>
-                    <input type="checkbox" name="strict_check_in" class="form-check-input" @if(isset($strict_check_in) && $strict_check_in == 1) checked @endif
-                        id="strict_check_in-input">
-                    <label for="strict_check_in-input" class="form-check-label">Checked In</label>
+                    <input type="checkbox" name="check_in_time_confirmed" class="form-check-input" @if(isset($check_in_time_confirmed) && $check_in_time_confirmed == 1) checked @endif
+                        id="check_in_time_confirmed-input">
+                    <label for="check_in_time_confirmed-input" class="form-check-label">Checked In</label>
                 </div>                                                
                 <div class="form-group col-xl-6">
                     <label for="check_out-input">Check Out</label>
                     <input type="datetime-local" name="check_out" value="{{ isset($check_out) ? $check_out->format('Y-m-d\TH:i') : "" }}" class="form-control"
                         id="check_out-input">
                     <p></p>
-                    <input type="checkbox" name="strict_check_out" class="form-check-input" @if(isset($strict_check_out) && $strict_check_out == 1) checked @endif
-                        id="strict_check_out-input">
-                    <label for="strict_check_out-input" class="form-check-label">Checked Out</label>
+                    <input type="checkbox" name="check_out_time_confirmed" class="form-check-input" @if(isset($check_out_time_confirmed) && $check_out_time_confirmed == 1) checked @endif
+                        id="check_out_time_confirmed-input">
+                    <label for="check_out_time_confirmed-input" class="form-check-label">Checked Out</label>
                 </div>                
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif >

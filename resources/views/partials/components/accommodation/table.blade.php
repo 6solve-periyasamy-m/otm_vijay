@@ -37,9 +37,9 @@
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
                     <td>{{ $accommodationInventory->check_in }}</td>
-                    <td>{{ $accommodationInventory->strict_check_in == 1 ? 'True' : 'False' }}</td>
+                    <td>{{ $accommodationInventory->check_in_time_confirmed == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->check_out }}</td>
-                    <td>{{ $accommodationInventory->strict_check_out == 1 ? 'True' : 'False' }}</td>
+                    <td>{{ $accommodationInventory->check_out_time_confirmed == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->stock }}</td>
                     <td>{{ $accommodationInventory->purchase_price }}</td>
