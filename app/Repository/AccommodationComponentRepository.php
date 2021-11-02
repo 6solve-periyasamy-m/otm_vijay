@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersAccommodation;
+use App\Models\OrderAccommodation;
 use App\Models\OrderCustomer;
 use App\Models\Tour;
 use Carbon\Carbon;
@@ -27,18 +27,18 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersAccommodation::findOrFail($orderComponentId);
+        return OrderAccommodation::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersAccommodation::findOrFail($orderComponentId);
+        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
         return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersAccommodation::findOrFail($orderComponentId);
+        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
         return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
     }
 
@@ -67,7 +67,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
     {
-        return OrdersAccommodation::create([
+        return OrderAccommodation::create([
             'order_customer_id' => $oCustomerId,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
             'share_with_user_id' => null

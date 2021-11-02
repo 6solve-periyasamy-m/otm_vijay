@@ -27,7 +27,7 @@ class Accommodation extends Model
 
     public function orderAccommodation()
     {
-        return $this->belongsTo(OrdersAccommodation::class);
+        return $this->belongsTo(OrderAccommodation::class);
     }
     
     public function region()

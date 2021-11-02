@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Order;
-use App\Models\OrdersAccommodation;
+use App\Models\OrderAccommodation;
 use App\Models\OrdersActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrdersFlight;
@@ -157,7 +157,7 @@ class OrderRepository implements OrderRepositoryInterface
     public static function addIncludedToCustomer(OrderCustomer $ordercustomer, Order $order) {
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
                 $ordercustomer->orderAccommodation()->save($orderInventory);
             }
         }
