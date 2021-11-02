@@ -54,20 +54,20 @@
                   <aside>
                     <img
                       src="https://picsum.photos/300/200"
-                      :alt="accommodation.title"
+                      :alt="accommodation.name"
                     />
                   </aside>
                   <div class="a-card__content">
                     <div class="active content">
-                      {{ accommodation.title }}
+                      {{ accommodation.name }}
                     </div>
                     <div class="label">Check-in</div>
                     <div class="content">
-                      {{ bookingTime(accommodation.check_in_date_time) }}
+                      {{ bookingTime(accommodation.check_in) }}
                     </div>
                     <div class="label">Checkout</div>
                     <div class="content">
-                      {{ bookingTime(accommodation.check_out_date_time) }}
+                      {{ bookingTime(accommodation.check_out) }}
                     </div>
                     <div class="label">Room type</div>
                     <div class="content">
@@ -163,21 +163,23 @@
                     <div class="label">Check-in</div>
                     <div class="content">
                       {{
-                        bookingTime(booking.accommodation.check_in_date_time)
+                        bookingTime(booking.accommodation.check_in)
                       }}
                     </div>
                     <div class="label">Checkout</div>
                     <div class="content">
                       {{
-                        bookingTime(booking.accommodation.check_out_date_time)
+                        bookingTime(booking.accommodation.check_out)
                       }}
                     </div>
                     <div class="label">Room type</div>
                     <div class="content">
                       {{ booking.accommodation.board_type_name }}
+                      <!-- TODO: Nic, may need rename. board_type_name -> name. -->
                       <br />
                       <span v-if="shared(booking)">Shared</span>
                       {{ booking.accommodation.room_type_name }}
+                      <!-- TODO: Nic, may need rename. room_type_name -> name. -->
                     </div>
                     <div class="label">Max occupancy</div>
                     <div class="content">
@@ -193,7 +195,7 @@
                         v-for="traveller in travellers"
                         :key="traveller.customer_id"
                       >
-                        <div v-if="traveller.id == booking.orders_customer_id">
+                        <div v-if="traveller.id == booking.order_customer_id">
                           {{ fullName(traveller) }}
                         </div>
                       </span>

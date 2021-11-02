@@ -4,6 +4,6 @@
 
 @section('content')
     @include('partials.models.board_types.form', ['action' => route('board-types.update', ['boardType' => $boardType,]),
-      'board_type_name' => $boardType->board_type_name,
+      'name' => $boardType->name,
     ])
 @endsection

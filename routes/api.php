@@ -58,7 +58,7 @@ Route::post('/booking/flights/remove/flight', [BookingController::class, 'remove
 Route::get('/booking/accommodation/customer/{tour}/{order}/{token}', [AccommodationController::class, 'getAccommodationBooking']);
 Route::get('/booking/accommodation/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
 Route::post('/booking/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
-Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
+Route::post('/booking/accommodation/{tour}/{order_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
 
 // accommodation rooms
 Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);

@@ -52,7 +52,7 @@ class Transport extends Model
         return $this->hasOne(Location::class, 'id', 'arrival_location_id');
     }
 
-    public static function findDepartureLocation(OrdersTransport $ordersTransport)
+    public static function findDepartureLocation(OrderTransport $ordersTransport)
     {
        return Location::where('id', $ordersTransport->transport->departure_location_id);
     }

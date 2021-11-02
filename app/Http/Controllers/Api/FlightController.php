@@ -14,7 +14,7 @@ use App\Models\Airport;
 use App\Models\Order;
 use App\Models\CustomerOrderDetail;
 use App\Models\FlightInventory;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 
 class FlightController extends ApiController
 {
@@ -39,10 +39,10 @@ class FlightController extends ApiController
             return [
                 "id" => $flightInventory->id,
                 "flight_id" => $flightInventory->flight->id,
-                "check_in_date_time" => $flightInventory->check_in_date_time,
-                "departure_date_time" => $flightInventory->departure_date_time,
-                "arrival_date_time" => $flightInventory->arrival_date_time,
-                "class" => $flightInventory->travelClass->title,
+                "check_in" => $flightInventory->check_in,
+                "departs_at" => $flightInventory->departs_at,
+                "arrives_at" => $flightInventory->arrives_at,
+                "class" => $flightInventory->travelClass->name,
                 "airline" => $flightInventory->flight->airline->name,
                 "departure_airport" => $flightInventory->flight->departureAirport->name,
                 "arrival_airport" => $flightInventory->flight->arrivalAirport->name,
@@ -62,7 +62,7 @@ class FlightController extends ApiController
         // $flightsRepository = new FlightsRepository($flight);
         // $flights = $flightsRepository->flights($tour_id);
 
-        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.title as travel_class', 'flights.available_after')
+        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.name as travel_class', 'flights.available_after')
         ->join('airlines', 'airline_id', 'airlines.id')
         ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
         ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
@@ -129,8 +129,8 @@ class FlightController extends ApiController
         $order = new Order();
         $orders = $order
             ->select('customer_order_details.*','customer_order_details.id as cod_id', 'flight_inventory_tour.*', 'flights.*')
-            ->join('orders_customers', 'orders_customers.order_id', 'order_id')
-            ->join('customer_order_details', 'customer_order_details.orders_customer_id', 'orders_customers.id')
+            ->join('order_customers', 'order_customers.order_id', 'order_id')
+            ->join('customer_order_details', 'customer_order_details.order_customer_id', 'order_customers.id')
             ->join('flight_inventory_tour', 'flight_inventory_tour.id', 'customer_order_details.inventory_tour_id')
             ->join('flight_inventories','flight_inventories.id', 'flight_inventory_tour.flight_inventory_id')
             ->join('flights', 'flights.id', 'flight_inventories.flight_id')

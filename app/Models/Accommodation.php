@@ -16,10 +16,10 @@ class Accommodation extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['region_id','title','description','audit_date','address','currency',];
+    protected $fillable = ['region_id','name','description','audit_date','address','currency',];
     protected $cascadeDeletes = ['inventory'];
     const RULES = [
-        'title' => 'required',
+        'name' => 'required',
         'region_id' => 'required|exists:regions,id',
         'audit_date' => 'date',
         'currency' => 'size:3'
@@ -27,7 +27,7 @@ class Accommodation extends Model
 
     public function orderAccommodation()
     {
-        return $this->belongsTo(OrdersAccommodation::class);
+        return $this->belongsTo(OrderAccommodation::class);
     }
     
     public function region()

@@ -15,7 +15,7 @@
         @foreach($roomTypes as $roomType)
             @include('partials.models.room_types.row', [
               'roomType' => $roomType,
-              'room_type_name' => $roomType->room_type_name,
+              'name' => $roomType->name,
               'maximum_occupancy' => $roomType->maximum_occupancy,
             ])
         @endforeach

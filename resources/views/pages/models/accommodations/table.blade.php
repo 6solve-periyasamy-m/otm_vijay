@@ -24,7 +24,7 @@
             <table id="accommodation" style="width: 100%;" class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Title</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Region</th>
                     <th scope="col">Description</th>
                     <th scope="col">Audit Date</th>
@@ -37,7 +37,7 @@
                     @include('partials.models.accommodations.row', [
                     'accommodation' => $accommodation,
                     'region_id' => $accommodation->region_id,
-                    'title' => $accommodation->title,
+                    'name' => $accommodation->name,
                     'description' => $accommodation->description,
                     'audit_date' => $accommodation->audit_date,
                     'address' => $accommodation->address,

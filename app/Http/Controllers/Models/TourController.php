@@ -25,7 +25,7 @@ class TourController extends Controller
         $request->validate(Tour::RULES);
         $tour = Tour::create([
             'event_id' => $request->input('event_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
@@ -57,7 +57,7 @@ class TourController extends Controller
         $request->validate(Tour::RULES);
         $tour->update([
             'event_id' => $request->input('event_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
@@ -68,7 +68,7 @@ class TourController extends Controller
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_colour_id' => $request->input('tour_colour_id'),
-            'is_active' => $request->input('is_active'),
+            'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);

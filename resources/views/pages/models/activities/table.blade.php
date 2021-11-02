@@ -24,7 +24,7 @@
         <table id="activity" style="width: 100%;" class="table table-striped">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Title</th>
+                <th scope="col">Name</th>
                 <th scope="col">Activity Type</th>
                 <th scope="col">Location</th>
                 <th scope="col">Description</th>
@@ -35,7 +35,7 @@
             @foreach($activities as $activity)
                 @include('partials.models.activities.row', [
                 'activity' => $activity,
-                'title' => $activity->title,
+                'name' => $activity->name,
                 'description' => $activity->description,
                 'notes' => $activity->notes,
                 ])

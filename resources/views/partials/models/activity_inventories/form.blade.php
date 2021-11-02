@@ -35,14 +35,14 @@
                     </div>
                 </div>                
                 <div class="form-group col-xl-6">
-                    <label for="activity_start_date_time-input">Activity Start Date Time</label>
-                    <input type="datetime-local" name="activity_start_date_time" value="{{ isset($activity_start_date_time) ? $activity_start_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="activity_start_date_time-input">
+                    <label for="starts_at-input">Activity Start Date Time</label>
+                    <input type="datetime-local" name="starts_at" value="{{ isset($starts_at) ? $starts_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="starts_at-input">
                 </div>                
                 <div class="form-group col-xl-6">
-                    <label for="activity_end_date_time-input">Activity End Date Time</label>
-                    <input type="datetime-local" name="activity_end_date_time" value="{{ isset($activity_end_date_time) ? $activity_end_date_time->format('Y-m-d\TH:i') : "" }}"
-                        class="form-control" id="activity_end_date_time-input">
+                    <label for="ends_at-input">Activity End Date Time</label>
+                    <input type="datetime-local" name="ends_at" value="{{ isset($ends_at) ? $ends_at->format('Y-m-d\TH:i') : "" }}"
+                        class="form-control" id="ends_at-input">
                 </div>                
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>

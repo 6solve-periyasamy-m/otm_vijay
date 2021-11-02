@@ -38,7 +38,7 @@ class Order extends Model
     }
 
     public function orderCustomers() {
-        return $this->hasMany(OrdersCustomer::class, 'order_id');
+        return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
     public function payments() {
@@ -46,7 +46,7 @@ class Order extends Model
     }
 
     public function leadBooker() {
-        return $this->belongsTo(OrdersCustomer::class, 'lead_booker_id');
+        return $this->belongsTo(OrderCustomer::class, 'lead_booker_id');
     }
 
     public function adjustments() {

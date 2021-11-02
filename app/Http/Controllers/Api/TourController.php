@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\Event;
 use App\Models\Tour;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 
 class TourController extends ApiController
 {
     public function getEvents() {
-        $events = Event::where('event_start_date', '>', date('Y-m-d'))->get();
+        $events = Event::where('starts_at', '>', date('Y-m-d'))->get();
 
         return response()->json(['success' => true, 'data' => $events->toArray()]);
     }
@@ -35,7 +35,7 @@ class TourController extends ApiController
 
         return response()->json([
             "success" => true,
-            "title" => $tour->title,
+            "title" => $tour->name,
             "description" => $tour->description,
             "base_price_per_person" => $tour->base_price_per_person,
             // tour_colour - is an ID so i'm assuming there would be a relationship, doesn't exist yet

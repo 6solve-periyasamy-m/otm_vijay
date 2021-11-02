@@ -10,5 +10,5 @@ class RoomType extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['room_type_name','maximum_occupancy',];
+    protected $fillable = ['name','maximum_occupancy',];
 }

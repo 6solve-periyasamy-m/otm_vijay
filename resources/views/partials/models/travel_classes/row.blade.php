@@ -1,5 +1,5 @@
 <tr>
-    <td><a href="{{ route('travel-classes.view', ['travelClass' => $travelClass,]) }}">{{ $title }}</a></td>
+    <td><a href="{{ route('travel-classes.view', ['travelClass' => $travelClass,]) }}">{{ $name }}</a></td>
     <td>
         <a href="{{route('travel-classes.edit', ['travelClass' => $travelClass,])}}">
             <ion-icon name="create"></ion-icon>

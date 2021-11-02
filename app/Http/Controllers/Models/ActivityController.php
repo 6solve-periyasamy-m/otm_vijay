@@ -25,7 +25,7 @@ class ActivityController extends Controller
         $activity = Activity::create([
             'activity_type_id' => $request->input('activity_type_id'),
             'location_id' => $request->input('location_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'notes' => $request->input('notes'),
         ]);
@@ -48,7 +48,7 @@ class ActivityController extends Controller
         $activity->update([
             'activity_type_id' => $request->input('activity_type_id'),
             'location_id' => $request->input('location_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'notes' => $request->input('notes'),
         ]);

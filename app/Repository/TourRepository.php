@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Order;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
 

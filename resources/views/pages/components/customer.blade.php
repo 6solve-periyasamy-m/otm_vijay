@@ -36,19 +36,19 @@
                             <tbody>
                                 @foreach($orderAccommodations as $accommodation)
                                 <td>
-                                    {{($accommodation->accommodation->title)}}
+                                    {{($accommodation->accommodation->name)}}
                                 </td>
                                 <td>
-                                    {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_in_date_time)->format('d-m-Y H:i')}}
+                                    {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_in)->format('d-m-Y H:i')}}
                                 </td>
                                 <td>
-                                    {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_out_date_time)->format('d-m-Y H:i')}}
+                                    {{Carbon\Carbon::parse($accommodation->accommodationInventory->check_out)->format('d-m-Y H:i')}}
                                 </td>
                                 <td>
-                                    {{ $accommodation->accommodationInventory->roomType->room_type_name }}
+                                    {{ $accommodation->accommodationInventory->roomType->name }}
                                 </td>
                                 <td>
-                                    {{ $accommodation->accommodationInventory->boardType->board_type_name }}
+                                    {{ $accommodation->accommodationInventory->boardType->name }}
                                 </td>
                                 @endforeach
                             </tbody>
@@ -85,13 +85,13 @@
                                 @foreach($orderActivities as $activity)
                                 <tr>
                                     <td>
-                                        {{($activity->activity->title)}}
+                                        {{($activity->activity->name)}}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($activity->activityInventory->activity_start_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($activity->activityInventory->starts_at)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($activity->activityInventory->activity_end_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($activity->activityInventory->ends_at)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
                                         {{ $activity->activityInventory->ticketType->name }}
@@ -195,13 +195,13 @@
                                         {{ $transport->transport->departureLocation->name }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($transport->transportInventory->departure_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($transport->transportInventory->departs_at)->format('d-m-Y H:i') }}
                                     </td>
                                     <td>
                                         {{ $transport->transport->departureLocation->name }}
                                     </td>
                                     <td>
-                                        {{ Carbon\Carbon::parse($transport->transportInventory->arrival_date_time)->format('d-m-Y H:i') }}
+                                        {{ Carbon\Carbon::parse($transport->transportInventory->arrives_at)->format('d-m-Y H:i') }}
                                     </td>
                                 </tr>
                                 @endforeach

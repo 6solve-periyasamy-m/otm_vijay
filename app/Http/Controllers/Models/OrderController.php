@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
@@ -33,7 +33,7 @@ class OrderController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
         ]);
-        $orderCustomer = OrdersCustomer::make([
+        $orderCustomer = OrderCustomer::make([
             'customer_id' => $request->input('customer_id'),
             'tour_cost' => $order->tour->base_price_per_person,
             'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,

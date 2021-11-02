@@ -117,7 +117,7 @@ $(document).ready( function () {
     <table class="table" style="font-size: 32px">
         <tr>
             <td class="header-cell">{{ $order->booking_reference }}</td>
-            <td class="header-cell">{{ $order->tour->title }} <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-amber">Edit</a></td>
+            <td class="header-cell">{{ $order->tour->name }} <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-amber">Edit</a></td>
             <td class="header-cell">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</td>
             <td class="header-cell" style="background-color: {{ true ? "#33ff99" : "#ffff99" }}">{{ true ? "Paid in Full" : "Balance Outstanding" }}</td>
         </tr>
@@ -180,7 +180,7 @@ $(document).ready( function () {
     </table>
     <div>
         <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
-        <a href="{{ route('orders-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
+        <a href="{{ route('order-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
     </div>
 </div>
 {{-- Components Section --}}
@@ -226,9 +226,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($accommodation as $accommodationEntry)
                             <tr>
-                                <td>{{ $accommodationEntry["inventory"]->check_in_date_time }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
+                                <td>{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
                                 <td>{{ $accommodationEntry["component"]->title }}</td>
-                                <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
+                                <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                 <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                                 <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                 <td>
@@ -263,7 +263,7 @@ $(document).ready( function () {
                     </thead>
                     @foreach($activities as $activity)
                         <tr>
-                            <td>{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
+                            <td>{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
                             <td>{{ $activity["component"]->title }}</td>
                             <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
                             <td>{{ $activity["tour"]->tour_component_type }}</td>
@@ -299,9 +299,9 @@ $(document).ready( function () {
                     </thead>
                     @foreach($flights as $flight)
                         <tr>
-                            <td>{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
+                            <td>{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
                             <td>{{ $flight["inventory"]->flight_number }}</td>
-                            <td>{{ $flight["inventory"]->travelClass->title }}</td>
+                            <td>{{ $flight["inventory"]->travelClass->name }}</td>
                             <td>{{ $flight["tour"]->tour_component_type }}</td>
                             <td>
                                 <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
@@ -335,9 +335,9 @@ $(document).ready( function () {
                     </thead>
                     @foreach($transports as $transport)
                         <tr>
-                            <td>{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
+                            <td>{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrives_at }}</td>
                             <td>{{ $transport["component"]->name }}</td>
-                            <td>{{ $transport["inventory"]->travelClass->title }}</td>
+                            <td>{{ $transport["inventory"]->travelClass->name }}</td>
                             <td>{{ $transport["tour"]->tour_component_type }}</td>
                             <td>
                                 <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">

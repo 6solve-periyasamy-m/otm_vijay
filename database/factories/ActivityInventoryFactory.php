@@ -23,8 +23,8 @@ class ActivityInventoryFactory extends Factory
     {
         return [
             'ticket_type_id' => $this->faker->numberBetween(1, 4),
-            'activity_start_date_time' => now(),
-            'activity_end_date_time' => now(),
+            'starts_at' => now(),
+            'ends_at' => now(),
             'fit_selectable' => true,
             'stock' => $this->faker->numberBetween(1, 10),
             'purchase_price' => $this->faker->numberBetween(10, 50),

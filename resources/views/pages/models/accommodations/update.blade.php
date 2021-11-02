@@ -5,7 +5,7 @@
 @section('content')
     @include('partials.models.accommodations.form', ['action' => route('accommodations.update', ['accommodation' => $accommodation,]),
       'region_id' => $accommodation->region_id,
-      'title' => $accommodation->title,
+      'name' => $accommodation->name,
       'description' => $accommodation->description,
       'audit_date' => $accommodation->audit_date,
       'address' => $accommodation->address,

@@ -34,10 +34,10 @@
             @foreach($flight->flightInventory as $flightInventory)
                 <tr>
                     <td>{{ $flightInventory->flight_number }}</td>
-                    <td>{{ $flightInventory->travelClass->title }}</td>
-                    <td>{{ $flightInventory->check_in_date_time }}</td>
-                    <td>{{ $flightInventory->departure_date_time }}</td>
-                    <td>{{ $flightInventory->arrival_date_time }}</td>
+                    <td>{{ $flightInventory->travelClass->name }}</td>
+                    <td>{{ $flightInventory->check_in }}</td>
+                    <td>{{ $flightInventory->departs_at }}</td>
+                    <td>{{ $flightInventory->arrives_at }}</td>
                     <td>{{ $flightInventory->fit_selectable ? "Yes" : "No" }}</td>
                     <td>{{ $flightInventory->stock }}</td>
                     <td>{{ $flightInventory->purchase_price }}</td>
