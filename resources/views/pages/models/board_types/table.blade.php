@@ -14,7 +14,7 @@
         @foreach($boardTypes as $boardType)
             @include('partials.models.board_types.row', [
               'boardType' => $boardType,
-              'board_type_name' => $boardType->board_type_name,
+              'name' => $boardType->name,
             ])
         @endforeach
     </table>

@@ -1,5 +1,5 @@
 <tr>
-    <td><a href="{{ route('room-types.view', ['roomType' => $roomType,]) }}">{{ $room_type_name }}</a></td>
+    <td><a href="{{ route('room-types.view', ['roomType' => $roomType,]) }}">{{ $name }}</a></td>
     <td>{{ $maximum_occupancy }}</td>
     <td>
         <a href="{{route('room-types.edit', ['roomType' => $roomType,])}}">

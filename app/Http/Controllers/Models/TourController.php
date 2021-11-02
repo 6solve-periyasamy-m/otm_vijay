@@ -25,7 +25,7 @@ class TourController extends Controller
         $request->validate(Tour::RULES);
         $tour = Tour::create([
             'event_id' => $request->input('event_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),
@@ -57,7 +57,7 @@ class TourController extends Controller
         $request->validate(Tour::RULES);
         $tour->update([
             'event_id' => $request->input('event_id'),
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
             'description' => $request->input('description'),
             'date_from' => $request->input('date_from'),
             'date_to' => $request->input('date_to'),

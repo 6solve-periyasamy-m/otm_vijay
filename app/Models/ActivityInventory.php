@@ -13,16 +13,16 @@ class ActivityInventory extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_id','ticket_type_id','activity_start_date_time','activity_end_date_time','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['activity_id','ticket_type_id','starts_at','ends_at','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
-        'activity_start_date_time' => 'datetime',
-        'activity_end_date_time' => 'datetime',
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
     ];
     const RULES = [
         'ticket_type_id' => 'required|exists:ticket_types,id',
-        'activity_start_date_time' => 'date',
-        'activity_end_date_time' => 'date',
+        'starts_at' => 'date',
+        'ends_at' => 'date',
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
@@ -62,10 +62,10 @@ class ActivityInventory extends Model
 
     public function getActivityForTourAttribute()
     {
-        $activity_start_date_time =  $this->activity_start_date_time->format('d/m/Y H:i');
-        $activity_end_date_time = $this->activity_end_date_time->format('d/m/Y H:i');
+        $starts_at =  $this->starts_at->format('d/m/Y H:i');
+        $ends_at = $this->ends_at->format('d/m/Y H:i');
 
-        return "{$this->activity->title}｜Activity Start: {$activity_start_date_time}｜Activity End: {$activity_end_date_time}｜Ticket Type: {$this->ticketType->name}";
+        return "{$this->activity->name}｜Activity Start: {$starts_at}｜Activity End: {$ends_at}｜Ticket Type: {$this->ticketType->name}";
     }
 
     public $additional_attributes = ['Activity_for_tour'];

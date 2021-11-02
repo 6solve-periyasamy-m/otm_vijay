@@ -4,8 +4,8 @@
             @csrf
             <div class="row">
                 <div class="form-group">
-                    <label for="title-input">Title</label>
-                    <input name="title" value="{{ $title ?? "" }}" class="form-control" id="title-input">
+                    <label for="name-input">Name</label>
+                    <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
                 </div>
                 <p></p>
                 <div class="form-group">

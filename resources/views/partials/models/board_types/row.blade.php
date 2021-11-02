@@ -1,5 +1,5 @@
 <tr>
-    <td><a href="{{ route('board-types.view', ['boardType' => $boardType,]) }}">{{ $board_type_name }}</a></td>
+    <td><a href="{{ route('board-types.view', ['boardType' => $boardType,]) }}">{{ $name }}</a></td>
     <td>
         <a href="{{route('board-types.edit', ['boardType' => $boardType,])}}">
             <ion-icon name="create"></ion-icon>

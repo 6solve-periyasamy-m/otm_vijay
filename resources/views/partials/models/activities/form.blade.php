@@ -56,8 +56,8 @@
                     </div>
                 </div>
                 <div class="form-group col-12">
-                    <label for="title-input">Title</label>
-                    <input name="title" value="{{ $title ?? "" }}" class="form-control" id="title-input">
+                    <label for="name-input">Name</label>
+                    <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
                 </div>                
                 <div class="form-group col-12">
                     <label for="description-input">Description</label>

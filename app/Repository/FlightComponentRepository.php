@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersCustomer;
-use App\Models\OrdersFlight;
+use App\Models\OrderCustomer;
+use App\Models\OrderFlight;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,32 +23,32 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersFlight::findOrFail($orderComponentId);
+        return OrderFlight::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersFlight::findOrFail($orderComponentId);
+        $orderComponent = OrderFlight::findOrFail($orderComponentId);
         return $orderComponent->flightInventoryTour()->first()->flightInventory()->first()->flight();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersFlight::findOrFail($orderComponentId);
+        $orderComponent = OrderFlight::findOrFail($orderComponentId);
         return $orderComponent->flightInventoryTour()->first()->flightInventory();
     }
 
     public static function getAvailableAddons($tourId, $oCustomerId)
     {
         $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->flightInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->flightInventory->flight_number;
-                $components[$component->id]['travel_class'] = $component->flightInventory->travelClass->title;
+                $components[$component->id]['travel_class'] = $component->flightInventory->travelClass->name;
             }
         }
         if ($oCustomer != null) {
@@ -63,7 +63,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
 
     public static function grantAddonToCustomer($oCustomerId, $flightInventoryTourId)
     {
-        return OrdersFlight::create([
+        return OrderFlight::create([
             'order_customer_id' => $oCustomerId,
             'flight_inventory_tour_id' => $flightInventoryTourId,
         ]);
@@ -85,13 +85,13 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
             'flight_inventories.id AS id',
             'flights.id AS flight_id',
             'flight_inventories.flight_number AS flight_number',
-            'travel_classes.title AS travel_class',
+            'travel_classes.name AS travel_class',
             DB::raw('CASE WHEN `flights`.`is_domestic` = 1 THEN \'Yes\' ELSE \'No\' END AS is_domestic'),
             'flights.available_after AS available_after',
-            'flight_inventories.check_in_date_time AS check_in_time',
-            'flight_inventories.departure_date_time AS departure_time',
+            'flight_inventories.check_in AS check_in',
+            'flight_inventories.departs_at AS departure_time',
             'departure_airports.name AS departure_airport',
-            'flight_inventories.arrival_date_time AS arrival_time',
+            'flight_inventories.arrives_at AS arrival_time',
             'arrival_airports.name AS arrival_airport',
             DB::raw('CASE WHEN `flight_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END AS fit_selectable'),
             'flight_inventories.stock AS stock',
@@ -100,8 +100,8 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
             'flight_inventories.notes AS notes'
         );
         $query->whereNotIn('flight_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departure_date_time` AND `flight_inventories`.`arrival_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departure_date_time` AND `flight_inventories`.`arrival_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departs_at` AND `flight_inventories`.`arrives_at`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departs_at` AND `flight_inventories`.`arrives_at`");
         return $query->get();
     }
 }

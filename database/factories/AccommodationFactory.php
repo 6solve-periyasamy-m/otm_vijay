@@ -23,7 +23,7 @@ class AccommodationFactory extends Factory
     {
         return [
             'region_id' => $this->faker->numberBetween(1, 8),
-            'title' => $this->faker->words(3, true),
+            'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
             'audit_date' => now(),
             'address' => $this->faker->address,

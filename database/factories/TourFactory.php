@@ -24,7 +24,7 @@ class TourFactory extends Factory
         return [
             'id' => 1,
             'event_id' => 1,
-            'title' => $this->faker->sentence,
+            'name' => $this->faker->sentence,
             'description' => $this->faker->sentence,
             'notes' => $this->faker->sentence,
             'base_price_per_person' => 1000,

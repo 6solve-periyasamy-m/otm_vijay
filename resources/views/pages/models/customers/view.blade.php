@@ -81,7 +81,7 @@
                 @foreach($customer->orderCustomers as $orderCustomer)
                     <tr>
                         <th scope="row"><a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}">{{ $orderCustomer->order->booking_reference }}</a></th>
-                        <td>{{ $orderCustomer->order->tour->title }}</td>
+                        <td>{{ $orderCustomer->order->tour->name }}</td>
                         <td>{{ $orderCustomer->order->ordered_on }}</td>
                         <td>{{ $orderCustomer->tour_cost }}</td>
                     </tr>

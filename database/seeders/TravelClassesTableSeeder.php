@@ -22,7 +22,7 @@ class TravelClassesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'title' => 'Economy',
+                'name' => 'Economy',
                 'created_at' => '2021-04-02 16:51:57',
                 'updated_at' => '2021-04-02 16:51:57',
                 'deleted_at' => NULL,
@@ -30,7 +30,7 @@ class TravelClassesTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'title' => 'First Class',
+                'name' => 'First Class',
                 'created_at' => '2021-04-02 16:52:15',
                 'updated_at' => '2021-04-02 16:52:15',
                 'deleted_at' => NULL,

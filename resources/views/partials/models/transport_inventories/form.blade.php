@@ -33,22 +33,22 @@
                     </div>
                 </div>                
                 <div class="form-group col-12 col-xl-6">
-                    <label for="departure_date_time-input">Departure Date Time</label>
-                    <input type="datetime-local" name="departure_date_time" value="{{ isset($departure_date_time) ? $departure_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="departure_date_time-input">
+                    <label for="departs_at-input">Departs At</label>
+                    <input type="datetime-local" name="departs_at" value="{{ isset($departs_at) ? $departs_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="departs_at-input">
                     <p></p>
-                    <input type="checkbox" name="departure_confirmed" class="form-check-input" @if(isset($departure_confirmed) && $departure_confirmed == 1) checked @endif
-                        id="departure_confirmed-input">
-                    <label for="departure_confirmed-input">Departure Confirmed</label>
+                    <input type="checkbox" name="departure_time_confirmed" class="form-check-input" @if(isset($departure_time_confirmed) && $departure_time_confirmed == 1) checked @endif
+                        id="departure_time_confirmed-input">
+                    <label for="departure_time_confirmed-input">Departure Confirmed</label>
                 </div>                                
                 <div class="form-group col-12 col-xl-6">
-                    <label for="arrival_date_time-input">Arrival Date Time</label>
-                    <input type="datetime-local" name="arrival_date_time" value="{{ isset($arrival_date_time) ? $arrival_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="arrival_date_time-input">
+                    <label for="arrives_at-input">Arrives At</label>
+                    <input type="datetime-local" name="arrives_at" value="{{ isset($arrives_at) ? $arrives_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="arrives_at-input">
                     <p></p>
-                    <input type="checkbox" name="arrival_confirmed" class="form-check-input" @if(isset($arrival_confirmed) && $arrival_confirmed == 1) checked @endif
-                        id="arrival_confirmed-input">
-                    <label for="arrival_confirmed-input">Arrival Confirmed</label>
+                    <input type="checkbox" name="arrival_time_confirmed" class="form-check-input" @if(isset($arrival_time_confirmed) && $arrival_time_confirmed == 1) checked @endif
+                        id="arrival_time_confirmed-input">
+                    <label for="arrival_time_confirmed-input">Arrival Confirmed</label>
                 </div>
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>

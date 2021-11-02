@@ -4,10 +4,10 @@
     </td>
     <td>{{ $room_type_id }}</td>
     <td>{{ $board_type_id }}</td>
-    <td>{{ $check_in_date_time }}</td>
-    <td>{{ $checkin_confirmed }}</td>
-    <td>{{ $check_out_date_time }}</td>
-    <td>{{ $checkout_confirmed }}</td>
+    <td>{{ $check_in }}</td>
+    <td>{{ $check_in_time_confirmed }}</td>
+    <td>{{ $check_out }}</td>
+    <td>{{ $check_out_time_confirmed }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $purchase_price }}</td>

@@ -4,9 +4,9 @@
             @csrf
             <div class="row">
                 <div class="form-group col-12">
-                    <label for="board_type_name-input">Board Type Name</label>
-                    <input name="board_type_name" value="{{ $board_type_name ?? "" }}" class="form-control"
-                        id="board_type_name-input">
+                    <label for="name-input">Board Type Name</label>
+                    <input name="name" value="{{ $name ?? "" }}" class="form-control"
+                        id="name-input">
                 </div>
                 <p></p>
                 <div class="form-group col-12">

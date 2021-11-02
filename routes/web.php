@@ -26,7 +26,7 @@ use App\Http\Controllers\Models\ManualAdjustmentController;
 use App\Http\Controllers\Models\OperatorController;
 use App\Http\Controllers\Models\OrderController;
 use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
-use App\Http\Controllers\Models\OrdersCustomerController;
+use App\Http\Controllers\Models\OrderCustomerModelController;
 use App\Http\Controllers\Models\PaymentController;
 use App\Http\Controllers\Models\PaymentInstallmentController;
 use App\Http\Controllers\Models\PaymentMethodController;
@@ -303,15 +303,15 @@ Route::middleware('auth')->group(function () {
                 });
             });
             Route::prefix('customer')->group(function () {
-                Route::get('/', [OrdersCustomerController::class, 'index'])->name('orders-customers.all');
-                Route::get('/create', [OrdersCustomerController::class, 'create'])->name('orders-customers.create');
-                Route::post('/create', [OrdersCustomerController::class, 'store'])->name('orders-customers.store');
+                Route::get('/', [OrderCustomerModelController::class, 'index'])->name('order-customers.all');
+                Route::get('/create', [OrderCustomerModelController::class, 'create'])->name('order-customers.create');
+                Route::post('/create', [OrderCustomerModelController::class, 'store'])->name('order-customers.store');
                 Route::prefix('{orderCustomer}')->group(function () {
                     // This is staying in the OrderCustomerController, as moving it out breaks it somehow
-                    Route::get('/', [OrderCustomerController::class, 'show'])->name("orders-customers.view");
-                    Route::get('/update', [OrdersCustomerController::class, 'edit'])->name('orders-customers.edit');
-                    Route::post('/update', [OrdersCustomerController::class, 'update'])->name('orders-customers.update');
-                    Route::post('/delete', [OrdersCustomerController::class, 'destroy'])->name('orders-customers.delete');
+                    Route::get('/', [OrderCustomerController::class, 'show'])->name("order-customers.view");
+                    Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit');
+                    Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update');
+                    Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete');
                     Route::prefix('adjustment')->group(function () {
                         Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all');
                         Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create');

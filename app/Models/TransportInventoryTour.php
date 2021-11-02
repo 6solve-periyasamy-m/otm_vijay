@@ -11,7 +11,6 @@ use Illuminate\Validation\Rule;
 
 class TransportInventoryTour extends Model
 {
-    protected $table = 'transport_inventory_tour';
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
@@ -34,6 +33,6 @@ class TransportInventoryTour extends Model
     }
 
     public function orders() {
-        return $this->hasMany(OrdersTransport::class, 'transport_inventory_tour_id');
+        return $this->hasMany(OrderTransport::class, 'transport_inventory_tour_id');
     }
 }

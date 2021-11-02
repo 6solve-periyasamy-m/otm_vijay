@@ -10,5 +10,5 @@ class BoardType extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['board_type_name',];
+    protected $fillable = ['name',];
 }

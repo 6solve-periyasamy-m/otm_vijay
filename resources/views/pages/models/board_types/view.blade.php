@@ -3,5 +3,5 @@
 @section('title', 'View Board Type')
 
 @section('content')
-    Board Type Name: {{ $boardType->board_type_name }}<br/>
+    Board Type Name: {{ $boardType->name }}<br/>
 @endsection

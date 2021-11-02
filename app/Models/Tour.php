@@ -11,10 +11,10 @@ class Tour extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['event_id','title','description','date_from','date_to','base_price_per_person','margin','single_occupancy_surcharge','stock_control_active','stock','booking_form_url','tour_colour_id','is_active','notes',];
+    protected $fillable = ['event_id','name','description','date_from','date_to','base_price_per_person','margin','single_occupancy_surcharge','stock_control_active','stock','booking_form_url','tour_colour_id','is_active','notes',];
     const RULES = [
         'event_id' => 'required|exists:events,id',
-        'title' => 'required',
+        'name' => 'required',
         'date_from' => 'required|date',
         'date_to' => 'required|date',
         'base_price_per_person' => 'numeric',
@@ -33,7 +33,7 @@ class Tour extends Model
 
     public function flightInventory()
     {
-        return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+        return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
     public function accommodationInventory()
@@ -43,12 +43,12 @@ class Tour extends Model
 
     public function activityInventory()
     {
-        return $this->belongsToMany(ActivityInventory::class, 'activity_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+        return $this->belongsToMany(ActivityInventory::class, 'activity_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
     public function transportInventory()
     {
-        return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tour')->withPivot('sales_price', 'tour_component_type');
+        return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
     public function paymentPlan() {

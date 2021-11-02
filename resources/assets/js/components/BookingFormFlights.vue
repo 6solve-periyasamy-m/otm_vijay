@@ -228,7 +228,7 @@ export default {
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         // this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
-        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out_date_time ', this.order_id)
+        this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out ', this.order_id)
         this.debug>1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
         this.debug>1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
         that.ready = true
@@ -268,7 +268,7 @@ export default {
         bus.$on('removeBooking', (booking, flight_type, traveller) => {
             console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.token)
             const item = this.orderset.filter(ordr => ordr.inventory_tour_id === booking &&
-                ordr.orders_customer_id == traveller.order_customer_id);
+                ordr.order_customer_id == traveller.order_customer_id);
             if (item.length === 1) {
                 console.log('deleting booking', item[0].cod_id)
             }
@@ -394,7 +394,7 @@ export default {
             }
             let order = orders.filter(ordr => ordr.flight_type == type &&
                 ordr.addon == addon &&
-                ordr.orders_customer_id == traveller.order_customer_id)
+                ordr.order_customer_id == traveller.order_customer_id)
 
             if (typeof order == 'undefined' || order == null || order.length == 0) {
                 console.log('WARNING: flightSelected no ' + type + ' order?')

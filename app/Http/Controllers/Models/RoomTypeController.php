@@ -22,7 +22,7 @@ class RoomTypeController extends Controller
     public function store(Request $request)
     {
         $roomType = RoomType::create([
-            'room_type_name' => $request->input('room_type_name'),
+            'name' => $request->input('name'),
             'maximum_occupancy' => $request->input('maximum_occupancy'),
         ]);
         return redirect()->route('room-types.view', ['roomType' => $roomType,]);
@@ -41,7 +41,7 @@ class RoomTypeController extends Controller
     public function update(Request $request, RoomType $roomType)
     {
         $roomType->update([
-            'room_type_name' => $request->input('room_type_name'),
+            'name' => $request->input('name'),
             'maximum_occupancy' => $request->input('maximum_occupancy'),
         ]);
         return redirect()->route('room-types.view', ['roomType' => $roomType,]);

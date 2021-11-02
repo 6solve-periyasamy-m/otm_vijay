@@ -23,10 +23,10 @@ class EventController extends Controller
     {
         $request->validate(Event::RULES);
         $event = Event::create([
-            'event_title' => $request->input('event_title'),
-            'event_description' => $request->input('event_description'),
-            'event_start_date' => $request->input('event_start_date'),
-            'event_end_date' => $request->input('event_end_date'),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'starts_at' => $request->input('starts_at'),
+            'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
             'notes' => $request->input('notes'),
         ]);
@@ -47,10 +47,10 @@ class EventController extends Controller
     {
         $request->validate(Event::RULES);
         $event->update([
-            'event_title' => $request->input('event_title'),
-            'event_description' => $request->input('event_description'),
-            'event_start_date' => $request->input('event_start_date'),
-            'event_end_date' => $request->input('event_end_date'),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'starts_at' => $request->input('starts_at'),
+            'ends_at' => $request->input('ends_at'),
             'booking_url' => $request->input('booking_url'),
             'notes' => $request->input('notes'),
         ]);

@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersCustomer;
-use App\Models\OrdersTransport;
+use App\Models\OrderCustomer;
+use App\Models\OrderTransport;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,25 +23,25 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersTransport::findOrFail($orderComponentId);
+        return OrderTransport::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersTransport::findOrFail($orderComponentId);
+        $orderComponent = OrderTransport::findOrFail($orderComponentId);
         return $orderComponent->transportInventoryTour()->first()->transportInventory()->first()->transport();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersTransport::findOrFail($orderComponentId);
+        $orderComponent = OrderTransport::findOrFail($orderComponentId);
         return $orderComponent->transportInventoryTour()->first()->transportInventory();
     }
 
     public static function getAvailableAddons($tourId, $oCustomerId)
     {
         $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->transportInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
@@ -63,7 +63,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
 
     public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId)
     {
-        return OrdersTransport::create([
+        return OrderTransport::create([
             'order_customer_id' => $oCustomerId,
             'transport_inventory_tour_id' => $transportInventoryTourId,
         ]);
@@ -90,11 +90,11 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             'transports.description AS description',
             DB::raw('CASE WHEN `transports`.`is_domestic` = 1 THEN \'Yes\' ELSE \'No\' END AS is_domestic'),
             'departure_locations.name AS departure_location',
-            'transport_inventories.departure_date_time AS departure_date',
-            DB::raw('CASE WHEN `transport_inventories`.`departure_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END AS departure_confirmed'),
+            'transport_inventories.departs_at AS departure_date',
+            DB::raw('CASE WHEN `transport_inventories`.`departure_time_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END AS departure_time_confirmed'),
             'arrival_locations.name AS arrival_location',
-            'transport_inventories.arrival_date_time AS arrival_date',
-            DB::raw('CASE WHEN `transport_inventories`.`arrival_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END AS arrival_confirmed'),
+            'transport_inventories.arrives_at AS arrival_date',
+            DB::raw('CASE WHEN `transport_inventories`.`arrival_time_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END AS arrival_time_confirmed'),
             DB::raw('CASE WHEN `transport_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END AS fit_selectable'),
             'transport_inventories.stock AS stock',
             'transport_inventories.purchase_price AS purchase_price',
@@ -102,8 +102,8 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             'transport_inventories.notes AS notes'
         );
         $query->whereNotIn('transport_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departure_date_time` AND `transport_inventories`.`arrival_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departure_date_time` AND `transport_inventories`.`arrival_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrives_at`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrives_at`");
         return $query->get();
     }
 }

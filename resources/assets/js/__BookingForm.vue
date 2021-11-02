@@ -6,8 +6,8 @@
                     <div class="card-header">OTM Booking Form version 0.2.0 PRERELEASE - Lead/Additional/Flights/Custom Flights</div>
                     <div class="card-body">
                         <bookingform-header></bookingform-header>
-                            <h1 v-if="event != null">{{event.event_title}}</h1>
-                            <h2 v-if="tour != null">{{tour.title}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
+                            <h1 v-if="event != null">{{event.name}}</h1>
+                            <h2 v-if="tour != null">{{tour.name}} From {{ startDate(event) }} To {{endDate(event) }}</h2>
                             <div v-if="selectOrder.length>1 && order_selected === null">
                                 <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected" >
                                     <option value="">Select an Order</option>
@@ -139,10 +139,10 @@ export default {
             })
         },
         startDate(event) {
-            return dates.makeDateFromString(event.event_start_date)
+            return dates.makeDateFromString(event.starts_at)
         },
         endDate(event) {
-            return dates.makeDateFromString(event.event_end_date)
+            return dates.makeDateFromString(event.ends_at)
         },
     }
 }
