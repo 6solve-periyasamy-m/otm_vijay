@@ -5,6 +5,7 @@
             travelClassSelect.select2({
                 ajax: {
                     url: '{{ route('api.travel-classes.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.travel-classes.selected', ['id' => $travel_class_id ?? 0, ]) }}', })
