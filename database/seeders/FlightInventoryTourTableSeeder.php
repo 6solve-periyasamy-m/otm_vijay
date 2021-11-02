@@ -16,9 +16,9 @@ class FlightInventoryTourTableSeeder extends Seeder
     {
         
 
-        \DB::table('flight_inventory_tour')->delete();
+        \DB::table('flight_inventory_tours')->delete();
         
-        \DB::table('flight_inventory_tour')->insert(array (
+        \DB::table('flight_inventory_tours')->insert(array (
             0 => 
             array (
                 'tour_id' => 1,

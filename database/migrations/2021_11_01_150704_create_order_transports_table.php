@@ -20,7 +20,7 @@ class CreateOrderTransportsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('order_customer_id')->references('id')->on('order_customers')->onDelete('cascade');
-            $table->foreign('transport_inventory_tour_id')->references('id')->on('transport_inventory_tour')->onDelete('cascade');
+            $table->foreign('transport_inventory_tour_id')->references('id')->on('transport_inventory_tours')->onDelete('cascade');
         });
     }
 

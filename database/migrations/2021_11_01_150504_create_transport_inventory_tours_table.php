@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransportInventoryTourTable extends Migration
+class CreateTransportInventoryToursTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTransportInventoryTourTable extends Migration
      */
     public function up()
     {
-        Schema::create('transport_inventory_tour', function (Blueprint $table) {
+        Schema::create('transport_inventory_tours', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tour_id');
             $table->foreignId('transport_inventory_id');
@@ -33,6 +33,6 @@ class CreateTransportInventoryTourTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transport_inventory_tour');
+        Schema::dropIfExists('transport_inventory_tours');
     }
 }
