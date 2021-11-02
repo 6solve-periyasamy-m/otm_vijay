@@ -41,7 +41,7 @@
                 @foreach($tours as $tour)
                     @include('partials.models.tours.row', [
                     'tour' => $tour,
-                    'event' => $tour->event->event_title,
+                    'event' => isset($tour->event) ? $tour->event->event_title : "None",
                     'title' => $tour->title,
                     'description' => $tour->description,
                     'date_from' => $tour->date_from,
