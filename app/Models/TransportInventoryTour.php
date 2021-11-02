@@ -11,7 +11,6 @@ use Illuminate\Validation\Rule;
 
 class TransportInventoryTour extends Model
 {
-    protected $table = 'transport_inventory_tour';
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 

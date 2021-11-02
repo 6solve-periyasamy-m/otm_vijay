@@ -11,7 +11,6 @@ use Illuminate\Validation\Rule;
 
 class FlightInventoryTour extends Model
 {
-    protected $table = 'flight_inventory_tour';
     public $additional_attributes = ['flight_inventory_for_tour'];
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
