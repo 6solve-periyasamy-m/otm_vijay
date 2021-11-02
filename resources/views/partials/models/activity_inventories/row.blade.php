@@ -3,8 +3,8 @@
         <a href="{{ route('activity-inventories.view', ['activityInventory' => $activityInventory,]) }}">{{ $activity_id }}</a>
     </td>
     <td>{{ $ticket_type_id }}</td>
-    <td>{{ $activity_start_date_time }}</td>
-    <td>{{ $activity_end_date_time }}</td>
+    <td>{{ $starts_at }}</td>
+    <td>{{ $ends_at }}</td>
     <td>{{ $fit_selectable }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $purchase_price }}</td>

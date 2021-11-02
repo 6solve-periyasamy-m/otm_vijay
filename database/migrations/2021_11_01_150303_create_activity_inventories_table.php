@@ -16,8 +16,8 @@ class CreateActivityInventoriesTable extends Migration
         Schema::create('activity_inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('activity_id')->index();
-            $table->dateTime('activity_start_date_time')->nullable();
-            $table->dateTime('activity_end_date_time')->nullable();
+            $table->dateTime('starts_at')->nullable();
+            $table->dateTime('ends_at')->nullable();
             $table->tinyInteger('fit_selectable')->nullable();
             $table->foreignId('ticket_type_id')->index();
             $table->integer('stock');

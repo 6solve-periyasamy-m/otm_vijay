@@ -147,7 +147,7 @@
                             </thead>
                             @foreach($activities as $activity)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
                                     <td>{{ $activity["component"]->title }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>

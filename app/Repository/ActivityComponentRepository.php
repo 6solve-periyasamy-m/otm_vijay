@@ -90,8 +90,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             'locations.name AS location',
             'ticket_types.name AS ticket_type',
             'activity_types.name AS activity_type',
-            'activity_inventories.activity_start_date_time AS start_date',
-            'activity_inventories.activity_end_date_time AS end_date',
+            'activity_inventories.starts_at AS start_date',
+            'activity_inventories.ends_at AS end_date',
             DB::raw('CASE WHEN `activity_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END AS fit_selectable'),
             'activity_inventories.stock AS stock',
             'activity_inventories.purchase_price AS purchase_price',
@@ -99,8 +99,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             'activity_inventories.notes AS notes'
         );
         $query->whereNotIn('activity_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
         return $query->get();
     }
 }

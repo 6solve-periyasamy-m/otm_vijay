@@ -263,7 +263,7 @@ $(document).ready( function () {
                     </thead>
                     @foreach($activities as $activity)
                         <tr>
-                            <td>{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
+                            <td>{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
                             <td>{{ $activity["component"]->title }}</td>
                             <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
                             <td>{{ $activity["tour"]->tour_component_type }}</td>
