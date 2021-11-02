@@ -14,7 +14,7 @@ class AddLeadBookerForeignKeyConstraint extends Migration
     public function up()
     {
         Schema::table('orders', function ($table) {
-            $table->foreign('lead_booker_id')->references('id')->on('orders_customers')->onDelete('cascade');
+            $table->foreign('lead_booker_id')->references('id')->on('order_customers')->onDelete('cascade');
         });
     }
 

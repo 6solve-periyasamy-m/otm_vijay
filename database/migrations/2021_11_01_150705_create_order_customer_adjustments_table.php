@@ -21,7 +21,7 @@ class CreateOrderCustomerAdjustmentsTable extends Migration
             $table->dateTime('date');
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('order_customer_id')->references('id')->on('orders_customers')->onDelete('cascade');
+            $table->foreign('order_customer_id')->references('id')->on('order_customers')->onDelete('cascade');
         });
     }
 

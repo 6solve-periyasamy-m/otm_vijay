@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Models\OrdersAccommodation;
 use App\Models\OrdersActivity;
 use App\Models\OrdersFlight;
@@ -14,7 +14,7 @@ class OrderCustomerController extends Controller
 {
     public function customerComponents($id)
     {
-        $customerOrder = OrdersCustomer::findOrFail($id);
+        $customerOrder = OrderCustomer::findOrFail($id);
         $orderAccommodations = OrdersAccommodation::findByOrderCustomer($id);
         $orderActivities = OrdersActivity::findByOrderCustomer($id);
         $orderFlights = OrdersFlight::findByOrderCustomer($id);
@@ -29,7 +29,7 @@ class OrderCustomerController extends Controller
         ]);
     }
 
-    public function show($order, OrdersCustomer $orderCustomer) {
+    public function show($order, OrderCustomer $orderCustomer) {
         return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($orderCustomer));
     }
 }

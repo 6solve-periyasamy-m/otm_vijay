@@ -15,7 +15,7 @@ use App\Models\Tour;
 use App\Models\Order;
 use App\Models\Flight;
 use App\Models\Customer;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Models\CustomerOrderDetail;
 use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
@@ -40,7 +40,7 @@ class BookingController extends ApiController
     }
     private function getOrderCustomer($order, $customer_id) 
     {
-        $orderCustomers = new OrdersCustomer();
+        $orderCustomers = new OrderCustomer();
         $customer_id = 0 + $customer_id;
         $orderCustomer = $orderCustomers
                 ->where('order_id', $order->id)
@@ -58,7 +58,7 @@ class BookingController extends ApiController
 
     private function removeCustomerOrderDetail($orderCustomer, $inventory_tour_id, $type, $custom, $reference) {
         $cod = new CustomerOrderDetail();
-        $result = $cod->where('orders_customer_id', $orderCustomer->id)
+        $result = $cod->where('order_customer_id', $orderCustomer->id)
             ->where('type', ucfirst($type))
             ->where('addon', $custom)
             ->where('inventory_tour_id', $inventory_tour_id)
@@ -87,7 +87,7 @@ class BookingController extends ApiController
         ]);
         $order_customer_id = $request->order_customer_id;
         $inventory_tour_id = $request->inventory_tour_id;
-        $orderCustomers = new OrdersCustomer();
+        $orderCustomers = new OrderCustomer();
         $orderCustomer = $orderCustomers->find($order_customer_id);
 
         $token = $_COOKIE['OTM_booking_order_token'];
@@ -117,7 +117,7 @@ class BookingController extends ApiController
     /**
      * bookFlightDetails
      * save flight details for a pax tour flight
-     * 1. create / update orders_customers
+     * 1. create / update order_customers
      * 2. create customer_order_details (audit)
      * 3. create / update 8orders_flights
      * @param tour
@@ -205,11 +205,11 @@ class BookingController extends ApiController
         ];
     }
 
-    // private function findCustomerOrderDetailsByOrderId($orders_customer_id, $order_id, $flight_type, $reference, $addon)
+    // private function findCustomerOrderDetailsByOrderId($order_customer_id, $order_id, $flight_type, $reference, $addon)
     // {
     //     $model = new CustomerOrderDetail();
     //     $customer_order_details = $model
-    //         ->where('orders_customer_id', $orders_customer_id)
+    //         ->where('order_customer_id', $order_customer_id)
     //         ->where('order_id', $order_id)
     //         ->where('type', $flight_type)
     //         ->where('reference', $reference)
@@ -218,18 +218,18 @@ class BookingController extends ApiController
 
     //     return $customer_order_details;
     // }
-    private function findCustomerOrderDetailByInventoryTourId($orders_customer_id, $inventory_tour_id, $flight_type, $reference, $addon)
+    private function findCustomerOrderDetailByInventoryTourId($order_customer_id, $inventory_tour_id, $flight_type, $reference, $addon)
     {
         $model = new CustomerOrderDetail();
-        $this->logging == 'orders' && Log::info('findCustomerOrderDetailByInventoryTourId', [$orders_customer_id, $inventory_tour_id, $flight_type, $reference, $addon]);
+        $this->logging == 'orders' && Log::info('findCustomerOrderDetailByInventoryTourId', [$order_customer_id, $inventory_tour_id, $flight_type, $reference, $addon]);
         $customer_order_detail = $model
             ->select('customer_order_details.*')
             ->join('flight_inventory_tour', 'flight_inventory_tour.id', 'customer_order_details.inventory_tour_id')
             ->join('tours', 'flight_inventory_tour.tour_id', 'tours.id')
-            ->join('orders_customers', 'orders_customers.id', 'customer_order_details.orders_customer_id')
-            ->join('orders', 'orders_customers.order_id', 'orders.id')
+            ->join('order_customers', 'order_customers.id', 'customer_order_details.order_customer_id')
+            ->join('orders', 'order_customers.order_id', 'orders.id')
             ->whereNull('customer_order_details.deleted_at')
-            ->where('customer_order_details.orders_customer_id', $orders_customer_id)
+            ->where('customer_order_details.order_customer_id', $order_customer_id)
             ->where('customer_order_details.type', $flight_type)
             ->where('addon', $addon)
             ->where('orders.token', $reference)
@@ -277,7 +277,7 @@ class BookingController extends ApiController
             $status = 'updated';
             ActionsRepository::log('UPDATE Flight: Customer Order Detail', $orderCustomer->order_id, $flightTour->flight_inventory_id, 'Flight Inventory ID?='.$flightTour->id);
             // anything to update?
-            if ($customer_order_detail->orders_customer_id === $orderCustomer->id
+            if ($customer_order_detail->order_customer_id === $orderCustomer->id
                 && $customer_order_detail->inventory_tour_id === $flightTour->id
                 && $customer_order_detail->type === $flightType
                 && $customer_order_detail->addon === intval($addon)
@@ -286,7 +286,7 @@ class BookingController extends ApiController
                 //return;
             }
         }
-        $customer_order_detail->orders_customer_id = $orderCustomer->id;
+        $customer_order_detail->order_customer_id = $orderCustomer->id;
         $customer_order_detail->type = $flightType;
         $customer_order_detail->inventory_tour_id = $flightTour->id;
         $customer_order_detail->date_time = date('Y-m-d H:i:s');
@@ -319,28 +319,28 @@ class BookingController extends ApiController
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
         }
-        $ordersCustomer = new OrdersCustomer();
+        $ordercustomer = new OrderCustomer();
         $this->logging == 'orders' && Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer->id);
-        $ordersCustomerExists = $ordersCustomer
+        $ordercustomerExists = $ordercustomer
             ->where('order_id', $request->order_id)
             ->where('customer_id', $customer->id)
             ->first();
-        if ($ordersCustomerExists) {
-            $ordersCustomer = $ordersCustomerExists;
-            $this->logging == 'orders' && Log::info('orderCustomer record', $ordersCustomerExists->toArray());
-            $this->updateOrderCustomerFields($ordersCustomer, $request);
+        if ($ordercustomerExists) {
+            $ordercustomer = $ordercustomerExists;
+            $this->logging == 'orders' && Log::info('orderCustomer record', $ordercustomerExists->toArray());
+            $this->updateOrderCustomerFields($ordercustomer, $request);
             // Log::info('ordercustomer exists, updating');
         } else {
-            $ordersCustomer->order_id = $request->order_id;
-            $ordersCustomer->customer_id = $customer->id;
+            $ordercustomer->order_id = $request->order_id;
+            $ordercustomer->customer_id = $customer->id;
             $this->logging == 'orders' && Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer->id);
         }
-        $ordersCustomer->is_lead_booker = $isLead;
-        $ordersCustomer->travel_insurer = null;
-        $ordersCustomer->policy_number = null;
-        $ordersCustomer->save();
+        $ordercustomer->is_lead_booker = $isLead;
+        $ordercustomer->travel_insurer = null;
+        $ordercustomer->policy_number = null;
+        $ordercustomer->save();
 
-        return $ordersCustomer;
+        return $ordercustomer;
     }
 
     /**
@@ -475,7 +475,7 @@ class BookingController extends ApiController
     {
         $order_customer_id = $request->order_customer_id;
         $this->logging == 'customers' && Log::info('removing Additional Traveller order_customer_id:' . $order_customer_id);
-        $orderCustomer = OrdersCustomer::find($order_customer_id);
+        $orderCustomer = OrderCustomer::find($order_customer_id);
         if (empty($orderCustomer)) {
             return json_encode(['success' => false, $request]);
         }
@@ -489,17 +489,17 @@ class BookingController extends ApiController
         /**
      * updateOrderCustomer - adds fields to existing orderCustomer record for a single traveller
      *
-     * @param [type] $ordersCustomer (object)
+     * @param [type] $ordercustomer (object)
      * @param Request $request
      * @return void
      */
-    private function updateOrderCustomerFields($ordersCustomer, Request $request) 
+    private function updateOrderCustomerFields($ordercustomer, Request $request)
     {
         if (!empty($request->tour['base_price_per_person'])) {
-            $ordersCustomer->tour_cost = $request->tour['base_price_per_person'];
+            $ordercustomer->tour_cost = $request->tour['base_price_per_person'];
         }
         if (!empty($request->tour['single_occupancy_surcharge'])) {
-            $ordersCustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
+            $ordercustomer->single_occupancy_surcharge = $request->tour['single_occupancy_surcharge'];
         }
     }
     

@@ -180,7 +180,7 @@ $(document).ready( function () {
     </table>
     <div>
         <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success">Add Adjustment</a>
-        <a href="{{ route('orders-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
+        <a href="{{ route('order-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber">Edit Order Customer</a>
     </div>
 </div>
 {{-- Components Section --}}

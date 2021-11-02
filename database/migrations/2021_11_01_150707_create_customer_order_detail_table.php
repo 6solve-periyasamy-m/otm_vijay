@@ -16,7 +16,7 @@ class CreateCustomerOrderDetailTable extends Migration
     {
         Schema::create('customer_order_details', function(Blueprint $table) {
             $table->id();
-            $table->integer('orders_customer_id')->index();
+            $table->integer('order_customer_id')->index();
             $table->string('type')->index(); // flight / accommodation / activity / transport
             $table->integer('inventory_tour_id')->index(); // e.g. flight_inventory_tour_id
             $table->datetime('date_time');
@@ -26,7 +26,7 @@ class CreateCustomerOrderDetailTable extends Migration
             $table->decimal('cost', $precision = 8, $scale = 2);
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
-            // $table->foreign('customers_orders_id')->references('id')->on('orders_customers');
+            // $table->foreign('customers_orders_id')->references('id')->on('order_customers');
             // $table->foreign('order_id')->references('id')->on('orders');
         });        
     }

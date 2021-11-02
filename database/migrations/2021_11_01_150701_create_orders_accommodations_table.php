@@ -20,7 +20,7 @@ class CreateOrdersAccommodationsTable extends Migration
             $table->foreignId('share_with_user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('order_customer_id')->references('id')->on('orders_customers')->onDelete('cascade');
+            $table->foreign('order_customer_id')->references('id')->on('order_customers')->onDelete('cascade');
             $table->foreign('accommodation_inventory_tour_id')->references('id')->on('accommodation_inventory_tours')->onDelete('cascade');
         });
     }

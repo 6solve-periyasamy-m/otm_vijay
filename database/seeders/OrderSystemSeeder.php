@@ -15,7 +15,7 @@ use App\Models\Operator;
 use App\Models\Order;
 use App\Models\OrdersAccommodation;
 use App\Models\OrdersActivity;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Models\OrdersFlight;
 use App\Models\OrdersTransport;
 use App\Models\Payment;
@@ -40,7 +40,7 @@ class OrderSystemSeeder extends Seeder
         Customer::factory()->count($this->seedCount)->create();
         Quote::factory()->count($this->seedCount)->create();
         Order::factory()->count($this->seedCount)->create()->each(function($order) {
-            $orderCustomers = OrdersCustomer::factory()->count($this->seedCount)->make();
+            $orderCustomers = OrderCustomer::factory()->count($this->seedCount)->make();
             $order->orderCustomers()->saveMany($orderCustomers);
             $order->lead_booker_id = $orderCustomers->all()[0]->id;
             $order->save();

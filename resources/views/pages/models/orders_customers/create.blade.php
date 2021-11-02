@@ -3,5 +3,5 @@
 @section('title', 'Create Orders Customer')
 
 @section('content')
-    @include('partials.models.orders_customers.form', ['action' => route('orders-customers.store', ['order' => $order, ]),])
+    @include('partials.models.order_customers.form', ['action' => route('order-customers.store', ['order' => $order, ]),])
 @endsection

@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\OrdersAccommodation;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +45,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     public static function getAvailableAddons($tourId, $oCustomerId = -1)
     {
         $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->accommodationInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {

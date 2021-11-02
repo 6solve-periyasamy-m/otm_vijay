@@ -16,7 +16,7 @@ class OrdersTransport extends Model
 
     public function orderCustomers()
     {
-        return $this->belongsTo(OrdersCustomer::class);
+        return $this->belongsTo(OrderCustomer::class);
     }
 
     public function transport()

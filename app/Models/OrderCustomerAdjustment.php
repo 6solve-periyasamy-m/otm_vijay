@@ -17,6 +17,6 @@ class OrderCustomerAdjustment extends Model
     }
 
     public function orderCustomer() {
-        return $this->belongsTo(OrdersCustomer::class, 'order_customer_id');
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 }

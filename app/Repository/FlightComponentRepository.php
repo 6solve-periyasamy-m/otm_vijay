@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 use App\Models\OrdersFlight;
 use App\Models\Tour;
 use Carbon\Carbon;
@@ -41,7 +41,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
     public static function getAvailableAddons($tourId, $oCustomerId)
     {
         $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->flightInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {

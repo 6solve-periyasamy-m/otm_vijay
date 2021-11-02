@@ -195,7 +195,7 @@
                         v-for="traveller in travellers"
                         :key="traveller.customer_id"
                       >
-                        <div v-if="traveller.id == booking.orders_customer_id">
+                        <div v-if="traveller.id == booking.order_customer_id">
                           {{ fullName(traveller) }}
                         </div>
                       </span>

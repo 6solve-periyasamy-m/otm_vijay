@@ -19,7 +19,7 @@ class CreateOrdersActivitiesTable extends Migration
             $table->foreignId('activity_inventory_tour_id');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('order_customer_id')->references('id')->on('orders_customers')->onDelete('cascade');
+            $table->foreign('order_customer_id')->references('id')->on('order_customers')->onDelete('cascade');
             $table->foreign('activity_inventory_tour_id')->references('id')->on('activity_inventory_tour')->onDelete('cascade');
         });
     }
