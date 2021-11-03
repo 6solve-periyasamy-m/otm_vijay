@@ -6,7 +6,21 @@
     border-style: solid;
     border-left-width: .25rem;    
     border-left-color: $primaryColor;
+    margin-bottom: 0.5rem;
 
+    p {
+        margin-bottom: 0rem;
+    }
+}
+
+.otm-card {
+    padding: 0.75rem 1.25rem;        
+    border-width: 2px;
+    border-style: solid;    
+    border-color: $sideBarColor;
+    border-radius: 5px;       
+    margin-bottom: 0.5rem;
+    
     p {
         margin-bottom: 0rem;
     }
