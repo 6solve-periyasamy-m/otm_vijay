@@ -2,9 +2,10 @@
     <div class="container">
         <div class="card card-options">
             <div class="card-header">
+                [{{token}} {{booking_token}}]
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
-                    <p v-if="!show_traveller">Click this button to start your booking</p>
+                    <p v-if="!token && !show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                         <font-awesome-icon icon="book-reader" />
                         Lead Traveller details
@@ -12,20 +13,32 @@
                 </h5>
 
                 <div class="card-info" v-if="!show_traveller">
-                    <p><font-awesome-icon icon="arrow-right" />
-                    No active booking. You may be able to retrieve your booking by email address.</p>
-                    <input v-model="email" style="width: 100%" type="email" placeholder="Retrieve booking by email" />
-                    <div v-if="!getPassword">
-                       <button @click="retrieveOrder()" class="btn btn-primary"><font-awesome-icon icon="check" /> Check </button>
+                    <div v-if="!token g">
+                        <p>
+                            <font-awesome-icon icon="arrow-right" />
+                            What is you email address?
+                        </p>
+                        <input v-model="email" type="email" placeholder="Retrieve booking by email" />
+                        <div v-if="!getPassword">
+                           <button @click="retrieveUser()" class="btn btn-primary">
+                            <font-awesome-icon icon="check" /> Check 
+                           </button>
+                        </div>
                     </div>
-                    <div v-else>
+                
+                    <div v-if="!token && activeUser">
                         <p>Active User</p>
                         <label for="password">Enter your password</label>
-                        <input type="password" v-model="password" @change="loginUser">
-                        <button @click="loginUser" class="btn btn-primary"><font-awesome-icon icon="check" />Login</button>
+                        <input type="password" v-model="password">
+                        <button @click="loginUser" class="btn btn-primary">
+                            <font-awesome-icon icon="check" /> Login
+                        </button>
+                    </div>
+                    <div v-else>
+                        <p>Enter your details</p>
                     </div>
                 </div>
-                <div v-if="token">
+                <div v-if="token && !show_traveller">
                     <font-awesome-icon icon="arrow-right" />
                     You can continue with your booking, please fill in all sections
                 </div>
@@ -230,6 +243,7 @@
 
 <script>
 import axios from 'axios'
+import { isThisQuarter } from 'date-fns'
 import { bus } from '../bus'
 import ValidationErrors from './ValidationErrors.vue'
 export default {
@@ -242,6 +256,7 @@ export default {
             email: '',
             password: '',
             auth: false,
+            activeUser: false,
             getPassword: false,
             show_traveller: false,
             title: '',
@@ -325,7 +340,9 @@ export default {
         let that = this
         this.validationErrors = ''
         bus.$on('debugOverride', (debug) => that.debug = debug)
-
+        if (that.booking_token) {
+            that.token = that.booking_token
+        }
     },
     computed: {
         otherNumberType: function() {
@@ -347,6 +364,7 @@ export default {
             const username = this.email
             const password = this.password
             const t = new Date()
+            alert('login user');
             // request a salt value from the server which is then used in the encryption
             axios.get(`/api/booking/auth/token/${username}`)
                 .then(response => {
@@ -377,20 +395,24 @@ export default {
                 })
 
         },
-        retrieveOrder() {
+        retrieveUser() {
             // if the cookie does not retrieve an active order
             // perhaps we can do so with an email address
             let that = this
             // is it a registered user?
             if (!this.auth) {
+                console.log('checking for auth user');
                 axios.get(`/api/booking/email/registered/${this.email}`)
                     .then(response => {
                         console.log('email registered? response', response)
-                        this.getPassword = response.data.existing
-                        return
+                        this.activeUser = response.data.existing
                     })
                     .catch(error => console.log(error));
+            } else {
+                console.log('auth is true??')
             }
+        },
+        retrieveUserToken() {
             // get login_token for the user
             axios.post('/api/booking/recover/token', this.email)
             .then(response => {

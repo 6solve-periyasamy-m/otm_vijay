@@ -8,41 +8,21 @@
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
-                            <div v-if="selectOrder.length>1 && order_selected === null">
-                                <div class="orders-active">
-                                    <h3>Active User</h3>
-                                    <label for="email_address">Enter your email address</label>
-                                    <input v-model="login">
-                                    <input v-model="password">
-                                    <div v-if="authenticated">
-                                        <h4>Active Orders</h4>
-                                        <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected">
-                                            <option value="">Select an Order</option>
-                                            <option :value="key">{{order.id}}</option>
-                                        </select>
-                                    </div>
-                                    <div v-else>
-                                        <h5>You need to login to access your active orders</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>
-                                    <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
-                                    <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                                    <booking-form-lead :booking_token="bookingOrderToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
-                                    <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
-                                    <div v-if="tour && token">
-                                        <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
-                                        <booking-form-accommodation :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
-                                        <booking-form-activity></booking-form-activity>
-                                        <booking-form-transport></booking-form-transport>
-                                        <booking-form-payment></booking-form-payment>
-                                        <booking-form-terms></booking-form-terms>
-                                    </div>
-                            </div>
-                            <bookingform-footer></bookingform-footer>
-
+                        <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
+                        <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
+                        <booking-form-lead :booking_token="bookingToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
+                        <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
+                        <div v-if="tour && token">
+                        {{tour}} {{token}}
+                            <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
+                            <booking-form-accommodation :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
+                            <booking-form-activity></booking-form-activity>
+                            <booking-form-transport></booking-form-transport>
+                            <booking-form-payment></booking-form-payment>
+                            <booking-form-terms></booking-form-terms>
+                        </div>
                     </div>
+                    <bookingform-footer></bookingform-footer>
                 </div>
             </div>
         </div>
@@ -67,12 +47,23 @@ function getCookie(cname) {
   }
   return "";
 }
-function deleteCookie( name, path, domain ) {
-  if (getCookie(name) ) {
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function deleteCookie(name) {
+  if (getCookie(name)) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    /*
     document.cookie = name + "=" +
       ((path) ? ";path="+path:"")+
       ((domain)?";domain="+domain:"") +
-      ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+      ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    */
   }
 }
 export default {
@@ -92,7 +83,7 @@ export default {
             booked: {},
             selectOrder: [],
             order_selected: null,
-            bookingOrderToken: '',
+            bookingToken: '',
             login: '',
             password: '',
             authenticated: false,
@@ -104,44 +95,43 @@ export default {
         this.debug && console.log('BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
 
-        that.bookingOrderToken = getCookie(that.tokenId); 
-        this.debug && console.log('Cookie read:', that.bookingOrderToken)
-    
-        if (typeof that.bookingOrderToken != 'undefined' && that.bookingOrderToken.length) {
-            this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingOrderToken)
-            axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
-                .then(response => {
-                    const customer = response.data.customer
-
-                    console.log('customer retrieved', customer)
-                    if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
-                        deleteCookie(that.tokenId)
-                        that.authenticated = false
-                        that.login = ''
-                    } else {
-                        that.leadTraveller = customer
-                        const home_address = response.data.home_address
-                        const billing_address = response.data.billing_address
+        that.bookingToken = getCookie(that.tokenId); 
+        this.debug && console.log('Cookie read:', that.bookingToken)
+        if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
+            this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
+            axios.get(`/api/booking/customer/${that.bookingToken}`)
+            .then(response => {
+                const customer = response.data.customer
+                console.log('customer retrieved', customer)
+                if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
+                    console.log('cookie found no customer. removing ', that.tokenId)
+                    deleteCookie(that.tokenId)
+                    that.authenticated = false
+                    that.login = ''
+                } else {
+                    that.leadTraveller = customer
+                    const home_address = response.data.home_address
+                    const billing_address = response.data.billing_address
 console.log(response.data)
-                        bus.$emit('setBookingToken', that.bookingOrderToken)
-                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                        bus.$emit('homeAddressLoaded', home_address)
-
-                        if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
-                            console.log('BILLING loading...', customer, billing_address)
-                            bus.$emit('billingAddressLoaded', billing_address)
-                        }
-                        that.login = that.leadTraveller.email_address
+                    bus.$emit('setBookingToken', that.bookingToken)
+                    bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                    bus.$emit('homeAddressLoaded', home_address)
+                    if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
+                        console.log('BILLING loading...', customer, billing_address)
+                        bus.$emit('billingAddressLoaded', billing_address)
                     }
-                })
-                .catch(error => {
-                    console.log('get current customer', error)
-                })
-        } else {
+                    that.login = that.leadTraveller.email_address
+                }
+            })
+            .catch(error => {
+                console.log('get current customer', error)
+            })
+        } 
+        if (!that.leadTraveller) {
             that.token = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             bus.$emit('setBookingToken', that.token)
-            that.bookingOrderToken = getCookie(that.tokenId);
-            console.log('bookingOrderToken CREATED ', that.bookingOrderToken)
+            that.bookingToken = getCookie(that.tokenId);
+            console.log('bookingToken CREATED ', that.bookingToken)
         }
     },
     mounted() {
