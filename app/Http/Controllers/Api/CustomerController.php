@@ -9,8 +9,9 @@ use Cookie;
 
 use App\Models\Order;
 use App\Models\Customer;
-use App\Models\OrdersCustomer;
+
 use App\Repository\AddressRepository;
+use App\Models\OrderCustomer;
 
 class CustomerController extends ApiController
 {
@@ -69,14 +70,14 @@ isset($billing_address) && Log::info('business', $billing_address);
         $order = $orders->where('token', $token)->first();
         if (isset($order)) {
             if ($this->logging) Log::info('orders are ', $order->toArray());
-            $ordersCustomer = new OrdersCustomer();
-            $orderCustomers = $ordersCustomer
-                ->select('customers.*', 'orders_customers.*', 'orders_customers.id as order_customer_id')
-                ->join('customers', 'orders_customers.customer_id', 'customers.id')
+            $orderCustomer = new OrderCustomer();
+            $orderCustomers = $orderCustomer
+                ->select('customers.*', 'order_customers.*', 'order_customers.id as order_customer_id')
+                ->join('customers', 'order_customers.customer_id', 'customers.id')
                 ->where('order_id', $order->id)
-                ->whereNull('orders_customers.deleted_at')
+                ->whereNull('order_customers.deleted_at')
                 // order by isLead desc so lead is first
-                ->orderBy('orders_customers.is_lead_booker', 'desc')
+                ->orderBy('order_customers.is_lead_booker', 'desc')
                 ->get();
             if (count($orderCustomers)) {
                 $order->customer = $orderCustomers[0];
@@ -140,9 +141,9 @@ isset($billing_address) && Log::info('business', $billing_address);
         }
         $customer = new Customer();
         $customers = $customer
-            ->select('orders.id as order_id', 'orders_customers.id as order_customer_id', 'orders_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
-            ->join('orders_customers', 'orders_customers.customer_id', 'customers.id')
-            ->join('orders', 'orders.id', 'orders_customers.order_id')
+            ->select('orders.id as order_id', 'order_customers.id as order_customer_id', 'order_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
+            ->join('order_customers', 'order_customers.customer_id', 'customers.id')
+            ->join('orders', 'orders.id', 'order_customers.order_id')
             ->where('orders.id', $request->order_id)->get();
         
             return $customers->toJson();

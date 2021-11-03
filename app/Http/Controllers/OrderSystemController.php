@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\OrdersActivity;
+use App\Models\OrderActivity;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 

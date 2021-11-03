@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersAccommodation;
-use App\Models\OrdersCustomer;
+use App\Models\OrderAccommodation;
+use App\Models\OrderCustomer;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -27,32 +27,32 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersAccommodation::findOrFail($orderComponentId);
+        return OrderAccommodation::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersAccommodation::findOrFail($orderComponentId);
+        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
         return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersAccommodation::findOrFail($orderComponentId);
+        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
         return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
     }
 
     public static function getAvailableAddons($tourId, $oCustomerId = -1)
     {
         $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->accommodationInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
-                $components[$component->id]['name'] = $component->accommodationInventory->accommodation->title;
-                $components[$component->id]['room_type'] = $component->accommodationInventory->roomType->room_type_name;
+                $components[$component->id]['name'] = $component->accommodationInventory->accommodation->name;
+                $components[$component->id]['room_type'] = $component->accommodationInventory->roomType->name;
             }
         }
         if ($oCustomer != null) {
@@ -67,7 +67,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
     {
-        return OrdersAccommodation::create([
+        return OrderAccommodation::create([
             'order_customer_id' => $oCustomerId,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
             'share_with_user_id' => null
@@ -89,14 +89,14 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query->select(
             'accommodation_inventories.id AS id',
             'accommodations.id AS accommodation_id',
-            'accommodations.title AS accommodation_name',
+            'accommodations.name AS accommodation_name',
             DB::raw('CONCAT(`regions`.`name`, \' - \', `countries`.`name`) AS location'),
-            'accommodation_inventories.check_in_date_time AS check_in_time',
-            'accommodation_inventories.check_out_date_time AS check_out_time',
-            DB::raw('CASE WHEN `accommodation_inventories`.`checkin_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_in_confirmed'),
-            DB::raw('CASE WHEN `accommodation_inventories`.`checkout_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_out_confirmed'),
-            'room_types.room_type_name AS room_type',
-            'board_types.board_type_name AS board_type',
+            'accommodation_inventories.check_in AS check_in',
+            'accommodation_inventories.check_out AS check_out_time',
+            DB::raw('CASE WHEN `accommodation_inventories`.`check_in_time_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_in_time_confirmed'),
+            DB::raw('CASE WHEN `accommodation_inventories`.`check_out_time_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_out_confirmed'),
+            'room_types.name AS room_type',
+            'board_types.name AS board_type',
             DB::raw('CASE WHEN `accommodation_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END  AS fit_selectable'),
             'accommodation_inventories.stock AS stock',
             'accommodation_inventories.purchase_price AS purchase_price',
@@ -104,8 +104,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'accommodation_inventories.notes as notes'
         );
         $query->whereNotIn('accommodation_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in_date_time` AND `accommodation_inventories`.`check_out_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in` AND `accommodation_inventories`.`check_out`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in` AND `accommodation_inventories`.`check_out`");
         return  $query->get();
     }
 }

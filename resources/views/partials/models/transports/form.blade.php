@@ -6,6 +6,7 @@
             transportTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.transport-types.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.transport-types.selected', ['id' => $transport_type_id ?? 0, ]) }}', })
@@ -22,6 +23,7 @@
             operatorsSelect.select2({
                 ajax: {
                     url: '{{ route('api.operators.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.operators.selected', ['id' => $operator_id ?? 0, ]) }}', })
@@ -38,6 +40,7 @@
             departureLocationSelect.select2({
                 ajax: {
                     url: '{{ route('api.locations.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.locations.selected', ['id' => $departure_location_id ?? 0, ]) }}', })
@@ -54,6 +57,7 @@
             arrivalLocationSelect.select2({
                 ajax: {
                     url: '{{ route('api.locations.select') }}',
+                    data: function (params) { return {filter: params.term,}; }
                 }
             });
             $.ajax({ url: '{{ route('api.locations.selected', ['id' => $arrival_location_id ?? 0, ]) }}', })

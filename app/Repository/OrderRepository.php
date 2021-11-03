@@ -3,18 +3,18 @@
 namespace App\Repository;
 
 use App\Models\Order;
-use App\Models\OrdersAccommodation;
-use App\Models\OrdersActivity;
-use App\Models\OrdersCustomer;
-use App\Models\OrdersFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderAccommodation;
+use App\Models\OrderActivity;
+use App\Models\OrderCustomer;
+use App\Models\OrderFlight;
+use App\Models\OrderTransport;
 use Illuminate\Support\Facades\DB;
 
 interface OrderRepositoryInterface {
     public static function getSearchOrders($searchTerm = "", $archived = false);
     public static function getOrderDetails(Order $order);
-    public static function getOrderCustomerDetails(OrdersCustomer $orderCustomer);
-    public static function addIncludedToCustomer(OrdersCustomer $ordersCustomer, Order $order);
+    public static function getOrderCustomerDetails(OrderCustomer $orderCustomer);
+    public static function addIncludedToCustomer(OrderCustomer $ordercustomer, Order $order);
     public static function getInvoiceDetails(Order $order);
 
 }
@@ -26,21 +26,21 @@ class OrderRepository implements OrderRepositoryInterface
     public static function getSearchOrders($searchTerm = "", $archived = false)
     {
         $query = DB::table('orders')
-            ->join('orders_customers AS orders_customers_details', 'orders_customers_details.order_id', '=', 'orders.id')
-            ->join('orders_customers AS lead_booker', 'orders.lead_booker_id', '=', 'lead_booker.id')
-            ->join('customers AS customer_details', 'orders_customers_details.customer_id', '=', 'customer_details.id')
+            ->join('order_customers AS order_customers_details', 'order_customers_details.order_id', '=', 'orders.id')
+            ->join('order_customers AS lead_booker', 'orders.lead_booker_id', '=', 'lead_booker.id')
+            ->join('customers AS customer_details', 'order_customers_details.customer_id', '=', 'customer_details.id')
             ->join('customers AS lead_booker_details', 'lead_booker.customer_id', '=', 'lead_booker_details.id')
             ->join('tours', 'orders.tour_id', '=', 'tours.id')
             ->where(function ($intQuery) use ($searchTerm) {
                 $intQuery->where('customer_details.first_name', 'like', '%' . $searchTerm . '%')
                     ->OrWhere('customer_details.last_name', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('tours.title', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('tours.name', 'like', '%' . $searchTerm . '%');
             });
         if (!$archived) $query->whereNull('orders.deleted_at');
-        $query->select('orders.id AS order_id', 'tours.title AS tour_title', 'lead_booker.id AS lead_booker_id',
+        $query->select('orders.id AS order_id', 'tours.name AS tour_title', 'lead_booker.id AS lead_booker_id',
             'orders.booking_reference AS booking_reference', 'lead_booker_details.first_name AS lead_booker_first_name',
             'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on')
-            ->groupBy('orders.id', 'tours.title', 'lead_booker.id', 'booking_reference',
+            ->groupBy('orders.id', 'tours.name', 'lead_booker.id', 'booking_reference',
                 'lead_booker_details.first_name', 'lead_booker_details.last_name', 'orders.ordered_on')
             ->orderBy('ordered_on');
         return $query->get();
@@ -103,7 +103,7 @@ class OrderRepository implements OrderRepositoryInterface
         return $details;
     }
 
-    public static function getOrderCustomerDetails(OrdersCustomer $orderCustomer)
+    public static function getOrderCustomerDetails(OrderCustomer $orderCustomer)
     {
         $details = ['order_customer' => $orderCustomer, 'customer' => $orderCustomer->customer, 'order' => $orderCustomer->order,];
         $accommodationArr = [];
@@ -154,29 +154,29 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public static function addIncludedToCustomer(OrdersCustomer $ordersCustomer, Order $order) {
+    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order) {
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
-                $ordersCustomer->orderAccommodation()->save($orderInventory);
+                $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
+                $orderCustomer->orderAccommodation()->save($orderInventory);
             }
         }
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
-                $ordersCustomer->orderActivities()->save($orderInventory);
+                $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
+                $orderCustomer->orderActivities()->save($orderInventory);
             }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
-                $ordersCustomer->orderFlights()->save($orderInventory);
+                $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
+                $orderCustomer->orderFlights()->save($orderInventory);
             }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrdersTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
-                $ordersCustomer->orderTransports()->save($orderInventory);
+                $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
+                $orderCustomer->orderTransports()->save($orderInventory);
             }
         }
     }
@@ -206,17 +206,17 @@ class OrderRepository implements OrderRepositoryInterface
                     } else {
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id] = [];
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['description'] =
-                            $tourInventory->accommodationInventory->accommodation->title . ' - ' .
-                            $tourInventory->accommodationInventory->roomType->room_type_name . ' - ' .
-                            $tourInventory->accommodationInventory->boardType->board_type_name;
+                            $tourInventory->accommodationInventory->accommodation->name . ' - ' .
+                            $tourInventory->accommodationInventory->roomType->name . ' - ' .
+                            $tourInventory->accommodationInventory->boardType->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
                     $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
                 } else {
-                    $included .= $tourInventory->accommodationInventory->accommodation->title . ' - ' .
-                        $tourInventory->accommodationInventory->roomType->room_type_name . ' - ' .
-                        $tourInventory->accommodationInventory->boardType->board_type_name . "\n";
+                    $included .= $tourInventory->accommodationInventory->accommodation->name . ' - ' .
+                        $tourInventory->accommodationInventory->roomType->name . ' - ' .
+                        $tourInventory->accommodationInventory->boardType->name . "\n";
                 }
             }
             foreach ($orderCustomer->orderActivities as $orderInventory) {
@@ -228,7 +228,7 @@ class OrderRepository implements OrderRepositoryInterface
                     } else {
                         $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id] = [];
                         $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['description'] =
-                            $tourInventory->activityInventory->activity->title . ' - ' .
+                            $tourInventory->activityInventory->activity->name . ' - ' .
                             $tourInventory->activityInventory->activity->activityType->name . ' - ' .
                             $tourInventory->activityInventory->ticketType->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] = 1;
@@ -236,7 +236,7 @@ class OrderRepository implements OrderRepositoryInterface
                     }
                     $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
                 } else {
-                    $included .= $tourInventory->activityInventory->activity->title . ' - ' .
+                    $included .= $tourInventory->activityInventory->activity->name . ' - ' .
                         $tourInventory->activityInventory->activity->activityType->name . ' - ' .
                         $tourInventory->activityInventory->ticketType->name . "\n";
                 }
@@ -252,7 +252,7 @@ class OrderRepository implements OrderRepositoryInterface
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['description'] =
                             $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
                             $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
-                            $tourInventory->flightInventory->travelClass->title;
+                            $tourInventory->flightInventory->travelClass->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
@@ -260,7 +260,7 @@ class OrderRepository implements OrderRepositoryInterface
                 } else {
                     $included .= $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
                         $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
-                        $tourInventory->flightInventory->travelClass->title . "\n";
+                        $tourInventory->flightInventory->travelClass->name . "\n";
                 }
             }
             foreach ($orderCustomer->orderTransports as $orderInventory) {
@@ -275,7 +275,7 @@ class OrderRepository implements OrderRepositoryInterface
                             $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
                             $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
                             $tourInventory->transportInventory->transport->transportType->name . ' - ' .
-                            $tourInventory->transportInventory->travelClass->title;
+                            $tourInventory->transportInventory->travelClass->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
@@ -283,7 +283,7 @@ class OrderRepository implements OrderRepositoryInterface
                     $included .= $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
                         $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
                         $tourInventory->transportInventory->transport->transportType->name . ' - ' .
-                        $tourInventory->transportInventory->travelClass->title . "\n";
+                        $tourInventory->transportInventory->travelClass->name . "\n";
                 }
                 $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
             }

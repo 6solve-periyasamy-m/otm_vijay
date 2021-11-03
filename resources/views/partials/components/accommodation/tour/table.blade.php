@@ -10,8 +10,8 @@
                 { "data": "location" },
                 { "data": "room_type" },
                 { "data": "board_type" },
-                { "data": "check_in_time" },
-                { "data": "check_in_confirmed" },
+                { "data": "check_in" },
+                { "data": "check_in_time_confirmed" },
                 { "data": "check_out_time" },
                 { "data": "check_out_confirmed" },
                 { "data": "fit_selectable" },
@@ -40,12 +40,17 @@
         });
     }
 </script>
-<select class="form-select accommodation-component-type-select">
-    <option value="Included" selected>Included</option>
-    <option value="Upgrade">Upgrade</option>
-    <option value="Add-on">Add-on</option>
-</select>
-<a href="javascript:getSelectedAccommodationInventory()" class="btn btn-success">Add Components</a>
+<div class="d-flex justify-content-between mb-3">
+    <select class="form-select accommodation-component-type-select">
+        <option value="Included" selected>Included</option>
+        <option value="Upgrade">Upgrade</option>
+        <option value="Add-on">Add-on</option>
+    </select>    
+    <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
+        <i class="icon-plus"></i>
+        <span>Add Components</span>
+    </a>
+</div>
 <table style="width: 100%;" class="table table-striped accommodation-inventory-table">
     <thead class="thead-dark">
     <tr>

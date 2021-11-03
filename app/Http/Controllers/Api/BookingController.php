@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 use App\Repository\ActionsRepository;
 // use App\Models\Tour;
 use App\Models\Order;
+use App\Models\Flight;
+use App\Models\Customer;
+use App\Models\OrderCustomer;
 use App\Models\CustomerOrderDetail;
 
 

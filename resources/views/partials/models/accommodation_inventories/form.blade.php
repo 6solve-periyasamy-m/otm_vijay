@@ -56,23 +56,23 @@
                     </div>
                 </div>                
                 <div class="form-group col-xl-6">
-                    <label for="check_in_date_time-input">Check In Date Time</label>
-                    <input type="datetime-local" name="check_in_date_time" value="{{ isset($check_in_date_time) ? $check_in_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="check_in_date_time-input">
+                    <label for="check_in-input">Check In Date Time</label>
+                    <input type="datetime-local" name="check_in" value="{{ isset($check_in) ? $check_in->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="check_in-input">
 
                     <p></p>
-                    <input type="checkbox" name="checkin_confirmed" class="form-check-input" @if(isset($checkin_confirmed) && $checkin_confirmed == 1) checked @endif
-                        id="checkin_confirmed-input">
-                    <label for="checkin_confirmed-input" class="form-check-label">Checkin Confirmed</label>
+                    <input type="checkbox" name="check_in_time_confirmed" class="form-check-input" @if(isset($check_in_time_confirmed) && $check_in_time_confirmed == 1) checked @endif
+                        id="check_in_time_confirmed-input">
+                    <label for="check_in_time_confirmed-input" class="form-check-label">Check In Time Confirmed</label>
                 </div>                                                
                 <div class="form-group col-xl-6">
-                    <label for="check_out_date_time-input">Check Out Date Time</label>
-                    <input type="datetime-local" name="check_out_date_time" value="{{ isset($check_out_date_time) ? $check_out_date_time->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="check_out_date_time-input">
+                    <label for="check_out-input">Check Out</label>
+                    <input type="datetime-local" name="check_out" value="{{ isset($check_out) ? $check_out->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                        id="check_out-input">
                     <p></p>
-                    <input type="checkbox" name="checkout_confirmed" class="form-check-input" @if(isset($checkout_confirmed) && $checkout_confirmed == 1) checked @endif
-                        id="checkout_confirmed-input">
-                    <label for="checkout_confirmed-input" class="form-check-label">Checkout Confirmed</label>
+                    <input type="checkbox" name="check_out_time_confirmed" class="form-check-input" @if(isset($check_out_time_confirmed) && $check_out_time_confirmed == 1) checked @endif
+                        id="check_out_time_confirmed-input">
+                    <label for="check_out_time_confirmed-input" class="form-check-label">Check Out Time Confirmed</label>
                 </div>                
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif >

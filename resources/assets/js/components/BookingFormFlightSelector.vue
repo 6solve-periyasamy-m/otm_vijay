@@ -111,7 +111,7 @@ export default {
                 return ''
             }
             // TODO: Nic, can you verify if 'airline_name' needs to be renamed?
-            return `${dates.makeDateFromString(flight.departure_date_time)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
+            return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
         },
         dmy(s) {
             return dates.makeDateFromString(s)

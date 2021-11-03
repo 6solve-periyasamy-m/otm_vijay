@@ -13,11 +13,11 @@ use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Operator;
 use App\Models\Order;
-use App\Models\OrdersAccommodation;
-use App\Models\OrdersActivity;
-use App\Models\OrdersCustomer;
-use App\Models\OrdersFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderAccommodation;
+use App\Models\OrderActivity;
+use App\Models\OrderCustomer;
+use App\Models\OrderFlight;
+use App\Models\OrderTransport;
 use App\Models\Payment;
 use App\Models\Quote;
 use App\Models\Transport;
@@ -40,7 +40,7 @@ class OrderSystemSeeder extends Seeder
         Customer::factory()->count($this->seedCount)->create();
         Quote::factory()->count($this->seedCount)->create();
         Order::factory()->count($this->seedCount)->create()->each(function($order) {
-            $orderCustomers = OrdersCustomer::factory()->count($this->seedCount)->make();
+            $orderCustomers = OrderCustomer::factory()->count($this->seedCount)->make();
             $order->orderCustomers()->saveMany($orderCustomers);
             $order->lead_booker_id = $orderCustomers->all()[0]->id;
             $order->save();
@@ -54,7 +54,7 @@ class OrderSystemSeeder extends Seeder
                 $tourInventories = AccommodationInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
                 $tourInventories->each(function ($tourInventory) {
-                   $orders = OrdersAccommodation::factory()->count($this->seedCount)->make();
+                   $orders = OrderAccommodation::factory()->count($this->seedCount)->make();
                    $tourInventory->orders()->saveMany($orders);
                 });
             });
@@ -66,7 +66,7 @@ class OrderSystemSeeder extends Seeder
                 $tourInventories = ActivityInventoryTour::factory()->count($this->seedCount)->make();
                 $inventory->tourComponents()->saveMany($tourInventories);
                 $tourInventories->each(function ($tourInventory) {
-                    $orders = OrdersActivity::factory()->count($this->seedCount)->make();
+                    $orders = OrderActivity::factory()->count($this->seedCount)->make();
                     $tourInventory->orders()->saveMany($orders);
                 });
             });
@@ -82,14 +82,14 @@ class OrderSystemSeeder extends Seeder
                  $inventory->tourComponents()->saveMany($tourInventories);
                   $tourInventories->each(function ($tourInventory) {
                       // Due to how nested this is, only one will be made
-                      $orders = OrdersTransport::factory()->makeOne();
+                      $orders = OrderTransport::factory()->makeOne();
                       $tourInventory->orders()->save($orders);
                   });
               });
            });
         });
         FlightInventoryTour::all()->each(function($tourInventory) {
-            $orders = OrdersFlight::factory()->count($this->seedCount)->make();
+            $orders = OrderFlight::factory()->count($this->seedCount)->make();
             $tourInventory->orders()->saveMany($orders);
         });
     }

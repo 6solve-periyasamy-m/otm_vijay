@@ -19,11 +19,9 @@ class CustomerOrderDetailRepository implements CustomerOrderDetailRepositoryInte
         $cod = new CustomerOrderDetail();
         $existing = null;
         try {
-Log::info('getting COD', [$customerOrderId, $type]);
-            $existing = $cod->where('orders_customer_id', $customerOrderId)
+            $existing = $cod->where('order_customer_id', $customerOrderId)
                 ->where('type', $type)
                 ->get();
-Log::info('COD', $existing->toArray());
         } catch (Exception $e) {
             Log::info('Failed to get COD ' . $e->getMessage());
         }
@@ -35,14 +33,14 @@ Log::info('COD', $existing->toArray());
 
     public function saveCOD($cod, $customerOrderId, $type, $inventory_tour_id, $traveller, $reference, $info)
     {
-        $cod->orders_customer_id = $customerOrderId;
+        $cod->order_customer_id = $customerOrderId;
         // $cod->order_id = $order_id;
         $cod->type = $type;
         $cod->info = $info;
 
         $cod->type = $type;
         // if ($room) {
-        //     $cod->type = $room['board_type_name'] . ' ' . $room['room_type_name'];
+        //     $cod->type = $room['name'] . ' ' . $room['name'];
         // } else {
         //     $cod->type = "shared room";
         //}
@@ -83,7 +81,7 @@ Log::info('COD', $existing->toArray());
     {
         $cod = new CustomerOrderDetail();
         Log::info('purge', [$customerOrderId, $type]);
-        $result = $cod->where('orders_customer_id', $customerOrderId)
+        $result = $cod->where('order_customer_id', $customerOrderId)
                 ->where('type', $type)
                 ->forceDelete();
 

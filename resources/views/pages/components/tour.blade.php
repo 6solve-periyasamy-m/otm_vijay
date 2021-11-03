@@ -47,19 +47,19 @@
                                 <tbody>
                                     @foreach($accommodationInventories as $accommodation)
                                     <td>
-                                        {{$accommodation->accommodation->title . ' - ' . $accommodation->accommodation->region->name}}
+                                        {{$accommodation->accommodation->name . ' - ' . $accommodation->accommodation->region->name}}
                                     </td>
                                     <td>
-                                        {{Carbon\Carbon::parse($accommodation->check_in_date_time)->format('d-m-Y H:i')}}
+                                        {{Carbon\Carbon::parse($accommodation->check_in)->format('d-m-Y H:i')}}
                                     </td>
                                     <td>
-                                        {{Carbon\Carbon::parse($accommodation->check_out_date_time)->format('d-m-Y H:i')}}
+                                        {{Carbon\Carbon::parse($accommodation->check_out)->format('d-m-Y H:i')}}
                                     </td>
                                     <td>
-                                        {{ $accommodation->roomType->room_type_name }}
+                                        {{ $accommodation->roomType->name }}
                                     </td>
                                     <td>
-                                        {{ $accommodation->boardType->board_type_name }}
+                                        {{ $accommodation->boardType->name }}
                                     </td>
                                     <td>
                                         <input type="text"
@@ -125,13 +125,13 @@
                                     @foreach($activityInventories as $activity)
                                     <tr>
                                         <td>
-                                            {{($activity->activity->title)}}
+                                            {{($activity->activity->name)}}
                                         </td>
                                         <td>
-                                            {{ Carbon\Carbon::parse($activity->activity_start_date_time)->format('d-m-Y H:i') }}
+                                            {{ Carbon\Carbon::parse($activity->starts_at)->format('d-m-Y H:i') }}
                                         </td>
                                         <td>
-                                            {{ Carbon\Carbon::parse($activity->activity_end_date_time)->format('d-m-Y H:i') }}
+                                            {{ Carbon\Carbon::parse($activity->ends_at)->format('d-m-Y H:i') }}
                                         </td>
                                         <td>
                                             {{ $activity->ticketType->name }}
@@ -272,13 +272,13 @@
     {{ $transport->departureLocation }}
 </td>
 <td>
-    {{ Carbon\Carbon::parse($transport->departure_date_time)->format('d-m-Y H:i') }}
+    {{ Carbon\Carbon::parse($transport->departs_at)->format('d-m-Y H:i') }}
 </td>
 <td>
     {{ $transport->arrivalLocation }}
 </td>
 <td>
-    {{ Carbon\Carbon::parse($transport->arrival_date_time)->format('d-m-Y H:i') }}
+    {{ Carbon\Carbon::parse($transport->arrives_at)->format('d-m-Y H:i') }}
 </td>
 <td>
     <input type="text"
