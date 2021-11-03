@@ -18,4 +18,10 @@
     textarea.form-control {
         height: auto;
     }
+
+    .form-select {
+        max-width: none;
+        border-radius: 0px;
+        box-shadow: none!important;
+    }
 }
