@@ -22,7 +22,7 @@
             <table id="tour" style="width: 100%;" class="table table-striped">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Title</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Event</th>
                     <th scope="col">Description</th>
                     <th scope="col">Date From</th>
@@ -41,8 +41,8 @@
                 @foreach($tours as $tour)
                     @include('partials.models.tours.row', [
                     'tour' => $tour,
-                    'event' => $tour->event->event_title,
-                    'title' => $tour->title,
+                    'event' => isset($tour->event) ? $tour->event->event_title : "None",
+                    'title' => $tour->name,
                     'description' => $tour->description,
                     'date_from' => $tour->date_from,
                     'date_to' => $tour->date_to,

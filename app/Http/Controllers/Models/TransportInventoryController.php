@@ -25,10 +25,10 @@ class TransportInventoryController extends Controller
         $request->validate(TransportInventory::RULES);
         $transportInventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
-            'departure_date_time' => $request->input('departure_date_time'),
-            'departure_confirmed' => $request->input('departure_confirmed') === 'on' ? 1 : 0,
-            'arrival_date_time' => $request->input('arrival_date_time'),
-            'arrival_confirmed' => $request->input('arrival_confirmed') === 'on' ? 1 : 0,
+            'departs_at' => $request->input('departs_at'),
+            'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
+            'arrives_at' => $request->input('arrives_at'),
+            'arrival_time_confirmed' => $request->input('arrival_time_confirmed') === 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
@@ -55,10 +55,10 @@ class TransportInventoryController extends Controller
         $request->validate(TransportInventory::RULES);
         $transportInventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
-            'departure_date_time' => $request->input('departure_date_time'),
-            'departure_confirmed' => $request->input('departure_confirmed') === 'on' ? 1 : 0,
-            'arrival_date_time' => $request->input('arrival_date_time'),
-            'arrival_confirmed' => $request->input('arrival_confirmed') === 'on' ? 1 : 0,
+            'departs_at' => $request->input('departs_at'),
+            'departure_time_confirmed' => $request->input('departure_time_confirmed') === 'on' ? 1 : 0,
+            'arrives_at' => $request->input('arrives_at'),
+            'arrival_time_confirmed' => $request->input('arrival_time_confirmed') === 'on' ? 1 : 0,
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),

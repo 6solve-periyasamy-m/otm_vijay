@@ -14,16 +14,16 @@ class Event extends Model
 
     public $additional_attributes = ['event_details'];
 
-    protected $fillable = ['event_title','event_description','event_start_date','event_end_date','booking_url','notes',];
+    protected $fillable = ['name','description','starts_at','ends_at','booking_url','notes',];
 
     const RULES = [
-        'event_title' => 'required',
-        'event_start_date' => 'required|date',
-        'event_end_date' => 'required|date',
+        'name' => 'required',
+        'starts_at' => 'required|date',
+        'ends_at' => 'required|date',
     ];
 
     function getEventDetailsAttribute() 
     {
-        return $this->event_title . ' - ' . Carbon::parse($this->event_start_date)->format('d/m/Y') . ' : ' . Carbon::parse($this->event_end_date)->format('d/m/Y');
+        return $this->name . ' - ' . Carbon::parse($this->starts_at)->format('d/m/Y') . ' : ' . Carbon::parse($this->ends_at)->format('d/m/Y');
     }
 }

@@ -4,7 +4,7 @@
 
 @section('content')
     Event Id: {{ $tour->event_id }}<br/>
-    Title: {{ $tour->title }}<br/>
+    Name: {{ $tour->name }}<br/>
     Description: {{ $tour->description }}<br/>
     Date From: {{ $tour->date_from }}<br/>
     Date To: {{ $tour->date_to }}<br/>

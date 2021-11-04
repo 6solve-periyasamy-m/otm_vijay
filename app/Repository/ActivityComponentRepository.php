@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\OrdersActivity;
-use App\Models\OrdersCustomer;
+use App\Models\OrderActivity;
+use App\Models\OrderCustomer;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -25,31 +25,31 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
 {
     public static function getOrderComponentFromId($orderComponentId)
     {
-        return OrdersActivity::findOrFail($orderComponentId);
+        return OrderActivity::findOrFail($orderComponentId);
     }
 
     public static function getComponentFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersActivity::findOrFail($orderComponentId);
+        $orderComponent = OrderActivity::findOrFail($orderComponentId);
         return $orderComponent->activityInventoryTour()->first()->activityInventory()->first()->activity();
     }
 
     public static function getInventoryFromOrderComponent($orderComponentId)
     {
-        $orderComponent = OrdersActivity::findOrFail($orderComponentId);
+        $orderComponent = OrderActivity::findOrFail($orderComponentId);
         return $orderComponent->activityInventoryTour()->first()->activityInventory();
     }
 
     public static function getAvailableAddons($tourId, $oCustomerId = -1)
     {
         $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrdersCustomer::findOrFail($oCustomerId);
+        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
             if ($component->tour_component_type == "Add-on") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
-                $components[$component->id]['name'] = $component->activityInventory->activity->title;
+                $components[$component->id]['name'] = $component->activityInventory->activity->name;
                 $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->name;
             }
         }
@@ -65,7 +65,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
 
     public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId)
     {
-        return OrdersActivity::create([
+        return OrderActivity::create([
             'order_customer_id' => $oCustomerId,
             'activity_inventory_tour_id' => $activityInventoryTourId,
         ]);
@@ -85,13 +85,13 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $query->select(
             'activity_inventories.id AS id',
             'activities.id AS activity_id',
-            'activities.title AS name',
+            'activities.name AS name',
             'activities.description AS description',
             'locations.name AS location',
             'ticket_types.name AS ticket_type',
             'activity_types.name AS activity_type',
-            'activity_inventories.activity_start_date_time AS start_date',
-            'activity_inventories.activity_end_date_time AS end_date',
+            'activity_inventories.starts_at AS start_date',
+            'activity_inventories.ends_at AS end_date',
             DB::raw('CASE WHEN `activity_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END AS fit_selectable'),
             'activity_inventories.stock AS stock',
             'activity_inventories.purchase_price AS purchase_price',
@@ -99,8 +99,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             'activity_inventories.notes AS notes'
         );
         $query->whereNotIn('activity_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`activity_start_date_time` AND `activity_inventories`.`activity_end_date_time`");
+        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
+        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
         return $query->get();
     }
 }

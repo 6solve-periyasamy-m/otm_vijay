@@ -11,7 +11,6 @@ use Illuminate\Validation\Rule;
 
 class FlightInventoryTour extends Model
 {
-    protected $table = 'flight_inventory_tour';
     public $additional_attributes = ['flight_inventory_for_tour'];
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
@@ -41,7 +40,7 @@ class FlightInventoryTour extends Model
     }
 
     public function orders() {
-        return $this->hasMany(OrdersFlight::class, 'flight_inventory_tour_id');
+        return $this->hasMany(OrderFlight::class, 'flight_inventory_tour_id');
     }
 
 

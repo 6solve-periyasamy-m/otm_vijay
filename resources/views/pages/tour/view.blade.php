@@ -18,11 +18,11 @@
     <div class="otm-callout">
         <div class="row">
             <div class="col-12">
-                <h4 class="fw-bold">{{ $tour->title }}</h4>
+                <h4 class="fw-bold">{{ $tour->name }}</h4>
             </div>
             <div class="col-12">
                 <p>Event</p>
-                <h6 class="fw-bold">{{ $tour->event->event_title }}</h6>
+                <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "None" }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
@@ -116,9 +116,9 @@
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in_date_time }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
                                     <td>{{ $accommodationEntry["component"]->title }}</td>
-                                    <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
+                                    <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td>
                                         <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -147,7 +147,7 @@
                             </thead>
                             @foreach($activities as $activity)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
                                     <td>{{ $activity["component"]->title }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
@@ -178,9 +178,9 @@
                             </thead>
                             @foreach($flights as $flight)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
-                                    <td>{{ $flight["inventory"]->travelClass->title }}</td>
+                                    <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
                                     <td>
                                         <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -209,9 +209,9 @@
                             </thead>
                             @foreach($transports as $transport)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
+                                    <td style="min-width: 200px">{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrives_at }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
-                                    <td>{{ $transport["inventory"]->travelClass->title }}</td>
+                                    <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
                                     <td>
                                         <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

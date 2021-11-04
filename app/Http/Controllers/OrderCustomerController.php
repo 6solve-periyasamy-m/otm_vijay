@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrdersCustomer;
-use App\Models\OrdersAccommodation;
-use App\Models\OrdersActivity;
-use App\Models\OrdersFlight;
-use App\Models\OrdersTransport;
+use App\Models\OrderCustomer;
+use App\Models\OrderAccommodation;
+use App\Models\OrderActivity;
+use App\Models\OrderFlight;
+use App\Models\OrderTransport;
 use App\Models\Transport;
 use App\Repository\OrderRepository;
 
@@ -14,11 +14,11 @@ class OrderCustomerController extends Controller
 {
     public function customerComponents($id)
     {
-        $customerOrder = OrdersCustomer::findOrFail($id);
-        $orderAccommodations = OrdersAccommodation::findByOrderCustomer($id);
-        $orderActivities = OrdersActivity::findByOrderCustomer($id);
-        $orderFlights = OrdersFlight::findByOrderCustomer($id);
-        $orderTransports = OrdersTransport::findByOrderCustomer($id);
+        $customerOrder = OrderCustomer::findOrFail($id);
+        $orderAccommodations = OrderAccommodation::findByOrderCustomer($id);
+        $orderActivities = OrderActivity::findByOrderCustomer($id);
+        $orderFlights = OrderFlight::findByOrderCustomer($id);
+        $orderTransports = OrderTransport::findByOrderCustomer($id);
 
         return view('pages.components.customer', [
             'customerOrder' => $customerOrder,
@@ -29,7 +29,7 @@ class OrderCustomerController extends Controller
         ]);
     }
 
-    public function show($order, OrdersCustomer $orderCustomer) {
+    public function show($order, OrderCustomer $orderCustomer) {
         return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($orderCustomer));
     }
 }

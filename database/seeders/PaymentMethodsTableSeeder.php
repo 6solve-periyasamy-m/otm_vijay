@@ -20,7 +20,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:03:55',
                     'deleted_at' => NULL,
-                    'id' => 11,
+                    'id' => 1,
                     'name' => 'Stripe',
                     'updated_at' => '2021-09-07 13:03:55',
                 ),
@@ -28,7 +28,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:04:01',
                     'deleted_at' => NULL,
-                    'id' => 12,
+                    'id' => 2,
                     'name' => 'PayPal',
                     'updated_at' => '2021-09-07 13:04:01',
                 ),
@@ -36,7 +36,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:04:11',
                     'deleted_at' => NULL,
-                    'id' => 13,
+                    'id' => 3,
                     'name' => 'BACS',
                     'updated_at' => '2021-09-07 13:04:11',
                 ),
@@ -44,7 +44,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:04:17',
                     'deleted_at' => NULL,
-                    'id' => 14,
+                    'id' => 4,
                     'name' => 'Cash',
                     'updated_at' => '2021-09-07 13:04:17',
                 ),
@@ -52,7 +52,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:04:23',
                     'deleted_at' => NULL,
-                    'id' => 15,
+                    'id' => 5,
                     'name' => 'Cheque',
                     'updated_at' => '2021-09-07 13:04:23',
                 ),
@@ -60,7 +60,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:04:33',
                     'deleted_at' => NULL,
-                    'id' => 16,
+                    'id' => 6,
                     'name' => 'Debit Card by Phone',
                     'updated_at' => '2021-09-07 13:04:33',
                 ),
@@ -68,7 +68,7 @@ class PaymentMethodsTableSeeder extends Seeder
                 array (
                     'created_at' => '2021-09-07 13:04:39',
                     'deleted_at' => NULL,
-                    'id' => 17,
+                    'id' => 7,
                     'name' => 'Credit Card by Phone',
                     'updated_at' => '2021-09-07 13:04:39',
                 ),

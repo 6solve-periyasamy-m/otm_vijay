@@ -1,8 +1,8 @@
 <tr>
-    <td><a href="{{ route('events.view', ['event' => $event,]) }}">{{ $event_title }}</a></td>
-    <td>{{ $event_description }}</td>
-    <td>{{ $event_start_date }}</td>
-    <td>{{ $event_end_date }}</td>
+    <td><a href="{{ route('events.view', ['event' => $event,]) }}">{{ $name }}</a></td>
+    <td>{{ $description }}</td>
+    <td>{{ $starts_at }}</td>
+    <td>{{ $ends_at }}</td>
     <td>{{ $booking_url }}</td>
     <td>{{ $notes }}</td>
     <td>

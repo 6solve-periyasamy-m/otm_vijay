@@ -4,7 +4,7 @@
 
 @section('content')
     @include('partials.models.room_types.form', ['action' => route('room-types.update', ['roomType' => $roomType,]),
-      'room_type_name' => $roomType->room_type_name,
+      'name' => $roomType->name,
       'maximum_occupancy' => $roomType->maximum_occupancy,
     ])
 @endsection

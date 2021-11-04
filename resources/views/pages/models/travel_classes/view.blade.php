@@ -3,5 +3,5 @@
 @section('title', 'View Travel Class')
 
 @section('content')
-    Title: {{ $travelClass->title }}<br/>
+    Name: {{ $travelClass->name }}<br/>
 @endsection

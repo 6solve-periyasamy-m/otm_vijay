@@ -65,7 +65,7 @@
         {{ $order->leadBooker->customer->billingAddress->postcode }}{!! isset($order->leadBooker->customer->billingAddress->postcode) ? "<br />" : "" !!}
     </div>
     <div class="header-cell t-align-center">
-        <h3>Tour: {{ $order->tour->title }}</h3>
+        <h3>Tour: {{ $order->tour->name }}</h3>
     </div>
     <div class="header-cell"></div>
 </div>

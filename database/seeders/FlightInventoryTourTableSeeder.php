@@ -16,9 +16,9 @@ class FlightInventoryTourTableSeeder extends Seeder
     {
         
 
-        \DB::table('flight_inventory_tour')->delete();
+        \DB::table('flight_inventory_tours')->delete();
         
-        \DB::table('flight_inventory_tour')->insert(array (
+        \DB::table('flight_inventory_tours')->insert(array (
             0 => 
             array (
                 'tour_id' => 1,
@@ -32,7 +32,7 @@ class FlightInventoryTourTableSeeder extends Seeder
             ),
             1 => 
             array (
-                'tour_id' => 2,
+                'tour_id' => 1,
                 'flight_inventory_id' => 14,
                 'created_at' => NULL,
                 'updated_at' => '2021-03-24 08:39:16',
@@ -54,7 +54,7 @@ class FlightInventoryTourTableSeeder extends Seeder
             ),
             3 => 
             array (
-                'tour_id' => 2,
+                'tour_id' => 1,
                 'flight_inventory_id' => 16,
                 'created_at' => NULL,
                 'updated_at' => '2021-03-24 08:39:00',
@@ -98,7 +98,7 @@ class FlightInventoryTourTableSeeder extends Seeder
             ),
             7 => 
             array (
-                'tour_id' => 2,
+                'tour_id' => 1,
                 'flight_inventory_id' => 17,
                 'created_at' => NULL,
                 'updated_at' => '2021-03-06 18:14:48',
@@ -142,7 +142,7 @@ class FlightInventoryTourTableSeeder extends Seeder
             ),
             11 => 
             array (
-                'tour_id' => 2,
+                'tour_id' => 1,
                 'flight_inventory_id' => 21,
                 'created_at' => NULL,
                 'updated_at' => '2021-03-06 18:13:50',
@@ -219,7 +219,7 @@ class FlightInventoryTourTableSeeder extends Seeder
             ),
             18 => 
             array (
-                'tour_id' => 2,
+                'tour_id' => 1,
                 'flight_inventory_id' => 29,
                 'created_at' => NULL,
                 'updated_at' => '2021-03-08 08:51:40',

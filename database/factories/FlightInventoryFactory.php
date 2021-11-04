@@ -23,9 +23,9 @@ class FlightInventoryFactory extends Factory
     {
         return [
             'id' => 1,
-            'check_in_date_time' => '2022-05-14 12:30:00',
-            'departure_date_time' => '2022-05-14 14:30:00',
-            'arrival_date_time' => '2022-05-14 16:30:00',
+            'check_in' => '2022-05-14 12:30:00',
+            'departs_at' => '2022-05-14 14:30:00',
+            'arrives_at' => '2022-05-14 16:30:00',
             'flight_number' => $this->faker->word,
             'travel_class_id' => 1,
             'fit_selectable' => 1,

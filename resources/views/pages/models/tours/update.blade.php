@@ -5,7 +5,7 @@
 @section('content')
     @include('partials.models.tours.form', ['action' => route('tours.update', ['tour' => $tour,]),
       'event_id' => $tour->event_id,
-      'title' => $tour->title,
+      'name' => $tour->name,
       'description' => $tour->description,
       'date_from' => $tour->date_from,
       'date_to' => $tour->date_to,

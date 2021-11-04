@@ -22,7 +22,7 @@ class TravelClassController extends Controller
     public function store(Request $request)
     {
         $travelClass = TravelClass::create([
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
         ]);
         return redirect()->route('travel-classes.view', ['travelClass' => $travelClass,]);
     }
@@ -40,7 +40,7 @@ class TravelClassController extends Controller
     public function update(Request $request, TravelClass $travelClass)
     {
         $travelClass->update([
-            'title' => $request->input('title'),
+            'name' => $request->input('name'),
         ]);
         return redirect()->route('travel-classes.view', ['travelClass' => $travelClass,]);
     }
