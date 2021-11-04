@@ -72,9 +72,16 @@
             </a>
         </li>
         <li>
+            @if(strpos(Request::url(), 'orders') !== false)
+            <a href="{{ route('orders.all') }}" class="nav-link active">
+            @else
             <a href="{{ route('orders.all') }}" class="nav-link">
+            @endif
                 <i class="icon-credit-card"></i>
                 <span>Orders</span>
+                @if(strpos(Request::url(), 'orders') !== false)
+                <span class="selected"></span>
+                @endif
             </a>
         </li>
         <li>
