@@ -25,16 +25,10 @@ class Customer extends Model
             'date_of_birth' => 'required|date',
             'mobile_number' => 'required',
             'email_address' => 'required|email',
-            'password' => 'required',
             'gender' => 'required',
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
             'emergency_contact_telephone' => 'required',
-            'passport_first_name' => 'required',
-            'passport_last_name' => 'required',
-            'passport_number' => 'required',
-            'passport_issue_date' => 'required|date',
-            'passport_expiry_date' => 'required|date',
         ];
     }
 
