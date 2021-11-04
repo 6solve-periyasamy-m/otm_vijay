@@ -120,6 +120,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Type</th>
+                                    <th scope="col">Method</th>
                                     <th scope="col">Value</th>
                                     <th scope="col">Due Date</th>
                                     <th scope="col">Paid Date</th>
@@ -127,6 +128,7 @@
                             </thead>
                             @foreach($payments as $payment)
                                 <tr>
+                                    <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
                                     <td>{{ $payment->amount }}</td>
                                     <td>{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
