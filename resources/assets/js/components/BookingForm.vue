@@ -99,7 +99,8 @@ export default {
         this.debug && console.log('Cookie read:', that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
-            axios.get(`/api/booking/customer/${that.bookingToken}`)
+            //axios.get(`/api/booking/customer/${that.bookingToken}`)
+            axios.get('/api/booking/token/${that.bookingToken}')
             .then(response => {
                 const customer = response.data.customer
                 console.log('customer retrieved', customer)

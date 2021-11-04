@@ -5,23 +5,47 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\ApiController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
-use App\Repository\ActionsRepository;
-// use App\Models\Tour;
 use App\Models\Order;
 use App\Models\Flight;
+use App\Models\Booking;
+
 use App\Models\Customer;
+// use App\Models\Tour;
+use Illuminate\Http\Request;
 use App\Models\OrderCustomer;
 use App\Models\CustomerOrderDetail;
-
+use Illuminate\Support\Facades\Log;
+use App\Repository\ActionsRepository;
+use App\Repository\BookingRepository;
+use App\Http\Controllers\ApiController;
 
 class BookingController extends ApiController
 {
     protected $logging = 'customer';
 
+    /**
+     * get
+     *
+     * @param $token
+     * @return void
+     */
+    public function get($token)
+    {
+        $bookingRepo = new BookingRepository();
+        $booking = $bookingRepo->findBookingByToken($token);
+        if (isset($booking)) {
+            return response()->json(['success' => true, 'customer' => $booking->customer]);
+        }
+        return response()->json(['success' => false]);
+    }
+
+    public function create($customer_id)
+    {
+        $bookingRepo = new BookingRepository();
+        $booking = $bookingRepo->create(['customer_id' => $customer_id]);
+
+        return $booking;
+    }
     /***
      * order section
      */

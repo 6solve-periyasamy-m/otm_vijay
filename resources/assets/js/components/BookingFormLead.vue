@@ -13,7 +13,7 @@
                 </h5>
 
                 <div class="card-info" v-if="!show_traveller">
-                    <div v-if="!token g">
+                    <div v-if="!token">
                         <p>
                             <font-awesome-icon icon="arrow-right" />
                             What is you email address?

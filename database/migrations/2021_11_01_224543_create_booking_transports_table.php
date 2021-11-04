@@ -17,7 +17,7 @@ class CreateBookingTransportsTable extends Migration
             $table->id();
             $table->foreignId('booking_id')->constrained();
             $table->foreignId('customer_id')->constrained();
-            $table->foreignId('transports_inventory_id')->constrained();
+            $table->foreignId('transport_inventory_id')->constrained();
             $table->timestamps();
         });
     }
