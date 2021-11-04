@@ -50,7 +50,7 @@
 <div class="card" id="section-1">
     <div class="card-body">
         <div class="py-2 mb-3 text-end">            
-            <a href="{{ route('orders-customers.create', ['order' => $order, ]) }}" class="btn btn-primary text-white">
+            <a href="{{ route('order-customers.create', ['order' => $order, ]) }}" class="btn btn-primary text-white">
                 <i class="icon-plus"></i>
                 <span>Add Customer</span>
             </a>
@@ -77,7 +77,7 @@
                 <div class="otm-card">
                     <p>Lead Broker</p>
                     <h6 class="fw-bold">
-                        <a href="{{ route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
+                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
                             {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                         </a>
                     </h6>
