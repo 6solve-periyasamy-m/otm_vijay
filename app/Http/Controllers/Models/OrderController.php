@@ -40,11 +40,7 @@ class OrderController extends Controller
         ]);
         $order->orderCustomers()->save($orderCustomer);
         $order->lead_booker_id = $orderCustomer->id;
-        $order->booking_reference = SettingsRepository::get('booking.prefix')
-            . str_pad($request->input('tour_id'), 4, '0', STR_PAD_LEFT)
-            . str_pad($order->id, 4, '0', STR_PAD_LEFT)
-            . str_pad($orderCustomer->id, 4, '0', STR_PAD_LEFT)
-            . substr(str_shuffle(str_repeat($x='ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4/strlen($x)))), 1, 4);
+        $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
         OrderRepository::addIncludedToCustomer($orderCustomer, $order);
         return redirect()->route('orders.view', ['order' => $order,]);

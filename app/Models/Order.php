@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\SettingsRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,15 @@ class Order extends Model
             'quote_id' => 'exists:quotes,id',
             'tour_id'=> 'required|exists:tours,id',
         ];
+    }
+
+    public static function generateBookingReference(Order $order)
+    {
+        return SettingsRepository::get('booking.prefix')
+            . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
+            . str_pad($order->id, 4, '0', STR_PAD_LEFT)
+            . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
+            . substr(str_shuffle(str_repeat($x='ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4/strlen($x)))), 1, 4);
     }
 
     public function quote() 
