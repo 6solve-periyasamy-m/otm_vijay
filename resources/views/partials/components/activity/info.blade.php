@@ -1,11 +1,25 @@
 <div class="otm-callout">
-    <h4 class="fw-bold">{{ $activity->name }}</h4>
-    <p class="fw-bold">{{ $activity->description }}</p>
-    <p class="fw-bold">{{ $activity->location->name }}</p>
-    <p> {{ $activity->notes }} </p>
-    <br>
-    <a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">
-        <i class="icon-note"></i>
-        <span>Edit Activity</span>
-    </a>
+    <div class="row">
+        <div class="col-12">
+            <h4 class="fw-bold">{{ $activity->name }}</h4>
+        </div>       
+        <div class="col-12 col-xl-6">
+            <p>Location</p>
+            <h6 class="fw-bold">{{ $activity->location->name }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Description</p>
+            <h6 class="fw-bold">{{ $activity->description }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Notes</p>
+            <h6 class="fw-bold">{{ $activity->notes }}</h6>
+        </div>
+        <div class="col-12">
+            <a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">
+                <i class="icon-note"></i>
+                <span>Edit Activity</span>
+            </a>
+        </div>
+    </div>
 </div>
