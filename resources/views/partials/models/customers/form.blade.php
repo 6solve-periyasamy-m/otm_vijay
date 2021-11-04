@@ -43,7 +43,7 @@
 @endsection
 <div class="card">
     <div class="card-body">
-        <form action="{{ $action }}" method="post">
+        <form action="{{ $action }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="form-group col-12">
@@ -69,7 +69,11 @@
                 <div class="form-group col-12 col-xl-4">
                     <label for="date_of_birth-input">Date Of Birth</label>
                     <input type="date" name="date_of_birth" value="{{ $date_of_birth ?? "" }}" class="form-control" id="date_of_birth-input">
-                </div>                
+                </div>
+                <div class="form-group col-12 col-xl-4">
+                    <label for="profile_picture-input">Profile Picture</label>
+                    <input type="file" name="profile_picture" class="form-control" id="profile_picture-input">
+                </div>
                 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
                 <div class="form-group col-12">
                     <label for="email_address-input">Email Address</label>
