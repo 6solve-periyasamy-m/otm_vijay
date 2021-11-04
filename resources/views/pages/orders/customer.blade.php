@@ -102,6 +102,10 @@ $(document).ready( function () {
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-amber">
+                <i class="icon-home"></i>
+                Return to Order
+            </a>
         </div>
     </div>
 </div>
