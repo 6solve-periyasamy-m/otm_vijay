@@ -1,192 +1,229 @@
-@extends('layout.main')
+@extends('layout.master')
 
 @section('title', 'View Order')
 {{-- TODO: Tidy up CSS --}}
+
+@section('footer-script')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#payment-table').DataTable({fixedHeader: true});
+        $('#cost-table').DataTable({fixedHeader: true});
+        $('#order-adjustment-table').DataTable({fixedHeader: true});
+        $('#customer-adjustment-table').DataTable({fixedHeader: true});
+    });
+</script>
+@endsection
 @section('content')
 {{-- Header Details --}}
-<div id="header-details">
-    <table class="table" style="border-bottom: 1px solid black; font-size: 32px">
-        <tr>
-            <td style="border: 1px solid black; font-size: 24px">{{ $order->booking_reference }}</td>
-            <td style="border: 1px solid black; font-size: 24px">{{ $order->tour->name }} <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-amber">Edit</a></td>
-            <td style="border: 1px solid black; font-size: 24px">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</td>
-            <td style="border: 1px solid black; background-color: {{ $totalPaid >= $totalOrderValue ? "#33ff99" : "#ffff99" }}; font-size: 24px">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</td>
-        </tr>
-    </table>
+<div class="otm-callout" id="header-details">
+    <div class="row">
+        <div class="col-12 col-xl-6">
+            <p>Booking Reference</p>
+            <h6 class="fw-bold">{{ $order->booking_reference }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Tour</p>
+            <h6 class="fw-bold">{{ $order->tour->title }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Tour Date</p>
+            <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Payment Status</p>
+            <h6 class="badge {{ $totalPaid >= $totalOrderValue ? 'badge-success' : 'badge-danger' }} fw-bold">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</h6>
+        </div>
+        <div class="col-12">
+            <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
+                <i class="icon-note"></i>
+                Edit Order
+            </a>
+        </div>
+    </div>
 </div>
+<hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
+
 {{-- Order Overview and Customers Section --}}
-<div id="section-1" style="margin-bottom: 5px; border: 1px solid black;">
-    {{-- Customers Table --}}
-    <div id="customers" style="width: 50%; display: inline-block; vertical-align: bottom;">
-        <div id="customers-header" style="max-width: 20%; font-size: 24px; border-right: 1px solid black;">
-            Customers
+<div class="heading pt-2 pb-md-3 pb-2">
+    <h2 class="fw-bold">Customers</h2>        
+</div>
+<div class="card" id="section-1">
+    <div class="card-body">
+        <div class="py-2 mb-3 text-end">            
+            <a href="{{ route('orders-customers.create', ['order' => $order, ]) }}" class="btn btn-primary text-white">
+                <i class="icon-plus"></i>
+                <span>Add Customer</span>
+            </a>
+        </div>        
+        <div class="otm-callout" id="overview-details" >
+            <div class="row">
+                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+                    <p>Order Value</p>
+                    <p class="fw-bold">{{ $totalOrderValue }}</p>
+                </div>
+                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+                    <p>Balance Paid</p>
+                    <p class="fw-bold">{{ $totalPaid }}</p>
+                </div>
+                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+                    <p>Balance Outstanding</p>
+                    <p class="fw-bold">{{ $totalOrderValue - $totalPaid }}</p>
+                </div>
+            </div>
         </div>
-        <div id="customers-details" style="width: 100%">
-            <table style="margin-bottom: 2px;">
-                @foreach($customers as $orderCustomer)
-                <tr>
-                    <td style="border: 1px solid black; border-left: 0; width: 30%;">
-                        <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer, ]) }}" class="link-info"><u>
-                            {{ $orderCustomer->customer->first_name . " " . $orderCustomer->customer->last_name }}
-                        </u></a>
-                    </td>
-                    <td style="border: 1px solid black; width: 30%;">Born: {{ $orderCustomer->customer->date_of_birth }}</td>
-                    <td style="border: 1px solid black; width: 30%;">Passport Number: {{ $orderCustomer->customer->passport_number }}</td>
-                </tr>
-                @endforeach
-            </table>
-            <a href="{{ route('order-customers.create', ['order' => $order, ]) }}" class="btn btn-success">Add Customer</a>
-        </div>
+        <div class="row">
+            @foreach($customers as $ordersCustomer)
+            <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+                <div class="otm-card">
+                    <p>Lead Broker</p>
+                    <h6 class="fw-bold">
+                        <a href="{{ route('orders-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
+                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                        </a>
+                    </h6>
+                    <p>Born</p>
+                    <h6 class="fw-bold">{{ $ordersCustomer->customer->date_of_birth }}</h6>
+                    <p>Passport Number</p>
+                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number }}</h6>
+                </div>
+            </div>
+            @endforeach
+        </div>        
     </div>
-    {{-- Order Overview Table --}}
-    <div id="overview-details" style="width:49%; min-width: 49%; display:inline-block; vertical-align: bottom; horiz-align: right">
-        <div id="values-header"><br/></div>
-        <div id="values-table">
-        <table style="float: right; margin-bottom: 2px;">
-            <tr>
-                <td style="border: 1px solid black; width: 70%;"><b>Order Value:&nbsp;</b></td>
-                <td style="border: 1px solid black; width: 30%;">{{ $totalOrderValue }}</td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid black; width: 70%;"><b>Balance Paid:&nbsp;</b></td>
-                <td style="border: 1px solid black; width: 30%;">{{ $totalPaid }}</td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid black; width: 70%;"><b>Balance Outstanding:&nbsp;</b></td>
-                <td style="border: 1px solid black; width: 30%;">{{ $totalOrderValue - $totalPaid }}</td>
-            </tr>
-        </table>
-        </div>
-    </div>
+</div>
+<hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
+
+<div class="heading pt-2 pb-md-3 pb-2">
+    <h2 class="fw-bold">Billing & Payments</h2>        
 </div>
 
-<div id="billing-section" style="border: 1px solid black">
-    <div id="billing-header" style="max-width: 20%; font-size: 24px; border: 1px solid black; border-top: 0; border-left: 0; margin-bottom: 2px;">
-        Billing & Payments
-    </div>
+<div id="billing-section">        
     {{-- Payments Table--}}
-    <div id="payments-section">
-        <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
-            <div id="customers-header" style="max-width: 35%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Payments <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success">New</a>
+    <div class="row">
+        <div class="col-xl-6" id="payments-section">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Payments</h4>
+                    </div>
+                    <div class="pb-3 text-end">
+                        <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
+                            <i class="icon-plus"></i>
+                            New Payment
+                        </a>
+                        <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" class="btn btn-primary text-white mb-1">View Invoice</a>
+                        <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>
+                        <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>                    
+                    </div>
+                    <div class="pt-1">
+                        <table class="table table-striped" id="payment-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Paid Date</th>
+                                </tr>
+                            </thead>
+                            @foreach($payments as $payment)
+                                <tr>
+                                    <td>{{ $payment->paymentMethod->name }}</td>
+                                    <td>{{ $payment->amount }}</td>
+                                    <td>{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
+                                    <td>{{ $payment->paid_on }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
             </div>
-            <table style="min-width: 100%; margin-bottom: 1px">
-                <thead>
-                    <tr>
-                        <th scope="col" style="border: 1px solid black; width: 25%;">Type</th>
-                        <th scope="col" style="border: 1px solid black; width: 25%;">Value</th>
-                        <th scope="col" style="border: 1px solid black; width: 25%;">Due Date</th>
-                        <th scope="col" style="border: 1px solid black; width: 25%;">Paid Date</th>
-                    </tr>
-                </thead>
-                @foreach($payments as $payment)
-                    <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $payment->paymentMethod->name }}</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $payment->amount }}</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
-                        <td style="border: 1px solid black; width: 20%;">{{ $payment->paid_on }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-        <div id="overview-details" style="width:39%; min-width: 39%; display:inline-block; vertical-align: bottom; horiz-align: right">
-            <div id="values-header"><br/></div>
-            {{-- Buttons Table--}}
-            <div id="values-table">
-                <table style="float: right; margin-bottom: 2px;">
-                    <tr>
-                        <td style="width: 70%;">
-                            <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" class="btn btn-primary float-right">View Invoice</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 70%;">
-                            <button class="btn btn-primary float-right" onclick="alert('This is non-functional')">Email Invoice</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 70%;">
-                            <button class="btn btn-primary float-right" onclick="alert('This is non-functional')">View Previous Invoices</button>
-                        </td>
-                    </tr>
-                </table>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Costs</h4>
+                    </div>
+                    <div>
+                        <table class="table table-striped" id="cost-table">
+                            <thead>
+                            <tr>
+                                <th scope="col" >Type</th>
+                                <th scope="col" >Value</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>Base</td>
+                                <td>{{ $order->tour->base_price_per_person * sizeof($customers) }}</td>
+                            </tr>
+                            @foreach($addons as $addon)
+                                <tr>
+                                    <td>Add-on</td>
+                                    <td>{{ $addon->tour_sales_price }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    {{-- Costs Table --}}
-    <div id="costs-section">
-        <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
-            <div id="customers-header" style="max-width: 35%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Costs
+        </div>        
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Order Adjustments</h4>
+                    </div>
+                    <div class="pb-3 text-end">
+                        <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="btn btn-success text-white">
+                            <i class="icon-plus"></i>
+                            Add Adjustment
+                        </a>
+                    </div>
+                    <div class="pt-2">
+                        <table class="table table-striped" id="order-adjustment-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Reason</th>
+                            </tr>
+                            </thead>
+                            @foreach($order->adjustments as $adjustment)
+                                <tr>
+                                    <td>{{ $adjustment->amount }}</td>
+                                    <td>{{ $adjustment->reason }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
             </div>
-            <table style="min-width: 100%; margin-bottom: 1px">
-                <thead>
-                <tr>
-                    <th scope="col" style="border: 1px solid black; width: 25%;">Type</th>
-                    <th scope="col" style="border: 1px solid black; width: 25%;">Value</th>
-                </tr>
-                </thead>
-                <tr>
-                    <td style="border: 1px solid black; width: 20%;">Base</td>
-                    <td style="border: 1px solid black; width: 20%;">{{ $order->tour->base_price_per_person * sizeof($customers) }}</td>
-                </tr>
-                @foreach($addons as $addon)
-                    <tr>
-                        <td style="border: 1px solid black; width: 20%;">Add-on</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $addon->tour_sales_price }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
-    {{-- Manual Adjustments Table --}}
-    <div id="costs-section">
-        <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
-            <div id="customers-header" style="max-width: 50%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Order Adjustments <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="d-inline btn btn-success">Add Adjustment</a>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Customer Adjustments</h4>
+                    </div>
+                    <div>
+                        <table class="table table-striped" id="customer-adjustment-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Reason</th>
+                            </tr>
+                            </thead>
+                            @foreach($customers as $ordersCustomer)
+                                @foreach($ordersCustomer->adjustments as $adjustment)
+                                <tr>
+                                    <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
+                                    <td>{{ $adjustment->amount }}</td>
+                                    <td>{{ $adjustment->reason }}</td>
+                                </tr>
+                                @endforeach
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
             </div>
-            <table style="min-width: 100%; margin-bottom: 1px">
-                <thead>
-                <tr>
-                    <th scope="col" style="border: 1px solid black; width: 25%;">Amount</th>
-                    <th scope="col" style="border: 1px solid black; width: 50%;">Reason</th>
-                </tr>
-                </thead>
-                @foreach($order->adjustments as $adjustment)
-                    <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $adjustment->amount }}</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $adjustment->reason }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
-    {{-- Customer Adjustments Table --}}
-    <div id="costs-section">
-        <div id="customers-details" style="min-width: 60%; max-width: 60%; display: inline-block; vertical-align: bottom;">
-            <div id="customers-header" style="max-width: 35%; font-size: 24px; border: 1px solid black; border-bottom: 0;">
-                Customer Adjustments
-            </div>
-            <table style="min-width: 100%; margin-bottom: 1px">
-                <thead>
-                <tr>
-                    <th scope="col" style="border: 1px solid black; width: 25%;">Customer</th>
-                    <th scope="col" style="border: 1px solid black; width: 25%;">Amount</th>
-                    <th scope="col" style="border: 1px solid black; width: 50%;">Reason</th>
-                </tr>
-                </thead>
-                @foreach($customers as $orderCustomer)
-                    @foreach($orderCustomer->adjustments as $adjustment)
-                    <tr>
-                        <td style="border: 1px solid black; width: 20%;">{{ $orderCustomer->customer->first_name .  " " . $orderCustomer->customer->last_name }}</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $adjustment->amount }}</td>
-                        <td style="border: 1px solid black; width: 20%;">{{ $adjustment->reason }}</td>
-                    </tr>
-                    @endforeach
-                @endforeach
-            </table>
-        </div>
-    </div>
+        </div>        
+    </div>    
 </div>
 
 {{-- Closing Container--}}

@@ -4,7 +4,7 @@
     .form-control {
         height: 2.5rem;
         box-shadow: none!important;
-        border-radius: 0px;
+        border-radius: 0;
         background-color: white;
     }
     
@@ -17,5 +17,11 @@
     
     textarea.form-control {
         height: auto;
+    }
+
+    .form-select {
+        max-width: none;
+        border-radius: 0px;
+        box-shadow: none!important;
     }
 }
