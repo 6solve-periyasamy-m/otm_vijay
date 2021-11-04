@@ -5,7 +5,7 @@
 @section('content')
     <div class="row row justify-content-center">
         <div class="col-6 col-md-5 col-xl-3">
-            <img src="{{ asset('images/octlogo.png') }}" style="width: 100%"/>
+            <img src="{{ asset('images/octlogo.png') }}" class="maxwidth"/>
         </div>
     </div>
     <div class="card">
@@ -30,7 +30,7 @@
         </div>
     </div>
     
-    <table class="table table-striped" style="border-radius: 10px;">
+    <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
             <th scope="col">Order Date</th>
