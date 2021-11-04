@@ -22,7 +22,8 @@ class PaymentController extends Controller
 
     public function store(Request $request, Order $order)
     {
-        $value = $request->input('payment_type') == "Refund" ? abs($request->input('amount'))*-1 : $request->input('amount');
+        $request->validate(Payment::getValidationRules());
+        $value = $request->input('payment_type') === "Refund" ? abs($request->input('amount'))*-1 : $request->input('amount');
         $payment = Payment::make([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $value,
@@ -45,7 +46,8 @@ class PaymentController extends Controller
 
     public function update(Request $request, Order $order, Payment $payment)
     {
-        $value = $request->input('payment_type') == "Refund" ? abs($request->input('amount'))*-1 : $request->input('amount');
+        $request->validate(Payment::getValidationRules());
+        $value = $request->input('payment_type') === "Refund" ? abs($request->input('amount'))*-1 : $request->input('amount');
         $payment->update([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $value,
