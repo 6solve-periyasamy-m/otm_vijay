@@ -12,7 +12,7 @@
     <td>{{ $booking_form_url }}</td>
     <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
             <i class="icon-note"></i>            
         </a>

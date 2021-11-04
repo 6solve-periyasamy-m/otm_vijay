@@ -1,7 +1,7 @@
 <tr>
     <td><a href="{{ route('airports.view', ['airport' => $airport,]) }}">{{ $name }}</a></td>
     <td>{{ $iata_code }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('airports.edit', ['airport' => $airport,])}}" class="btn btn-outline-success mb-1 btn-sm">
             <i class="icon-note"></i>
         </a>
