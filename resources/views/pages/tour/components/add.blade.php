@@ -54,6 +54,12 @@
     {{-- Tabs Definition --}}
     <div class="card">
         <div class="card-body">
+            <div class="mb-3">
+                <a href="{{ route('tours.view', ['tour' => $tour, ])}}" class="btn btn-primary text-white">
+                    <i class="icon-arrow-left"></i>
+                    Back to Tour
+                </a>
+            </div>
             <ul class="nav nav-pills otm-tab">
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">
