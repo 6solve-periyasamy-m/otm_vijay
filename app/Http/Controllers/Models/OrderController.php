@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
 use App\Repository\OrderRepository;
+use App\Repository\SettingsRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -28,7 +29,6 @@ class OrderController extends Controller
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
             'token' => $request->input('token'),
-            'booking_reference' => $request->input('booking_reference'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
@@ -40,6 +40,11 @@ class OrderController extends Controller
         ]);
         $order->orderCustomers()->save($orderCustomer);
         $order->lead_booker_id = $orderCustomer->id;
+        $order->booking_reference = SettingsRepository::get('booking.prefix')
+            . str_pad($request->input('tour_id'), 4, '0', STR_PAD_LEFT)
+            . str_pad($order->id, 4, '0', STR_PAD_LEFT)
+            . str_pad($orderCustomer->id, 4, '0', STR_PAD_LEFT)
+            . substr(str_shuffle(str_repeat($x='ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4/strlen($x)))), 1, 4);
         $order->save();
         OrderRepository::addIncludedToCustomer($orderCustomer, $order);
         return redirect()->route('orders.view', ['order' => $order,]);
@@ -62,7 +67,6 @@ class OrderController extends Controller
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
             'token' => $request->input('token'),
-            'booking_reference' => $request->input('booking_reference'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),

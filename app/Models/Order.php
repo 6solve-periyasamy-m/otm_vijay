@@ -18,7 +18,6 @@ class Order extends Model
         return [
             'quote_id' => 'exists:quotes,id',
             'tour_id'=> 'required|exists:tours,id',
-            'booking_reference' => 'required',
         ];
     }
 
