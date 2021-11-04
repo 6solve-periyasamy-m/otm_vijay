@@ -42,7 +42,7 @@
                     @include('partials.models.tours.row', [
                     'tour' => $tour,
                     'event' => isset($tour->event) ? $tour->event->event_title : "None",
-                    'title' => $tour->name,
+                    'name' => $tour->name,
                     'description' => $tour->description,
                     'date_from' => $tour->date_from,
                     'date_to' => $tour->date_to,
