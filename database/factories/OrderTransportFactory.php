@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\OrderFlight;
+use App\Models\OrderTransport;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class OrdersFlightFactory extends Factory
+class OrderTransportFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = OrderFlight::class;
+    protected $model = OrderTransport::class;
 
     /**
      * Define the model's default state.
