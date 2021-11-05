@@ -36,13 +36,13 @@
                 </div>                
                 <div class="form-group col-xl-6">
                     <label for="starts_at-input">Activity Start Date Time</label>
-                    <input type="datetime-local" name="starts_at" value="{{ isset($starts_at) ? $starts_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                    <input type="datetime-local" name="starts_at" value="{{ isset($starts_at) ? $starts_at->format('Y-m-d\TH:i') : "" }}" class="form-control" onchange="changeDate(indate, outdate)"
                         id="starts_at-input">
                 </div>                
                 <div class="form-group col-xl-6">
                     <label for="ends_at-input">Activity End Date Time</label>
-                    <input type="datetime-local" name="ends_at" value="{{ isset($ends_at) ? $ends_at->format('Y-m-d\TH:i') : "" }}"
-                        class="form-control" id="ends_at-input">
+                    <input type="datetime-local" name="ends_at" value="{{ isset($ends_at) ? $ends_at->format('Y-m-d\TH:i') : "" }}" onchange="removeAutoset(indate, outdate);"
+                        class="form-control autoset" id="ends_at-input">
                 </div>                
                 <div class="form-group col-12">
                     <input type="checkbox" name="fit_selectable" class="form-check-input" id="fit_selectable-input" @if(isset($fit_selectable) && $fit_selectable == 1) checked @endif>
@@ -75,3 +75,19 @@
         </form>
     </div>
 </div>
+@section('footer-script')
+    <script type="text/javascript">
+        let indate = $('#starts_at-input');
+        let outdate = $('#ends_at-input');
+        function changeDate(invar, outvar) {
+            if (outvar.hasClass('autoset')) {
+                outvar.val(invar.val());
+            }
+        }
+        function removeAutoset(invar, outvar) {
+            if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
+                outvar.removeClass('autoset')
+            }
+        }
+    </script>
+@endsection
