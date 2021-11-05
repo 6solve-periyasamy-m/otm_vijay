@@ -11,6 +11,7 @@
       'date_to' => $tour->date_to,
       'base_price_per_person' => $tour->base_price_per_person,
       'margin' => $tour->margin,
+      'deposit' => $tour->deposit,
       'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
       'stock_control_active' => $tour->stock_control_active,
       'stock' => $tour->stock,
