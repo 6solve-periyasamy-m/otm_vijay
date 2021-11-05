@@ -29,6 +29,7 @@
                     <th scope="col">Date To</th>
                     <th scope="col">Base Price Per Person</th>
                     <th scope="col">Margin</th>
+                    <th scope="col">Deposit</th>
                     <th scope="col">Single Occupancy Surcharge</th>
                     <th scope="col">Stock Control Active</th>
                     <th scope="col">Stock</th>
@@ -48,6 +49,7 @@
                     'date_to' => $tour->date_to,
                     'base_price_per_person' => $tour->base_price_per_person,
                     'margin' => $tour->margin,
+                    'deposit' => $tour->deposit,
                     'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
                     'stock_control_active' => $tour->stock_control_active,
                     'stock' => $tour->stock,

@@ -6,6 +6,7 @@
     <td>{{ $date_to }}</td>
     <td>{{ $base_price_per_person }}</td>
     <td>{{ $margin }}</td>
+    <td>{{ $deposit }}</td>
     <td>{{ $single_occupancy_surcharge }}</td>
     <td>{{ $stock_control_active ? "Yes" : "No" }}</td>
     <td>{{ $stock }}</td>
