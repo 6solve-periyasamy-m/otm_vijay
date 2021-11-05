@@ -245,13 +245,25 @@
             <table id="installments-table" class="table table-striped">
                 <thead>
                 <tr>
+                    <th scope="col">Type</th>
                     <th scope="col">Due Date</th>
                     <th scope="col">Amount Due</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
+                <tr>
+                    <th scope="row">Deposit</th>
+                    <td>With Order</td>
+                    <td>{{ $tour->deposit }}</td>
+                    <td>
+                        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                            <i class="icon-note"></i>
+                        </a>
+                    </td>
+                </tr>
                 @foreach($tour->paymentInstallments as $installment)
                     <tr>
+                        <th scope="row">Installment</th>
                         <td>{{ $installment->due_on }}</td>
                         <td>{{ $installment->amount }}</td>
                         <td>
