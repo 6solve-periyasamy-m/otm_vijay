@@ -36,7 +36,7 @@
                 <div class="form-group col-12 col-xl-6">
                     <label for="departs_at-input">Departs At</label>
                     <input type="datetime-local" name="departs_at" value="{{ isset($departs_at) ? $departs_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="departs_at-input">
+                        id="departs_at-input" onchange="changeDate(indate, outdate)">
                     <p></p>
                     <input type="checkbox" name="departure_time_confirmed" class="form-check-input" @if(isset($departure_time_confirmed) && $departure_time_confirmed == 1) checked @endif
                         id="departure_time_confirmed-input">
@@ -44,8 +44,8 @@
                 </div>                                
                 <div class="form-group col-12 col-xl-6">
                     <label for="arrives_at-input">Arrives At</label>
-                    <input type="datetime-local" name="arrives_at" value="{{ isset($arrives_at) ? $arrives_at->format('Y-m-d\TH:i') : "" }}" class="form-control"
-                        id="arrives_at-input">
+                    <input type="datetime-local" name="arrives_at" value="{{ isset($arrives_at) ? $arrives_at->format('Y-m-d\TH:i') : "" }}" class="form-control autoset"
+                        id="arrives_at-input" onchange="removeAutoset(indate, outdate);">
                     <p></p>
                     <input type="checkbox" name="arrival_time_confirmed" class="form-check-input" @if(isset($arrival_time_confirmed) && $arrival_time_confirmed == 1) checked @endif
                         id="arrival_time_confirmed-input">
@@ -82,3 +82,19 @@
         </form>
     </div>
 </div>
+@section('footer-script')
+    <script type="text/javascript">
+        let indate = $('#departs_at-input');
+        let outdate = $('#arrives_at-input');
+        function changeDate(invar, outvar) {
+            if (outvar.hasClass('autoset')) {
+                outvar.val(invar.val());
+            }
+        }
+        function removeAutoset(invar, outvar) {
+            if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
+                outvar.removeClass('autoset')
+            }
+        }
+    </script>
+@endsection
