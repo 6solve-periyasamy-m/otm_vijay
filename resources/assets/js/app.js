@@ -40,9 +40,7 @@ window.axios.defaults.headers.common = {
       bus.booking.name = name
   })
  
- bus.$on('customerLoaded', function(customer) {
-     busEventLogging && console.log('** Event Bus: Customer Loaded', customer)
- })
+
  
  bus.$on('leadTravellerLoaded', function(customer) {
      busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)

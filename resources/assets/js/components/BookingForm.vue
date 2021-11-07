@@ -28,7 +28,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
@@ -100,35 +99,35 @@ export default {
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
             //axios.get(`/api/booking/customer/${that.bookingToken}`)
-            axios.get('/api/booking/token/${that.bookingToken}')
+            axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
-                const customer = response.data.customer
-                console.log('customer retrieved', customer)
-                if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
-                    console.log('cookie found no customer. removing ', that.tokenId)
-                    deleteCookie(that.tokenId)
-                    that.authenticated = false
-                    that.login = ''
-                } else {
-                    that.leadTraveller = customer
-                    const home_address = response.data.home_address
-                    const billing_address = response.data.billing_address
-console.log(response.data)
-                    bus.$emit('setBookingToken', that.bookingToken)
-                    bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                    bus.$emit('homeAddressLoaded', home_address)
-                    if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
-                        console.log('BILLING loading...', customer, billing_address)
-                        bus.$emit('billingAddressLoaded', billing_address)
-                    }
-                    that.login = that.leadTraveller.email_address
-                }
+                console.log('>>>> >>>> >>> booking found by token', response.data)
+//                 const customer = response.data.customer
+//                 console.log('customer retrieved', customer)
+//                 if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
+//                     console.log('cookie found no customer. removing ', that.tokenId)
+//                     deleteCookie(that.tokenId)
+//                     that.authenticated = false
+//                     that.login = ''
+//                 } else {
+//                     that.leadTraveller = customer
+//                     const home_address = response.data.home_address
+//                     const billing_address = response.data.billing_address
+// console.log(response.data)
+//                     bus.$emit('setBookingToken', that.bookingToken)
+//                     bus.$emit('leadTravellerLoaded', that.leadTraveller)
+//                     bus.$emit('homeAddressLoaded', home_address)
+//                     if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
+//                         console.log('BILLING loading...', customer, billing_address)
+//                         bus.$emit('billingAddressLoaded', billing_address)
+//                     }
+//                     that.login = that.leadTraveller.email_address
+//                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
             })
-        } 
-        if (!that.leadTraveller) {
+        } else {
             that.token = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             bus.$emit('setBookingToken', that.token)
             that.bookingToken = getCookie(that.tokenId);

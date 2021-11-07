@@ -10,8 +10,9 @@ use App\Models\Address;
 use App\Models\Customer;
 
 use Illuminate\Http\Request;
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
 
+use App\Models\OrdersCustomer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Repository\AddressRepository;
@@ -147,7 +148,7 @@ class BookingCustomerController extends ApiController
                     Log::info('Billing Address Customer Validation passed', $billingValidated);
                 }
             } else {
-                // only switches for a customer update
+                // if we have a customer, set the billing address ID to the same address as home address
                 if (isset($customer)) {
                     $customer->billing_address_id = $customer->home_address_id;
                 }
@@ -186,36 +187,31 @@ class BookingCustomerController extends ApiController
             'login_token' => $request->login_token
         ];
 
+        // if the customer exists, then the addresses MAY exist
         if ($customer) {
             $this->logging == 'customers' && Log::info('customer exists record ', $customer->toArray());
             Log::debug('>>>>> update customer with ', $customerData);
             $customer = $customerRepo->update($customerData);
+            
+            // in booking form, only the lead enters addresses
             if ($isLead) {
-                $this->update_addresses($request, $customer);
+                $addressIds = $this->update_addresses($request, $customer);
+                Log::debug('<<<<< update_address returned with ', $addressIds);
+                $customerData['home_address_id'] = $addressIds['home_address_id'];
+                $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             }
+            $customer = $customerRepo->update($customerData);
         } else {
             // $customer->email_address = $request->email_address;
-            Log::debug('<<<<< create customer with ', $customerData);
             $customer = $customerRepo->create($customerData);
-
             if ($isLead) {
-                $customer = $this->create_addresses($request, $customer);
+                $addressIds = $this->create_addresses($request);
+                Log::debug('<<<<< create_addressess returned with ', $addressIds);
+                $customerData['home_address_id'] = $addressIds['home_address_id'];
+                $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             }
+            $customer = $customerRepo->update($customerData);
         }
-
-
-        // if (isset($home_address)) {
-        //     Log::info('check address vars ', [$home_address]);
-        //     $customer->home_address = $home_address;
-        // }
-        // if (isset($billing_address)) {
-        //     Log::info('check business address vars ', [$billing_address]);
-        //     $customer->billing_address = $billing_address;
-        // }
-        // update the links to the addresses created
-        // 'home_address_id' => $customer->home_address_id,
-        // 'billing_address_id' => $customer->billing_address_id,
-Log::debug('.......about to save customer', [$customer]);
         $customer->save();
 
         return $customer;
@@ -224,9 +220,16 @@ Log::debug('.......about to save customer', [$customer]);
     private function update_addresses($request, $customer)
     {
         $addressRepo = new AddressRepository();
+        if (!$customer->home_address_id) {
+            $addressIds = $this->create_addresses($request);
+            $customer->home_address_id = $addressIds['home_address_id'];
+            $customer->billing_address_id = $addressIds['billing_address_id'];
+
+            return $addressIds;
+        }
+
         if ($customer->home_address_id) {
-            Log::info('** Updating Home Address for customer', [$request->address_line_1]);
-            $newAddress = [
+            $newHomeAddress = [
                 'id' => $customer->home_address_id,
                 'address_line_1' => $request->address_line_1,
                 'address_line_2' => $request->address_line_2,
@@ -236,13 +239,13 @@ Log::debug('.......about to save customer', [$customer]);
                 'country' => $request->country,
                 'postcode' => $request->postcode
             ];
-            $home_address = $addressRepo->update($newAddress);
-            Log::info('updated home address', [$home_address]);
-
+            $home_address = $addressRepo->update($newHomeAddress);
+            $home_address_id = $home_address['id'];
+        } else {
+            $home_address_id = 0;
         }
-        if (!$request->same_address && $customer->billing_address_id) {
-            Log::info('** Updating Billing Address for customer', [$request->billing_address_line_1]);
-            $newAddress = [
+        if (!$request->same_address) {
+            $newBillingAddress = [
                 'id' => $customer->billing_address_id,
                 'address_line_1' => $request->billing_address_line_1,
                 'address_line_2' => $request->billing_address_line_2,
@@ -252,9 +255,20 @@ Log::debug('.......about to save customer', [$customer]);
                 'country' => $request->billing_country,
                 'postcode' => $request->billing_postcode
             ];
-            $billing_address = $addressRepo->update($newAddress);
-            Log::info('updated billing address', [$billing_address]);
+            if ($customer->billing_address_id) {
+                $billing_address = $addressRepo->update($newBillingAddress);
+            } else {
+                $billing_address = $addressRepo->create($newBillingAddress);
+            }
+            $billing_address_id = $billing_address->id;
+        } else {
+            $billing_address_id = $home_address_id;
         }
+
+        return [
+            'home_address_id' => $home_address_id, 
+            'billing_address_id' => $billing_address_id
+        ];
     }
 
     /**
@@ -265,51 +279,48 @@ Log::debug('.......about to save customer', [$customer]);
      * @param [type] $customer
      * @return Object ($customer)
      */
-    private function create_addresses($request, $customer) {
+    private function create_addresses($request) {
         Log::info('** Creating Home Address ');
         $addressRepo = new AddressRepository();
-        $home_address = $addressRepo->create(
-            [
-                'address_line_1' => $request->address_line_1,
-                'address_line_2' => $request->address_line_2,
-                'address_line_3' => $request->address_line_3,
-                'town' => $request->town,
-                'region' => $request->region,
-                'country' => $request->country,
-                'postcode' => $request->postcode,
-                'same_adress' => $request->same_address
-            ]
-        );
-        $customer->home_address_id = $home_address->id;
-
-        Log::info('Creating Home_address', [$home_address]);
-        //Log::debug('check address id ', [$home_address->id]);
-        //Log::debug('check customer', [$customer]);
+        $address_record = [
+            'address_line_1' => $request->address_line_1,
+            'address_line_2' => $request->address_line_2,
+            'address_line_3' => $request->address_line_3,
+            'town' => $request->town,
+            'region' => $request->region,
+            'country' => $request->country,
+            'postcode' => $request->postcode,
+            'same_adress' => $request->same_address
+        ];
+        $home_address = $addressRepo->create($address_record);
+        if (isset($home_address) && isset($home_address->id)) {
+            $home_address_id = $home_address->id;
+        } else {
+            throw new \Exception('Can not create an address with ', $address_record);
+        }
         if ($request->same_address) {
-            $customer->billing_address_id = $customer->home_address_id;
-            return $customer;
+            $billing_address_id = $home_address_id;
+        } else {
+            $addressRepo = new AddressRepository();
+            $billing_address = $addressRepo->create(
+                [
+                    'address_line_1' => $request->billing_address_line_1,
+                    'address_line_2' => $request->billing_address_line_2,
+                    'address_line_3' => $request->billing_address_line_3,
+                    'town' => $request->billing_town,
+                    'region' => $request->billing_region,
+                    'country' => $request->billing_country,
+                    'postcode' => $request->billing_postcode
+                ],
+                'billing'
+            );
+            $billing_address_id = $billing_address->id;
         }
 
-        Log::debug('before billing address create' . $request->billing_address_line_1);
-        $addressRepo = new AddressRepository();
-        $billing_address = $addressRepo->create(
-            [
-                'address_line_1' => $request->billing_address_line_1,
-                'address_line_2' => $request->billing_address_line_2,
-                'address_line_3' => $request->billing_address_line_3,
-                'town' => $request->billing_town,
-                'region' => $request->billing_region,
-                'country' => $request->billing_country,
-                'postcode' => $request->billing_postcode
-            ],
-            'billing'
-        );
-        $billing_address_id = $billing_address->id;
-        $customer->billing_address_id = $billing_address_id;
-
-        Log::debug('after billing address create', $billing_address->toArray());
-
-        return $customer;
+        return [
+            'home_address_id' => $home_address_id, 
+            'billing_address_id' => $billing_address_id
+        ];
     }
 
     public function updateLoginToken(Request $request) 
@@ -372,7 +383,7 @@ Log::debug('.......about to save customer', [$customer]);
         // TODO: use COD instead of orderCustomer
         $order_customer_id = $request->order_customer_id;
         $this->logging == 'customers' && Log::info('removing Additional Traveller order_customer_id:' . $order_customer_id);
-        $orderCustomer = OrdersCustomer::find($order_customer_id);
+        $orderCustomer = OrderCustomer::find($order_customer_id);
         if (empty($orderCustomer)) {
             return json_encode(['success' => false, $request]);
         }

@@ -42,7 +42,7 @@ class BookingController extends ApiController
     public function create($customer_id)
     {
         $bookingRepo = new BookingRepository();
-        $booking = $bookingRepo->create(['customer_id' => $customer_id]);
+        $booking = $bookingRepo->create($customer_id, $tour_id, $token);
 
         return $booking;
     }

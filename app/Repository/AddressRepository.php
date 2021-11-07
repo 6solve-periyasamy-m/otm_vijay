@@ -59,7 +59,7 @@ class AddressRepository implements AddressRepositoryInterface
     public function update(array $address) {
         Log::debug('&&&& address update with ', [$address]);
         if (empty($address['id'])) {
-            throw new \Exception('address update does not see an address_id');
+            throw new \Exception('ERROR: address update does not have an address_id');
         }
         $currentAddress = $this->model->find($address['id']);
         if (empty($currentAddress)) {
@@ -76,6 +76,7 @@ class AddressRepository implements AddressRepositoryInterface
         }
         try {
             $currentAddress->save();
+            
         } catch (\Exception $e) {
             Log::debug('error updating customer' . $e->getMessage());
         }

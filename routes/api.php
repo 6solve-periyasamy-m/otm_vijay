@@ -91,7 +91,7 @@ Route::post('/booking/flight', [BookFlightDetailsController::class, 'bookFlightD
 
 // Booking Orders in Customer Order Details
 // Route::get('/booking/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
-// Route::post('/booking/recover/token', [CustomerController::class, 'getTokenLink']);
+Route::post('/booking/recover/token', [CustomerController::class, 'getTokenLink']);
 Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);

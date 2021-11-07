@@ -58,7 +58,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     public function update(array $customer) {
         $customerRecord = $this->model->where('email_address', $customer['email_address'])->first();
         if (empty($customerRecord) || $customerRecord->count() === 0) {
-            throw new \Exception('Can not update a customer with an email address does not exist');
+            throw new \Exception('Can not update a customer with an email address that does not exist');
         }
         foreach ($this->fields as $field) {
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
