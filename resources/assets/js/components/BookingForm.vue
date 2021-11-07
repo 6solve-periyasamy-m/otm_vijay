@@ -101,7 +101,13 @@ export default {
             //axios.get(`/api/booking/customer/${that.bookingToken}`)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
-                console.log('>>>> >>>> >>> booking found by token', response.data)
+                console.log('>>>> >>>> >>> booking found by token', response.data.booking)
+                that.leadTraveller = response.data.booking.customer
+                bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                
+                bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
+                bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
+
 //                 const customer = response.data.customer
 //                 console.log('customer retrieved', customer)
 //                 if (typeof customer === 'undefined' || customer == null || customer.length == 0) {

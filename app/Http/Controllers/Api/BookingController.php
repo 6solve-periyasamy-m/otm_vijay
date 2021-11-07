@@ -34,7 +34,8 @@ class BookingController extends ApiController
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
         if (isset($booking)) {
-            return response()->json(['success' => true, 'customer' => $booking->customer]);
+            Log::debug('===>>> booking->cusotmer', [$booking, $booking->customer]);
+            return response()->json(['success' => true, 'booking' => $booking]);
         }
         return response()->json(['success' => false]);
     }

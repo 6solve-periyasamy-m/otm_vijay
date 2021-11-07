@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Repository\AddressRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
+use App\Repository\BookingRepository;
 use App\Repository\OrdersCustomerRepository;
 
 class BookingCustomerController extends ApiController
@@ -205,6 +206,7 @@ class BookingCustomerController extends ApiController
             // $customer->email_address = $request->email_address;
             $customer = $customerRepo->create($customerData);
             if ($isLead) {
+                // a new lead customer record creates the booking record and address records
                 $addressIds = $this->create_addresses($request);
                 Log::debug('<<<<< create_addressess returned with ', $addressIds);
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
@@ -357,7 +359,13 @@ class BookingCustomerController extends ApiController
     {
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, true);
-       // $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, true);
+        $booking = new BookingRepository();
+        $findBooking = $booking->findBookingByToken($request->booking_token);
+        Log::debug('======= >>>>> findBooking', [$findBooking]);
+        if (empty($findBooking)) {
+            Log::debug('====>>> creating a new booking with '.$request->tour['id'] . '  token:'. $request->booking_token);
+            $customer['booking'] = $booking->create($customer->id, $request->tour['id'], $request->booking_token);
+        }
 
         return json_encode(['success' => true, 'customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
     }

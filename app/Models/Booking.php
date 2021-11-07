@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Tour;
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Booking extends Model
 {
@@ -11,11 +13,11 @@ class Booking extends Model
 
     public function customer()
     {
-        return $this->hasOne(Customer::class);
+        return $this->belongsTo(Customer::class);
     }
 
     public function tour()
     {
-        return $this->hasOne(Tour::class);
+        return $this->belongsTo(Tour::class);
     }
 }

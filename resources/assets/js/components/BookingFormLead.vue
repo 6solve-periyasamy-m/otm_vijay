@@ -578,7 +578,7 @@ export default {
                 billing_region: this.billing_region,
                 billing_town: this.billing_town,
                 billing_postcode: this.billing_postcode,
-                login_token: this.booking_token,
+                booking_token: this.booking_token,
                 tour: this.tour
             })
             .then(response => {
