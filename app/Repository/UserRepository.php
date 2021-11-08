@@ -12,6 +12,8 @@ interface UserRepositoryInterface
     public static function getLatestToken(User $user) : ApiToken;
     public static function getUserFromToken(string $token) : User;
     public static function generateUserToken(User $user) : ApiToken;
+    public static function purgeUserTokens(User $user, int $limit = ApiToken::DEFAULT_LIMIT) : void;
+    public static function invalidateAllUserTokens(User $user) : void;
 }
 
 class UserRepository implements UserRepositoryInterface
@@ -42,6 +44,24 @@ class UserRepository implements UserRepositoryInterface
                 $user->tokens()->save($apiToken);
                 return $apiToken;
             } catch (QueryException $ignored) { continue; }
+        }
+    }
+
+    public static function purgeUserTokens(User $user, int $limit = ApiToken::DEFAULT_LIMIT) : void
+    {
+        foreach ($user->tokens as $token) {
+            if (now()->addHours($limit*-1)->isAfter($token->expiry)) {
+                $token->forceDelete();
+            }
+        }
+    }
+
+    public static function invalidateAllUserTokens(User $user) : void
+    {
+        foreach ($user->tokens as $token) {
+            if (!$token->hasExpired()) {
+                $token->invalidate();
+            }
         }
     }
 }

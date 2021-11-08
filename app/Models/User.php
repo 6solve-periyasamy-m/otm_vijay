@@ -60,19 +60,11 @@ class User extends Authenticatable
 
     public function invalidateAllTokens()
     {
-        foreach ($this->tokens as $token) {
-            if (!$token->hasExpired()) {
-                $token->invalidate();
-            }
-        }
+        UserRepository::invalidateAllUserTokens($this);
     }
 
-    public function purgeTokens(int $hours = ApiToken::DEFAULT_LIMIT)
+    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
     {
-        foreach ($this->tokens as $token) {
-            if (now()->addHours($hours*-1)->isAfter($token->expiry)) {
-                $token->forceDelete();
-            }
-        }
+        UserRepository::purgeUserTokens($this, $limit);
     }
 }
