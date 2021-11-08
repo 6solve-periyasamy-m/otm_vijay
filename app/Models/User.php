@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\UserRepository;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,7 +48,12 @@ class User extends Authenticatable
         return $this->hasMany(ApiToken::class, 'user_id');
     }
 
-    public function generateToken(int $expiresIn)
+    public function getCurrentToken()
+    {
+        return UserRepository::getLatestToken($this);
+    }
+
+    public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY)
     {
         $apiToken = ApiToken::make([
             'token' => Str::random(32),
