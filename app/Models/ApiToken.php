@@ -11,6 +11,10 @@ class ApiToken extends Model
 
     protected $fillable = ['token', 'expiry'];
 
+    protected $primaryKey = 'token';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     public const DEFAULT_EXPIRY = 90;
     public const DEFAULT_LIMIT = 48;
 

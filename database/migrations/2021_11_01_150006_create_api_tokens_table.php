@@ -14,9 +14,8 @@ class CreateApiTokensTable extends Migration
     public function up()
     {
         Schema::create('api_tokens', function (Blueprint $table) {
-            $table->id();
+            $table->string('token')->primary()->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('token');
             $table->dateTime('expiry');
             $table->timestamps();
         });
