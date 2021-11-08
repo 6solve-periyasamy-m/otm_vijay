@@ -9,6 +9,7 @@
                 "data": {
                     "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
                 },
+                "type": "post",
             },
             "columns": [
                 { "data": "name" },
