@@ -5,10 +5,10 @@
             inventorySelect.select2({
                 ajax: {
                     url: '{{ route('api.inventory.accommodation.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.inventory.accommodation.selected', ['id' => $accommodation_inventory_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.inventory.accommodation.selected', ['id' => $accommodation_inventory_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     inventorySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

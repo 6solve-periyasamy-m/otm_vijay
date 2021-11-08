@@ -6,10 +6,10 @@
             transportTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.transport-types.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.transport-types.selected', ['id' => $transport_type_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.transport-types.selected', ['id' => $transport_type_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     transportTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -23,10 +23,10 @@
             operatorsSelect.select2({
                 ajax: {
                     url: '{{ route('api.operators.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.operators.selected', ['id' => $operator_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.operators.selected', ['id' => $operator_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     operatorsSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -40,10 +40,10 @@
             departureLocationSelect.select2({
                 ajax: {
                     url: '{{ route('api.locations.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $departure_location_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $departure_location_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     departureLocationSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -57,10 +57,10 @@
             arrivalLocationSelect.select2({
                 ajax: {
                     url: '{{ route('api.locations.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $arrival_location_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $arrival_location_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     arrivalLocationSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

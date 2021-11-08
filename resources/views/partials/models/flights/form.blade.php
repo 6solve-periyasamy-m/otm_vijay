@@ -5,10 +5,10 @@
             airlineSelect.select2({
                 ajax: {
                     url: '{{ route('api.airlines.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.airlines.selected', ['id' => $airline_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.airlines.selected', ['id' => $airline_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     airlineSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -21,10 +21,10 @@
             departureSelect.select2({
                 ajax: {
                     url: '{{ route('api.airports.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.airports.selected', ['id' => $departure_airport_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.airports.selected', ['id' => $departure_airport_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     departureSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -37,10 +37,10 @@
             arrivalSelect.select2({
                 ajax: {
                     url: '{{ route('api.airports.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
-            $.ajax({ url: '{{ route('api.airports.selected', ['id' => $arrival_airport_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.airports.selected', ['id' => $arrival_airport_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     arrivalSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

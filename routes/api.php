@@ -96,7 +96,7 @@ Route::middleware('auth:api')->group(function() {
     
 });
 
-Route::prefix('select')->group(function () {
+Route::prefix('select')->middleware('api.token.auth')->group(function () {
    Route::get('locations', [SelectController::class, 'getLocations'])->name('api.locations.select');
    Route::get('regions', [SelectController::class, 'getRegions'])->name('api.regions.select');
    Route::get('countries', [SelectController::class, 'getCountries'])->name('api.countries.select');

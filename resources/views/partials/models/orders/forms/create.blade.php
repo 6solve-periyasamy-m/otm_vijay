@@ -5,21 +5,21 @@
             quoteSelect.select2({
                 ajax: {
                     url: '{{ route('api.quotes.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
             let tourSelect = $('#tour_id-input');
             tourSelect.select2({
                 ajax: {
                     url: '{{ route('api.tours.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
             let leadBookerSelect = $('#customer_id-input');
             leadBookerSelect.select2({
                 ajax: {
                     url: '{{ route('api.customers.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
                 }
             });
         });
