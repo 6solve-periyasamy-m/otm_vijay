@@ -10,7 +10,7 @@
                     }
                 }
             });
-            $.ajax({url: '{{ route('api.countries.selected', ['id' => $country_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
+            $.ajax({url: '{{ route('api.countries.selected', ['id' => $country_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
                 .then(function (data) {
                     countrySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

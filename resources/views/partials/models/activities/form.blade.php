@@ -5,10 +5,11 @@
             activitySelect.select2({
                 ajax: {
                     url: '{{ route('api.activity-types.select') }}',
-                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; },
+                    type: 'post'
                 }
             });
-            $.ajax({ url: '{{ route('api.activity-types.selected', ['id' => $activity_type_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
+            $.ajax({ url: '{{ route('api.activity-types.selected', ['id' => $activity_type_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
                 .then(function (data) {
                     activitySelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -24,7 +25,7 @@
                     data: function (params) { return { filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }}
                 }
             });
-            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $activity_type_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
+            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $activity_type_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     locationSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

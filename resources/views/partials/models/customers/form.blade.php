@@ -5,10 +5,11 @@
             hatSizeSelect.select2({
                 ajax: {
                     url: '{{ route('api.hat-size.select') }}',
-                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; },
+                    type: 'post'
                 }
             });
-            $.ajax({ url: '{{ route('api.hat-size.selected', ['id' => $hat_size_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
+            $.ajax({ url: '{{ route('api.hat-size.selected', ['id' => $hat_size_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     hatSizeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -21,10 +22,11 @@
             tShirtSizeSelect.select2({
                 ajax: {
                     url: '{{ route('api.t-shirt-size.select') }}',
-                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; },
+                    type: 'post'
                 }
             });
-            $.ajax({ url: '{{ route('api.t-shirt-size.selected', ['id' => $t_shirt_size_id ?? 0, ]) }}', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
+            $.ajax({ url: '{{ route('api.t-shirt-size.selected', ['id' => $t_shirt_size_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     tShirtSizeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
