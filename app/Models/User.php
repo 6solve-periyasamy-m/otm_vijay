@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -41,7 +42,36 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function tokens() {
+    public function tokens()
+    {
         return $this->hasMany(ApiToken::class, 'user_id');
+    }
+
+    public function generateToken(int $expiresIn)
+    {
+        $apiToken = ApiToken::make([
+            'token' => Str::random(32),
+            'expiry' => now()->addMinutes($expiresIn),
+        ]);
+        $this->tokens()->save($apiToken);
+        return $apiToken;
+    }
+
+    public function invalidateAllTokens()
+    {
+        foreach ($this->tokens as $token) {
+            if (!$token->hasExpired()) {
+                $token->invalidate();
+            }
+        }
+    }
+
+    public function purgeTokens(int $hours = ApiToken::DEFAULT_LIMIT)
+    {
+        foreach ($this->tokens as $token) {
+            if (now()->addHours($hours*-1)->isAfter($token->expiry)) {
+                $token->forceDelete();
+            }
+        }
     }
 }
