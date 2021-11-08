@@ -82,11 +82,6 @@ Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFrom
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
-Route::get('/orders/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
-Route::get('/orders/activities/{oCustomerId}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
-Route::get('/orders/flights/{oCustomerId}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
-Route::get('/orders/transports/{oCustomerId}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
-
 Route::middleware('auth:api')->group(function() {
     
 });
@@ -173,10 +168,20 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         });
     });
 
-    Route::prefix('orders/addons')->name('addon')->group(function() {
-        Route::post('/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('accommodation.add');
-        Route::post('/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('activity.add');
-        Route::post('/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('flight.add');
-        Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('transport.add');
+    Route::prefix('orders')->name('order.')->group(function() {
+        Route::prefix('addons')->name('addon.')->group(function () {
+            Route::prefix('add')->name('add.')->group(function () {
+                Route::post('/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('accommodation');
+                Route::post('/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('activity');
+                Route::post('/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('flight');
+                Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('transport');
+            });
+            Route::prefix('available')->name('get.')->group(function () {
+                Route::get('/accommodation/{oCustomerId}', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('accommodation');
+                Route::get('/activities/{oCustomerId}', [TourComponentController::class, 'getAvailableActivityAddons'])->name('activity');
+                Route::get('/flights/{oCustomerId}', [TourComponentController::class, 'getAvailableFlightAddons'])->name('flight');
+                Route::get('/transports/{oCustomerId}', [TourComponentController::class, 'getAvailableTransportAddons'])->name('transport');
+            });
+        });
     });
 });
