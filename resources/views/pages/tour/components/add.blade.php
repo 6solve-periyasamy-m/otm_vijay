@@ -10,7 +10,7 @@
             </div>
             <div class="col-12">
                 <p>Event</p>
-                <h6 class="fw-bold">{{ $tour->event->name }}</h6>
+                <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "No Event" }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
