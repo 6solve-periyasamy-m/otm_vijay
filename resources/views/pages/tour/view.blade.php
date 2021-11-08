@@ -59,7 +59,13 @@
             <div class="col-12 col-xl-6">
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
-            </div>        
+            </div>
+            <div class="col-12">
+                <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
+                    <i class="icon-note"></i>
+                    <span>Edit Tour</span>
+                </a>
+            </div>
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>    
