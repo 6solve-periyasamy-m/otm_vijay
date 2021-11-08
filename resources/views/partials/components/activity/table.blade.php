@@ -40,7 +40,7 @@
                     <td>{{ $activityInventory->sales_price }}</td>
                     <td>{{ $activityInventory->currency }}</td>
                     <td>{{ $activityInventory->notes }}</td>
-                    <td>
+                    <td class="actions">
                         <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"
                             class="btn btn-sm btn-outline-success mb-1">
                             <i class="icon-note"></i>                            

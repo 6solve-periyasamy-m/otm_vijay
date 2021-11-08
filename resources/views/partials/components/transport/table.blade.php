@@ -49,7 +49,7 @@ $(document).ready(function() {
                 <td>{{ $transportInventory->sales_price }}</td>
                 <td>{{ $transportInventory->currency }}</td>
                 <td>{{ $transportInventory->notes }}</td>
-                <td>
+                <td class="actions">
                     <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}"
                         class="btn btn-sm btn-outline-success mb-1">
                         <i class="icon-note"></i>

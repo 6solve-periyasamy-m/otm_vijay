@@ -4,7 +4,7 @@
     <td>{{ $activity->location->name }}</td>
     <td>{{ $description }}</td>
     <td>{{ $notes }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('activities.edit', ['activity' => $activity,])}}" class="btn btn-sm btn-outline-success mb-1">
             <i class="icon-note"></i>
         </a>
