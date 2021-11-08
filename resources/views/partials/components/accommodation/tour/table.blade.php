@@ -4,7 +4,12 @@
         accommodationTable = $('.accommodation-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
-            "ajax": "{{ route('api.accommodation-inventory.datatables', ['tour' => $tour,]) }}",
+            "ajax": {
+                "url": "{{ route('api.accommodation-inventory.datatables', ['tour' => $tour,]) }}",
+                "data": {
+                    "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
+                },
+            },
             "columns": [
                 { "data": "accommodation_name" },
                 { "data": "location" },

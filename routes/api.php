@@ -153,14 +153,16 @@ Route::middleware('api.token.auth')->group(function () {
             });
         });
     });
+
+    Route::prefix('datatables')->group(function () {
+        Route::get('accommodation-inventory/{tour}', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
+        Route::get('activity-inventory/{tour}', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
+        Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
+        Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
+    });
 });
 
-Route::prefix('datatables')->group(function () {
-    Route::get('accommodation-inventory/{tour}', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
-    Route::get('activity-inventory/{tour}', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
-    Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
-    Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
-});
+
 
 Route::prefix('component')->group(function() {
     Route::prefix('tour/{tour}')->group(function() {

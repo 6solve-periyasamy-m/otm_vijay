@@ -4,7 +4,12 @@
         transportTable = $('.transport-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
-            "ajax": "{{ route('api.transport-inventory.datatables', ['tour' => $tour,]) }}",
+            "ajax": {
+                "url": "{{ route('api.transport-inventory.datatables', ['tour' => $tour,]) }}",
+                "data": {
+                    "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
+                },
+            },
             "columns": [
                 { "data": "name" },
                 { "data": "transport_type" },
