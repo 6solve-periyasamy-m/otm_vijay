@@ -18,6 +18,7 @@ class Tour extends Model
         'date_from' => 'required|date',
         'date_to' => 'required|date',
         'base_price_per_person' => 'numeric',
+        'deposit' => 'numeric',
         'margin' => 'numeric',
         'single_occupancy_surcharge' => 'numeric',
         'stock' => 'required_with:stock_control_active|nullable|numeric|integer',

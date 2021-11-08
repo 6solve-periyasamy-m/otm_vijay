@@ -36,6 +36,7 @@ class TourController extends Controller
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
             'tour_colour_id' => $request->input('tour_colour_id'),
+            'deposit' => $request->input('deposit'),
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
@@ -63,6 +64,7 @@ class TourController extends Controller
             'date_to' => $request->input('date_to'),
             'base_price_per_person' => $request->input('base_price_per_person'),
             'margin' => $request->input('margin'),
+            'deposit' => $request->input('deposit'),
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
