@@ -8,6 +8,7 @@ use App\Models\User;
 interface UserRepositoryInterface
 {
     public static function getLatestToken(User $user) : ApiToken;
+    public static function getUserFromToken(string $token) : User;
 }
 
 class UserRepository implements UserRepositoryInterface
@@ -18,5 +19,11 @@ class UserRepository implements UserRepositoryInterface
         $token = $user->tokens()->latest()->first();
         if (!(isset($token) && !$token->hasExpired())) $token = $user->generateToken();
         return $token;
+    }
+
+    public static function getUserFromToken(string $token) : User
+    {
+        $apiToken = ApiToken::findOrFail($token);
+        return $apiToken->user;
     }
 }
