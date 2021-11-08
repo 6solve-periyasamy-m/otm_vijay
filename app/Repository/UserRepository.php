@@ -14,6 +14,8 @@ class UserRepository implements UserRepositoryInterface
 
     public static function getLatestToken(User $user)
     {
-        return $user->tokens()->latest()->first();
+        $token = $user->tokens()->latest()->first();
+        if (!(isset($token) && !$token->hasExpired())) $token = $user->generateToken();
+        return $token;
     }
 }
