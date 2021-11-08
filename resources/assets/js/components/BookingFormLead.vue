@@ -39,8 +39,14 @@
                     </div>
                 </div>
                 <div v-if="token && !show_traveller">
-                    <font-awesome-icon icon="arrow-right" />
-                    You can continue with your booking, please fill in all sections
+                    <div>
+                        <font-awesome-icon icon="arrow-right" />
+                        You can continue with your booking, please fill in all sections
+                    </div>
+                    <div>
+                        You have {{activeBookings}} bookings active.  
+                        To access bookings, you must <a :href="loginLink">login</a>. 
+                    </div>
                 </div>
             </div>
             {{debug ? 'DEBUG MODE: Order retrieved by cookie: token: '+ token : ''}}
@@ -176,51 +182,51 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="row spacer">
-                                <div class="col-sm-6" v-if="!same_address">
+                            <div class="row spacer" v-if="!same_address">
+                                <div class="col-sm-6">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <h4>Billing Address</h4>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-12 form-group field-separation">
+                                        <div class="col-sm-12 form-group field-separation">
                                             <label class="form-label" v-show="billing_address_line_1">Billing Address line 1</label>
                                             <input type="text" v-model="billing_address_line_1" placeholder="Billing Address Line 1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-12 form-group field-separation">
+                                        <div class="col-sm-12 form-group field-separation">
                                             <label class="form-label" v-show="billing_address_line_2">Billing Address line 2</label>
                                             <input type="text" v-model="billing_address_line_2" placeholder="Billing Address Line 2" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-12 form-group field-separation">
+                                        <div class="col-sm-12 form-group field-separation">
                                             <label class="form-label" v-show="billing_address_line_3">Billing Address line 3</label>
                                             <input type="text" v-model="billing_address_line_3" placeholder="Billing Address Line 3" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-8 form-group field-separation">
+                                        <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="billing_town" v-show="billing_town">Town</label>
                                             <input type="text" v-model="billing_town" name="billing_town" placeholder="Town" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-8 form-group field-separation">
+                                        <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="billing_region" v-show="billing_region">Region</label>
                                             <input type="text" v-model="billing_region" name="billing_region" placeholder="Region" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-8 form-group field-separation">
+                                        <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="billing_postcode" v-show="billing_postcode">Billing Postcode</label>
                                             <input type="text" v-model="billing_postcode" name="billing_postcode" placeholder="Postcode" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div v-if="!same_address" class="col-sm-8 form-group field-separation">
+                                        <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
                                             <input type="text" v-model="billing_country" name="billing_country" placeholder="Country" class="form-control">
                                         </div>
@@ -260,6 +266,8 @@ export default {
             noUser: false,
             getPassword: false,
             show_traveller: false,
+            loginLink: '',
+            activeBookings: 0,
             title: '',
             first_name: '',
             last_name: '',
@@ -344,6 +352,9 @@ export default {
         if (that.booking_token) {
             that.token = that.booking_token
         }
+        console.log(that.tour)
+        this.loginLink = `/login?cb=${that.tour.url}`
+        this.activeBookings = 123;
     },
     computed: {
         otherNumberType: function() {
@@ -535,7 +546,8 @@ export default {
             })
         },
         createBooking() {
-            console.log('create Booking')
+            alert('create Booking : you must be logged in');
+            // NB: a new booking user can create a booking, or a user can login and create a booking
             // axios.post('/api/booking/createBooking');
         },
 
@@ -552,6 +564,15 @@ export default {
                 alert('Check one order code created')
             }
             */
+            // if (this.same_address) {
+            //     this.billingAddressFields.map(field => {
+            //         const billing_field = `billing_${field}`
+            //         this.$billing_field = this.$field
+            //     })
+            //     this.billingAddressFields.map(field => {
+            //         console.log(field, this.$billing_field)
+            //     })
+            // }
             axios.post('/api/booking/lead-traveller', {
                 title: this.title,
                 first_name: this.first_name,

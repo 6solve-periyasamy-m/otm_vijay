@@ -29,8 +29,10 @@ use App\Http\Controllers\Api\PaymentController;
 /**
  * Booking form routes are PUBLIC (do not use api auth)
  */
-// Booking
+// Booking Repo
 Route::get('/booking/token/{token}', [BookingController::class, 'get']);
+Route::post('/booking/create', [BookingController::class, 'create']);
+
 // Accommodation
 Route::get('/booking/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
 Route::get('/booking/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);

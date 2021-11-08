@@ -148,11 +148,6 @@ class BookingCustomerController extends ApiController
                 if ($this->logging == 'customers') {
                     Log::info('Billing Address Customer Validation passed', $billingValidated);
                 }
-            } else {
-                // if we have a customer, set the billing address ID to the same address as home address
-                if (isset($customer)) {
-                    $customer->billing_address_id = $customer->home_address_id;
-                }
             }
         } else {
             $validated = $request->validate([
@@ -246,7 +241,18 @@ class BookingCustomerController extends ApiController
         } else {
             $home_address_id = 0;
         }
-        if (!$request->same_address) {
+        if ($request->same_address) {
+            $newBillingAddress = [
+                'id' => $customer->billing_address_id,
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'address_line_3' => $request->address_line_3,
+                'town' => $request->town,
+                'region' => $request->region,
+                'country' => $request->country,
+                'postcode' => $request->postcode
+            ];
+        } else {
             $newBillingAddress = [
                 'id' => $customer->billing_address_id,
                 'address_line_1' => $request->billing_address_line_1,
@@ -257,15 +263,13 @@ class BookingCustomerController extends ApiController
                 'country' => $request->billing_country,
                 'postcode' => $request->billing_postcode
             ];
-            if ($customer->billing_address_id) {
-                $billing_address = $addressRepo->update($newBillingAddress);
-            } else {
-                $billing_address = $addressRepo->create($newBillingAddress);
-            }
-            $billing_address_id = $billing_address->id;
-        } else {
-            $billing_address_id = $home_address_id;
         }
+        if ($customer->billing_address_id) {
+            $billing_address = $addressRepo->update($newBillingAddress);
+        } else {
+            $billing_address = $addressRepo->create($newBillingAddress);
+        }
+        $billing_address_id = $billing_address->id;
 
         return [
             'home_address_id' => $home_address_id, 
@@ -301,23 +305,33 @@ class BookingCustomerController extends ApiController
             throw new \Exception('Can not create an address with ', $address_record);
         }
         if ($request->same_address) {
-            $billing_address_id = $home_address_id;
+            $billingAddressRecord = [
+                'address_line_1' => $request->address_line_1,
+                'address_line_2' => $request->address_line_2,
+                'address_line_3' => $request->address_line_3,
+                'town' => $request->town,
+                'region' => $request->region,
+                'country' => $request->country,
+                'postcode' => $request->postcode
+            ];
         } else {
-            $addressRepo = new AddressRepository();
-            $billing_address = $addressRepo->create(
-                [
-                    'address_line_1' => $request->billing_address_line_1,
-                    'address_line_2' => $request->billing_address_line_2,
-                    'address_line_3' => $request->billing_address_line_3,
-                    'town' => $request->billing_town,
-                    'region' => $request->billing_region,
-                    'country' => $request->billing_country,
-                    'postcode' => $request->billing_postcode
-                ],
-                'billing'
-            );
-            $billing_address_id = $billing_address->id;
+            $billingAddressRecord = [
+                'address_line_1' => $request->billing_address_line_1,
+                'address_line_2' => $request->billing_address_line_2,
+                'address_line_3' => $request->billing_address_line_3,
+                'town' => $request->billing_town,
+                'region' => $request->billing_region,
+                'country' => $request->billing_country,
+                'postcode' => $request->billing_postcode
+            ];
         }
+        $addressRepo = new AddressRepository();
+        $billing_address = $addressRepo->create(
+            $billingAddressRecord,
+            'billing'
+        );
+        $billing_address_id = $billing_address->id;
+
 
         return [
             'home_address_id' => $home_address_id, 

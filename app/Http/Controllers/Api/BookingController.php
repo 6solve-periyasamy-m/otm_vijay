@@ -34,13 +34,22 @@ class BookingController extends ApiController
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
         if (isset($booking)) {
-            Log::debug('===>>> booking->cusotmer', [$booking, $booking->customer]);
+            Log::debug('===>>> booking->customer', [$booking, $booking->customer]);
             return response()->json(['success' => true, 'booking' => $booking]);
         }
         return response()->json(['success' => false]);
     }
 
-    public function create($customer_id)
+    /**
+     * create
+     * POST function to create a booking in the repo
+     * @param Request $request with parameters:
+     * @param string $customer_id
+     * @param string $tour_id
+     * @param string $token
+     * @return void
+     */
+    public function create($customer_id, $tour_id, $token)
     {
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->create($customer_id, $tour_id, $token);
