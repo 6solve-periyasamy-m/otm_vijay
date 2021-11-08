@@ -55,12 +55,7 @@ class User extends Authenticatable
 
     public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY)
     {
-        $apiToken = ApiToken::make([
-            'token' => Str::random(32),
-            'expiry' => now()->addMinutes($expiresIn),
-        ]);
-        $this->tokens()->save($apiToken);
-        return $apiToken;
+        return UserRepository::generateUserToken($this, $expiresIn);
     }
 
     public function invalidateAllTokens()
