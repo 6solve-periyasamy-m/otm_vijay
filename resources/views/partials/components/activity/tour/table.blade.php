@@ -39,7 +39,7 @@
                 200: function () { alert('Components added successfully'); activityTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".activity-component-type-select").find(":selected").val(), "ids": ids },
+            data: { "type": $(".activity-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
 </script>

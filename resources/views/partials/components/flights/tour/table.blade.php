@@ -40,7 +40,7 @@
                 200: function () { alert('Components added successfully'); flightTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".flight-component-type-select").find(":selected").val(), "ids": ids },
+            data: { "type": $(".flight-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
 </script>

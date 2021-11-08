@@ -41,7 +41,7 @@
                 200: function () { alert('Components added successfully'); accommodationTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids },
+            data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
 </script>
