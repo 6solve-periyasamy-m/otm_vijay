@@ -14,6 +14,6 @@ class UserRepository implements UserRepositoryInterface
 
     public static function getLatestToken(User $user)
     {
-        return $user->tokens()->orderBy('created', 'DESC')->first();
+        return $user->tokens()->latest()->first();
     }
 }
