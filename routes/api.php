@@ -96,84 +96,84 @@ Route::middleware('auth:api')->group(function() {
     
 });
 
-Route::middleware('api.token.auth')->group(function () {
+Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::prefix('select')->group(function () {
-        Route::get('locations', [SelectController::class, 'getLocations'])->name('api.locations.select');
-        Route::get('regions', [SelectController::class, 'getRegions'])->name('api.regions.select');
-        Route::get('countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
-        Route::get('location-types', [SelectController::class, 'getLocationTypes'])->name('api.location-types.select');
-        Route::get('room-types', [SelectController::class, 'getRoomTypes'])->name('api.room-types.select');
-        Route::get('board-types', [SelectController::class, 'getBoardTypes'])->name('api.board-types.select');
-        Route::get('transport-types', [SelectController::class, 'getTransportTypes'])->name('api.transport-types.select');
-        Route::get('operators', [SelectController::class, 'getOperators'])->name('api.operators.select');
-        Route::get('travel-classes', [SelectController::class, 'getTravelClasses'])->name('api.travel-classes.select');
-        Route::get('activity-types', [SelectController::class, 'getActivityTypes'])->name('api.activity-types.select');
-        Route::get('ticket-types', [SelectController::class, 'getTicketTypes'])->name('api.ticket-types.select');
-        Route::get('events', [SelectController::class, 'getEvents'])->name('api.events.select');
-        Route::get('tours', [SelectController::class, 'getTours'])->name('api.tours.select');
-        Route::get('airports', [SelectController::class, 'getAirports'])->name('api.airports.select');
-        Route::get('airlines', [SelectController::class, 'getAirlines'])->name('api.airlines.select');
-        Route::get('quotes', [SelectController::class, 'getQuotes'])->name('api.quotes.select');
-        Route::get('customer', [SelectController::class, 'getCustomers'])->name('api.customers.select');
-        Route::get('hat-size', [SelectController::class, 'getHatSizes'])->name('api.hat-size.select');
-        Route::get('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('api.t-shirt-size.select');
-        Route::get('payment-method', [SelectController::class, 'getPaymentMethods'])->name('api.payment-method.select');
+        Route::get('locations', [SelectController::class, 'getLocations'])->name('locations.select');
+        Route::get('regions', [SelectController::class, 'getRegions'])->name('regions.select');
+        Route::get('countries', [SelectController::class, 'getCountries'])->name('countries.select');
+        Route::get('location-types', [SelectController::class, 'getLocationTypes'])->name('location-types.select');
+        Route::get('room-types', [SelectController::class, 'getRoomTypes'])->name('room-types.select');
+        Route::get('board-types', [SelectController::class, 'getBoardTypes'])->name('board-types.select');
+        Route::get('transport-types', [SelectController::class, 'getTransportTypes'])->name('transport-types.select');
+        Route::get('operators', [SelectController::class, 'getOperators'])->name('operators.select');
+        Route::get('travel-classes', [SelectController::class, 'getTravelClasses'])->name('travel-classes.select');
+        Route::get('activity-types', [SelectController::class, 'getActivityTypes'])->name('activity-types.select');
+        Route::get('ticket-types', [SelectController::class, 'getTicketTypes'])->name('ticket-types.select');
+        Route::get('events', [SelectController::class, 'getEvents'])->name('events.select');
+        Route::get('tours', [SelectController::class, 'getTours'])->name('tours.select');
+        Route::get('airports', [SelectController::class, 'getAirports'])->name('airports.select');
+        Route::get('airlines', [SelectController::class, 'getAirlines'])->name('airlines.select');
+        Route::get('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
+        Route::get('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
+        Route::get('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
+        Route::get('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
+        Route::get('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::prefix('inventory')->group(function () {
-            Route::get('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('api.inventory.accommodation.select');
-            Route::get('activity', [SelectController::class, 'getActivityInventory'])->name('api.inventory.activity.select');
-            Route::get('flight', [SelectController::class, 'getFlightInventory'])->name('api.inventory.flight.select');
-            Route::get('transport', [SelectController::class, 'getTransportInventory'])->name('api.inventory.transport.select');
+            Route::get('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
+            Route::get('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
+            Route::get('flight', [SelectController::class, 'getFlightInventory'])->name('inventory.flight.select');
+            Route::get('transport', [SelectController::class, 'getTransportInventory'])->name('inventory.transport.select');
         });
         Route::prefix('selected')->group(function () {
-            Route::get('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('api.locations.selected');
-            Route::get('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('api.regions.selected');
-            Route::get('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('api.countries.selected');
-            Route::get('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('api.location-types.selected');
-            Route::get('room-type/{id}', [SelectController::class, 'getSelectedRoomType'])->name('api.room-types.selected');
-            Route::get('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('api.board-types.selected');
-            Route::get('transport-type/{id}', [SelectController::class, 'getSelectedTransportType'])->name('api.transport-types.selected');
-            Route::get('operator/{id}', [SelectController::class, 'getSelectedOperator'])->name('api.operators.selected');
-            Route::get('travel-class/{id}', [SelectController::class, 'getSelectedTravelClass'])->name('api.travel-classes.selected');
-            Route::get('activity-type/{id}', [SelectController::class, 'getSelectedActivityType'])->name('api.activity-types.selected');
-            Route::get('ticket-type/{id}', [SelectController::class, 'getSelectedTicketTypes'])->name('api.ticket-types.selected');
-            Route::get('event/{id}', [SelectController::class, 'getSelectedEvent'])->name('api.events.selected');
-            Route::get('tour/{id}', [SelectController::class, 'getSelectedTour'])->name('api.tours.selected');
-            Route::get('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('api.airports.selected');
-            Route::get('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('api.airlines.selected');
-            Route::get('quotes/{id}', [SelectController::class, 'getSelectedQuote'])->name('api.quotes.selected');
-            Route::get('customers/{id}', [SelectController::class, 'getSelectedCustomer'])->name('api.customers.selected');
-            Route::get('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('api.hat-size.selected');
-            Route::get('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('api.t-shirt-size.selected');
-            Route::get('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('api.payment-method.selected');
+            Route::get('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('locations.selected');
+            Route::get('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('regions.selected');
+            Route::get('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('countries.selected');
+            Route::get('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('location-types.selected');
+            Route::get('room-type/{id}', [SelectController::class, 'getSelectedRoomType'])->name('room-types.selected');
+            Route::get('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('board-types.selected');
+            Route::get('transport-type/{id}', [SelectController::class, 'getSelectedTransportType'])->name('transport-types.selected');
+            Route::get('operator/{id}', [SelectController::class, 'getSelectedOperator'])->name('operators.selected');
+            Route::get('travel-class/{id}', [SelectController::class, 'getSelectedTravelClass'])->name('travel-classes.selected');
+            Route::get('activity-type/{id}', [SelectController::class, 'getSelectedActivityType'])->name('activity-types.selected');
+            Route::get('ticket-type/{id}', [SelectController::class, 'getSelectedTicketTypes'])->name('ticket-types.selected');
+            Route::get('event/{id}', [SelectController::class, 'getSelectedEvent'])->name('events.selected');
+            Route::get('tour/{id}', [SelectController::class, 'getSelectedTour'])->name('tours.selected');
+            Route::get('airports/{id}', [SelectController::class, 'getSelectedAirport'])->name('airports.selected');
+            Route::get('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('airlines.selected');
+            Route::get('quotes/{id}', [SelectController::class, 'getSelectedQuote'])->name('quotes.selected');
+            Route::get('customers/{id}', [SelectController::class, 'getSelectedCustomer'])->name('customers.selected');
+            Route::get('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
+            Route::get('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
+            Route::get('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('payment-method.selected');
             Route::prefix('inventory/{id}')->group(function () {
-                Route::get('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('api.inventory.accommodation.selected');
-                Route::get('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('api.inventory.activity.selected');
-                Route::get('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('api.inventory.flight.selected');
-                Route::get('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('api.inventory.transport.selected');
+                Route::get('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
+                Route::get('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
+                Route::get('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('inventory.flight.selected');
+                Route::get('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('inventory.transport.selected');
             });
         });
     });
 
     Route::prefix('datatables')->group(function () {
-        Route::get('accommodation-inventory/{tour}', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('api.accommodation-inventory.datatables');
-        Route::get('activity-inventory/{tour}', [DataTablesController::class, 'getActivityInventoryComponents'])->name('api.activity-inventory.datatables');
-        Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('api.flight-inventory.datatables');
-        Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('api.transport-inventory.datatables');
+        Route::get('accommodation-inventory/{tour}', [DataTablesController::class, 'getAccommodationInventoryComponents'])->name('accommodation-inventory.datatables');
+        Route::get('activity-inventory/{tour}', [DataTablesController::class, 'getActivityInventoryComponents'])->name('activity-inventory.datatables');
+        Route::get('flight-inventory/{tour}', [DataTablesController::class, 'getFlightInventoryComponents'])->name('flight-inventory.datatables');
+        Route::get('transport-inventory/{tour}', [DataTablesController::class, 'getTransportInventoryComponents'])->name('transport-inventory.datatables');
     });
 
     Route::prefix('component')->group(function() {
         Route::prefix('tour/{tour}')->group(function() {
             Route::prefix('accommodation/inventory')->group(function() {
-                Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('api.tour.accommodation.inventory.add');
+                Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('tour.accommodation.inventory.add');
             });
             Route::prefix('activity/inventory')->group(function() {
-                Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('api.tour.activity.inventory.add');
+                Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('tour.activity.inventory.add');
             });
             Route::prefix('flight/inventory')->group(function() {
-                Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('api.tour.flight.inventory.add');
+                Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('tour.flight.inventory.add');
             });
             Route::prefix('transport/inventory')->group(function() {
-                Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('api.tour.transport.inventory.add');
+                Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('tour.transport.inventory.add');
             });
         });
     });
