@@ -15,4 +15,12 @@ class Country extends Model
     public function currencies() {
         return $this->belongsToMany(Currency::class, 'country_currencies');
     }
+
+    public function getCurrenciesList() {
+        $codes = [];
+        foreach ($this->currencies as $currency) {
+            $codes[] = $currency->code;
+        }
+        return collect($codes)->implode(', ');
+    }
 }

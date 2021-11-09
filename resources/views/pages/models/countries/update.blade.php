@@ -4,8 +4,10 @@
 
 @section('content')
     @include('partials.models.countries.form', ['action' => route('countries.update', ['country' => $country,]),
-      'name' => $country->name,
-      'code' => $country->code,
-      'currency' => $country->currency,
+        'country' => $country,
+        'name' => $country->name,
+        'numeric_code' => $country->numeric_code,
+        'alpha_code' => $country->alpha_code,
+        'dialing_code' => $country->dialing_code,
     ])
 @endsection

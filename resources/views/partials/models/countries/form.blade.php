@@ -4,18 +4,21 @@
             @csrf
             <div class="row">
                 <div class="form-group col-12">
+                    <label for="name-input">Numeric Code</label>
+                    <input name="name" value="{{ $numeric_code ?? "" }}" class="form-control" id="name-input">
+                </div>
+                <p></p><div class="form-group col-12">
+                    <label for="name-input">Alpha Code</label>
+                    <input name="name" value="{{ $alpha_code ?? "" }}" class="form-control" id="name-input">
+                </div>
+                <p></p><div class="form-group col-12">
                     <label for="name-input">Name</label>
                     <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
                 </div>
                 <p></p>
                 <div class="form-group col-12">
-                    <label for="code-input">Code</label>
-                    <input name="code" value="{{ $code ?? "" }}" class="form-control" id="code-input">
-                </div>
-                <p></p>
-                <div class="form-group col-12">
-                    <label for="currency-input">Currency</label>
-                    <input name="currency" value="{{ $currency ?? "" }}" class="form-control" id="currency-input">
+                    <label for="code-input">Dialing Code</label>
+                    <input name="code" value="{{ $dialing_code ?? "" }}" class="form-control" id="code-input">
                 </div>
                 <p></p>
                 <div class="form-group col-12">
