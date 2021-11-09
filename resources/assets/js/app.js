@@ -22,13 +22,13 @@ window.axios.defaults.headers.common = {
 
  console.log('app.js marker 3')
 
- // operational 
- bus.$on('setBookingToken', function(token) {
-     console.log('Event Handler: setBookingToken:', token)
-     setCookie('OTM_booking_token', token);
-     // alert('apps: setCookie', token);
-     // bus.$emit('setBookingToken2', token, order_id)
- })
+//  // operational 
+//  bus.$on('setBookingToken', function(token) {
+//      console.log('Event Handler: setBookingToken:', token)
+//      //setCookie('OTM_booking_token', token);
+//      alert('apps: setCookie', token);
+//      bus.$emit('setBookingToken2', token)
+//  })
  
  const busEventLogging = true
  
@@ -39,8 +39,6 @@ window.axios.defaults.headers.common = {
  bus.$on('saveLeadCustomer', function(name) {
       bus.booking.name = name
   })
- 
-
  
  bus.$on('leadTravellerLoaded', function(customer) {
      busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)

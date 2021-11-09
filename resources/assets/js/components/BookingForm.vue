@@ -11,14 +11,13 @@
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :booking_token="bookingToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
-                        <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
+                        <booking-form-additional :booking_token="bookingToken" :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
                         <div v-if="tour && token">
-                        {{tour}} {{token}}
-                            <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
-                            <booking-form-accommodation :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
-                            <booking-form-activity></booking-form-activity>
-                            <booking-form-transport></booking-form-transport>
-                            <booking-form-payment></booking-form-payment>
+                            <booking-form-flights :booking_token="bookingToken" :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour"></booking-form-flights>
+                            <booking-form-accommodation :booking_token="bookingToken" :travellers="travellers" :tour="tour"></booking-form-accommodation>
+                            <booking-form-activity :booking_token="bookingToken"></booking-form-activity>
+                            <booking-form-transport :booking_token="bookingToken"></booking-form-transport>
+                            <booking-form-payment :booking_token="bookingToken"></booking-form-payment>
                             <booking-form-terms></booking-form-terms>
                         </div>
                     </div>
@@ -47,7 +46,7 @@ function getCookie(cname) {
   return "";
 }
 
-function setCookie(cname, cvalue, exdays) {
+function setCookie(cname, cvalue, exdays = 7) {
   const d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
   let expires = "expires="+ d.toUTCString();
@@ -70,7 +69,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: 4,
+            debug: false,
             formInfo: false,
             token: '',
             leadTraveller: {},
@@ -103,8 +102,8 @@ export default {
             .then(response => {
                 console.log('>>>> >>>> >>> booking found by token', response.data.booking)
                 that.leadTraveller = response.data.booking.customer
+                bus.$emit('setBookingToken', response.data.booking.token)
                 bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                
                 bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
                 bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
 
@@ -136,6 +135,7 @@ export default {
         } else {
             that.token = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             bus.$emit('setBookingToken', that.token)
+            setCookie(that.tokenId, that.token)
             that.bookingToken = getCookie(that.tokenId);
             console.log('bookingToken CREATED ', that.bookingToken)
         }

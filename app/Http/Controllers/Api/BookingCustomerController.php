@@ -1,24 +1,20 @@
 <?php
 
-// Booking Customer Controller: BOOKING FORM Updating API
-// Lead and Additional Traveller API
-// TODO: are these functions now redundant?
-
 namespace App\Http\Controllers\Api;
 
-use App\Models\Address;
+use App\Models\Booking;
+
 use App\Models\Customer;
-
 use Illuminate\Http\Request;
-use App\Models\OrderCustomer;
 
-use App\Models\OrdersCustomer;
+use App\Models\OrderCustomer;
+use App\Models\AdditionalTraveller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Repository\AddressRepository;
+use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
-use App\Repository\BookingRepository;
 use App\Repository\OrdersCustomerRepository;
 
 class BookingCustomerController extends ApiController
@@ -56,6 +52,8 @@ class BookingCustomerController extends ApiController
         return response()->json(["success" => true, "auth" => $auth]);
     } 
 
+    // interesting idea, but replace with regular user login
+    // by adding a callback URL to it.
     public function authenticate(Request $request)
     {
         // ignore auth label
@@ -113,9 +111,10 @@ class BookingCustomerController extends ApiController
      * @param boolean $isLead
      * @return JSON (Customer object)
      */
-    private function storeOrUpdateCustomer($request, $isLead = false)
+    private function storeOrUpdateCustomer($request, $token, $isLead = false)
     {
         $this->logging == 'customers' && Log::info('search for '. $request->email_address);
+        // Log::debug('check booking token', [$request->booking_token]);
 
         $customer = Customer::where('email_address', $request->email_address)->first();
         // if (empty($customer)) {
@@ -179,20 +178,19 @@ class BookingCustomerController extends ApiController
             'date_of_birth' => $request->date_of_birth,
             'mobile_number' => $request->mobile_number,
             'other_phone_number' => $request->other_phone_number,
-            'gender' => $request->gender,
-            'login_token' => $request->login_token
+            'gender' => $request->gender
         ];
 
         // if the customer exists, then the addresses MAY exist
         if ($customer) {
             $this->logging == 'customers' && Log::info('customer exists record ', $customer->toArray());
-            Log::debug('>>>>> update customer with ', $customerData);
+            // Log::debug('>>>>> update customer with ', $customerData);
             $customer = $customerRepo->update($customerData);
             
             // in booking form, only the lead enters addresses
             if ($isLead) {
                 $addressIds = $this->update_addresses($request, $customer);
-                Log::debug('<<<<< update_address returned with ', $addressIds);
+                // Log::debug('<<<<< update_address returned with ', $addressIds);
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
                 $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             }
@@ -203,7 +201,7 @@ class BookingCustomerController extends ApiController
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
                 $addressIds = $this->create_addresses($request);
-                Log::debug('<<<<< create_addressess returned with ', $addressIds);
+                // Log::debug('<<<<< create_addressess returned with ', $addressIds);
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
                 $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             }
@@ -211,6 +209,23 @@ class BookingCustomerController extends ApiController
         }
         $customer->save();
 
+        if (!$isLead) {
+            $bookingRepo = new BookingRepository();
+            $booking = $bookingRepo->findBookingByToken($request->booking_token);
+            if (!$booking || !$booking->id) {
+                throw new \Exception('StorTravellers: booking not found '.$request->booking_token);
+            }
+            $additionalTravellers = new AdditionalTraveller();
+            $additionalTraveller = $additionalTravellers->where('booking_id', $booking->id)
+                ->where('customer_id', $customer->id)->first();
+            if (empty($additionalTraveller)) {
+                $additionalTraveller = new AdditionalTraveller();
+                $additionalTraveller->booking_id = $booking->id;
+                $additionalTraveller->customer_id = $customer->id;
+                $additionalTraveller->save();
+                Log::debug('additional traveller bookings save', [$additionalTraveller]);
+            }
+        }
         return $customer;
     }
 
@@ -332,7 +347,6 @@ class BookingCustomerController extends ApiController
         );
         $billing_address_id = $billing_address->id;
 
-
         return [
             'home_address_id' => $home_address_id, 
             'billing_address_id' => $billing_address_id
@@ -372,7 +386,8 @@ class BookingCustomerController extends ApiController
     public function leadTraveller(Request $request)
     {
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
-        $customer = $this->storeOrUpdateCustomer($request, true);
+        $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
+
         $booking = new BookingRepository();
         $findBooking = $booking->findBookingByToken($request->booking_token);
         Log::debug('======= >>>>> findBooking', [$findBooking]);
@@ -392,11 +407,24 @@ class BookingCustomerController extends ApiController
      */
     public function additionalTraveller(Request $request)
     {
-        $this->logging == 'customers' && Log::info('additionalTraveller', $request->toArray());
-        $customer = $this->storeOrUpdateCustomer($request, false);
-       // $orderCustomer = $this->storeOrUpdateOrderCustomer($customer, $request, false);
+        Log::debug('>>> additionalTraveller', $request->toArray());
+        $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
         
         return json_encode(['success' => true, 'customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
+    }
+
+    public function loadAdditionalTravellers($token) {
+        $bookingRepo = new BookingRepository();
+        $booking = $bookingRepo->findBookingByToken($token);
+        if (!$booking || !$booking->id) {
+            throw new \Exception('loadAdditionalTravellers: booking not found '.$token);
+        }
+        $additionalTraveller = new AdditionalTraveller();
+        $additionalTravellers = $additionalTraveller->where('booking_id', $booking->id)->get();
+        foreach($additionalTravellers as $n => $traveller) {
+            $additionalTravellers[$n] = Customer::findOrFail($traveller->customer_id);
+        }
+        return json_encode(['success' => true, 'travellers' => $additionalTravellers]);
     }
 
     public function removeAdditionalTraveller(Request $request)

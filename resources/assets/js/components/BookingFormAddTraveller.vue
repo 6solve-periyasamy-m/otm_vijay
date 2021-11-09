@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <div class="card-options" v-if="!removed">
-        <h3 v-if="developer">Additional Traveller Details for Order {{order_id}} </h3>
+        <h3 v-if="developer">Additional Traveller Details for Order {{order_id}}</h3>
         <div class="ept-form" :id="form_id">
             <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
             <div v-if="edit_fields || (!first_name && !last_name)">
@@ -88,7 +88,7 @@
         
             </div>
             <div v-else>
-                {{first_name}} {{last_name}} <button class="btn btn-small btn-warning" @click="edit_fields = true">Edit</button> 
+                {{first_name}} {{last_name}} <button class="btn btn-warning" @click="edit_fields = true">Edit</button> 
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@
 <script>
 import { bus } from '../bus'
 export default {
-    props: ['order_id', 'traveller', 'tour'],
+    props: ['order_id', 'traveller', 'tour', 'booking_token'],
     data() {
         return {
             debug: false,
@@ -109,6 +109,7 @@ export default {
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_number_type'
             ],
+            form_id: 0,
             title: '',
             first_name: '',
             middle_names: '',
@@ -132,29 +133,27 @@ export default {
             removed: false,
             errors: [],
             edit_fields: true,
-            form_id: 0,
             validationErrors: '',
             validated: false
         }
+    },
+    created() {
+        // bus.$on('setBookingToken', function(token) {
+        //     that.booking_token = token
+        //     that.debug && console.log('EVENT: additional traveller booking token set', token)
+        // })
+        bus.$on('addTraveller', function(formId) {
+            that.debug && console.log('adding', formId)
+            that.edit_fields = false
+        })
     },
     mounted() {
         let that = this
         this.validationErrors = ''
         this.customer = this.traveller
         this.setCustomerFields()
-        this.debug && console.log('Additional traveller mounted: order '+this.order_id, this.tour, this.traveller)
+        this.debug && console.log('Additional traveller mounted: seq '+this.form_id, this.tour, this.traveller)
 
-        bus.$on('setOrderToken', function(formId, orderId) {
-            that.form_id = formId
-            if (that.order_id != orderId) {
-                alert('order ID incorrect!', that.order_id, orderId)
-            }
-            this.debug && console.log('EVENT: additional traveller created: setting form and order', formId, orderId)
-        })
-        bus.$on('addTraveller', function(formId) {
-            that.debug && console.log('adding', formId)
-            that.edit_fields = false
-        })
     },
     computed: {
         emptyForm: function () {
@@ -223,9 +222,11 @@ export default {
         },
         storeTraveller() {
             const that = this
+            console.log('store additional', that.booking_token)
+            that.errors = []
+            that.validationErrors = null
             axios.post('/api/booking/additional-traveller', {
-                    form_id: this.form_id,
-                    order_id: this.order_id,
+                    booking_token: this.booking_token,
                     customer_id: this.customer_id,
                     title: this.title,
                     first_name: this.first_name,
@@ -261,8 +262,8 @@ export default {
                 })
                 .catch(e => {
                     console.log('submit error', e)
-                    that.errors.push(e.response.data.errors)
-                    that.validationErrors = e.response.data.errors
+                    that.errors.push(e.response.errors)
+                    that.validationErrors = e.response.errors
                     that.validated = false
                 })
         },
@@ -277,7 +278,7 @@ export default {
             })
             .catch(error => console.log('remove customer error', error))            
             
-            bus.$emit('removeTraveller', this.form_id)
+            bus.$emit('removeTraveller', this.customer_id)
         }
     }
 }

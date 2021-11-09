@@ -57,6 +57,7 @@ Route::get('/booking/airports',         [AirlinesController::class, 'getAirports
 // Travellers
 Route::get('/booking/tourparty', [CustomerController::class, 'getTravellers']);
 Route::get('/booking/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
+Route::get('/booking/travellers/{token}', [BookingCustomerController::class, 'loadAdditionalTravellers']);
 
 // Flights
 Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);

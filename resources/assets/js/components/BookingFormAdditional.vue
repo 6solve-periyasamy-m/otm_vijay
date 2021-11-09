@@ -15,7 +15,7 @@
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
                 <div v-for="item in additional" :key="item.id">
-                    <booking-form-add-traveller :traveller="item" :order_id="order_id" :tour="tour" @remove="removeTraveller"></booking-form-add-traveller>
+                    <booking-form-add-traveller :booking_token="booking_token" :traveller="item" :order_id="order_id" :tour="tour" @remove="removeTraveller"></booking-form-add-traveller>
                 </div>
                 <button type="button" 
                     class="btn btn-primary" 
@@ -32,9 +32,10 @@
 </template>
 
 <script>
-    import { bus } from '../bus' 
+    import axios from 'axios'
+import { bus } from '../bus' 
     export default {
-        props: ['form_info', 'order_id', 'tour'],
+        props: ['form_info', 'order_id', 'tour', 'booking_token'],
         data() {
             return {
                 debug: false,
@@ -47,11 +48,20 @@
             }
         },
         created() {
+            let that = this
             this.debug && console.log('Booking form Additional Customer Component created.', this.order_id, this.tour)
-            bus.$on('additionalTravellersLoaded', (customers) => {
-                this.debug && console.log('additionalTravellersLoaded signal', customers)
-                this.setCustomers(customers)
-            })
+            // bus.$on('additionalTravellersLoaded', (customers) => {
+            //     this.debug && console.log('additionalTravellersLoaded signal', customers)
+            //     this.setCustomers(customers)
+            // })
+            axios.get(`/api/booking/travellers/${this.booking_token}`)
+                .then(response => {
+                    console.log('get Travellers:', response);
+                    response.data.travellers.map(value => {
+                        that.additional.push(value)
+                    })
+                })
+                .catch(error => console.log(error))
         },
         methods: {
             submit() {

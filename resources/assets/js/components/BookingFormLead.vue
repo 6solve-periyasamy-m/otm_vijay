@@ -2,7 +2,9 @@
     <div class="container">
         <div class="card card-options">
             <div class="card-header">
-                [Token: {{token}} Booking Token: {{booking_token}} ]
+                <div v-if="debug">
+                    [Token: {{token}} Booking Token: {{booking_token}} ]
+                </div>
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
                     <p v-if="!token && !show_traveller">Click this button to start your booking</p>
@@ -43,7 +45,7 @@
                         <font-awesome-icon icon="arrow-right" />
                         You can continue with your booking, please fill in all sections
                     </div>
-                    <div>
+                    <div v-if="!token">
                         You have {{activeBookings}} bookings active.  
                         To access bookings, you must <a :href="loginLink">login</a>. 
                     </div>
@@ -256,7 +258,7 @@ export default {
     props: ['form_info', 'tour', 'booked', 'booking_token'],
     data() {
         return {
-            debug: 6,
+            debug: false,
             token: null,
             // order_id: null,
             email: '',
@@ -354,7 +356,7 @@ export default {
         }
         console.log(that.tour)
         this.loginLink = `/login?cb=${that.tour.url}`
-        this.activeBookings = 123;
+        this.activeBookings = ''
     },
     computed: {
         otherNumberType: function() {
