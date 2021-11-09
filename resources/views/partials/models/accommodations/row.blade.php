@@ -5,7 +5,7 @@
     <td>{{ $audit_date }}</td>
     <td>{{ $address }}</td>
     <td>{{ $currency }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}" class="btn btn-outline-success btn-sm mb-1">
             <i class="icon-note"></i>   
         </a>

@@ -59,7 +59,13 @@
             <div class="col-12 col-xl-6">
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
-            </div>        
+            </div>
+            <div class="col-12">
+                <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
+                    <i class="icon-note"></i>
+                    <span>Edit Tour</span>
+                </a>
+            </div>
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>    
@@ -120,7 +126,7 @@
                                     <td>{{ $accommodationEntry["component"]->title }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                         <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
@@ -151,7 +157,7 @@
                                     <td>{{ $activity["component"]->title }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                         <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post">
@@ -182,7 +188,7 @@
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                         <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post">
@@ -213,7 +219,7 @@
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                         <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post">
@@ -245,16 +251,28 @@
             <table id="installments-table" class="table table-striped">
                 <thead>
                 <tr>
+                    <th scope="col">Type</th>
                     <th scope="col">Due Date</th>
                     <th scope="col">Amount Due</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
+                <tr>
+                    <th scope="row">Deposit</th>
+                    <td>With Order</td>
+                    <td>{{ $tour->deposit }}</td>
+                    <td>
+                        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                            <i class="icon-note"></i>
+                        </a>
+                    </td>
+                </tr>
                 @foreach($tour->paymentInstallments as $installment)
                     <tr>
+                        <th scope="row">Installment</th>
                         <td>{{ $installment->due_on }}</td>
                         <td>{{ $installment->amount }}</td>
-                        <td>
+                        <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
                             </a>

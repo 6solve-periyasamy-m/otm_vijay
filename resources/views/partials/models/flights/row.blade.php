@@ -5,7 +5,7 @@
     <td>{{ $is_domestic ? "Domestic" : "International" }}</td>
     <td>{{ $available_after }}</td>
     <td>{{ $notes }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('flights.edit', ['flight' => $flight,])}}" class="btn btn-outline-success btn-sm mb-1">
             <i class="icon-note"></i>
         </a>

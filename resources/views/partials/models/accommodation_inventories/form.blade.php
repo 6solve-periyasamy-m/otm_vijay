@@ -59,7 +59,7 @@
                 </div>                
                 <div class="form-group col-xl-6">
                     <label for="check_in-input">Check In Date Time</label>
-                    <input type="datetime-local" name="check_in" value="{{ isset($check_in) ? $check_in->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                    <input type="datetime-local" name="check_in" value="{{ isset($check_in) ? $check_in->format('Y-m-d\TH:i') : "" }}" class="form-control" onchange="changeDate(indate, outdate);"
                         id="check_in-input">
 
                     <p></p>
@@ -69,7 +69,7 @@
                 </div>                                                
                 <div class="form-group col-xl-6">
                     <label for="check_out-input">Check Out</label>
-                    <input type="datetime-local" name="check_out" value="{{ isset($check_out) ? $check_out->format('Y-m-d\TH:i') : "" }}" class="form-control"
+                    <input type="datetime-local" name="check_out" value="{{ isset($check_out) ? $check_out->format('Y-m-d\TH:i') : "" }}" class="form-control autoset" onchange="removeAutoset(indate, outdate);"
                         id="check_out-input">
                     <p></p>
                     <input type="checkbox" name="check_out_time_confirmed" class="form-check-input" @if(isset($check_out_time_confirmed) && $check_out_time_confirmed == 1) checked @endif
@@ -107,3 +107,19 @@
         </form>
     </div>
 </div>
+@section('footer-script')
+    <script type="text/javascript">
+        let indate = $('#check_in-input');
+        let outdate = $('#check_out-input');
+        function changeDate(invar, outvar) {
+            if (outvar.hasClass('autoset')) {
+                outvar.val(invar.val());
+            }
+        }
+        function removeAutoset(invar, outvar) {
+            if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
+                outvar.removeClass('autoset')
+            }
+        }
+    </script>
+@endsection
