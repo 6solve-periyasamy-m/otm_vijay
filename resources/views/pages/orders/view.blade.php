@@ -32,6 +32,18 @@
         <div class="col-12 col-xl-6">
             <p>Payment Status</p>
             <h6 class="badge {{ $totalPaid >= $totalOrderValue ? 'badge-success' : 'badge-danger' }} fw-bold">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</h6>
+        </div>                
+        <div class="col-12 col-xl-6">
+            <p>Order Value</p>
+            <h6 class="fw-bold">{{ $totalOrderValue }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Balance Paid</p>
+            <h6 class="fw-bold">{{ $totalPaid }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Balance Outstanding</p>
+            <h6 class="fw-bold">{{ $totalOrderValue - $totalPaid }}</h6>
         </div>
         <div class="col-12">
             <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
@@ -54,23 +66,7 @@
                 <i class="icon-plus"></i>
                 <span>Add Customer</span>
             </a>
-        </div>        
-        <div class="otm-callout" id="overview-details" >
-            <div class="row">
-                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
-                    <p>Order Value</p>
-                    <p class="fw-bold">{{ $totalOrderValue }}</p>
-                </div>
-                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
-                    <p>Balance Paid</p>
-                    <p class="fw-bold">{{ $totalPaid }}</p>
-                </div>
-                <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
-                    <p>Balance Outstanding</p>
-                    <p class="fw-bold">{{ $totalOrderValue - $totalPaid }}</p>
-                </div>
-            </div>
-        </div>
+        </div>               
         <div class="row">
             @foreach($customers as $ordersCustomer)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
