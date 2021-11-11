@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation;
+use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 
 class AccommodationController extends Controller
@@ -22,14 +23,15 @@ class AccommodationController extends Controller
     public function store(Request $request)
     {
         $request->validate(Accommodation::RULES);
-        $accommodation = Accommodation::create([
-            'region_id' => $request->input('region_id'),
+        $accommodation = Accommodation::make([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
-            'address' => $request->input('address'),
-            'currency' => $request->input('currency'),
+            'currency_id' => $request->input('currency_id'),
         ]);
+        $address = LocationsRepository::storeAddressFromGenericRequest(null, $request, $request->input('name'), '');
+        $accommodation->address_id = $address->id;
+        $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -47,13 +49,12 @@ class AccommodationController extends Controller
     {
         $request->validate(Accommodation::RULES);
         $accommodation->update([
-            'region_id' => $request->input('region_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
-            'address' => $request->input('address'),
-            'currency' => $request->input('currency'),
+            'currency_id' => $request->input('currency_id'),
         ]);
+        LocationsRepository::storeAddressFromGenericRequest($accommodation->address, $request, $request->input('name'), '');
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 

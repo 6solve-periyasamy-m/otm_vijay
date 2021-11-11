@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Models\Address;
 use App\Models\Country;
 use App\Models\Currency;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 interface LocationsRepositoryInterface
 {
@@ -38,5 +39,44 @@ class LocationsRepository implements LocationsRepositoryInterface
             $currency = Currency::create(['code' => $code, 'name' => $name, 'symbol' => $symbol, ]);
         }
         $currency->countries()->save($country);
+    }
+
+    public static function storeAddress($address, $name, $location_type_id,
+                                        $address_line_1, $address_line_2, $address_line_3, $town, $region,
+                                        $country_id, $postcode)
+    {
+        $data = [
+            'name' => $name,
+            'location_type_id' => $location_type_id,
+            'address_line_1' => $address_line_1,
+            'address_line_2' => $address_line_2,
+            'address_line_3' => $address_line_3,
+            'town' => $town,
+            'region'=> $region,
+            'country_id' => $country_id,
+            'postcode' => $postcode,
+        ];
+        if (isset($address)) {
+            $address->update($data);
+            $address->save();
+            return $address;
+        } else {
+            return Address::create($data);
+        }
+    }
+
+    public static function storeAddressFromGenericRequest($address, Request $request, $name, $prefix)
+    {
+        return self::storeAddress($address,
+            $name,
+            $request->input($prefix . 'location_type_id'),
+            $request->input($prefix . 'address_line_1'),
+            $request->input($prefix . 'address_line_2'),
+            $request->input($prefix . 'address_line_3'),
+            $request->input($prefix . 'town'),
+            $request->input($prefix . 'region'),
+            $request->input($prefix . 'country_id'),
+            $request->input($prefix . 'postcode'),
+        );
     }
 }

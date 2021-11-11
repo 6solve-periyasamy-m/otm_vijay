@@ -60,13 +60,9 @@
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 <div class="row {{ $prefix ?? "" }}switcher-existing">
-    @include('partials.models.addresses.selector')
+    @include('partials.models.addresses.selector', ['id' => isset($address) ? $address->id : 0, ])
 </div>
 <div class="row switcher-new">
-    <div class="form-group col-12">
-        <label for="{{ $prefix ?? "" }}address_line_1-input">Name</label>
-        <input name="{{ $prefix ?? "" }}address_line_1" value="{{ $name ?? "" }}" class="form-control" id="{{ $prefix ?? "" }}address_line_1-input">
-    </div>
     <div class="form-group col-12">
         <label for="location_type_id-input">Location Type</label>
         <div class="d-flex">
