@@ -2,7 +2,9 @@
 
 namespace App\Transforms;
 
+use App\Models\Address;
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Location;
 use App\Models\LocationType;
 use App\Models\Region;
@@ -16,6 +18,10 @@ interface LocationsTransformsInterface {
     public static function getSelectedRegion($id);
     public static function getSelectedCountry($id);
     public static function getSelectedLocationType($id);
+    public static function getAddresses($filter, $includeCustomer = false);
+    public static function getSelectedAddress($id);
+    public static function getCurrencies($filter);
+    public static function getSelectedCurrency($id);
 }
 
 class LocationsTransforms implements LocationsTransformsInterface
@@ -102,6 +108,47 @@ class LocationsTransforms implements LocationsTransformsInterface
         $data = [];
         $data['id'] = $locationType->id;
         $data['text'] = $locationType->name;
+        return $data;
+    }
+
+    public static function getAddresses($filter, $includeCustomer = false) {
+        $data = [];
+        foreach (Address::all() as $address) {
+            if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses that have no location type set
+            $subData = [];
+            $subData['id'] = $address->id;
+            $subData['text'] = $address->name . ' - ' . isset($address->locationType) ?  $address->locationType->name : 'Customer Address';
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedAddress($id) {
+        if ($id == 0) return null;
+        $address = Address::findOrFail($id);
+        $data = [];
+        $data['id'] = $address->id;
+        $data['text'] = $address->name;
+        return $data;
+    }
+
+    public static function getCurrencies($filter) {
+        $data = [];
+        foreach (Currency::all() as $currency) {
+            $subData = [];
+            $subData['id'] = $currency->id;
+            $subData['text'] = $currency->name . ' - ' . $currency->code;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedCurrency($id) {
+        if ($id == 0) return null;
+        $currency = Currency::findOrFail($id);
+        $data = [];
+        $data['id'] = $currency->id;
+        $data['text'] = $currency->name . ' - ' . $currency->code;
         return $data;
     }
 }

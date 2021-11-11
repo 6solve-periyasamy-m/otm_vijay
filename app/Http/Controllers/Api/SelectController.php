@@ -230,4 +230,22 @@ class SelectController extends Controller
     public function getSelectedPaymentMethod($id) {
         return OrderTransforms::getSelectedPaymentMethod($id);
     }
+
+    public function getAddresses(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsTransforms::getAddresses($filter);
+    }
+
+    public function getSelectedAddress($id) {
+        return LocationsTransforms::getSelectedAddress($id);
+    }
+
+    public function getCurrencies(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsTransforms::getCurrencies($filter);
+    }
+
+    public function getSelectedCurrency($id) {
+        return LocationsTransforms::getSelectedCurrency($id);
+    }
 }
