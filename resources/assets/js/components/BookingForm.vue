@@ -10,14 +10,14 @@
                     <div id="booking-form" class="card-body">
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                        <booking-form-lead :booking_token="bookingToken" :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
-                        <booking-form-additional :booking_token="bookingToken" :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
-                        <div v-if="tour && token">
-                            <booking-form-flights :booking_token="bookingToken" :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour"></booking-form-flights>
-                            <booking-form-accommodation :booking_token="bookingToken" :travellers="travellers" :tour="tour"></booking-form-accommodation>
-                            <booking-form-activity :booking_token="bookingToken"></booking-form-activity>
-                            <booking-form-transport :booking_token="bookingToken"></booking-form-transport>
-                            <booking-form-payment :booking_token="bookingToken"></booking-form-payment>
+                        <booking-form-lead :form_info="formInfo" :booked="booked"></booking-form-lead>
+                        <booking-form-additional :form_info="formInfo"></booking-form-additional>
+                        <div v-if="tour && bookingToken">
+                            <booking-form-flights :lead_traveller="leadTraveller" :travellers="travellers"></booking-form-flights>
+                            <booking-form-accommodation  :travellers="travellers"></booking-form-accommodation>
+                            <booking-form-activity></booking-form-activity>
+                            <booking-form-transport></booking-form-transport>
+                            <booking-form-payment></booking-form-payment>
                             <booking-form-terms></booking-form-terms>
                         </div>
                     </div>
@@ -65,13 +65,17 @@ function deleteCookie(name) {
   }
 }
 export default {
-    props: ['tour', 'event', 'name'],
+    props: {
+        tour: Object,
+        event: Object,
+        name: String
+    },
     components: { BookingFormTour },
     data() {
         return {
             debug: false,
             formInfo: false,
-            token: '',
+            bookingId: '',
             leadTraveller: {},
             home_address: {},
             billing_address: {},
@@ -85,7 +89,7 @@ export default {
             login: '',
             password: '',
             authenticated: false,
-            tokenId: 'OTM_booking_token'
+            tokenName: 'OTM_booking_token'
         }
     },
     created() {
@@ -93,16 +97,18 @@ export default {
         this.debug && console.log('BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
 
-        that.bookingToken = getCookie(that.tokenId); 
+        that.bookingToken = getCookie(that.tokenName); 
         this.debug && console.log('Cookie read:', that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
             //axios.get(`/api/booking/customer/${that.bookingToken}`)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
-                console.log('>>>> >>>> >>> booking found by token', response.data.booking)
+                that.debug && console.log(`BookingForm: booking found by token`, response.data.booking)
                 that.leadTraveller = response.data.booking.customer
                 bus.$emit('setBookingToken', response.data.booking.token)
+
+                // TODO: are these events really needed?
                 bus.$emit('leadTravellerLoaded', that.leadTraveller)
                 bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
                 bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
@@ -110,8 +116,8 @@ export default {
 //                 const customer = response.data.customer
 //                 console.log('customer retrieved', customer)
 //                 if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
-//                     console.log('cookie found no customer. removing ', that.tokenId)
-//                     deleteCookie(that.tokenId)
+//                     console.log('cookie found no customer. removing ', that.tokenName)
+//                     deleteCookie(that.tokenName)
 //                     that.authenticated = false
 //                     that.login = ''
 //                 } else {
@@ -133,10 +139,10 @@ export default {
                 console.log('get current customer', error)
             })
         } else {
-            that.token = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
-            bus.$emit('setBookingToken', that.token)
-            setCookie(that.tokenId, that.token)
-            that.bookingToken = getCookie(that.tokenId);
+            that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+            bus.$emit('setBookingToken', that.bookingToken)
+            setCookie(that.tokenName, that.bookingToken)
+            that.bookingToken = getCookie(that.tokenName);
             console.log('bookingToken CREATED ', that.bookingToken)
         }
     },
@@ -163,27 +169,7 @@ export default {
                 default: 
                     break;
             }
-        },
-        // TODO: do not create an order until we place an order at end of booking
-        async createOrderId() {
-            alert('createOrderId call!')
-            return;
-            
-            let that = this
-            axios.post('/api/booking/create-order', {
-                tour: this.tour.id,
-                event: this.event.id
-            })
-            .then(response => {
-                that.debug && console.log('bookingForm - create order_id', response)
-                that.order_id = response.data.order.id
-                that.token = response.data.order.token
-                bus.$emit('setBookingToken', that.token)
-            })
-            .catch(err => {
-                console.log('error creating an order', err)
-            })
-        },
+        }
     }
 }
 </script>

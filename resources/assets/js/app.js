@@ -5,6 +5,7 @@ import { bus } from './bus'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import axios from 'axios';
 
 library.add(faUserSecret, faArrowRight, faBookReader, faCheck)
 
@@ -22,13 +23,18 @@ window.axios.defaults.headers.common = {
 
  console.log('app.js marker 3')
 
-//  // operational 
-//  bus.$on('setBookingToken', function(token) {
-//      console.log('Event Handler: setBookingToken:', token)
-//      //setCookie('OTM_booking_token', token);
-//      alert('apps: setCookie', token);
-//      bus.$emit('setBookingToken2', token)
-//  })
+ // operational 
+ bus.$on('setBookingToken', function(token) {
+     console.log('Event Handler: setBookingToken:', token)
+     axios.get(`/api/booking/token/${token}`)
+        .then(response => {
+            console.log('got booking : broadcasting to modules', response.data.booking)
+            bus.$emit('setBooking', response.data.booking)
+        })
+        .catch(error => {
+            console.log('error getting booking', error)
+        })
+ })
  
  const busEventLogging = true
  

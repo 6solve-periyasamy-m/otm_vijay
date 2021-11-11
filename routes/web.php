@@ -92,11 +92,11 @@ Route::prefix("/booking")->group(function () {
         return view('pages.booking.store');
     });
 
-    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
-    Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
-    Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);
-    Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
-    Route::get('/', [BookingController::class, 'bookingForm']);
+    // Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
+    // Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
+    // Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);
+    // Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
+    // Route::get('/', [BookingController::class, 'bookingForm']);
 
     Route::get('/{url}', [BookingController::class, 'tourBookingForm']);
 

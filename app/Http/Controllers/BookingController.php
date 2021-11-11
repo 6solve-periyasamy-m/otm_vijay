@@ -20,6 +20,9 @@ class BookingController extends Controller
      */
     public function bookingForm($token = null)
     {
+        
+        die('booking form by token deprecated');
+
         if ($token) {
             $orders = new Order;
             $order = $orders->where('token', $token)->first();
@@ -36,6 +39,8 @@ class BookingController extends Controller
 
     public function eventBookingForm($url) 
     {
+        die('booking form by event URL deprecated');
+
         $event = Event::where('booking_url', $url)->first();
         if (empty($event)) {
             abort(404);
@@ -54,13 +59,17 @@ class BookingController extends Controller
         if (empty($tour)) {
             abort(404);
         }
-        try {
-            $event = Event::findOrFail($tour->event_id);
-        } catch(\Exception $e) {
-            if (!config('app.setting.booking-selection')) {
-                abort(403);
+        if ($tour->event_id) {
+            try {
+                $event = Event::findOrFail($tour->event_id);
+            } catch (\Exception $e) {
+                if (!config('app.setting.booking-selection')) {
+                    abort(403);
+                }
+                return view('pages.booking.form');
             }
-            return view('pages.booking.form');
+        } else {
+            $event = null;
         }
 
         if (isset($tour) && isset($event)) {

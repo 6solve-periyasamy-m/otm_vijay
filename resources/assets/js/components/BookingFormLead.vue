@@ -255,11 +255,13 @@ import { isThisQuarter } from 'date-fns'
 import { bus } from '../bus'
 import ValidationErrors from './ValidationErrors.vue'
 export default {
-    props: ['form_info', 'tour', 'booked', 'booking_token'],
+    props: ['form_info'],
     data() {
         return {
             debug: false,
+            moduleName: 'leadTraveller',
             token: null,
+            tour: {},
             // order_id: null,
             email: '',
             password: '',
@@ -322,6 +324,13 @@ export default {
     },
     created() {
         let that = this
+        console.log('booking form lead created')
+        bus.$on('setBooking', (booking) => {
+            that.debug && console.log(`${moduleName} : setBooking`, booking)
+            that.booking = booking
+            that.tour = booking.tour
+            
+        })
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('leadTravellerLoaded', customer)
             that.setCustomer(customer)
@@ -349,13 +358,17 @@ export default {
     },
     mounted() {
         let that = this
+        console.log('bookingform lead mounted')
         this.validationErrors = ''
         bus.$on('debugOverride', (debug) => that.debug = debug)
+
         if (that.booking_token) {
             that.token = that.booking_token
         }
         console.log(that.tour)
-        this.loginLink = `/login?cb=${that.tour.url}`
+        if (that.tour != null) {
+            this.loginLink = `/login?cb=${that.tour.url}`
+        }
         this.activeBookings = ''
     },
     computed: {

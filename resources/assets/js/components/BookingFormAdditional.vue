@@ -35,26 +35,28 @@
     import axios from 'axios'
 import { bus } from '../bus' 
     export default {
-        props: ['form_info', 'order_id', 'tour', 'booking_token'],
+        props: ['form_info', 'order_id', 'tour'],
         data() {
             return {
                 debug: false,
+                moduleName: 'additionalTravellers',
                 id: 0,
                 formId: 0,
                 lead_traveller: false, // TODO: this should be set by the event bus
                 showAdditional: false,
                 showInstruction: true,
-                additional: []
+                additional: [],
+                booking: {}
             }
         },
         created() {
             let that = this
-            this.debug && console.log('Booking form Additional Customer Component created.', this.order_id, this.tour)
-            // bus.$on('additionalTravellersLoaded', (customers) => {
-            //     this.debug && console.log('additionalTravellersLoaded signal', customers)
-            //     this.setCustomers(customers)
-            // })
-            axios.get(`/api/booking/travellers/${this.booking_token}`)
+            bus.$on('setBooking', (booking) => {
+                that.debug && console.log(`${moduleName} : setBooking`, booking)
+                that.booking = booking
+            })
+            if (false) {
+            axios.get(`/api/booking/travellers/${this.booking.token}`)
                 .then(response => {
                     console.log('get Travellers:', response);
                     response.data.travellers.map(value => {
@@ -62,6 +64,7 @@ import { bus } from '../bus'
                     })
                 })
                 .catch(error => console.log(error))
+            }
         },
         methods: {
             submit() {
