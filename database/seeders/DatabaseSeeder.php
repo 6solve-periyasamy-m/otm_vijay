@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Tour;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EventsTableSeeder::class);
         Tour::factory()->createOne();
         $this->call(LocationTypesTableSeeder::class);
-        $this->call(CountriesTableSeeder::class);
+        Artisan::call('countries:update');
         $this->call(RegionsTableSeeder::class);
         $this->call(LocationsTableSeeder::class);
         $this->call(AirlinesTableSeeder::class);
