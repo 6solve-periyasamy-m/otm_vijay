@@ -40,12 +40,12 @@ class TransportInventory extends Model
         return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
     }
 
-    public function departureLocation()
+    public function departureAddress()
     {
         return $this->hasOneThrough(Location::class, Transport::class, 'departure_location_id', 'id');
     }
 
-    public function arrivalLocation()
+    public function arrivalAddress()
     {
         return $this->hasOneThrough(Location::class, Transport::class, 'arrival_location_id', 'id');
     }
@@ -68,7 +68,7 @@ class TransportInventory extends Model
     {
         return TransportInventory::with(['tour' => function ($q) use ($tour_id) {
             $q->where('tour_id', $tour_id);
-        }])->with('departureLocation', 'arrivalLocation')->get();
+        }])->with('departureAddress', 'arrivalAddress')->get();
     }
 
     public function getTransportForTourAttribute()
@@ -86,5 +86,10 @@ class TransportInventory extends Model
         return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}";
 	// build server edit: remove transport travelClass
         //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}｜Travel Class: {$this->travelClass->name}";
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 }

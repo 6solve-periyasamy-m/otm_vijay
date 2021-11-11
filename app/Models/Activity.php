@@ -26,9 +26,9 @@ class Activity extends Model
         return $this->hasMany(ActivityInventory::class);
     }
 
-    public function location()
+    public function address()
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function activityType()

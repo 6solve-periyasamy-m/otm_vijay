@@ -17,9 +17,9 @@ class Airport extends Model
         return $this->hasManyThrough(FlightInventory::class, Flight::class);
     }
 
-    public function location()
+    public function address()
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Address::class);
     }
 
     // public static function getAirportById($airport_id)

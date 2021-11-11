@@ -42,17 +42,17 @@ class Transport extends Model
         return $this->belongsTo(Operator::class);
     }
 
-    public function departureLocation()
+    public function departureAddress()
     {
-        return $this->hasOne(Location::class, 'id', 'departure_location_id');
+        return $this->hasOne(Address::class, 'id', 'departure_address_id');
     }
 
-    public function arrivalLocation()
+    public function arrivalAddress()
     {
-        return $this->hasOne(Location::class, 'id', 'arrival_location_id');
+        return $this->hasOne(Address::class, 'id', 'arrival_address_id');
     }
 
-    public static function findDepartureLocation(OrderTransport $ordersTransport)
+    public static function findDepartureAddress(OrderTransport $ordersTransport)
     {
        return Location::where('id', $ordersTransport->transport->departure_location_id);
     }
@@ -60,10 +60,10 @@ class Transport extends Model
     public function getInventoryRelationAttribute()
     {
         $operator = !is_null($this->operator) ? $this->operator->name : "Not Set";
-        $departureLocation = !is_null($this->departureLocation) ? $this->departureLocation->name : "Not Set";
-        $arrivalLocation = !is_null($this->arrivalLocation) ? $this->arrivalLocation->name : "None";
+        $departureAddress = !is_null($this->departureAddress) ? $this->departureAddress->name : "Not Set";
+        $arrivalAddress = !is_null($this->arrivalAddress) ? $this->arrivalAddress->name : "None";
 
-        return "{$this->name} | Operator: {$operator} | Departs: {$departureLocation} | Arrives: {$arrivalLocation}";
+        return "{$this->name} | Operator: {$operator} | Departs: {$departureAddress} | Arrives: {$arrivalAddress}";
     }
 
     public $additional_attributes = ['inventory_relation'];

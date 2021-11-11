@@ -30,11 +30,6 @@ class Flight extends Model
         return $this->hasMany(FlightInventory::class);
     }
 
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
-    }
-
     public function arrivalAirport()
     {
         return $this->belongsTo(Airport::class, 'arrival_airport_id', 'id');
@@ -55,7 +50,7 @@ class Flight extends Model
         $departs = Carbon::parse($this->departure_date)->format('d/m/Y');
         $arrives = Carbon::parse($this->arrival_date)->format('d/m/Y');
 
-        return "{$this->airline->name} | Departs from: {$this->departureAirport->location->name} - Arrives at: {$this->arrivalAirport->location->name}";
+        return "{$this->airline->name} | Departs from: {$this->departureAirport->address->name} - Arrives at: {$this->arrivalAirport->address->name}";
         //return "{$this->airline->name} | Departs {$departs} from: {$this->departureAirport->location->name} - Arrives {$arrives} at: {$this->arrivalAirport->location->name} ";
     }
 

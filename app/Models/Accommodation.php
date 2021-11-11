@@ -16,11 +16,10 @@ class Accommodation extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['region_id','name','description','audit_date','address','currency',];
+    protected $fillable = ['name','description','audit_date','address_id','currency',];
     protected $cascadeDeletes = ['inventory'];
     const RULES = [
         'name' => 'required',
-        'region_id' => 'required|exists:regions,id',
         'audit_date' => 'date',
         'currency' => 'size:3'
     ];
@@ -30,9 +29,9 @@ class Accommodation extends Model
         return $this->belongsTo(OrderAccommodation::class);
     }
     
-    public function region()
+    public function address()
     {
-        return $this->belongsTo(Region::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function board_type()
@@ -42,7 +41,7 @@ class Accommodation extends Model
 
     public function getInventoryRelationAttribute()
     {
-        return "{$this->title} | {$this->region->name}";
+        return "{$this->title} | {$this->address->name}";
     }
 
     public function inventory() {
