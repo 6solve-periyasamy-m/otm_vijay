@@ -47,13 +47,6 @@
                         <select name="activity_type_id" class="form-control" id="activity_type_id-input"></select>
                         <a href="{{ route('activity-types.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
                     </div>
-                </div>                
-                <div class="form-group col-12">
-                    <label for="location_id-input">Location</label>
-                    <div class="d-flex">
-                        <select name="location_id" class="form-control" id="location_id-input"></select>
-                        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    </div>
                 </div>
                 <div class="form-group col-12">
                     <label for="name-input">Name</label>
@@ -62,7 +55,16 @@
                 <div class="form-group col-12">
                     <label for="description-input">Description</label>
                     <input name="description" value="{{ $description ?? "" }}" class="form-control" id="description-input">
-                </div>                
+                </div>
+                @include('partials.models.addresses.switcher', [
+                    'location_type_id' => isset($address) ? $address->location_type_id : 0,
+                    'address_line_1' => isset($address) ? $address->address_line_1 : "",
+                    'address_line_2' => isset($address) ? $address->address_line_2 : "",
+                    'town' => isset($address) ? $address->town : "",
+                    'region' => isset($address) ? $address->region : "",
+                    'country_id' => isset($address) ? $address->country_id : 0,
+                    'postcode' => isset($address) ? $address->postcode : "",
+                ])
                 <div class="form-group col-12">
                     <label for="notes-input">Notes</label>
                     <textarea name="notes" class="form-control"  id="notes-input" rows="2">{{ $notes ?? "" }}</textarea>                    
