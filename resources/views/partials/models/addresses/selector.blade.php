@@ -23,6 +23,6 @@
 </script>
 @endpush
 <div class="form-group col-12">
-    <label for="{{ $prefix ?? "" }}address-input">Address</label>
+    <label for="{{ $prefix ?? "" }}address_id-input">Address</label>
     <select name="{{ $prefix ?? "" }}address_id" class="form-control" id="{{ $prefix ?? "" }}address_id-input"></select>
 </div>
