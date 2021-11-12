@@ -79,4 +79,16 @@ class LocationsRepository implements LocationsRepositoryInterface
             $request->input($prefix . 'postcode'),
         );
     }
+
+    public static function cloneAddressToAddress(Address $fromAddress, Address $toAddress = null) {
+        if (isset($toAddress)) {
+            $data = $toAddress->toArray();
+            unset($data['id']);
+            $toAddress->update($data);
+        } else {
+            $toAddress = $fromAddress->replicate();
+        }
+        $toAddress->save();
+        return $toAddress;
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation;
+use App\Models\Address;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,11 @@ class AccommodationController extends Controller
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
         ]);
-        $address = LocationsRepository::storeAddressFromGenericRequest(null, $request, $request->input('name'), '');
+        if ($request->input('use_existing') == 'on') {
+            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')));
+        } else {
+            $address = LocationsRepository::storeAddressFromGenericRequest(null, $request, $request->input('name'), '');
+        }
         $accommodation->address_id = $address->id;
         $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
@@ -54,7 +59,11 @@ class AccommodationController extends Controller
             'audit_date' => $request->input('audit_date'),
             'currency_id' => $request->input('currency_id'),
         ]);
-        LocationsRepository::storeAddressFromGenericRequest($accommodation->address, $request, $request->input('name'), '');
+        if ($request->input('use_existing') == 'on') {
+            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), $accommodation->address);
+        } else {
+            LocationsRepository::storeAddressFromGenericRequest($accommodation->address, $request, $request->input('name'), '');
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
