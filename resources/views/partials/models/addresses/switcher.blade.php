@@ -39,7 +39,7 @@
 @push('footer-stack')
     <script type="text/javascript">
         function {{ $prefix ?? "" }}switchView() {
-            let createNew = $('#{{ $prefix ?? "" }}create_new-input').is(':checked');
+            let createNew = $('#{{ $prefix ?? "" }}use_existing-input').is(':checked');
             if (createNew) {
                 $('.{{ $prefix ?? "" }}switcher-new').hide();
                 $('.{{ $prefix ?? "" }}switcher-existing').show();
@@ -53,16 +53,16 @@
 @endpush
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 <div class="form-group col-xl-6">
-    <input type="checkbox" name="create_new" class="form-check-input"
+    <input type="checkbox" name="{{ $prefix ?? "" }}use_existing" class="form-check-input"
            @if(isset($address_id)) checked @endif
-    id="create_new-input" onchange="{{ $prefix ?? "" }}switchView();">
-    <label for="create_new-input" class="form-check-label">Use Pre-Existing Address</label>
+    id="{{ $prefix ?? "" }}use_existing-input" onchange="{{ $prefix ?? "" }}switchView();">
+    <label for="{{ $prefix ?? "" }}use_existing-input" class="form-check-label">Use Pre-Existing Address</label>
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
-<div class="row {{ $prefix ?? "" }}switcher-existing">
+<div class="{{ $prefix ?? "" }}switcher-existing">
     @include('partials.models.addresses.selector', ['id' => isset($address) ? $address->id : 0, ])
 </div>
-<div class="row switcher-new">
+<div class="switcher-new">
     <div class="form-group col-12">
         <label for="location_type_id-input">Location Type</label>
         <div class="d-flex">
