@@ -7,4 +7,4 @@
 @include('partials.fields.text',
     ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $sales_price ?? null, 'width' => 6, ])
 @include('partials.fields.text',
-    ['name' => 'Currency', 'field' => 'currency', 'value' => $currency ?? null, 'width' => 6, ])
+    ['name' => 'Currency', 'field' => 'currency', 'value' => $currency ?? null, ])
