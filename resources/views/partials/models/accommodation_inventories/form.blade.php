@@ -1,7 +1,7 @@
 @include('partials.fields.selector.adder',
-    ['name' => 'Room Type', 'field' => 'room_type_id', 'route' => 'room-types', 'id' => $room_type_id ?? 0, 'createRoute' => route('room-types.create'),])
+    ['name' => 'Room Type', 'field' => 'room_type_id', 'route' => 'room-types', 'value' => $room_type_id ?? 0, 'createRoute' => route('room-types.create'),])
 @include('partials.fields.selector.adder',
-    ['name' => 'Board Type', 'field' => 'board_type_id', 'route' => 'board-types', 'id' => $board_type_id ?? 0, 'createRoute' => route('board-types.create'),])
+    ['name' => 'Board Type', 'field' => 'board_type_id', 'route' => 'board-types', 'value' => $board_type_id ?? 0, 'createRoute' => route('board-types.create'),])
 <div class="form-group col-xl-6">
     @include('partials.fields.raw.datetime',
         ['name' => 'Check In', 'field' => 'check_in', 'value' => $check_in ?? null,
