@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('location-types.update', ['locationType' => $locationType,]),])
 
 @section('title', 'Update Location Type')
 
-@section('content')
-    @include('partials.models.location_types.form', ['action' => route('location-types.update', ['locationType' => $locationType,]),
+@section('form-body')
+    @include('partials.models.location_types.form', [
       'name' => $locationType->name,
     ])
 @endsection
