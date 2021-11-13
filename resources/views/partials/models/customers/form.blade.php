@@ -2,7 +2,11 @@
     <script type="text/javascript">
         function changeBillingForm() {
             let disable = $('#home_is_billing-input').is(':checked');
-            if (disable) { $('.billing-address').hide() } else { $('.billing-address').show() }
+            if (disable) {
+                $('.billing-address').hide()
+            } else {
+                $('.billing-address').show()
+            }
         }
     </script>
 @endpush
