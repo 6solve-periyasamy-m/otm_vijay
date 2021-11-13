@@ -69,6 +69,16 @@
     $(document).ready(function () {
         @stack('footer-ready')
     });
+    function changeDate(invar, outvar) {
+        if (outvar.hasClass('autoset')) {
+            outvar.val(invar.val());
+        }
+    }
+    function removeAutoset(invar, outvar) {
+        if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
+            outvar.removeClass('autoset')
+        }
+    }
 </script>
 </body>
 </html>
