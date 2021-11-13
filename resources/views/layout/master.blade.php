@@ -24,7 +24,7 @@
     @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
     <script type="text/javascript">
         $(document).ready(function () {
-            @stack('head-ready')
+            @stack('header-ready')
         });
     </script>
 </head>
