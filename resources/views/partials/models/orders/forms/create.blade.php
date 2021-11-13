@@ -1,4 +1,4 @@
-@section('head-script')
+@section('header-script')
     <script type="text/javascript">
         $(document).ready(function() {
             let quoteSelect = $('#quote_id-input');

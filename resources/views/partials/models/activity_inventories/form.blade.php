@@ -1,4 +1,4 @@
-@section('head-script')
+@section('header-script')
     <script type="text/javascript">
         $(document).ready(function() {
             let ticketType = $('#ticket_type_id-input');

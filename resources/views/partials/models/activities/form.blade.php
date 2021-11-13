@@ -1,4 +1,4 @@
-@section('head-script')
+@section('header-script')
     <script type="text/javascript">
         $(document).ready(function() {
             let activitySelect = $('#activity_type_id-input');

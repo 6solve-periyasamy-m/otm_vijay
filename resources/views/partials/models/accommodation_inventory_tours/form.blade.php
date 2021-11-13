@@ -1,4 +1,4 @@
-@section('head-script')
+@section('header-script')
     <script type="text/javascript">
         $(document).ready(function() {
             let inventorySelect = $('#accommodation_inventory_id-input');
