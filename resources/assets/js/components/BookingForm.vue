@@ -11,8 +11,12 @@
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
-                        <booking-form-additional :tour="tour"></booking-form-additional>
-                        <div v-if="tour && bookingToken">
+                        <div v-if="tour && bookingToken && leadTraveller">
+                            <booking-form-additional :tour="tour"></booking-form-additional>
+                        </div>
+                        {{leadTraveller}}
+                        <div v-if="tour && bookingToken && leadTraveller">
+                            {{tour}} {{bookingToken}} {{leadTraveller}}}
                             <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity></booking-form-activity>
@@ -73,10 +77,10 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 5,
             formInfo: false,
             bookingId: '',
-            leadTraveller: {},
+            leadTraveller: null,
             home_address: {},
             billing_address: {},
             travellers: [],
@@ -92,58 +96,66 @@ export default {
             tokenName: 'OTM_booking_token'
         }
     },
-    created() {
+    async created() {
         let that = this
-        this.debug && console.log('BookingForm created for tour:', this.tour)
+        this.debug && console.log('1) BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
 
         that.bookingToken = getCookie(that.tokenName); 
         this.debug && console.log('Cookie read:', that.bookingToken)
+
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
-            this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
-            //axios.get(`/api/booking/customer/${that.bookingToken}`)
-            axios.get(`/api/booking/token/${that.bookingToken}`)
-            .then(response => {
-                that.debug && console.log(`BookingForm: booking found by token`, response.data.booking)
-                that.leadTraveller = response.data.booking.customer
-                bus.$emit('setBookingToken', response.data.booking.token)
 
-                // TODO: are these events really needed?
-                bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
-                bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
+            this.debug>1 && console.log('2) BookingOrderToken cookie was set', that.bookingToken)
 
-//                 const customer = response.data.customer
-//                 console.log('customer retrieved', customer)
-//                 if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
-//                     console.log('cookie found no customer. removing ', that.tokenName)
-//                     deleteCookie(that.tokenName)
-//                     that.authenticated = false
-//                     that.login = ''
-//                 } else {
-//                     that.leadTraveller = customer
-//                     const home_address = response.data.home_address
-//                     const billing_address = response.data.billing_address
-// console.log(response.data)
-//                     bus.$emit('setBookingToken', that.bookingToken)
-//                     bus.$emit('leadTravellerLoaded', that.leadTraveller)
-//                     bus.$emit('homeAddressLoaded', home_address)
-//                     if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
-//                         console.log('BILLING loading...', customer, billing_address)
-//                         bus.$emit('billingAddressLoaded', billing_address)
-//                     }
-//                     that.login = that.leadTraveller.email_address
-//                 }
-            })
-            .catch(error => {
-                console.log('get current customer', error)
-            })
-        } else {
-            that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+            await axios.get(`/api/booking/token/${that.bookingToken}`)
+                .then(response => {
+                    that.debug && console.log('3) BookingForm: booking loaded from token', response)
+                    if (response.data.success) {
+                        that.leadTraveller = response.data.booking.customer
+                    }
+                    if (!response.data.success || !that.leadTraveller) {
+                            console.log('>>> 4) booking token did not find a lead traveller', response)
+                            that.bookingToken = null
+                    } else {
+                        bus.$emit('setBookingToken', response.data.booking.token)
+                        // TODO: are these events really needed?
+                        console.log('leadTravellerLoaded event emit', that.leadTraveller)
+                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                        bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
+                        bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
+                        // const customer = response.data.customer
+                        // console.log('customer retrieved', customer)
+                        // if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
+                        //     console.log('cookie found no customer. removing ', that.tokenName)
+                        //     deleteCookie(that.tokenName)
+                        //     that.authenticated = false
+                        //     that.login = ''
+                        // } else {
+                        //     that.leadTraveller = customer
+                        //     const home_address = response.data.home_address
+                        //     const billing_address = response.data.billing_address
+                        // console.log(response.data)
+                        //     bus.$emit('setBookingToken', that.bookingToken)
+                        //     bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                        //     bus.$emit('homeAddressLoaded', home_address)
+                        //     if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
+                        //         console.log('BILLING loading...', customer, billing_address)
+                        //         bus.$emit('billingAddressLoaded', billing_address)
+                        //     }
+                        //     that.login = that.leadTraveller.email_address
+                        // }
+                    }
+                })
+                .catch(error => {
+                    console.log('error getting booking from token', error)
+                })
+        }
+        if (that.bookingToken == undefined || that.bookingToken == null || that.bookingToken.length === 0) {
+            that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
+            console.log('>>>> 5) creating a random new booking token', that.bookingToken)
+            setCookie('OTM_booking_token', that.bookingToken)
             bus.$emit('setBookingToken', that.bookingToken)
-            setCookie(that.tokenName, that.bookingToken)
-            that.bookingToken = getCookie(that.tokenName);
-            console.log('bookingToken CREATED ', that.bookingToken)
         }
     },
     mounted() {

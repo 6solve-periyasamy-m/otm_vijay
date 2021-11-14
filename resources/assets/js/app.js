@@ -24,16 +24,20 @@ window.axios.defaults.headers.common = {
  console.log('app.js marker 3')
 
  // operational 
- bus.$on('setBookingToken', function(token) {
+ bus.$on('setBookingToken', token => {
      console.log('Event Handler: setBookingToken:', token)
-     axios.get(`/api/booking/token/${token}`)
-        .then(response => {
-            console.log('got booking : broadcasting to modules', response.data.booking)
-            bus.$emit('setBooking', response.data.booking)
-        })
-        .catch(error => {
-            console.log('error getting booking', error)
-        })
+    //  axios.get(`/api/booking/token/${token}`)
+    //     .then(response => {
+    //         if (response.success) {
+    //             console.log('got booking : broadcasting to modules', response)
+    //             bus.$emit('setBooking', response.data.booking)
+    //         } else {
+    //             alert('token did nto find findin')
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.log('error getting booking', error)
+    //     })
  })
  
  const busEventLogging = true

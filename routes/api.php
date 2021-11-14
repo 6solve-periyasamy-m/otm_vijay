@@ -87,8 +87,9 @@ Route::prefix('booking')->group(function () {
 
     // create Booking Order
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
-    Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
-    Route::post('/create-order', [BookingController::class, 'createOrder']);
+    // Route::post('/set_booking_token', [BookingController::class, 'setBookingToken']);
+    // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
+    // Route::post('/create-order', [BookingController::class, 'createOrder']);
 
     // create Flights Order
     // Route::post('/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [

@@ -49,18 +49,29 @@ class BookingController extends ApiController
      * @param string $token
      * @return void
      */
-    public function create($customer_id, $tour_id, $token)
+    public function create(Request $request)
     {
+        $request->validate([
+            'customer_id' => 'required',
+            'tour_id' => 'required',
+            'token' => 'required'
+        ]);
+        $customer_id = $request->customer_id;
+        $tour_id = $request->tour_id;
+        $token = $request->token;
+
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->create($customer_id, $tour_id, $token);
 
         return $booking;
     }
+
     /***
-     * order section
+     * order section :: use booking->create to make a booking
+     * this may be used to create an order when booking paid
      */
-        /**
-     * createOrder - makes an order every time booking form is accessed by URL, unless it already exists (via token or link)
+    /**
+     * createOrder 
      *
      * @param Request $request
      * @return JSON (order object)

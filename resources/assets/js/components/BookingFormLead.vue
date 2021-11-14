@@ -3,11 +3,11 @@
         <div class="card card-options">
             <div class="card-header">
                 <div v-if="debug">
-                    [Token: {{token}} Booking Token: {{booking_token}} ]
+                    [ Booking Token: {{booking_token}} ]
                 </div>
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
-                    <p v-if="!token && !show_traveller">Click this button to start your booking</p>
+                    <p v-if="!booking_token && !show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                         <font-awesome-icon icon="book-reader" />
                         Lead Traveller details
@@ -15,7 +15,7 @@
                 </h5>
 
                 <div class="card-info" v-if="!show_traveller">
-                    <div v-if="!token && noUser">
+                    <div v-if="!booking_token && noUser">
                         <p>
                             <font-awesome-icon icon="arrow-right" />
                             If you have a booking in progress, try entering your email address
@@ -28,10 +28,10 @@
                         </div>
                     </div>
                     <div v-else>
-                        <p v-if="!email_address">No booking found with that email address, please enter the Lead Traveller details</p>
+                        <p v-if="!email_address">Please enter the Lead Traveller details</p>
                     </div>
                 
-                    <div v-if="!token && activeUser">
+                    <div v-if="!booking_token && activeUser">
                         <p>Active User</p>
                         <label for="password">Enter your password</label>
                         <input type="password" v-model="password">
@@ -40,18 +40,18 @@
                         </button>
                     </div>
                 </div>
-                <div v-if="token && !show_traveller">
+                <div v-if="booking_token && !show_traveller">
                     <div>
                         <font-awesome-icon icon="arrow-right" />
                         You can continue with your booking, please fill in all sections
                     </div>
-                    <div v-if="!token">
+                    <div v-if="!booking_token">
                         You have {{activeBookings}} bookings active.  
                         To access bookings, you must <a :href="loginLink">login</a>. 
                     </div>
                 </div>
             </div>
-            {{debug ? 'DEBUG MODE: Order retrieved by cookie: token: '+ token : ''}}
+            {{debug ? 'DEBUG MODE: Order retrieved by cookie: booking_token: '+ booking_token : ''}}
             <div class="card-body" v-if="show_traveller">
                 <div class="container">
                     <div class="card-options">
@@ -255,14 +255,12 @@ import { isThisQuarter } from 'date-fns'
 import { bus } from '../bus'
 import ValidationErrors from './ValidationErrors.vue'
 export default {
-    props: ['form_info'],
+    props: ['form_info', 'tour'],
     data() {
         return {
-            debug: false,
+            debug: 1,
             moduleName: 'leadTraveller',
-            token: null,
-            tour: {},
-            // order_id: null,
+            booking_token: null,
             email: '',
             password: '',
             auth: false,
@@ -325,14 +323,14 @@ export default {
     created() {
         let that = this
         console.log('booking form lead created')
-        bus.$on('setBooking', (bookingData) => {
-            that.debug && console.log(`${that.moduleName} : setBooking`, bookingData)
-            that.booking = bookingData
-            that.tour = bookingData.tour
-            
+        bus.$on('setBookingToken', (bookingData) => {
+            console.log(`>>>>>><<<<<<< setBooking`, bookingData)
+            that.debug && console.log(`>>>>>><<<<<<< ${that.moduleName} : setBooking`, bookingData)
+            that.booking_token = bookingData
+            //that.tour = bookingData.tour
         })
         bus.$on('leadTravellerLoaded', (customer) => {
-            console.log('leadTravellerLoaded', customer)
+            console.log('BFL: EH leadTravellerLoaded', customer)
             that.setCustomer(customer)
             that.same_address = customer.home_address_id === customer.billing_address_id
             that.email = that.email_address
@@ -362,10 +360,6 @@ export default {
         this.validationErrors = ''
         bus.$on('debugOverride', (debug) => that.debug = debug)
 
-        if (that.booking_token) {
-            that.token = that.booking_token
-        }
-        console.log(that.tour)
         if (that.tour != null) {
             this.loginLink = `/login?cb=${that.tour.url}`
         }
@@ -431,6 +425,7 @@ export default {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
             let that = this
+alert('retriveUser');
             // is it a registered user?
             if (!this.auth) {
                 console.log('checking for auth user');
@@ -440,7 +435,7 @@ export default {
                         this.activeUser = response.data.existing
                         if (that.activeUser) {
                             that.email_address = that.email
-                            that.retrieveUserToken()
+                            that.retrieveBookingToken()
                         } else {
                             that.noUser = true
                         }
@@ -451,14 +446,14 @@ export default {
                 console.log('Authenticated user', that.customer)
             }
         },
-        retrieveUserToken() {
+        retrieveBookingToken() {
             let that = this
             axios.post('/api/booking/recover/token', this.email)
             .then(response => {
                 console.log(response);
                 if (response.data.success) {
                     bus.$emit('setBookingToken', response.data.token)
-                    alert('token retrieved for ' + that.email,response.data.token, that.token)
+                    alert('token retrieved for ' + that.email, response.data.token, that.booking_token)
                 } else {
                     that.noUser = true
                 }
@@ -588,6 +583,7 @@ export default {
             //         console.log(field, this.$billing_field)
             //     })
             // }
+            // console.log('saving booking with booking_token', this.booking_token)
             axios.post('/api/booking/lead-traveller', {
                 title: this.title,
                 first_name: this.first_name,
@@ -620,10 +616,23 @@ export default {
             .then(response => {
                 that.debug && console.log('customerStored, reponse', response)
                 const customer = response.data.customer
-                that.login_token = customer.login_token
+                // that.login_token = customer.login_token
                 that.full_name = customer.first_name + ' ' + customer.last_name
                 that.show_traveller = false
                 that.validationErrors = null
+                console.log('>>>> creating a new new booking token', that.booking_token, response)
+                axios.post('/api/booking/create', {
+                    token: that.booking_token,
+                    customer_id: response.data.customer.id,
+                    tour_id: that.tour.id
+                })
+                .then(response => {
+                    // setCookie(that.tokenName, that.bookingToken)
+                    // that.bookingToken = getCookie(that.tokenName);
+                    console.log('response: ', response, ' bookingToken CREATED ', that.bookingToken)
+                    // that.leadTraveller = null
+                })
+
             })
             .catch(e => {
                 console.log('BookingFormLead.storeTraveller() error', e)
