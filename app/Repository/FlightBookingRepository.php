@@ -41,5 +41,7 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
         Log::info('query', [$sql]);
         $flightBookings = $flightBooking->get();
         Log::info('query', [$flightBookings]);
+
+        return $flightBookings;
     }
 }

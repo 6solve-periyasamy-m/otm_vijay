@@ -22,7 +22,7 @@
                                     :custom="false"
                                     :tour="tour"
                                     :token="token"
-                                    :traveller="leadTraveller"
+                                    :traveller="lead_traveller"
                                     :airports="airports"
                                     :flights="outbound_flights"
                                     :types="outbound_type"
@@ -38,7 +38,7 @@
                                     :custom="false"
                                     :tour="tour"
                                     :token="token"
-                                    :traveller="leadTraveller"
+                                    :traveller="lead_traveller"
                                     :airports="airports"
                                     :flights="inbound_flights"
                                     :types="inbound_type"
@@ -243,8 +243,8 @@ console.log('mounted flights')
     },
     created() {
         let that = this
-console.log('created flights')
-        this.leadTraveller = this.lead_traveller
+
+
         this.debug>1 && console.log('BFF mounted', this.booking_id, that.token, that.leadTraveller);
 
         bus.$on('additionalTravellersLoaded', travellers => {
@@ -261,13 +261,24 @@ console.log('created flights')
             that.loadFlightsForBooking(that.booking.id)
         })
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
+
+            if (custom && !traveller) {
+                alert('can not set outbound for a custom traveller without the traveller')
+            }
+            if (!custom && traveller) {
+                console.log('>>>>>> group booking with traveller', traveller)
+            }
+            if (!custom && !traveller) {
+                alert('group booking but not traveller set?')
+            }
+
             that.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
             if (traveller == null) {
                 console.log('set_outbound: no traveller is passed in')
             } else if (that.leadTraveller == null) {
                 console.log('set_outbound: leadTravller NOT set')
-            } else if (traveller.id == this.leadTraveller.id && traveller.is_lead_booker && !custom) {
-                that.unselected_outbound = this.outbound_flights.filter(flight => {
+            } else if (traveller.id == that.leadTraveller.id && traveller.is_lead_booker && !custom) {
+                that.unselected_outbound = that.outbound_flights.filter(flight => {
                     that.debug > 2 && ('unselected outbound: flight: ', flight)
                     return flight.flight_inventory_tour_id != flight_inventory_tour_id
                 })
@@ -383,14 +394,15 @@ console.log('created flights')
         async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token) {
             this.debug > 3 && console.log('updateFlight()', flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token);
             let that = this
-            if (customer == null) {
+            if (customer == undefinded || customer == null) {
                 console.log('WARNING: updateFlight customer data missing')
-                // alert('Form data missing, please refresh or contact support')
+                alert('UpdateFlight does not know the customer ... ')
+                alert('Form data missing, please refresh or contact support')
                 return
             }
-            const url = '/api/booking/flight'
+
             const data = {
-                customer_id: customer.id,
+                customer_id: this.lead_traveller.id,
                 tour_id: that.tour.id,
                 booking_id: that.booking_id,
                 flight_type: flight_type,
@@ -398,7 +410,8 @@ console.log('created flights')
                 custom: custom,
                 token: token
             }
-            await axios.post(url, data)
+console.log('booking a flight', data);
+            await axios.post('/api/booking/flight', data)
                 .then(response => {
                     that.debug > 3 && console.log('flight booking response', response)
                     that.loadFlightsForBooking(that.booking_id)
@@ -452,13 +465,20 @@ console.log('FLIGHTSELECTED order', order);
             // loads current fight bookings if there are any
             await axios.get(`/api/booking/flight/bookings/${this.booking.id}`)
                 .then(response => {
-console.log('flight orders', response)
+
                     // that.orderset = response.data.orders
                     // const orders = that.orderset
 
                     const bookings = response.data.flightBooking
                     that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', bookings, that.travellers[0])
-console.log('bookings loaded', bookings)
+
+                    if (bookings === null || bookings.length === 0) {
+                        console.log('nothing has been booked yet')
+                        that.showwait = false
+                        return
+                    }
+                    // DEBUG BELOW
+console.log('flight orders', response)
                     //this.flightSelected('Inbound', 1, orders, that.travellers[1])
                     outbound = that.flightSelected('Outbound', 0, bookings, that.travellers[0])
                     inbound = that.flightSelected('Inbound', 0, bookings, that.travellers[0])

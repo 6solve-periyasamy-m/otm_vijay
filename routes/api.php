@@ -72,6 +72,7 @@ Route::prefix('booking')->group(function () {
     // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
+
     // POST routes (requires token auth)
 
     // store travellers

@@ -21,7 +21,7 @@ use App\Repository\FlightBookingRepository;
 
 class FlightController extends ApiController
 {
-    protected $logging = 5;
+    protected $logging = 1;
 
     public function getFlightInventories()
     {
@@ -73,7 +73,7 @@ class FlightController extends ApiController
             Log::info('flightsAvailableForTour:: found ' . count($flights) . ' flights available');
         }
 
-        return response()->json(["success" => true, "data" => $flights->toArray()]);
+        return response()->json(["success" => true, "data" => $flights]);
     }
 
     /**
@@ -125,7 +125,7 @@ class FlightController extends ApiController
         $flightBookingRepository = new FlightBookingRepository($booking_id, $type);
         $flightBookings = $flightBookingRepository->getFlightBookings($booking_id);
 
-        return response()->json(["success" => true, "flightBooking" => $flightBookings->toArray()]);
+        return response()->json(["success" => true, "flightBooking" => $flightBookings]);
     }
 }
 

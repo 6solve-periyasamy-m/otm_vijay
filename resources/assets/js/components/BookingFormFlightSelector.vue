@@ -5,7 +5,7 @@
                 v-model="tour_flight_type" 
                 @change="filterFlights">
                 <option selected disabled value="">Select...</option>
-                <option v-for="tour_flight_type in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
+                <option v-for="tour_flight_type in tour_flight_types" :key="tour_flight_type.flight_id" :value="tour_flight_type">
                    {{tour_flight_type}}
                 </option>
             </select>
@@ -38,7 +38,7 @@ export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
     data() {
         return {
-            debug: false,
+            debug: 5,
             flightId: '',
             tour_flight_type: '',
             flight_selected: this.selected_item,
@@ -52,6 +52,7 @@ export default {
     },
     mounted() {
         let that = this
+        console.log('*&^*&^&*^*^&* flights', this.flights.map(f => f.id))
         bus.$on('debugOverride', (debug) => that.debug = debug)
         console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
         this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
@@ -111,8 +112,8 @@ console.log('items in created: ',this.selected_item, this.identification, this.t
                 alert('not a flight?', flight)
                 return ''
             }
-            console.log('flightValue', flight)
-            return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
+            const showComponentType = true
+            return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} ${showComponentType ? flight.tour_component_type + ' ' : ''}From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
         },
         dmy(s) {
             return dates.makeDateFromString(s)

@@ -66,13 +66,14 @@ class FlightDetailsController extends ApiController
         $inventory_tour_id = $request->inventory_tour_id;
         $custom = $request->custom;
 
+        // token is posted: why look it up?  opportunity to catch a false post?
         $token = $_COOKIE['OTM_booking_token'];
         if ($token !== $request->token) {
             throw new \Exception('Booking token mismatch');
         }
         $token = $request->token;
 
-        $this->logging == 'flights' && Log::info('bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $token]);
+        $this->logging == 'flights' && Log::info('***** bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $token]);
 
         $tours = new Tour();
         $rejection = 0;
@@ -196,11 +197,11 @@ class OLD_COD_BOOKING {
      * @param [type] $order
      * @param [type] $customer_id
      * @return void
-     */ */
+     */ 
     private function getOrderCustomer($order, $customer_id) 
     {
         $orderCustomers = new OrderCustomer();
-        $customer_id = 0 + $customer_id;
+        $customer_id = intval($customer_id);
         $orderCustomer = $orderCustomers
                 ->where('order_id', $order->id)
                 ->where('customer_id', $customer_id)
