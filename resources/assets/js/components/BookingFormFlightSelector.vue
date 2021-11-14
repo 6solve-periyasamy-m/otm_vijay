@@ -4,7 +4,7 @@
             <select 
                 v-model="tour_flight_type" 
                 @change="filterFlights">
-                <option selected disabled value="">Select</option>
+                <option selected disabled value="">Select...</option>
                 <option v-for="tour_flight_type in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
                    {{tour_flight_type}}
                 </option>
@@ -53,7 +53,7 @@ export default {
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-        console.log('BFFS: this.selected_item', this.selected_item)
+        console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
         this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
     },
     created() {
@@ -63,6 +63,7 @@ export default {
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
+console.log('items in created: ',this.selected_item, this.identification, this.tour_flights, this.tour_flight_types, this.tour_flight_type);
         // BUG: this.selected_item is NULL on addons load?
         if (this.selected_item) {
             this.flightId = this.selected_item
@@ -73,7 +74,7 @@ export default {
                 console.log(that.tour_flights_filtered)
             })
         } else {
-            console.log('WARNING: selected_item not set?')
+            console.log('WARNING: selected_item not set?', this.selected_item)
         }
         this.filterFlights()
         bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
@@ -106,11 +107,11 @@ export default {
             this.debug>4 && console.log('tour flights filtered', this.tour_flights_filtered)
         },
         flightValue(flight) {
-            if (typeof flight == 'undefined') {
+            if (typeof flight === 'undefined') {
                 alert('not a flight?', flight)
                 return ''
             }
-            // TODO: Nic, can you verify if 'airline_name' needs to be renamed?
+            console.log('flightValue', flight)
             return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
         },
         dmy(s) {

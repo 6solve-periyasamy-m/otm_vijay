@@ -98,7 +98,7 @@
 <script>
 import { bus } from '../bus'
 export default {
-    props: ['order_id', 'traveller', 'tour', 'booking_token'],
+    props: ['traveller', 'tour', 'booking_token'],
     data() {
         return {
             debug: false,

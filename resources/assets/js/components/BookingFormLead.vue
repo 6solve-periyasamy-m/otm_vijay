@@ -15,7 +15,7 @@
                 </h5>
 
                 <div class="card-info" v-if="!show_traveller">
-                    <div v-if="!token && !noUser">
+                    <div v-if="!token && noUser">
                         <p>
                             <font-awesome-icon icon="arrow-right" />
                             If you have a booking in progress, try entering your email address
@@ -325,10 +325,10 @@ export default {
     created() {
         let that = this
         console.log('booking form lead created')
-        bus.$on('setBooking', (booking) => {
-            that.debug && console.log(`${moduleName} : setBooking`, booking)
-            that.booking = booking
-            that.tour = booking.tour
+        bus.$on('setBooking', (bookingData) => {
+            that.debug && console.log(`${that.moduleName} : setBooking`, bookingData)
+            that.booking = bookingData
+            that.tour = bookingData.tour
             
         })
         bus.$on('leadTravellerLoaded', (customer) => {

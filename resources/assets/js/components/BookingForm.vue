@@ -10,11 +10,11 @@
                     <div id="booking-form" class="card-body">
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                        <booking-form-lead :form_info="formInfo" :booked="booked"></booking-form-lead>
-                        <booking-form-additional :form_info="formInfo"></booking-form-additional>
+                        <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
+                        <booking-form-additional :tour="tour"></booking-form-additional>
                         <div v-if="tour && bookingToken">
-                            <booking-form-flights :lead_traveller="leadTraveller" :travellers="travellers"></booking-form-flights>
-                            <booking-form-accommodation  :travellers="travellers"></booking-form-accommodation>
+                            <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
+                            <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity></booking-form-activity>
                             <booking-form-transport></booking-form-transport>
                             <booking-form-payment></booking-form-payment>

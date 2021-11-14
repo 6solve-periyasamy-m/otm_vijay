@@ -25,92 +25,100 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\FlightDetailsController;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
  */
 // Booking Repo
-Route::get('/booking/token/{token}', [BookingController::class, 'get']);
-Route::post('/booking/create', [BookingController::class, 'create']);
+Route::prefix('booking')->group(function () {
 
-// Accommodation
-Route::get('/booking/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
-Route::get('/booking/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
-Route::get('/booking/accommodation/customer/{tour}/{order}/{token}/{travellers}', [AccommodationController::class, 'getAccommodationBooking']);
-Route::get('/booking/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
-Route::post('/booking/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
-//Route::post('/booking/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
-Route::post('/booking/accommodation/delete', [AccommodationController::class, 'deleteAccommodationReservation']);
-// accommodation rooms
-Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);
-// Route::post('/booking/get/accommodation', [AccommodationController::class, 'getAccommodationBooking']);
+    Route::get('/token/{token}', [BookingController::class, 'get']);
+    Route::post('/create', [BookingController::class, 'create']);
 
-// Events
-Route::get('/booking/events',           [TourController::class, 'getEvents']);
-Route::get('/booking/tours/{event_id}', [TourController::class, 'getTours']);
-Route::get('/booking/tour/{id}',        [TourController::class, 'getBasicTourInformation']);
+    // Accommodation
+    Route::get('/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
+    Route::get('/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
+    Route::get('/accommodation/customer/{tour}/{order}/{token}/{travellers}', [AccommodationController::class, 'getAccommodationBooking']);
+    Route::get('/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
+    Route::post('/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
+    //Route::post('/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
+    Route::post('/accommodation/delete', [AccommodationController::class, 'deleteAccommodationReservation']);
+    // accommodation rooms
+    Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);
+    // Route::post('/booking/get/accommodation', [AccommodationController::class, 'getAccommodationBooking']);
 
-// Airlines
-Route::get('/booking/airlines',         [AirlinesController::class, 'getAirlines']);
-Route::get('/booking/airports',         [AirlinesController::class, 'getAirports']);
+    // Events
+    Route::get('/events', [TourController::class, 'getEvents']);
+    Route::get('/tours/{event_id}', [TourController::class, 'getTours']);
+    Route::get('/tour/{id}', [TourController::class, 'getBasicTourInformation']);
 
-// Travellers
-Route::get('/booking/tourparty', [CustomerController::class, 'getTravellers']);
-Route::get('/booking/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
-Route::get('/booking/travellers/{token}', [BookingCustomerController::class, 'loadAdditionalTravellers']);
+    // Airlines
+    Route::get('/airlines', [AirlinesController::class, 'getAirlines']);
+    Route::get('/airports', [AirlinesController::class, 'getAirports']);
 
-// Flights
-Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
-Route::get('/booking/flights/{tour_id}/{flight_type}', [FlightController::class, 'getFlightInventoriesForTour']);
-Route::get('/booking/flights/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
-Route::get('/booking/flight-inventories', [FlightController::class, 'getFlightsInventories']);
-Route::get('/booking/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
-// function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
-// Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
-Route::post('/booking/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
+    // Travellers
+    Route::get('/tourparty', [CustomerController::class, 'getTravellers']);
+    Route::get('/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
+    Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadAdditionalTravellers']);
 
-// POST routes (requires token auth)
+    // Flights
+    Route::get('/flight/bookings/{order_id}', [FlightController::class, 'loadFlightsForBooking']);
+    Route::get('/flights/{tour_id}/{flight_type}', [FlightController::class, 'getFlightInventoriesForTour']);
+    Route::get('/flights/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
+    Route::get('/flight-inventories', [FlightController::class, 'getFlightsInventories']);
+    Route::get('/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
+    // function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
+    // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
+    Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
-// store travellers
-Route::post('/booking/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
-Route::post('/booking/additional-traveller', [BookingCustomerController::class, 'additionalTraveller']);
-Route::post('/booking/additional-traveller/remove', [BookingCustomerController::class, 'removeAdditionalTraveller']);
+    // POST routes (requires token auth)
 
-// is email registered 
-Route::get('/booking/email/registered/{email}', [BookingCustomerController::class, 'checkActiveUser']);
-Route::post('/booking/email/login', [BookingCustomerController::class, 'loginActiveUser']);
-Route::post('/booking/authenticate/user', [BookingCustomerController::class, 'authenticate']);
+    // store travellers
+    Route::post('/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
+    Route::post('/additional-traveller', [BookingCustomerController::class, 'additionalTraveller']);
+    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeAdditionalTraveller']);
 
-// create Booking Order
-Route::get('/booking/auth/token/{email}', [BookingCustomerController::class, 'salt']);
-Route::post('/booking/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
-Route::post('/booking/create-order', [BookingController::class, 'createOrder']);
+    // is email registered
+    Route::get('/email/registered/{email}', [BookingCustomerController::class, 'checkActiveUser']);
+    Route::post('/email/login', [BookingCustomerController::class, 'loginActiveUser']);
+    Route::post('/authenticate/user', [BookingCustomerController::class, 'authenticate']);
 
-// create Flights Order
-// Route::post('/booking/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
+    // create Booking Order
+    Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
+    Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
+    Route::post('/create-order', [BookingController::class, 'createOrder']);
+
+    // create Flights Order
+    // Route::post('/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
 //     BookingController::class, 'bookFlightDetails'
-// ]);
-Route::post('/booking/flight', [BookFlightDetailsController::class, 'bookFlightDetails']);
+    // ]);
 
-// Booking Orders in Customer Order Details
-// Route::get('/booking/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
-Route::post('/booking/recover/token', [CustomerController::class, 'getTokenLink']);
-Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFromTour']);
-Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
-Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
-// existing components
-Route::get('/orders/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
-Route::get('/orders/activities/{oCustomerId}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
-Route::get('/orders/flights/{oCustomerId}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
-Route::get('/orders/transports/{oCustomerId}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
-// additional components for COD 
-Route::post('/orders/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('addAccommodationAddon');
-Route::post('/orders/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('addActivityAddon');
-Route::post('/orders/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('addFlightAddon');
-Route::post('/orders/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('addTransportAddon');
-/**
- * end of CUSTOMER ORDER DETAILS Token access Booking Form
- */
+    Route::post('/flight', [FlightDetailsController::class, 'bookFlightDetails']);
+
+    // Booking Orders in Customer Order Details
+    // Route::get('/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
+    Route::post('/recover/token', [CustomerController::class, 'getTokenLink']);
+    Route::get('/accomodation', [ApiController::class, 'getAccommodationFromTour']);
+    Route::get('/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
+    Route::get('/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
+});
+
+Route::prefix('/orders')->group(function () {
+    // existing components
+    Route::get('/accommodation/{oCustomerId}/available', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('getAvailableAccommodationAddons');
+    Route::get('/activities/{oCustomerId}/available', [TourComponentController::class, 'getAvailableActivityAddons'])->name('getAvailableActivityAddons');
+    Route::get('/flights/{oCustomerId}/available', [TourComponentController::class, 'getAvailableFlightAddons'])->name('getAvailableFlightAddons');
+    Route::get('/transports/{oCustomerId}/available', [TourComponentController::class, 'getAvailableTransportAddons'])->name('getAvailableTransportAddons');
+    // additional components for COD
+    Route::post('/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('addAccommodationAddon');
+    Route::post('/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('addActivityAddon');
+    Route::post('/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('addFlightAddon');
+    Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('addTransportAddon');
+    /**
+     * end of CUSTOMER ORDER DETAILS Token access Booking Form
+     */
+});
 
 // main ordering sytem: requires AUTH
 Route::middleware('auth:api')->group(function() {
@@ -119,6 +127,8 @@ Route::middleware('auth:api')->group(function() {
         return $request->user();
     });   
 });
+
+
 
 Route::prefix('select')->group(function () {
    Route::get('locations', [SelectController::class, 'getLocations'])->name('api.locations.select');

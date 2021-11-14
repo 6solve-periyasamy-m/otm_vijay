@@ -15,7 +15,7 @@
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
                 <div v-for="item in additional" :key="item.id">
-                    <booking-form-add-traveller :booking_token="booking_token" :traveller="item" :order_id="order_id" :tour="tour" @remove="removeTraveller"></booking-form-add-traveller>
+                    <booking-form-add-traveller :booking_token="booking_token" :tour="tour" :traveller="item" @remove="removeTraveller"></booking-form-add-traveller>
                 </div>
                 <button type="button" 
                     class="btn btn-primary" 
@@ -33,38 +33,44 @@
 
 <script>
     import axios from 'axios'
-import { bus } from '../bus' 
+    import { bus } from '../bus' 
     export default {
-        props: ['form_info', 'order_id', 'tour'],
+        props: ['form_info', 'tour'],
         data() {
             return {
-                debug: false,
+                debug: true,
                 moduleName: 'additionalTravellers',
                 id: 0,
                 formId: 0,
-                lead_traveller: false, // TODO: this should be set by the event bus
+                lead_traveller: {},
                 showAdditional: false,
                 showInstruction: true,
                 additional: [],
-                booking: {}
+                booking: {},
+                booking_token: ''
             }
         },
         created() {
             let that = this
-            bus.$on('setBooking', (booking) => {
-                that.debug && console.log(`${moduleName} : setBooking`, booking)
-                that.booking = booking
-            })
-            if (false) {
-            axios.get(`/api/booking/travellers/${this.booking.token}`)
-                .then(response => {
-                    console.log('get Travellers:', response);
-                    response.data.travellers.map(value => {
-                        that.additional.push(value)
+            bus.$on('setBooking', (bookingData) => {
+                that.debug && console.log(`XXXX ${that.moduleName} : setBooking`, bookingData)
+                that.booking = bookingData
+                that.lead_traveller = bookingData.customer
+                that.booking_token = bookingData.token
+                axios.get(`/api/booking/travellers/${that.booking_token}`)
+                    .then(response => {
+                        console.log(`${that.moduleName} ... get Travellers:`, response);
+                        response.data.travellers.map(value => {
+                            that.additional.push(value)
+                        })
+                        bus.$emit('additionalTravellersLoaded', that.additional)
                     })
-                })
-                .catch(error => console.log(error))
-            }
+                    .catch(error => console.log(error))
+            })
+            // bus.$on('setLeadTraveller', (leadTraveller) {
+            //     console.log(`${that.moduleName} : setLeadTraveller`, leadTraveller)
+            //     that.lead_traveller = leadTraveller
+            // })
         },
         methods: {
             submit() {

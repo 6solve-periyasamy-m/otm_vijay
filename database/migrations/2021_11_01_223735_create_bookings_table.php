@@ -19,6 +19,7 @@ class CreateBookingsTable extends Migration
             $table->foreignId('tour_id')->constrained();
             $table->string('token', 64)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
