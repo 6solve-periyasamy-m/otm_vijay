@@ -12,7 +12,7 @@
     <div class="otm-callout">
         <div class="row">
             <div class="col-xl-3">
-                <img src="{{ asset('images/exampleavatar.jpg') }}" class="img-thumbnail">
+                <img src="{{ asset($customer->profile_picture) }}" class="img-thumbnail">
             </div>
             <div class="col-xl-9">
                 <div class="row">

@@ -8,7 +8,7 @@
     <td>{{ $currency }}</td>
     <td>{{ $is_domestic ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('transports.edit', ['transport' => $transport,])}}" class="btn btn-sm btn-outline-success mb-1">            
             <i class="icon-note"></i>
         </a>

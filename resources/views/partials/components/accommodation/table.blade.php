@@ -46,7 +46,7 @@
                     <td>{{ $accommodationInventory->sales_price }}</td>
                     <td>{{ $accommodationInventory->currency }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
-                    <td>
+                    <td class="actions">
                         <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" 
                             class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>

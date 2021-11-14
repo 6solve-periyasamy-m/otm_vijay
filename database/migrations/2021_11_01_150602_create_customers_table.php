@@ -39,6 +39,7 @@ class CreateCustomersTable extends Migration
             $table->date('passport_expiry_date')->nullable();
             $table->string('passport_country_of_issue', 60)->nullable();
             $table->string('loyalty_number', 160)->nullable();
+            $table->string('profile_picture')->default('images/exampleavatar.jpg');
             $table->foreignId('t_shirt_size_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('hat_size_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('notes')->nullable();

@@ -44,7 +44,7 @@
                     <td>{{ $flightInventory->sales_price }}</td>
                     <td>{{ $flightInventory->currency }}</td>
                     <td>{{ $flightInventory->notes }}</td>
-                    <td>
+                    <td class="actions">
                         <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
                             class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>

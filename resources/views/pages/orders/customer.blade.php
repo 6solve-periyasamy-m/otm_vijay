@@ -102,6 +102,10 @@ $(document).ready( function () {
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-amber">
+                <i class="icon-home"></i>
+                Return to Order
+            </a>
         </div>
     </div>
 </div>
@@ -179,7 +183,7 @@ $(document).ready( function () {
                 <i class="icon-plus"></i>
                 Add Adjustment
             </a>
-            <a href="{{ route('orders-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber mb-1">
+            <a href="{{ route('order-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber mb-1">
                 <i class="icon-note"></i>
                 Edit Order Customer
             </a>

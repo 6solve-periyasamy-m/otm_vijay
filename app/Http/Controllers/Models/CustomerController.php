@@ -77,6 +77,9 @@ class CustomerController extends Controller
             ]);
             $customer->billing_address_id = $billingAddress->id;
         }
+        if ($request->has('profile_picture')  && $request->file('profile_picture') != null) {
+            $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
+        }
         $customer->save();
         return redirect()->route('customers.view', ['customer' => $customer,]);
     }
@@ -150,6 +153,9 @@ class CustomerController extends Controller
                 'country' => $request->input('billing_country'),
                 'postcode' => $request->input('billing_postcode'),
             ]);
+        }
+        if ($request->has('profile_picture')  && $request->file('profile_picture') != null) {
+            $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         $customer->save();
         return redirect()->route('customers.view', ['customer' => $customer,]);

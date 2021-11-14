@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('quote_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('tour_id')->constrained()->onDelete('cascade');
             $table->foreignId('lead_booker_id')->nullable();
-            $table->string('booking_reference');
+            $table->string('booking_reference')->nullable();
             $table->dateTime('ordered_on');
             $table->text('internal_notes')->nullable();
             $table->text('external_notes')->nullable();

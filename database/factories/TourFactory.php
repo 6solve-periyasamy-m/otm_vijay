@@ -30,6 +30,7 @@ class TourFactory extends Factory
             'base_price_per_person' => 1000,
             'margin' => 500,
             'single_occupancy_surcharge' => 100,
+            'deposit' => 100,
             'stock_control_active' => true,
             'booking_form_url' => 'example-tour',
             'tour_colour_id' => null,
