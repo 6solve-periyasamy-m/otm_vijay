@@ -2,7 +2,7 @@
 
 @section('title', 'Update Board Type')
 
-@section('content')
+@section('form-body')
     @include('partials.models.board_types.form', [
       'name' => $boardType->name,
     ])

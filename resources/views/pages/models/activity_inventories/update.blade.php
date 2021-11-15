@@ -2,7 +2,7 @@
 
 @section('title', 'Update Activity Inventory')
 
-@section('content')
+@section('form-body')
     @include('partials.models.activity_inventories.form', [
       'activity_id' => $activityInventory->activity_id,
       'ticket_type_id' => $activityInventory->ticket_type_id,
