@@ -1,9 +1,9 @@
-@extends('layout.main')
+@extends('layout.form', ['action' => route('t-shirt-sizes.update', ['tShirtSize' => $tShirtSize,]),])
 
 @section('title', 'Update T Shirt Size')
 
-@section('content')
-    @include('partials.models.t_shirt_sizes.form', ['action' => route('t-shirt-sizes.update', ['tShirtSize' => $tShirtSize,]),
+@section('form-body')
+    @include('partials.models.t_shirt_sizes.form', [
       'name' => $tShirtSize->name,
     ])
 @endsection
