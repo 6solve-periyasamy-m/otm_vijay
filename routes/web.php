@@ -66,6 +66,9 @@ Route::get('/', function () {
     return view('pages.otm');
 });
 
+Route::get('/customer/login', [\App\Http\Controllers\CustomerLoginController::class, 'showLogin']);
+Route::post('/customer/login', [\App\Http\Controllers\CustomerLoginController::class, 'login'])->name('customer.verify-login');
+
 Route::get('/homepage', function () {
     return view('pages.homepage');
 });
@@ -108,7 +111,7 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard');
 });
 
-Route::prefix('raw')->middleware('auth')->group(function () {
+Route::prefix('raw')->middleware('auth:admin')->group(function () {
     Route::prefix('activity-types')->group(function () {
         Route::get('/', [ActivityTypeController::class, 'index'])->name('activity-types.all');
         Route::get('/create', [ActivityTypeController::class, 'create'])->name('activity-types.create');
