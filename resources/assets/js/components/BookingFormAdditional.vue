@@ -35,14 +35,13 @@
     import axios from 'axios'
     import { bus } from '../bus' 
     export default {
-        props: ['form_info', 'tour'],
+        props: ['form_info', 'booked', 'tour', 'lead_traveller'],
         data() {
             return {
                 debug: true,
                 moduleName: 'additionalTravellers',
                 id: 0,
                 formId: 0,
-                lead_traveller: {},
                 showAdditional: false,
                 showInstruction: true,
                 additional: [],

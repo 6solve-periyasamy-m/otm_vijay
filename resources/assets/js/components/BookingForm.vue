@@ -11,8 +11,9 @@
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
-                        <booking-form-additional :tour="tour"></booking-form-additional>
-                        <div v-if="tour && bookingToken">
+                        Token {{bookingToken}}, Tour {{tour}},Lead {{leadTraveller}}
+                        <div v-if="tour && bookingToken && Object.keys(leadTraveller).length">
+                            <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
                             <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity></booking-form-activity>
@@ -30,6 +31,7 @@
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
+import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -96,6 +98,9 @@ export default {
         let that = this
         this.debug && console.log('BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
+        bus.$on('setLeadTraveller', customer => {
+            that.leadTraveller = customer
+        })
 
         that.bookingToken = getCookie(that.tokenName); 
         this.debug && console.log('Cookie read:', that.bookingToken)
@@ -104,15 +109,22 @@ export default {
             //axios.get(`/api/booking/customer/${that.bookingToken}`)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
-                that.debug && console.log(`BookingForm: booking found by token`, response.data.booking)
-                that.leadTraveller = response.data.booking.customer
-                bus.$emit('setBookingToken', response.data.booking.token)
+                if (response.data.success) {
+                    that.debug && console.log(`BookingForm: booking found by token`, response.data.booking)
+                    that.leadTraveller = response.data.booking.customer
+                    bus.$emit('setBookingToken', response.data.booking.token)
 
-                // TODO: are these events really needed?
-                bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
-                bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
-
+                    // TODO: are these events really needed?
+                    bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                    bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
+                    bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
+                } else {
+                    // the token is not registered
+                    console.log('**** requested token but no success, resetting it')
+                    that.bookingToken = null
+                    that.resetToken()
+                    //that.createBooking(that.bookingToken)
+                }
 //                 const customer = response.data.customer
 //                 console.log('customer retrieved', customer)
 //                 if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
@@ -139,11 +151,9 @@ export default {
                 console.log('get current customer', error)
             })
         } else {
-            that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
-            bus.$emit('setBookingToken', that.bookingToken)
-            setCookie(that.tokenName, that.bookingToken)
-            that.bookingToken = getCookie(that.tokenName);
-            console.log('bookingToken CREATED ', that.bookingToken)
+            console.log('BookingForm: no booking token (create it?) ', that.bookingToken)
+            that.resetToken()
+            //that.createBooking(that.bookingToken)
         }
     },
     mounted() {
@@ -151,6 +161,14 @@ export default {
 
     },
     methods: {
+        resetToken() {
+            let that = this
+            that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+            setCookie(that.tokenName, that.bookingToken)
+            that.bookingToken = getCookie(that.tokenName);
+            console.log('bookingToken reset and CREATED ', that.bookingToken)
+            bus.$emit('setBookingToken', that.bookingToken)
+        },
         changeTheme(theme) {
             const bookingForm = document.querySelector('#booking-form')
             bookingForm.classList.remove('cool-theme')

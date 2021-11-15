@@ -38,7 +38,7 @@ export default {
     props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
     data() {
         return {
-            debug: false,
+            debug: 5,
             flightId: '',
             tour_flight_type: '',
             flight_selected: this.selected_item,

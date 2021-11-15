@@ -72,6 +72,7 @@ Route::prefix('booking')->group(function () {
     // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
+
     // POST routes (requires token auth)
 
     // store travellers
@@ -86,8 +87,9 @@ Route::prefix('booking')->group(function () {
 
     // create Booking Order
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
-    Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
-    Route::post('/create-order', [BookingController::class, 'createOrder']);
+    Route::post('/create-booking', [BookingController::class, 'create']);
+    // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
+    // Route::post('/create-order', [BookingController::class, 'createOrder']);
 
     // create Flights Order
     // Route::post('/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [

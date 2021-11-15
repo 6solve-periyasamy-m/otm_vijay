@@ -116,10 +116,6 @@ class BookingCustomerController extends ApiController
         $this->logging == 'customers' && Log::info('search for '. $request->email_address);
         // Log::debug('check booking token', [$request->booking_token]);
 
-        $customer = Customer::where('email_address', $request->email_address)->first();
-        // if (empty($customer)) {
-        //     $customer = new Customer();
-        // }
         // validation
         if ($isLead) {
             $validated = $request->validate([
@@ -139,11 +135,11 @@ class BookingCustomerController extends ApiController
             if (!$request->same_address) {
                 Log::info('validation of billing address', [$request->billing_address_line_1]);
                 $billingValidated = $request->validate([
-                        'billing_town' => 'required',
-                        'billing_country' => 'required',
-                        'billing_postcode' => 'required',
-                        'billing_address_line_1' => 'required'
-                    ]);
+                    'billing_town' => 'required',
+                    'billing_country' => 'required',
+                    'billing_postcode' => 'required',
+                    'billing_address_line_1' => 'required'
+                ]);
                 if ($this->logging == 'customers') {
                     Log::info('Billing Address Customer Validation passed', $billingValidated);
                 }
@@ -181,6 +177,11 @@ class BookingCustomerController extends ApiController
             'gender' => $request->gender
         ];
 
+        $customer = Customer::where('email_address', $request->email_address)->first();
+        // if (empty($customer)) {
+        //     $customer = new Customer();
+        // }
+
         // if the customer exists, then the addresses MAY exist
         if ($customer) {
             $this->logging == 'customers' && Log::info('customer exists record ', $customer->toArray());
@@ -197,7 +198,7 @@ class BookingCustomerController extends ApiController
             $customer = $customerRepo->update($customerData);
         } else {
             // $customer->email_address = $request->email_address;
-            $customer = $customerRepo->create($customerData);
+
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
                 $addressIds = $this->create_addresses($request);
@@ -205,7 +206,7 @@ class BookingCustomerController extends ApiController
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
                 $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             }
-            $customer = $customerRepo->update($customerData);
+            $customer = $customerRepo->create($customerData);
         }
         $customer->save();
 
@@ -388,13 +389,14 @@ class BookingCustomerController extends ApiController
         $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
 
-        $booking = new BookingRepository();
-        $findBooking = $booking->findBookingByToken($request->booking_token);
-        Log::debug('======= >>>>> findBooking', [$findBooking]);
-        if (empty($findBooking)) {
-            Log::debug('====>>> creating a new booking with '.$request->tour['id'] . '  token:'. $request->booking_token);
-            $customer['booking'] = $booking->create($customer->id, $request->tour['id'], $request->booking_token);
-        }
+        // $booking = new BookingRepository();
+        // $findBooking = $booking->findBookingByToken($request->booking_token);
+        // Log::debug('======= >>>>> findBooking', [$findBooking]);
+        // if (empty($findBooking)) {
+        //     Log::debug('tour record', [$request->tour_id]);
+        //     Log::debug('====>>> creating a new booking with '.$request->tour['id'] . '  token:'. $request->booking_token);
+        //     $customer['booking'] = $booking->create($customer->id, $request->tour['id'], $request->booking_token);
+        // }
 
         return json_encode(['success' => true, 'customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
     }

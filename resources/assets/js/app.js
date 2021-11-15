@@ -24,7 +24,7 @@ window.axios.defaults.headers.common = {
  console.log('app.js marker 3')
 
  // operational 
- bus.$on('setBookingToken', function(token) {
+ bus.$on('getBookingToken', function(token) {
      console.log('Event Handler: setBookingToken:', token)
      axios.get(`/api/booking/token/${token}`)
         .then(response => {
@@ -34,6 +34,9 @@ window.axios.defaults.headers.common = {
         .catch(error => {
             console.log('error getting booking', error)
         })
+ })
+ bus.$on('setBookingToken', token => {
+     console.log('setBookingToken event monitor ', token);
  })
  
  const busEventLogging = true
