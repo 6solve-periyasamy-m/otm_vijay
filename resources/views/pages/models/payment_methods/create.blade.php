@@ -1,7 +1,7 @@
-@extends('layout.main')
+@extends('layout.form', ['action' => route('payment-methods.store'),])
 
 @section('title', 'Create Payment Method')
 
-@section('content')
-    @include('partials.models.payment_methods.form', ['action' => route('payment-methods.store'),])
+@section('form-body')
+    @include('partials.models.payment_methods.form')
 @endsection
