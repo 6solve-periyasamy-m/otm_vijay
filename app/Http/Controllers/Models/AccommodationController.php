@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation;
 use App\Models\Address;
+use App\Models\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,7 @@ class AccommodationController extends Controller
         if ($request->input('use_existing') == 'on') {
             $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')));
         } else {
-            $address = LocationsRepository::storeAddressFromGenericRequest(null, $request, $request->input('name'), '');
+            $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
         }
         $accommodation->address_id = $address->id;
         $accommodation->save();
@@ -62,7 +63,7 @@ class AccommodationController extends Controller
         if ($request->input('use_existing') == 'on') {
             LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), $accommodation->address);
         } else {
-            LocationsRepository::storeAddressFromGenericRequest($accommodation->address, $request, $request->input('name'), '');
+            LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
         }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }

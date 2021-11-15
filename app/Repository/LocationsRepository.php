@@ -41,19 +41,20 @@ class LocationsRepository implements LocationsRepositoryInterface
         $currency->countries()->save($country);
     }
 
-    public static function storeAddress($address, $name, $location_type_id,
-                                        $address_line_1, $address_line_2, $address_line_3, $town, $region,
-                                        $country_id, $postcode)
+    public static function storeAddress($address, $addressParent, $name, $locationType,
+                                        $addressLine1, $addressLine2, $addressLine3, $town, $region,
+                                        $country, $postcode)
     {
         $data = [
             'name' => $name,
-            'location_type_id' => $location_type_id,
-            'address_line_1' => $address_line_1,
-            'address_line_2' => $address_line_2,
-            'address_line_3' => $address_line_3,
+            'address_parent_id' => $addressParent,
+            'location_type_id' => $locationType,
+            'address_line_1' => $addressLine1,
+            'address_line_2' => $addressLine2,
+            'address_line_3' => $addressLine3,
             'town' => $town,
             'region'=> $region,
-            'country_id' => $country_id,
+            'country_id' => $country,
             'postcode' => $postcode,
         ];
         if (isset($address)) {
@@ -65,10 +66,11 @@ class LocationsRepository implements LocationsRepositoryInterface
         }
     }
 
-    public static function storeAddressFromGenericRequest($address, Request $request, $name, $prefix)
+    public static function storeAddressFromGenericRequest($address, $addressParent, Request $request, $name, $prefix)
     {
         return self::storeAddress($address,
             $name,
+            $addressParent,
             $request->input($prefix . 'location_type_id'),
             $request->input($prefix . 'address_line_1'),
             $request->input($prefix . 'address_line_2'),
