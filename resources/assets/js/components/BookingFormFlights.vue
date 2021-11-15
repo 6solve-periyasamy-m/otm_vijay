@@ -174,7 +174,7 @@ export default {
     },
     data() {
         return {
-            debug: 6,
+            debug: 9,
             token: null,
             moduleName: 'Flights',
             activated: false,

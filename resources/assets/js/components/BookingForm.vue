@@ -11,7 +11,9 @@
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
-                        Token {{bookingToken}}, Tour {{tour}},Lead {{leadTraveller}}
+                        <div v-if="debug">
+                            Token {{bookingToken}}, Tour {{tour}},Lead {{leadTraveller}}
+                        </div>
                         <div v-if="tour && bookingToken && Object.keys(leadTraveller).length">
                             <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
                             <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
