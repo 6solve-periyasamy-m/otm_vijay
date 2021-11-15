@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('ticket-types.update', ['ticketType' => $ticketType,]),])
 
 @section('title', 'Update Ticket Type')
 
-@section('content')
-    @include('partials.models.ticket_types.form', ['action' => route('ticket-types.update', ['ticketType' => $ticketType,]),
+@section('form-body')
+    @include('partials.models.ticket_types.form', [
       'name' => $ticketType->name,
     ])
 @endsection
