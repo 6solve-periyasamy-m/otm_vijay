@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AddressParent;
 use Illuminate\Database\Seeder;
 use App\Models\Tour;
 use Illuminate\Support\Facades\Artisan;
@@ -15,6 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        foreach (AddressParent::ID_MAP as $key => $value) {
+            AddressParent::create(['id' => $key, 'name' => $value]);
+        }
         $this->call(EventsTableSeeder::class);
         Tour::factory()->createOne();
         $this->call(LocationTypesTableSeeder::class);
