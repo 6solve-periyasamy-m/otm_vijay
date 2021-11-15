@@ -1,134 +1,18 @@
-@section('header-script')
-    <script type="text/javascript">
-        $(document).ready(function() {
-            // Transport Types
-            let transportTypeSelect = $('#transport_type_id-input');
-            transportTypeSelect.select2({
-                ajax: {
-                    url: '{{ route('api.transport-types.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
-                }
-            });
-            $.ajax({ url: '{{ route('api.transport-types.selected', ['id' => $transport_type_id ?? 0, ]) }}', })
-                .then(function (data) {
-                    transportTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
-
-                    transportTypeSelect.trigger({
-                        type: 'select2:select',
-                        params: { data: data, }
-                    });
-                });
-            // Operators
-            let operatorsSelect = $('#operator_id-input');
-            operatorsSelect.select2({
-                ajax: {
-                    url: '{{ route('api.operators.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
-                }
-            });
-            $.ajax({ url: '{{ route('api.operators.selected', ['id' => $operator_id ?? 0, ]) }}', })
-                .then(function (data) {
-                    operatorsSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
-
-                    operatorsSelect.trigger({
-                        type: 'select2:select',
-                        params: { data: data, }
-                    });
-                });
-            // Departure Location
-            let departureLocationSelect = $('#departure_location_id-input');
-            departureLocationSelect.select2({
-                ajax: {
-                    url: '{{ route('api.locations.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
-                }
-            });
-            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $departure_location_id ?? 0, ]) }}', })
-                .then(function (data) {
-                    departureLocationSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
-
-                    departureLocationSelect.trigger({
-                        type: 'select2:select',
-                        params: { data: data, }
-                    });
-                });
-            // Arrival Location
-            let arrivalLocationSelect = $('#arrival_location_id-input');
-            arrivalLocationSelect.select2({
-                ajax: {
-                    url: '{{ route('api.locations.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
-                }
-            });
-            $.ajax({ url: '{{ route('api.locations.selected', ['id' => $arrival_location_id ?? 0, ]) }}', })
-                .then(function (data) {
-                    arrivalLocationSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
-
-                    arrivalLocationSelect.trigger({
-                        type: 'select2:select',
-                        params: { data: data, }
-                    });
-                });
-        });
-    </script>
-@endsection
-<div class="card">
-    <div class="card-body">
-        <form action="{{ $action }}" method="post">
-            @csrf
-            <div class="row">
-                <div class="form-group col-12">
-                    <label for="transport_type_id-input">Transport Type</label>
-                    <div class="d-flex">
-                        <select name="transport_type_id" class="form-control" id="transport_type_id-input"></select>
-                        <a href="{{ route('transport-types.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    </div>
-                </div>                
-                <div class="form-group col-12">
-                    <label for="operator_id-input">Operator</label><br/>
-                    <div class="d-flex">
-                        <select name="operator_id" class="form-control" id="operator_id-input"></select>
-                        <a href="{{ route('operators.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    </div>
-                </div>                
-                <div class="form-group col-12">
-                    <label for="departure_location_id-input">Departure Location</label>
-                    <div class="d-flex">
-                        <select name="departure_location_id" class="form-control" id="departure_location_id-input"></select>
-                        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    </div>
-                </div>                
-                <div class="form-group col-12">
-                    <label for="arrival_location_id-input">Arrival Location</label>
-                    <div class="d-flex">
-                        <select name="arrival_location_id" class="form-control" id="arrival_location_id-input"></select>
-                        <a href="{{ route('locations.create') }}" target="_blank" class="btn btn-success d-inline ms-1">+</a>
-                    </div>
-                </div>                
-                <div class="form-group col-12">
-                    <label for="name-input">Name</label>
-                    <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
-                </div>                
-                <div class="form-group col-12">
-                    <label for="description-input">Description</label>
-                    <input name="description" value="{{ $description ?? "" }}" class="form-control" id="description-input">
-                </div>                
-                <div class="form-group col-12">
-                    <label for="currency-input">Currency</label>
-                    <input name="currency" value="{{ $currency ?? "" }}" class="form-control" id="currency-input">
-                </div>
-                <div class="form-group col-12">
-                    <input type="checkbox" name="is_domestic" class="form-check-input" id="is_domestic-input" @if(isset($is_domestic) && $is_domestic == 1) checked @endif>
-                    <label for="is_domestic-input">Is Domestic</label>
-                </div>                
-                <div class="form-group col-12">
-                    <label for="notes-input">Notes</label>
-                    <textarea name="notes" class="form-control" id="notes-input">{{ $notes ?? "" }}</textarea>                    
-                </div>                
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+@include('partials.fields.selector.adder',
+            ['name' => 'Transport Type', 'field' => 'transport_type_id', 'value' => $transport_type_id ?? 0,
+             'route' => 'transport-types', 'createRoute' => route('transport-types.create'),])
+@include('partials.fields.selector.adder',
+            ['name' => 'Operator', 'field' => 'operator_id', 'value' => $operator_id ?? 0,
+             'route' => 'operators', 'createRoute' => route('operators.create'),])
+@include('partials.fields.selector.adder',
+            ['name' => 'Departure Location', 'field' => 'departure_location_id', 'value' => $departure_location_id ?? 0,
+             'route' => 'locations', 'createRoute' => route('locations.create'),])
+@include('partials.fields.selector.adder',
+            ['name' => 'Arrival Location', 'field' => 'arrival_location_id', 'value' => $arrival_location_id ?? 0,
+             'route' => 'locations', 'createRoute' => route('locations.create'),])
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
+@include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
+@include('partials.fields.text', ['name' => 'Currency', 'field' => 'currency', 'value' => $currency ?? null,])
+@include('partials.fields.checkbox', ['name' => 'Is Domestic', 'field' => 'is_domestic', 'value' => $is_domestic ?? null,])
+@include('partials.fields.prefab.notes')
+@include('partials.fields.submit')
