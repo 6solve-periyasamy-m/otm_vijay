@@ -1,7 +1,7 @@
 <label for="tour_component_type-input" class="{{ $labelClasses ?? "" }}">{{ $name }}</label>
 <select class="form-select {{ $classes ?? "" }}" name="{{ $field }}" id="{{ $field }}-input">
-@php($set = false)
+@php($set = isset($selected))
 @foreach($values as $key => $value)
-    <option value="{{ $key }}" @if(!$set) selected @php($set = true) @endif>{{ $value }}</option>
+    <option value="{{ $key }}" @if(!$set || $selected == $key) selected @php($set = true) @endif>{{ $value }}</option>
 @endforeach
 </select>
