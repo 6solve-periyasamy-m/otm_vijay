@@ -176,7 +176,6 @@ class BookingCustomerController extends ApiController
             'other_phone_number' => $request->other_phone_number,
             'gender' => $request->gender
         ];
-
         $customer = Customer::where('email_address', $request->email_address)->first();
         // if (empty($customer)) {
         //     $customer = new Customer();
@@ -198,7 +197,6 @@ class BookingCustomerController extends ApiController
             $customer = $customerRepo->update($customerData);
         } else {
             // $customer->email_address = $request->email_address;
-
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
                 $addressIds = $this->create_addresses($request);

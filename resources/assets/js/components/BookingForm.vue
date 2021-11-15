@@ -77,10 +77,10 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 5,
             formInfo: false,
             bookingId: '',
-            leadTraveller: {},
+            leadTraveller: null,
             home_address: {},
             billing_address: {},
             travellers: [],
@@ -96,9 +96,9 @@ export default {
             tokenName: 'OTM_booking_token'
         }
     },
-    created() {
+    async created() {
         let that = this
-        this.debug && console.log('BookingForm created for tour:', this.tour)
+        this.debug && console.log('1) BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
@@ -106,6 +106,7 @@ export default {
 
         that.bookingToken = getCookie(that.tokenName); 
         this.debug && console.log('Cookie read:', that.bookingToken)
+
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
             //axios.get(`/api/booking/customer/${that.bookingToken}`)

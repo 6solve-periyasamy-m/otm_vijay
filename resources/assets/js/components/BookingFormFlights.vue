@@ -22,7 +22,7 @@
                                     :custom="false"
                                     :tour="tour"
                                     :token="token"
-                                    :traveller="leadTraveller"
+                                    :traveller="lead_traveller"
                                     :airports="airports"
                                     :flights="outbound_flights"
                                     :types="outbound_type"
@@ -39,7 +39,7 @@
                                     :custom="false"
                                     :tour="tour"
                                     :token="token"
-                                    :traveller="leadTraveller"
+                                    :traveller="lead_traveller"
                                     :airports="airports"
                                     :flights="inbound_flights"
                                     :types="inbound_type"
@@ -245,8 +245,6 @@ console.log('mounted flights')
     created() {
         let that = this
         this.leadTraveller = this.lead_traveller
-console.log('&&&&&****^^^^ created flights lead', this.leadTraveller)
-
         this.debug>1 && console.log('BFF mounted', this.booking_id, that.token, that.leadTraveller);
 
         bus.$on('additionalTravellersLoaded', travellers => {
@@ -269,7 +267,7 @@ console.log('&&&&&****^^^^ created flights lead', this.leadTraveller)
             }
             if (!custom && traveller) {
                 console.log('>>>>>> group booking with traveller', traveller)
-                alert('group bookin with traveller set?', traveller)
+                alert('group booking with traveller set?', traveller)
             }
 
             that.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)

@@ -10,7 +10,7 @@
             </div>
             <div class="col-12">
                 <p>Event</p>
-                <h6 class="fw-bold">{{ $tour->event->name }}</h6>
+                <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "No Event" }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
@@ -54,6 +54,12 @@
     {{-- Tabs Definition --}}
     <div class="card">
         <div class="card-body">
+            <div class="mb-3">
+                <a href="{{ route('tours.view', ['tour' => $tour, ])}}" class="btn btn-primary text-white">
+                    <i class="icon-arrow-left"></i>
+                    Back to Tour
+                </a>
+            </div>
             <ul class="nav nav-pills otm-tab">
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#accommodation">

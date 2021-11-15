@@ -65,11 +65,13 @@ class BookingController extends ApiController
 Log::debug('Booking:Create', [$tour_id, $token]);
         return response()->json(["success" => true, 'booking' => $booking]);
     }
+
     /***
-     * order section
+     * order section :: use booking->create to make a booking
+     * this may be used to create an order when booking paid
      */
-        /**
-     * createOrder - makes an order every time booking form is accessed by URL, unless it already exists (via token or link)
+    /**
+     * createOrder 
      *
      * @param Request $request
      * @return JSON (order object)

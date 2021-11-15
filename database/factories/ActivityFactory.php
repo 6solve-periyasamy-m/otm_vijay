@@ -24,7 +24,7 @@ class ActivityFactory extends Factory
         return [
             'activity_type_id' => $this->faker->numberBetween(1, 3),
             'location_id' => $this->faker->numberBetween(1, 5),
-            'title' => $this->faker->words(3, true),
+            'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
         ];
     }

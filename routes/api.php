@@ -93,7 +93,7 @@ Route::prefix('booking')->group(function () {
 
     // create Flights Order
     // Route::post('/flight/{customer}/{tour}/{order}/{flight_type}/{flight}/{custom}/{reference}', [
-//     BookingController::class, 'bookFlightDetails'
+    // BookingController::class, 'bookFlightDetails'
     // ]);
 
     Route::post('/flight', [FlightDetailsController::class, 'bookFlightDetails']);

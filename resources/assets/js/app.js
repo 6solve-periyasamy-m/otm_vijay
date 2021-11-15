@@ -14,93 +14,76 @@ Vue.config.productionTip = false
 // jquery is working ... validation
 $('.addredbordertest').addClass('red-border');
 
-
 window.axios.defaults.headers.common = {
-     'X-Requested-With': 'XMLHttpRequest',
-     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-     'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
- };
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
+};
 
- console.log('app.js marker 3')
+// operational 
+const busEventLogging = true
 
- // operational 
- bus.$on('getBookingToken', function(token) {
-     console.log('Event Handler: setBookingToken:', token)
-     axios.get(`/api/booking/token/${token}`)
-        .then(response => {
-            console.log('got booking : broadcasting to modules', response.data.booking)
-            bus.$emit('setBooking', response.data.booking)
-        })
-        .catch(error => {
-            console.log('error getting booking', error)
-        })
- })
- bus.$on('setBookingToken', token => {
-     console.log('setBookingToken event monitor ', token);
- })
- 
- const busEventLogging = true
- 
- bus.$on('click', function(id) {
-     busEventLogging && console.log('added traveller', id)
- })
- 
- bus.$on('saveLeadCustomer', function(name) {
-      bus.booking.name = name
-  })
- 
- bus.$on('leadTravellerLoaded', function(customer) {
-     busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)
- })
- 
- bus.$on('removeTraveller', function(id) {
-      busEventLogging && console.log('Event Bus: removed traveller ',id)
- })
- 
- bus.$on('accommodationBookingsLoaded', function() {
-     busEventLogging && console.log('accommodationBookingsLoaded')
- })
- 
- let othertravellers = []
- // initialises the external array
- bus.$on('loadOthers', function(others) {
-     othertravellers = others //.map(t => t.id)
-     //console.log('init others', others)
- })
- 
- bus.$on('setRoomShare', function(t, share, room) {
-     let others = othertravellers
-     console.log('setRoomShare (global) ', t.id, share.id, room)
-     others = others.filter(o => {
-         return share.id != o.id
-     })
-     others = others.filter(o => {
-         console.log('filtering out traveller', t.first_name)
-         return t.id != o.id
-     })
-     console.log('global filter from from', othertravellers, ' to ', others)
-     othertravellers = others
-     bus.$emit('setOthers', others, t)
- })
- 
+bus.$on('setBookingToken', token => {
+    console.log('setBookingToken event monitor ', token);
+})
 
+bus.$on('click', function(id) {
+    busEventLogging && console.log('added traveller', id)
+})
 
+bus.$on('saveLeadCustomer', function(name) {
+    bus.booking.name = name
+})
 
- Vue.component('font-awesome-icon', FontAwesomeIcon)
- Vue.component('booking-form', require('./components/BookingForm.vue').default);
- Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
- Vue.component('booking-form-lead', require('./components/BookingFormLead.vue').default);
- Vue.component('booking-form-additional', require('./components/BookingFormAdditional.vue').default);
- Vue.component('booking-form-add-traveller', require('./components/BookingFormAddTraveller.vue').default);
- Vue.component('booking-form-flights', require('./components/BookingFormFlights.vue').default);
- Vue.component('booking-form-flight-select', require('./components/BookingFormFlightSelector.vue').default);
- Vue.component('booking-form-accommodation', require('./components/BookingFormAccommodation.vue').default);
- Vue.component('accommodation-room-selection', require('./components/AccommodationRoomSelection.vue').default);
- Vue.component('booking-form-activity', require('./components/BookingFormActivity.vue').default);
- Vue.component('booking-form-transport', require('./components/BookingFormTransport.vue').default);
- Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
- Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
- Vue.component('validation-errors', require('./components/ValidationErrors.vue').default);
+bus.$on('leadTravellerLoaded', function(customer) {
+    busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)
+})
+
+bus.$on('removeTraveller', function(id) {
+    busEventLogging && console.log('Event Bus: removed traveller ',id)
+})
+
+bus.$on('accommodationBookingsLoaded', function() {
+    busEventLogging && console.log('accommodationBookingsLoaded')
+})
+
+let othertravellers = []
+// initialises the external array
+bus.$on('loadOthers', function(others) {
+    othertravellers = others //.map(t => t.id)
+    //console.log('init others', others)
+})
+
+bus.$on('setRoomShare', function(t, share, room) {
+    let others = othertravellers
+    console.log('setRoomShare (global) ', t.id, share.id, room)
+    others = others.filter(o => {
+        return share.id != o.id
+    })
+    others = others.filter(o => {
+        console.log('filtering out traveller', t.first_name)
+        return t.id != o.id
+    })
+    console.log('global filter from from', othertravellers, ' to ', others)
+    othertravellers = others
+    bus.$emit('setOthers', others, t)
+})
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('booking-form', require('./components/BookingForm.vue').default);
+Vue.component('booking-form-tour', require('./components/BookingFormTour.vue').default);
+Vue.component('booking-form-lead', require('./components/BookingFormLead.vue').default);
+Vue.component('booking-form-additional', require('./components/BookingFormAdditional.vue').default);
+Vue.component('booking-form-add-traveller', require('./components/BookingFormAddTraveller.vue').default);
+Vue.component('booking-form-flights', require('./components/BookingFormFlights.vue').default);
+Vue.component('booking-form-flight-select', require('./components/BookingFormFlightSelector.vue').default);
+Vue.component('booking-form-accommodation', require('./components/BookingFormAccommodation.vue').default);
+Vue.component('accommodation-room-selection', require('./components/AccommodationRoomSelection.vue').default);
+Vue.component('booking-form-activity', require('./components/BookingFormActivity.vue').default);
+Vue.component('booking-form-transport', require('./components/BookingFormTransport.vue').default);
+Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
+Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
+Vue.component('validation-errors', require('./components/ValidationErrors.vue').default);
 // Vue.component('booking-store', require('./components/BookingStore.vue').default);
 
 Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);

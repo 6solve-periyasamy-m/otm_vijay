@@ -61,11 +61,6 @@
                     <input name="token" value="{{ $token ?? "" }}" class="form-control" id="token-input">
                 </div>
                 <div class="form-group col-12">
-                    <label for="booking_reference-input">Booking Reference</label>
-                    <input name="booking_reference" value="{{ $booking_reference ?? "" }}" class="form-control"
-                        id="booking_reference-input">
-                </div>
-                <div class="form-group col-12">
                     <label for="ordered_on-input">Ordered On</label>
                     <input type="datetime-local" name="ordered_on" value="{{ $ordered_on ?? "" }}" class="form-control" id="ordered_on-input">
                 </div>

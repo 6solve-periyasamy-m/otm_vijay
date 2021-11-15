@@ -31,7 +31,7 @@ class TourTransforms implements TourTransformsInterface
         foreach (Tour::all() as $tour) {
             $subData = [];
             $subData['id'] = $tour->id;
-            $subData['text'] = $tour->name . ' - ' . $tour->event->name;
+            $subData['text'] = isset($tour->event) ? $tour->name . ' - ' . $tour->event->name : $tour->name . ' - No Event';
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -55,7 +55,7 @@ class TourTransforms implements TourTransformsInterface
         $tour = Tour::findOrFail($id);
         $data = [];
         $data['id'] = $tour->id;
-        $data['text'] = $tour->name . ' - ' . $tour->event->name;
+        $data['text'] = isset($tour->event) ? $tour->name . ' - ' . $tour->event->name : $tour->name . ' - No Event';
         return $data;
     }
 

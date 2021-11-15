@@ -4,7 +4,7 @@
     <td>{{ $home_address }}</td>
     <td>{{ $mobile_number }}</td>
     <td>{{ $passport_expiry_date }}</td>
-    <td>
+    <td class="actions">
         <a href="{{route('customers.edit', ['customer' => $customer,])}}" class="btn btn-outline-success btn-sm mb-1">
             <i class="icon-note"></i>
         </a>

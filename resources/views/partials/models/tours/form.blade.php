@@ -34,7 +34,7 @@
                 </div>                
                 <div class="form-group col-12">
                     <label for="name-input">Name</label>
-                    <input name="name" value="{{ $title ?? "" }}" class="form-control" id="name-input">
+                    <input name="name" value="{{ $name ?? "" }}" class="form-control" id="name-input">
                 </div>                
                 <div class="form-group col-12">
                     <label for="description-input">Description</label>
@@ -56,7 +56,11 @@
                 <div class="form-group col-xl-6">
                     <label for="margin-input">Margin</label>
                     <input name="margin" value="{{ $margin ?? "" }}" class="form-control" id="margin-input" type="number">
-                </div>                
+                </div>
+                <div class="form-group col-xl-6">
+                    <label for="deposit-input">Deposit</label>
+                    <input name="deposit" value="{{ $deposit ?? "" }}" class="form-control" id="deposit-input" type="number">
+                </div>
                 <div class="form-group col-12">
                     <label for="single_occupancy_surcharge-input">Single Occupancy Surcharge</label>
                     <input name="single_occupancy_surcharge" value="{{ $single_occupancy_surcharge ?? "" }}" class="form-control"

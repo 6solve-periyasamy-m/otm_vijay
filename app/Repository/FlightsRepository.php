@@ -15,7 +15,7 @@ interface FlightsRepositoryInterface {
 class FlightsRepository implements FlightsRepositoryInterface
 {
     protected $model;
-    private $logging = false;
+    private $logging = 1;
 
     public function __construct()
     {
@@ -34,14 +34,15 @@ class FlightsRepository implements FlightsRepositoryInterface
         return $flights;
     }
 
-    public function flightsAvailableForTour($tour_id, $flight_type)
+    public function flightsAvailableForTour($tour_id, $flight_type, $tour_component_type = 'Included')
     {
-        $flights = Flight::select('airlines.name as airline_name', 'flight_inventories.*', 'flight_inventory_tours.id as flight_inventory_tour_id', 'flight_inventory_tours.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.name as travel_class', 'flights.available_after')
+        $flights = Flight::select('flight_inventory_tours.id as flight_id', 'flight_inventory_tours.tour_component_type', 'airlines.name as airline_name', 'flight_inventories.*', 'flight_inventory_tours.id as flight_inventory_tour_id', 'flight_inventory_tours.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.name as travel_class', 'flight_inventory_tours.tour_component_type','flights.available_after')
         ->join('airlines', 'airline_id', 'airlines.id')
         ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
         ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
         ->join('flight_inventory_tours', 'flight_inventory_tours.flight_inventory_id', 'flight_inventories.id')
         ->where('flight_inventory_tours.tour_id', $tour_id)
+        ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
         ->where(function($q) {
             $q->whereNull('flights.available_after')
                 ->orWhere('flights.available_after', '<', date('Y-m-d'));
@@ -57,6 +58,8 @@ class FlightsRepository implements FlightsRepositoryInterface
             ->orderBy('airlines.name', 'asc')
             ->get();
 
+        $this->logging && Log::info("\n".'flightsAvaiableForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : Recs : '. $flightData->count());
+        
         return $flightData;
     }
 
