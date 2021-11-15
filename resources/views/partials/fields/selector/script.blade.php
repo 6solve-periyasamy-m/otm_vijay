@@ -11,7 +11,7 @@ let {{ $field }}Select = $('.{{ $field }}-input');
 }
 });
 $.ajax({
-    url: '{{ route('api.' . $route . '.selected', ['id' => $id ?? 0, ]) }}',
+    url: '{{ route('api.' . $route . '.selected', ['id' => old($field) ?? $id ?? 0, ]) }}',
 }).then(function (data) {
     {{ $field }}Select.append(new Option(data.text, data.id, true, true)).trigger('change');
 
