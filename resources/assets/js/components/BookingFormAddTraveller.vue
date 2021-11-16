@@ -4,10 +4,11 @@
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}}</h3>
         <div class="ept-form" :id="form_id">
             <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
-            <div v-if="edit_fields || (!first_name && !last_name)">
+{{edit_fields}} {{form_id}}
+            <div v-if="edit_fields || (!title && !first_name && !last_name)">
                 <div class="row">
                     <div class="col-md-3 form-group field-separation">
-                        <select v-model="title" class="form-control form-select form-select-lg">
+                        <select @change="edit_fields = true" v-model="title" class="form-control form-select form-select-lg">
                             <option value="" default>Select a title</option>
                             <option value="Mr">Mr</option>
                             <option value="Ms">Ms</option>
@@ -75,10 +76,9 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-10 form-group field-separation">
-                        <button :disabled="!validForm" type="button" :formId="form_id" class="btn btn-secondary" @click="storeTraveller">Save Traveller</button>
-                        <button v-if="emptyForm" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
-                        <p class="small" v-else>To remove an additional traveller, <span
-                         class="small underlined" @click="first_name='';last_name='';middle_names=''">clear the name fields first</span></p>
+                        <button :disabled="!validForm" type="button" :formId="form_id" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
+                        <button v-if="removal" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
+                        <button class="btn btn-secondary" @click="removal=!removal">{{removal?'Disable':'Enable'}} removal</button>
                     </div>
                 </div>
                 <div class="row" v-if="errors.length">
@@ -88,7 +88,8 @@
         
             </div>
             <div v-else>
-                {{first_name}} {{last_name}} <button class="btn btn-warning" @click="edit_fields = true">Edit</button> 
+                {{!title ? 'You must select a title field' : '' }}
+                {{title}} {{first_name}} {{last_name}} <button class="btn btn-warning" @click="edit_fields = true">Edit</button> 
             </div>
         </div>
     </div>
@@ -132,8 +133,9 @@ export default {
             additionalTraveller: 'checked',
             customer: {},
             removed: false,
+            removal: false,
             errors: [],
-            edit_fields: true,
+            edit_fields: false,
             validationErrors: '',
             validated: false
         }
@@ -147,19 +149,24 @@ export default {
     },
     created() {
         let that = this
+        // this gets its booking token from a prop
         // bus.$on('setBookingToken', (token) => {
         //     that.booking_token = token
         //     that.debug && console.log(`>>>>>>>>>> ${that.moduleName} created for booking ${that.booking_token}`)            
         // })
         bus.$on('addTraveller', function(formId) {
-            that.debug && console.log('adding', formId)
-            that.edit_fields = false
+            
+            that.debug && console.log('^^^ BookingFormAddTraveller setting', formId, that.form_id)
+            if (formId === that.form_id) {
+                console.log('form ' + that.form_id + ' edit activated')
+                that.edit_fields = true
+            }
         })
     },
     computed: {
-        emptyForm: function () {
-            return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
-        },
+        // emptyForm: function () {
+        //     return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
+        // },
         validForm: function () {
             this.debug && console.log('validForm called', this)
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;

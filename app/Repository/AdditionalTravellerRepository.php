@@ -38,6 +38,15 @@ class AdditionalTravellerRepository implements AdditionalTravellerRepositoryInte
         return $this->current;
     }
 
+    private function find($booking_id, $customer_id)
+    {
+        $found = $this->model->where('booking_id', $booking_id)
+            ->where('customer_id', $customer_id)
+            ->count();
+
+        return $found;
+    }
+
     /**
      * getGroup - returns an array of additional travellers associated with a booking
      *
@@ -53,6 +62,10 @@ class AdditionalTravellerRepository implements AdditionalTravellerRepositoryInte
 
     public function create($booking_id, $customer_id)
     {
+        if ($this->find($booking_id, $customer_id)) {
+            Log::debug('AdditionalTravellerRepo request to create a dup record', [$booking_id, $customer_id]);
+            return false;
+        }
         $this->model->booking_id = $booking_id;
         $this->model->customer_id = $customer_id;
         $this->current = $this->model->save();

@@ -244,7 +244,7 @@ export default {
     let that = this
     this.debug>2 && console.log("DEV: Accommodation mounted")
     bus.$on("accommodationBookingsLoaded", (bookings) => {
-      console.log('>>>> accommodationBookingsLoaded', bookings)
+      console.log('>>> accommodationBookingsLoaded', bookings)
       
       bookings.map((b) => {
         console.log('>>> booking loaded', b)

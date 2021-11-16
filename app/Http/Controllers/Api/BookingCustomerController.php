@@ -212,7 +212,8 @@ class BookingCustomerController extends ApiController
             $booking = $bookingRepo->findBookingByToken($token);
             if ($booking) {
                 $additionalTraveller = new AdditionalTravellerRepository();
-                $additionalTraveller->create($booking->id, $customer->id);
+                $newTraveller = $additionalTraveller->create($booking->id, $customer->id);
+                $this->logging && Log::info('Additional Traveller created', [$newTraveller]);
             } else {
                 Log::error('Invalid token when creating additional traveller pivot record for customer', [$token, $customer]);
             }
