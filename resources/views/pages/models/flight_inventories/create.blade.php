@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('flight-inventories.store', ['flight' => $flight, ]),])
 
 @section('title', 'Create Flight Inventory')
 
-@section('content')
-    @include('partials.models.flight_inventories.form', ['action' => route('flight-inventories.store', ['flight' => $flight, ]),])
+@section('form-body')
+    @include('partials.models.flight_inventories.form')
 @endsection

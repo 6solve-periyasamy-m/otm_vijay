@@ -1,5 +1,5 @@
 @extends ('layout.main')
-@section('head-script')
+@section('header-script')
 <style>
     .red-border {
         border: 1rem double red;

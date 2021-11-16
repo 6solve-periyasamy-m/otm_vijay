@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('customers.store'), 'multipart' => true])
 
 @section('title', 'Create Customer')
 
-@section('content')
-    @include('partials.models.customers.form', ['action' => route('customers.store'),])
+@section('form-body')
+    @include('partials.models.customers.form')
 @endsection

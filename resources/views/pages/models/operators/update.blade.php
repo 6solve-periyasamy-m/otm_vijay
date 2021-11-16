@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('operators.update', ['operator' => $operator,]),])
 
 @section('title', 'Update Operator')
 
-@section('content')
-    @include('partials.models.operators.form', ['action' => route('operators.update', ['operator' => $operator,]),
+@section('form-body')
+    @include('partials.models.operators.form', [
       'name' => $operator->name,
       'notes' => $operator->notes,
     ])

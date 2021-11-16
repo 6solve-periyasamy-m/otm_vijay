@@ -2,7 +2,7 @@
 
 @section('title', 'View Order Customer')
 
-@section('head-script')
+@section('header-script')
 <script type="text/javascript">
     {{-- TODO: Upgrade to Select2 --}}
 function updateAccommodationSelectFields() {

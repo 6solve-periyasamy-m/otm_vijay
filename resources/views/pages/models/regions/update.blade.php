@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('regions.update', ['region' => $region,]),])
 
 @section('title', 'Update Region')
 
-@section('content')
-    @include('partials.models.regions.form', ['action' => route('regions.update', ['region' => $region,]),
+@section('form-body')
+    @include('partials.models.regions.form', [
       'country_id' => $region->country_id,
       'name' => $region->name,
     ])

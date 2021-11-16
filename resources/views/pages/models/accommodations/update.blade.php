@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('accommodations.update', ['accommodation' => $accommodation,]),])
 
 @section('title', 'Update Accommodation')
 
-@section('content')
-    @include('partials.models.accommodations.form', ['action' => route('accommodations.update', ['accommodation' => $accommodation,]),
+@section('form-body')
+    @include('partials.models.accommodations.form', [
       'region_id' => $accommodation->region_id,
       'name' => $accommodation->name,
       'description' => $accommodation->description,

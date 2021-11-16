@@ -1,9 +1,9 @@
-@extends('layout.main')
+@extends('layout.form', ['action' => route('payments.update', ['order' => $order, 'payment' => $payment,]),])
 
 @section('title', 'Update Payment')
 
-@section('content')
-    @include('partials.models.payments.form', ['action' => route('payments.update', ['order' => $order, 'payment' => $payment,]),
+@section('form-body')
+    @include('partials.models.payments.form', [
       'payment_method_id' => $payment->payment_method_id,
       'amount' => $payment->amount,
       'payment_type' => $payment->payment_type,
