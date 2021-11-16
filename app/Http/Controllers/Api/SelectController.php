@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
 use App\Transforms\OrderTransforms;
@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\LocationsTransforms;
 
-class SelectController extends Controller
+class SelectController extends ApiController
 {
     public function getLocations(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";

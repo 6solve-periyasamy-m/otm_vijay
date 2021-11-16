@@ -4,7 +4,13 @@
         flightTable = $('.flight-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
-            "ajax": "{{ route('api.flight-inventory.datatables', ['tour' => $tour,]) }}",
+            "ajax": {
+                "url": "{{ route('api.flight-inventory.datatables', ['tour' => $tour,]) }}",
+                "data": {
+                    "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
+                },
+                "type": "post",
+            },
             "columns": [
                 { "data": "flight_number" },
                 { "data": "travel_class" },
@@ -35,7 +41,7 @@
                 200: function () { alert('Components added successfully'); flightTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".flight-component-type-select").find(":selected").val(), "ids": ids },
+            data: { "type": $(".flight-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
 </script>
