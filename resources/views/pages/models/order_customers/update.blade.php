@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('order-customers.update', ['order' => $order, 'orderCustomer' => $orderCustomer,]),])
 
 @section('title', 'Update Orders Customer')
 
-@section('content')
-    @include('partials.models.order_customers.form', ['action' => route('order-customers.update', ['order' => $order, 'orderCustomer' => $orderCustomer,]),
+@section('form-body')
+    @include('partials.models.order_customers.form', [
       'order_id' => $orderCustomer->order_id,
       'customer_id' => $orderCustomer->customer_id,
       'tour_cost' => $orderCustomer->tour_cost,

@@ -1,9 +1,9 @@
-@extends('layout.main')
+@extends('layout.form', ['action' => route('manual-adjustments.update', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]),])
 
 @section('title', 'Update Manual Adjustment')
 
-@section('content')
-    @include('partials.models.manual_adjustments.form', ['action' => route('manual-adjustments.update', ['order' => $order, 'manualAdjustment' => $manualAdjustment,]),
+@section('form-body')
+    @include('partials.models.manual_adjustments.form', [
       'order_id' => $manualAdjustment->order_id,
       'amount' => $manualAdjustment->amount,
       'reason' => $manualAdjustment->reason,

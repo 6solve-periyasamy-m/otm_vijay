@@ -1,7 +1,7 @@
-@extends('layout.main')
+@extends('layout.form', ['action' => route('addresses.store'),])
 
 @section('title', 'Create Address')
 
-@section('content')
-    @include('partials.models.addresses.form', ['action' => route('addresses.store'),])
+@section('form-body')
+    @include('partials.models.addresses.form')
 @endsection
