@@ -21,7 +21,7 @@
                                     :enabled="!travellerFlightOptions.includes(true)"
                                     :custom="false"
                                     :tour="tour"
-                                    :token="token"
+                                    :token="booking_token"
                                     :traveller="lead_traveller"
                                     :airports="airports"
                                     :flights="outbound_flights"
@@ -38,7 +38,7 @@
                                     :enabled="!travellerFlightOptions.includes(true)"
                                     :custom="false"
                                     :tour="tour"
-                                    :token="token"
+                                    :token="booking_token"
                                     :traveller="lead_traveller"
                                     :airports="airports"
                                     :flights="inbound_flights"
@@ -54,7 +54,7 @@
                                     <booking-form-flight-selector 
                                         v-model="other_flight_selected"
                                         :tour="tour"
-                                        :token="token"
+                                        :token="booking_token"
                                         :airports="airports"
                                         :flights="flights"
                                         :types="tour_flight_optional_types">
@@ -111,7 +111,7 @@
                                                 :enabled="true"
                                                 :custom="true"
                                                 :tour="tour"
-                                                :token="token"
+                                                :token="booking_token"
                                                 :traveller="traveller"
                                                 :airports="airports"
                                                 :flights="unselected_outbound"
@@ -124,7 +124,7 @@
                                                 :enabled="true"
                                                 :custom="true"
                                                 :tour="tour"
-                                                :token="token"
+                                                :token="booking_token"
                                                 :traveller="traveller"
                                                 :airports="airports"
                                                 :flights="unselected_inbound"
@@ -165,17 +165,13 @@ import Vue from 'vue'
 export default {
     components: { BookingFormFlightSelector },
     props: {
-        // booking_id: Number,
-        // tour : String,
-        // token: String,
-        // 
         lead_traveller: Object,
-        // tour: Object
+        tour: Object
     },
     data() {
         return {
             debug: 9,
-            token: null,
+            booking_token: null,
             moduleName: 'Flights',
             activated: false,
             showwait: false,
@@ -245,20 +241,18 @@ console.log('mounted flights')
     created() {
         let that = this
         this.leadTraveller = this.lead_traveller
-        this.debug>1 && console.log('BFF mounted', this.booking_id, that.token, that.leadTraveller);
+        this.debug>1 && console.log('BFF mounted', this.booking_id, that.booking_token, that.leadTraveller);
 
         bus.$on('additionalTravellersLoaded', travellers => {
             console.log('FLIGHTS: additionalTravellersLoaded', travellers)
             that.travellers = travellers
         })
-        bus.$on('setBooking', booking => {
-            that.debug && console.log(`${that.moduleName} : setBooking`, booking)
-            that.booking = booking
-            that.token = booking.token
-            that.tour = booking.tour
+        bus.$on('setBookingToken', token => {
+            that.debug && console.log(`>>>> ${that.moduleName} : setBooking ${token} for tour ${that.tour.name}`)
+            that.booking_token = token
            // console.log('BFF created setBooking handler', this.booking.token, this.booking.tour, this.booking.tour.id, this.booking.id)
-            that.getFlights(that.booking.tour.id)
-            that.loadFlightsForBooking(that.booking.id)
+            that.getFlights(that.tour)
+            that.loadFlightsForBooking(that.booking_token)
         })
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
 
@@ -298,7 +292,7 @@ console.log('mounted flights')
         })
 
         bus.$on('removeBooking', (booking, flight_type, traveller) => {
-            console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.token)
+            console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.booking_token)
             const item = this.orderset.filter(ordr => ordr.inventory_tour_id === booking &&
                 ordr.order_customer_id == traveller.order_customer_id);
             if (item.length === 1) {
@@ -310,7 +304,7 @@ console.log('mounted flights')
                 inventory_tour_id: booking,
                 flight_type: flight_type,
                 custom: true,
-                token: that.token
+                token: that.booking_token
             }
             console.log('remove flight booking', record)
             axios.post(`/api/booking/flights/remove/flight`, record)
@@ -448,20 +442,20 @@ console.log('FLIGHTSELECTED order', order);
         },
 
         // loads current flight orders 
-        async loadFlightsForBooking(booking_id) {
-            if (!booking_id) {
+        async loadFlightsForBooking(booking_token) {
+            if (!booking_token) {
                 // alert('Form data seems to have missing data, please refresh or contact support')
                 console.log('WARNING: load flights for order missing booking_id?');
                 return
             } else {
-                this.debug>3 && console.log('INFO: loadFlightsForBooking called for order ', booking_id)
+                this.debug>3 && console.log('INFO: loadFlightsForBooking called for order ', booking_token)
             }
             let that = this
             let outbound = {}
             let inbound = {}
             this.showwait = true
             // loads current fight bookings if there are any
-            await axios.get(`/api/booking/flight/bookings/${this.booking.id}`)
+            await axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
 
                     // that.orderset = response.data.orders

@@ -24,7 +24,7 @@ window.axios.defaults.headers.common = {
 const busEventLogging = true
 
 bus.$on('setBookingToken', token => {
-    console.log('setBookingToken event monitor ', token);
+    console.log('>>>> setBookingToken event monitor ', token);
 })
 
 bus.$on('click', function(id) {

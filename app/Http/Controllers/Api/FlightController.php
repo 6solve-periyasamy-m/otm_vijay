@@ -17,6 +17,7 @@ use App\Models\FlightInventoryTour;
 use Illuminate\Support\Facades\Log;
 use App\Repository\FlightsRepository;
 use App\Http\Controllers\ApiController;
+use App\Repository\BookingRepository;
 use App\Repository\FlightBookingRepository;
 
 class FlightController extends ApiController
@@ -119,11 +120,14 @@ class FlightController extends ApiController
      * @param string $type
      * @return void
      */
-    public function loadFlightsForBooking($booking_id, $type = 'Both')
+    public function loadFlightsForBooking($booking_token, $type = 'Both')
     {
 
-        $flightBookingRepository = new FlightBookingRepository($booking_id, $type);
-        $flightBookings = $flightBookingRepository->getFlightBookings($booking_id);
+        $bookingRepo = new BookingRepository();
+        $booking = $bookingRepo->findBookingByToken($booking_token);
+
+        $flightBookingRepository = new FlightBookingRepository($booking->id, $type);
+        $flightBookings = $flightBookingRepository->getFlightBookings($booking->id);
 
         return response()->json(["success" => true, "flightBooking" => $flightBookings]);
     }

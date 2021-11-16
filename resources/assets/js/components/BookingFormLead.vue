@@ -258,10 +258,9 @@ export default {
     props: ['booked', 'tour'],
     data() {
         return {
-            debug: false,
+            debug: true,
             booking_token: null,
             moduleName: 'leadTraveller',
-            booking_token: null,
             email: '',
             password: '',
             auth: false,
@@ -323,10 +322,11 @@ export default {
     },
     created() {
         let that = this
-        console.log('booking form lead created')
+        console.log(`${this.moduleName} created`)
         bus.$on('setBookingToken', (bookingData) => {
-            that.debug && console.log(`${that.moduleName} : setBooking`, bookingData)
             that.booking_token = bookingData
+            that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
+
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('BFL: EH leadTravellerLoaded', customer)
@@ -355,7 +355,7 @@ export default {
     },
     mounted() {
         let that = this
-        console.log('bookingform lead mounted for tour', this.tour)
+        console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`)
         this.validationErrors = ''
         bus.$on('debugOverride', (debug) => that.debug = debug)
         if (that.tour != null) {

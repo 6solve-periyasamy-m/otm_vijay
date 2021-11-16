@@ -16,6 +16,8 @@ use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
 use App\Repository\OrdersCustomerRepository;
+use App\Repository\AdditionalCustomerRepository;
+use App\Repository\AdditionalTravellerRepository;
 
 class BookingCustomerController extends ApiController
 {
@@ -108,6 +110,7 @@ class BookingCustomerController extends ApiController
      * as it is not used UNTIL the customer has a login and then the customer is authenticated
      *
      * @param [type] $request
+     * @param $token
      * @param boolean $isLead
      * @return JSON (Customer object)
      */
@@ -177,9 +180,6 @@ class BookingCustomerController extends ApiController
             'gender' => $request->gender
         ];
         $customer = Customer::where('email_address', $request->email_address)->first();
-        // if (empty($customer)) {
-        //     $customer = new Customer();
-        // }
 
         // if the customer exists, then the addresses MAY exist
         if ($customer) {
@@ -206,23 +206,15 @@ class BookingCustomerController extends ApiController
             }
             $customer = $customerRepo->create($customerData);
         }
-        $customer->save();
 
         if (!$isLead) {
             $bookingRepo = new BookingRepository();
-            $booking = $bookingRepo->findBookingByToken($request->booking_token);
-            if (!$booking || !$booking->id) {
-                throw new \Exception('StorTravellers: booking not found '.$request->booking_token);
-            }
-            $additionalTravellers = new AdditionalTraveller();
-            $additionalTraveller = $additionalTravellers->where('booking_id', $booking->id)
-                ->where('customer_id', $customer->id)->first();
-            if (empty($additionalTraveller)) {
-                $additionalTraveller = new AdditionalTraveller();
-                $additionalTraveller->booking_id = $booking->id;
-                $additionalTraveller->customer_id = $customer->id;
-                $additionalTraveller->save();
-                Log::debug('additional traveller bookings save', [$additionalTraveller]);
+            $booking = $bookingRepo->findBookingByToken($token);
+            if ($booking) {
+                $additionalTraveller = new AdditionalTravellerRepository();
+                $additionalTraveller->create($booking->id, $customer->id);
+            } else {
+                Log::error('Invalid token when creating additional traveller pivot record for customer', [$token, $customer]);
             }
         }
         return $customer;

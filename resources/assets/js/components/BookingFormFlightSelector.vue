@@ -65,6 +65,7 @@ export default {
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
 console.log('items in created: ',this.selected_item, this.identification, this.tour_flights, this.tour_flight_types, this.tour_flight_type);
+        // TODO: Looks wrong...
         // BUG: this.selected_item is NULL on addons load?
         if (this.selected_item) {
             this.flightId = this.selected_item

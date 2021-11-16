@@ -86,21 +86,25 @@ export default {
     data() {
         return initialState();
     },
-    created() {
-        this.debug > 3 && console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
-        this.group = this.others = this.travellers
-        this.setup()
-    },
     mounted() {
         this.eventInit()
         bus.$emit('loadOthers', this.group)
         this.loadAccommodationBooking(this.travellers, this.order_id)
     },
+    created() {
+        this.debug > 3 && console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
+        this.group = this.others = this.travellers
+        this.setup()
+    },
     methods: {
         setup() {
-            this.group.map(t => {
-                t.shared = false
-            })
+            if (this.group != undefined && this.group.length) {
+                this.group.map(t => {
+                    t.shared = false
+                })
+            } else {
+                console.log('ACCOMODATION MODULE GROUP IS NOT DEFINED');
+            }
         },
         eventInit() {
             let that = this
@@ -267,6 +271,10 @@ export default {
         async loadAccommodationBooking(travellers, order_id) {
             const that = this;
             console.log('***** loadAccommodationBooking started...')
+            if (this.traveller == undefined || !this.traveller.length) {
+                console.log('loadAccommodationBooking has no travellers to load')
+                return
+            }
             let allTravellers = this.travellers.map(t => t.id).toString()
             let url = `/api/booking/accommodation/customer/${this.tour.id}/${this.order_id}/${this.order_token}/${allTravellers}`
             this.debug > 2 && console.log("loadBooking() accommodation booking data token=", url)

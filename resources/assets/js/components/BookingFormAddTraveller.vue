@@ -101,8 +101,9 @@ export default {
     props: ['traveller', 'tour', 'booking_token'],
     data() {
         return {
-            debug: false,
+            debug: 9,
             developer: false,
+            moduleName: 'addTraveller',
             fields: [
                 'customer_id',
                 'title', 'first_name', 'middle_names', 'last_name', 
@@ -137,23 +138,23 @@ export default {
             validated: false
         }
     },
+    mounted() {
+        this.moduleName = 'BookingFormAddTraveller'
+        this.validationErrors = ''
+        this.customer = this.traveller
+        this.setCustomerFields()
+        this.debug && console.log(`${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller}`)
+    },
     created() {
-        // bus.$on('setBookingToken', function(token) {
+        let that = this
+        // bus.$on('setBookingToken', (token) => {
         //     that.booking_token = token
-        //     that.debug && console.log('EVENT: additional traveller booking token set', token)
+        //     that.debug && console.log(`>>>>>>>>>> ${that.moduleName} created for booking ${that.booking_token}`)            
         // })
         bus.$on('addTraveller', function(formId) {
             that.debug && console.log('adding', formId)
             that.edit_fields = false
         })
-    },
-    mounted() {
-        let that = this
-        this.validationErrors = ''
-        this.customer = this.traveller
-        this.setCustomerFields()
-        this.debug && console.log('Additional traveller mounted: seq '+this.form_id, this.tour, this.traveller)
-
     },
     computed: {
         emptyForm: function () {

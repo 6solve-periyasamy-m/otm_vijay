@@ -14,7 +14,7 @@
                         <div v-if="debug">
                             Token {{bookingToken}}, Tour {{tour}},Lead {{leadTraveller}}
                         </div>
-                        <div v-if="tour && bookingToken && Object.keys(leadTraveller).length">
+                        <div v-if="tour && bookingToken">
                             <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
                             <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
@@ -161,9 +161,14 @@ export default {
     },
     mounted() {
         let that = this
-
+        console.log("bookingForm module mounted")
     },
     methods: {
+        isset(obj) {
+            if (typeof obj !== 'undefined' && obj !== null) {
+                return Object.keys(obj).length > 0
+            }
+        },
         resetToken() {
             let that = this
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);

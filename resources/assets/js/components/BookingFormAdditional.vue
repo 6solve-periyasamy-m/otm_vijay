@@ -39,33 +39,37 @@
         data() {
             return {
                 debug: true,
-                moduleName: 'additionalTravellers',
+                moduleName: 'Additional',
+                booking_token: null,
                 id: 0,
                 formId: 0,
                 showAdditional: false,
                 showInstruction: true,
                 additional: [],
-                booking: {},
-                booking_token: ''
+                booking: {}
             }
         },
         created() {
             let that = this
-            bus.$on('setBooking', (bookingData) => {
-                that.debug && console.log(`XXXX ${that.moduleName} : setBooking`, bookingData)
-                that.booking = bookingData
-                that.lead_traveller = bookingData.customer
-                that.booking_token = bookingData.token
-                axios.get(`/api/booking/travellers/${that.booking_token}`)
-                    .then(response => {
-                        console.log(`${that.moduleName} ... get Travellers:`, response);
-                        response.data.travellers.map(value => {
-                            that.additional.push(value)
-                        })
-                        bus.$emit('additionalTravellersLoaded', that.additional)
-                    })
-                    .catch(error => console.log(error))
+            bus.$on('setBookingToken', (token) => {
+                that.booking_token = token
+                that.debug && console.log(`>>>>> ${that.moduleName} created for booking ${that.booking_token}`)            
             })
+            // bus.$on('setBooking', (bookingData) => {
+            //     that.debug && console.log(`XXXX ${that.moduleName} : setBooking`, bookingData)
+            //     that.booking = bookingData
+            //     that.lead_traveller = bookingData.customer
+            //     that.booking_token = bookingData.token
+            //     axios.get(`/api/booking/travellers/${that.booking_token}`)
+            //         .then(response => {
+            //             console.log(`${that.moduleName} ... get Travellers:`, response);
+            //             response.data.travellers.map(value => {
+            //                 that.additional.push(value)
+            //             })
+            //             bus.$emit('additionalTravellersLoaded', that.additional)
+            //         })
+            //         .catch(error => console.log(error))
+            // })
             // bus.$on('setLeadTraveller', (leadTraveller) {
             //     console.log(`${that.moduleName} : setLeadTraveller`, leadTraveller)
             //     that.lead_traveller = leadTraveller
