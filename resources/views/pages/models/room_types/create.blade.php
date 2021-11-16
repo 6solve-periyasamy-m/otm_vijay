@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('room-types.store'),])
 
 @section('title', 'Create Room Type')
 
-@section('content')
-    @include('partials.models.room_types.form', ['action' => route('room-types.store'),])
+@section('form-body')
+    @include('partials.models.room_types.form')
 @endsection

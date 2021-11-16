@@ -20,14 +20,19 @@
     <!-- TODO: Remove IonIcons -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    @yield('head-script')
-    @stack('head-stack')
+    @yield('header-script')
+    @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @stack('header-ready')
+        });
+    </script>
 </head>
 <body>
 @include('partials.navbar')
 <div class="container-fluid">
     <div class='row flex-xl-nowrap'>
-        @include('partials.sidebar')    
+        @include('partials.sidebar')
         <div id="container" class='col-12 col-md-9 col-xl-10 py-md-3 px-md-4 otm-content'>
             @if ($errors->any())
                 @foreach ($errors->all() as $error)
@@ -60,6 +65,21 @@
     });
 </script>
 @yield('footer-script')
+<script type="text/javascript">
+    $(document).ready(function () {
+        @stack('footer-ready')
+    });
+    function changeDate(invar, outvar) {
+        if (outvar.hasClass('autoset')) {
+            outvar.val(invar.val());
+        }
+    }
+    function removeAutoset(invar, outvar) {
+        if (outvar.hasClass('autoset') && outvar.val() !== invar.val()) {
+            outvar.removeClass('autoset')
+        }
+    }
+</script>
 @stack('footer-stack')
 </body>
 </html>

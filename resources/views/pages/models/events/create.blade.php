@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('events.store'),])
 
 @section('title', 'Create Event')
 
-@section('content')
-    @include('partials.models.events.form', ['action' => route('events.store'),])
+@section('form-body')
+    @include('partials.models.events.form')
 @endsection

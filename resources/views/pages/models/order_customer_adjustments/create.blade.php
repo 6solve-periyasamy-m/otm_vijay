@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('order-customer-adjustments.store', ['order' => $order, 'orderCustomer' => $orderCustomer, ]),])
 
 @section('title', 'Create Order Customer Adjustment')
 
-@section('content')
-    @include('partials.models.order_customer_adjustments.form', ['action' => route('order-customer-adjustments.store', ['order' => $order, 'orderCustomer' => $orderCustomer, ]),])
+@section('form-body')
+    @include('partials.models.order_customer_adjustments.form')
 @endsection

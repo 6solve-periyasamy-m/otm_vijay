@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('regions.store'),])
 
 @section('title', 'Create Region')
 
-@section('content')
-    @include('partials.models.regions.form', ['action' => route('regions.store'),])
+@section('form-body')
+    @include('partials.models.regions.form')
 @endsection

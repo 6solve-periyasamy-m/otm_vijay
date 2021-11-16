@@ -17,7 +17,7 @@ class Payment extends Model
         return [
             'payment_method_id' => 'required|exists:payment_methods,id',
             'amount' => 'required|numeric',
-            'paid_on' => 'required|datetime',
+            'paid_on' => 'required|date',
             'payment_type' => [
                 'required',
                 Rule::in(['Deposit', 'Installment', 'Refund'])
