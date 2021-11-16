@@ -63,7 +63,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadAdditionalTravellers']);
 
     // Flights
-    Route::get('/flight/bookings/{order_id}', [FlightController::class, 'loadFlightsForBooking']);
+    Route::get('/flight/bookings/{booking_token}', [FlightController::class, 'loadFlightsForBooking']);
     Route::get('/flights/{tour_id}/{flight_type}', [FlightController::class, 'getFlightInventoriesForTour']);
     Route::get('/flights/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
     Route::get('/flight-inventories', [FlightController::class, 'getFlightsInventories']);

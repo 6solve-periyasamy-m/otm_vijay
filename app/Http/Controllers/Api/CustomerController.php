@@ -13,11 +13,15 @@ use App\Models\Customer;
 use App\Repository\AddressRepository;
 use App\Models\OrderCustomer;
 
+// NO FUNCTIONS IN USE in v0.51.x
+
 class CustomerController extends ApiController
 {
     protected $logging = false;
     /** 
-     * getCustomerByToken
+     * getCustomerByToken - No longer used by booking form, the user can find their bookings by token
+     * or authenticate to access their bookings by customer_id: may be adapted to getCustomerByEmail
+     * as a secure way to restore booking tokens before logging in
      * 
      * @param $token
      * @return $customer or NULL if token no longer valid
@@ -55,44 +59,12 @@ isset($billing_address) && Log::info('business', $billing_address);
         return response()->json(['success' => true, 'customer' => $customer, 'home_address' => $home_address, 'billing_address' => $billing_address]);
     }
 
-    public function DEPRECATE_getCustomerOrderByToken($token = null)
-    {
-        if (empty($token)) {
-            Log::info('getCustomerOrderByToken: no token');
-            return null;
-        }
-
-        $customers = new Customer();
-        $customer = $customers->where('login_token', $token)->first();
-
-
-        $orders = new Order();
-        $order = $orders->where('token', $token)->first();
-        if (isset($order)) {
-            if ($this->logging) Log::info('orders are ', $order->toArray());
-            $orderCustomer = new OrderCustomer();
-            $orderCustomers = $orderCustomer
-                ->select('customers.*', 'order_customers.*', 'order_customers.id as order_customer_id')
-                ->join('customers', 'order_customers.customer_id', 'customers.id')
-                ->where('order_id', $order->id)
-                ->whereNull('order_customers.deleted_at')
-                // order by isLead desc so lead is first
-                ->orderBy('order_customers.is_lead_booker', 'desc')
-                ->get();
-            if (count($orderCustomers)) {
-                $order->customer = $orderCustomers[0];
-                $order->customers = $orderCustomers;
-                $this->logging && Log::info('order data for customer retrieved ', $orderCustomers->toArray());
-                return response()->json(['success' => true, 'orders' => $order]);
-            } else {
-                return response()->json(['success' => false]);
-            }
-        } else {
-            $this->logging && Log::info('no order found for token: '. $token);
-        }
-        return null;
-    }
-
+    /**
+     * may be adapted to return booking tokens from email?
+     *
+     * @param Request $request
+     * @return void
+     */
     public function getTokenLink(Request $request)
     {
         $email = $request->email;
@@ -109,27 +81,8 @@ isset($billing_address) && Log::info('business', $billing_address);
         return response()->json(["success" => true])->cookie("login_token", $customer->login_token, 60);
     }
 
-    public function getCustomerOrdersByEmail($email)
-    {
-        // DEPRECATE
-        // $customerOrders = OrdersCustomer::select('orders.token', 'orders_customers.order_id')
-        //     ->join('customers', 'orders_customers.customer_id', 'customers.id')
-        //     ->join('orders', 'orders_customers.order_id', 'orders.id')
-        //     ->where('customers.email_address', $email)
-        //     ->whereNull('orders_customers.deleted_at')
-        //     ->get();
-        // // Log::info('getOrderByEmail: ', $customerOrders->toArray());
-        // return response()->json(['success' => true,
-        //     'data' => $customerOrders]);
-        //     // select * from `orders_customers` 
-        //     // inner join `customers` on `orders_customers`.`customer_id` = `customers`.`id` 
-        //     // inner join `orders` on `orders_customers`.`order_id` = `orders`.`id` 
-        //     // where `orders_customer.customer_id` = ? and `customer`.`email_address` = ? 
-        //     // deleted_at `orders_customers` is null";
-    }
-
     /**
-     * getTravellers for this order
+     * getTravellers for this order: could be adapted to use the bookings
      *
      * @param Request $request
      * @return JSON

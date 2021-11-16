@@ -310,6 +310,7 @@ export default {
                 })
                 .catch((error) => console.log(error));
         },
+        // TODO: adapt to use booking token?
         async DEPRECATEDloadAccommodationBooking(travellers, order_id) {
             const that = this
             const url = `/api/booking/get/accommodation`;
