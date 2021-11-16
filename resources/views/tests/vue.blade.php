@@ -1,4 +1,4 @@
-@extends ('layout.main')
+@extends ('layout.booking')
 @section('header-script')
 <style>
     .red-border {
