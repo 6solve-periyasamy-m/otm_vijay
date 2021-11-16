@@ -6,11 +6,11 @@
                 ajax: {
                     url: '{{ route('api.quotes.select') }}',
                     data: function (params) {
-                        return {filter: params.term,};
+                        return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',};
                     }
                 }
             });
-            $.ajax({url: '{{ route('api.quotes.selected', ['id' => $quote_id ?? 0, ]) }}',})
+            $.ajax({url: '{{ route('api.quotes.selected', ['id' => $quote_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
                 .then(function (data) {
                     quoteSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -24,11 +24,11 @@
                 ajax: {
                     url: '{{ route('api.tours.select') }}',
                     data: function (params) {
-                        return {filter: params.term,};
+                        return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',};
                     }
                 }
             });
-            $.ajax({url: '{{ route('api.tours.selected', ['id' => $tour_id ?? 0, ]) }}',})
+            $.ajax({url: '{{ route('api.tours.selected', ['id' => $tour_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
                 .then(function (data) {
                     tourSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

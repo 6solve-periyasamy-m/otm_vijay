@@ -5,10 +5,11 @@
             methodSelect.select2({
                 ajax: {
                     url: '{{ route('api.payment-method.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; },
+                    type: 'post'
                 }
             });
-            $.ajax({ url: '{{ route('api.payment-method.selected', ['id' => $payment_method_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.payment-method.selected', ['id' => $payment_method_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     methodSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 

@@ -6,11 +6,11 @@
                 ajax: {
                     url: '{{ route('api.ticket-types.select') }}',
                     data: function (params) {
-                        return {filter: params.term,};
+                        return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',};
                     }
                 }
             });
-            $.ajax({url: '{{ route('api.ticket-types.selected', ['id' => $ticket_type_id ?? 0, ]) }}',})
+            $.ajax({url: '{{ route('api.ticket-types.selected', ['id' => $ticket_type_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }})
                 .then(function (data) {
                     ticketType.append(new Option(data.text, data.id, true, true)).trigger('change');
 

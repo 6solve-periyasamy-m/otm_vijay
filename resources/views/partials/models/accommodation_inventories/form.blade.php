@@ -5,10 +5,11 @@
             roomTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.room-types.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; },
+                    type: 'post'
                 }
             });
-            $.ajax({ url: '{{ route('api.room-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.room-types.selected', ['id' => $room_type_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     roomTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
@@ -21,10 +22,11 @@
             boardTypeSelect.select2({
                 ajax: {
                     url: '{{ route('api.board-types.select') }}',
-                    data: function (params) { return {filter: params.term,}; }
+                    data: function (params) { return {filter: params.term, __api_token: '{{ Auth::user()->getCurrentToken()->token }}',}; },
+                    type: 'post'
                 }
             });
-            $.ajax({ url: '{{ route('api.board-types.selected', ['id' => $room_type_id ?? 0, ]) }}', })
+            $.ajax({ url: '{{ route('api.board-types.selected', ['id' => $room_type_id ?? 0, ]) }}', type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', } })
                 .then(function (data) {
                     boardTypeSelect.append(new Option(data.text, data.id, true, true)).trigger('change');
 
