@@ -2,9 +2,7 @@
 
 @section('title', 'Edit Customer Profile')
 
-@section('content')    
-
-           
+@section('content')  
 <div class="container-fluid">    
     <div class="row">
         <!-- Column -->
