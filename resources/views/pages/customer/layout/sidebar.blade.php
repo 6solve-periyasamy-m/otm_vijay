@@ -12,20 +12,20 @@
                     </a>
                 </li>
                 <li class="sidebar-item"> 
-                    <a class="sidebar-link has-arrow waves-effect waves-dark active" href="javascript:void(0)" aria-expanded="false">                        
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">                        
                         <i class="me-2 icon-user"></i>
                         <span class="hide-menu">Your Detail</span>
                     </a>
-                    <ul aria-expanded="false" class="collapse first-level in">
+                    <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a href="layout-inner-fixed-left-sidebar.html" class="sidebar-link active">
+                            <a href="{{ route('customer.edit', ['customer' => $customer]) }}" class="sidebar-link">
                                 <span class="hide-menu">
                                 Update
                                 </span>
                             </a>
                         </li>  
                         <li class="sidebar-item">
-                            <a href="layout-inner-fixed-left-sidebar.html" class="sidebar-link">
+                            <a href="{{ route('customer.atol', ['customer' => $customer]) }}" class="sidebar-link">
                                 <span class="hide-menu">
                                 ATOL
                                 </span>
