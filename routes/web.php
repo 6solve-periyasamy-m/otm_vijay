@@ -280,6 +280,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::post('/login', [CustomerPortalController::class, 'login'])->name('confirm-login');
     Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
     Route::prefix('{customer}')->group(function () {
+        Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
         Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
         Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
         Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
