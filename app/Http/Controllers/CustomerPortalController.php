@@ -23,6 +23,10 @@ class CustomerPortalController extends Controller
         return view('pages.customer.details', ['customer' => $customer,]);
     }
 
+    public function showAtol(Customer $customer) {
+        return view('pages.customer.atol', ['customer' => $customer,]);
+    }
+
     public function showEditDetailsPage(Customer $customer) {
         return view('pages.customer.edit', ['customer' => $customer,]);
     }
