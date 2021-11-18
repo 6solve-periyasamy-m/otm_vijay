@@ -17,7 +17,8 @@
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.3",
-        "orangehill/iseed": "^2.6"
+        "orangehill/iseed": "^2.6",
+        "silber/bouncer": "v1.0.0-rc.10"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
