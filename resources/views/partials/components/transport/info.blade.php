@@ -13,11 +13,11 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Departure Location</p>
-            <h6 class="fw-bold">{{ $transport->departureAddress->name }}</h6>
+            <h6 class="fw-bold">{{ $transport->departureAddress}}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Arrival Location</p>
-            <h6 class="fw-bold">{{ $transport->arrivalAddress->name }}</h6>
+            <h6 class="fw-bold">{{ $transport->arrivalAddress }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Currency</p>
