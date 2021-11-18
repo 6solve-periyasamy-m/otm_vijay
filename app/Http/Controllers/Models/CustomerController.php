@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Hash;
 class CustomerController extends Controller
 {
 
-    const HOME_RULES = ['home_address_line_1' => 'required', 'home_country' => 'required,exists:countries,id', 'home_postcode' => 'required'];
-    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,exists:countries,id', 'billing_postcode' => 'required_unless:home_is_billing,on'];
+    const HOME_RULES = ['home_address_line_1' => 'required', 'home_country' => 'required|exists:countries,id', 'home_postcode' => 'required'];
+    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,on|exists:countries,id', 'billing_postcode' => 'required_unless:home_is_billing,on'];
 
     public function index()
     {
