@@ -10,16 +10,16 @@ class AddressParent extends Model
     use HasFactory;
 
     const ID_MAP = [
-        63 => 'other',
-        1 => 'customer',
-        2 => 'accommodation',
-        3 => 'activity',
-        4 => 'airport',
-        5 => 'transport',
+        63 => 'Other',
+        1 => 'Customer',
+        2 => 'Accommodation',
+        3 => 'Activity',
+        4 => 'Airport',
+        5 => 'Transport',
     ];
 
     public static function getParentId(string $key) {
-        switch ($key) {
+        switch (strtolower($key)) {
             case 'customer': return 1;
             case 'accommodation': return 2;
             case 'activity': return 3;
