@@ -20,7 +20,7 @@
         "axios": "^0.21.1",
         "bootstrap": "^5.0.2",
         "date-fns": "^2.23.0",
-        "jquery": "^2.2.4",
+        "jquery": "^3.5.1",
         "laravel-mix": "^6.0.34",
         "lodash": "^4.17.19",
         "mdb": "^0.1.0",
