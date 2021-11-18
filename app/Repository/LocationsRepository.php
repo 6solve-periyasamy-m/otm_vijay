@@ -82,13 +82,15 @@ class LocationsRepository implements LocationsRepositoryInterface
         );
     }
 
-    public static function cloneAddressToAddress(Address $fromAddress, Address $toAddress = null) {
+    public static function cloneAddressToAddress(Address $fromAddress, int $addressParent, Address $toAddress = null) {
         if (isset($toAddress)) {
             $data = $toAddress->toArray();
             unset($data['id']);
+            $data['address_parent_id'] = $addressParent;
             $toAddress->update($data);
         } else {
             $toAddress = $fromAddress->replicate();
+            $toAddress->address_parent_id = $addressParent;
         }
         $toAddress->save();
         return $toAddress;

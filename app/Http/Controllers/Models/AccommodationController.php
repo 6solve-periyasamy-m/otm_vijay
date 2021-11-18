@@ -32,7 +32,7 @@ class AccommodationController extends Controller
             'currency_id' => $request->input('currency_id'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')));
+            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('accommodation'));
         } else {
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
         }
@@ -61,7 +61,7 @@ class AccommodationController extends Controller
             'currency_id' => $request->input('currency_id'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), $accommodation->address);
+            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('accommodation'), $accommodation->address);
         } else {
             LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'));
         }

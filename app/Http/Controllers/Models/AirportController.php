@@ -29,7 +29,7 @@ class AirportController extends Controller
             'iata_code' => $request->input('iata_code'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')));
+            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('airport'));
         } else {
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('airport'), $request, $request->input('name'), '');
         }
@@ -55,7 +55,7 @@ class AirportController extends Controller
             'iata_code' => $request->input('iata_code'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), $airport->address);
+            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('airport'), $airport->address);
         } else {
             LocationsRepository::storeAddressFromGenericRequest($airport->address, AddressParent::getParentId('airport'), $request, $request->input('name'));
         }

@@ -33,7 +33,7 @@ class ActivityController extends Controller
             'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')));
+            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'));
         } else {
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
         }
@@ -63,7 +63,7 @@ class ActivityController extends Controller
             'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), $activity->address);
+            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'), $activity->address);
         } else {
             LocationsRepository::storeAddressFromGenericRequest($activity->address, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
         }
