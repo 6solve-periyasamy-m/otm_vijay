@@ -17,7 +17,7 @@ class CreateAirportsTable extends Migration
             $table->id();
             $table->text('name');
             $table->foreignId('address_id')->constrained()->onDelete('cascade');
-            $table->text('iata_code')->nullable();
+            $table->string('iata_code', 3)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
