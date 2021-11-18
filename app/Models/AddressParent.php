@@ -10,7 +10,7 @@ class AddressParent extends Model
     use HasFactory;
 
     const ID_MAP = [
-        0 => 'other',
+        63 => 'other',
         1 => 'customer',
         2 => 'accommodation',
         3 => 'activity',
@@ -25,7 +25,7 @@ class AddressParent extends Model
             case 'activity': return 3;
             case 'airport': return 4;
             case 'transport': return 5;
-            default: return 0;
+            default: return 63;
         }
     }
 }
