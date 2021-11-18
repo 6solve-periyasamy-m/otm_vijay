@@ -6,5 +6,5 @@
     ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $purchase_price ?? null, 'width' => 6, ])
 @include('partials.fields.text',
     ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $sales_price ?? null, 'width' => 6, ])
-@include('partials.fields.text',
-    ['name' => 'Currency', 'field' => 'currency', 'value' => $currency ?? null, ])
+@include('partials.fields.selector.default',
+    ['name' => 'Currency', 'field' => 'currency_id', 'value' => $currency ?? null, 'route' => 'currencies',])
