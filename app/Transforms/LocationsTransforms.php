@@ -117,7 +117,7 @@ class LocationsTransforms implements LocationsTransformsInterface
             if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses that have no location type set
             $subData = [];
             $subData['id'] = $address->id;
-            $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address');
+            $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->addressParent->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -128,7 +128,7 @@ class LocationsTransforms implements LocationsTransformsInterface
         $address = Address::findOrFail($id);
         $data = [];
         $data['id'] = $address->id;
-        $data['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address');
+        $data['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->addressParent->name;
         return $data;
     }
 
