@@ -17,7 +17,7 @@ class Order extends Model
 
     public static function getValidationRules() {
         return [
-            'quote_id' => 'exists:quotes,id',
+            'quote_id' => 'nullable|exists:quotes,id',
             'tour_id'=> 'required|exists:tours,id',
         ];
     }
