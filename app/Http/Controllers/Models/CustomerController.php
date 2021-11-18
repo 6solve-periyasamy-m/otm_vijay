@@ -14,7 +14,7 @@ class CustomerController extends Controller
 {
 
     const HOME_RULES = ['home_address_line_1' => 'required', 'home_country' => 'required|exists:countries,id', 'home_postcode' => 'required'];
-    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,on|exists:countries,id', 'billing_postcode' => 'required_unless:home_is_billing,on'];
+    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,on|nullable|exists:countries,id', 'billing_postcode' => 'required_unless:home_is_billing,on'];
 
     public function index()
     {
@@ -68,7 +68,7 @@ class CustomerController extends Controller
         ]);
         $customer->home_address_id = $homeAddress->id;
         if ($request->input('home_is_billing') == 'on') {
-            $customer->billing_address_id = LocationsRepository::cloneAddressToAddress($homeAddress)->id;
+            $customer->billing_address_id = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'))->id;
         }
         else {
             $billingAddress = Address::create([
@@ -138,7 +138,7 @@ class CustomerController extends Controller
         ]);
         $customer->homeAddress->save();
         if ($request->input('home_is_billing') == 'on') {
-            LocationsRepository::cloneAddressToAddress($customer->homeAddress, $customer->billingAddress);
+            LocationsRepository::cloneAddressToAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->billingAddress);
         }
         else {
             $customer->billingAddress->update([
