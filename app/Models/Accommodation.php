@@ -21,7 +21,7 @@ class Accommodation extends Model
     const RULES = [
         'name' => 'required',
         'audit_date' => 'date',
-        'currency' => 'size:3'
+        'currency_id' => 'nullable|exists:currencies,id'
     ];
 
     public function orderAccommodation()
