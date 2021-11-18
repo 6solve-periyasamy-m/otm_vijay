@@ -34,7 +34,7 @@
     @include('partials.fields.text', ['name' => 'Town', 'field' => ($prefix ?? "") . 'town', 'value' => $town ?? null,])
     @include('partials.fields.text', ['name' => 'Region', 'field' => ($prefix ?? "") . 'region', 'value' => $region ?? null,])
     @include('partials.fields.selector.default',
-                ['name' => 'Country', 'field' => ($prefix ?? '') . 'country_id', 'value' => $country_id,
+                ['name' => 'Country', 'field' => ($prefix ?? '') . 'country_id', 'value' => $country_id ?? null,
                  'route' => 'countries', ])
     @include('partials.fields.text', ['name' => 'Postcode', 'field' => ($prefix ?? "") . 'postcode', 'value' => $postcode ?? null,])
 </div>
