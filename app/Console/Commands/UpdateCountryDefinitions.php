@@ -50,7 +50,6 @@ class UpdateCountryDefinitions extends Command
                 Log::error('Data failed to be gathered. ' . $response->status() . ': ' . $response->body());
                 return 1;
         }
-        $this->info('Data has been gathered from the API');
         foreach ($response->json() as $data) {
             if (!isset($data['ccn3'])) {
                 Log::error($data['name']['common'] . ' has been skipped (No numeric code set)');
