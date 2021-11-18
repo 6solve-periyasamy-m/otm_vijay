@@ -28,7 +28,7 @@
 @include('partials.fields.text', ['name' => 'Home Address Line 2', 'field' => 'home_address_line_2', 'value' => $home_address_line_2 ?? null, 'width' => 6,])
 @include('partials.fields.text', ['name' => 'Home Town', 'field' => 'home_town', 'value' => $home_town ?? null, 'width' => 6,])
 @include('partials.fields.text', ['name' => 'Home Region', 'field' => 'home_region', 'value' => $home_region ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Home Country', 'field' => 'home_country', 'value' => $home_country ?? null, 'width' => 6,])
+@include('partials.fields.selector.default', ['name' => 'Home Country', 'field' => 'home_country', 'value' => $home_country ?? null, 'width' => 6, 'route' => 'countries',])
 @include('partials.fields.text', ['name' => 'Home Postcode', 'field' => 'home_postcode', 'value' => $home_postcode ?? null, 'width' => 6,])
 @include('partials.fields.checkbox', ['name' => 'Billing Address is Same As Home', 'field' => 'home_is_billing',
 'value' => (isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) ? 1 : 0, 'onChange' => 'changeBillingForm();'])
@@ -37,7 +37,7 @@
 @include('partials.fields.text', ['name' => 'Billing Address Line 2', 'field' => 'billing_address_line_2', 'value' => $billing_address_line_2 ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
 @include('partials.fields.text', ['name' => 'Billing Town', 'field' => 'billing_town', 'value' => $billing_town ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
 @include('partials.fields.text', ['name' => 'Billing Region', 'field' => 'billing_region', 'value' => $billing_region ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
-@include('partials.fields.text', ['name' => 'Billing Country', 'field' => 'billing_country', 'value' => $billing_country ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
+@include('partials.fields.selector.default', ['name' => 'Billing Country', 'field' => 'billing_country', 'value' => $billing_country ?? null, 'width' => 6, 'divClasses' => 'billing-address', 'route' => 'countries',]])
 @include('partials.fields.text', ['name' => 'Billing Postcode', 'field' => 'billing_postcode', 'value' => $billing_postcode ?? null, 'width' => 6, 'divClasses' => 'billing-address',])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.text', ['name' => 'Mobile Number', 'field' => 'mobile_number', 'value' => $mobile_number ?? null, 'width' => 6,])
