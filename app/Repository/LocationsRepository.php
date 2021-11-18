@@ -66,7 +66,7 @@ class LocationsRepository implements LocationsRepositoryInterface
         }
     }
 
-    public static function storeAddressFromGenericRequest($address, $addressParent, Request $request, $name, $prefix)
+    public static function storeAddressFromGenericRequest($address, $addressParent, Request $request, $name, $prefix = '')
     {
         return self::storeAddress($address,
             $name,

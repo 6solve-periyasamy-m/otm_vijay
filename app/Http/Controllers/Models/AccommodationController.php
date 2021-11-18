@@ -63,7 +63,7 @@ class AccommodationController extends Controller
         if ($request->input('use_existing') == 'on') {
             LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), $accommodation->address);
         } else {
-            LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
+            LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'));
         }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
