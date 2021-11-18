@@ -22,7 +22,7 @@
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 <div class="{{ $prefix ?? "" }}switcher-existing">
-    @include('partials.models.addresses.selector', ['id' => isset($address) ? $address->id : 0, ])
+    @include('partials.models.addresses.selector', ['value' => isset($address) ? $address->id : 0, ])
 </div>
 <div class="switcher-new">
     @include('partials.fields.selector.adder',
