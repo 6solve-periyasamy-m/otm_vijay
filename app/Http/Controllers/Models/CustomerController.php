@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\AddressParent;
 use App\Models\Customer;
+use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
 
-    const HOME_RULES = ['home_address_line_1' => 'required', 'home_country' => 'required', 'home_postcode' => 'required'];
-    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,on', 'billing_postcode' => 'required_unless:home_is_billing,on'];
+    const HOME_RULES = ['home_address_line_1' => 'required', 'home_country' => 'required|exists:countries,id', 'home_postcode' => 'required'];
+    const BILLING_RULES = ['billing_address_line_1' => 'required_unless:home_is_billing,on', 'billing_country' => 'required_unless:home_is_billing,on|nullable|exists:countries,id', 'billing_postcode' => 'required_unless:home_is_billing,on'];
 
     public function index()
     {
@@ -55,25 +57,29 @@ class CustomerController extends Controller
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
         $homeAddress = Address::create([
+            'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' .  $request->input('last_name'),
+            'address_parent_id' => AddressParent::getParentId('customer'),
             'address_line_1' => $request->input('home_address_line_1'),
             'address_line_2' => $request->input('home_address_line_2'),
             'town' => $request->input('home_town'),
             'region' => $request->input('home_region'),
-            'country' => $request->input('home_country'),
+            'country_id' => $request->input('home_country'),
             'postcode' => $request->input('home_postcode'),
         ]);
         $customer->home_address_id = $homeAddress->id;
         if ($request->input('home_is_billing') == 'on') {
-            $customer->billing_address_id = $homeAddress->id;
+            $customer->billing_address_id = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'))->id;
         }
         else {
             $billingAddress = Address::create([
-                'address_line_1' => $request->input('home_address_line_1'),
-                'address_line_2' => $request->input('home_address_line_2'),
-                'town' => $request->input('home_town'),
-                'region' => $request->input('home_region'),
-                'country' => $request->input('home_country'),
-                'postcode' => $request->input('home_postcode'),
+                'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' .  $request->input('last_name'),
+                'address_parent_id' => AddressParent::getParentId('customer'),
+                'address_line_1' => $request->input('billing_address_line_1'),
+                'address_line_2' => $request->input('billing_address_line_2'),
+                'town' => $request->input('billing_town'),
+                'region' => $request->input('billing_region'),
+                'country_id' => $request->input('billing_country'),
+                'postcode' => $request->input('billing_postcode'),
             ]);
             $customer->billing_address_id = $billingAddress->id;
         }
@@ -130,19 +136,9 @@ class CustomerController extends Controller
             'country' => $request->input('home_country'),
             'postcode' => $request->input('home_postcode'),
         ]);
+        $customer->homeAddress->save();
         if ($request->input('home_is_billing') == 'on') {
-            $customer->billing_address_id = $customer->home_address_id;
-        }
-        else if ($customer->billing_address_id == $customer->home_address_id) {
-            $billingAddress = Address::create([
-                'address_line_1' => $request->input('billing_address_line_1'),
-                'address_line_2' => $request->input('billing_address_line_2'),
-                'town' => $request->input('billing_town'),
-                'region' => $request->input('billing_region'),
-                'country' => $request->input('billing_country'),
-                'postcode' => $request->input('billing_postcode'),
-            ]);
-            $customer->billing_address_id = $billingAddress->id;
+            LocationsRepository::cloneAddressToAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->billingAddress);
         }
         else {
             $customer->billingAddress->update([
@@ -153,6 +149,7 @@ class CustomerController extends Controller
                 'country' => $request->input('billing_country'),
                 'postcode' => $request->input('billing_postcode'),
             ]);
+            $customer->billingAddress->save();
         }
         if ($request->has('profile_picture')  && $request->file('profile_picture') != null) {
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');

@@ -13,7 +13,7 @@ class FlightInventory extends Model
 
     public $additional_attributes = ['flight_for_tour'];
     protected $cascadeDeletes = ['flightInventoryTour'];
-    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in','departs_at','arrives_at','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in','departs_at','arrives_at','fit_selectable','stock','purchase_price','sales_price','currency_id','notes',];
 
     const RULES = [
         'travel_class_id' => 'required|exists:travel_classes,id',
@@ -24,7 +24,7 @@ class FlightInventory extends Model
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
-        'currency' => 'required|size:3',
+        'currency_id' => 'required|exists:currencies,id',
     ];
 
     protected $casts = [
@@ -57,7 +57,6 @@ class FlightInventory extends Model
     {
         return $this->hasMany(FlightInventoryTour::class);
     }
-
 
     public function departureAirport()
     {

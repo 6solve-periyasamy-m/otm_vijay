@@ -272,16 +272,16 @@ class OrderRepository implements OrderRepositoryInterface
                     } else {
                         $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id] = [];
                         $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['description'] =
-                            $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
-                            $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
+                            $tourInventory->transportInventory->transport->departureAddress->name . ' to ' .
+                            $tourInventory->transportInventory->transport->arrivalAddress->name . ' - ' .
                             $tourInventory->transportInventory->transport->transportType->name . ' - ' .
                             $tourInventory->transportInventory->travelClass->name;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
                         $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
                 } else {
-                    $included .= $tourInventory->transportInventory->transport->departureLocation->name . ' to ' .
-                        $tourInventory->transportInventory->transport->arrivalLocation->name . ' - ' .
+                    $included .= $tourInventory->transportInventory->transport->departureAddress->name . ' to ' .
+                        $tourInventory->transportInventory->transport->arrivalAddress->name . ' - ' .
                         $tourInventory->transportInventory->transport->transportType->name . ' - ' .
                         $tourInventory->transportInventory->travelClass->name . "\n";
                 }

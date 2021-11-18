@@ -6,7 +6,7 @@
              'route' => 'quotes',])
 @if(!isset($update))
 @include('partials.fields.selector.adder',
-            ['name' => 'Lead Booker', 'field' => 'lead_booker_id',
+            ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
              'route' => 'customers', 'createRoute' => route('customers.create'),])
 @endif
 @include('partials.fields.text', ['name' => 'Token', 'field' => 'token', 'value' => $token ?? null, ])

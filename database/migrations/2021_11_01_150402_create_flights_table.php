@@ -20,7 +20,7 @@ class CreateFlightsTable extends Migration
             $table->foreignId('arrival_airport_id')->nullable()->constrained('airports')->onDelete('cascade');
             $table->boolean('is_domestic')->default(false);
             $table->text('notes')->nullable();
-            $table->string('currency', 5)->nullable();
+            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('SET NULL');
             $table->date('available_after')->nullable();
             $table->timestamps();
             $table->softDeletes();

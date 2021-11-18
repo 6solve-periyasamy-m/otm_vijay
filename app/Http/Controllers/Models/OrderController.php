@@ -34,7 +34,7 @@ class OrderController extends Controller
             'external_notes' => $request->input('external_notes'),
         ]);
         $orderCustomer = OrderCustomer::make([
-            'customer_id' => $request->input('customer_id'),
+            'customer_id' => $request->input('lead_booker_id'),
             'tour_cost' => $order->tour->base_price_per_person,
             'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
         ]);

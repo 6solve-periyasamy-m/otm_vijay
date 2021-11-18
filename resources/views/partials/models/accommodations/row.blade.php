@@ -1,6 +1,6 @@
 <tr>
     <td><a href="{{ route('accommodations.view', ['accommodation' => $accommodation,]) }}">{{ $name }}</a></td>
-    <td>{{ $accommodation->region->name }}</td>
+    <td>{{ $accommodation->address }}</td>
     <td>{{ $description }}</td>
     <td>{{ $audit_date }}</td>
     <td>{{ $address }}</td>
