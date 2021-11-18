@@ -10,7 +10,7 @@ class Airport extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name','iata_code',];
+    protected $fillable = ['name','iata_code','address_id'];
 
     public function flightInventory()
     {
