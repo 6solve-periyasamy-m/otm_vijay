@@ -12,13 +12,13 @@ class Transport extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_type_id','operator_id','departure_location_id','arrival_location_id','name','description','currency','is_domestic','notes',];
+    protected $fillable = ['transport_type_id','operator_id','departure_address_id','arrival_address_id','name','description','currency','is_domestic','notes',];
     protected $cascadeDeletes = ['transportInventory'];
     const RULES = [
         'transport_type_id' => 'required|exists:transport_types,id',
         'operator_id' => 'required|exists:operators,id',
-        'departure_location_id' => 'required|exists:locations,id',
-        'arrival_location_id' => 'required|exists:locations,id',
+        'departure_address_id' => 'required|exists:addresses,id',
+        'arrival_address_id' => 'required|exists:addresses,id',
         'name' => 'required',
     ];
 

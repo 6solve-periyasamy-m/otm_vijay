@@ -25,8 +25,8 @@ class TransportController extends Controller
         $transport = Transport::create([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
-            'departure_location_id' => $request->input('departure_location_id'),
-            'arrival_location_id' => $request->input('arrival_location_id'),
+            'departure_address_id' => $request->input('departure_address_id'),
+            'arrival_address_id' => $request->input('arrival_address_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency' => $request->input('currency'),
@@ -52,8 +52,8 @@ class TransportController extends Controller
         $transport->update([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
-            'departure_location_id' => $request->input('departure_location_id'),
-            'arrival_location_id' => $request->input('arrival_location_id'),
+            'departure_address_id' => $request->input('departure_address_id'),
+            'arrival_address_id' => $request->input('arrival_address_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'currency' => $request->input('currency'),
