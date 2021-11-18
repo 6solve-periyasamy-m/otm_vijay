@@ -23,4 +23,9 @@ class Country extends Model
         }
         return collect($codes)->implode(', ');
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
