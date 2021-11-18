@@ -89,10 +89,10 @@ Route::middleware('auth:api')->group(function() {
 Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
-        Route::get('addresses', [SelectController::class, 'getAddresses'])->name('api.addresses.select');
-        Route::get('currencies', [SelectController::class, 'getCurrencies'])->name('api.currencies.select');
-        Route::get('addresses', [SelectController::class, 'getAddresses'])->name('api.addresses.select');
-        Route::get('currencies', [SelectController::class, 'getCurrencies'])->name('api.currencies.select');
+        Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
+        Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
+        Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
+        Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
         Route::post('regions', [SelectController::class, 'getRegions'])->name('regions.select');
         Route::post('countries', [SelectController::class, 'getCountries'])->name('countries.select');
         Route::post('location-types', [SelectController::class, 'getLocationTypes'])->name('location-types.select');
@@ -120,8 +120,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         });
         Route::prefix('selected')->group(function () {
             Route::post('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('locations.selected');
-            Route::get('address/{id}', [SelectController::class, 'getSelectedAddress'])->name('api.addresses.selected');
-            Route::get('currency/{id}', [SelectController::class, 'getSelectedCurrency'])->name('api.currencies.selected');
+            Route::post('address/{id}', [SelectController::class, 'getSelectedAddress'])->name('addresses.selected');
+            Route::post('currency/{id}', [SelectController::class, 'getSelectedCurrency'])->name('currencies.selected');
             Route::post('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('regions.selected');
             Route::post('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('countries.selected');
             Route::post('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('location-types.selected');
