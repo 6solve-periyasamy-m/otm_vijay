@@ -33,7 +33,6 @@
     @include('partials.fields.text', ['name' => 'Address Line 2', 'field' => ($prefix ?? "") . 'address_line_2', 'value' => $address_line_2 ?? null,])
     @include('partials.fields.text', ['name' => 'Town', 'field' => ($prefix ?? "") . 'town', 'value' => $town ?? null,])
     @include('partials.fields.text', ['name' => 'Region', 'field' => ($prefix ?? "") . 'region', 'value' => $region ?? null,])
-    @include('partials.fields.text', ['name' => 'Country', 'field' => ($prefix ?? "") . 'country', 'value' => $country ?? null,])
     @include('partials.fields.selector.default',
                 ['name' => 'Country', 'field' => ($prefix ?? '') . 'country_id', 'value' => $country_id,
                  'route' => 'countries', ])
