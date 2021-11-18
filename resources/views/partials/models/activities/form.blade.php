@@ -3,7 +3,7 @@
              'route' => 'activity-types', 'createRoute' => route('activity-types.create'),])
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
-@include('partials.models.addresses.switcher', [
+@include('partials.fields.prefab.addresses.switcher', [
     'location_type_id' => isset($address) ? $address->location_type_id : 0,
     'address_line_1' => isset($address) ? $address->address_line_1 : "",
     'address_line_2' => isset($address) ? $address->address_line_2 : "",

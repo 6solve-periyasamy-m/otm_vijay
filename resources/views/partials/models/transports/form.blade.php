@@ -4,8 +4,8 @@
 @include('partials.fields.selector.adder',
             ['name' => 'Operator', 'field' => 'operator_id', 'value' => $operator_id ?? 0,
              'route' => 'operators', 'createRoute' => route('operators.create'),])
-@include('partials.models.addresses.selector', ['prefix' => 'departure_', 'value' => $departure_address_id,])
-@include('partials.models.addresses.selector', ['prefix' => 'arrival_', 'value' => $arrival_address_id,])
+@include('partials.fields.prefab.addresses.selector', ['prefix' => 'departure_', 'value' => $departure_address_id,])
+@include('partials.fields.prefab.addresses.selector', ['prefix' => 'arrival_', 'value' => $arrival_address_id,])
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @include('partials.fields.text', ['name' => 'Currency', 'field' => 'currency', 'value' => $currency ?? null,])
