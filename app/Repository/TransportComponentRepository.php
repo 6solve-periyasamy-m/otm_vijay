@@ -79,8 +79,8 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         $query->join('transports', 'transport_inventories.transport_id', '=', 'transports.id');
         $query->join('operators', 'transports.operator_id', '=', 'operators.id');
         $query->join('transport_types', 'transports.transport_type_id', '=', 'transport_types.id');
-        $query->join('locations AS departure_locations', 'transports.departure_location_id', '=', 'departure_locations.id');
-        $query->join('locations AS arrival_locations', 'transports.arrival_location_id', '=', 'arrival_locations.id');
+        $query->join('addresses AS departure_locations', 'transports.departure_address_id', '=', 'departure_locations.id');
+        $query->join('addresses AS arrival_locations', 'transports.arrival_address_id', '=', 'arrival_locations.id');
         $query->select(
             'transport_inventories.id AS id',
             'transports.id AS transport_id',
