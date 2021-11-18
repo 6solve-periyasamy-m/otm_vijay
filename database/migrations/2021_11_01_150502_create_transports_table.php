@@ -23,7 +23,7 @@ class CreateTransportsTable extends Migration
             $table->text('name');
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
-            $table->string('currency', 5)->nullable();
+            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
         });

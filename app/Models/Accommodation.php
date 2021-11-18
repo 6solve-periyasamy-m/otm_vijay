@@ -48,5 +48,10 @@ class Accommodation extends Model
         return $this->hasMany(AccommodationInventory::class, 'accommodation_id');
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
     public $additional_attributes = ['inventory_relation'];
 }

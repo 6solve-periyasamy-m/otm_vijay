@@ -87,9 +87,4 @@ class TransportInventory extends Model
 	// build server edit: remove transport travelClass
         //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}｜Travel Class: {$this->travelClass->name}";
     }
-
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
 }

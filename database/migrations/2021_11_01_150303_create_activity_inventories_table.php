@@ -23,7 +23,6 @@ class CreateActivityInventoriesTable extends Migration
             $table->integer('stock');
             $table->double('purchase_price');
             $table->double('sales_price');
-            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('SET NULL');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -29,6 +29,7 @@ class ActivityController extends Controller
             'activity_type_id' => $request->input('activity_type_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
@@ -58,6 +59,7 @@ class ActivityController extends Controller
             'activity_type_id' => $request->input('activity_type_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {

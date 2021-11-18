@@ -44,11 +44,6 @@ class AccommodationInventory extends Model
         return $this->belongsToMany(Tour::class, 'accommodation_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
-
     // public function OrdersAccommodation()
     // {
     //     return $this->belongsTo(OrdersAccommodation::class);

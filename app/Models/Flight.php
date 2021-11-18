@@ -54,4 +54,8 @@ class Flight extends Model
         //return "{$this->airline->name} | Departs {$departs} from: {$this->departureAirport->location->name} - Arrives {$arrives} at: {$this->arrivalAirport->location->name} ";
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }

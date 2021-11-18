@@ -12,5 +12,7 @@
     'country_id' => isset($address) ? $address->country_id : 0,
     'postcode' => isset($address) ? $address->postcode : "",
 ])
+@include('partials.fields.selector.default',
+    ['name' => 'Currency', 'field' => 'currency_id', 'value' => $currency ?? null, 'route' => 'currencies',])
 @include('partials.fields.prefab.notes')
 @include('partials.fields.submit')

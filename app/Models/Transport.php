@@ -67,4 +67,9 @@ class Transport extends Model
     }
 
     public $additional_attributes = ['inventory_relation'];
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }

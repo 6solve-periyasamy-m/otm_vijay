@@ -34,4 +34,9 @@ class Activity extends Model
     {
         return $this->belongsTo(ActivityType::class);
     }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }

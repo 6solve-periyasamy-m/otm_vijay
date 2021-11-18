@@ -25,7 +25,6 @@ class CreateFlightInventoriesTable extends Migration
             $table->integer('stock')->nullable();
             $table->float('purchase_price', 10, 0)->nullable();
             $table->float('sales_price', 10, 0)->nullable();
-            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('SET NULL');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

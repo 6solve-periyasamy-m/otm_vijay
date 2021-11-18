@@ -69,9 +69,4 @@ class ActivityInventory extends Model
     }
 
     public $additional_attributes = ['Activity_for_tour'];
-
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
 }

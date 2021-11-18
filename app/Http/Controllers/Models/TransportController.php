@@ -29,7 +29,7 @@ class TransportController extends Controller
             'arrival_address_id' => $request->input('arrival_address_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'currency' => $request->input('currency'),
+            'currency_id' => $request->input('currency_id'),
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
@@ -56,7 +56,7 @@ class TransportController extends Controller
             'arrival_address_id' => $request->input('arrival_address_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'currency' => $request->input('currency'),
+            'currency_id' => $request->input('currency_id'),
             'is_domestic' => $request->input('is_domestic') == "on" ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);

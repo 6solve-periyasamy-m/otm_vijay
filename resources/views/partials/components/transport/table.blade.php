@@ -31,7 +31,6 @@ $(document).ready(function() {
                     <th scope="col">Stock</th>
                     <th scope="col">Purchase Price</th>
                     <th scope="col">Sales Price</th>
-                    <th scope="col">Currency</th>
                     <th scope="col">Notes</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -47,7 +46,6 @@ $(document).ready(function() {
                 <td>{{ $transportInventory->stock }}</td>
                 <td>{{ $transportInventory->purchase_price }}</td>
                 <td>{{ $transportInventory->sales_price }}</td>
-                <td>{{ $transportInventory->currency }}</td>
                 <td>{{ $transportInventory->notes }}</td>
                 <td class="actions">
                     <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}"

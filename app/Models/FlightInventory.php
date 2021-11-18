@@ -102,9 +102,4 @@ class FlightInventory extends Model
     // {
     //     return "{$this->flight->airline->name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
     // }
-
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
 }

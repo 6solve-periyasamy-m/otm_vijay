@@ -9,5 +9,7 @@
              'route' => 'airports', 'createRoute' => route('airports.create'),])
 @include('partials.fields.checkbox', ['name' => 'Is Domestic', 'field' => 'is_domestic', 'value' => $is_domestic ?? null,])
 @include('partials.fields.date', ['name' => 'Available After', 'field' => 'available_after', 'value' => $available_after ?? null,])
+@include('partials.fields.selector.default',
+    ['name' => 'Currency', 'field' => 'currency_id', 'value' => $currency ?? null, 'route' => 'currencies',])
 @include('partials.fields.prefab.notes')
 @include('partials.fields.submit')
