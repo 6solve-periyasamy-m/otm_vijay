@@ -23,6 +23,11 @@ class Address extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function addressParent()
+    {
+        return $this->belongsTo(AddressParent::class, 'address_parent_id');
+    }
+
     public function __toString()
     {
         $addrString = $this->address_line_1;
