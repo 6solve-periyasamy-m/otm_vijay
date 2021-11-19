@@ -68,4 +68,14 @@ class User extends Authenticatable
     {
         UserRepository::purgeUserTokens($this, $limit);
     }
+
+    public function getHighestRoleLevel()
+    {
+        $highest = 0;
+        foreach ($this->roles as $role)
+        {
+            $highest = $highest >= ($role->level ?? 0) ? $highest : $role->level;
+        }
+        return $highest;
+    }
 }

@@ -37,6 +37,7 @@ use App\Http\Controllers\Models\TransportInventoryTourController;
 use App\Http\Controllers\Models\TransportTypeController;
 use App\Http\Controllers\Models\TravelClassController;
 use App\Http\Controllers\Models\TShirtSizeController;
+use App\Http\Controllers\Models\UserController;
 use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
@@ -550,6 +551,19 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             });
         });
     });
+
+    Route::prefix('users')->group(function () {
+       Route::get('/', [UserController::class, 'index'])->name('users.all')->middleware('bouncer:User,read');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create')->middleware('bouncer:User,create');
+        Route::post('/create', [UserController::class, 'store'])->name('users.store')->middleware('bouncer:User,create');
+        Route::prefix('{user}')->group(function () {
+            Route::get('/', [UserController::class, 'view'])->name('users.view')->middleware('bouncer:User,read');
+            Route::get('/update', [UserController::class, 'edit'])->name('users.edit')->middleware('bouncer:User,update');
+            Route::post('/update', [UserController::class, 'update'])->name('users.update')->middleware('bouncer:User,update');
+            Route::post('/delete', [UserController::class, 'destroy'])->name('users.delete')->middleware('bouncer:User,delete');
+        });
+    });
 });
 
 Auth::routes();
+Route::get('/test', function () { return view('pages.test'); });
