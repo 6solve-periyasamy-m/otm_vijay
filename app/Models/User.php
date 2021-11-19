@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Repository\UserRepository;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -41,4 +43,29 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function tokens()
+    {
+        return $this->hasMany(ApiToken::class, 'user_id');
+    }
+
+    public function getCurrentToken()
+    {
+        return UserRepository::getLatestToken($this);
+    }
+
+    public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY)
+    {
+        return UserRepository::generateUserToken($this, $expiresIn);
+    }
+
+    public function invalidateAllTokens()
+    {
+        UserRepository::invalidateAllUserTokens($this);
+    }
+
+    public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
+    {
+        UserRepository::purgeUserTokens($this, $limit);
+    }
 }

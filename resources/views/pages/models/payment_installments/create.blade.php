@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('payment-installments.store', ['tour' => $tour,]),])
 
 @section('title', 'Create Payment Installment')
 
-@section('content')
-  @include('partials.models.payment_installments.form', ['action' => route('payment-installments.store', ['tour' => $tour,]),])
+@section('form-body')
+  @include('partials.models.payment_installments.form')
 @endsection
