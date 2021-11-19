@@ -7,16 +7,34 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use \Silber\Bouncer\BouncerFacade as Bouncer;
+use Silber\Bouncer\Database\Role;
 
 class UserSeeder extends Seeder
 {
 
     public function run() {
-        Bouncer::allow('otm-staff')->everything();
-        Bouncer::allow('administrator')->everything();
-        Bouncer::forbid('administrator')->to('promote-to-administrator');
-        Bouncer::allow('user')->everything();
-        Bouncer::forbid('user')->toManage(User::class);
+        $otmStaff = Bouncer::role()->firstOrCreate([
+            'name' => 'otm-staff',
+            'title' => 'OTM Staff Member',
+            'level' => 999,
+        ]);
+        Bouncer::allow($otmStaff)->everything();
+
+        $administrator = Bouncer::role()->firstOrCreate([
+            'name' => 'administrator',
+            'title' => 'Administrator',
+            'level' => 100,
+        ]);
+        Bouncer::allow($administrator)->everything();
+
+        $userRole = Bouncer::role()->firstOrCreate([
+            'name' => 'user',
+            'title' => 'Staff',
+            'level' => 5,
+        ]);
+        Bouncer::allow($userRole)->everything();
+        Bouncer::forbid($userRole)->toManage(User::class);
+
         $charlotte = User::create([
             'name' => 'Charlotte Redding',
             'email' => 'clr@octopustravelmatrix.com',
@@ -35,9 +53,9 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
         ]);
-        $celeste->assign('otm-staff');
-        $charlotte->assign('otm-staff');
-        $nicholas->assign('otm-staff');
+        $celeste->assign($otmStaff);
+        $charlotte->assign($otmStaff);
+        $nicholas->assign($otmStaff);
 
     }
 }
