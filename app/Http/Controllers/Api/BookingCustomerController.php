@@ -422,19 +422,20 @@ class BookingCustomerController extends ApiController
 
     public function removeAdditionalTraveller(Request $request)
     {
+        $request->validate([
+            'customer_id' => 'required | exists:customers,id',
+            'booking_token' => 'required | exists:bookings,token'
+        ]);
 
-        // TODO: use COD instead of orderCustomer
-        $order_customer_id = $request->order_customer_id;
-        $this->logging == 'customers' && Log::info('removing Additional Traveller order_customer_id:' . $order_customer_id);
-        $orderCustomer = OrderCustomer::find($order_customer_id);
-        if (empty($orderCustomer)) {
-            return json_encode(['success' => false, $request]);
+        $booking_token = $request->booking_token;
+        $customer_id = $request->customer_id;
+
+        $booking = Booking::where('token', $booking_token)->first();
+        $customer = Customer::find($booking->customer_id);
+        if ($booking->id && $customer->id) {
+            AdditionalTraveller::where('booking_id', $booking->id)->where('customer_id', $customer_id)->delete();
         }
-        $customer = Customer::find($orderCustomer->customer_id);
 
-        $orderCustomer->deleted_at = date('Y-m-d H:i:s');
-        $orderCustomer->save();
-
-        return json_encode(['success' => true, 'customer' => $customer]);
+        return json_encode(['success' => true]);
     }
 }

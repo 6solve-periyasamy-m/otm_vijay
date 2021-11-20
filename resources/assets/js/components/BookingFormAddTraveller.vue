@@ -4,8 +4,25 @@
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}}</h3>
         <div class="ept-form" :id="form_id">
             <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
-{{edit_fields}} {{form_id}}
-            <div v-if="edit_fields || (!title && !first_name && !last_name)">
+            <validation-message v-if="validationErrors"></validation-message>
+            <div v-if="debug">
+                {{edit_fields}} {{form_id}}
+            </div>
+            <div v-if="edit_fields">
+                <div class="row">
+                    <div class="col-sm-6 form-group field-separation">
+                        <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
+                        <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
+                        <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
+                        <label v-else class="valid">Email address</label>
+                    </div>
+                    <div class="col-sm-6 form-group field-separation">
+                        <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
+                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
+                        <label :class="{invalid: mobileNumberInvalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
+                        <label class="valid" v-else>Mobile Number</label>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-3 form-group field-separation">
                         <select @change="edit_fields = true" v-model="title" class="form-control form-select form-select-lg">
@@ -29,20 +46,6 @@
                     <div class="col-md-3 form-group field-separation">
                         <label class="form-label" for="last_name" v-show="last_name">Last name</label>
                         <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 form-group field-separation">
-                        <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
-                        <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
-                        <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                        <label v-else class="valid">Email address</label>
-                    </div>
-                    <div class="col-sm-6 form-group field-separation">
-                        <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
-                        <label :class="{invalid: mobileNumberInvalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                        <label class="valid" v-else>Mobile Number</label>
                     </div>
                 </div>
                 <div class="row">
@@ -76,7 +79,13 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-10 form-group field-separation">
-                        <button :disabled="!validForm" type="button" :formId="form_id" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
+                        <button 
+                            :disabled="!validForm"
+                            type="button"
+                            :formId="form_id"
+                            class="btn"
+                            :class="{'btn-default': !validForm,'btn-primary': validForm}"
+                            @click="storeTraveller">Save Traveller</button>
                         <button v-if="removal" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
                         <button class="btn btn-secondary" @click="removal=!removal">{{removal?'Disable':'Enable'}} removal</button>
                     </div>
@@ -88,8 +97,9 @@
         
             </div>
             <div v-else>
-                {{!title ? 'You must select a title field' : '' }}
-                {{title}} {{first_name}} {{last_name}} <button class="btn btn-warning" @click="edit_fields = true">Edit</button> 
+                {{!title ? 'You must select a title field' : `${title} ${first_name} ${last_name}` }}
+                &nbsp;
+                <button class="btn btn-warning" @click="edit_fields = true">Edit</button> 
             </div>
         </div>
     </div>
@@ -97,9 +107,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { bus } from '../bus'
 export default {
-    props: ['traveller', 'tour', 'booking_token'],
+    props: ['traveller', 'tour', 'form_id', 'booking_token'],
     data() {
         return {
             debug: 9,
@@ -111,7 +122,6 @@ export default {
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_number_type'
             ],
-            form_id: 0,
             title: '',
             first_name: '',
             middle_names: '',
@@ -136,6 +146,7 @@ export default {
             removal: false,
             errors: [],
             edit_fields: false,
+            validationMessage: '',
             validationErrors: '',
             validated: false
         }
@@ -145,17 +156,14 @@ export default {
         this.validationErrors = ''
         this.customer = this.traveller
         this.setCustomerFields()
-        this.debug && console.log(`${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller}`)
+        if (!this.traveller.id) {
+            this.edit_fields = true
+        }
+        this.debug && console.log(`${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
     },
     created() {
         let that = this
-        // this gets its booking token from a prop
-        // bus.$on('setBookingToken', (token) => {
-        //     that.booking_token = token
-        //     that.debug && console.log(`>>>>>>>>>> ${that.moduleName} created for booking ${that.booking_token}`)            
-        // })
         bus.$on('addTraveller', function(formId) {
-            
             that.debug && console.log('^^^ BookingFormAddTraveller setting', formId, that.form_id)
             if (formId === that.form_id) {
                 console.log('form ' + that.form_id + ' edit activated')
@@ -164,9 +172,6 @@ export default {
         })
     },
     computed: {
-        // emptyForm: function () {
-        //     return this.first_name == null || this.first_name == '' || this.first_name.length == 0;
-        // },
         validForm: function () {
             this.debug && console.log('validForm called', this)
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
@@ -222,10 +227,37 @@ export default {
             if (!this.email_address.length) {
                 return false
             }
+            
+            bus.$on('emailUsed', email => {
+                alert('email already used')
+                return false
+            });
+            bus.$emit('checkEmailUnique', this.email_address);
             const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             const valid = valid_email.test(this.email_address)
             //this.debug && console.log(this.email_address, valid)
             this.email_invalid = !valid
+            // is this an existing customer?
+            axios.post('/api/booking/customer/email/check', {
+                email_address: this.email_address
+            })
+                .then(response => {
+                    console.log(response)
+                    if (response.data.success) {
+                        const customer = response.data.customer
+                        this.title = customer.title
+                        this.first_name = customer.first_name
+                        this.middle_name = customer.middle_name
+                        this.last_name = customer.last_name
+                        this.mobile_number = customer.mobile_number
+                        this.other_phone_number = customer.other_phone_number
+                        this.gender = customer.gender
+                        this.date_of_birth = customer.date_of_birth
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
             return false
         },
         storeTraveller() {
@@ -248,25 +280,28 @@ export default {
                     date_of_birth: this.date_of_birth
                 })
                 .then(response => {
-                    that.include = 'checked'
-                    that.edit_fields = false
-                    that.debug && console.log('stored', response)
-                    const customer = response.data.customer
-                    const orderCustomer = response.data.orderCustomer
-                    that.id = orderCustomer.customer_id
-                    that.title = customer.title
-                    that.customer_id = orderCustomer.id
-                    that.first_name = customer.first_name
-                    that.middle_names = customer.middle_names
-                    that.last_name = customer.last_name
-                    that.email_address = customer.email_address
-                    that.mobile_number = customer.mobile_number
-                    that.other_phone_number = customer.other_phone_number
-                    that.other_phone_number_type = customer.other_phone_number_type
-                    that.date_of_birth = customer.date_of_birth
-                    that.gender = customer.gender
-                    that.validated = true
-                    that.validationErrors = ''
+                    console.log('response', response.data.success, response.data)
+                    if (response.data.success) {
+                        that.include = 'checked'
+                        that.edit_fields = false
+                        that.debug && console.log('stored', response)
+                        const customer = response.data.customer
+                        that.id = customer.id
+                        that.title = customer.title
+                        that.first_name = customer.first_name
+                        that.middle_names = customer.middle_names
+                        that.last_name = customer.last_name
+                        that.email_address = customer.email_address
+                        that.mobile_number = customer.mobile_number
+                        that.other_phone_number = customer.other_phone_number
+                        that.other_phone_number_type = customer.other_phone_number_type
+                        that.date_of_birth = customer.date_of_birth
+                        that.gender = customer.gender
+                        that.validated = true
+                        that.validationErrors = ''
+                    } else {
+                        that.validationMessage = 'Something did not appear to work correctly, please try again'
+                    }
                 })
                 .catch(e => {
                     console.log('submit error', e)
@@ -277,16 +312,21 @@ export default {
         },
         removeTraveller() {
             const that = this
-            this.debug && console.log('removing ', this.customer_id)
+            this.debug && console.log('removing ', this.traveller.id)
+            if (!this.traveller.id) {
+                this.removed = true
+                return
+            }
             axios.post(`/api/booking/additional-traveller/remove`, {
-                order_customer_id: this.customer_id
+                customer_id: this.traveller.id,
+                booking_token: this.booking_token
             })
             .then(response => {
                 that.removed = true
             })
             .catch(error => console.log('remove customer error', error))            
-            
-            bus.$emit('removeTraveller', this.customer_id)
+
+            bus.$emit('removeTraveller', this.traveller.id)
         }
     }
 }

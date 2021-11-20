@@ -72,13 +72,13 @@ Route::prefix('booking')->group(function () {
     // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
-
     // POST routes (requires token auth)
 
     // store travellers
     Route::post('/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
     Route::post('/additional-traveller', [BookingCustomerController::class, 'additionalTraveller']);
     Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeAdditionalTraveller']);
+    Route::post('/customer/email/check', [CustomerController::class, 'findCustomerByEmail']);
 
     // is email registered
     Route::get('/email/registered/{email}', [BookingCustomerController::class, 'checkActiveUser']);

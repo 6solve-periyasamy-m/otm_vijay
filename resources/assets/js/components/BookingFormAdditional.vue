@@ -19,6 +19,7 @@
                         :booking_token="booking_token"
                         :tour="tour"
                         :traveller="item"
+                        :form_id="item.id"
                         @remove="removeTraveller">
                     </booking-form-add-traveller>
                 </div>
@@ -63,6 +64,13 @@
                 that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)            
                 that.loadAdditionalTravellers()
             })
+            bus.$on('checkEmailUnique', email => {
+                that.additionalTravellers.map(traveller => {
+                    if (traveller.email == email) {
+                        bus.$emit('emailUsed', true)
+                    }
+                })
+            })
 
         },
         mounted() {
@@ -101,13 +109,13 @@
                     })
             },
             addAdditional() {
-                const formId = this.getFormId()
+                this.formId = this.getFormId()
                 this.showInstruction = false
-                this.additionalTravellers.push(`traveller_${formId}`) 
+                this.additionalTravellers.push(`traveller_${this.formId}`) 
                 this.showAdditional = true
-                this.debug && console.log(formId, '????? additional added', this.formId)
+                this.debug && console.log('????? additional added', this.formId)
                 // Event handler in BookingFormAddTraveller used this.formId (which was not defined?)
-                bus.$emit('addTraveller', formId)
+                bus.$emit('addTraveller', this.formId)
             }
         }
     }

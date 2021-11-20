@@ -13,8 +13,6 @@ use App\Models\Customer;
 use App\Repository\AddressRepository;
 use App\Models\OrderCustomer;
 
-// NO FUNCTIONS IN USE in v0.51.x
-
 class CustomerController extends ApiController
 {
     protected $logging = false;
@@ -100,5 +98,16 @@ isset($billing_address) && Log::info('business', $billing_address);
             ->where('orders.id', $request->order_id)->get();
         
             return $customers->toJson();
+    }
+
+    public function findCustomerByEmail(Request $request) {
+        $email_address = $request->email_address;
+        $customers = new Customer();
+        $customer = $customers->where('email_address', $email_address)->get();
+        if(!$customer->count()) {
+            return response()->json(['success' => false]);
+        }
+
+        return response()->json(['success' => true, 'customer' => $customer[0]]);
     }
 }
