@@ -326,7 +326,6 @@ export default {
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
-
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('BFL: EH leadTravellerLoaded', customer)

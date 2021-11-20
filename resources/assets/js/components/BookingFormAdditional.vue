@@ -44,7 +44,7 @@
         props: ['form_info', 'booked', 'tour', 'lead_traveller'],
         data() {
             return {
-                debug: true,
+                debug: false,
                 moduleName: 'Additional',
                 booking_token: null,
                 id: 0,
@@ -101,7 +101,7 @@
                         console.log(response)
                         if (response.data.success) {
                             that.additionalTravellers = response.data.travellers
-                            // that.addAdditional()
+                            bus.$emit('additionalTravellersLoaded', that.additionalTravellers)
                         }
                     })
                     .catch(error => {

@@ -6,13 +6,9 @@ use App\Models\Tour;
 use App\Models\Order;
 use App\Models\Flight;
 use App\Models\Airport;
-use App\Models\Booking;
 
 use Illuminate\Http\Request;
-use App\Models\OrderCustomer;
 use App\Models\FlightInventory;
-use Illuminate\Support\Facades\DB;
-use App\Models\CustomerOrderDetail;
 use App\Models\FlightInventoryTour;
 use Illuminate\Support\Facades\Log;
 use App\Repository\FlightsRepository;
@@ -64,7 +60,6 @@ class FlightController extends ApiController
      */
     public function getFlightInventoriesForTour($tour_id, $flight_type = null)
     {
-        $flight = new Flight();
         $flightsRepository = new FlightsRepository();
         $flights = $flightsRepository->flightsAvailableForTour($tour_id, $flight_type);
 
@@ -87,7 +82,7 @@ class FlightController extends ApiController
     {
         // Returns a list of flights from an airport
         $flightsRepository = new FlightsRepository();
-        $result = $flightsRepository->flightsDepartingAfterToday();
+        $result = $flightsRepository->flightsDepartingAfterToday($airport);
 
         return response()->json(["success" => true, "data" => $result]);
     }

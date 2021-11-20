@@ -21,7 +21,7 @@
                 <option value="0" v-if="!flight_selected" selected>{{caption}}</option>
                 <option 
                     v-for="flight in tour_flights_filtered" 
-                    :key="flight.id" 
+                    :key="flight.flight_inventory_tour_id" 
                     :value="flight.flight_inventory_tour_id"
                 >
                     {{flightValue(flight)}}

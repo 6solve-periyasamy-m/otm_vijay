@@ -241,29 +241,38 @@ console.log('mounted flights')
     created() {
         let that = this
         this.leadTraveller = this.lead_traveller
-        this.debug>1 && console.log('BFF mounted', this.booking_id, that.booking_token, that.leadTraveller);
 
-        bus.$on('additionalTravellersLoaded', travellers => {
-            console.log('FLIGHTS: additionalTravellersLoaded', travellers)
-            that.travellers = travellers
-        })
-        bus.$on('setBookingToken', token => {
-            that.debug && console.log(`>>>> ${that.moduleName} : setBooking ${token} for tour ${that.tour.name}`)
-            that.booking_token = token
-           // console.log('BFF created setBooking handler', this.booking.token, this.booking.tour, this.booking.tour.id, this.booking.id)
+        this.debug>1 && console.log('BFF created', this.booking_id, that.booking_token, that.leadTraveller);
+        console.log(`${this.moduleName} created`)
+        
+        bus.$on('setBookingToken', (bookingData) => {
+            that.booking_token = bookingData
+            that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
             that.getFlights(that.tour)
             that.loadFlightsForBooking(that.booking_token)
         })
-        bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
 
+        bus.$on('additionalTravellersLoaded', travellers => {
+            console.log(`${that.moduleName}: additionalTravellersLoaded`, travellers)
+            that.travellers = travellers
+        })
+
+        // bus.$on('setBookingToken', token => {
+        //     that.debug && console.log(`>>>> ${that.moduleName} : setBooking ${token} for tour ${that.tour.name}`)
+        //     that.booking_token = token
+        //    // console.log('BFF created setBooking handler', this.booking.token, this.booking.tour, this.booking.tour.id, this.booking.id)
+        //     that.getFlights(that.tour)
+        //     that.loadFlightsForBooking(that.booking_token)
+        // })
+
+        bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
             if (custom && !traveller) {
                 alert('can not set outbound for a custom traveller without the traveller')
             }
             if (!custom && traveller) {
                 console.log('>>>>>> group booking with traveller', traveller)
-                alert('group booking with traveller set?', traveller)
+                // alert('group booking with traveller set?', traveller)
             }
-
             that.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
             if (traveller == null) {
                 console.log('set_outbound: no traveller is passed in')
@@ -386,7 +395,7 @@ console.log('mounted flights')
         async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token) {
             this.debug > 3 && console.log('updateFlight()', flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token);
             let that = this
-            if (customer == undefinded || customer == null) {
+            if (customer == undefined || customer == null) {
                 console.log('WARNING: updateFlight customer data missing')
                 alert('UpdateFlight does not know the customer ... ')
                 alert('Form data missing, please refresh or contact support')
@@ -548,7 +557,7 @@ console.log('inbound flights selected', inbound)
         async getFlights(tour) {
             var that = this
             this.debug>3 && console.log('BookingFormFlights: getFlights, tour ', tour)
-            await axios.get(`/api/booking/flights/${tour}`)
+            await axios.get(`/api/booking/flights/tour/${tour.id}`)
                 .then(response => {
                     this.debug>2 && console.log('&&&& flight response', response)
                     that.flights = response.data.data

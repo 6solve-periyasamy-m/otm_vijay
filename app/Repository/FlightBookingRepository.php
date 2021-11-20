@@ -17,6 +17,8 @@ interface FlightBookingRepositoryInterface {
 class FlightBookingRepository implements FlightBookingRepositoryInterface
 {
     protected $model;
+    private $logging = 5;
+
     public function __construct()
     {
         $this->model = new BookingFlights();
@@ -37,11 +39,17 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
         if ($type !== 'Both') {
             $flightBooking = $flightBooking->whereIn('flight_inventory_tours.flight_type', $type);
         }
-        $sql = $flightBooking->toSql();
-        Log::info('query', [$sql]);
         $flightBookings = $flightBooking->get();
-        Log::info('query', [$flightBookings]);
-
+        if ($this->logging > 5) {
+            Log::info('Fight Bookings :', [$flightBookings]);
+        }
+        if ($this->logging > 3) {
+            $sql = $flightBooking->toSql();
+            Log::info('query', [$sql]);
+        }
+        if ($this->logging > 0) {
+            Log::info('Fight Bookings Found:' . $flightBookings->count());
+        }
         return $flightBookings;
     }
 }

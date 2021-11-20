@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use Exception;
 use App\Models\Flight;
+use App\Models\Airport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 interface FlightsRepositoryInterface {
@@ -24,6 +27,7 @@ class FlightsRepository implements FlightsRepositoryInterface
 
     public function getFlights($tour_id) 
     {
+
         $flights = $this->model->join('airlines', 'airline_id', 'id')
             ->join('flight_inventory_tours', 'tour_id', $tour_id)
             ->join('flight_inventories', 'flight_inventory_tours.flight_inventory_id', 'id')
@@ -36,7 +40,16 @@ class FlightsRepository implements FlightsRepositoryInterface
 
     public function flightsAvailableForTour($tour_id, $flight_type, $tour_component_type = 'Included')
     {
-        $flights = Flight::select('flight_inventory_tours.id as flight_id', 'flight_inventory_tours.tour_component_type', 'airlines.name as airline_name', 'flight_inventories.*', 'flight_inventory_tours.id as flight_inventory_tour_id', 'flight_inventory_tours.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.name as travel_class', 'flight_inventory_tours.tour_component_type','flights.available_after')
+        $flights = Flight::select('flight_inventory_tours.id as flight_id', 
+            'flight_inventory_tours.tour_component_type', 
+            'airlines.name as airline_name', 
+            'flight_inventories.*', 
+            'flight_inventory_tours.id as flight_inventory_tour_id', 'flight_inventory_tours.flight_type', 
+            'flights.departure_airport_id', 'flights.arrival_airport_id', 
+            'airlines.name', 
+            'travel_classes.name as travel_class', 
+            'flight_inventory_tours.tour_component_type',
+            'flights.available_after')
         ->join('airlines', 'airline_id', 'airlines.id')
         ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
         ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
@@ -68,9 +81,13 @@ class FlightsRepository implements FlightsRepositoryInterface
      *
      * @return void
      */
-    public function flightsDepartingAfterToday()
+    public function flightsDepartingAfterToday(Airport $airport)
     {
         $today = date('Y-m-d');
+        if (empty($airport)) {
+            Log::error('flightsDepartingAfterToday needs an airport');
+            throw new Exception('flightsDepartingAfterToday has no airport');
+        }
         $flights = Flight::where('departure_airport_id', $airport->id)
             ->orWhere(function ($query) {
                 $query->whereNull('departure_date')

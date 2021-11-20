@@ -64,12 +64,13 @@ Route::prefix('booking')->group(function () {
 
     // Flights
     Route::get('/flight/bookings/{booking_token}', [FlightController::class, 'loadFlightsForBooking']);
-    Route::get('/flights/{tour_id}/{flight_type}', [FlightController::class, 'getFlightInventoriesForTour']);
-    Route::get('/flights/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
+    Route::get('/flights/tour/{tour_id}/{flight_type}', [FlightController::class, 'getFlightInventoriesForTour']);
+    Route::get('/flights/tour/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
     Route::get('/flight-inventories', [FlightController::class, 'getFlightsInventories']);
     Route::get('/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
     // function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
     // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
+    Route::post('/flight', [FlightDetailsController::class, 'bookFlightDetails']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
     // POST routes (requires token auth)
@@ -96,7 +97,6 @@ Route::prefix('booking')->group(function () {
     // BookingController::class, 'bookFlightDetails'
     // ]);
 
-    Route::post('/flight', [FlightDetailsController::class, 'bookFlightDetails']);
 
     // Booking Orders in Customer Order Details
     // Route::get('/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);

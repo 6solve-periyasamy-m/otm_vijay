@@ -7,52 +7,66 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use App\Models\Tour;
 use App\Models\Order;
-use App\Models\Flight;
 
+use App\Models\Flight;
+use App\Models\Booking;
 use Illuminate\Http\Request;
-use App\Models\OrderCustomer;
-use App\Models\CustomerOrderDetail;
+use App\Models\BookingFlight;
 use App\Models\FlightInventoryTour;
 use Illuminate\Support\Facades\Log;
-use App\Repository\ActionsRepository;
 use App\Http\Controllers\ApiController;
-use App\Repository\CustomerOrderDetailRepository;
 
 class FlightDetailsController extends ApiController
 {
     /**
-     * storeOrUpdateFlightBooking TODO
+     * storeOrUpdateFlightBooking
      *
-     * @param [type] $orderCustomer
-     * @param [type] $flightTour
-     * @param [type] $flightType
-     * @param [type] $addon
-     * @param [type] $reference
+     * @param [type] $booking
+     * @param [type] $flightInventoryTour
+     * @param [type] $flight_type
+     * @param [type] $custom
+     * @param [type] $token
      * @return void
      */
-    private function storeOrUpdateFlightBooking($orderCustomer, $flightTour, $flightType, $addon, $reference)
+    private function storeOrUpdateFlightBooking($booking, $flightInventoryTour) 
     {
-        return;
+        $bookingFlight = new BookingFlight();
+        $bookingFlight->booking_id = $booking->id;
+        $bookingFlight->customer_id = $booking->customer_id;
+        $bookingFlight->flight_inventory_id = $flightInventoryTour->flight_inventory_id;
+        try {
+            $bookingFlight->save();
+        } catch (Exception $e) {
+            Log::error('Error saving Booking flight' . $e->getMessage());
+        }
+
+        return $bookingFlight;
+    }
+    private function getFlightInventoryTour($inventory_tour_id)
+    {
+        $flightInventoryTour = FlightInventoryTour::find($inventory_tour_id);
+
+        return $flightInventoryTour;
     }
     /**
-         * bookFlightDetails  WIP (convert to booking tables)
-         * save flight details for a pax tour flight
-         * 1. create / update orders_customers
-         * 2. create customer_order_details (audit)
-         * 3. create / update 8orders_flights
-         * @param tour
-         * @param passenger
-         * @param flight (we are sending in the flight->id - which should be the flightInventoryTour record id)
-         */
+     * bookFlightDetails  WIP (convert to booking tables)
+     * save flight details for a pax tour flight
+     * 1. create / update orders_customers
+     * 2. create customer_order_details (audit)
+     * 3. create / update 8orders_flights
+     * @param tour
+     * @param passenger
+     * @param flight (we are sending in the flight->id - which should be the flightInventoryTour record id)
+     */
     public function bookFlightDetails(Request $request)
     {
         // validation
         $validated = $request->validate([
             'customer_id' => 'required',
             'tour_id' => 'required',
-            'booking_id' => 'required',
             'flight_type' => 'required',
             'inventory_tour_id' => 'required',
             'custom' => 'required',
@@ -60,18 +74,16 @@ class FlightDetailsController extends ApiController
         ]);
         $customer_id = $request->customer_id;
         $tour_id = $request->tour_id;
-        /// $order_id = $request->order_id;
-        $booking_id = $request->booking_id;
         $flight_type = $request->flight_type;
         $inventory_tour_id = $request->inventory_tour_id;
         $custom = $request->custom;
+        $booking_token = $request->token;
 
         // token is posted: why look it up?  opportunity to catch a false post?
         $token = $_COOKIE['OTM_booking_token'];
-        if ($token !== $request->token) {
+        if ($token !== $booking_token) {
             throw new \Exception('Booking token mismatch');
         }
-        $token = $request->token;
 
         $this->logging == 'flights' && Log::info('***** bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $token]);
 
@@ -80,54 +92,38 @@ class FlightDetailsController extends ApiController
 
         // validate parameters are valid
         if ($inventory_tour_id) {
-            $flightTour = $this->getFlightTour($inventory_tour_id);
-            if (!$flightTour) {
+            $flightInventoryTour = $this->getFlightInventoryTour($inventory_tour_id);
+            if (!$flightInventoryTour) {
                 $rejection = 404;
-                $status = 'Invalid Flight Tour record';
+                $status = 'Invalid Flight Inventory Tour record';
             }
+        } else {
+            throw new Exception('Booking Flight Details has no inventory_tour_id to book');
         }
         $tour = $tours->find($tour_id);
-        $order = $this->getOrder($order_id);
-        if ($tour->id !== $order->tour_id) {
-            $rejection = 302;
-            $status = 'Invalid Tour/Order';
-        } else {
-            $status = 'Order ';
+        $booking = Booking::where('token', $booking_token)->first();
+        if (empty($booking)) {
+            throw new Exception('booking could not be found for token '.$token);
         }
+        $status = '';
 
-        $orderCustomer = $this->getOrderCustomer($order, $customer_id);
-        $this->logging === 'flights' && Log::info('bookFlightDetails order:', $orderCustomer->toArray());
-
+        if ($tour->id !== $booking->tour_id) {
+            throw new Exception('BookFlightDetails: booking and tour ids do not agree');
+        }
+        if ($customer_id !== $booking->customer_id) {
+            throw new Exception('BookFlightDetails: booking and customer IDs do not agree');
+        }
+Log::debug('flightInventoryTour', [$flightInventoryTour]);
         if ($inventory_tour_id) {
-            $result = $this->storeOrUpdateFlightBooking($orderCustomer, $flightTour, $flight_type, $custom, $token);
+            $result = $this->storeOrUpdateFlightBooking($booking, $flightInventoryTour);
             //$result = $this->storeOrUpdateCustomerOrderDetail($orderCustomer, $flightTour, $flight_type, $custom, $token);
-            $this->logging === 'flights' && Log::info('storeOrUpdateCustomerOrderDetail returned!', $result);
+            $this->logging && Log::info('storeOrUpdateCustomerOrderDetail returned!', [$result]);
         } else {
-            $result = $this->removeFlightBooking('flight', $order, $orderCustomer, $flight_type, $custom, $token);
-            $this->logging === 'flights' && Log::info('removeCustomerOrderDetail returned!');
-        }
-        if (!$result) {
-            $status .= ' error updating!';
-        } else {
-            $status .= ' update appears successful';
+            $result = $this->removeFlightBooking($booking, $flightInventoryTour);
+            $this->logging && Log::info('removeCustomerOrderDetail');
         }
 
-        if ($rejection || !$customer_id) {
-            return [
-                'status' => $rejection,
-                'message' => $status
-            ];
-        }
-        
-        if ($rejection) {
-            $this->logging == 'flights' && Log::info('booking flight details:', [$tour_id, $flightTour->id, $customer_id]);
-            ActionsRepository::log('Booking Order '.$status, $customer_id, $order_id);
-        }
-
-        return [
-            'status' => $rejection,
-            'message' => $status
-        ];
+        return response()->json(['success' => $result]);
     }
 
     /**
@@ -136,40 +132,13 @@ class FlightDetailsController extends ApiController
      * @param Request $request
      * @return JSON response
      */
-    public function removeFlightBooking(Request $request)
+    private function removeFlightBooking($booking, $flightInventoryTour)
     {
-        $validated = $request->validate([
-            'order_customer_id' => 'required',
-            'inventory_tour_id' => 'required',
-            'token' => 'required'
-        ]);
-        $order_customer_id = $request->order_customer_id;
-        $inventory_tour_id = $request->inventory_tour_id;
-        $orderCustomers = new OrderCustomer();
-        $orderCustomer = $orderCustomers->find($order_customer_id);
-
-        $token = $_COOKIE['OTM_booking_order_token'];
-        if ($token !== $request->token) {
-            throw new \Exception('Booking token mismatch I have:'. $token . ' request has:'.$request->token);
-        }
-        if (empty($orderCustomer) || empty($orderCustomer->order_id)) {
-            throw new \Exception('No order exists!');
-        }
-        $orders = new Order();
-        $order = $orders->find($orderCustomer->order_id);
-        $this->logging && Log::info('order for removal', $order->toArray());
-
-        if ($token !== $order->token) {
-            throw new \Exception('Order token mismatch');
-        }
-        // $order_id = $order->id;
-        $type = $request->flight_type;
-        $custom = $request->custom;
-
-        // $inventory_tour_id = $request->inventory_tour_id;
-        // $reference = $order->reference;
-        $result = $this->removeCustomerOrderDetail($orderCustomer, $inventory_tour_id, $type, $custom, $order->token);
-    
-        return json_encode(['success' => true, 'flight' => $result, 'orderCustomer' => $orderCustomer]);
+        $bookingFlight = new BookingFlight();
+        $booking = $bookingFlight->where('booking_id', $booking->id)
+            ->where('flight_inventory_id', $flightInventoryTour->flight_inventory_id)
+            ->delete();
+        
+        return $booking;
     }
 }
