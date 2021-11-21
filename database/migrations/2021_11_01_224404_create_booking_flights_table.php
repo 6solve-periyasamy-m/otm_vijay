@@ -18,6 +18,7 @@ class CreateBookingFlightsTable extends Migration
             $table->foreignId('booking_id')->constrained();
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('flight_inventory_id')->constrained();
+            $table->string('flight_type');
             $table->timestamps();
         });
     }

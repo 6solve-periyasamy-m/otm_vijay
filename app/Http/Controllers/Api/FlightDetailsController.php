@@ -31,11 +31,18 @@ class FlightDetailsController extends ApiController
      * @param [type] $token
      * @return void
      */
-    private function storeOrUpdateFlightBooking($booking, $flightInventoryTour) 
+    private function storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour) 
     {
         $bookingFlight = new BookingFlight();
-        $bookingFlight->booking_id = $booking->id;
-        $bookingFlight->customer_id = $booking->customer_id;
+        $existing = $bookingFlight->where('flight_type', $flight_type)->where('booking_id', $booking->id)->where('customer_id', $booking->customer_id)->first();
+        Log::debug('existing', [$existing, $booking]);
+        if (empty($existing)) {
+            $bookingFlight->booking_id = $booking->id;
+            $bookingFlight->customer_id = $booking->customer_id;
+            $bookingFlight->flight_type = $flight_type;
+        } else {
+            $bookingFlight = $existing;
+        }
         $bookingFlight->flight_inventory_id = $flightInventoryTour->flight_inventory_id;
         try {
             $bookingFlight->save();
@@ -115,7 +122,7 @@ class FlightDetailsController extends ApiController
         }
 Log::debug('flightInventoryTour', [$flightInventoryTour]);
         if ($inventory_tour_id) {
-            $result = $this->storeOrUpdateFlightBooking($booking, $flightInventoryTour);
+            $result = $this->storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour);
             //$result = $this->storeOrUpdateCustomerOrderDetail($orderCustomer, $flightTour, $flight_type, $custom, $token);
             $this->logging && Log::info('storeOrUpdateCustomerOrderDetail returned!', [$result]);
         } else {
