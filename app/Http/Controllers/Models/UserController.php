@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,7 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
+        event(new Registered($user));
         $user->assign($request->input('role') ?? 'user');
         return redirect()->route('users.view', ['user' => $user,]);
     }
@@ -47,11 +49,15 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->verifyUser($user, true);
+        if ($user->email !== $request->input('email')) {
+            $user->email_verified_at = null;
+        }
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
+        event(new Registered($user));
         $user->save();
         return redirect()->route('users.view', ['user' => $user,]);
     }

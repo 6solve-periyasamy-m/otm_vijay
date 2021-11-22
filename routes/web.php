@@ -565,5 +565,5 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     });
 });
 
-Auth::routes();
+Auth::routes(['verify' => true,]);
 Route::get('/test', function () { return view('pages.test'); });

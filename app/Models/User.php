@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities;
 
