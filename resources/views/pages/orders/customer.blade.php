@@ -406,6 +406,7 @@ $(document).ready( function () {
                     <th scope="col">Amount</th>
                     <th scope="col">Reason</th>
                     <th scope="col">Date</th>
+                    <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 @foreach($order_customer->adjustments as $adjustment)
@@ -413,6 +414,13 @@ $(document).ready( function () {
                         <td>{{ $adjustment->amount }}</td>
                         <td>{{ $adjustment->reason }}</td>
                         <td>{{ $adjustment->date }}</td>
+                        <td class="actions">
+                            <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                            <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                            <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                @csrf
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </table>
