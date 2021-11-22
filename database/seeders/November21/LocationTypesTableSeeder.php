@@ -1,5 +1,5 @@
 <?php
-namespace Database\Seeders;
+namespace Database\Seeders\November21;
 
 use Illuminate\Database\Seeder;
 

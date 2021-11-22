@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\November21;
 
 use App\Models\AddressParent;
 use Illuminate\Database\Seeder;
