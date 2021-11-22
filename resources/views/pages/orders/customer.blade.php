@@ -70,6 +70,7 @@ $(document).ready( function () {
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
+    $('#customer-adjustment-table').DataTable({fixedHeader: true});
     updateAccommodationSelectFields();
     updateActivitySelectFields();
     updateFlightSelectFields();
@@ -384,6 +385,37 @@ $(document).ready( function () {
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="fw-bold">Customer Adjustments</h4>
+            <div class="pb-3 text-end">
+                <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer]) }}" class="btn btn-success text-white">
+                    <i class="icon-plus"></i>
+                    Add Adjustment
+                </a>
+            </div>
+        </div>
+        <div>
+            <table class="table table-striped" id="customer-adjustment-table">
+                <thead>
+                <tr>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                @foreach($order_customer->adjustments as $adjustment)
+                    <tr>
+                        <td>{{ $adjustment->amount }}</td>
+                        <td>{{ $adjustment->reason }}</td>
+                        <td>{{ $adjustment->date }}</td>
+                    </tr>
+                @endforeach
+            </table>
         </div>
     </div>
 </div>
