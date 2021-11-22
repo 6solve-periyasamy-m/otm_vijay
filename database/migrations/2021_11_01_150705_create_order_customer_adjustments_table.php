@@ -18,7 +18,7 @@ class CreateOrderCustomerAdjustmentsTable extends Migration
             $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
             $table->float('amount');
             $table->text('reason');
-            $table->dateTime('date');
+            $table->date('date');
             $table->softDeletes();
             $table->timestamps();
         });
