@@ -250,9 +250,9 @@ $(document).ready( function () {
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in_date_time }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
-                                    <td>{{ $accommodationEntry["component"]->title }}</td>
-                                    <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
+                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
+                                    <td>{{ $accommodationEntry["component"]->name }}</td>
+                                    <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td>
@@ -290,9 +290,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($activities as $activity)
                             <tr>
-                                <td style="min-width: 200px">{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
-                                <td>{{ $activity["component"]->title }}</td>
-                                <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
+                                <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
+                                <td>{{ $activity["component"]->name }}</td>
+                                <td>{{ $activity["component"]->activityType->name }}</td>
                                 <td>{{ $activity["tour"]->tour_component_type }}</td>
                                 <td>
                                     <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
@@ -329,9 +329,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($flights as $flight)
                             <tr>
-                                <td style="min-width: 200px">{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
+                                <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
                                 <td>{{ $flight["inventory"]->flight_number }}</td>
-                                <td>{{ $flight["inventory"]->travelClass->title }}</td>
+                                <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                 <td>{{ $flight["tour"]->tour_component_type }}</td>
                                 <td>
                                     <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
@@ -368,9 +368,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($transports as $transport)
                             <tr>
-                                <td style="min-width: 200px">{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
+                                <td style="min-width: 200px">{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrives_at }}</td>
                                 <td>{{ $transport["component"]->name }}</td>
-                                <td>{{ $transport["inventory"]->travelClass->title }}</td>
+                                <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                 <td>{{ $transport["tour"]->tour_component_type }}</td>
                                 <td>
                                     <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
