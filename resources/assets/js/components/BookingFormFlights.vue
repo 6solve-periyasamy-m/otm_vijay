@@ -154,13 +154,6 @@ import Vue from 'vue'
  * asks the lead booker to select from Outbound and Inbound flights
  * and to select addons for each kind that is available
  * Any selected flights can then be booked or edited.
- * 
- * Known Issues:
- * 1. Addon selector: if we are building an itinery: the order of these selections matters 
- * - the dates should set the order in the order summary
- * Expansions:
- * 1. Tour members may not all book same addons
- * 2. Tour members may require different Outbound/Inbound selections
  */
 export default {
     components: { BookingFormFlightSelector },
@@ -180,6 +173,7 @@ export default {
             travellers: [],
             leadTraveller: {},
 
+            bookings: [],
             outbound_flights: [],
             inbound_flights: [],
             other_flights: [],
@@ -226,15 +220,14 @@ export default {
     },
     mounted() {
         let that = this
-console.log('mounted flights')
         bus.$on('debugOverride', (debug) => that.debug = debug)
 
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         // this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
         this.debug && console.log('BookingFormFlights component mounted with flights: ', this.flights, ' for tour ', this.tour, ' check_out ', this.booking_id)
-        this.debug>1 && console.log('MOUNTED: outbound flights', this.outbound_flights)
-        this.debug>1 && console.log('MOUNTED: inbound flights', this.inbound_flights)
+        this.debug>1 && console.log('BookingFormFlights MOUNTED: outbound flights', this.outbound_flights)
+        this.debug>1 && console.log('BookingFormFlights MOUNTED: inbound flights', this.inbound_flights)
         that.ready = true
         that.activated = true
     },
@@ -242,8 +235,8 @@ console.log('mounted flights')
         let that = this
         this.leadTraveller = this.lead_traveller
 
-        this.debug>1 && console.log('BFF created', this.booking_id, that.booking_token, that.leadTraveller);
-        console.log(`${this.moduleName} created`)
+        this.debug>1 && console.log('BookingFormFlights created', this.booking_id, that.booking_token, that.leadTraveller);
+
         
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
@@ -253,7 +246,7 @@ console.log('mounted flights')
         })
 
         bus.$on('additionalTravellersLoaded', travellers => {
-            console.log(`${that.moduleName}: additionalTravellersLoaded`, travellers)
+            this.debug>1 && console.log(`${that.moduleName}: additionalTravellersLoaded`, travellers)
             that.travellers = travellers
         })
 
@@ -270,14 +263,14 @@ console.log('mounted flights')
                 alert('can not set outbound for a custom traveller without the traveller')
             }
             if (!custom && traveller) {
-                console.log('>>>>>> group booking with traveller', traveller)
+                this.debug>1 && console.log('>>>>>> group booking with traveller', traveller)
                 // alert('group booking with traveller set?', traveller)
             }
             that.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
             if (traveller == null) {
-                console.log('set_outbound: no traveller is passed in')
+                this.debug>1 && console.log('set_outbound: no traveller is passed in')
             } else if (that.leadTraveller == null) {
-                console.log('set_outbound: leadTravller NOT set')
+                this.debug>1 && console.log('set_outbound: leadTravller NOT set')
             } else if (traveller.id == that.leadTraveller.id && traveller.is_lead_booker && !custom) {
                 that.unselected_outbound = that.outbound_flights.filter(flight => {
                     that.debug > 2 && ('unselected outbound: flight: ', flight)
@@ -289,9 +282,9 @@ console.log('mounted flights')
 
         bus.$on('set_inbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
             if (traveller == null) {
-                console.log('set_inbound: no traveller is passed in')
+                this.debug>1 && console.log('set_inbound: no traveller is passed in')
             } else if (that.leadTraveller == null) {
-                console.log('set_inbound: no leadTravller')
+                this.debug>1 && console.log('set_inbound: no leadTravller')
             } else if (traveller.id == that.leadTraveller.id && traveller.is_lead_booker && !custom) {
                 that.unselected_inbound = that.inbound_flights.filter(flight => {
                     return flight.flight_inventory_tour_id != flight_inventory_tour_id
@@ -301,11 +294,11 @@ console.log('mounted flights')
         })
 
         bus.$on('removeBooking', (booking, flight_type, traveller) => {
-            console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.booking_token)
+            this.debug>1 && console.log('event remove ', flight_type, ' Booking', booking, 'for ', traveller, 'token', that.booking_token)
             const item = this.orderset.filter(ordr => ordr.inventory_tour_id === booking &&
                 ordr.order_customer_id == traveller.order_customer_id);
             if (item.length === 1) {
-                console.log('deleting booking', item[0].cod_id)
+                this.debug>1 && console.log('deleting booking', item[0].cod_id)
             }
             // this method is only for removing custom (addon) flights (you can only change group bookings)
             const record = {
@@ -315,7 +308,7 @@ console.log('mounted flights')
                 custom: true,
                 token: that.booking_token
             }
-            console.log('remove flight booking', record)
+            this.debug>1 && console.log('remove flight booking', record)
             axios.post(`/api/booking/flights/remove/flight`, record)
                  .then(response => {
                     that.debug>3 && console.log('remove flight response', response.data.flight)
@@ -411,7 +404,7 @@ console.log('mounted flights')
                 custom: custom,
                 token: token
             }
-console.log('booking a flight', data);
+            this.debug>1 && console.log('booking a flight', data);
             await axios.post('/api/booking/flight', data)
                 .then(response => {
                     that.debug > 3 && console.log('flight booking response', response)
@@ -421,7 +414,7 @@ console.log('booking a flight', data);
                     console.log(error)
                 })
         },
-        flightSelected(type, addon, orders, traveller) {
+        flightSelected(flight_type, tour_component_type, traveller) {
             const that = this
 
             if (traveller == null) {
@@ -429,24 +422,25 @@ console.log('booking a flight', data);
                 // alert('Form data incomplete, please refresh or contact support')
                 return
             }
+            that.debug>4 && console.log('>>>>> FLIGHTSELECTED: traveller', traveller)
+            let booking = that.bookings.filter(b => {
+                that.debug>5 && console.log('evaluation of flight ',b.flight_type, flight_type, b.tour_component_type, tour_component_type, b.customer_id, traveller.id)
+                return b.flight_type === flight_type &&
+                       b.tour_component_type === tour_component_type &&
+                       b.customer_id === traveller.id
+            })
+            that.debug>2 && console.log('>>>>>>> FLIGHTSELECTED booking filter found', booking.length)
+            that.debug>3 && console.log('>>>>>>> FLIGHTSELECTED booking filter', that.bookings, flight_type, tour_component_type, booking)
 
-            let order = orders.filter(ordr => ordr.flight_type == type &&
-                ordr.addon == addon &&
-                ordr.order_customer_id == traveller.order_customer_id)
-
-console.log('FLIGHTSELECTED order', order);
-            if (typeof order == 'undefined' || order == null || order.length == 0) {
-                console.log('WARNING: flightSelected no ' + type + ' order?')
-             //   alert('Form data incorrect, please refresh or contact support')
+            if (typeof booking == 'undefined' || booking == null || booking.length == 0) {
+                that.debug && console.log('WARNING: flightSelected no ' + tour_component_type + ' booking')
                 return null
             }
-            const order_selected = order[0]
-            const flight = that.flights.filter(flight => {
-                return flight.flight_inventory_tour_id == order_selected.inventory_tour_id
-            })[0]
-            flight.cod = order_selected.cod_id
-            this.debug>2 && console.log('>>>>> order_selected:', order_selected, ' flight type ' + type + ' flight ...', flight)
 
+            const booking_selected = booking[0]
+            const flight = that.flights.filter(flight => {
+                return flight.flight_inventory_tour_id == booking_selected.inventory_tour_id
+            })[0]
             return flight
         },
 
@@ -457,7 +451,7 @@ console.log('FLIGHTSELECTED order', order);
                 console.log('WARNING: load flights for order missing booking_id?');
                 return
             } else {
-                this.debug>3 && console.log('INFO: loadFlightsForBooking called for order ', booking_token)
+                this.debug>1 && console.log('INFO: loadFlightsForBooking called for order ', booking_token)
             }
             let that = this
             let outbound = {}
@@ -466,25 +460,21 @@ console.log('FLIGHTSELECTED order', order);
             // loads current fight bookings if there are any
             await axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
+                    that.bookings = response.data.flightBooking
+                    that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', that.bookings, that.travellers[0])
 
-                    // that.orderset = response.data.orders
-                    // const orders = that.orderset
-
-                    const bookings = response.data.flightBooking
-                    that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', bookings, that.travellers[0])
-
-                    if (bookings === null || bookings.length === 0) {
-                        console.log('nothing has been booked yet')
+                    if (that.bookings === null || that.bookings.length === 0) {
+                        this.debug>1 && console.log('nothing has been booked yet')
                         that.showwait = false
                         return
                     }
                     // DEBUG BELOW
-console.log('flight orders', response)
+this.debug>1 && console.log('BookingFormFlight: flight orders', response)
                     //this.flightSelected('Inbound', 1, orders, that.travellers[1])
-                    outbound = that.flightSelected('Outbound', 0, bookings, that.travellers[0])
-                    inbound = that.flightSelected('Inbound', 0, bookings, that.travellers[0])
-console.log('outbound flights selected', outbound)
-console.log('inbound flights selected', inbound)
+                    outbound = that.flightSelected('Outbound', 'Included', that.lead_traveller)
+                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)
+this.debug>1 && console.log('outbound flights selected', outbound)
+this.debug>1 && console.log('inbound flights selected', inbound)
                     // set the selected_outbound_flight (group selector)
                     if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
                         that.selected_outbound_flight = outbound.flight_inventory_tour_id
@@ -508,12 +498,13 @@ console.log('inbound flights selected', inbound)
                     })
 
                     // process the addons TODO: Change orders -> bookings!
-                    const outbound_addons = orders.filter(order => order.flight_type == 'Outbound' && order.addon == 1)
-                    const inbound_addons = orders.filter(order => order.flight_type == 'Inbound' && order.addon == 1)
+                    // TODO : addon should be for a specific traveller!  It will need to be recorded in that way
+                    const outbound_addons = that.flightSelected('Outbound', 'Addon', that.travellers[0])
+                    const inbound_addons  = that.flightSelected('Inbound', 'Addon', that.travellers[0])
                     if (outbound_addons) {
                         that.debug>2 && console.log('loadFlightsForBooking ADDONS', outbound_addons)
                         that.travellers.map((traveller, key) => {
-                            outbound = that.flightSelected('Outbound', 1, orders, traveller)
+                            outbound = that.flightSelected('Outbound', 1, traveller)
                             //  :selected_item="traveller.selected_outbound_addon">
                             if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
                                 traveller['selected_outbound_addon'] = outbound.flight_inventory_tour_id
@@ -526,7 +517,7 @@ console.log('inbound flights selected', inbound)
                     if (inbound_addons) {
                         that.debug>2 && console.log('ADDONS', inbound_addons)
                         that.travellers.map((traveller, key) => {
-                            inbound = that.flightSelected('Inbound', 1, orders, traveller)
+                            inbound = that.flightSelected('Inbound', 1, traveller)
                             //  :selected_item="traveller.selected_outbound_addon">
                             if (typeof inbound !== 'undefined' && inbound != null && inbound.flight_inventory_tour_id) {
                                 traveller['selected_inbound_addon'] = inbound.flight_inventory_tour_id

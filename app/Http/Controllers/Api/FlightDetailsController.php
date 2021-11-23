@@ -19,19 +19,19 @@ use App\Models\FlightInventoryTour;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController;
 
+// TODO: refactor
+
 class FlightDetailsController extends ApiController
 {
     /**
      * storeOrUpdateFlightBooking
-     *
+     * 
      * @param [type] $booking
-     * @param [type] $flightInventoryTour
      * @param [type] $flight_type
-     * @param [type] $custom
-     * @param [type] $token
+     * @param [type] $flightInventoryTour
      * @return void
      */
-    private function storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour) 
+    private function storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour)
     {
         $bookingFlight = new BookingFlight();
         $existing = $bookingFlight->where('flight_type', $flight_type)->where('booking_id', $booking->id)->where('customer_id', $booking->customer_id)->first();

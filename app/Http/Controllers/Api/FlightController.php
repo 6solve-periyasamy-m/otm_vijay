@@ -121,8 +121,8 @@ class FlightController extends ApiController
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($booking_token);
 
-        $flightBookingRepository = new FlightBookingRepository($booking->id, $type);
-        $flightBookings = $flightBookingRepository->getFlightBookings($booking->id);
+        $flightBookingRepository = new FlightBookingRepository();
+        $flightBookings = $flightBookingRepository->getFlightBookings($booking->id. $type);
 
         return response()->json(["success" => true, "flightBooking" => $flightBookings]);
     }

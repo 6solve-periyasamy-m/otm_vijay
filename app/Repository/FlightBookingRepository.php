@@ -17,7 +17,7 @@ interface FlightBookingRepositoryInterface {
 class FlightBookingRepository implements FlightBookingRepositoryInterface
 {
     protected $model;
-    private $logging = 5;
+    private $logging = 7;
 
     public function __construct()
     {
@@ -28,7 +28,7 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
         $booking = new Booking();
         $flightBooking = $booking
             // NB: careful: overly restrictive select and the joins may not work
-            //    ->select('booking_flights.*','flights.*', 'flight_inventory_tours.*')
+            ->select('bookings.*', 'booking_flights.*','flights.*', 'flight_inventory_tours.*')
             ->join('booking_flights', 'booking_flights.booking_id', 'bookings.id')
             ->join('flight_inventories', 'flight_inventories.id', 'booking_flights.flight_inventory_id')
             ->join('flights', 'flights.id', 'flight_inventories.flight_id')
