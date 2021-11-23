@@ -31,7 +31,6 @@ class ActivityInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
             'sales_price' => $request->input('sales_price'),
-            'currency' => $request->input('currency'),
             'notes' => $request->input('notes'),
         ]);
         $activity->activityInventory()->save($activityInventory);
@@ -59,7 +58,6 @@ class ActivityInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
             'sales_price' => $request->input('sales_price'),
-            'currency' => $request->input('currency'),
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('activities.view', ['activity' => $activity, ]);

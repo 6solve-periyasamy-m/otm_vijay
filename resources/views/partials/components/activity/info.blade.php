@@ -5,11 +5,15 @@
         </div>       
         <div class="col-12 col-xl-6">
             <p>Location</p>
-            <h6 class="fw-bold">{{ $activity->location->name }}</h6>
+            <h6 class="fw-bold">{{ $activity->address }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Description</p>
             <h6 class="fw-bold">{{ $activity->description }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Currency</p>
+            <h6 class="fw-bold">{{ $activity->currency }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Notes</p>

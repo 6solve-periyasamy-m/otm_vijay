@@ -17,13 +17,13 @@ class CreateTransportsTable extends Migration
             $table->id();
             $table->foreignId('transport_type_id')->constrained()->onDelete('cascade');
             $table->foreignId('operator_id')->constrained()->onDelete('cascade');
-            $table->foreignId('departure_location_id')->constrained('locations')->onDelete('cascade');
-            $table->foreignId('arrival_location_id')->constrained('locations')->onDelete('cascade');
+            $table->foreignId('departure_address_id')->constrained('addresses')->onDelete('cascade');
+            $table->foreignId('arrival_address_id')->constrained('addresses')->onDelete('cascade');
             $table->boolean('is_domestic')->default(true);
             $table->text('name');
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
-            $table->string('currency', 5)->nullable();
+            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
         });

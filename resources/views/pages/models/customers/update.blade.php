@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('customers.update', ['customer' => $customer,]), 'multipart' => true,])
 
 @section('title', 'Update Customer')
 
-@section('content')
-    @include('partials.models.customers.form', ['action' => route('customers.update', ['customer' => $customer,]),
+@section('form-body')
+    @include('partials.models.customers.form', [
       'title' => $customer->title,
       'first_name' => $customer->first_name,
       'middle_names' => $customer->middle_names,

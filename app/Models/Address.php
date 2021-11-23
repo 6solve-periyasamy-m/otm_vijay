@@ -11,7 +11,22 @@ class Address extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['address_line_1','address_line_2','town','region','country','postcode',];
+    protected $fillable = ['name','address_parent_id','location_type_id','address_line_1','address_line_2','address_line_3','town','region','country_id','postcode',];
+
+    public function locationType()
+    {
+        return $this->belongsTo(LocationType::class);
+    }
+    
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function addressParent()
+    {
+        return $this->belongsTo(AddressParent::class, 'address_parent_id');
+    }
 
     public function __toString()
     {
@@ -20,7 +35,7 @@ class Address extends Model
         if (isset($this->address_line_3)) $addrString .= ", " . $this->address_line_3;
         if (isset($this->town)) $addrString .= ", " . $this->town;
         if (isset($this->region)) $addrString .= ", " . $this->region;
-        if (isset($this->country)) $addrString .= ", " . $this->country;
+        if (isset($this->country)) $addrString .= ", " . $this->country->name;
         if (isset($this->postcode)) $addrString .= ", " . $this->postcode;
         return $addrString;
     }

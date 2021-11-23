@@ -24,7 +24,6 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
-                <th scope="col">Currency</th>
                 <th scope="col">Notes</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -38,7 +37,6 @@
                     <td>{{ $activityInventory->stock }}</td>
                     <td>{{ $activityInventory->purchase_price }}</td>
                     <td>{{ $activityInventory->sales_price }}</td>
-                    <td>{{ $activityInventory->currency }}</td>
                     <td>{{ $activityInventory->notes }}</td>
                     <td class="actions">
                         <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"

@@ -81,13 +81,13 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $query->join('activities', 'activity_inventories.activity_id', '=', 'activities.id');
         $query->join('activity_types', 'activities.activity_type_id', '=', 'activity_types.id');
         $query->join('ticket_types', 'activity_inventories.ticket_type_id', '=', 'ticket_types.id');
-        $query->join('locations', 'activities.location_id', '=', 'locations.id');
+        $query->join('addresses', 'activities.address_id', '=', 'addresses.id');
         $query->select(
             'activity_inventories.id AS id',
             'activities.id AS activity_id',
             'activities.name AS name',
             'activities.description AS description',
-            'locations.name AS location',
+            'addresses.name AS location',
             'ticket_types.name AS ticket_type',
             'activity_types.name AS activity_type',
             'activity_inventories.starts_at AS start_date',

@@ -13,7 +13,7 @@ class ActivityInventory extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_id','ticket_type_id','starts_at','ends_at','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['activity_id','ticket_type_id','starts_at','ends_at','fit_selectable','stock','purchase_price','sales_price','currency_id','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'starts_at' => 'datetime',
@@ -26,7 +26,7 @@ class ActivityInventory extends Model
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
-        'currency' => 'required|size:3',
+        'currency_id' => 'required|exists:currencies,id',
     ];
 
     public function activity()

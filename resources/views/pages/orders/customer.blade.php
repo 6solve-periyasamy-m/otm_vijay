@@ -2,12 +2,12 @@
 
 @section('title', 'View Order Customer')
 
-@section('head-script')
+@section('header-script')
 <script type="text/javascript">
     {{-- TODO: Upgrade to Select2 --}}
 function updateAccommodationSelectFields() {
     $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.accommodation', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function (index, element) {
             $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
         });
@@ -15,7 +15,7 @@ function updateAccommodationSelectFields() {
 }
 function updateActivitySelectFields() {
     $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableActivityAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.activity', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function (index, element) {
             $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
         });
@@ -23,7 +23,7 @@ function updateActivitySelectFields() {
 }
 function updateFlightSelectFields() {
     $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableFlightAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.flight', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function (index, element) {
             $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
         });
@@ -31,7 +31,7 @@ function updateFlightSelectFields() {
 }
 function updateTransportSelectFields() {
     $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableTransportAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.transport', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function(index, element) {
             $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
         });
@@ -40,28 +40,28 @@ function updateTransportSelectFields() {
 function addAccommodationAddon() {
     let id = $('#accommodation-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addAccommodationAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
+        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
     }
     location.reload();
 }
 function addActivityAddon() {
     let id = $('#activities-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addActivityAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
+        $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
     }
     location.reload();
 }
 function addFlightAddon() {
     let id = $('#flights-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addFlightAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
+        $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
     }
     location.reload();
 }
 function addTransportAddon() {
     let id = $('#transports-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addTransportAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
+        $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
     }
     location.reload();
 }
@@ -87,7 +87,7 @@ $(document).ready( function () {
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour</p>
-            <h6 class="fw-bold">{{ $order->tour->title }}</h6>
+            <h6 class="fw-bold">{{ $order->tour->name }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
