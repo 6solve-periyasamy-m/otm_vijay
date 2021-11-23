@@ -123,7 +123,7 @@
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
                                     <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
-                                    <td>{{ $accommodationEntry["component"]->title }}</td>
+                                    <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td class="actions">
@@ -154,7 +154,7 @@
                             @foreach($activities as $activity)
                                 <tr>
                                     <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
-                                    <td>{{ $activity["component"]->title }}</td>
+                                    <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
                                     <td class="actions">
