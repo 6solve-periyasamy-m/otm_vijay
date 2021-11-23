@@ -579,5 +579,5 @@ Route::prefix('customer')->name('customer.')->group(function () {
     });
 });
 
-Auth::routes(['verify' => true,]);
+Auth::routes(['verify' => true,'register' => false]);
 Route::get('/test', function () { return view('pages.test'); });
