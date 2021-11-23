@@ -70,7 +70,7 @@ class UserController extends Controller
     }
 
     private function verifyUser($user, $allowSelfEdit) {
-        $allow = (Auth::user() instanceof User);
+        $allow = (Auth::guard('web')->check());
         if ($allowSelfEdit) {
             $allow = $allow &&
                 ((Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel()
