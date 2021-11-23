@@ -18,7 +18,7 @@ class CreateManualAdjustmentsTable extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->float('amount');
             $table->text('reason');
-            $table->dateTime('date');
+            $table->date('date');
             $table->softDeletes();
             $table->timestamps();
         });

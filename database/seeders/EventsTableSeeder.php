@@ -22,14 +22,14 @@ class EventsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'The World Cup',
-                'description' => 'The World Cup attracts fans from all over the world. Witness greatness from great seats.',
-                'starts_at' => '2023-03-17',
-                'ends_at' => '2023-04-20',
-                'booking_url' => 'world-cup',
-                'notes' => 'This is an example record',
-                'created_at' => NULL,
-                'updated_at' => NULL,
+                'name' => 'Dinosaur Exhibit at Leeds City Museum',
+                'description' => 'Leeds City Museum is holding an exibit to show off a skeleton found recently.',
+                'starts_at' => '2021-11-22',
+                'ends_at' => '2021-11-30',
+                'booking_url' => 'dino-museum',
+                'notes' => NULL,
+                'created_at' => '2021-11-22 13:26:28',
+                'updated_at' => '2021-11-22 13:26:28',
                 'deleted_at' => NULL,
             ),
         ));

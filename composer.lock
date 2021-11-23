@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e022cdc16f3ee5154b02e7d7bf7de10b",
+    "content-hash": "cf340a52b2a1aa3098749dfdba0cc3ec",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2146,21 +2146,21 @@
         },
         {
             "name": "orangehill/iseed",
-            "version": "v2.6.4",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orangehill/iseed.git",
-                "reference": "03c73d3f829a74065e14a757f0d749ad4928a15f"
+                "reference": "874f77a20d49aa4c6c5fec2daf0daa070514e013"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orangehill/iseed/zipball/03c73d3f829a74065e14a757f0d749ad4928a15f",
-                "reference": "03c73d3f829a74065e14a757f0d749ad4928a15f",
+                "url": "https://api.github.com/repos/orangehill/iseed/zipball/874f77a20d49aa4c6c5fec2daf0daa070514e013",
+                "reference": "874f77a20d49aa4c6c5fec2daf0daa070514e013",
                 "shasum": ""
             },
             "require": {
                 "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
-                "php": "^7.2"
+                "php": "^7.2|^8.0"
             },
             "require-dev": {
                 "illuminate/filesystem": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
@@ -2203,9 +2203,9 @@
             ],
             "support": {
                 "issues": "https://github.com/orangehill/iseed/issues",
-                "source": "https://github.com/orangehill/iseed/tree/v2.6.4"
+                "source": "https://github.com/orangehill/iseed/tree/v3.0.1"
             },
-            "time": "2020-09-10T06:25:21+00:00"
+            "time": "2021-01-14T15:34:12+00:00"
         },
         {
             "name": "phpoption/phpoption",
