@@ -80,5 +80,6 @@
         }
     }
 </script>
+@stack('footer-stack')
 </body>
 </html>

@@ -8,7 +8,9 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
-            <th scope="col">Code</th>
+            <th scope="col">Numeric Code</th>
+            <th scope="col">Alpha Code</th>
+            <th scope="col">Dialing Prefix</th>
             <th scope="col">Currency</th>
             <th scope="col">Actions</th>
         </tr>
@@ -17,8 +19,10 @@
             @include('partials.models.countries.row', [
               'country' => $country,
               'name' => $country->name,
-              'code' => $country->code,
-              'currency' => $country->currency,
+              'numeric_code' => $country->numeric_code,
+              'alpha_code' => $country->alpha_code,
+              'dialing_code' => $country->dialing_code,
+              'currency' => $country->getCurrenciesList(),
             ])
         @endforeach
     </table>

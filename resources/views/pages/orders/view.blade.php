@@ -23,7 +23,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour</p>
-            <h6 class="fw-bold">{{ $order->tour->title }}</h6>
+            <h6 class="fw-bold">{{ $order->tour->name }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>

@@ -1,0 +1,23 @@
+/*
+Template Name: Admin Template
+Author: Niravjoshi / Wrappixel
+File: scss
+*/
+
+//(Required file)
+@import 'variable';
+
+//This is for the components (Required file)
+@import 'components';
+
+//This is for the widgets (Required file)
+@import 'widgets/widgets';
+
+//This is for the responsive (Required file)
+@import 'responsive';
+
+//In This scss you can write your scss
+@import 'custom'; 
+
+//This is for the icons (Required file)
+@import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');

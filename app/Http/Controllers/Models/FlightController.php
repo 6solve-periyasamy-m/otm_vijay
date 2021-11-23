@@ -27,6 +27,7 @@ class FlightController extends Controller
             'departure_airport_id' => $request->input('departure_airport_id'),
             'arrival_airport_id' => $request->input('arrival_airport_id'),
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
+            'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
             'available_after' => $request->input('available_after'),
         ]);
@@ -51,6 +52,7 @@ class FlightController extends Controller
             'departure_airport_id' => $request->input('departure_airport_id'),
             'arrival_airport_id' => $request->input('arrival_airport_id'),
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
+            'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
             'available_after' => $request->input('available_after'),
         ]);

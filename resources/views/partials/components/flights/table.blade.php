@@ -26,7 +26,6 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
-                <th scope="col">Currency</th>
                 <th scope="col">Notes</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -42,7 +41,6 @@
                     <td>{{ $flightInventory->stock }}</td>
                     <td>{{ $flightInventory->purchase_price }}</td>
                     <td>{{ $flightInventory->sales_price }}</td>
-                    <td>{{ $flightInventory->currency }}</td>
                     <td>{{ $flightInventory->notes }}</td>
                     <td class="actions">
                         <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"

@@ -4,8 +4,10 @@
 
 @section('form-body')
     @include('partials.models.countries.form', [
-      'name' => $country->name,
-      'code' => $country->code,
-      'currency' => $country->currency,
+        'country' => $country,
+        'name' => $country->name,
+        'numeric_code' => $country->numeric_code,
+        'alpha_code' => $country->alpha_code,
+        'dialing_code' => $country->dialing_code,
     ])
 @endsection

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation;
+use App\Models\Address;
+use App\Models\AddressParent;
+use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 
 class AccommodationController extends Controller
@@ -22,14 +25,19 @@ class AccommodationController extends Controller
     public function store(Request $request)
     {
         $request->validate(Accommodation::RULES);
-        $accommodation = Accommodation::create([
-            'region_id' => $request->input('region_id'),
+        $accommodation = Accommodation::make([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
-            'address' => $request->input('address'),
-            'currency' => $request->input('currency'),
+            'currency_id' => $request->input('currency_id'),
         ]);
+        if ($request->input('use_existing') == 'on') {
+            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('accommodation'));
+        } else {
+            $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
+        }
+        $accommodation->address_id = $address->id;
+        $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
@@ -47,13 +55,16 @@ class AccommodationController extends Controller
     {
         $request->validate(Accommodation::RULES);
         $accommodation->update([
-            'region_id' => $request->input('region_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'audit_date' => $request->input('audit_date'),
-            'address' => $request->input('address'),
-            'currency' => $request->input('currency'),
+            'currency_id' => $request->input('currency_id'),
         ]);
+        if ($request->input('use_existing') == 'on') {
+            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('accommodation'), $accommodation->address);
+        } else {
+            LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'));
+        }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 

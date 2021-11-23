@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Address;
+use App\Models\AddressParent;
+use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -22,13 +25,20 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $request->validate(Activity::RULES);
-        $activity = Activity::create([
+        $activity = Activity::make([
             'activity_type_id' => $request->input('activity_type_id'),
-            'location_id' => $request->input('location_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
         ]);
+        if ($request->input('use_existing') == 'on') {
+            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'));
+        } else {
+            $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+        }
+        $activity->address_id = $address->id;
+        $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
@@ -47,11 +57,17 @@ class ActivityController extends Controller
         $request->validate(Activity::RULES);
         $activity->update([
             'activity_type_id' => $request->input('activity_type_id'),
-            'location_id' => $request->input('location_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
         ]);
+        if ($request->input('use_existing') == 'on') {
+            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'), $activity->address);
+        } else {
+            LocationsRepository::storeAddressFromGenericRequest($activity->address, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+        }
+        $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 

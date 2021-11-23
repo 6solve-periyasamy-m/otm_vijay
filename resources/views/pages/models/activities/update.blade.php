@@ -5,7 +5,7 @@
 @section('form-body')
     @include('partials.models.activities.form', [
       'activity_type_id' => $activity->activity_type_id,
-      'location_id' => $activity->location_id,
+      'address' => $activity->address,
       'name' => $activity->name,
       'description' => $activity->description,
       'notes' => $activity->notes,

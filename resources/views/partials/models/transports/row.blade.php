@@ -2,8 +2,8 @@
     <td><a href="{{ route('transports.view', ['transport' => $transport,]) }}">{{ $name }}</a></td>
     <td>{{ $transport->transportType->name }}</td>
     <td>{{ $transport->operator->name }}</td>
-    <td>{{ $transport->departureLocation->name }}</td>
-    <td>{{ $transport->arrivalLocation->name }}</td>
+    <td>{{ $transport->departureAddress->name }}</td>
+    <td>{{ $transport->arrivalAddress->name }}</td>
     <td>{{ $description }}</td>
     <td>{{ $currency }}</td>
     <td>{{ $is_domestic ? "Yes" : "No" }}</td>
