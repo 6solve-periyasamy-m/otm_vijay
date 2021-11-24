@@ -52,7 +52,6 @@ export default {
     },
     mounted() {
         let that = this
-        console.log('*&^*&^&*^*^&* flights', this.flights.map(f => f.id))
         bus.$on('debugOverride', (debug) => that.debug = debug)
         console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
         this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
