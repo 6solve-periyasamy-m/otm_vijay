@@ -92,7 +92,7 @@ class TransportTransforms implements TransportTransformsInterface
         foreach (TransportInventory::all() as $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
-            $subData['text'] = $inventory->transport->name . ' - ' . $inventory->departureLocation->name . ' to ' . $inventory->arrivalLocation->name;
+            $subData['text'] = $inventory->transport->name . ' - ' . $inventory->departureAddress->name . ' to ' . $inventory->arrivalAddress->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -104,7 +104,7 @@ class TransportTransforms implements TransportTransformsInterface
         $inventory = TransportInventory::findOrFail($id);
         $data = [];
         $data['id'] = $inventory->id;
-        $data['text'] = $inventory->transport->name . ' - ' . $inventory->departureLocation->name . ' to ' . $inventory->arrivalLocation->name;
+        $data['text'] = $inventory->transport->name . ' - ' . $inventory->departureAddress->name . ' to ' . $inventory->arrivalAddress->name;
         return $data;
     }
 }

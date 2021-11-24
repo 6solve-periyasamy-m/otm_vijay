@@ -4,16 +4,20 @@
             <h4 class="fw-bold">{{ $flight->airline->name }}</h4>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Arrival Airport</p>
-            <h6 class="fw-bold">{{ $flight->arrivalAirport->name }}</h6>
-        </div>
-        <div class="col-12 col-xl-6">
             <p>Departure Airport</p>
-            <h6 class="fw-bold">{{ $flight->departureAirport->name }}</h6>
+            <h6 class="fw-bold">{{ $flight->departureAirport->address }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Is Demonic</p>
+            <p>Arrival Airport</p>
+            <h6 class="fw-bold">{{ $flight->arrivalAirport->address }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Is Domestic</p>
             <h6 class="fw-bold">{{ $flight->is_domestic ? "Domestic" : "International" }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Currency</p>
+            <h6 class="fw-bold">{{ $flight->currency }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Notes</p>

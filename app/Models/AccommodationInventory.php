@@ -15,7 +15,7 @@ class AccommodationInventory extends Model
     // use ModelLogging;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in','check_in_time_confirmed','check_out','check_out_time_confirmed','fit_selectable','stock','purchase_price','sales_price','notes','currency'];
+    protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in','check_in_time_confirmed','check_out','check_out_time_confirmed','fit_selectable','stock','purchase_price','sales_price','notes','currency_id'];
     protected $cascadeDeletes = ['tourComponents'];
     const RULES = [
         'room_type_id' => 'required|exists:room_types,id',
@@ -25,7 +25,6 @@ class AccommodationInventory extends Model
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
-        'currency' => 'required|size:3',
     ];
 
     protected $casts = [
@@ -42,11 +41,6 @@ class AccommodationInventory extends Model
     public function tour()
     {
         return $this->belongsToMany(Tour::class, 'accommodation_inventory_tours')->withPivot('sales_price', 'tour_component_type');
-    }
-
-    public function region()
-    {
-        return $this->hasOneThrough(Region::class, Accommodation::class, 'id', 'accommodation_id', 'region_id');
     }
 
     // public function OrdersAccommodation()

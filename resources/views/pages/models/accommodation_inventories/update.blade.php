@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('accommodation-inventories.update', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])])
 
 @section('title', 'Update Accommodation Inventory')
 
-@section('content')
-    @include('partials.models.accommodation_inventories.form', ['action' => route('accommodation-inventories.update', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]),
+@section('form-body')
+    @include('partials.models.accommodation_inventories.form', [
       'accommodation_id' => $accommodationInventory->accommodation_id,
       'room_type_id' => $accommodationInventory->room_type_id,
       'board_type_id' => $accommodationInventory->board_type_id,
@@ -15,6 +15,7 @@
       'stock' => $accommodationInventory->stock,
       'purchase_price' => $accommodationInventory->purchase_price,
       'sales_price' => $accommodationInventory->sales_price,
+      'currency' => $accommodationInventory->currency,
       'notes' => $accommodationInventory->notes,
     ])
 @endsection

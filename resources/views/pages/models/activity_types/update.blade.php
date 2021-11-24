@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('activity-types.update', ['activityType' => $activityType,]),])
 
 @section('title', 'Update Activity Type')
 
-@section('content')
-    @include('partials.models.activity_types.form', ['action' => route('activity-types.update', ['activityType' => $activityType,]),
+@section('form-body')
+    @include('partials.models.activity_types.form', [
       'name' => $activityType->name,
     ])
 @endsection

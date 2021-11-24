@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('airlines.store'),])
 
 @section('title', 'Create Airline')
 
-@section('content')
-    @include('partials.models.airlines.form', ['action' => route('airlines.store'),])
+@section('form-body')
+    @include('partials.models.airlines.form')
 @endsection

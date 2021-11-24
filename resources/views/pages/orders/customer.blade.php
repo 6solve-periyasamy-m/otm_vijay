@@ -2,12 +2,12 @@
 
 @section('title', 'View Order Customer')
 
-@section('head-script')
+@section('header-script')
 <script type="text/javascript">
     {{-- TODO: Upgrade to Select2 --}}
 function updateAccommodationSelectFields() {
     $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableAccommodationAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.accommodation', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function (index, element) {
             $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
         });
@@ -15,7 +15,7 @@ function updateAccommodationSelectFields() {
 }
 function updateActivitySelectFields() {
     $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableActivityAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.activity', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function (index, element) {
             $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
         });
@@ -23,7 +23,7 @@ function updateActivitySelectFields() {
 }
 function updateFlightSelectFields() {
     $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableFlightAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.flight', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function (index, element) {
             $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
         });
@@ -31,7 +31,7 @@ function updateFlightSelectFields() {
 }
 function updateTransportSelectFields() {
     $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('getAvailableTransportAddons', ['oCustomerId' => $order_customer->id,]) }}', function (data) {
+    $.get('{{ route('api.order.addon.get.transport', ['oCustomerId' => $order_customer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
         $.each(data, function(index, element) {
             $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
         });
@@ -40,28 +40,28 @@ function updateTransportSelectFields() {
 function addAccommodationAddon() {
     let id = $('#accommodation-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addAccommodationAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
+        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
     }
     location.reload();
 }
 function addActivityAddon() {
     let id = $('#activities-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addActivityAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
+        $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
     }
     location.reload();
 }
 function addFlightAddon() {
     let id = $('#flights-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addFlightAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
+        $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
     }
     location.reload();
 }
 function addTransportAddon() {
     let id = $('#transports-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('addTransportAddon') }}', { '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
+        $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
     }
     location.reload();
 }
@@ -70,6 +70,7 @@ $(document).ready( function () {
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
+    $('#customer-adjustment-table').DataTable({fixedHeader: true});
     updateAccommodationSelectFields();
     updateActivitySelectFields();
     updateFlightSelectFields();
@@ -87,7 +88,7 @@ $(document).ready( function () {
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour</p>
-            <h6 class="fw-bold">{{ $order->tour->title }}</h6>
+            <h6 class="fw-bold">{{ $order->tour->name }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
@@ -250,9 +251,9 @@ $(document).ready( function () {
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in_date_time }} to {{ $accommodationEntry["inventory"]->check_out_date_time }}</td>
-                                    <td>{{ $accommodationEntry["component"]->title }}</td>
-                                    <td>{{ $accommodationEntry["inventory"]->roomType->room_type_name }}</td>
+                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
+                                    <td>{{ $accommodationEntry["component"]->name }}</td>
+                                    <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>TBI</td> {{-- TODO: Discuss and Implement--}}
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td>
@@ -290,9 +291,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($activities as $activity)
                             <tr>
-                                <td style="min-width: 200px">{{ $activity["inventory"]->activity_start_date_time }} to {{ $activity["inventory"]->activity_end_date_time }}</td>
-                                <td>{{ $activity["component"]->title }}</td>
-                                <td>{{ $activity["component"]->activityType->activity_type_title }}</td>
+                                <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
+                                <td>{{ $activity["component"]->name }}</td>
+                                <td>{{ $activity["component"]->activityType->name }}</td>
                                 <td>{{ $activity["tour"]->tour_component_type }}</td>
                                 <td>
                                     <form action="{{ route('orderActivityDelete', ['id' => $activity['order']->id,]) }}" method="post">
@@ -329,9 +330,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($flights as $flight)
                             <tr>
-                                <td style="min-width: 200px">{{ $flight["inventory"]->departure_date_time }} to {{ $flight["inventory"]->arrival_date_time }}</td>
+                                <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
                                 <td>{{ $flight["inventory"]->flight_number }}</td>
-                                <td>{{ $flight["inventory"]->travelClass->title }}</td>
+                                <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                 <td>{{ $flight["tour"]->tour_component_type }}</td>
                                 <td>
                                     <form action="{{ route('orderFlightDelete', ['id' => $flight['order']->id,]) }}" method="post">
@@ -368,9 +369,9 @@ $(document).ready( function () {
                         </thead>
                         @foreach($transports as $transport)
                             <tr>
-                                <td style="min-width: 200px">{{ $transport["inventory"]->departure_date_time }} to {{ $transport["inventory"]->arrival_date_time }}</td>
+                                <td style="min-width: 200px">{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrives_at }}</td>
                                 <td>{{ $transport["component"]->name }}</td>
-                                <td>{{ $transport["inventory"]->travelClass->title }}</td>
+                                <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                 <td>{{ $transport["tour"]->tour_component_type }}</td>
                                 <td>
                                     <form action="{{ route('orderTransportDelete', ['id' => $transport['order']->id,]) }}" method="post">
@@ -384,6 +385,45 @@ $(document).ready( function () {
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="fw-bold">Customer Adjustments</h4>
+            <div class="pb-3 text-end">
+                <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer]) }}" class="btn btn-success text-white">
+                    <i class="icon-plus"></i>
+                    Add Adjustment
+                </a>
+            </div>
+        </div>
+        <div>
+            <table class="table table-striped" id="customer-adjustment-table">
+                <thead>
+                <tr>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($order_customer->adjustments as $adjustment)
+                    <tr>
+                        <td>{{ $adjustment->amount }}</td>
+                        <td>{{ $adjustment->reason }}</td>
+                        <td>{{ $adjustment->date }}</td>
+                        <td class="actions">
+                            <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                            <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                            <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                @csrf
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
         </div>
     </div>
 </div>

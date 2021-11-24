@@ -4,7 +4,13 @@
         accommodationTable = $('.accommodation-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
-            "ajax": "{{ route('api.accommodation-inventory.datatables', ['tour' => $tour,]) }}",
+            "ajax": {
+                "url": "{{ route('api.accommodation-inventory.datatables', ['tour' => $tour,]) }}",
+                "data": {
+                    "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
+                },
+                "type": "post",
+            },
             "columns": [
                 { "data": "accommodation_name" },
                 { "data": "location" },
@@ -36,7 +42,7 @@
                 200: function () { alert('Components added successfully'); accommodationTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids },
+            data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
 </script>

@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('payments.store', ['order' => $order, ]),])
 
 @section('title', 'Create Payment')
 
-@section('content')
-    @include('partials.models.payments.form', ['action' => route('payments.store', ['order' => $order, ]),])
+@section('form-body')
+    @include('partials.models.payments.form')
 @endsection

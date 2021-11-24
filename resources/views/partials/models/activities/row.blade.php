@@ -1,7 +1,7 @@
 <tr>
     <td><a href="{{ route('activities.view', ['activity' => $activity,]) }}">{{ $name }}</a></td>
     <td>{{ $activity->activityType->name }}</td>
-    <td>{{ $activity->location->name }}</td>
+    <td>{{ $activity->address }}</td>
     <td>{{ $description }}</td>
     <td>{{ $notes }}</td>
     <td class="actions">

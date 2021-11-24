@@ -23,7 +23,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour</p>
-            <h6 class="fw-bold">{{ $order->tour->title }}</h6>
+            <h6 class="fw-bold">{{ $order->tour->name }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
@@ -120,6 +120,7 @@
                                     <th scope="col">Value</th>
                                     <th scope="col">Due Date</th>
                                     <th scope="col">Paid Date</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             @foreach($payments as $payment)
@@ -129,6 +130,13 @@
                                     <td>{{ $payment->amount }}</td>
                                     <td>{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
                                     <td>{{ $payment->paid_on }}</td>
+                                    <td class="actions">
+                                        <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}" method="post" id="payment-{{$payment->id}}-delete">
+                                            @csrf
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </table>
@@ -181,12 +189,20 @@
                             <tr>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Reason</th>
+                                <th scope="col">Actions</th>
                             </tr>
                             </thead>
                             @foreach($order->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $adjustment->amount }}</td>
                                     <td>{{ $adjustment->reason }}</td>
+                                    <td class="actions">
+                                        <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" method="post" id="madjustment-{{$adjustment->id}}-delete">
+                                            @csrf
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </table>
@@ -205,6 +221,7 @@
                                 <th scope="col">Customer</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Reason</th>
+                                <th scope="col">Actions</th>
                             </tr>
                             </thead>
                             @foreach($customers as $ordersCustomer)
@@ -213,6 +230,13 @@
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
                                     <td>{{ $adjustment->amount }}</td>
                                     <td>{{ $adjustment->reason }}</td>
+                                    <td class="actions">
+                                        <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                            @csrf
+                                        </form>
+                                    </td>
                                 </tr>
                                 @endforeach
                             @endforeach

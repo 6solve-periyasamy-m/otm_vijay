@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingFormLoginController;
+use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
@@ -276,6 +277,19 @@ Route::prefix('raw')->middleware('auth')->group(function () {
         Route::get('/update/{travelClass}', [TravelClassController::class, 'edit'])->name('travel-classes.edit');
         Route::post('/update/{travelClass}', [TravelClassController::class, 'update'])->name('travel-classes.update');
         Route::post('/delete/{travelClass}', [TravelClassController::class, 'destroy'])->name('travel-classes.delete');
+    });
+});
+
+Route::prefix('customer')->name('customer.')->group(function () {
+    Route::get('/login', [CustomerPortalController::class, 'showCustomerLogin'])->name('login');
+    Route::get('/register', [CustomerPortalController::class, 'showCustomerRegister'])->name('register');
+    Route::post('/login', [CustomerPortalController::class, 'login'])->name('confirm-login');
+    Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
+    Route::prefix('{customer}')->group(function () {
+        Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
+        Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
+        Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
+        Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
     });
 });
 

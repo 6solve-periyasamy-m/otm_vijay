@@ -82,15 +82,15 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         }
         $query = DB::table('accommodation_inventories');
         $query->join('accommodations', 'accommodation_inventories.accommodation_id', '=', 'accommodations.id');
-        $query->join('regions', 'accommodations.region_id', '=', 'regions.id');
-        $query->join('countries', 'regions.country_id', '=', 'countries.id');
+        $query->join('addresses', 'accommodations.address_id', '=', 'addresses.id');
+        $query->join('countries', 'countries.id', '=', 'addresses.country_id');
         $query->join('room_types', 'accommodation_inventories.room_type_id', '=', 'room_types.id');
         $query->join('board_types', 'accommodation_inventories.board_type_id', '=', 'board_types.id');
         $query->select(
             'accommodation_inventories.id AS id',
             'accommodations.id AS accommodation_id',
             'accommodations.name AS accommodation_name',
-            DB::raw('CONCAT(`regions`.`name`, \' - \', `countries`.`name`) AS location'),
+            DB::raw('CONCAT(`addresses`.`region`, \' - \', `countries`.`name`) AS location'),
             'accommodation_inventories.check_in AS check_in',
             'accommodation_inventories.check_out AS check_out_time',
             DB::raw('CASE WHEN `accommodation_inventories`.`check_in_time_confirmed` = 1 THEN \'Yes\' ELSE \'No\' END  AS check_in_time_confirmed'),

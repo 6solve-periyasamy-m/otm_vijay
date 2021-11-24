@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
 use App\Transforms\OrderTransforms;
@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\LocationsTransforms;
 
-class SelectController extends Controller
+class SelectController extends ApiController
 {
     public function getLocations(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
@@ -229,5 +229,23 @@ class SelectController extends Controller
 
     public function getSelectedPaymentMethod($id) {
         return OrderTransforms::getSelectedPaymentMethod($id);
+    }
+
+    public function getAddresses(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsTransforms::getAddresses($filter);
+    }
+
+    public function getSelectedAddress($id) {
+        return LocationsTransforms::getSelectedAddress($id);
+    }
+
+    public function getCurrencies(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return LocationsTransforms::getCurrencies($filter);
+    }
+
+    public function getSelectedCurrency($id) {
+        return LocationsTransforms::getSelectedCurrency($id);
     }
 }

@@ -1,6 +1,8 @@
 <tr>
     <td><a href="{{ route('countries.view', ['country' => $country,]) }}">{{ $name }}</a></td>
-    <td>{{ $code }}</td>
+    <td>{{ $numeric_code }}</td>
+    <td>{{ $alpha_code }}</td>
+    <td>{{ $dialing_code }}</td>
     <td>{{ $currency }}</td>
     <td>
         <a href="{{route('countries.edit', ['country' => $country,])}}">

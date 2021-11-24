@@ -15,12 +15,11 @@ class CreateAccommodationsTable extends Migration
     {
         Schema::create('accommodations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->string('name', 190)->index();
             $table->text('description')->nullable();
             $table->date('audit_date')->nullable();
-            $table->text('address')->nullable();
-            $table->string('currency', 5)->nullable();
+            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('address_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
