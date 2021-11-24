@@ -468,16 +468,14 @@ that.debug>3 && console.log('>>>>>>> BookingSelection: ', bookingSelection)
                         that.showwait = false
                         return
                     }
-                    // DEBUG BELOW
                     this.debug>4 && console.log('BookingFormFlight: flight orders', response)
-                    //this.flightSelected('Inbound', 1, orders, that.travellers[1])
+
                     outbound = that.flightSelected('Outbound', 'Included', that.lead_traveller)[0]
-                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0]
-                    this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
+                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0];  this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
+
                     // set the selected_outbound_flight (group selector)
                     if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
-                        that.selected_outbound_flight = outbound.flight_inventory_tour_id
-                        if (that.debug>4) console.log('loadFlightsForBooking SELECTED OUT FLIGHT', that.selected_outbound_flight)
+                        that.selected_outbound_flight = outbound.flight_inventory_tour_id;   if (that.debug>4) console.log('loadFlightsForBooking SELECTED OUT FLIGHT', that.selected_outbound_flight)
                     } else {
                         console.log('>>>> check outbound var', outbound, typeof outbound, outbound.flight_inventory_tour_id)
                     }
@@ -500,8 +498,8 @@ that.debug>3 && console.log('>>>>>>> BookingSelection: ', bookingSelection)
 
                     // process the addons TODO: Change orders -> bookings!
                     // TODO : addon should be for a specific traveller!  It will need to be recorded in that way
-                    const outbound_addons = that.flightSelected('Outbound', 'Addon', that.travellers[0])
-                    const inbound_addons  = that.flightSelected('Inbound', 'Addon', that.travellers[0])
+                    const outbound_addons = that.flightSelected('Outbound', 'Addon', that.travellers)
+                    const inbound_addons  = that.flightSelected('Inbound', 'Addon', that.travellers)
                     if (outbound_addons) {
                         that.debug>2 && console.log('loadFlightsForBooking ADDONS', outbound_addons)
                         that.travellers.map((traveller, key) => {
