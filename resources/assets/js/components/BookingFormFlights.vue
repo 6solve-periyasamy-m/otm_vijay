@@ -89,10 +89,10 @@
                                 </div>
                             </div>
                             <hr class="light" />
-                            <div v-for="traveller in travellers" v-bind:key="traveller.order_customer_id">
+                            <div v-for="traveller in travellers" v-bind:key="traveller.id">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        {{ traveller.order_customer_id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
+                                        {{ traveller.id }} {{ traveller.is_lead_booker ? 'Lead' : 'Additional'}}
                                     </div>
                                     <div class="col-sm-3">
                                         {{ traveller.first_name }}
@@ -105,7 +105,7 @@
                                     <h5>Flight Options for traveller</h5>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            {{debug>5 ? unselected_outbound : ''}}
+                                            {{debug>1 ? unselected_outbound : ''}}
                                             <booking-form-flight-selector
                                                 v-model="selected_custom_outbound_flight"
                                                 :enabled="true"
@@ -118,7 +118,7 @@
                                                 :types="outbound_type"
                                                 :selected_item="traveller.selected_outbound_addon">
                                             </booking-form-flight-selector>
-                                            {{debug>5 ? unselected_inbound : ''}}
+                                            {{debug>1 ? unselected_inbound : ''}}
                                             <booking-form-flight-selector
                                                 v-model="selected_custom_inbound_flight"
                                                 :enabled="true"
@@ -163,7 +163,7 @@ export default {
     },
     data() {
         return {
-            debug: 4,
+            debug: 3,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
@@ -345,31 +345,20 @@ export default {
                 this.showwait = false
             }
         },
+        // filter out already selected item for this traveller
         flightOptionsCustomer(id) {
+            console.log('>>>>>>> ',  !this.travellerFlightOptions[id])
             if (typeof this.travellerFlightOptions[id] == 'undefined' || this.travellerFlightOptions.length == 0 || this.travellerFlightOptions[id] == null) {
                 Vue.set(this.travellerFlightOptions, id, true)
             } else {
                 Vue.set(this.travellerFlightOptions, id, !this.travellerFlightOptions[id])
             }
         },
-        // async getTourParty(booking_id) {
-        //     let that = this
-        //     await axios.get('/api/booking/tourparty', {
-        //             params: {
-        //                 booking_id: booking_id
-        //             }
-        //         })
-        //         .then(response => {
-        //             that.debug > 1 && console.log('getTourParty, response:', response)
-        //             that.travellers = response.data
-        //         })
-        //         .catch(err => {
-        //             console.log('ERROR loading tour party', err)
-        //         })
-        // },
         hasCustomFlights(traveller) {
-            if (traveller.order_customer_id) {
-                this.flightOptionsCustomer(traveller.order_customer_id)
+            if (traveller.id) {
+                console.log('DOES traveller have custom flights?', traveller)
+                // this weirdly sometimes works??? this.flightOptionsCustomer(traveller.order_customer_id)
+                this.flightOptionsCustomer(traveller.id)
                 return true
             }
             return false
@@ -385,7 +374,7 @@ export default {
 
             this.showCustomFlights = !state
         },
-        async updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token) {
+        updateFlight(flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token) {
             this.debug > 3 && console.log('updateFlight()', flight_inventory_tour_id, flight_type, flight_tour, customer, custom, token);
             let that = this
             if (customer == undefined || customer == null) {
@@ -405,7 +394,7 @@ export default {
                 token: token
             }
             this.debug>1 && console.log('booking a flight', data);
-            await axios.post('/api/booking/flight', data)
+            axios.post('/api/booking/flight', data)
                 .then(response => {
                     that.debug > 3 && console.log('flight booking response', response)
                     that.loadFlightsForBooking(that.booking_id)
@@ -422,25 +411,18 @@ export default {
                 // alert('Form data incomplete, please refresh or contact support')
                 return
             }
-            that.debug>5 && console.log('>>>>> FLIGHTSELECTED: traveller', traveller)
 
             let bookingSelection = that.bookings.filter(b => {
-                that.debug>4 && console.log('evaluation of flight ',b.flight_type === flight_type &&
-                       b.tour_component_type === tour_component_type &&
-                       b.customer_id === traveller.id, b.flight_type, flight_type, b.tour_component_type, tour_component_type, b.customer_id, traveller.id)
                 return b.flight_type === flight_type &&
                        b.tour_component_type === tour_component_type &&
                        b.customer_id === traveller.id
             })
-            that.debug>4 && console.log('>>>>>>> FLIGHTSELECTED booking filter items found', bookingSelection.length)
-            that.debug>5 && console.log('>>>>>>> FLIGHTSELECTED booking filter', that.bookings, bookingSelection)
 
             if (typeof bookingSelection == 'undefined' || bookingSelection == null || bookingSelection.length == 0) {
                 that.debug && console.log('WARNING: flightSelected no ' + tour_component_type + ' booking')
                 return null
             }
 
-that.debug>3 && console.log('>>>>>>> BookingSelection: ', bookingSelection)
             return bookingSelection
         },
 
@@ -471,20 +453,15 @@ that.debug>3 && console.log('>>>>>>> BookingSelection: ', bookingSelection)
                     this.debug>4 && console.log('BookingFormFlight: flight orders', response)
 
                     outbound = that.flightSelected('Outbound', 'Included', that.lead_traveller)[0]
-                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0];  this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
+                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0];    this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
 
                     // set the selected_outbound_flight (group selector)
                     if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
                         that.selected_outbound_flight = outbound.flight_inventory_tour_id;   if (that.debug>4) console.log('loadFlightsForBooking SELECTED OUT FLIGHT', that.selected_outbound_flight)
-                    } else {
-                        console.log('>>>> check outbound var', outbound, typeof outbound, outbound.flight_inventory_tour_id)
                     }
-
                     if (typeof inbound !== 'undefined' && inbound != null && inbound.flight_inventory_tour_id) {
-                        that.selected_inbound_flight = inbound.flight_inventory_tour_id
-                        if (that.debug>4) console.log('loadFlightsForBooking SELECTED IN FLIGHTS', that.selected_inbound_flight)
+                        that.selected_inbound_flight = inbound.flight_inventory_tour_id;     if (that.debug>4) console.log('loadFlightsForBooking SELECTED IN FLIGHTS', that.selected_inbound_flight)
                     }
-
                     that.debug>2 && console.log('loadFlightsForBooking SELECTED GROUP FLIGHTS', that.selected_outbound_flight, that.selected_inbound_flight)
 
                     that.unselected_outbound = that.flights.filter(flight => {
@@ -498,37 +475,40 @@ that.debug>3 && console.log('>>>>>>> BookingSelection: ', bookingSelection)
 
                     // process the addons TODO: Change orders -> bookings!
                     // TODO : addon should be for a specific traveller!  It will need to be recorded in that way
-                    const outbound_addons = that.flightSelected('Outbound', 'Addon', that.travellers)
-                    const inbound_addons  = that.flightSelected('Inbound', 'Addon', that.travellers)
-                    if (outbound_addons) {
-                        that.debug>2 && console.log('loadFlightsForBooking ADDONS', outbound_addons)
-                        that.travellers.map((traveller, key) => {
-                            outbound = that.flightSelected('Outbound', 1, traveller)
-                            //  :selected_item="traveller.selected_outbound_addon">
-                            if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
-                                traveller['selected_outbound_addon'] = outbound.flight_inventory_tour_id
-                                that.$set(that.travellers, key, traveller)
-                                this.debug>3 && console.log('EMITTING setCustomFlightsForTraveller outbound', traveller, outbound)
-                                bus.$emit('setCustomFlightsForTraveller', traveller, outbound.flight_inventory_tour_id)
-                            }
-                        })
-                    }
-                    if (inbound_addons) {
-                        that.debug>2 && console.log('ADDONS', inbound_addons)
-                        that.travellers.map((traveller, key) => {
-                            inbound = that.flightSelected('Inbound', 1, traveller)
-                            //  :selected_item="traveller.selected_outbound_addon">
-                            if (typeof inbound !== 'undefined' && inbound != null && inbound.flight_inventory_tour_id) {
-                                traveller['selected_inbound_addon'] = inbound.flight_inventory_tour_id
-                                // this should work, TODO: check it seting the inventory flight id into the component?
-                                that.$set(that.travellers, key, traveller)
-                                // TODO: may want to check if these worked, or if required
-                                // that.$set(that.travellers[key], 'selected_inbound_addon', inbound.flight_inventory_tour_id)
-                                // that.selected_inbound_addon = inbound.flight_inventory_tour_id
-                                bus.$emit('setCustomFlightsForTraveller', traveller, inbound.flight_inventory_tour_id)
-                            }
-                        })
-                    }
+                    this.travellers.map(traveller => {
+                        const outbound_addons = that.flightSelected('Outbound', 'Add-on', traveller)
+                        const inbound_addons  = that.flightSelected('Inbound', 'Add-on', traveller)
+console.log('Addon selected: ', traveller, outbound_addons, inbound_addons)
+                        if (outbound_addons) {
+                            that.debug>2 && console.log('>>>>> loadFlightsForBooking ADDONS', outbound_addons)
+                            that.travellers.map((traveller, key) => {
+                                outbound = that.flightSelected('Outbound', 1, traveller)
+                                //  :selected_item="traveller.selected_outbound_addon">
+                                if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
+                                    traveller['selected_outbound_addon'] = outbound.flight_inventory_tour_id
+                                    that.$set(that.travellers, key, traveller)
+                                    this.debug>3 && console.log('EMITTING setCustomFlightsForTraveller outbound', traveller, outbound)
+                                    bus.$emit('setCustomFlightsForTraveller', traveller, outbound.flight_inventory_tour_id)
+                                }
+                            })
+                        }
+                        if (inbound_addons) {
+                            that.debug>2 && console.log('ADDONS', inbound_addons)
+                            that.travellers.map((traveller, key) => {
+                                inbound = that.flightSelected('Inbound', 1, traveller)
+                                //  :selected_item="traveller.selected_outbound_addon">
+                                if (typeof inbound !== 'undefined' && inbound != null && inbound.flight_inventory_tour_id) {
+                                    traveller['selected_inbound_addon'] = inbound.flight_inventory_tour_id
+                                    // this should work, TODO: check it seting the inventory flight id into the component?
+                                    that.$set(that.travellers, key, traveller)
+                                    // TODO: may want to check if these worked, or if required
+                                    // that.$set(that.travellers[key], 'selected_inbound_addon', inbound.flight_inventory_tour_id)
+                                    // that.selected_inbound_addon = inbound.flight_inventory_tour_id
+                                    bus.$emit('setCustomFlightsForTraveller', traveller, inbound.flight_inventory_tour_id)
+                                }
+                            })
+                        }
+                    })
                     that.showwait = false
                 })
                 .catch(error => {
