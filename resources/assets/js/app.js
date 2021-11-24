@@ -23,6 +23,10 @@ window.axios.defaults.headers.common = {
 // operational 
 const busEventLogging = true
 
+bus.$on('getLoginToken', () => {
+    console.log('>>> getLoginToken cookie')
+    
+})
 bus.$on('setBookingToken', token => {
     console.log('>>>> setBookingToken event monitor ', token);
 })

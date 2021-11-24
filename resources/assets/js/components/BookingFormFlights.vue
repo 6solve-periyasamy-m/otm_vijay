@@ -163,7 +163,7 @@ export default {
     },
     data() {
         return {
-            debug: 9,
+            debug: 4,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
@@ -422,26 +422,26 @@ export default {
                 // alert('Form data incomplete, please refresh or contact support')
                 return
             }
-            that.debug>4 && console.log('>>>>> FLIGHTSELECTED: traveller', traveller)
-            let booking = that.bookings.filter(b => {
-                that.debug>5 && console.log('evaluation of flight ',b.flight_type, flight_type, b.tour_component_type, tour_component_type, b.customer_id, traveller.id)
+            that.debug>5 && console.log('>>>>> FLIGHTSELECTED: traveller', traveller)
+
+            let bookingSelection = that.bookings.filter(b => {
+                that.debug>4 && console.log('evaluation of flight ',b.flight_type === flight_type &&
+                       b.tour_component_type === tour_component_type &&
+                       b.customer_id === traveller.id, b.flight_type, flight_type, b.tour_component_type, tour_component_type, b.customer_id, traveller.id)
                 return b.flight_type === flight_type &&
                        b.tour_component_type === tour_component_type &&
                        b.customer_id === traveller.id
             })
-            that.debug>2 && console.log('>>>>>>> FLIGHTSELECTED booking filter found', booking.length)
-            that.debug>3 && console.log('>>>>>>> FLIGHTSELECTED booking filter', that.bookings, flight_type, tour_component_type, booking)
+            that.debug>4 && console.log('>>>>>>> FLIGHTSELECTED booking filter items found', bookingSelection.length)
+            that.debug>5 && console.log('>>>>>>> FLIGHTSELECTED booking filter', that.bookings, bookingSelection)
 
-            if (typeof booking == 'undefined' || booking == null || booking.length == 0) {
+            if (typeof bookingSelection == 'undefined' || bookingSelection == null || bookingSelection.length == 0) {
                 that.debug && console.log('WARNING: flightSelected no ' + tour_component_type + ' booking')
                 return null
             }
 
-            const booking_selected = booking[0]
-            const flight = that.flights.filter(flight => {
-                return flight.flight_inventory_tour_id == booking_selected.inventory_tour_id
-            })[0]
-            return flight
+that.debug>3 && console.log('>>>>>>> BookingSelection: ', bookingSelection)
+            return bookingSelection
         },
 
         // loads current flight orders 
@@ -469,21 +469,22 @@ export default {
                         return
                     }
                     // DEBUG BELOW
-this.debug>1 && console.log('BookingFormFlight: flight orders', response)
+                    this.debug>4 && console.log('BookingFormFlight: flight orders', response)
                     //this.flightSelected('Inbound', 1, orders, that.travellers[1])
-                    outbound = that.flightSelected('Outbound', 'Included', that.lead_traveller)
-                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)
-this.debug>1 && console.log('outbound flights selected', outbound)
-this.debug>1 && console.log('inbound flights selected', inbound)
+                    outbound = that.flightSelected('Outbound', 'Included', that.lead_traveller)[0]
+                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0]
+                    this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
                     // set the selected_outbound_flight (group selector)
                     if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
                         that.selected_outbound_flight = outbound.flight_inventory_tour_id
-                        if (that.debug>3) console.log('loadFlightsForBooking SELECTED OUT FLIGHT', that.selected_outbound_flight)
+                        if (that.debug>4) console.log('loadFlightsForBooking SELECTED OUT FLIGHT', that.selected_outbound_flight)
+                    } else {
+                        console.log('>>>> check outbound var', outbound, typeof outbound, outbound.flight_inventory_tour_id)
                     }
 
                     if (typeof inbound !== 'undefined' && inbound != null && inbound.flight_inventory_tour_id) {
                         that.selected_inbound_flight = inbound.flight_inventory_tour_id
-                        if (that.debug>3) console.log('loadFlightsForBooking SELECTED IN FLIGHTS', that.selected_inbound_flight)
+                        if (that.debug>4) console.log('loadFlightsForBooking SELECTED IN FLIGHTS', that.selected_inbound_flight)
                     }
 
                     that.debug>2 && console.log('loadFlightsForBooking SELECTED GROUP FLIGHTS', that.selected_outbound_flight, that.selected_inbound_flight)

@@ -23,21 +23,28 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
     {
         $this->model = new BookingFlights();
     }
-    public function getFlightBookings($booking_id, $type = 'Both')
+    public function getFlightBookings($booking_id, $type = 'Both', $tour_component_type = 'Included')
     {
         $booking = new Booking();
         $flightBooking = $booking
-            // NB: careful: overly restrictive select and the joins may not work
-            ->select('bookings.*', 'booking_flights.*','flights.*', 'flight_inventory_tours.*')
+            ->select('bookings.*', 
+                'booking_flights.*',
+                'flights.*',
+                'flight_inventory_tours.id as flight_inventory_tour_id',
+                'flight_inventories.travel_class_id',
+                'flight_inventory_tours.tour_component_type', 
+                'flight_inventory_tours.flight_type', 
+                'flight_inventory_tours.tour_sales_price') 
             ->join('booking_flights', 'booking_flights.booking_id', 'bookings.id')
             ->join('flight_inventories', 'flight_inventories.id', 'booking_flights.flight_inventory_id')
             ->join('flights', 'flights.id', 'flight_inventories.flight_id')
             ->join('flight_inventory_tours', 'flight_inventory_tours.flight_inventory_id', 'flight_inventories.id')
             ->leftJoin('airlines', 'airlines.id', 'flights.airline_id')
             ->where('bookings.id', $booking_id)
+            ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
             ->whereNull('bookings.deleted_at');
         if ($type !== 'Both') {
-            $flightBooking = $flightBooking->whereIn('flight_inventory_tours.flight_type', $type);
+            $flightBooking = $flightBooking->where('flight_inventory_tours.flight_type', $type);
         }
         $flightBookings = $flightBooking->get();
         if ($this->logging > 5) {
