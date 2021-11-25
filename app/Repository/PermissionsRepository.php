@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
 use \Silber\Bouncer\BouncerFacade as Bouncer;
 
@@ -15,6 +17,8 @@ interface PermissionsRepositoryInterface
     public static function grantPermission(Role $role, string $ability, string $class);
     public static function revokePermission(Role $role, string $ability, string $class);
     public static function createRole(string $name, string $title, int $level);
+    public static function createPresetRole(string $title, int $level);
+    public static function getCurrentLevel();
 }
 
 class PermissionsRepository implements PermissionsRepositoryInterface
@@ -210,11 +214,31 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         return Bouncer::can($action, '\\App\\Models\\' . $class);
     }
 
-    public static function grantPermission(Role $role, string $ability, string $class) {
+    /**
+     * @throws AuthorizationException
+     */
+    public static function grantPermission(Role $role, string $ability, string $class, $onFail = null) {
+        if (!self::canCurrentUser($ability, $class)) {
+            if (!isset($onFail)) {
+                throw new AuthorizationException('Role does not have access to this permission');
+            } else {
+                $onFail();
+            }
+        }
         Bouncer::allow($role)->to($ability, '\\App\\Models\\' . $class);
     }
 
-    public static function revokePermission(Role $role, string $ability, string $class) {
+    /**
+     * @throws AuthorizationException
+     */
+    public static function revokePermission(Role $role, string $ability, string $class, $onFail = null) {
+        if (!self::canCurrentUser($ability, $class)) {
+            if (!isset($onFail)) {
+                throw new AuthorizationException('Role does not have access to this permission');
+            } else {
+                $onFail();
+            }
+        }
         Bouncer::disallow($role)->to($ability, '\\App\\Models\\' . $class);
     }
 
@@ -224,5 +248,14 @@ class PermissionsRepository implements PermissionsRepositoryInterface
             'title' => $title,
             'level' => $level,
         ]);
+    }
+
+    public static function createPresetRole(string $title, int $level) {
+        return self::createRole(strtolower(str_replace(' ', '-', $title)), $title, $level);
+    }
+
+    public static function getCurrentLevel() {
+        if (!Auth::guard('web')->check()) return -1;
+        return Auth::user()->getHighestRoleLevel();
     }
 }
