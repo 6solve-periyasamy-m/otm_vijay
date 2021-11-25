@@ -11,11 +11,6 @@ use Silber\Bouncer\Database\Role;
 
 class PermissionsController extends Controller
 {
-    public function showPermissionScreen(Role $role)
-    {
-        return view('pages.users.permissions', ['role' => $role, 'permissions' => PermissionsRepository::getGroupedPermissions($role)]);
-    }
-
     public function index()
     {
         return view('pages.roles.table', ['roles' => Role::all(),]);
@@ -36,6 +31,9 @@ class PermissionsController extends Controller
 
     public function edit(Role $role)
     {
+        if ($role->level >= PermissionsRepository::getCurrentLevel()) {
+            abort(403, 'You cannot delete a role that is higher than or equal to your permission level');
+        }
         return view('pages.roles.update', ['role' => $role, 'permissions' => PermissionsRepository::getGroupedPermissions($role)]);
     }
 
@@ -51,6 +49,10 @@ class PermissionsController extends Controller
 
     public function destroy(Role $role)
     {
+        if ($role->level >= PermissionsRepository::getCurrentLevel()) {
+            abort(403, 'You cannot delete a role that is higher than or equal to your permission level');
+        }
+        $role->delete();
         return redirect()->route('roles.all');
     }
 
