@@ -40,9 +40,7 @@ class PermissionsController extends Controller
     public function update(Request $request, Role $role)
     {
         $request->validate($this->getValidationRules());
-        $role->title = $request->input('title');
-        $role->level = $request->input('level');
-        $role->save();
+        PermissionsRepository::updateRole($role, $request->input('title'), $request->input('level'));
         $this->processRequest($role, $request);
         return redirect()->route('roles.all');
     }

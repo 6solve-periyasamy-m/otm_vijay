@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
@@ -18,7 +19,12 @@ interface PermissionsRepositoryInterface
     public static function revokePermission(Role $role, string $ability, string $class);
     public static function createRole(string $name, string $title, int $level);
     public static function createPresetRole(string $title, int $level);
+    public static function updateRole(Role $role, string $title, int $level);
     public static function getCurrentLevel();
+    public static function getAvailableRoles();
+    public static function getDefaultRole();
+    public static function assignRole(User $user, string $newRole);
+    public static function getRoleFromName(string $role);
 }
 
 class PermissionsRepository implements PermissionsRepositoryInterface
@@ -254,8 +260,48 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         return self::createRole(strtolower(str_replace(' ', '-', $title)), $title, $level);
     }
 
+    public static function updateRole(Role $role, string $title, int $level) {
+        $role->name = strtolower(str_replace(' ', '-', $title));
+        $role->title = $title;
+        $role->level = $level;
+        $role->save();
+        return $role;
+    }
+
     public static function getCurrentLevel() {
         if (!Auth::guard('web')->check()) return -1;
         return Auth::user()->getHighestRoleLevel();
+    }
+
+    public static function getAvailableRoles() {
+        return Role::where('level', '<', self::getCurrentLevel())->get();
+    }
+
+    public static function getDefaultRole() {
+        return Role::all()->sortBy('level', SORT_ASC)->first();
+    }
+
+    public static function getRoleFromName(string $role) {
+        return Role::where('name', '=', $role)->first();
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public static function assignRole(User $user, string $newRole) {
+        $role = self::getRoleFromName($newRole);
+        if (isset($role)) {
+            if ($role->level >= self::getCurrentLevel()) {
+                throw new AuthorizationException('You cannot assign a role higher than your own');
+            }
+
+            foreach ($user->roles as $iRole) {
+                $user->retract($iRole);
+            }
+
+            $user->assign($newRole);
+            return $user;
+        }
+        return null;
     }
 }
