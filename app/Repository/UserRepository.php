@@ -159,7 +159,7 @@ class UserRepository implements UserRepositoryInterface
                 'order' => 2,
             ],
             'Airline' => [
-                'name' => 'Flight',
+                'name' => 'Airline',
                 'group' => 'Flight',
                 'order' => 3,
             ],
@@ -203,17 +203,17 @@ class UserRepository implements UserRepositoryInterface
             // Customers
             'Customer' => [
                 'name' => 'Customer',
-                'group' => 'Customers',
+                'group' => 'Orders',
                 'order' => 0,
             ],
             'OrderCustomer' => [
                 'name' => 'Order Customer',
-                'group' => 'Customers',
+                'group' => 'Orders',
                 'order' => 1,
             ],
             'OrderCustomerAdjustment' => [
                 'name' => 'Customer Adjustment',
-                'group' => 'Customers',
+                'group' => 'Orders',
                 'order' => 2,
             ],
             // System
