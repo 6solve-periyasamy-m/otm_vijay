@@ -83,7 +83,8 @@ class PermissionsController extends Controller
             'title' => 'required',
             'level' => [
                 'required',
-                'max:' . PermissionsRepository::getCurrentLevel(),
+                'integer',
+                'between:0,' . (PermissionsRepository::getCurrentLevel()-1),
             ],
         ];
     }
