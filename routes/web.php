@@ -43,6 +43,7 @@ use App\Http\Controllers\OrderComponentController;
 use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
 use App\Models\Order;
@@ -554,7 +555,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     });
 
     Route::prefix('users')->group(function () {
-       Route::get('/', [UserController::class, 'index'])->name('users.all')->middleware('bouncer:User,read');
+        Route::get('/', [UserController::class, 'index'])->name('users.all')->middleware('bouncer:User,read');
         Route::get('/create', [UserController::class, 'create'])->name('users.create')->middleware('bouncer:User,create');
         Route::post('/create', [UserController::class, 'store'])->name('users.store')->middleware('bouncer:User,create');
         Route::prefix('{user}')->group(function () {
@@ -562,6 +563,18 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/update', [UserController::class, 'edit'])->name('users.edit')->middleware('bouncer:User,update');
             Route::post('/update', [UserController::class, 'update'])->name('users.update')->middleware('bouncer:User,update');
             Route::post('/delete', [UserController::class, 'destroy'])->name('users.delete')->middleware('bouncer:User,delete');
+        });
+    });
+
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [PermissionsController::class, 'index'])->name('roles.all')->middleware('bouncer:User,read');
+        Route::get('/create', [PermissionsController::class, 'create'])->name('roles.create')->middleware('bouncer:User,create');
+        Route::post('/create', [PermissionsController::class, 'store'])->name('roles.store')->middleware('bouncer:User,create');
+        Route::prefix('{role}')->group(function () {
+            Route::get('/', [PermissionsController::class, 'view'])->name('roles.view')->middleware('bouncer:User,read');
+            Route::get('/update', [PermissionsController::class, 'edit'])->name('roles.edit')->middleware('bouncer:User,update');
+            Route::post('/update', [PermissionsController::class, 'update'])->name('roles.update')->middleware('bouncer:User,update');
+            Route::post('/delete', [PermissionsController::class, 'destroy'])->name('roles.delete')->middleware('bouncer:User,delete');
         });
     });
 });
@@ -580,4 +593,4 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
-Route::get('/test', function () { return view('pages.test'); });
+Route::get('/test/{role}', [PermissionsController::class, 'showPermissionScreen']);
