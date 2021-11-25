@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             AddressParent::create(['id' => $key, 'name' => $value]);
         }
         Artisan::call('countries:update');
+        $this->call(UserSeeder::class);
 
         if (config('app.debug')) {
             $this->call(LocationTypesTableSeeder::class);
