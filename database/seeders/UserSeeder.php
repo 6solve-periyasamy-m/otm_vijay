@@ -37,6 +37,12 @@ class UserSeeder extends Seeder
         Bouncer::forbid($userRole)->toManage(User::class);
         Bouncer::forbid($userRole)->toManage(Setting::class);
 
+        $guest = Bouncer::role()->firstOrCreate([
+           'name' => 'guest',
+           'title' => 'Guest',
+           'level' => 0
+        ]);
+
         $charlotte = User::create([
             'name' => 'Charlotte Redding',
             'email' => 'clr@octopustravelmatrix.com',
@@ -55,9 +61,9 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
         ]);
+
         $celeste->assign($otmStaff);
         $charlotte->assign($otmStaff);
         $nicholas->assign($otmStaff);
-
     }
 }
