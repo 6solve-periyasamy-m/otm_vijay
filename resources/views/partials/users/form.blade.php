@@ -3,4 +3,7 @@
 @include('partials.fields.password', ['name' => 'Password', 'field' => 'password', ])
 @include('partials.fields.password', ['name' => 'Confirm Password', 'field' => 'password_confirmed', ])
 @include('partials.fields.file', ['name' => 'Avatar', 'field' => 'avatar',])
+@if(Auth::user()->id != $user->id)
+    @include('partials.fields.dropdown', ['name' => 'Role', 'field' => 'role', 'values' => $roles, 'selected' => $current,])
+@endif
 @include('partials.fields.submit')

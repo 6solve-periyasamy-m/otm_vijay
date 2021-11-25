@@ -78,4 +78,14 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return $highest;
     }
+
+    public function getCurrentRole()
+    {
+        $highest = null;
+        foreach ($this->roles as $role)
+        {
+            $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
+        }
+        return $highest;
+    }
 }

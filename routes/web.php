@@ -592,4 +592,3 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
-Route::get('/test/{role}', [PermissionsController::class, 'showPermissionScreen']);
