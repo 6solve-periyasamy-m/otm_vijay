@@ -2,12 +2,15 @@
 
 namespace App\Repository;
 
+use App\Models\Customer;
+use App\Models\Event;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\OrderTransport;
+use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
 
 interface OrderRepositoryInterface {
@@ -310,5 +313,82 @@ class OrderRepository implements OrderRepositoryInterface
         $data['payments'] = collect($payments)->sortBy('date')->toArray();
         $data['totals']['combined'] = $data['totals']['orderValue'] - $data['totals']['paid'] + $data['totals']['adjusted'];
         return $data;
+    }
+
+    /**
+     * @param Order $order
+     * @return array
+     * @var Customer $customer
+     * @var Tour $tour
+     * @var Event $event
+     */
+    public static function getOrderShortCodes(Order $order) {
+        $customer = $order->leadBooker->customer;
+        $tour = $order->tour;
+        $event = $tour->event;
+        $nextPayment = self::getNextPaymentDetails($order);
+        $data = [
+            'TITLE' => $customer->title,
+            'FIRST_NAME' => $customer->first_name,
+            'MIDDLE_NAMES' => $customer->middle_names,
+            'LAST_NAME' => $customer->last_name,
+            'PASSPORT_EXPIRY_DATE' => $customer->passport_expiry_date,
+            'BOOKING_REFERENCE' => $order->booking_reference,
+            'ORDERED_ON' => $order->ordered_on,
+            'TOTAL_PAID' => self::getTotalPaid($order),
+            'PAYMENT_AMOUNT' => $nextPayment['amount'],
+            'PAYMENT_DUE' => $nextPayment['due'],
+            'TOUR_NAME' => $tour->name,
+            'TOUR_DESCRIPTION' => $tour->description,
+            'TOUR_START' => $tour->date_from,
+            'TOUR_END' => $tour->date_to,
+            'TOUR_BASE_PER_PERSON' => $tour->base_price_per_person,
+            'TOUR_DEPOSIT' => $tour->deposit,
+            'TOUR_SURCHARGE' => $tour->single_occupancy_surcharge,
+            'LATEST_INVOICE' => route('orders.invoice.latest', ['order' => $order, ]), // TODO: Link to customers invoices
+            'PORTAL_LINK' => route('customer.portal', ['customer' => $customer,]),
+            'ATOL_LINK' => route('customer.atol', ['customer' => $customer,]),
+            'DETAILS_LINK' => route('customer.details', ['customer' => $customer,]),
+        ];
+
+        if (isset($event)) {
+            $data['EVENT_NAME'] = $event->name;
+            $data['EVENT_DESCRIPTION'] = $event->description;
+            $data['EVENT_START'] = $event->starts_at;
+            $data['EVENT_END'] = $event->ends_at;
+            $data['EVENT_URL'] = $event->booking_url;
+        }
+
+        return $data;
+    }
+
+    public static function getTotalPaid(Order $order) {
+        $paid = 0;
+        foreach ($order->payments as $payment) {
+            $paid += $payment->amount;
+        }
+        return $paid;
+    }
+
+    public static function getCosts(Order $order) {
+
+    }
+
+    public static function getNextPaymentDetails(Order $order) {
+        $paid = self::getTotalPaid($order);
+        $paid -= $order->tour->deposit;
+        foreach ($order->tour->paymentInstallments as $installment) {
+            $paid -= $installment->amount;
+            if ($paid < 0) {
+                return [
+                    'amount' => $paid*-1,
+                    'due' => $installment->due_on
+                ];
+            }
+        }
+        return [
+            'amount' => 0,
+            'due' => $order->tour->date_from,
+        ];
     }
 }
