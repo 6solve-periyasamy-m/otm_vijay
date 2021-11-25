@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Setting;
 use App\Models\Tour;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -34,6 +35,7 @@ class UserSeeder extends Seeder
         ]);
         Bouncer::allow($userRole)->everything();
         Bouncer::forbid($userRole)->toManage(User::class);
+        Bouncer::forbid($userRole)->toManage(Setting::class);
 
         $charlotte = User::create([
             'name' => 'Charlotte Redding',
