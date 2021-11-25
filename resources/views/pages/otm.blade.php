@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('head-script')
+@section('header-script')
 <style>
     .page {
         padding: 1rem;

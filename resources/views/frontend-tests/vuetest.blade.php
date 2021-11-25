@@ -1,5 +1,5 @@
-@extends ('layout.main')
-@section('head-script')
+@extends ('layout.booking')
+@section('header-script')
 <style>
     .red-border {
         border: 1rem double red;

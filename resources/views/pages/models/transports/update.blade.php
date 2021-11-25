@@ -1,13 +1,13 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('transports.update', ['transport' => $transport,]),])
 
 @section('title', 'Update Transport')
 
-@section('content')
-    @include('partials.models.transports.form', ['action' => route('transports.update', ['transport' => $transport,]),
+@section('form-body')
+    @include('partials.models.transports.form', [
       'transport_type_id' => $transport->transport_type_id,
       'operator_id' => $transport->operator_id,
-      'departure_location_id' => $transport->departure_location_id,
-      'arrival_location_id' => $transport->arrival_location_id,
+      'departure_address_id' => $transport->departure_address_id,
+      'arrival_address_id' => $transport->arrival_address_id,
       'name' => $transport->name,
       'description' => $transport->description,
       'currency' => $transport->currency,

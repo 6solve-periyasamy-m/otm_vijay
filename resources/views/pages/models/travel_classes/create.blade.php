@@ -1,7 +1,7 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('travel-classes.store'),])
 
 @section('title', 'Create Travel Class')
 
-@section('content')
-    @include('partials.models.travel_classes.form', ['action' => route('travel-classes.store'),])
+@section('form-body')
+    @include('partials.models.travel_classes.form')
 @endsection

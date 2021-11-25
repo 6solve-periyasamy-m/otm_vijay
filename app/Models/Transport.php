@@ -12,13 +12,13 @@ class Transport extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_type_id','operator_id','departure_location_id','arrival_location_id','name','description','currency','is_domestic','notes',];
+    protected $fillable = ['transport_type_id','operator_id','departure_address_id','arrival_address_id','name','description','currency_id','is_domestic','notes',];
     protected $cascadeDeletes = ['transportInventory'];
     const RULES = [
         'transport_type_id' => 'required|exists:transport_types,id',
         'operator_id' => 'required|exists:operators,id',
-        'departure_location_id' => 'required|exists:locations,id',
-        'arrival_location_id' => 'required|exists:locations,id',
+        'departure_address_id' => 'required|exists:addresses,id',
+        'arrival_address_id' => 'required|exists:addresses,id',
         'name' => 'required',
     ];
 
@@ -42,17 +42,17 @@ class Transport extends Model
         return $this->belongsTo(Operator::class);
     }
 
-    public function departureLocation()
+    public function departureAddress()
     {
-        return $this->hasOne(Location::class, 'id', 'departure_location_id');
+        return $this->hasOne(Address::class, 'id', 'departure_address_id');
     }
 
-    public function arrivalLocation()
+    public function arrivalAddress()
     {
-        return $this->hasOne(Location::class, 'id', 'arrival_location_id');
+        return $this->hasOne(Address::class, 'id', 'arrival_address_id');
     }
 
-    public static function findDepartureLocation(OrderTransport $ordersTransport)
+    public static function findDepartureAddress(OrderTransport $ordersTransport)
     {
        return Location::where('id', $ordersTransport->transport->departure_location_id);
     }
@@ -60,11 +60,16 @@ class Transport extends Model
     public function getInventoryRelationAttribute()
     {
         $operator = !is_null($this->operator) ? $this->operator->name : "Not Set";
-        $departureLocation = !is_null($this->departureLocation) ? $this->departureLocation->name : "Not Set";
-        $arrivalLocation = !is_null($this->arrivalLocation) ? $this->arrivalLocation->name : "None";
+        $departureAddress = !is_null($this->departureAddress) ? $this->departureAddress->name : "Not Set";
+        $arrivalAddress = !is_null($this->arrivalAddress) ? $this->arrivalAddress->name : "None";
 
-        return "{$this->name} | Operator: {$operator} | Departs: {$departureLocation} | Arrives: {$arrivalLocation}";
+        return "{$this->name} | Operator: {$operator} | Departs: {$departureAddress} | Arrives: {$arrivalAddress}";
     }
 
     public $additional_attributes = ['inventory_relation'];
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }

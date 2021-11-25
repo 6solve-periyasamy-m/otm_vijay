@@ -1,7 +1,7 @@
-@extends('layout.main')
+@extends('layout.form', ['action' => route('accommodation-inventory-tours.store', ['tour' => $tour, ]),])
 
 @section('title', 'Create Accommodation Inventory Tour')
 
-@section('content')
-    @include('partials.models.accommodation_inventory_tours.form', ['action' => route('accommodation-inventory-tours.store', ['tour' => $tour, ]),])
+@section('form-body')
+    @include('partials.models.accommodation_inventory_tours.form')
 @endsection

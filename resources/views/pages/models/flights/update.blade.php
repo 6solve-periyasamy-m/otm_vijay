@@ -1,9 +1,9 @@
-@extends('layout.master')
+@extends('layout.form', ['action' => route('flights.update', ['flight' => $flight,]),])
 
 @section('title', 'Update Flight')
 
-@section('content')
-    @include('partials.models.flights.form', ['action' => route('flights.update', ['flight' => $flight,]),
+@section('form-body')
+    @include('partials.models.flights.form', [
       'airline_id' => $flight->airline_id,
       'departure_airport_id' => $flight->departure_airport_id,
       'arrival_airport_id' => $flight->arrival_airport_id,

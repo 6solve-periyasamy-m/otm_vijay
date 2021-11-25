@@ -26,7 +26,6 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->integer('stock');
             $table->double('purchase_price')->nullable();
             $table->double('sales_price')->nullable();
-            $table->text('currency')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -2,7 +2,7 @@
 
 @section('title', 'View Tour')
 
-@section('head-script')
+@section('header-script')
     <script>
         $(document).ready( function () {
             $('#accommodation-table').DataTable({fixedHeader: true});
@@ -123,13 +123,13 @@
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
                                     <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
-                                    <td>{{ $accommodationEntry["component"]->title }}</td>
+                                    <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td class="actions">
                                         <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post">
+                                        <a href="#" onclick="$('#accommodation-{{$accommodationEntry["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post" id="accommodation-{{$accommodationEntry["tour"]->id}}-delete">
                                             @csrf
                                         </form>
                                     </td>
@@ -154,13 +154,13 @@
                             @foreach($activities as $activity)
                                 <tr>
                                     <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
-                                    <td>{{ $activity["component"]->title }}</td>
+                                    <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
                                     <td class="actions">
                                         <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post">
+                                        <a href="#" onclick="$('#activity-{{$activity["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post" id="activity-{{$activity["tour"]->id}}-delete">
                                             @csrf
                                         </form>
                                     </td>
@@ -190,8 +190,8 @@
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
                                     <td class="actions">
                                         <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post">
+                                        <a href="#" onclick="$('#flight-{{$flight["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post" id="flight-{{$flight["tour"]->id}}-delete">
                                             @csrf
                                         </form>
                                     </td>
@@ -221,8 +221,8 @@
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
                                     <td class="actions">
                                         <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post">
+                                        <a href="#" onclick="$('#transport-{{$transport["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                        <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post" id="transport-{{$transport["tour"]->id}}-delete">
                                             @csrf
                                         </form>
                                     </td>

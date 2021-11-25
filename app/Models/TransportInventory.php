@@ -12,7 +12,7 @@ class TransportInventory extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_id','travel_class_id','departs_at','departure_time_confirmed','arrives_at','arrival_time_confirmed','fit_selectable','stock','purchase_price','sales_price','currency','notes',];
+    protected $fillable = ['transport_id','travel_class_id','departs_at','departure_time_confirmed','arrives_at','arrival_time_confirmed','fit_selectable','stock','purchase_price','sales_price','currency_id','notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         "departs_at" => "datetime",
@@ -25,7 +25,6 @@ class TransportInventory extends Model
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
-        'currency' => 'required|size:3',
     ];
 
     public $additional_attributes = ['Transport_for_tour'];
@@ -40,12 +39,12 @@ class TransportInventory extends Model
         return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
     }
 
-    public function departureLocation()
+    public function departureAddress()
     {
         return $this->hasOneThrough(Location::class, Transport::class, 'departure_location_id', 'id');
     }
 
-    public function arrivalLocation()
+    public function arrivalAddress()
     {
         return $this->hasOneThrough(Location::class, Transport::class, 'arrival_location_id', 'id');
     }
@@ -68,7 +67,7 @@ class TransportInventory extends Model
     {
         return TransportInventory::with(['tour' => function ($q) use ($tour_id) {
             $q->where('tour_id', $tour_id);
-        }])->with('departureLocation', 'arrivalLocation')->get();
+        }])->with('departureAddress', 'arrivalAddress')->get();
     }
 
     public function getTransportForTourAttribute()

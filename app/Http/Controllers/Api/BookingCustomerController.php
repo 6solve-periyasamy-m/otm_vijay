@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
+
 use App\Models\Booking;
-
 use App\Models\Customer;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use App\Models\OrderCustomer;
 use App\Models\AdditionalTraveller;
 use Illuminate\Support\Facades\Log;
@@ -132,14 +133,14 @@ class BookingCustomerController extends ApiController
                 'address_line_1' => 'required',
                 'address_line_2' => 'required',
                 'town' => 'required',
-                'country' => 'required',
+                'country_id' => 'required',
                 'postcode' => 'required'
             ]);
             if (!$request->same_address) {
                 Log::info('validation of billing address', [$request->billing_address_line_1]);
                 $billingValidated = $request->validate([
                     'billing_town' => 'required',
-                    'billing_country' => 'required',
+                    'billing_country_id' => 'required',
                     'billing_postcode' => 'required',
                     'billing_address_line_1' => 'required'
                 ]);
@@ -185,7 +186,8 @@ class BookingCustomerController extends ApiController
         if ($customer) {
             $this->logging == 'customers' && Log::info('customer exists record ', $customer->toArray());
             // Log::debug('>>>>> update customer with ', $customerData);
-            $customer = $customerRepo->update($customerData);
+            // $customer = $customerRepo->update($customerData);
+            // Log::debug('>>>>> update customer returned with ', [$customer]);
             
             // in booking form, only the lead enters addresses
             if ($isLead) {
@@ -224,6 +226,10 @@ class BookingCustomerController extends ApiController
     private function update_addresses($request, $customer)
     {
         $addressRepo = new AddressRepository();
+        if (empty($customer)) {
+            throw new Exception('BookingCustomerController::update_address, no customer');
+        }
+        Log::debug('update_addresses:', [$customer]);
         if (!$customer->home_address_id) {
             $addressIds = $this->create_addresses($request);
             $customer->home_address_id = $addressIds['home_address_id'];
@@ -240,8 +246,11 @@ class BookingCustomerController extends ApiController
                 'address_line_3' => $request->address_line_3,
                 'town' => $request->town,
                 'region' => $request->region,
-                'country' => $request->country,
-                'postcode' => $request->postcode
+                'country_id' => $request->country_id,
+                'postcode' => $request->postcode,
+                'same_address' => $request->same_address,
+                'address_parent_id' => $customer->id,
+                'name' => 'Home Address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
             $home_address = $addressRepo->update($newHomeAddress);
             $home_address_id = $home_address['id'];
@@ -256,8 +265,10 @@ class BookingCustomerController extends ApiController
                 'address_line_3' => $request->address_line_3,
                 'town' => $request->town,
                 'region' => $request->region,
-                'country' => $request->country,
-                'postcode' => $request->postcode
+                'country_id' => $request->country_id,
+                'postcode' => $request->postcode,
+                'address_parent_id' => $customer->id,
+                'name' => 'Billing address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
         } else {
             $newBillingAddress = [
@@ -267,8 +278,10 @@ class BookingCustomerController extends ApiController
                 'address_line_3' => $request->billing_address_line_3,
                 'town' => $request->billing_town,
                 'region' => $request->billing_region,
-                'country' => $request->billing_country,
-                'postcode' => $request->billing_postcode
+                'country_id' => $request->billing_country_id,
+                'postcode' => $request->billing_postcode,
+                'address_parent_id' => $customer->id,
+                'name' => 'Billing address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
         }
         if ($customer->billing_address_id) {
@@ -302,7 +315,7 @@ class BookingCustomerController extends ApiController
             'address_line_3' => $request->address_line_3,
             'town' => $request->town,
             'region' => $request->region,
-            'country' => $request->country,
+            'country_id' => $request->country_id,
             'postcode' => $request->postcode,
             'same_adress' => $request->same_address
         ];
@@ -310,7 +323,8 @@ class BookingCustomerController extends ApiController
         if (isset($home_address) && isset($home_address->id)) {
             $home_address_id = $home_address->id;
         } else {
-            throw new \Exception('Can not create an address with ', $address_record);
+            Log::debug('Error creating address with record: ', $address_record);
+            throw new \Exception('Can not create address ');
         }
         if ($request->same_address) {
             $billingAddressRecord = [
@@ -320,7 +334,7 @@ class BookingCustomerController extends ApiController
                 'address_line_3' => $request->address_line_3,
                 'town' => $request->town,
                 'region' => $request->region,
-                'country' => $request->country,
+                'country_id' => $request->country_id,
                 'postcode' => $request->postcode
             ];
         } else {
@@ -331,7 +345,7 @@ class BookingCustomerController extends ApiController
                 'address_line_3' => $request->billing_address_line_3,
                 'town' => $request->billing_town,
                 'region' => $request->billing_region,
-                'country' => $request->billing_country,
+                'country_id' => $request->billing_country_id,
                 'postcode' => $request->billing_postcode
             ];
         }
@@ -380,7 +394,7 @@ class BookingCustomerController extends ApiController
      */
     public function leadTraveller(Request $request)
     {
-        $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
+        // $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
 
         // $booking = new BookingRepository();

@@ -9,45 +9,42 @@
                 <h5 class="dropdown-button">
                     <p v-if="!booking_token && !show_traveller">Click this button to start your booking</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
-                        <font-awesome-icon icon="book-reader" />
-                        Lead Traveller details
-                    </button>
+                            <font-awesome-icon icon="book-reader" />
+                            Lead Traveller details
+                        </button>
                 </h5>
-
+    
                 <div class="card-info" v-if="!show_traveller">
                     <div v-if="!booking_token && noUser">
                         <p>
-                            <font-awesome-icon icon="arrow-right" />
-                            If you have a booking in progress, try entering your email address
+                            <font-awesome-icon icon="arrow-right" /> If you have a booking in progress, try entering your email address
                         </p>
                         <input v-model="email" type="email" placeholder="Retrieve booking by email" />
                         <div v-if="!getPassword">
-                           <button v-if="email && !activeUser" @click="retrieveUser()" class="btn btn-primary">
-                                <font-awesome-icon icon="check" /> Check 
-                           </button>
+                            <button v-if="email && !activeUser" @click="retrieveUser()" class="btn btn-primary">
+                                    <font-awesome-icon icon="check" /> Check 
+                               </button>
                         </div>
                     </div>
                     <div v-else>
                         <p v-if="!email_address">Please enter the Lead Traveller details</p>
                     </div>
-                
+    
                     <div v-if="!booking_token && activeUser">
                         <p>Active User</p>
                         <label for="password">Enter your password</label>
                         <input type="password" v-model="password">
                         <button @click="loginUser" class="btn btn-primary">
-                            <font-awesome-icon icon="check" /> Login
-                        </button>
+                                <font-awesome-icon icon="check" /> Login
+                            </button>
                     </div>
                 </div>
                 <div v-if="booking_token && !show_traveller">
                     <div>
-                        <font-awesome-icon icon="arrow-right" />
-                        You can continue with your booking, please fill in all sections
+                        <font-awesome-icon icon="arrow-right" /> You can continue with your booking, please fill in all sections
                     </div>
                     <div v-if="!booking_token">
-                        You have {{activeBookings}} bookings active.  
-                        To access bookings, you must <a :href="loginLink">login</a>. 
+                        You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
                     </div>
                 </div>
             </div>
@@ -60,14 +57,14 @@
                             <div class="row">
                                 <div class="col-md-3 form-group field-separation">
                                     <select v-model="title" class="form-control form-select form-select-lg">
-                                        <option value="" default>Select a title</option>
-                                        <option value="Mr">Mr</option>
-                                        <option value="Ms">Ms</option>
-                                        <option value="Mrs">Mrs</option>
-                                        <option value="Miss">Miss</option>
-                                        <option value="Dr">Dr</option>
-                                        <option value="Prof">Prof</option>
-                                    </select>
+                                            <option value="" default>Select a title</option>
+                                            <option value="Mr">Mr</option>
+                                            <option value="Ms">Ms</option>
+                                            <option value="Mrs">Mrs</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Dr">Dr</option>
+                                            <option value="Prof">Prof</option>
+                                        </select>
                                 </div>
                                 <div class="col-md-3 form-group field-separation">
                                     <label type="form-label" for="first_name" v-show="first_name">First name</label>
@@ -97,16 +94,16 @@
                                     <label class="valid" v-else>{{mobile_number_validation}}</label>
                                 </div>
                             </div>
-
+    
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation has-dropdown">
                                     <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
-                                        <option value="" disabled>Additional Phone</option>
-                                        <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
-                                        <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
-                                        <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
-                                        <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
-                                    </select>
+                                            <option value="" disabled>Additional Phone</option>
+                                            <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
+                                            <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
+                                            <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
+                                            <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
+                                        </select>
                                     <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
                                     <label :class="{invalid: other_number_invalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
                                     <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
@@ -120,10 +117,10 @@
                                 <div class="col-sm-6 form-group field-separation">
                                     <label class="form-label" for="gender">Gender</label>
                                     <select name="gender" v-model="gender" class="dropdown">
-                                        <option default disabled value="">Select Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                    </select>
+                                            <option default disabled value="">Select Gender</option>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
                                 </div>
                             </div>
                             <div class="row spacer">
@@ -172,10 +169,10 @@
                                     <div class="row">
                                         <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="country" v-show="country">Country</label>
-                                            <select name="country" class="dropdown" v-model="country" :key="country.id">
-                                                <option default disabled value="">Select country</option>
-                                                <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
-                                            </select>
+                                            <select name="country" class="dropdown" v-model="country_id" :key="country.id">
+                                                    <option default disabled value="">Select country</option>
+                                                    <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
+                                                </select>
                                         </div>
                                     </div>
                                 </div>
@@ -184,8 +181,8 @@
                                 <div class="col-sm-12">
                                     <input class="form-check-input inset" @click="toggleSameAddress" type="checkbox" v-model="same_address">
                                     <label class="form-check-label inset" for="billing">
-                                        Billing is delivery address
-                                    </label>
+                                            Billing is delivery address
+                                        </label>
                                 </div>
                             </div>
                             <div class="row spacer" v-if="!same_address">
@@ -235,21 +232,20 @@
                                         <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="billing_country" v-show="billing_country">Billing Country</label>
                                             <select name="billing_country" class="dropdown" v-model="billing_country" :key="billing_country.id">
-                                                <option default disabled value="">Select country</option>
-                                                <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
-                                            </select>
+                                                    <option default disabled value="">Select country</option>
+                                                    <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
+                                                </select>
                                         </div>
-                                            <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
-                                            <input type="text" v-model="billing_country" name="billing_country" placeholder="Country" class="form-control">
-                                        </div>
+                                        <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
+                                        <input type="text" v-model="billing_country_id" name="billing_country" placeholder="Country" class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 form-group field-separation">
-                                    <input type="hidden" name="booking_token" :value="booking_token" />
-                                    <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group field-separation">
+                                <input type="hidden" name="booking_token" :value="booking_token" />
+                                <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                             </div>
                         </div>
                     </div>
@@ -320,14 +316,15 @@ export default {
                 'title', 'first_name', 'middle_names', 'last_name',
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
+                'same_address'
             ],
             billingAddressFields: [
                 'name', 'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
-                'billing_town', 'billing_region', 'billing_country', 'billing_postcode',
+                'billing_town', 'billing_region', 'billing_country_id', 'billing_postcode',
             ],
             homeAddressFields: [
                 'name', 'address_line_1', 'address_line_2', 'address_line_3',
-                'town', 'region', 'country', 'postcode'
+                'town', 'region', 'country_id', 'postcode'
             ],
             validationErrors: ''
         }
@@ -342,7 +339,6 @@ export default {
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('BFL: EH leadTravellerLoaded', customer)
             that.setCustomer(customer)
-            that.same_address = customer.home_address_id === customer.billing_address_id
             that.email = that.email_address
         })
         bus.$on('homeAddressLoaded', home_address => {
@@ -353,7 +349,7 @@ export default {
             that.town = home_address.town
             that.region = home_address.region
             that.postcode = home_address.postcode
-            that.country = home_address.country
+            that.country_id = home_address.country_id
         })
         bus.$on('billingAddressLoaded', billing_address => {
             that.billing_address_line_1 = billing_address.address_line_1
@@ -362,7 +358,7 @@ export default {
             that.billing_town = billing_address.town
             that.billing_region = billing_address.region
             that.billing_postcode = billing_address.postcode
-            that.billing_country = billing_address.country
+            that.billing_country_id = billing_address.country_id
         })
     },
     mounted() {
@@ -411,20 +407,20 @@ export default {
                     const url = '/api/booking/authenticate/user'
                     const data = this.email
                     axios.post(url, data, {
-                        headers: {
-                            'Authorization': `Basic ${token}`
-                        },
-                    })
-                    .then(response => {
-                        that.auth = false
-                        console.log('authorised', response)
-                        if (response.authorised) {
-                            that.auth = true
-                        }
-                    })
-                    .catch(error => {
-                        console.log('auth error', error)
-                    })
+                            headers: {
+                                'Authorization': `Basic ${token}`
+                            },
+                        })
+                        .then(response => {
+                            that.auth = false
+                            console.log('authorised', response)
+                            if (response.authorised) {
+                                that.auth = true
+                            }
+                        })
+                        .catch(error => {
+                            console.log('auth error', error)
+                        })
                 })
                 .catch(error => {
                     console.log('can not obtain token');
@@ -436,7 +432,7 @@ export default {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
             let that = this
-alert('retriveUser');
+            alert('retriveUser');
             // is it a registered user?
             if (!this.auth) {
                 console.log('checking for auth user');
@@ -460,18 +456,18 @@ alert('retriveUser');
         retrieveBookingToken() {
             let that = this
             axios.post('/api/booking/recover/token', this.email)
-            .then(response => {
-                console.log(response);
-                if (response.data.success) {
-                    bus.$emit('setBookingToken', response.data.token)
-                    alert('token retrieved for ' + that.email, response.data.token, that.booking_token)
-                } else {
-                    that.noUser = true
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+                .then(response => {
+                    console.log(response);
+                    if (response.data.success) {
+                        bus.$emit('setBookingToken', response.data.token)
+                        alert('token retrieved for ' + that.email, response.data.token, that.booking_token)
+                    } else {
+                        that.noUser = true
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
             // are there bookings associated to this user?
             /*
             axios.get(`/api/booking/findOrderByEmail/${this.email}`)
@@ -574,16 +570,16 @@ alert('retriveUser');
         createBooking(customer_id, token, tour_id) {
             console.log('BFL: >>> creating booking for ', customer_id, token, tour_id)
             axios.post('/api/booking/create-booking', {
-                token: token,
-                customer_id: customer_id,
-                tour_id: tour_id
-            })
-            .then(response => {
-                console.log('createBooking response', response)
-            })
-            .catch(error => {
-                console.log('error createBooking', eachQuarterOfInterval)
-            })
+                    token: token,
+                    customer_id: customer_id,
+                    tour_id: tour_id
+                })
+                .then(response => {
+                    console.log('createBooking response', response)
+                })
+                .catch(error => {
+                    console.log('error createBooking', eachQuarterOfInterval)
+                })
         },
 
         loadCountries() {
@@ -593,7 +589,7 @@ alert('retriveUser');
                     if (response.data.success) {
                         that.countries = response.data.countries
                     } else {
-                        that.countries = {id:1,name:"United Kingdom",code:"UK",currency:"GBP"}
+                        that.countries = { id: 1, name: "United Kingdom", code: "UK", currency: "GBP" }
                         console.log('Country list: ', response)
                     }
                 })
@@ -626,49 +622,49 @@ alert('retriveUser');
             // }
             // console.log('saving booking with booking_token', this.booking_token)
             axios.post('/api/booking/lead-traveller', {
-                title: this.title,
-                first_name: this.first_name,
-                middle_names: this.middle_names,
-                last_name: this.last_name,
-                email_address: this.email_address,
-                mobile_number: this.mobile_number,
-                other_phone_number: this.other_phone_number,
-                other_phone_number_type: this.other_phone_number_type,
-                date_of_birth: this.date_of_birth,
-                gender: this.gender,
-                address_line_1: this.address_line_1,
-                address_line_2: this.address_line_2,
-                address_line_3: this.address_line_3,
-                country: this.country,
-                region: this.region,
-                town: this.town,
-                postcode: this.postcode,
-                same_address: this.same_address,
-                billing_address_line_1: this.billing_address_line_1,
-                billing_address_line_2: this.billing_address_line_2,
-                billing_address_line_3: this.billing_address_line_3,
-                billing_country: this.billing_country,
-                billing_region: this.billing_region,
-                billing_town: this.billing_town,
-                billing_postcode: this.billing_postcode,
-                booking_token: this.booking_token,
-                tour: this.tour
-            })
-            .then(response => {
-                that.debug && console.log('**** Lead Traveller customerStored, reponse', response)
-                const customer = response.data.customer
-                // that.login_token = customer.login_token
-                that.full_name = customer.first_name + ' ' + customer.last_name
-                that.show_traveller = false
-                that.validationErrors = null
-                that.createBooking(customer.id, that.booking_token, that.tour.id)
-                bus.$emit('setLeadTraveller', customer)
-            })
-            .catch(e => {
-                console.log('*** BookingFormLead.storeTraveller() error', e)
-                // that.errors.push(e.response.data.errors)
-                that.validationErrors = e.response.data.errors
-            })
+                    title: this.title,
+                    first_name: this.first_name,
+                    middle_names: this.middle_names,
+                    last_name: this.last_name,
+                    email_address: this.email_address,
+                    mobile_number: this.mobile_number,
+                    other_phone_number: this.other_phone_number,
+                    other_phone_number_type: this.other_phone_number_type,
+                    date_of_birth: this.date_of_birth,
+                    gender: this.gender,
+                    address_line_1: this.address_line_1,
+                    address_line_2: this.address_line_2,
+                    address_line_3: this.address_line_3,
+                    country_id: this.country_id,
+                    region: this.region,
+                    town: this.town,
+                    postcode: this.postcode,
+                    same_address: this.same_address,
+                    billing_address_line_1: this.billing_address_line_1,
+                    billing_address_line_2: this.billing_address_line_2,
+                    billing_address_line_3: this.billing_address_line_3,
+                    billing_country_id: this.billing_country_id,
+                    billing_region: this.billing_region,
+                    billing_town: this.billing_town,
+                    billing_postcode: this.billing_postcode,
+                    booking_token: this.booking_token,
+                    tour: this.tour
+                })
+                .then(response => {
+                    that.debug && console.log('**** Lead Traveller customerStored, reponse', response)
+                    const customer = response.data.customer
+                    // that.login_token = customer.login_token
+                    that.full_name = customer.first_name + ' ' + customer.last_name
+                    that.show_traveller = false
+                    that.validationErrors = null
+                    that.createBooking(customer.id, that.booking_token, that.tour.id)
+                    bus.$emit('setLeadTraveller', customer)
+                })
+                .catch(e => {
+                    console.log('*** BookingFormLead.storeTraveller() error', e)
+                    // that.errors.push(e.response.data.errors)
+                    that.validationErrors = e.response.data.errors
+                })
         }
     }
 }
