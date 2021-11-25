@@ -6,6 +6,7 @@
                 <span>Dashboard</span>
             </a>
         </li>
+        @can('read', 'App\Models\Tour')
         <li>
             @if(strpos(Request::url(), 'tours') !== false)
             <a href="{{ route('tours.all') }}" class="nav-link active">
@@ -19,6 +20,8 @@
                 @endif
             </a>
         </li>
+        @endcan
+        @can('read', 'App\Models\Accommodation')
         <li>
             @if(strpos(Request::url(), 'accommodation') !== false)
             <a href="{{ route('accommodations.all') }}" class="nav-link active">
@@ -32,6 +35,8 @@
                 @endif
             </a>
         </li>
+            @endcan
+        @can('read', 'App\Models\Activity')
         <li>
             @if(strpos(Request::url(), 'activities') !== false)
             <a href="{{ route('activities.all') }}" class="nav-link active">
@@ -45,6 +50,8 @@
                 @endif
             </a>
         </li>
+                @endcan
+        @can('read', 'App\Models\Flight')
         <li>
             @if(strpos(Request::url(), 'flights') !== false)
             <a href="{{ route('flights.all') }}" class="nav-link active">
@@ -58,6 +65,8 @@
                 @endif
             </a>
         </li>
+                @endcan
+        @can('read', 'App\Models\Transport')
         <li>
             @if(strpos(Request::url(), 'transports') !== false)
             <a href="{{ route('transports.all') }}" class="nav-link active">
@@ -71,6 +80,8 @@
                 @endif
             </a>
         </li>
+        @endcan
+        @can('read', 'App\Models\Order')
         <li>
             @if(strpos(Request::url(), 'orders') !== false)
             <a href="{{ route('orders.all') }}" class="nav-link active">
@@ -84,6 +95,8 @@
                 @endif
             </a>
         </li>
+        @endcan
+        @can('read', 'App\Models\Customer')
         <li>
             @if(strpos(Request::url(), 'customers') !== false)
             <a href="{{ route('customers.all') }}" class="nav-link active">
@@ -97,6 +110,7 @@
                 @endif
             </a>
         </li>
+        @endcan
         @can('read', 'App\Models\User')
             <li>
                 @if(strpos(Request::url(), 'users') !== false)
