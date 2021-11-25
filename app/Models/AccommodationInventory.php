@@ -25,7 +25,6 @@ class AccommodationInventory extends Model
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
-        'currency_id' => 'required|exists:currencies,id',
     ];
 
     protected $casts = [

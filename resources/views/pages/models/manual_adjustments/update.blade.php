@@ -7,5 +7,6 @@
       'order_id' => $manualAdjustment->order_id,
       'amount' => $manualAdjustment->amount,
       'reason' => $manualAdjustment->reason,
+      'date' => $manualAdjustment->date,
     ])
 @endsection

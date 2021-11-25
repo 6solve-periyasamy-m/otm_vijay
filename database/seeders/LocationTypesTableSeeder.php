@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -64,6 +65,14 @@ class LocationTypesTableSeeder extends Seeder
                 'name' => 'Point of Interest',
                 'created_at' => '2021-01-15 15:41:27',
                 'updated_at' => '2021-01-15 15:41:27',
+                'deleted_at' => NULL,
+            ),
+            6 => 
+            array (
+                'id' => 7,
+                'name' => 'Hotel',
+                'created_at' => '2021-11-22 12:35:00',
+                'updated_at' => '2021-11-22 12:35:00',
                 'deleted_at' => NULL,
             ),
         ));
