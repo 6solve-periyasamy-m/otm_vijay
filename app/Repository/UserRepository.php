@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Models\ApiToken;
 use App\Models\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Silber\Bouncer\Database\Role;
 use \Silber\Bouncer\BouncerFacade as Bouncer;
@@ -231,6 +232,10 @@ class UserRepository implements UserRepositoryInterface
         ];
     }
 
+    public static function getAvailablePermissionClasses() {
+        return array_keys(self::getAvailablePermissionSets());
+    }
+
     public static function getGroupedPermissions(Role $role = null) {
         $permissions = [];
         foreach (self::getAvailablePermissionSets() as $class => $values) {
@@ -247,8 +252,27 @@ class UserRepository implements UserRepositoryInterface
     }
 
     public static function getPermissionStatus(Role $role, string $ability, string $class) {
-        return $role->can($ability, app('\\App\\Models\\' . $class));
+        return $role->can($ability, '\\App\\Models\\' . $class);
     }
 
+    public static function canCurrentUser(string $action, string $class) {
+        return Bouncer::can($action, '\\App\\Models\\' . $class);
+    }
+
+    public static function grantPermission(Role $role, string $ability, string $class) {
+        Bouncer::allow($role)->to($ability, '\\App\\Models\\' . $class);
+    }
+
+    public static function revokePermission(Role $role, string $ability, string $class) {
+        Bouncer::disallow($role)->to($ability, '\\App\\Models\\' . $class);
+    }
+
+    public static function getRole(string $name, string $title, int $level) {
+        return Bouncer::roles()->firstOrCreate([
+            'name' => $name,
+            'title' => $title,
+            'level' => $level,
+        ]);
+    }
 
 }

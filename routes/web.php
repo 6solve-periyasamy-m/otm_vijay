@@ -571,7 +571,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/create', [PermissionsController::class, 'create'])->name('roles.create')->middleware('bouncer:User,create');
         Route::post('/create', [PermissionsController::class, 'store'])->name('roles.store')->middleware('bouncer:User,create');
         Route::prefix('{role}')->group(function () {
-            Route::get('/', [PermissionsController::class, 'view'])->name('roles.view')->middleware('bouncer:User,read');
             Route::get('/update', [PermissionsController::class, 'edit'])->name('roles.edit')->middleware('bouncer:User,update');
             Route::post('/update', [PermissionsController::class, 'update'])->name('roles.update')->middleware('bouncer:User,update');
             Route::post('/delete', [PermissionsController::class, 'destroy'])->name('roles.delete')->middleware('bouncer:User,delete');
