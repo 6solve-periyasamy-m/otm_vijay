@@ -296,6 +296,7 @@ class BookingCustomerController extends ApiController
         Log::info('** Creating Home Address ');
         $addressRepo = new AddressRepository();
         $address_record = [
+            'name' => 'Home address',
             'address_line_1' => $request->address_line_1,
             'address_line_2' => $request->address_line_2,
             'address_line_3' => $request->address_line_3,
@@ -313,6 +314,7 @@ class BookingCustomerController extends ApiController
         }
         if ($request->same_address) {
             $billingAddressRecord = [
+                'name' => 'Billing address',
                 'address_line_1' => $request->address_line_1,
                 'address_line_2' => $request->address_line_2,
                 'address_line_3' => $request->address_line_3,
@@ -323,6 +325,7 @@ class BookingCustomerController extends ApiController
             ];
         } else {
             $billingAddressRecord = [
+                'name' => 'Billing address',
                 'address_line_1' => $request->billing_address_line_1,
                 'address_line_2' => $request->billing_address_line_2,
                 'address_line_3' => $request->billing_address_line_3,
