@@ -97,5 +97,33 @@
                 @endif
             </a>
         </li>
+        @can('read', 'App\Models\User')
+            <li>
+                @if(strpos(Request::url(), 'users') !== false)
+                <a href="{{ route('users.all') }}" class="nav-link active">
+                @else
+                <a href="{{ route('users.all') }}" class="nav-link ">
+                @endif
+                    <i class="icon-people"></i>
+                    <span>Users</span>
+                    @if(strpos(Request::url(), 'users') !== false)
+                    <span class="selected"></span>
+                    @endif
+                </a>
+            </li>
+            <li>
+                @if(strpos(Request::url(), 'roles') !== false)
+                <a href="{{ route('roles.all') }}" class="nav-link active">
+                @else
+                <a href="{{ route('roles.all') }}" class="nav-link ">
+                @endif
+                    <i class="icon-wrench"></i>
+                    <span>Roles</span>
+                    @if(strpos(Request::url(), 'roles') !== false)
+                    <span class="selected"></span>
+                    @endif
+                </a>
+            </li>
+        @endcan
     </ul>    
 </div>
