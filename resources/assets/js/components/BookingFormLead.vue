@@ -172,7 +172,7 @@
                                     <div class="row">
                                         <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="country" v-show="country">Country</label>
-                                            <select name="country" class="dropdown" v-model="country" :key="country.id">
+                                            <select name="country" class="dropdown" v-model="country_id" :key="country.id">
                                                 <option default disabled value="">Select country</option>
                                                 <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
                                             </select>
@@ -240,7 +240,7 @@
                                             </select>
                                         </div>
                                             <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
-                                            <input type="text" v-model="billing_country" name="billing_country" placeholder="Country" class="form-control">
+                                            <input type="text" v-model="billing_country_id" name="billing_country" placeholder="Country" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -320,14 +320,15 @@ export default {
                 'title', 'first_name', 'middle_names', 'last_name',
                 'date_of_birth', 'gender', 'email_address',
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
+                'same_address'
             ],
             billingAddressFields: [
                 'name', 'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
-                'billing_town', 'billing_region', 'billing_country', 'billing_postcode',
+                'billing_town', 'billing_region', 'billing_country_id', 'billing_postcode',
             ],
             homeAddressFields: [
                 'name', 'address_line_1', 'address_line_2', 'address_line_3',
-                'town', 'region', 'country', 'postcode'
+                'town', 'region', 'country_id', 'postcode'
             ],
             validationErrors: ''
         }
@@ -342,7 +343,6 @@ export default {
         bus.$on('leadTravellerLoaded', (customer) => {
             console.log('BFL: EH leadTravellerLoaded', customer)
             that.setCustomer(customer)
-            that.same_address = customer.home_address_id === customer.billing_address_id
             that.email = that.email_address
         })
         bus.$on('homeAddressLoaded', home_address => {
@@ -353,7 +353,7 @@ export default {
             that.town = home_address.town
             that.region = home_address.region
             that.postcode = home_address.postcode
-            that.country = home_address.country
+            that.country_id = home_address.country_id
         })
         bus.$on('billingAddressLoaded', billing_address => {
             that.billing_address_line_1 = billing_address.address_line_1
@@ -362,7 +362,7 @@ export default {
             that.billing_town = billing_address.town
             that.billing_region = billing_address.region
             that.billing_postcode = billing_address.postcode
-            that.billing_country = billing_address.country
+            that.billing_country_id = billing_address.country_id
         })
     },
     mounted() {
@@ -639,7 +639,7 @@ alert('retriveUser');
                 address_line_1: this.address_line_1,
                 address_line_2: this.address_line_2,
                 address_line_3: this.address_line_3,
-                country: this.country,
+                country_id: this.country_id,
                 region: this.region,
                 town: this.town,
                 postcode: this.postcode,
@@ -647,7 +647,7 @@ alert('retriveUser');
                 billing_address_line_1: this.billing_address_line_1,
                 billing_address_line_2: this.billing_address_line_2,
                 billing_address_line_3: this.billing_address_line_3,
-                billing_country: this.billing_country,
+                billing_country_id: this.billing_country_id,
                 billing_region: this.billing_region,
                 billing_town: this.billing_town,
                 billing_postcode: this.billing_postcode,

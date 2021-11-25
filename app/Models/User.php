@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use Authenticatable, HasFactory, Notifiable;
+    use  \Illuminate\Auth\Authenticatable, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

@@ -35,9 +35,9 @@ class AddressRepository implements AddressRepositoryInterface
 
     public function create(Array $address, $type = 'home')
     {
-        $address['address_parent_id'] = 0;
+        $address['address_parent_id'] = 1;
         $address['location_type_id'] = 1;
-        $address['address_country_id'] = 1;
+        $address['name'] = ucfirst($type . ' address');
         Log::info('Create ['.$type.'] address', $address);
         foreach($this->fields as $field) {
             $typedField = $type . '_' . $field;
@@ -48,7 +48,7 @@ class AddressRepository implements AddressRepositoryInterface
             Log::info('** saved address', [$this->model]);
             return $this->model;
         } catch (\Exception $e) {
-            Log::error("!!! Can not save an address, data: ", implode($address));
+            Log::error("!!! Can not save an address, data: ", [$address]);
         }
         return null;
     }
@@ -60,7 +60,7 @@ class AddressRepository implements AddressRepositoryInterface
      * @return Object
      */
     public function update(array $address) {
-        Log::debug('&&&& address update with ', [$address]);
+        Log::debug('AddressRepo: address update with ', [$address]);
         if (empty($address['id'])) {
             throw new \Exception('ERROR: address update does not have an address_id');
         }
@@ -68,13 +68,13 @@ class AddressRepository implements AddressRepositoryInterface
         if (empty($currentAddress)) {
             throw new \Exception('address update can not load the current address');
         }
-        Log::debug('&&&& checking address fields');
+        Log::debug('AddressRepo: checking address fields');
         foreach ($this->fields as $field) {
             if (isset($address[$field]) && $address[$field] !== $currentAddress->$field) {
                 $currentAddress->$field = $address[$field];
                 Log::info('check address model', [$field, $address[$field], $this->model->$field]);
             } else {
-                Log::debug('&&& field not set or not changed', [$field, $address[$field]]);
+                Log::debug('&&& field not set or not changed', [$field, $address]);
             }
         }
         try {
