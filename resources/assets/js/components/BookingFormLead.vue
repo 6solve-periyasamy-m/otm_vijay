@@ -118,8 +118,9 @@
                                     <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
                                 </div>
                                 <div class="col-sm-6 form-group field-separation">
-                                    <label class="form-label" form="gender">Gender</label>
+                                    <label class="form-label" for="gender">Gender</label>
                                     <select name="gender" v-model="gender" class="dropdown">
+                                        <option default disabled value="">Select Gender</option>
                                         <option>Male</option>
                                         <option>Female</option>
                                     </select>
@@ -171,7 +172,10 @@
                                     <div class="row">
                                         <div class="col-sm-8 form-group field-separation">
                                             <label class="form-label" for="country" v-show="country">Country</label>
-                                            <input type="text" v-model="country" name="country" placeholder="Country" class="form-control">
+                                            <select name="country" class="dropdown" v-model="country" :key="country.id">
+                                                <option default disabled value="">Select country</option>
+                                                <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -229,6 +233,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="billing_country" v-show="billing_country">Billing Country</label>
+                                            <select name="billing_country" class="dropdown" v-model="billing_country" :key="billing_country.id">
+                                                <option default disabled value="">Select country</option>
+                                                <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
+                                            </select>
+                                        </div>
                                             <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
                                             <input type="text" v-model="billing_country" name="billing_country" placeholder="Country" class="form-control">
                                         </div>
@@ -261,6 +271,7 @@ export default {
             debug: false,
             booking_token: null,
             moduleName: 'leadTraveller',
+            countries: [],
             email: '',
             password: '',
             auth: false,
@@ -281,6 +292,7 @@ export default {
             address_line_2: '',
             address_line_3: '',
             country: '',
+            countries: [],
             region: '',
             town: '',
             postcode: '',
@@ -310,11 +322,11 @@ export default {
                 'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
             ],
             billingAddressFields: [
-                'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
+                'name', 'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
                 'billing_town', 'billing_region', 'billing_country', 'billing_postcode',
             ],
             homeAddressFields: [
-                'address_line_1', 'address_line_2', 'address_line_3',
+                'name', 'address_line_1', 'address_line_2', 'address_line_3',
                 'town', 'region', 'country', 'postcode'
             ],
             validationErrors: ''
@@ -334,6 +346,7 @@ export default {
             that.email = that.email_address
         })
         bus.$on('homeAddressLoaded', home_address => {
+            // that.name = home_address.name
             that.address_line_1 = home_address.address_line_1
             that.address_line_2 = home_address.address_line_2
             that.address_line_3 = home_address.address_line_3
@@ -361,6 +374,7 @@ export default {
             this.loginLink = `/login?cb=${that.tour.url}`
         }
         this.activeBookings = ''
+        this.loadCountries()
     },
     computed: {
         otherNumberType: function() {
@@ -570,6 +584,22 @@ alert('retriveUser');
             .catch(error => {
                 console.log('error createBooking', eachQuarterOfInterval)
             })
+        },
+
+        loadCountries() {
+            let that = this
+            axios.get('/api/booking/countries')
+                .then(response => {
+                    if (response.data.success) {
+                        that.countries = response.data.countries
+                    } else {
+                        that.countries = {id:1,name:"United Kingdom",code:"UK",currency:"GBP"}
+                        console.log('Country list: ', response)
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         },
 
         async storeTraveller() {

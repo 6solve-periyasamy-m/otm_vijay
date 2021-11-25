@@ -35,6 +35,9 @@ class AddressRepository implements AddressRepositoryInterface
 
     public function create(Array $address, $type = 'home')
     {
+        $address['address_parent_id'] = 0;
+        $address['location_type_id'] = 1;
+        $address['address_country_id'] = 1;
         Log::info('Create ['.$type.'] address', $address);
         foreach($this->fields as $field) {
             $typedField = $type . '_' . $field;

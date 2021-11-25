@@ -9,23 +9,24 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-use App\Http\Controllers\Api\DataTablesController;
-use App\Http\Controllers\Api\SelectController;
-use App\Http\Controllers\Api\TourComponentController;
-use App\Http\Controllers\Api\ActivityController;
-use App\Http\Controllers\Api\TransportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Api\AirlinesController;
-use App\Http\Controllers\Api\FlightController;
-use App\Http\Controllers\Api\BookingController;
-use App\Http\Controllers\Api\BookingCustomerController;
-use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TourController;
-use App\Http\Controllers\Api\AccommodationController;
+use App\Http\Controllers\Api\FlightController;
+use App\Http\Controllers\Api\SelectController;
+use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\AirlinesController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\Api\CountryApiController;
+use App\Http\Controllers\Api\DataTablesController;
+use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\FlightDetailsController;
+use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\BookingCustomerController;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
@@ -104,6 +105,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/accomodation', [ApiController::class, 'getAccommodationFromTour']);
     Route::get('/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
     Route::get('/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
+    Route::get('/countries', [CountryApiController::class, 'getCountries']);
 });
 
 Route::prefix('/orders')->group(function () {
