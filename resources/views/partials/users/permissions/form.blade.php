@@ -14,15 +14,24 @@
             <th scope="col">Create</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
+            <th scope="col">All</th>
         </tr>
         </thead>
         <tbody>
             @foreach($permissions as $group => $classes)
                 <tr>
                     <td colspan="5"><h4 style="text-decoration: underline">{{ $group }}</h4></td>
+                    <td>
+                        <div class="form-group">
+                            <input type="checkbox" name="{{ str_replace(' ', '', $group).'Group' }}-all"
+                                   class="form-check-input" id="{{ str_replace(' ', '', $group).'Group' }}-all"
+                                   onchange="multiChanger('{{ str_replace(' ', '', $group).'Group' }}-all', '{{ str_replace(' ', '', $group).'Group' }}')">
+                        </div>
+                    </td>
                 </tr>
                 @foreach($classes as $class => $data)
-                    @include('partials.users.permissions.form.row', ['field' => $class, 'data' => $data,])
+                    @include('partials.users.permissions.form.row',
+                                ['field' => $class, 'data' => $data, 'group' => str_replace(' ', '', $group).'Group'])
                 @endforeach
             @endforeach
         </tbody>

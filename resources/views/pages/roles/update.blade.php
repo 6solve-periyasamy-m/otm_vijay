@@ -9,3 +9,7 @@
                     'level' => $role->level,
                 ])
 @endsection
+
+@push('footer-stack')
+    @include('partials.scripts.multicheck')
+@endpush

@@ -5,3 +5,7 @@
 @section('form-body')
     @include('partials.users.permissions.form')
 @endsection
+
+@push('footer-stack')
+    @include('partials.scripts.multicheck')
+@endpush
