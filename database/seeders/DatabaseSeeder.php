@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AddressParent;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\Tour;
 
 class DatabaseSeeder extends Seeder
 {
