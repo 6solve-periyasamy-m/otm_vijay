@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -72,8 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getHighestRoleLevel()
     {
         $highest = 0;
-        foreach ($this->roles as $role)
-        {
+        foreach ($this->roles as $role) {
             $highest = $highest >= ($role->level ?? 0) ? $highest : $role->level;
         }
         return $highest;
@@ -82,8 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getCurrentRole()
     {
         $highest = null;
-        foreach ($this->roles as $role)
-        {
+        foreach ($this->roles as $role) {
             $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
         }
         return $highest;

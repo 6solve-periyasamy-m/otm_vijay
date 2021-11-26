@@ -5,31 +5,51 @@ namespace App\Repository;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 use Silber\Bouncer\Database\Role;
-use \Silber\Bouncer\BouncerFacade as Bouncer;
 
 interface PermissionsRepositoryInterface
 {
     public static function getAvailablePermissionSets();
+
     public static function getAvailablePermissionClasses();
+
     public static function getGroupedPermissions(Role $role = null);
+
     public static function getPermissionStatus(Role $role, string $ability, string $class);
+
     public static function canCurrentUser(string $action, string $class);
+
     public static function grantPermission(Role $role, string $ability, string $class);
+
     public static function revokePermission(Role $role, string $ability, string $class);
+
     public static function createRole(string $name, string $title, int $level);
+
     public static function createPresetRole(string $title, int $level);
+
     public static function updateRole(Role $role, string $title, int $level);
+
     public static function getCurrentLevel();
+
     public static function getAvailableRoles();
+
     public static function getDefaultRole();
+
     public static function assignRole(User $user, string $newRole);
+
     public static function getRoleFromName(string $role);
 }
 
 class PermissionsRepository implements PermissionsRepositoryInterface
 {
-    public static function getAvailablePermissionSets() {
+    public static function getAvailablePermissionClasses()
+    {
+        return array_keys(self::getAvailablePermissionSets());
+    }
+
+    public static function getAvailablePermissionSets()
+    {
         return [
             // Tours
             'Tour' => [
@@ -193,14 +213,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         ];
     }
 
-    public static function getAvailablePermissionClasses() {
-        return array_keys(self::getAvailablePermissionSets());
-    }
-
-    public static function getGroupedPermissions(Role $role = null) {
+    public static function getGroupedPermissions(Role $role = null)
+    {
         $permissions = [];
         foreach (self::getAvailablePermissionSets() as $class => $values) {
-            if (!isset($permissions[$values['group']])) { $permissions[$values['group']] = []; }
+            if (!isset($permissions[$values['group']])) {
+                $permissions[$values['group']] = [];
+            }
             $permissions[$values['group']][$class] = [
                 'name' => $values['name'],
                 'create' => isset($role) && self::getPermissionStatus($role, 'create', $class),
@@ -212,18 +231,16 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         return $permissions;
     }
 
-    public static function getPermissionStatus(Role $role, string $ability, string $class) {
+    public static function getPermissionStatus(Role $role, string $ability, string $class)
+    {
         return $role->can($ability, '\\App\\Models\\' . $class);
-    }
-
-    public static function canCurrentUser(string $action, string $class) {
-        return Bouncer::can($action, '\\App\\Models\\' . $class);
     }
 
     /**
      * @throws AuthorizationException
      */
-    public static function grantPermission(Role $role, string $ability, string $class, $onFail = null) {
+    public static function grantPermission(Role $role, string $ability, string $class, $onFail = null)
+    {
         if (!self::canCurrentUser($ability, $class)) {
             if (!isset($onFail)) {
                 throw new AuthorizationException('Role does not have access to this permission');
@@ -234,10 +251,16 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         Bouncer::allow($role)->to($ability, '\\App\\Models\\' . $class);
     }
 
+    public static function canCurrentUser(string $action, string $class)
+    {
+        return Bouncer::can($action, '\\App\\Models\\' . $class);
+    }
+
     /**
      * @throws AuthorizationException
      */
-    public static function revokePermission(Role $role, string $ability, string $class, $onFail = null) {
+    public static function revokePermission(Role $role, string $ability, string $class, $onFail = null)
+    {
         if (!self::canCurrentUser($ability, $class)) {
             if (!isset($onFail)) {
                 throw new AuthorizationException('Role does not have access to this permission');
@@ -248,7 +271,13 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         Bouncer::disallow($role)->to($ability, '\\App\\Models\\' . $class);
     }
 
-    public static function createRole(string $name, string $title, int $level) {
+    public static function createPresetRole(string $title, int $level)
+    {
+        return self::createRole(strtolower(str_replace(' ', '-', $title)), $title, $level);
+    }
+
+    public static function createRole(string $name, string $title, int $level)
+    {
         return Bouncer::roles()->firstOrCreate([
             'name' => $name,
             'title' => $title,
@@ -256,11 +285,8 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         ]);
     }
 
-    public static function createPresetRole(string $title, int $level) {
-        return self::createRole(strtolower(str_replace(' ', '-', $title)), $title, $level);
-    }
-
-    public static function updateRole(Role $role, string $title, int $level) {
+    public static function updateRole(Role $role, string $title, int $level)
+    {
         $role->name = strtolower(str_replace(' ', '-', $title));
         $role->title = $title;
         $role->level = $level;
@@ -268,27 +294,27 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         return $role;
     }
 
-    public static function getCurrentLevel() {
+    public static function getAvailableRoles()
+    {
+        return Role::where('level', '<', self::getCurrentLevel())->get();
+    }
+
+    public static function getCurrentLevel()
+    {
         if (!Auth::guard('web')->check()) return -1;
         return Auth::user()->getHighestRoleLevel();
     }
 
-    public static function getAvailableRoles() {
-        return Role::where('level', '<', self::getCurrentLevel())->get();
-    }
-
-    public static function getDefaultRole() {
+    public static function getDefaultRole()
+    {
         return Role::all()->sortBy('level', SORT_ASC)->first();
-    }
-
-    public static function getRoleFromName(string $role) {
-        return Role::where('name', '=', $role)->first();
     }
 
     /**
      * @throws AuthorizationException
      */
-    public static function assignRole(User $user, string $newRole) {
+    public static function assignRole(User $user, string $newRole)
+    {
         $role = self::getRoleFromName($newRole);
         if (isset($role)) {
             if ($role->level >= self::getCurrentLevel()) {
@@ -303,5 +329,10 @@ class PermissionsRepository implements PermissionsRepositoryInterface
             return $user;
         }
         return null;
+    }
+
+    public static function getRoleFromName(string $role)
+    {
+        return Role::where('name', '=', $role)->first();
     }
 }
