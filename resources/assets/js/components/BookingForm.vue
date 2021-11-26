@@ -77,7 +77,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: 5,
+            debug: false,
             formInfo: false,
             bookingId: '',
             leadTraveller: null,
