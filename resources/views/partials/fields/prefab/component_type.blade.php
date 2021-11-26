@@ -5,5 +5,6 @@
         'Included' => 'Included',
         'Upgrade' => 'Upgrade',
         'Add-on' => 'Add-on',
-    ]
+    ],
+    'selected' => $value ?? 'Included'
 ])
