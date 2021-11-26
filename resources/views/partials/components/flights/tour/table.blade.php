@@ -41,16 +41,24 @@
                 200: function () { alert('Components added successfully'); flightTable.ajax.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); }
             },
-            data: { "type": $(".flight-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
+            data: { "type": $(".flight-component-type-select").find(":selected").val(),
+                "direction": $(".flight-direction-select").find(":selected").val(),
+                "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
 </script>
 <div class="d-flex justify-content-between mb-3">
-    <select class="form-select flight-component-type-select">
-        <option value="Included" selected>Included</option>
-        <option value="Upgrade">Upgrade</option>
-        <option value="Add-on">Add-on</option>
-    </select>    
+    <div class="d-inline-flex col-12 col-xl-10">
+        <select class="form-select flight-component-type-select">
+            <option value="Included" selected>Included</option>
+            <option value="Upgrade">Upgrade</option>
+            <option value="Add-on">Add-on</option>
+        </select>
+        <select class="form-select flight-direction-select">
+            <option value="Inbound" selected>Inbound</option>
+            <option value="Outbound">Outbound</option>
+        </select>
+    </div>
     <a href="javascript:getSelectedFlightInventory()" class="btn btn-primary ms-3 text-white">
         <i class="icon-plus"></i>
         <span>Add Components</span>
