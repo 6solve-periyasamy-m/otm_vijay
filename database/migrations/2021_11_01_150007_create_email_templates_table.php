@@ -15,6 +15,8 @@ class CreateEmailTemplatesTable extends Migration
     {
         Schema::create('email_templates', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->longText('body')->default('This email template has not been set yet');
             $table->timestamps();
         });
     }
