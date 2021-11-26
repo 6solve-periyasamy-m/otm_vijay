@@ -361,14 +361,6 @@ class OrderRepository implements OrderRepositoryInterface
             'DETAILS_LINK' => route('customer.details', ['customer' => $customer,]),
         ];
 
-        if (isset($event)) {
-            $data['EVENT_NAME'] = $event->name;
-            $data['EVENT_DESCRIPTION'] = $event->description;
-            $data['EVENT_START'] = $event->starts_at;
-            $data['EVENT_END'] = $event->ends_at;
-            $data['EVENT_URL'] = $event->booking_url;
-        }
-
         return $data;
     }
 
