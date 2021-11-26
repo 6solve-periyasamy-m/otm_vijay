@@ -46,10 +46,8 @@ use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 
