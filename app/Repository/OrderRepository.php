@@ -11,13 +11,19 @@ use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\OrderTransport;
 use App\Models\Tour;
+use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
 
-interface OrderRepositoryInterface {
+interface OrderRepositoryInterface
+{
     public static function getSearchOrders($searchTerm = "", $archived = false);
+
     public static function getOrderDetails(Order $order);
+
     public static function getOrderCustomerDetails(OrderCustomer $orderCustomer);
+
     public static function addIncludedToCustomer(OrderCustomer $ordercustomer, Order $order);
+
     public static function getInvoiceDetails(Order $order);
 
 }
@@ -157,7 +163,8 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
 
-    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order) {
+    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order)
+    {
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
@@ -184,8 +191,9 @@ class OrderRepository implements OrderRepositoryInterface
         }
     }
 
-    public static function getInvoiceDetails(Order $order) {
-        $data = ['order' => $order, ];
+    public static function getInvoiceDetails(Order $order)
+    {
+        $data = ['order' => $order,];
         $data['orderCustomers'] = [];
         $data['payments'] = [];
         $adjustments = [];
@@ -194,7 +202,7 @@ class OrderRepository implements OrderRepositoryInterface
         $data['totals']['paid'] = 0;
         $data['totals']['adjusted'] = 0;
 
-        foreach($order->orderCustomers as $orderCustomer) {
+        foreach ($order->orderCustomers as $orderCustomer) {
             $data['orderCustomers'][$orderCustomer->id] = [];
             $data['orderCustomers'][$orderCustomer->id]['customer'] = $orderCustomer;
             $data['orderCustomers'][$orderCustomer->id]['items'] = [];
@@ -322,30 +330,32 @@ class OrderRepository implements OrderRepositoryInterface
      * @var Tour $tour
      * @var Event $event
      */
-    public static function getOrderShortCodes(Order $order) {
-        $customer = $order->leadBooker->customer;
-        $tour = $order->tour;
-        $event = $tour->event;
+    public static function getOrderShortCodes(Order $order = null)
+    {
+        $faker = Faker::create();
+        $customer = isset($order) ? $order->leadBooker->customer : null;
+        $tour = isset($order) ? $order->tour : null;
+        $event = isset($order) ? $tour->event : null;
         $nextPayment = self::getNextPaymentDetails($order);
         $data = [
-            'TITLE' => $customer->title,
-            'FIRST_NAME' => $customer->first_name,
-            'MIDDLE_NAMES' => $customer->middle_names,
-            'LAST_NAME' => $customer->last_name,
-            'PASSPORT_EXPIRY_DATE' => $customer->passport_expiry_date,
-            'BOOKING_REFERENCE' => $order->booking_reference,
-            'ORDERED_ON' => $order->ordered_on,
-            'TOTAL_PAID' => self::getTotalPaid($order),
-            'PAYMENT_AMOUNT' => $nextPayment['amount'],
-            'PAYMENT_DUE' => $nextPayment['due'],
-            'TOUR_NAME' => $tour->name,
-            'TOUR_DESCRIPTION' => $tour->description,
-            'TOUR_START' => $tour->date_from,
-            'TOUR_END' => $tour->date_to,
-            'TOUR_BASE_PER_PERSON' => $tour->base_price_per_person,
-            'TOUR_DEPOSIT' => $tour->deposit,
-            'TOUR_SURCHARGE' => $tour->single_occupancy_surcharge,
-            'LATEST_INVOICE' => route('orders.invoice.latest', ['order' => $order, ]), // TODO: Link to customers invoices
+            'TITLE' => !isset($order) ? $faker->title : $customer->title,
+            'FIRST_NAME' => !isset($order) ? $faker->firstName : $customer->first_name,
+            'MIDDLE_NAMES' => !isset($order) ? $faker->firstName : $customer->middle_names,
+            'LAST_NAME' => !isset($order) ? $faker->lastName : $customer->last_name,
+            'PASSPORT_EXPIRY_DATE' => !isset($order) ? $faker->date : $customer->passport_expiry_date,
+            'BOOKING_REFERENCE' => !isset($order) ? $faker->regexify('OTM[0-9]{12}[A-Z]{4}') : $order->booking_reference,
+            'ORDERED_ON' => !isset($order) ? $faker->date : $order->ordered_on,
+            'TOTAL_PAID' => !isset($order) ? $faker->numberBetween(100, 1000) : self::getTotalPaid($order),
+            'PAYMENT_AMOUNT' => !isset($order) ? $faker->numberBetween(100, 1000) : $nextPayment['amount'],
+            'PAYMENT_DUE' => !isset($order) ? $faker->date : $nextPayment['due'],
+            'TOUR_NAME' => !isset($order) ? implode(' ', $faker->words) : $tour->name,
+            'TOUR_DESCRIPTION' => !isset($order) ? $faker->sentence : $tour->description,
+            'TOUR_START' => !isset($order) ? $faker->date : $tour->date_from,
+            'TOUR_END' => !isset($order) ? $faker->date : $tour->date_to,
+            'TOUR_BASE_PER_PERSON' => !isset($order) ? $faker->numberBetween(100, 1000) : $tour->base_price_per_person,
+            'TOUR_DEPOSIT' => !isset($order) ? $faker->numberBetween(100, 1000) : $tour->deposit,
+            'TOUR_SURCHARGE' => !isset($order) ? $faker->numberBetween(100, 1000) : $tour->single_occupancy_surcharge,
+            'LATEST_INVOICE' => route('orders.invoice.latest', ['order' => $order,]), // TODO: Link to customers invoices
             'PORTAL_LINK' => route('customer.portal', ['customer' => $customer,]),
             'ATOL_LINK' => route('customer.atol', ['customer' => $customer,]),
             'DETAILS_LINK' => route('customer.details', ['customer' => $customer,]),
@@ -362,26 +372,15 @@ class OrderRepository implements OrderRepositoryInterface
         return $data;
     }
 
-    public static function getTotalPaid(Order $order) {
-        $paid = 0;
-        foreach ($order->payments as $payment) {
-            $paid += $payment->amount;
-        }
-        return $paid;
-    }
-
-    public static function getCosts(Order $order) {
-
-    }
-
-    public static function getNextPaymentDetails(Order $order) {
+    public static function getNextPaymentDetails(Order $order)
+    {
         $paid = self::getTotalPaid($order);
         $paid -= $order->tour->deposit;
         foreach ($order->tour->paymentInstallments as $installment) {
             $paid -= $installment->amount;
             if ($paid < 0) {
                 return [
-                    'amount' => $paid*-1,
+                    'amount' => $paid * -1,
                     'due' => $installment->due_on
                 ];
             }
@@ -390,5 +389,19 @@ class OrderRepository implements OrderRepositoryInterface
             'amount' => 0,
             'due' => $order->tour->date_from,
         ];
+    }
+
+    public static function getTotalPaid(Order $order)
+    {
+        $paid = 0;
+        foreach ($order->payments as $payment) {
+            $paid += $payment->amount;
+        }
+        return $paid;
+    }
+
+    public static function getCosts(Order $order)
+    {
+
     }
 }
