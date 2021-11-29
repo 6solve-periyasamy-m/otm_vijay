@@ -19,7 +19,7 @@ class BookingConfirmation extends Mailable
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct($order)
     {
         $this->order = $order;
     }
@@ -32,6 +32,6 @@ class BookingConfirmation extends Mailable
     public function build()
     {
         $body = MailRepository::getBookingConfirmationBody($this->order);
-        return $this->view('mail.templated', ['body' => $body,]);
+        return $this->view('mail.templated', ['content' => $body,]);
     }
 }
