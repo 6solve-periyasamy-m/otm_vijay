@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\BookingConfirmation;
 use App\Mail\PaymentDue;
+use App\Mail\PaymentMade;
 use App\Models\Order;
 use App\Repository\MailRepository;
 use App\Repository\OrderRepository;
@@ -63,5 +64,30 @@ class MailController extends Controller
     public function demoOrderPaymentDue(Order $order) {
         Mail::to($order->leadBooker->customer->email_address)->send(new PaymentDue($order));
         return redirect()->route('email.payment-due.edit');
+    }
+
+    public function editPaymentMade() {
+        return view('pages.email.editor', [
+            'body' => MailRepository::getEmailTemplate('payment.due'),
+            'codes' => ShortCodeRepository::getOrderShortCodes(),
+            'action' => route('email.payment-made.update'),
+            'demo' => route('email.payment-made.demo'),
+            'templateName' => 'Payment Made'
+        ]);
+    }
+
+    public function storePaymentMade(Request $request) {
+        SettingsRepository::set('payment.due', $request->input('body'));
+        return redirect()->route('email.payment-made.edit');
+    }
+
+    public function demoPaymentMade() {
+        Mail::to(Auth::user())->send(new PaymentMade(null));
+        return redirect()->route('email.payment-made.edit');
+    }
+
+    public function demoOrderPaymentMade(Order $order) {
+        Mail::to($order->leadBooker->customer->email_address)->send(new PaymentMade($order));
+        return redirect()->route('email.payment-made.edit');
     }
 }

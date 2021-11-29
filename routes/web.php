@@ -538,6 +538,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/demo', [MailController::class, 'demoPaymentDue'])->name('demo');
             Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentDue'])->name('order_demo');
         });
+        Route::prefix('payment-made')->name('payment-made.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editPaymentMade'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storePaymentMade'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoPaymentMade'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentMade'])->name('order_demo');
+        });
     });
 });
 
