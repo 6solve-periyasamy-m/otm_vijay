@@ -27,6 +27,16 @@ class MailRepository implements MailRepositoryInterface
         return $template;
     }
 
+    public static function getPaymentDueBody($order)
+    {
+        $fillables = ShortCodeRepository::getOrderShortCodes($order);
+        $template = self::getEmailTemplate('payment.due')->body;
+        foreach ($fillables as $key => $value) {
+            $template = str_replace('['.$key.']', $value, $template);
+        }
+        return $template;
+    }
+
     public static function getEmailTemplate(string $name)
     {
         return SettingsRepository::getOrDefault($name, 'This template has not been set up yet');

@@ -533,9 +533,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/demo/{order}', [MailController::class, 'demoOrderBooking'])->name('order_demo');
         });
         Route::prefix('due-payment')->name('due-payment.')->group(function () {
-            Route::get('/edit')->name('edit');
-            Route::post('/edit')->name('update');
-            Route::get('/demo')->name('demo');
+            Route::get('/edit', [MailController::class, 'editPaymentDue'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storePaymentDue'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoPaymentDue'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentDue'])->name('order_demo');
         });
     });
 });
