@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingFormLoginController;
 use App\Http\Controllers\CustomerPortalController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
@@ -522,6 +523,19 @@ Route::middleware('auth')->group(function () {
             Route::get('/update', [CustomerController::class, 'edit'])->name('customers.edit');
             Route::post('/update', [CustomerController::class, 'update'])->name('customers.update');
             Route::post('/delete', [CustomerController::class, 'destroy'])->name('customers.delete');
+        });
+    });
+    Route::prefix('email/')->name('email.')->group(function () {
+        Route::prefix('booking')->name('booking.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editBooking'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storeBooking'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoBooking'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderBooking'])->name('order_demo');
+        });
+        Route::prefix('due-payment')->name('due-payment.')->group(function () {
+            Route::get('/edit')->name('edit');
+            Route::post('/edit')->name('update');
+            Route::get('/demo')->name('demo');
         });
     });
 });
