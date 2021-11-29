@@ -20,7 +20,7 @@ class MailRepository implements MailRepositoryInterface
     public static function getBookingConfirmationBody($order)
     {
         $fillables = ShortCodeRepository::getOrderShortCodes($order);
-        $template = self::getEmailTemplate('booking.confirmation')->body;
+        $template = self::getEmailTemplate('booking.confirmation');
         foreach ($fillables as $key => $value) {
             $template = str_replace('['.$key.']', $value, $template);
         }
@@ -29,10 +29,6 @@ class MailRepository implements MailRepositoryInterface
 
     public static function getEmailTemplate(string $name)
     {
-        $template = EmailTemplate::where('name', '=', $name)->first();
-        if (!isset($template)) {
-            $template = EmailTemplate::create(['name' => $name,]);
-        }
-        return $template;
+        return SettingsRepository::getOrDefault($name, 'This template has not been set up yet');
     }
 }

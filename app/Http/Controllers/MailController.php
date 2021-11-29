@@ -6,6 +6,8 @@ use App\Mail\BookingConfirmation;
 use App\Models\Order;
 use App\Repository\MailRepository;
 use App\Repository\OrderRepository;
+use App\Repository\SettingsRepository;
+use App\Repository\ShortCodeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -14,8 +16,8 @@ class MailController extends Controller
 {
     public function editBooking() {
         return view('pages.email.editor', [
-            'body' => MailRepository::getEmailTemplate('booking.confirmation')->body,
-            'codes' => OrderRepository::getOrderShortCodes(),
+            'body' => MailRepository::getEmailTemplate('booking.confirmation'),
+            'codes' => ShortCodeRepository::getOrderShortCodes(),
             'action' => route('email.booking.update'),
             'demo' => route('email.booking.demo'),
             'templateName' => 'Booking Confirmation'
@@ -23,9 +25,7 @@ class MailController extends Controller
     }
 
     public function storeBooking(Request $request) {
-        $template = MailRepository::getEmailTemplate('booking.confirmation');
-        $template->body = $request->input('body');
-        $template->save();
+        SettingsRepository::set('booking.confirmation', $request->input('body'));
         return redirect()->route('email.booking.edit');
     }
 
