@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
@@ -43,6 +44,7 @@ class OrderController extends Controller
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
         OrderRepository::addIncludedToCustomer($orderCustomer, $order);
+        event(new OrderCreated($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
