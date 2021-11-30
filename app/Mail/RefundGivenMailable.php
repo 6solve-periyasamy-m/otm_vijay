@@ -20,7 +20,7 @@ class RefundGivenMailable extends Mailable
      *
      * @return void
      */
-    public function __construct(Payment $payment)
+    public function __construct($payment)
     {
         $this->payment = $payment;
     }
