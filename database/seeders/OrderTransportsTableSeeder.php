@@ -21,11 +21,29 @@ class OrderTransportsTableSeeder extends Seeder
         \DB::table('order_transports')->insert(array (
             0 => 
             array (
-                'id' => 1,
+                'id' => 2,
                 'order_customer_id' => 1,
-                'transport_inventory_tour_id' => 2,
-                'created_at' => '2021-11-22 13:50:51',
-                'updated_at' => '2021-11-22 13:50:51',
+                'transport_inventory_tour_id' => 4,
+                'created_at' => '2021-11-30 12:35:41',
+                'updated_at' => '2021-11-30 12:35:41',
+                'deleted_at' => NULL,
+            ),
+            1 => 
+            array (
+                'id' => 3,
+                'order_customer_id' => 1,
+                'transport_inventory_tour_id' => 5,
+                'created_at' => '2021-11-30 12:35:41',
+                'updated_at' => '2021-11-30 12:35:41',
+                'deleted_at' => NULL,
+            ),
+            2 => 
+            array (
+                'id' => 4,
+                'order_customer_id' => 1,
+                'transport_inventory_tour_id' => 6,
+                'created_at' => '2021-11-30 12:35:41',
+                'updated_at' => '2021-11-30 12:35:41',
                 'deleted_at' => NULL,
             ),
         ));

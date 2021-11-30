@@ -76,6 +76,25 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'updated_at' => '2021-11-22 12:44:00',
                 'deleted_at' => NULL,
             ),
+            3 => 
+            array (
+                'id' => 4,
+                'accommodation_id' => 1,
+                'room_type_id' => 1,
+                'board_type_id' => 1,
+                'check_in' => '2021-11-22 10:00:00',
+                'check_in_time_confirmed' => 1,
+                'check_out' => '2021-11-25 10:00:00',
+                'check_out_time_confirmed' => 1,
+                'fit_selectable' => 1,
+                'stock' => 100,
+                'purchase_price' => 30.0,
+                'sales_price' => 100.0,
+                'notes' => NULL,
+                'created_at' => '2021-11-30 10:16:56',
+                'updated_at' => '2021-11-30 10:17:06',
+                'deleted_at' => NULL,
+            ),
         ));
         
         
