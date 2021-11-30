@@ -61,4 +61,8 @@ class Order extends Model
     public function adjustments() {
         return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
+
+    public function reminders() {
+        return $this->hasMany(PaymentReminder::class, 'order_id');
+    }
 }

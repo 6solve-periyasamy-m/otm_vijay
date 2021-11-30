@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Mail\PaymentDueMailable;
 use App\Models\Customer;
 use App\Models\Event;
 use App\Models\Order;
@@ -10,9 +11,13 @@ use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\OrderTransport;
+use App\Models\PaymentInstallment;
+use App\Models\PaymentReminder;
 use App\Models\Tour;
+use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 interface OrderRepositoryInterface
 {
@@ -332,13 +337,15 @@ class OrderRepository implements OrderRepositoryInterface
             if ($paid < 0) {
                 return [
                     'amount' => $paid * -1,
-                    'due' => $installment->due_on
+                    'due' => $installment->due_on,
+                    'installment' => $installment,
                 ];
             }
         }
         return [
             'amount' => 0,
             'due' => $order->tour->date_from,
+            'installment' => null,
         ];
     }
 
@@ -349,5 +356,23 @@ class OrderRepository implements OrderRepositoryInterface
             $paid += $payment->amount;
         }
         return $paid;
+    }
+
+    public static function sendAllOrderReminders() {
+        foreach (Order::all() as $order) {
+            $nextPayment = self::getNextPaymentDetails($order);
+            if (!isset($nextPayment['installment'])  || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > 7) continue;
+            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->first();
+            if (isset($reminder)) continue;
+            self::sendReminderEmail($order, $nextPayment['installment']->id);
+        }
+    }
+
+    public static function sendReminderEmail(Order $order, PaymentInstallment $installment) {
+        PaymentReminder::create([
+            'order_id' => $order->id,
+            'payment_installment_id' => $installment->id,
+        ]);
+        Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
     }
 }
