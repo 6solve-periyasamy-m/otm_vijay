@@ -14,11 +14,7 @@
         </div>
         <div class="menu-item">
         </div>
-        <div class="donut-center">
-            <span class="donut-number">01</span>
-            <span class="donut-number">02</span>
-            <span class="donut-number">03</span>
-            <span class="donut-number">04</span>
+        <div class="donut-center">            
         </div>
     </div>
     <div class="click-menu">
@@ -77,19 +73,19 @@
             </div>
             <ul class="sub-menu">
                 <li class="menu-link">
-                    <a href="">Activities</a>
+                    <a href="" tooltip="Activities"><span class="icon-settings menu-icon"></a>
                 </li>
                 <li class="menu-link">
-                    <a href="">Accommodation</a>
+                    <a href=""><span class="icon-home menu-icon"></span></a>
                 </li> 
                 <li class="menu-link">
-                    <a href="">Flights</a>
+                    <a href=""><span class="icon-plane menu-icon"></a>
                 </li> 
                 <li class="menu-link">
-                    <a href="">Transport</a>
+                    <a href=""><span class="icon-directions menu-icon"></a>
                 </li> 
                 <li class="menu-link">
-                    <a href="">Itinerary</a>
+                    <a href=""><span class="icon-tag menu-icon"></a>
                 </li>                
             </ul>
         </div>
