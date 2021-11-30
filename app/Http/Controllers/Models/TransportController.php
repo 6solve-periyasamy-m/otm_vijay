@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use App\Models\Flight;
 use App\Models\Transport;
 use Illuminate\Http\Request;
 
@@ -67,5 +68,15 @@ class TransportController extends Controller
     {
         $transport->delete();
         return redirect()->route('transports.all');
+    }
+
+    public function createReturn(Transport $transport) {
+        $return = $transport->replicate();
+        $depart = $transport->arrival_address_id;
+        $arrival = $transport->departure_address_id;
+        $return->departure_address_id = $depart;
+        $return->arrival_address_id = $arrival;
+        $return->save();
+        return redirect()->route('transports.edit', ['transport' => $return,]);
     }
 }

@@ -385,6 +385,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{transport}', [TransportController::class, 'destroy'])->name('transports.delete');
         Route::prefix('{transport}')->group(function () {
             Route::get('/', [TransportController::class, 'view'])->name('transports.view');
+            Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
             Route::prefix('inventory')->group(function () {
                 Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create');
                 Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store');
@@ -405,6 +406,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{flight}', [FlightController::class, 'destroy'])->name('flights.delete');
         Route::prefix('{flight}')->group(function () {
             Route::get('/', [FlightController::class, 'view'])->name('flights.view');
+            Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
             Route::prefix('inventory')->group(function (){
                 Route::get('/', [FlightInventoryController::class, 'index'])->name('flight-inventories.all');
                 Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create');

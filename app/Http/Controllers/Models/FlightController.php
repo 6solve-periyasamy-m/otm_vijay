@@ -64,4 +64,14 @@ class FlightController extends Controller
         $flight->delete();
         return redirect()->route('flights.all');
     }
+
+    public function createReturn(Flight $flight) {
+        $returnFlight = $flight->replicate();
+        $depart = $flight->arrival_airport_id;
+        $arrival = $flight->departure_airport_id;
+        $returnFlight->departure_airport_id = $depart;
+        $returnFlight->arrival_airport_id = $arrival;
+        $returnFlight->save();
+        return redirect()->route('flights.edit', ['flight' => $returnFlight,]);
+    }
 }
