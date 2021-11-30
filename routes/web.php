@@ -245,6 +245,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::post('/update', [BoardTypeController::class, 'update'])->name('board-types.update')->middleware('bouncer:BoardType,update');
                 Route::post('/delete', [BoardTypeController::class, 'destroy'])->name('board-types.delete')->middleware('bouncer:BoardType,delete');
             });
+            Route::get('/{accommodation}/duplicate/{accommodationInventory}', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate');
         });
     });
 
@@ -257,6 +258,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport,update');
             Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport,update');
             Route::post('/delete', [TransportController::class, 'destroy'])->name('transports.delete')->middleware('bouncer:Transport,delete');
+            Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
             Route::prefix('inventory')->group(function () {
                 Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:TransportInventory,create');
                 Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store')->middleware('bouncer:TransportInventory,create');
@@ -277,6 +279,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [OperatorController::class, 'edit'])->name('operators.edit')->middleware('bouncer:Operator,update');
                 Route::post('/update', [OperatorController::class, 'update'])->name('operators.update')->middleware('bouncer:Operator,update');
                 Route::post('/delete', [OperatorController::class, 'destroy'])->name('operators.delete')->middleware('bouncer:Operator,delete');
+                Route::get('/{transportInventory}/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate');
             });
         });
         Route::prefix('transport-types')->group(function () {
@@ -313,6 +316,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/update', [FlightController::class, 'edit'])->name('flights.edit')->middleware('bouncer:Flight,update');
             Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight,update');
             Route::post('/delete', [FlightController::class, 'destroy'])->name('flights.delete')->middleware('bouncer:Flight,delete');
+            Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
             Route::prefix('inventory')->group(function () {
                 Route::get('/', [FlightInventoryController::class, 'index'])->name('flight-inventories.all')->middleware('bouncer:FlightInventory,read');
                 Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:FlightInventory,create');
@@ -347,6 +351,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [AirportController::class, 'edit'])->name('airports.edit')->middleware('bouncer:Airport,update');
                 Route::post('/update', [AirportController::class, 'update'])->name('airports.update')->middleware('bouncer:Airport,update');
                 Route::post('/delete', [AirportController::class, 'destroy'])->name('airports.delete')->middleware('bouncer:Airport,delete');
+                Route::get('/{flightInventory}/duplicate', [FlightInventoryController::class, 'duplicate'])->name('flight-inventories.duplicate');
             });
         });
     });
@@ -391,6 +396,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [TicketTypeController::class, 'edit'])->name('ticket-types.edit')->middleware('bouncer:TicketType,update');
                 Route::post('/update', [TicketTypeController::class, 'update'])->name('ticket-types.update')->middleware('bouncer:TicketType,update');
                 Route::post('/delete', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete')->middleware('bouncer:TicketType,delete');
+                Route::get('/{activityInventory}/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate');
             });
         });
     });

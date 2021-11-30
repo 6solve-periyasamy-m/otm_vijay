@@ -68,4 +68,11 @@ class ActivityInventoryController extends Controller
         $activityInventory->delete();
         return redirect()->route('activities.view', ['activity' => $activity, ]);
     }
+
+    public function duplicate(Activity $activity, ActivityInventory $activityInventory)
+    {
+        $inventory = $activityInventory->replicate();
+        $inventory->save();
+        return redirect()->route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $inventory,]);
+    }
 }
