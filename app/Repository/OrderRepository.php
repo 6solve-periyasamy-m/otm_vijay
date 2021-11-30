@@ -350,9 +350,4 @@ class OrderRepository implements OrderRepositoryInterface
         }
         return $paid;
     }
-
-    public static function getCosts(Order $order)
-    {
-
-    }
 }
