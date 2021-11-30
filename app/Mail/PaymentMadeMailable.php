@@ -2,27 +2,27 @@
 
 namespace App\Mail;
 
-use App\Models\Order;
+use App\Models\Payment;
 use App\Repository\MailRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentDue extends Mailable
+class PaymentMadeMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $order;
+    public $payment;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(Payment $payment)
     {
-        $this->order = $order;
+        $this->payment = $payment;
     }
 
     /**
@@ -32,7 +32,7 @@ class PaymentDue extends Mailable
      */
     public function build()
     {
-        $body = MailRepository::getPaymentDueBody($this->order);
+        $body = MailRepository::getPaymentMadeBody($this->payment);
         return $this->view('mail.templated', ['content' => $body,]);
     }
 }

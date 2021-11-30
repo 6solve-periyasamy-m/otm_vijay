@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderCreated;
-use App\Mail\BookingConfirmation;
+use App\Events\OrderCreatedEvent;
+use App\Mail\BookingConfirmationMailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -23,11 +23,11 @@ class SendBookingConfirmedEmail
     /**
      * Handle the event.
      *
-     * @param  OrderCreated  $event
+     * @param  OrderCreatedEvent  $event
      * @return void
      */
-    public function handle(OrderCreated $event)
+    public function handle(OrderCreatedEvent $event)
     {
-        Mail::to($event->order->leadBooker->customer->email_address)->send(new BookingConfirmation($event->order));
+        Mail::to($event->order->leadBooker->customer->email_address)->send(new BookingConfirmationMailable($event->order));
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Events\PaymentMade;
-use App\Mail\BookingConfirmation;
+use App\Events\PaymentMadeEvent;
+use App\Mail\PaymentMadeMailable;
+use App\Mail\RefundGivenMailable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -23,11 +24,15 @@ class SendPaymentMadeEmail
     /**
      * Handle the event.
      *
-     * @param  PaymentMade  $event
+     * @param  PaymentMadeEvent  $event
      * @return void
      */
-    public function handle(PaymentMade $event)
+    public function handle(PaymentMadeEvent $event)
     {
-        Mail::to($event->order->leadBooker->customer->email_address)->send(new PaymentMade($event->order));
+        if ($event->payment->payment_type === 'Refund') {
+            Mail::to($event->payment->order->leadBooker->customer->email_address)->send(new RefundGivenMailable($event->payment));
+        } else {
+            Mail::to($event->payment->order->leadBooker->customer->email_address)->send(new PaymentMadeMailable($event->payment));
+        }
     }
 }

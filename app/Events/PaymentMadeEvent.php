@@ -12,11 +12,10 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentMade
+class PaymentMadeEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $order;
     public $payment;
 
     /**
@@ -24,9 +23,8 @@ class PaymentMade
      *
      * @return void
      */
-    public function __construct(Order $order, Payment $payment)
+    public function __construct(Payment $payment)
     {
-        $this->order = $order;
         $this->payment = $payment;
     }
 

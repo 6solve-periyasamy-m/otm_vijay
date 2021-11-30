@@ -544,6 +544,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/demo', [MailController::class, 'demoPaymentMade'])->name('demo');
             Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentMade'])->name('order_demo');
         });
+        Route::prefix('refund-given')->name('refund-given.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editRefundGiven'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storeRefundGiven'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoRefundGiven'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderRefundGiven'])->name('order_demo');
+        });
     });
 });
 

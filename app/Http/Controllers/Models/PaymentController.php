@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\PaymentMade;
+use App\Events\PaymentMadeEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Payment;
@@ -31,7 +31,7 @@ class PaymentController extends Controller
             'payment_type' => $request->input('payment_type'),
             'paid_on' => $request->input('paid_on'),
         ]);
-        event(new PaymentMade($order, $payment));
+        event(new PaymentMadeEvent($payment));
         $order->payments()->save($payment);
         return redirect()->route('orders.view', ['order' => $order, ]);
     }

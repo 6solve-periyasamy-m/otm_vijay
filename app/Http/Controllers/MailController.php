@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\BookingConfirmation;
-use App\Mail\PaymentDue;
-use App\Mail\PaymentMade;
+use App\Mail\BookingConfirmationMailable;
+use App\Mail\PaymentDueMailable;
+use App\Mail\PaymentMadeMailable;
+use App\Mail\RefundGivenMailable;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Repository\MailRepository;
 use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
@@ -18,7 +20,7 @@ class MailController extends Controller
 {
     public function editBooking() {
         return view('pages.email.editor', [
-            'body' => MailRepository::getEmailTemplate('booking.confirmation'),
+            'body' => MailRepository::getEmailTemplate('email.booking.confirmation'),
             'codes' => ShortCodeRepository::getOrderShortCodes(),
             'action' => route('email.booking.update'),
             'demo' => route('email.booking.demo'),
@@ -27,23 +29,23 @@ class MailController extends Controller
     }
 
     public function storeBooking(Request $request) {
-        SettingsRepository::set('booking.confirmation', $request->input('body'));
+        SettingsRepository::set('email.booking.confirmation', $request->input('body'));
         return redirect()->route('email.booking.edit');
     }
 
     public function demoBooking() {
-        Mail::to(Auth::user())->send(new BookingConfirmation(null));
+        Mail::to(Auth::user())->send(new BookingConfirmationMailable(null));
         return redirect()->route('email.booking.edit');
     }
 
     public function demoOrderBooking(Order $order) {
-        Mail::to($order->leadBooker->customer->email_address)->send(new BookingConfirmation($order));
+        Mail::to($order->leadBooker->customer->email_address)->send(new BookingConfirmationMailable($order));
         return redirect()->route('email.booking.edit');
     }
 
     public function editPaymentDue() {
         return view('pages.email.editor', [
-            'body' => MailRepository::getEmailTemplate('payment.due'),
+            'body' => MailRepository::getEmailTemplate('email.payment.due'),
             'codes' => ShortCodeRepository::getOrderShortCodes(),
             'action' => route('email.payment-due.update'),
             'demo' => route('email.payment-due.demo'),
@@ -52,24 +54,24 @@ class MailController extends Controller
     }
 
     public function storePaymentDue(Request $request) {
-        SettingsRepository::set('payment.due', $request->input('body'));
+        SettingsRepository::set('email.payment.due', $request->input('body'));
         return redirect()->route('email.payment-due.edit');
     }
 
     public function demoPaymentDue() {
-        Mail::to(Auth::user())->send(new PaymentDue(null));
+        Mail::to(Auth::user())->send(new PaymentDueMailable(null));
         return redirect()->route('email.payment-due.edit');
     }
 
     public function demoOrderPaymentDue(Order $order) {
-        Mail::to($order->leadBooker->customer->email_address)->send(new PaymentDue($order));
+        Mail::to($order->leadBooker->customer->email_address)->send(new PaymentDueMailable($order));
         return redirect()->route('email.payment-due.edit');
     }
 
     public function editPaymentMade() {
         return view('pages.email.editor', [
-            'body' => MailRepository::getEmailTemplate('payment.due'),
-            'codes' => ShortCodeRepository::getOrderShortCodes(),
+            'body' => MailRepository::getEmailTemplate('email.payment.made'),
+            'codes' => ShortCodeRepository::getPaymentShortCodes(),
             'action' => route('email.payment-made.update'),
             'demo' => route('email.payment-made.demo'),
             'templateName' => 'Payment Made'
@@ -77,17 +79,42 @@ class MailController extends Controller
     }
 
     public function storePaymentMade(Request $request) {
-        SettingsRepository::set('payment.due', $request->input('body'));
+        SettingsRepository::set('email.payment.made', $request->input('body'));
         return redirect()->route('email.payment-made.edit');
     }
 
     public function demoPaymentMade() {
-        Mail::to(Auth::user())->send(new PaymentMade(null));
+        Mail::to(Auth::user())->send(new PaymentMadeMailable(null));
         return redirect()->route('email.payment-made.edit');
     }
 
-    public function demoOrderPaymentMade(Order $order) {
-        Mail::to($order->leadBooker->customer->email_address)->send(new PaymentMade($order));
+    public function demoOrderPaymentMade(Payment $payment) {
+        Mail::to($payment->order->leadBooker->customer->email_address)->send(new PaymentMadeMailable($payment));
         return redirect()->route('email.payment-made.edit');
+    }
+
+    public function editRefundGiven() {
+        return view('pages.email.editor', [
+            'body' => MailRepository::getEmailTemplate('email.refund.given'),
+            'codes' => ShortCodeRepository::getPaymentShortCodes(),
+            'action' => route('email.refund-given.update'),
+            'demo' => route('email.refund-given.demo'),
+            'templateName' => 'Refund Given'
+        ]);
+    }
+
+    public function storeRefundGiven(Request $request) {
+        SettingsRepository::set('email.refund.given', $request->input('body'));
+        return redirect()->route('email.refund-given.edit');
+    }
+
+    public function demoRefundGiven() {
+        Mail::to(Auth::user())->send(new RefundGivenMailable(null));
+        return redirect()->route('email.refund-given.edit');
+    }
+
+    public function demoOrderRefundGiven(Payment $payment) {
+        Mail::to($payment->order->leadBooker->customer->email_address)->send(new RefundGivenMailable($payment));
+        return redirect()->route('email.refund-given.edit');
     }
 }

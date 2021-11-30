@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentMade extends Mailable
+class PaymentDueMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class PaymentMade extends Mailable
      */
     public function build()
     {
-        $body = MailRepository::getPaymentMadeBody($this->order);
+        $body = MailRepository::getPaymentDueBody($this->order);
         return $this->view('mail.templated', ['content' => $body,]);
     }
 }
