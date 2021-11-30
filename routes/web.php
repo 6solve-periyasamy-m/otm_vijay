@@ -220,6 +220,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::get('/update', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit')->middleware('bouncer:AccommodationInventory,update');
                     Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:AccommodationInventory,update');
                     Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:AccommodationInventory,delete');
+                    Route::get('/duplicate', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate')->middleware('bouncer:AccommodationInventory,create');
                 });
 
             });
@@ -245,7 +246,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::post('/update', [BoardTypeController::class, 'update'])->name('board-types.update')->middleware('bouncer:BoardType,update');
                 Route::post('/delete', [BoardTypeController::class, 'destroy'])->name('board-types.delete')->middleware('bouncer:BoardType,delete');
             });
-            Route::get('/{accommodation}/duplicate/{accommodationInventory}', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate');
         });
     });
 
@@ -267,6 +267,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::get('/update', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit')->middleware('bouncer:TransportInventory,update');
                     Route::post('/update', [TransportInventoryController::class, 'update'])->name('transport-inventories.update')->middleware('bouncer:TransportInventory,update');
                     Route::post('/delete', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete')->middleware('bouncer:TransportInventory,delete');
+                    Route::get('/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate')->middleware('bouncer:TransportInventory,create');
                 });
             });
         });
@@ -279,7 +280,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [OperatorController::class, 'edit'])->name('operators.edit')->middleware('bouncer:Operator,update');
                 Route::post('/update', [OperatorController::class, 'update'])->name('operators.update')->middleware('bouncer:Operator,update');
                 Route::post('/delete', [OperatorController::class, 'destroy'])->name('operators.delete')->middleware('bouncer:Operator,delete');
-                Route::get('/{transportInventory}/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate');
+
             });
         });
         Route::prefix('transport-types')->group(function () {
@@ -326,6 +327,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::get('/update', [FlightInventoryController::class, 'edit'])->name('flight-inventories.edit')->middleware('bouncer:FlightInventory,update');
                     Route::post('/update', [FlightInventoryController::class, 'update'])->name('flight-inventories.update')->middleware('bouncer:FlightInventory,update');
                     Route::post('/delete', [FlightInventoryController::class, 'destroy'])->name('flight-inventories.delete')->middleware('bouncer:FlightInventory,delete');
+                    Route::get('/duplicate', [FlightInventoryController::class, 'duplicate'])->name('flight-inventories.duplicate')->middleware('bouncer:FlightInventory,create');
                 });
             });
         });
@@ -351,7 +353,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [AirportController::class, 'edit'])->name('airports.edit')->middleware('bouncer:Airport,update');
                 Route::post('/update', [AirportController::class, 'update'])->name('airports.update')->middleware('bouncer:Airport,update');
                 Route::post('/delete', [AirportController::class, 'destroy'])->name('airports.delete')->middleware('bouncer:Airport,delete');
-                Route::get('/{flightInventory}/duplicate', [FlightInventoryController::class, 'duplicate'])->name('flight-inventories.duplicate');
             });
         });
     });
