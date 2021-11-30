@@ -55,8 +55,8 @@
             <option value="Add-on">Add-on</option>
         </select>
         <select class="form-select flight-direction-select">
-            <option value="Inbound" selected>Inbound</option>
-            <option value="Outbound">Outbound</option>
+            <option value="Outbound" selected>Outbound</option>
+            <option value="Inbound">Inbound</option>
         </select>
     </div>
     <a href="javascript:getSelectedFlightInventory()" class="btn btn-primary ms-3 text-white">
