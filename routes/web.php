@@ -532,7 +532,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/demo', [MailController::class, 'demoBooking'])->name('demo');
             Route::get('/demo/{order}', [MailController::class, 'demoOrderBooking'])->name('order_demo');
         });
-        Route::prefix('due-payment')->name('due-payment.')->group(function () {
+        Route::prefix('due-payment')->name('payment-due.')->group(function () {
             Route::get('/edit', [MailController::class, 'editPaymentDue'])->name('edit');
             Route::post('/edit', [MailController::class, 'storePaymentDue'])->name('update');
             Route::get('/demo', [MailController::class, 'demoPaymentDue'])->name('demo');

@@ -23,7 +23,7 @@
 @include('partials.fields.submit')
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.button', ['name' => 'Edit Booking Email', 'route' => route('email.booking.edit'), 'width' => 2, 'color' => 'amber'])
-@include('partials.fields.button', ['name' => 'Edit Payment Due Email', 'route' => route('email.due-payment.edit'), 'width' => 2, 'color' => 'amber'])
+@include('partials.fields.button', ['name' => 'Edit Payment Due Email', 'route' => route('email.payment-due.edit'), 'width' => 2, 'color' => 'amber'])
 @include('partials.fields.button', ['name' => 'Edit Payment Received Email', 'route' => route('email.payment-made.edit'), 'width' => 2, 'color' => 'amber'])
 @include('partials.fields.button', ['name' => 'Edit Refund Given Email', 'route' => route('email.refund-given.edit'), 'width' => 2, 'color' => 'amber'])
 @endsection
