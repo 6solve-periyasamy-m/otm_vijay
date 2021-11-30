@@ -8,6 +8,7 @@
       'address' => $activity->address,
       'name' => $activity->name,
       'description' => $activity->description,
+      'currency' => $activity->currency,
       'notes' => $activity->notes,
     ])
 @endsection

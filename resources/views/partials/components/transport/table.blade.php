@@ -47,7 +47,10 @@ $(document).ready(function() {
                 <td>{{ $transportInventory->purchase_price }}</td>
                 <td>{{ $transportInventory->sales_price }}</td>
                 <td>{{ $transportInventory->notes }}</td>
-                <td class="actions">
+                <td class="actions-3">
+                    <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                        <i class="icon-layers"></i>
+                    </a>
                     <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}"
                         class="btn btn-sm btn-outline-success mb-1">
                         <i class="icon-note"></i>
