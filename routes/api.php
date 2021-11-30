@@ -38,15 +38,15 @@ Route::prefix('booking')->group(function () {
     Route::post('/create', [BookingController::class, 'create']);
 
     // Accommodation
-    Route::get('/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
+    Route::get('/accommodation/inventory/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
     Route::get('/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
-    Route::get('/accommodation/customer/{tour}/{order}/{token}/{travellers}', [AccommodationController::class, 'getAccommodationBooking']);
     Route::get('/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
     Route::post('/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
     //Route::post('/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
     Route::post('/accommodation/delete', [AccommodationController::class, 'deleteAccommodationReservation']);
     // accommodation rooms
-    Route::get('/accommodation/rooms/tour/{tour}/{order_id}', [AccommodationController::class, 'loadRoomsForTour']);
+    Route::get('/accommodation/booking/{token}/tour/{tour}', [AccommodationController::class, 'getAccommodationBooking']);
+    Route::get('/accommodation/rooms/tour/{tour}', [AccommodationController::class, 'loadRoomsForTour']);
     // Route::post('/booking/get/accommodation', [AccommodationController::class, 'getAccommodationBooking']);
 
     // Events

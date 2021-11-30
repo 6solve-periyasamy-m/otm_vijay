@@ -86,6 +86,9 @@ Route::prefix("/booking")->group(function () {
     Route::get('/check/vuetest', function () {
         return view('frontend-tests/vuetest');
     });
+    Route::get('/check/atoltest', function () {
+        return view('frontend-tests/atoltest');
+    });
 
     Route::get('/store', function () {
         return view('pages.booking.store');

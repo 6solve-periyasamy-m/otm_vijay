@@ -10,6 +10,7 @@ interface AdditionalTravellerRepositoryInterface
 {
     public function __construct();
     public function get($id);
+    public function getGroup($booking_id);
     public function create($booking_id, $customer_id);
     public function remove($booking_id, $customer_id);
 }

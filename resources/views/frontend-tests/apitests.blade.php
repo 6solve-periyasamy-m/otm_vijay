@@ -21,28 +21,44 @@
             <vue-test></vue-test>
             <booking-info></booking-info>
             <div class="panel">
-            <h1>API Tests</h1>
+            <h1>API Tests ... </h1>
             <ul>
+                <h2>Tour</h2>
                 <li>
+                    <a target="test" href="/booking/check/tour/1">Check Tour for event 1</a>
+                </li>
+                <li>
+                    <a target="test" href="/booking/check/events">Check events</a>
+                </li>
+
+                <h2>Accommodation</h2>
+                <li>Not used: 
                     <a href="/api/booking/accommodation/settings" target="test">
                         Route::get('/booking/accommodation/settings', [AccommodationController::class, 'getAccommodationSettings']);
                     </a>
                 </li>
                 <li>
-                    <a href="/api/booking/accommodation/options/1" target="test">
+                    <a href="/api/booking/accommodation/options/2" target="test">
                         Route::get('/booking/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
                     </a>
                 </li>
                 <li>
-                    <a href="/api/booking/accommodation/tour/1" target="test">
+                    <a href="/api/booking/accommodation/tour/2" target="test">
                         Route::get('/booking/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
                     </a>
                 </li>
                 <li>
-                    <a href="/api/booking/accommodation/customer/1/1/abcdefghijklmn/1,2,3,4,5" target="test">
-                        Route::get('/booking/accommodation/customer/{tour}/{order}/{token}/{travellers}', [AccommodationController::class, 'getAccommodationBooking']);
+                    <a href="/api/booking/accommodation/rooms/tour/2" target="test">
+                        Route::get('/booking/accommodation/rooms/tour/{tour}', [AccommodationController::class, 'loadRoomsForTour']);
                     </a>
                 </li>
+                <li><h3>testing...</h3>
+                    <a href="/api/booking/accommodation/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">
+                        Route::get('/booking/accommodation/booking/{token}/tour/{tour}/', [AccommodationController::class, 'getAccommodationBooking']);
+                    </a>
+                </li>
+
+                <h2>Flights</h2>
                 <li>
                     <a href="/api/booking/flight/orders/1" target="test">
                         Route::get('/booking/flight/orders/{order_id}', [FlightController::class, 'loadFlightsForOrder']);
@@ -67,12 +83,6 @@
                     <a href="/api/booking/flights/airport/1" target="test">
                         Route::get('/booking/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
                     </a>
-                </li>
-                <li>
-                    <a target="test" href="/booking/check/tour/1">Check Tour for event 1</a>
-                </li>
-                <li>
-                    <a target="test" href="/booking/check/events">Check events</a>
                 </li>
             </ul>
             <h3>Test output</h3>

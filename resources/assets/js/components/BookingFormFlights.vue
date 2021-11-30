@@ -478,22 +478,22 @@ export default {
                     this.travellers.map(traveller => {
                         const outbound_addons = that.flightSelected('Outbound', 'Add-on', traveller)
                         const inbound_addons  = that.flightSelected('Inbound', 'Add-on', traveller)
-console.log('Addon selected: ', traveller, outbound_addons, inbound_addons)
+                        this.debug>3 && console.log('BookingFormFlights: Addons selected: ', outbound_addons, inbound_addons)
                         if (outbound_addons) {
-                            that.debug>2 && console.log('>>>>> loadFlightsForBooking ADDONS', outbound_addons)
+                            that.debug>2 && console.log('BookingFormFlights: loadFlightsForBooking outbound addons', outbound_addons)
                             that.travellers.map((traveller, key) => {
                                 outbound = that.flightSelected('Outbound', 1, traveller)
                                 //  :selected_item="traveller.selected_outbound_addon">
                                 if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
                                     traveller['selected_outbound_addon'] = outbound.flight_inventory_tour_id
                                     that.$set(that.travellers, key, traveller)
-                                    this.debug>3 && console.log('EMITTING setCustomFlightsForTraveller outbound', traveller, outbound)
+                                    this.debug>3 && console.log('BookingFormFlights: EMITTING setCustomFlightsForTraveller outbound', traveller, outbound)
                                     bus.$emit('setCustomFlightsForTraveller', traveller, outbound.flight_inventory_tour_id)
                                 }
                             })
                         }
                         if (inbound_addons) {
-                            that.debug>2 && console.log('ADDONS', inbound_addons)
+                            that.debug>2 && console.log('BookingFormFlights: ADDONS', inbound_addons)
                             that.travellers.map((traveller, key) => {
                                 inbound = that.flightSelected('Inbound', 1, traveller)
                                 //  :selected_item="traveller.selected_outbound_addon">

@@ -1,8 +1,7 @@
 <template>
     <div class="accommodation-select-rooms">
         <select v-model="room_selected" @change="selectedRoom">
-            <option v-for="room in rooms" :key="room.id" :value="room">{{room.board_type_name}} {{room.room_type_name}} for {{room.maximum_occupancy}} {{room.maximum_occupancy > 1 ? 'people' : 'person' }}</option>
-            <!-- TODO: Nic, may need rename. room_type_name -> name. board_type_name -> name -->
+            <option v-for="room in rooms" :key="room.accommodation_inventory_tour_id" :value="room">{{room.accommodation_name}} {{room.room_type_name}} {{room.board_type_name}} for {{room.maximum_occupancy}} {{room.maximum_occupancy > 1 ? 'people' : 'person' }}</option>
         </select>
         <div v-if="room_selected.maximum_occupancy>1">
             <div v-for="index in (room_selected.maximum_occupancy - 1)" 
@@ -29,7 +28,7 @@
 import Vue from 'vue'
 import { bus } from "../bus";
 export default {
-    props: ['tour', 'order_id', 'traveller', 'group'],
+    props: ['tour', 'traveller', 'group', 'token'],
     name: 'RoomSelection',
     data() {
         return {
@@ -133,8 +132,8 @@ export default {
         },
         loadRoomsForTour() {
             let that = this
-            this.debug>3 && console.log('loadRoomsForTour', this.tour, this.order_id)
-            axios.get(`/api/accommodation/rooms/tour/${this.tour.id}/${this.order_id}`)
+            this.debug>3 && console.log('loadRoomsForTour', this.tour, this.token)
+            axios.get(`/api/booking/accommodation/rooms/tour/${this.tour.id}`)
                 .then(response => {
                     that.debug && console.log('accomodation rooms for tour', response)
                     that.rooms = response.data.rooms

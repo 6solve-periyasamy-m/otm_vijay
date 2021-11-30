@@ -18,23 +18,16 @@ use App\Models\AccommodationInventoryTour;
 
 use App\Repository\ActionsRepository;
 use App\Repository\AccommodationRepository;
+use App\Repository\AdditionalTravellerRepository;
+use App\Repository\BookingRepository;
 
 class AccommodationController extends ApiController
 {
     protected $component_type = 'accommodation';
     private $debug = 4;
 
-    // // this should get relational data for accomodation inventory
-    // public function getAccommodationInventoryData()
-    // {
-    //     $accommodationRepository = new AccommodationRepository();
-    //     $result = $accommodationRepository->getAccommodationInventoryData();
-
-    //     return response()->json(["success" => true, "data" => $result]);
-    // }
-
     /***
-     * this tour has a range of accommodation options: 
+     * this tour has a range of accommodation options: ??? deprecated
      * 
      */
     public function getAccommodationOptions(Tour $tour)
@@ -43,22 +36,6 @@ class AccommodationController extends ApiController
         return response()->json(["success" => true, 'options' => $tour]);
     }
 
-    public function getAccommodationSettings(Tour $tour)
-    {
-        $token = $_COOKIE['OTM_booking_order_token'];
-        if ($this->debug>3) {
-            Log::info('getAccommodationSettings for tour'. $tour->id. ' by ' . $token);
-        }
-        if (strlen($token) !== 32) {
-            return response()->json(['success' => false, 'message' => 'invalid key']);
-        }
-
-        $accommodationRepository = new AccommodationRepository();
-        $orderCustomers = $accommodationRepository->getSettings($tour, $token);
-
-        $accommodationRepository->logger(5, 'getAccommodationSettings logger for customers', $orderCustomers);
-        return response()->json(['success' => true, 'travellers' => $orderCustomers]);
-    }
 
     /**
      * getAccommodationForTour
@@ -142,31 +119,24 @@ class AccommodationController extends ApiController
     // }
 
 
-    public function getAccommodationBooking($tour_id, $order_id, $token, $travellers)
+    public function getAccommodationBooking(String $token, Tour $tour)
     {
-        $order = Order::findOrFail($order_id);
-        $traveller_ids = explode(',', $travellers);
-        $tour = Tour::findOrFail($tour_id);
+        $bookings = new BookingRepository();
+        $booking = $bookings->findBookingByToken($token);
+        $traveller = new AdditionalTravellerRepository();
 
-        // establish Tour $tour, Order $order, $token
-        $orderCustomerIds = $this->findCustomersForOrder($order);
-
-        // Log::info('getAccommodationBooking customer ids', $orderCustomerIds);
-        // Log::info('getAccommodationBooking traveller ids', $traveller_ids);
+        $travellers = $traveller->getGroup($booking->id); 
+        $ids = $travellers->map(function($item, $key) {
+            return $item->customer_id;
+        });
 
         $accommodationRepository = new AccommodationRepository();
-        $customerOrderDetails = $accommodationRepository->getAccommodationBooking($orderCustomerIds);
-
-        // $customerOrderDetails = $this->getAccommodationBookingObject($tour, $orderCustomerIds, $token);
-        // if (!$customerOrderDetails) {
-        //     return response()->json(['success' => false, 'bookings' => NULL]);
-        // }
-Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
-
-        return response()->json(["success" => true, 'bookings' => $customerOrderDetails]);
+        $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
+Log::debug('>>>>>> getAccommodationBooking', [$booked->count(), $booked]);
+        return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
-    public function loadRoomsForTour(Tour $tour, $order_id) {
+    public function loadRoomsForTour(Tour $tour) {
 
         $repo = new AccommodationRepository();
         $rooms = $repo->loadRoomsForTour($tour);
@@ -210,7 +180,11 @@ Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
         $tour = $request->tour;
         $traveller = $request->traveller;
 
-        $order_id = $traveller['order_id'];
+        $booking_token = $request->token;
+        $bookings = new BookingRepository();
+        $booking = $bookings->findBookingByToken($booking_token);
+        Log::debug('booking', [$booking]);
+
         $customer_id = $traveller['customer_id'];
         $reference = $request->reference;
 
@@ -220,7 +194,7 @@ Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
             $shared[$key] = $shares[$key];
         }
 
-        Log::info('post', [$tour, $order_id, $customer_id]);
+        Log::info('post', [$tour, $booking, $customer_id]);
         Log::info('room', [$room]);
         Log::info('shares', $shares);
         Log::info('traveller', $traveller);
@@ -228,13 +202,14 @@ Log::info('getAccommodationBooking', $customerOrderDetails->toArray());
 
         $accommodationRepository = new AccommodationRepository();
 
-        $results[] = $accommodationRepository->updateAccommodationReservation(
-            $order_id,
-            $room,
-            $traveller,
-            $customer_id,
-            $reference
-        );
+        $results = $accommodationRepository->updateAccommodationBooking($booking, $room, $traveller, $customer_id);
+        // $results[] = $accommodationRepository->updateAccommodationReservation(
+        //     $booking,
+        //     $room,
+        //     $traveller,
+        //     $customer_id,
+        //     $reference
+        // );
 
         return response()->json(['success' => true, 'accommodation' => $results]);
     }
