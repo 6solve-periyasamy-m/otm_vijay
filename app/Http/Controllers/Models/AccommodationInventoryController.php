@@ -74,4 +74,10 @@ class AccommodationInventoryController extends Controller
         $accommodationInventory->delete();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
+
+    public function duplicate(Accommodation $accommodation, AccommodationInventory $accommodationInventory) {
+        $inventory = $accommodationInventory->replicate();
+        $inventory->save();
+        return redirect()->route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $inventory,]);
+    }
 }
