@@ -81,6 +81,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         $query->join('transport_types', 'transports.transport_type_id', '=', 'transport_types.id');
         $query->join('addresses AS departure_locations', 'transports.departure_address_id', '=', 'departure_locations.id');
         $query->join('addresses AS arrival_locations', 'transports.arrival_address_id', '=', 'arrival_locations.id');
+        $query->join('travel_classes', 'transport_inventories.travel_class_id', '=', 'travel_classes.id');
         $query->select(
             'transport_inventories.id AS id',
             'transports.id AS transport_id',
@@ -88,6 +89,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             'transport_types.name AS transport_type',
             'operators.name AS operator_name',
             'transports.description AS description',
+            'travel_classes.name AS travel_class',
             DB::raw('CASE WHEN `transports`.`is_domestic` = 1 THEN \'Yes\' ELSE \'No\' END AS is_domestic'),
             'departure_locations.name AS departure_location',
             'transport_inventories.departs_at AS departure_date',

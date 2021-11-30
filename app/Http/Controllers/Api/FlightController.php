@@ -160,18 +160,23 @@ class FlightController extends ApiController
     public function addFlightInventoryToTour(Request $request, Tour $tour) {
         // TODO: Get actual enum values
         if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
-            if ($request->has('ids')) {
-                foreach ($request->input('ids') as $id) {
-                    $inventory = FlightInventory::findOrFail($id);
-                    $inventoryTour = FlightInventoryTour::make([
-                        'flight_inventory_id' => $id,
-                        'tour_component_type' => $request->input('type'),
-                        'tour_sales_price' => $inventory->sales_price,
-                    ]);
-                    $tour->flightInventoryTours()->save($inventoryTour);
+            if ($request->has('direction') && in_array($request->input('direction'), ['Inbound', 'Outbound',])) {
+                if ($request->has('ids')) {
+                    foreach ($request->input('ids') as $id) {
+                        $inventory = FlightInventory::findOrFail($id);
+                        $inventoryTour = FlightInventoryTour::make([
+                            'flight_inventory_id' => $id,
+                            'tour_component_type' => $request->input('type'),
+                            'tour_sales_price' => $inventory->sales_price,
+                            'flight_type' => $request->input('direction'),
+                        ]);
+                        $tour->flightInventoryTours()->save($inventoryTour);
+                    }
                 }
+                return response('Any listed components have been successfully added', 200);
+            } else {
+                abort(400, 'Invalid flight direction has been provided');
             }
-            return response('Any listed components have been successfully added', 200);
         }
         abort(400, 'Invalid component type has been provided');
         return null;

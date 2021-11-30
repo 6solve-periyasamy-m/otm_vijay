@@ -373,6 +373,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/{accommodation}/delete/{accommodationInventory}', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete');
             Route::get('/{accommodation}/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create');
             Route::post('/{accommodation}/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store');
+            Route::get('/{accommodation}/duplicate/{accommodationInventory}', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate');
         });
     });
 
@@ -385,6 +386,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{transport}', [TransportController::class, 'destroy'])->name('transports.delete');
         Route::prefix('{transport}')->group(function () {
             Route::get('/', [TransportController::class, 'view'])->name('transports.view');
+            Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
             Route::prefix('inventory')->group(function () {
                 Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create');
                 Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store');
@@ -392,6 +394,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/update/{transportInventory}', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit');
                 Route::post('/update/{transportInventory}', [TransportInventoryController::class, 'update'])->name('transport-inventories.update');
                 Route::post('/delete/{transportInventory}', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete');
+                Route::get('/{transportInventory}/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate');
             });
         });
     });
@@ -405,6 +408,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{flight}', [FlightController::class, 'destroy'])->name('flights.delete');
         Route::prefix('{flight}')->group(function () {
             Route::get('/', [FlightController::class, 'view'])->name('flights.view');
+            Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
             Route::prefix('inventory')->group(function (){
                 Route::get('/', [FlightInventoryController::class, 'index'])->name('flight-inventories.all');
                 Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create');
@@ -413,6 +417,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/update/{flightInventory}', [FlightInventoryController::class, 'edit'])->name('flight-inventories.edit');
                 Route::post('/update/{flightInventory}', [FlightInventoryController::class, 'update'])->name('flight-inventories.update');
                 Route::post('/delete/{flightInventory}', [FlightInventoryController::class, 'destroy'])->name('flight-inventories.delete');
+                Route::get('/{flightInventory}/duplicate', [FlightInventoryController::class, 'duplicate'])->name('flight-inventories.duplicate');
             });
         });
     });
@@ -433,6 +438,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/update/{activityInventory}', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit');
                 Route::post('/update/{activityInventory}', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update');
                 Route::post('/delete/{activityInventory}', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete');
+                Route::get('/{activityInventory}/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate');
             });
         });
     });

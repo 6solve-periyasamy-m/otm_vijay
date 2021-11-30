@@ -72,4 +72,11 @@ class TransportInventoryController extends Controller
         $transportInventory->delete();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
+
+    public function duplicate(Transport $transport, TransportInventory $transportInventory)
+    {
+        $inventory = $transportInventory->replicate();
+        $inventory->save();
+        return redirect()->route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $inventory,]);
+    }
 }
