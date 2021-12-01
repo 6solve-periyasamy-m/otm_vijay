@@ -53,7 +53,7 @@
         </div>
         <div class="menu-item">
             <div class="menu-text">
-                <span class="icon-settings menu-icon"></span>
+                <span class="icon-diamond menu-icon"></span>
                 <span>Extra</span>
             </div>
             <ul class="sub-menu">
@@ -73,19 +73,19 @@
             </div>
             <ul class="sub-menu">
                 <li class="menu-link">
-                    <a href="" tooltip="Activities"><span class="icon-settings menu-icon"></a>
+                    <a href=""><font-awesome-icon icon="futbol" class="menu-icon" /></a>
                 </li>
                 <li class="menu-link">
-                    <a href=""><span class="icon-home menu-icon"></span></a>
+                    <a href=""><font-awesome-icon icon="home" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href=""><span class="icon-plane menu-icon"></a>
+                    <a href=""><font-awesome-icon icon="plane" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href=""><span class="icon-directions menu-icon"></a>
+                    <a href=""><font-awesome-icon icon="train" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href=""><span class="icon-tag menu-icon"></a>
+                    <a href=""><font-awesome-icon icon="list-alt" class="menu-icon" /></a>
                 </li>                
             </ul>
         </div>
