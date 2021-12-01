@@ -44,7 +44,10 @@
                     <td>{{ $accommodationInventory->purchase_price }}</td>
                     <td>{{ $accommodationInventory->sales_price }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
-                    <td class="actions">
+                    <td class="actions-3">
+                        <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                            <i class="icon-layers"></i>
+                        </a>
                         <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" 
                             class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>

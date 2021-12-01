@@ -42,7 +42,10 @@
                     <td>{{ $flightInventory->purchase_price }}</td>
                     <td>{{ $flightInventory->sales_price }}</td>
                     <td>{{ $flightInventory->notes }}</td>
-                    <td class="actions">
+                    <td class="actions-3">
+                        <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                            <i class="icon-layers"></i>
+                        </a>
                         <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
                             class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>

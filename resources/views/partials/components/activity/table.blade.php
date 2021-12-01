@@ -38,7 +38,10 @@
                     <td>{{ $activityInventory->purchase_price }}</td>
                     <td>{{ $activityInventory->sales_price }}</td>
                     <td>{{ $activityInventory->notes }}</td>
-                    <td class="actions">
+                    <td class="actions-3">
+                        <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                            <i class="icon-layers"></i>
+                        </a>
                         <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"
                             class="btn btn-sm btn-outline-success mb-1">
                             <i class="icon-note"></i>                            

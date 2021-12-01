@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\AddressParent;
 use Illuminate\Database\Seeder;
 use App\Models\Tour;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AddressParent::create(['id' => $key, 'name' => $value]);
         }
         Artisan::call('countries:update');
+        $this->call(UserSeeder::class);
 
         if (config('app.debug')) {
             $this->call(LocationTypesTableSeeder::class);
