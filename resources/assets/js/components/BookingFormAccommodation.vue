@@ -207,7 +207,7 @@ export default {
 
             // bus.$emit('AccommodationRoomSelectorReset', this.booked, this.group)
             // Object.assign(this.$data, initialState())
-            // this.init()
+            this.init()
             // this.$forceUpdate()
             // this.setup()
             this.showAccommodation = true
@@ -242,7 +242,7 @@ export default {
                         token: this.booking_token
                     })
                     .then(response => {
-console.log('booking reservation: response', response)
+                        that.debug > 4 && console.log('booking reservation: response', response)
                         let accommodation = response.data.accommodation
                         that.loadAccommodationBooking(that.travellers)
                         that.showRegistered = true
@@ -294,53 +294,22 @@ console.log('booking reservation: response', response)
                 .catch((error) => console.log(error))
         },
         loadAccommodationBooking(travellers) {
-
             const that = this;
-
             if (travellers == undefined || !travellers.length) {
                 console.log('loadAccommodationBooking has no travellers to load')
                 return
             }
-            console.log('***** loadAccommodationBooking started...', travellers)
+            this.debug > 3 && console.log('***** loadAccommodationBooking started... travellers ', travellers)
 
-            let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`
-            this.debug > 5 && console.log("Accommodation: loadBooking() accommodation booking data token=", url)
-            
+            let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
             axios.get(url)
                 .then((response) => {
-                    let booked = []
-                    let shared = []
-                    that.debug > 7 && console.log('Accommodation: loadBooking response ', response)
                     const bookings = response.data.bookings
                     that.debug > 3 && console.log('Accommodation: loadBookings ', bookings)
+                    that.debug > 7 && console.log('Accommodation: loadBooking response ', response)
                     
-                    //const acc_ids = that.accommodations.map(a => a.accommodation_inventory_id);
-                    // bookings.map(a => {
-                    //     // let sharedwith = null
-                    //     // console.log('Accommodation: loadBooking  records mapped ', a.accommodation_inventory_id, shared)
-                    //     // if (acc_ids.includes(a.accommodation_inventory_id)) {
-                    //     //     console.log('eval', a.customer_id)
-                    //     //     sharedwith = a.customer_id
-                    //     //     shared.push(a.customer_id)
-                    //     // }
-                        
-                    //     booked.push({
-                    //         customer_id: a.customer_id,
-                    //         booking_id: a.booking_id,
-                    //         accommodation_inventory_id: a.accommodation_inventory_id,
-                    //         // room: a.room, 
-                    //         // shared: sharedwith, 
-                    //         // shares: a.shares, 
-                    //         room_type_name: a.room_type_name, 
-                    //         board_type_name: a.board_type_name
-                    //     })
-                    // })
-
-
-                    // const booked = that.accommodations
-                    // // TODO: why emit event here?
+                    // TODO: marking of shared rooms is not quite right
                     let used = new Array(bookings.length).fill(0);
-//                    that.accommodations = bookings
                     that.accomodations = bookings.map((b, i) => {
                         that.accommodations[i] = b
                         that.accommodations[i].shared = used.filter(m => m == b.accommodation_inventory_id).length > 0
@@ -348,15 +317,12 @@ console.log('booking reservation: response', response)
 
                         }
                         used.push(b.accommodation_inventory_id)
-console.log(i, b, used)
                     })
-console.log('used map', used)
                     that.accommodations.map((a,i) => {
                         const t = that.travellers.filter(t => t.id === a.customer_id)[0]
                         console.log('selected', t)
                         a.first_name = t.first_name
                         a.last_name = t.last_name
-                        
                     })
                     let noBooking = that.accommodations == null || typeof that.accommodations == 'undefined' || that.accommodations.length == 0
                     that.showRegistered = !noBooking
@@ -364,24 +330,6 @@ console.log('used map', used)
                 })
                 .catch((error) => console.log(error));
         },
-        // TODO: adapt to use booking token?
-        async DEPRECATEDloadAccommodationBooking(travellers, order_id) {
-            const that = this
-            const url = `/api/booking/get/accommodation`;
-            const data = {
-                tour: that.tour,
-                travellers: travellers,
-                order_id: order_id
-            }
-            console.log('loadAccommodationBooking', data)
-            await axios.get(url, data)
-                .then(response => {
-                    console.log('loadAccommodationBooking for ', travellers, response.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-        }
     }
 }
 </script>

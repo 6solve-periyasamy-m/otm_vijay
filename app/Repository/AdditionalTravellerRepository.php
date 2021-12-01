@@ -52,12 +52,11 @@ class AdditionalTravellerRepository implements AdditionalTravellerRepositoryInte
      * getGroup - returns an array of additional travellers associated with a booking
      *
      * @param [type] $customer_id
-     * @return Array of Customer objects
+     * @return Collection
      */
     public function getGroup($booking_id)
     {
         $customers = $this->model->where('booking_id', $booking_id)->get();
-
         return $customers;
     }
 

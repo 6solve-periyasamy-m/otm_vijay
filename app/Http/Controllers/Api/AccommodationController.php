@@ -9,14 +9,11 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController;
 
 use App\Models\Tour;
-use App\Models\Order;
-use App\Models\BoardType;
 use App\Models\OrderCustomer;
 use App\Models\CustomerOrderDetail;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 
-use App\Repository\ActionsRepository;
 use App\Repository\AccommodationRepository;
 use App\Repository\AdditionalTravellerRepository;
 use App\Repository\BookingRepository;
@@ -55,35 +52,6 @@ class AccommodationController extends ApiController
         return response()->json(["success" => true, 'accommodations' => $result]);
     }
 
-    private function findCustomersForOrder(Order $order) {
-        $orderCustomers = OrderCustomer::where('order_id', $order->id)
-            ->get();
-
-        $orderCustomerIds = [];
-        foreach ($orderCustomers as $orderCustomer) {
-            $orderCustomerIds[] = $orderCustomer->id;
-        }
-        return $orderCustomerIds;
-    }
-
-    private function getAccommodationBookingObject(Tour $tour, $orderCustomerIds, $token)
-    {
-        $customer_order_detail = new CustomerOrderDetail();
-        $result = $customer_order_detail
-            ->whereIn('orders_customer_id', $orderCustomerIds)
-            ->where('type', $this->component_type)
-            ->where('reference', $token)
-            ->whereNull('customer_order_details.deleted_at')
-            ->get();
-
-        if (!$result->count()) {
-            // Log::info('getAccommodationBookingObject: No Customer Order Detail record found');
-            return null;
-        }
-        Log::info('Found: '.$result->count().'COD records: ref:'.$token.' for type '.$this->component_type, $result->toArray());
-
-        return $result;
-    }
 
     private function getAccommodationBookingForCustomer(Tour $tour, OrderCustomer $orderCustomer, $token)
     {
@@ -99,40 +67,20 @@ class AccommodationController extends ApiController
         return $result;
     }
 
-    private function getAccommodationBookingForOrder(Tour $tour, Order $order, $token)
-    {
-        // Log::info('getAccommodationBookingForOrder  order: ', $order->toArray());
-        $customer_order_detail = new CustomerOrderDetail();
-        $result = $customer_order_detail
-            ->where('order_id', $order->id)
-            ->where('type', $this->component_type)
-            ->where('reference', $token)
-            ->whereNull('customer_order_details.deleted_at')
-            ->first();
-        
-        return $result;
-    }
-
-    // private function findAccommodationBookingFor(Customer $customer, $tour)
-    // {
-    //     Log::info('findAccommodationBookingFor:', [$customer, $tour]);
-    // }
-
-
     public function getAccommodationBooking(String $token, Tour $tour)
     {
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($token);
         $traveller = new AdditionalTravellerRepository();
 
-        $travellers = $traveller->getGroup($booking->id); 
+        $travellers = $traveller->getGroup($booking->id);
         $ids = $travellers->map(function($item, $key) {
             return $item->customer_id;
         });
 
         $accommodationRepository = new AccommodationRepository();
         $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
-Log::debug('>>>>>> getAccommodationBooking', [$booked->count(), $booked]);
+
         return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
@@ -142,21 +90,6 @@ Log::debug('>>>>>> getAccommodationBooking', [$booked->count(), $booked]);
         $rooms = $repo->loadRoomsForTour($tour);
 
         return response()->json(["success" => true, 'rooms' => $rooms]);
-    }
-
-    private function assignAccommodationBooking(CustomerOrderDetail &$customer_order_detail, $orderCustomer, $reference, AccommodationInventory $accommodationInventory, AccommodationInventoryTour $accommodationInventoryTour)
-    {
-        $boardTypes = new BoardType();
-        $boardType = $boardTypes->findOrFail($accommodationInventory->board_type_id);
-        $customer_order_detail->type = $this->component_type;
-        $customer_order_detail->orders_customer_id = $orderCustomer->id;
-        $customer_order_detail->inventory_tour_id = $accommodationInventoryTour->id;
-       // $customer_order_detail->type = $boardType->board_type_name;
-        $customer_order_detail->date_time = date('Y-m-d H:i:s');
-        $customer_order_detail->addon = 0;
-        $customer_order_detail->cost = $accommodationInventory->sales_price;
-        $customer_order_detail->reference = $reference;
-        $customer_order_detail->inventory_id = $accommodationInventory->id;
     }
 
     /**
@@ -177,84 +110,23 @@ Log::debug('>>>>>> getAccommodationBooking', [$booked->count(), $booked]);
      */
     public function postAccommodationReservation(Request $request)
     {
-        $tour = $request->tour;
         $traveller = $request->traveller;
 
         $booking_token = $request->token;
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($booking_token);
-        Log::debug('booking', [$booking]);
 
         $customer_id = $traveller['customer_id'];
-        $reference = $request->reference;
-
         $room = isset($traveller['room']) ? $traveller['room'] : null;
         $shares = [$traveller['shares']];
         foreach ($shares as $key => $value) {
             $shared[$key] = $shares[$key];
         }
 
-        Log::info('post', [$tour, $booking, $customer_id]);
-        Log::info('room', [$room]);
-        Log::info('shares', $shares);
-        Log::info('traveller', $traveller);
-        Log::info('reference '. $reference);
-
         $accommodationRepository = new AccommodationRepository();
-
         $results = $accommodationRepository->updateAccommodationBooking($booking, $room, $traveller, $customer_id);
-        // $results[] = $accommodationRepository->updateAccommodationReservation(
-        //     $booking,
-        //     $room,
-        //     $traveller,
-        //     $customer_id,
-        //     $reference
-        // );
-
+ 
         return response()->json(['success' => true, 'accommodation' => $results]);
-    }
-
-    public function postAccommodationBooking(Tour $tour, OrderCustomer $orderCustomer, String $reference, AccommodationInventory $accommodationInventory, Order $order)
-    {
-        Log::info('post accommodation booking', $orderCustomer->toArray());
-        // Log::info('post accommodation booking', $accommodationInventory->toArray());
-
-        $token = $_COOKIE['OTM_booking_order_token'];
-        if ($token !== $reference) {
-            ActionsRepository::log('Token mismatch', $orderCustomer->customer_id, $orderCustomer->order_id, $reference, 'token cookie '. $token);
-        }
-        
-        $accomodationInventoryTours = new AccommodationInventoryTour();
-        $accommodationInventoryTour = $accomodationInventoryTours->where('tour_id', $tour->id)
-            ->where('accommodation_inventory_id', $accommodationInventory->id)
-            ->first();
-
-        //$orderCustomer = Ordercustomer::where('customer_id', $customer->id)->where('order_id', $order->id)->firstOrFail();
-        ActionsRepository::log('Accommodation Booking', $orderCustomer->customer_id, $orderCustomer->order_id, $reference, 'Customer Order '.$orderCustomer->id . ' for tour '.$tour->name);
-        
-        $customer_order_detail = $this->getAccommodationBookingForCustomer($tour, $orderCustomer, $reference);
-        if (isset($customer_order_detail)) {
-            Log::info('getAccommodationBookingForCustomr returned ' . $customer_order_detail->count());
-        } else {
-            Log::info('getAccommodationBookingForCustomr returned NOTHING');
-        }
-    
-        if (!$customer_order_detail) {
-            // Log::info('postAccommodationBooking Create', $orderCustomer->toArray());
-            $customer_order_detail = new CustomerOrderDetail();
-            $customer_order_detail->status = 'created';
-            $this->assignAccommodationBooking($customer_order_detail, $orderCustomer, $reference, $accommodationInventory, $accommodationInventoryTour, $order->id);
-            $customer_order_detail->save();
-            // Log::info('ACCOMMODATION saving single COD ', $customer_order_detail->toArray());
-        } else {
-            // Log::info('postAccommodationBooking Update', $customer_order_detail->toArray());
-            $customer_order_detail->status = 'updated';
-            $this->assignAccommodationBooking($customer_order_detail, $orderCustomer, $reference, $accommodationInventory, $accommodationInventoryTour, $order->id);
-            $customer_order_detail->save();
-            // Log::info('ACCOMMODATION saving COD ', $customer_order_detail->toArray());
-        }
-
-        return response()->json(["success" => true, "data" => $customer_order_detail]);
     }
 
     public function deleteAccommodationReservation(Request $request)
