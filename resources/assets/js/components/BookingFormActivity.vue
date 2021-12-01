@@ -10,7 +10,42 @@
                 </h5>
             </div>
             <div class="card-body compress" v-if="activated">
-                Activities Activated
+                    {{debug?activities:''}}
+                    <div class="listing headings">
+                    <div class="column-id">
+                        #
+                    </div>
+                    <div class="column-name">
+                        Name
+                    </div>
+                    <div class="column-description">
+                        Description 
+                    </div>
+                    <div class="column-notes">
+                        Notes
+                    </div>
+                    <div class="column-price">
+                        Price
+                    </div>
+                </div>
+
+                <div class="listing" v-for="activity in activities" :key="activity.id">
+                    <div class="column-id">
+                        {{activity.activity_inventory_id}}
+                    </div>
+                    <div class="column-name">
+                        {{ activity.name }}
+                    </div>
+                    <div class="column-description">
+                        {{ activity.description }} 
+                    </div>
+                    <div class="column-notes">
+                        {{ activity.activity_notes }}
+                    </div>
+                    <div class="column-price">
+                        {{activity.ticket_type_name}}<br>{{activity.sales_price.toFixed(2)}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -19,30 +54,101 @@
 import dates from '../utilities'
 import { bus } from '../bus'
 import Vue from 'vue'
+import axios from 'axios'
 export default {
-    props: ['tour', 'order_id', 'order_token'],
+    props: ['tour'],
     data() {
         return {
             debug: false,
             activated: false,
+            moduleName: 'Activities',
+            booking_token: null,
+            travellers: [],
+            activities: []
         }
     },
     async mounted() {
+        this.loadActivityInventory()
     },
     created() {
+        let that = this
+        bus.$on('setBookingToken', (bookingData) => {
+            that.booking_token = bookingData
+            that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+        })
         bus.$on('customerLoaded', (leadTraveller) => {
             this.leadTraveller = leadTraveller
+            console.log('leadtravllerloaded')
         })
-        bus.$on('additionalTravellersLoaded', (travellers) => {
+        bus.$on("additionalTravellersLoaded", (travellers) => {
+            this.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
+            travellers.map(traveller => this.travellers.push(traveller));
+            this.loadActivityBooking(this.travellers)
         })
-
     },
     computed: {
     },
     methods: {
         toggleActivities() {
             this.activated = !this.activated
+        },
+        loadActivityInventory() {
+            let that = this
+            axios.get(`/api/booking/activities/tour/${this.tour.id}`)
+                .then(response => {
+                    console.log('Activity Inventory: ',response)
+                    that.activities = response.data.activities
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        loadActivityBooking() {
+            console.log('loadActivityBooking')
         }
     }
 }
 </script>
+<style scoped lang="scss">
+    .listing {
+        display: flex;
+        flex-direction: row;
+    }
+    .listing div {
+        padding: 0.25rem;
+        margin: 1rem;
+    }
+    .column-id {
+        width: 0.5rem;
+    }
+    .column-name {
+        width: 12rem;
+}
+    .column-description {
+        width: 24rem;
+    }
+    .column-notes {
+        width: 12rem;
+    }
+    .column-price {
+        width: 8rem;
+    }
+    @media screen and (max-width: 992px) {
+        .column-id {
+            display: none;
+        }
+        .listing:after {
+            content: '';
+            border-bottom: 1px grey solid;
+        }
+        .listing {
+            flex-direction: column;
+        }
+        .listing div {
+            margin: 0.25rem 0;
+        }
+        .listing.headings {
+            display: none;
+        }
+    }
+</style>

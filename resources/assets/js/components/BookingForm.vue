@@ -18,7 +18,7 @@
                             <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
                             <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
-                            <booking-form-activity></booking-form-activity>
+                            <booking-form-activity :tour="tour"></booking-form-activity>
                             <booking-form-transport></booking-form-transport>
                             <booking-form-payment></booking-form-payment>
                             <booking-form-terms></booking-form-terms>

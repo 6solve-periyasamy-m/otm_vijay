@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ActivityInventoriesTableSeeder extends Seeder
 {
@@ -14,11 +15,8 @@ class ActivityInventoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
-        \DB::table('activity_inventories')->delete();
-        
-        \DB::table('activity_inventories')->insert(array (
+        DB::table('activity_inventories')->delete();
+        DB::table('activity_inventories')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -51,8 +49,38 @@ class ActivityInventoriesTableSeeder extends Seeder
                 'updated_at' => '2021-11-30 10:18:18',
                 'deleted_at' => NULL,
             ),
+            2 => 
+            array (
+                'id' => 3,
+                'activity_id' => 2,
+                'starts_at' => '2021-11-23 10:00:00',
+                'ends_at' => '2021-11-23 15:00:00',
+                'fit_selectable' => 1,
+                'ticket_type_id' => 3,
+                'stock' => 15,
+                'purchase_price' => 10.0,
+                'sales_price' => 45.0,
+                'notes' => NULL,
+                'created_at' => '2021-11-30 10:18:06',
+                'updated_at' => '2021-11-30 10:18:18',
+                'deleted_at' => NULL,
+            ),
+            3 => 
+            array (
+                'id' => 4,
+                'activity_id' => 3,
+                'starts_at' => '2021-11-23 10:00:00',
+                'ends_at' => '2021-11-23 15:00:00',
+                'fit_selectable' => 1,
+                'ticket_type_id' => 3,
+                'stock' => 150,
+                'purchase_price' => 140.0,
+                'sales_price' => 240.0,
+                'notes' => NULL,
+                'created_at' => '2021-11-30 10:18:06',
+                'updated_at' => '2021-11-30 10:18:18',
+                'deleted_at' => NULL,
+            ),
         ));
-        
-        
     }
 }
