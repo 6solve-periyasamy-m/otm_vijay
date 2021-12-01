@@ -13,11 +13,19 @@
                 </svg>
             </a>
         </div>
-        <div class="nav-item">
-            <a class="nav-item nav-link" href="#">
-                <span class='text-light'>Nick</span>
-                <img src="{{ asset('images/exampleavatar2.jpg') }}" class="img-thumbnail">                
-            </a>
-        </div>
+        @if(Auth::check())
+            <div class="nav-item">
+                <a class="nav-item nav-link" href="#">
+                    <span class='text-light'>{{ Auth::user()->name }}</span>
+                    <img src="{{ asset(Auth::user()->avatar) }}" class="img-thumbnail">
+                </a>
+            </div>
+        @else
+            <div class="nav-item">
+                <a class="nav-item nav-link" href="{{ route('login') }}">
+                    <span class='text-light'>Login</span>
+                </a>
+            </div>
+        @endif
     </div>       
 </div>

@@ -138,6 +138,23 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2021-11-22 13:50:17',
                 'updated_at' => '2021-11-22 13:50:17',
             ),
+            7 => 
+            array (
+                'id' => 8,
+                'name' => 'Birmingham Airport',
+                'address_parent_id' => 4,
+                'location_type_id' => 1,
+                'address_line_1' => 'Birmingham Airport',
+                'address_line_2' => NULL,
+                'address_line_3' => NULL,
+                'town' => 'Birmingham',
+                'region' => 'Birmingham',
+                'country_id' => 66,
+                'postcode' => 'B26 3QJ',
+                'deleted_at' => NULL,
+                'created_at' => '2021-11-30 09:35:40',
+                'updated_at' => '2021-11-30 09:35:40',
+            ),
         ));
         
         
