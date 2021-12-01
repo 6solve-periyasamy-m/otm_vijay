@@ -3,10 +3,20 @@ import Vue from 'vue'
 import { bus } from './bus'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faFutbol, faTrain, faListAlt, faPlane, faHome} from '@fortawesome/free-solid-svg-icons'
+import { faFacebook, faFacebookSquare, faInstagramSquare, faTwitterSquare } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faUserSecret)
+library.add(faFutbol)
+library.add(faTrain)
+library.add(faListAlt)
+library.add(faPlane)
+library.add(faHome)
+library.add(faFacebook)
+library.add(faFacebookSquare)
+library.add(faTwitterSquare)
+library.add(faInstagramSquare)
 
 Vue.config.productionTip = false
 
