@@ -1,9 +1,16 @@
 <div class="col-12 col-md-3 col-xl-2 p-0  otm-sidebar collapse py-3">
-    <ul class="nav flex-column mb-auto">        
-        <li>            
-            <a href="{{ route('dash') }}" class="nav-link">
+    <ul class="nav flex-column mb-auto">
+        <li>
+            @if(strpos(Request::url(), 'dash') !== false)
+                <a href="{{ route('dash') }}" class="nav-link active">
+            @else
+                <a href="{{ route('dash') }}" class="nav-link">
+            @endif
                 <i class="icon-list"></i>
                 <span>Dashboard</span>
+                @if(strpos(Request::url(), 'dash') !== false)
+                    <span class="selected"></span>
+                @endif
             </a>
         </li>
         @can('read', 'App\Models\Tour')
