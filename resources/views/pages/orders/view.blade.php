@@ -130,7 +130,6 @@
                                     <th scope="col">Type</th>
                                     <th scope="col">Method</th>
                                     <th scope="col">Value</th>
-                                    <th scope="col">Due Date</th>
                                     <th scope="col">Paid Date</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -140,7 +139,6 @@
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
                                     <td>{{ $payment->amount }}</td>
-                                    <td>{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
                                     <td>{{ $payment->paid_on }}</td>
                                     <td class="actions">
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
