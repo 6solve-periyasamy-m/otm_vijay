@@ -174,8 +174,8 @@
                             @endforeach
                             @foreach($addons as $addon)
                                 <tr>
-                                    <td>Add-on</td>
-                                    <td>{{ $addon->tour_sales_price }}</td>
+                                    <td>Add-on: {{ $addon['customer']->customer->first_name . ' ' . $addon['customer']->customer->last_name }}</td>
+                                    <td>{{ $addon['addon']->tour_sales_price }}</td>
                                 </tr>
                             @endforeach
                         </table>
