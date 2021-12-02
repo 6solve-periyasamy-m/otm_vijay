@@ -625,3 +625,4 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
+Route::get('/test', function () { dd(\App\Repository\OrderRepository::getOrderCustomerCount(Order::findOrFail(1))); });
