@@ -95,7 +95,7 @@ $(document).ready( function () {
             <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Payment Status</p>
+            <p>Order Status</p>
             <h6 class="badge {{ true ? 'badge-success' : 'badge-danger' }} fw-bold">{{ true ? "Paid in Full" : "Balance Outstanding" }}</h6>
         </div>
         <div class="col-12">

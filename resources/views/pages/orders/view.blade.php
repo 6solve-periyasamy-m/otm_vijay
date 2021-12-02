@@ -30,7 +30,7 @@
             <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Payment Status</p>
+            <p>Order Status</p>
             <h6 class="badge {{ $totalPaid >= $totalOrderValue ? 'badge-success' : 'badge-danger' }} fw-bold">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</h6>
         </div>                
         <div class="col-12 col-xl-6">
