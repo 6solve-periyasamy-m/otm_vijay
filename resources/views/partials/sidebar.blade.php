@@ -50,7 +50,7 @@
             @else
             <a href="{{ route('activities.all') }}" class="nav-link">
             @endif
-                <i class="icon-settings"></i>
+                <i class="icon-game-controller"></i>
                 <span>Activities</span>
                 @if(strpos(Request::url(), 'activities') !== false)
                 <span class="selected"></span>
