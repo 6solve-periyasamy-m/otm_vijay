@@ -166,10 +166,12 @@
                                 <th scope="col" >Value</th>
                             </tr>
                             </thead>
+                            @foreach($customers as $ordersCustomer)
                             <tr>
-                                <td>Base</td>
-                                <td>{{ $order->tour->base_price_per_person * sizeof($customers) }}</td>
+                                <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
+                                <td>{{ $order->tour->base_price_per_person }}</td>
                             </tr>
+                            @endforeach
                             @foreach($addons as $addon)
                                 <tr>
                                     <td>Add-on</td>
