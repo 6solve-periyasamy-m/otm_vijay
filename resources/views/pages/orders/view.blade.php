@@ -45,6 +45,18 @@
             <p>Balance Outstanding</p>
             <h6 class="fw-bold">{{ $totalOrderValue - $totalPaid }}</h6>
         </div>
+        <div class="col-12 col-xl-6">
+            <p>Next Payment Due</p>
+            <h6 class="fw-bold">{{ 'To be implemented' }}{{-- TODO: Implement --}}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Internal Notes</p>
+            <h6 class="fw-bold">{!! nl2br($order->internal_notes) !!}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>External Notes</p>
+            <h6 class="fw-bold">{!! nl2br($order->external_notes) !!}</h6>
+        </div>
         <div class="col-12">
             <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
                 <i class="icon-note"></i>
@@ -71,7 +83,7 @@
             @foreach($customers as $ordersCustomer)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
-                    <p>Lead Broker</p>
+                    <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
                     <h6 class="fw-bold">
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
                             {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
@@ -80,7 +92,7 @@
                     <p>Born</p>
                     <h6 class="fw-bold">{{ $ordersCustomer->customer->date_of_birth }}</h6>
                     <p>Passport Number</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number }}</h6>
+                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>
             </div>
             @endforeach
