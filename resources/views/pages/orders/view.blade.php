@@ -47,7 +47,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ 'To be implemented' }}{{-- TODO: Implement --}}</h6>
+            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? $nextPayment['due'] . ' - ' . $nextPayment['amount'] : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Internal Notes</p>
