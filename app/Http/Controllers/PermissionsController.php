@@ -57,6 +57,7 @@ class PermissionsController extends Controller
     private function processRequest($role, Request $request)
     {
         $available = PermissionsRepository::getAvailablePermissionClasses();
+        PermissionsRepository::revokeEverything($role);
         foreach ($available as $class) {
             try {
                 foreach (['create', 'read', 'update', 'delete'] as $action) {
