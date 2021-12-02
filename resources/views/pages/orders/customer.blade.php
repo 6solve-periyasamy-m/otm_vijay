@@ -96,7 +96,7 @@ $(document).ready( function () {
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
-            <h6 class="badge {{ true ? 'badge-success' : 'badge-danger' }} fw-bold">{{ true ? "Paid in Full" : "Balance Outstanding" }}</h6>
+            <h6 class="badge badge-{{ $status['color'] }} fw-bold">{{ $status['status'] }}</h6>
         </div>
         <div class="col-12">
             <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
