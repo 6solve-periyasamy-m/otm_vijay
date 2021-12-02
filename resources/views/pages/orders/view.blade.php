@@ -31,7 +31,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
-            <h6 class="badge {{ $totalPaid >= $totalOrderValue ? 'badge-success' : 'badge-danger' }} fw-bold">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</h6>
+            <h6 class="badge badge-{{ $orderStatus['color'] }} fw-bold">{{ $orderStatus['status'] }}</h6>
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>
