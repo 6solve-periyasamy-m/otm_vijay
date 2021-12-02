@@ -14,6 +14,7 @@
             "columns": [
                 { "data": "name" },
                 { "data": "transport_type" },
+                { "data": "travel_class" },
                 { "data": "operator_name" },
                 { "data": "departure_location" },
                 { "data": "departure_date" },
@@ -62,10 +63,11 @@
     <tr>
         <th scope="col">Name</th>
         <th scope="col">Transport Type</th>
+        <th scope="col">Travel Class</th>
         <th scope="col">Operator</th>
-        <th scope="col">Departure Airport</th>
+        <th scope="col">Departure Location</th>
         <th scope="col">Departure Time</th>
-        <th scope="col">Arrival Airport</th>
+        <th scope="col">Arrival Location</th>
         <th scope="col">Arrival Time</th>
         <th scope="col">Domestic</th>
         <th scope="col">Fit Selectable</th>
