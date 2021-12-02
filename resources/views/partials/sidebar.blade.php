@@ -118,6 +118,21 @@
             </a>
         </li>
         @endcan
+        @can('update', 'App\Models\Setting')
+            <li>
+                @if(strpos(Request::url(), 'settings') !== false)
+                    <a href="{{ route('settings.edit') }}" class="nav-link active">
+                        @else
+                            <a href="{{ route('settings.edit') }}" class="nav-link ">
+                                @endif
+                                <i class="icon-settings"></i>
+                                <span>Settings</span>
+                                @if(strpos(Request::url(), 'settings') !== false)
+                                    <span class="selected"></span>
+                                @endif
+                            </a>
+            </li>
+        @endcan
         @can('read', 'App\Models\User')
             <li>
                 @if(strpos(Request::url(), 'users') !== false)
