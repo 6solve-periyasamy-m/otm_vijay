@@ -31,8 +31,8 @@ class PaymentController extends Controller
             'payment_type' => $request->input('payment_type'),
             'paid_on' => $request->input('paid_on'),
         ]);
-        event(new PaymentMadeEvent($payment));
         $order->payments()->save($payment);
+        event(new PaymentMadeEvent($payment));
         return redirect()->route('orders.view', ['order' => $order, ]);
     }
 
