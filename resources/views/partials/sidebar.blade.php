@@ -153,7 +153,7 @@
                 @else
                 <a href="{{ route('roles.all') }}" class="nav-link ">
                 @endif
-                    <i class="icon-wrench"></i>
+                    <i class="icon-organization"></i>
                     <span>Roles</span>
                     @if(strpos(Request::url(), 'roles') !== false)
                     <span class="selected"></span>
@@ -161,5 +161,5 @@
                 </a>
             </li>
         @endcan
-    </ul>    
+    </ul>
 </div>
