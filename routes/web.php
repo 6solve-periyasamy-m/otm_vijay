@@ -374,6 +374,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:ActivityInventory,update');
                     Route::post('/update', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update')->middleware('bouncer:ActivityInventory,update');
                     Route::post('/delete', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete')->middleware('bouncer:ActivityInventory,delete');
+                    Route::get('/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate')->middleware('bouncer:ActivityInventory,create');
                 });
             });
         });
@@ -397,7 +398,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [TicketTypeController::class, 'edit'])->name('ticket-types.edit')->middleware('bouncer:TicketType,update');
                 Route::post('/update', [TicketTypeController::class, 'update'])->name('ticket-types.update')->middleware('bouncer:TicketType,update');
                 Route::post('/delete', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete')->middleware('bouncer:TicketType,delete');
-                Route::get('/{activityInventory}/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate');
             });
         });
     });
