@@ -14,11 +14,7 @@
         </div>
         <div class="menu-item">
         </div>
-        <div class="donut-center">
-            <span class="donut-number">01</span>
-            <span class="donut-number">02</span>
-            <span class="donut-number">03</span>
-            <span class="donut-number">04</span>
+        <div class="donut-center">            
         </div>
     </div>
     <div class="click-menu">
@@ -57,7 +53,7 @@
         </div>
         <div class="menu-item">
             <div class="menu-text">
-                <span class="icon-settings menu-icon"></span>
+                <span class="icon-diamond menu-icon"></span>
                 <span>Extra</span>
             </div>
             <ul class="sub-menu">
@@ -77,19 +73,19 @@
             </div>
             <ul class="sub-menu">
                 <li class="menu-link">
-                    <a href="">Activities</a>
+                    <a href=""><font-awesome-icon icon="futbol" class="menu-icon" /></a>
                 </li>
                 <li class="menu-link">
-                    <a href="">Accommodation</a>
+                    <a href=""><font-awesome-icon icon="home" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href="">Flights</a>
+                    <a href=""><font-awesome-icon icon="plane" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href="">Transport</a>
+                    <a href=""><font-awesome-icon icon="train" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href="">Itinerary</a>
+                    <a href=""><font-awesome-icon icon="list-alt" class="menu-icon" /></a>
                 </li>                
             </ul>
         </div>
