@@ -70,4 +70,8 @@ class Order extends Model
     public function getStatus() {
         return OrderRepository::getOrderStatus($this);
     }
+
+    public function customers() {
+        return OrderRepository::getCustomersForOrder($this);
+    }
 }

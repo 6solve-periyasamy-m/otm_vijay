@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
 class CustomerPortalController extends Controller
@@ -32,12 +33,7 @@ class CustomerPortalController extends Controller
     }
 
     public function showFinancesPage(Customer $customer) {
-        // TODO: (Celeste) Optimize
-        $orders = [];
-        foreach ($customer->orderCustomers() as $orderCustomer) {
-            $orders[$orderCustomer->order->id] = $orderCustomer->order;
-        }
-        return view('pages.customer.finances', ['customer' => $customer, 'orders' => $orders, 'orderCustomers' => $customer->orderCustomers(),]);
+        return view('pages.customer.finances', OrderRepository::getCustomerOrders($customer));
     }
 
     public function login(Request $request) {

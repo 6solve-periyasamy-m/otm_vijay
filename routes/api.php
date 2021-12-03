@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\TransportController;
+use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -195,3 +196,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::get('/status', function(){})->name('status.stub');
     });
 });
+
+Route::get('/customer/finances', function () { return OrderRepository::getCustomerOrders(\App\Models\Customer::findOrFail(1)); });
+// TODO: Remove
