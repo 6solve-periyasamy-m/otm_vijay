@@ -37,6 +37,7 @@
             <th scope="col">Lead Booker</th>
             <th scope="col">Booking Reference</th>
             <th scope="col">Tour</th>
+            <th scope="col">Order Status</th>
         </tr>
         </thead>
         @foreach($data as $row)
@@ -45,7 +46,24 @@
                 <td>{{$row->lead_booker_first_name . ' ' . $row->lead_booker_last_name }}</td>
                 <td><a href="{{ route('orders.view', ['order' => $row->order_id]) }}" class="link-info"><u>{{$row->booking_reference}}</u></a></td>
                 <td>{{$row->tour_title}}</td>
+                <td><h6 class="order-{{$row->order_id}} badge fw-bold">Order Status</h6></td>
+                @push('footer-ready')
+                    getOrderStatus({{$row->order_id}});
+                @endpush
             </tr>
         @endforeach
     </table>
 @endsection
+
+@push('footer-stack')
+<script type="text/javascript">
+    function getOrderStatus(id) {
+        $.ajax({
+            url: '{{ route('api.order.status.stub') }}/' + id,
+            type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
+        }).then(function (data) {
+            $('.order-' + id).text(data.status).addClass('badge-' + data.color);
+        });
+    }
+</script>
+@endpush

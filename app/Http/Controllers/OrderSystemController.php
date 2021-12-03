@@ -16,6 +16,10 @@ class OrderSystemController extends Controller
         return view('pages.orders.search', ['data' => OrderRepository::getSearchOrders($searchQuery, $showArchived), 'query' => $searchQuery, 'archived' => $showArchived,]);
     }
 
+    public function newSearch() {
+        return view('pages.orders.search2', ['orders' => Order::all(),]);
+    }
+
     public function create()
     {
         //

@@ -1,9 +1,16 @@
 <div class="col-12 col-md-3 col-xl-2 p-0  otm-sidebar collapse py-3">
-    <ul class="nav flex-column mb-auto">        
-        <li>            
-            <a href="{{ route('dash') }}" class="nav-link">
+    <ul class="nav flex-column mb-auto">
+        <li>
+            @if(strpos(Request::url(), 'dash') !== false)
+                <a href="{{ route('dash') }}" class="nav-link active">
+            @else
+                <a href="{{ route('dash') }}" class="nav-link">
+            @endif
                 <i class="icon-list"></i>
                 <span>Dashboard</span>
+                @if(strpos(Request::url(), 'dash') !== false)
+                    <span class="selected"></span>
+                @endif
             </a>
         </li>
         @can('read', 'App\Models\Tour')
@@ -43,7 +50,7 @@
             @else
             <a href="{{ route('activities.all') }}" class="nav-link">
             @endif
-                <i class="icon-settings"></i>
+                <i class="icon-game-controller"></i>
                 <span>Activities</span>
                 @if(strpos(Request::url(), 'activities') !== false)
                 <span class="selected"></span>
@@ -111,6 +118,21 @@
             </a>
         </li>
         @endcan
+        @can('update', 'App\Models\Setting')
+            <li>
+                @if(strpos(Request::url(), 'settings') !== false)
+                    <a href="{{ route('settings.edit') }}" class="nav-link active">
+                        @else
+                            <a href="{{ route('settings.edit') }}" class="nav-link ">
+                                @endif
+                                <i class="icon-settings"></i>
+                                <span>Settings</span>
+                                @if(strpos(Request::url(), 'settings') !== false)
+                                    <span class="selected"></span>
+                                @endif
+                            </a>
+            </li>
+        @endcan
         @can('read', 'App\Models\User')
             <li>
                 @if(strpos(Request::url(), 'users') !== false)
@@ -131,7 +153,7 @@
                 @else
                 <a href="{{ route('roles.all') }}" class="nav-link ">
                 @endif
-                    <i class="icon-wrench"></i>
+                    <i class="icon-organization"></i>
                     <span>Roles</span>
                     @if(strpos(Request::url(), 'roles') !== false)
                     <span class="selected"></span>
@@ -139,5 +161,5 @@
                 </a>
             </li>
         @endcan
-    </ul>    
+    </ul>
 </div>

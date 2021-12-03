@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,5 +65,9 @@ class Order extends Model
 
     public function reminders() {
         return $this->hasMany(PaymentReminder::class, 'order_id');
+    }
+
+    public function getStatus() {
+        return OrderRepository::getOrderStatus($this);
     }
 }
