@@ -16,7 +16,7 @@
                     <iframe height="200px" width="100%" name="test" style="font-size: 8px;">
                     </iframe>
                 </pre>
-            <h1>API Tests ... </h1>
+            <h1>API Tests </h1>
             <ul>
                 <h2>Tour</h2>
                 <li>
@@ -32,6 +32,14 @@
                 </li>
                 <li>
                     <a href="/api/booking/activities/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">Get Activities booked for Tour 2</a>
+                </li>
+
+                <h2>Transports</h2>
+                <li>
+                    <a href="/api/booking/transports/tour/2" target="test">Get Transports for Tour 2</a>
+                </li>
+                <li>
+                    <a href="/api/booking/transports/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">Get Transports booked for Tour 2</a>
                 </li>
 
                 <h2>Accommodation</h2>

@@ -44,9 +44,9 @@ Route::prefix('booking')->group(function () {
     Route::post('/activities/booking', [ActivitiesController::class, 'updateActivities']);
 
     // Transports
-    Route::get('/transports/tour/{tour}', [TransportsController::class, 'getTransportsInventoryForTour']);
-    Route::get('/transports/booking/{token}/tour/{tour}', [TransportsController::class, 'getTransportsBooking']);
-    Route::post('/transports/booking', [TransportsController::class, 'updateTransports']);
+    Route::get('/transports/tour/{tour}', [TransportController::class, 'getTransportsInventoryForTour']);
+    Route::get('/transports/booking/{token}/tour/{tour}', [TransportController::class, 'getTransportsBooking']);
+    Route::post('/transports/booking', [TransportController::class, 'updateTransports']);
 
     // Accommodation
     Route::get('/accommodation/inventory/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
