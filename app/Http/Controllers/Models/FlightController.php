@@ -61,6 +61,12 @@ class FlightController extends Controller
 
     public function destroy(Flight $flight)
     {
+        foreach ($flight->flightInventory as $inventory)
+        {
+            if ($inventory->flightInventoryTour()->count() > 0) {
+                return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Flight']));
+            }
+        }
         $flight->delete();
         return redirect()->route('flights.all');
     }
