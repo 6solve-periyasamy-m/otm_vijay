@@ -95,4 +95,9 @@ class LocationsRepository implements LocationsRepositoryInterface
         $toAddress->save();
         return $toAddress;
     }
+
+    public static function getCurrencyIdByCode(string $code) {
+        $currency = Currency::where('code', '=', $code)->first();
+        return isset($currency) ? $currency->id : null;
+    }
 }

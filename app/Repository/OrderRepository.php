@@ -64,6 +64,7 @@ class OrderRepository implements OrderRepositoryInterface
         $addonData = self::getOrderAddons($order);
         $totalOrderValue += $addonData['additionalValue'];
         $totalOrderValue += self::getOrderAdjustmentTotal($order);
+        $totalOrderValue += self::getCustomerAdjustmentTotal($order);
         $totalOrderValue += $order->tour->base_price_per_person * count($customers);
         $details['customers'] = $customers;
         $details['addons'] = $addonData['addons'];
@@ -144,7 +145,8 @@ class OrderRepository implements OrderRepositoryInterface
         $paidAmount = self::getPayments($order)['amount'];
         $cost = self::getCosts($order);
         $adjustments = self::getOrderAdjustmentTotal($order);
-        if (($cost + $adjustments) > $paidAmount) {
+        $customerAdjustments = self::getCustomerAdjustmentTotal($order);
+        if (($cost + $adjustments + $customerAdjustments) > $paidAmount) {
             $next = self::getNextPaymentDetails($order);
             if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
                 return ['status' => 'Payment Overdue', 'color' => 'danger'];
@@ -434,5 +436,16 @@ class OrderRepository implements OrderRepositoryInterface
     public static function getOrderDepositAmount(Order $order)
     {
         return $order->tour->deposit * self::getOrderCustomerCount($order);
+    }
+
+    public static function getCustomerAdjustmentTotal(Order $order)
+    {
+        $total = 0;
+        foreach ($order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->adjustments as $adjustment) {
+                $total += $adjustment->amount;
+            }
+        }
+        return $total;
     }
 }
