@@ -59,6 +59,9 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
+        if ($event->tours()->count() > 0) {
+            return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Event', 'parent' => 'Tour']));
+        }
         $event->delete();
         return redirect()->route('events.all');
     }
