@@ -26,4 +26,8 @@ class Event extends Model
     {
         return $this->name . ' - ' . Carbon::parse($this->starts_at)->format('d/m/Y') . ' : ' . Carbon::parse($this->ends_at)->format('d/m/Y');
     }
+
+    public function tours() {
+        return $this->hasMany(Tour::class, 'event_id');
+    }
 }

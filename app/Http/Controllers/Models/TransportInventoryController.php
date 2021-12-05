@@ -69,6 +69,9 @@ class TransportInventoryController extends Controller
 
     public function destroy(Transport $transport, TransportInventory $transportInventory)
     {
+        if ($transportInventory->tourComponents()->count() > 0) {
+            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Transport Inventory']));
+        }
         $transportInventory->delete();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }

@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class AccommodationController extends Controller
 {
@@ -70,6 +71,12 @@ class AccommodationController extends Controller
 
     public function destroy(Accommodation $accommodation)
     {
+        foreach ($accommodation->inventory as $inventory)
+        {
+            if ($inventory->tourComponents()->count() > 0) {
+                return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation']));
+            }
+        }
         $accommodation->delete();
         return redirect()->route('accommodations.all');
     }
