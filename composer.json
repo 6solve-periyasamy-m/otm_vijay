@@ -18,7 +18,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.3",
         "orangehill/iseed": "^3.0",
-        "silber/bouncer": "v1.0.0-rc.11"
+        "silber/bouncer": "v1.0.0-rc.11",
+        "ext-intl": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
