@@ -3,6 +3,7 @@
     $(document).ready(function () { $('#flightInventory').DataTable({fixedHeader: true}); });
 </script>
 @endsection
+@can('create', \App\Models\FlightInventory::class)
 <div class="card">
     <div class="card-body">
         <a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>
@@ -12,6 +13,7 @@
         </a>
     </div>
 </div>
+@endcan
 <div class="card">
     <div class="card-body">
         <table id="flightInventory" style="width: 100%;" class="table table-striped">

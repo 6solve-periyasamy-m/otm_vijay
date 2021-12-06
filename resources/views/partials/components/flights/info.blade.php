@@ -23,11 +23,13 @@
             <p>Notes</p>
             <h6 class="fw-bold">{{ $flight->notes }}</h6>
         </div>
+        @can('edit', \App\Models\Flight::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{route('flights.edit', ['flight' => $flight,])}}">
                 <i class="icon-note"></i>
                 <span>Edit Flight</span>
             </a>
         </div>
+        @endcan
     </div>
 </div>
