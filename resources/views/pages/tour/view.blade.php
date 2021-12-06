@@ -60,12 +60,14 @@
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
+            @can('edit', \App\Models\Tour::class)
             <div class="col-12">
                 <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
                     <i class="icon-note"></i>
                     <span>Edit Tour</span>
                 </a>
             </div>
+            @endcan
         </div>
     </div>
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>    
@@ -127,11 +129,23 @@
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="$('#accommodation-{{$accommodationEntry["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post" id="accommodation-{{$accommodationEntry["tour"]->id}}-delete">
-                                            @csrf
-                                        </form>
+                                        @can('edit', \App\Models\AccommodationInventoryTour::class)
+                                            <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\AccommodationInventoryTour::class)
+                                            <a href="#" onclick="$('#accommodation-{{$accommodationEntry["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post" id="accommodation-{{$accommodationEntry["tour"]->id}}-delete">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -158,11 +172,23 @@
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="$('#activity-{{$activity["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post" id="activity-{{$activity["tour"]->id}}-delete">
-                                            @csrf
-                                        </form>
+                                        @can('edit', \App\Models\ActivityInventoryTour::class)
+                                            <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\ActivityInventoryTour::class)
+                                            <a href="#" onclick="$('#activity-{{$activity["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post" id="activity-{{$activity["tour"]->id}}-delete">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -191,11 +217,23 @@
                                     <td>{{ $flight["tour"]->flight_type }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="$('#flight-{{$flight["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post" id="flight-{{$flight["tour"]->id}}-delete">
-                                            @csrf
-                                        </form>
+                                        @can('edit', \App\Models\FlightInventoryTour::class)
+                                            <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\FlightInventoryTour::class)
+                                            <a href="#" onclick="$('#flight-{{$flight["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post" id="flight-{{$flight["tour"]->id}}-delete">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -222,11 +260,23 @@
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="$('#transport-{{$transport["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post" id="transport-{{$transport["tour"]->id}}-delete">
-                                            @csrf
-                                        </form>
+                                        @can('edit', \App\Models\TransportInventoryTour::class)
+                                            <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\TransportInventoryTour::class)
+                                            <a href="#" onclick="$('#transport-{{$transport["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post" id="transport-{{$transport["tour"]->id}}-delete">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
