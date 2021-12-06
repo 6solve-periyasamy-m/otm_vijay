@@ -55,16 +55,17 @@ class AccommodationRepository implements AccommodationRepositoryInterface
 
     public function getAccommodationInventoryForTour(Tour $tour)
     {
-        $inventory = new AccommodationInventory();
-        $result = $inventory->select(
+        $inventoryTour = new AccommodationInventoryTour();
+        $result = $inventoryTour->select(
             'accommodations.name as accommodation_name',
             'accommodation_inventory_tours.id as accommodation_inventory_tour_id',
-            'accommodation_inventories.*',
+            'accommodation_inventories.check_in',
+            'accommodation_inventories.check_out',
             'board_types.name as board_type',
             'room_types.name as room_type',
             'room_types.maximum_occupancy')
+            ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
             ->join('accommodations', 'accommodation_inventories.accommodation_id', 'accommodations.id')
-            ->join('accommodation_inventory_tours', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->where('accommodation_inventory_tours.tour_id', $tour->id)
