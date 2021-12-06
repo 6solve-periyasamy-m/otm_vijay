@@ -5,7 +5,7 @@
     <td>{{ $description }}</td>
     <td>{{ $notes }}</td>
     <td class="actions">
-        @can('edit', \App\Models\Activity::class)
+        @can('update', \App\Models\Activity::class)
             <a href="{{route('activities.edit', ['activity' => $activity,])}}" class="btn btn-sm btn-outline-success mb-1">
                 <i class="icon-note"></i>
             </a>

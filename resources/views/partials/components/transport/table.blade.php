@@ -58,7 +58,7 @@ $(document).ready(function() {
                             <i class="icon-layers"></i>
                         </span>
                     @endcan
-                    @can('edit', \App\Models\TransportInventory::class)
+                    @can('update', \App\Models\TransportInventory::class)
                         <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}"
                            class="btn btn-sm btn-outline-success mb-1">
                             <i class="icon-note"></i>

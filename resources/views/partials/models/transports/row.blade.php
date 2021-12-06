@@ -18,7 +18,7 @@
             <i class="icon-directions"></i>
         </span>
         @endcan
-        @can('edit', \App\Models\Transport::class)
+        @can('update', \App\Models\Transport::class)
             <a href="{{route('transports.edit', ['transport' => $transport,])}}" class="btn btn-sm btn-outline-success mb-1">
                 <i class="icon-note"></i>
             </a>

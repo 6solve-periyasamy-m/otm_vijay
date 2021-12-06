@@ -19,7 +19,7 @@
             <p>Currency</p>
             <h6 class="fw-bold">{{ $accommodation->currency }}</h6>
         </div>
-        @can('edit', \App\Models\Accommodation::class)
+        @can('update', \App\Models\Accommodation::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
                 <i class="icon-note"></i>

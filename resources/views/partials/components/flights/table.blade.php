@@ -54,7 +54,7 @@
                                 <i class="icon-layers"></i>
                             </span>
                         @endcan
-                        @can('edit', \App\Models\FlightInventory::class)
+                        @can('update', \App\Models\FlightInventory::class)
                             <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>

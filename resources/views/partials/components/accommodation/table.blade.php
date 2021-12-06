@@ -56,7 +56,7 @@
                                 <i class="icon-layers"></i>
                             </span>
                         @endcan
-                        @can('edit', \App\Models\AccommodationInventory::class)
+                        @can('update', \App\Models\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}"
                                 class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>

@@ -29,7 +29,7 @@
                         <th scope="col">Verified</th>
                         <th scope="col">Roles</th>
                         <th scope="col">Created</th>
-                        @can('edit', \App\Models\User::class)
+                        @can('update', \App\Models\User::class)
                             <th scope="col">Actions</th>
                         @endcan
                     </tr>

@@ -6,7 +6,7 @@
     <td>{{ $address }}</td>
     <td>{{ $currency }}</td>
     <td class="actions">
-        @can('edit', \App\Models\Accommodation::class)
+        @can('update', \App\Models\Accommodation::class)
             <a href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}" class="btn btn-outline-success btn-sm mb-1">
                 <i class="icon-note"></i>
             </a>

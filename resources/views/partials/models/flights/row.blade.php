@@ -15,7 +15,7 @@
             <i class="icon-directions"></i>
         </span>
         @endcan
-        @can('edit', \App\Models\Flight::class)
+        @can('update', \App\Models\Flight::class)
             <a href="{{route('flights.edit', ['flight' => $flight,])}}" class="btn btn-outline-success btn-sm mb-1">
                 <i class="icon-note"></i>
             </a>

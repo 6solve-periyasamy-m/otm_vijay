@@ -60,7 +60,7 @@
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
-            @can('edit', \App\Models\Tour::class)
+            @can('update', \App\Models\Tour::class)
             <div class="col-12">
                 <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
                     <i class="icon-note"></i>
@@ -129,7 +129,7 @@
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        @can('edit', \App\Models\AccommodationInventoryTour::class)
+                                        @can('update', \App\Models\AccommodationInventoryTour::class)
                                             <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
@@ -172,7 +172,7 @@
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        @can('edit', \App\Models\ActivityInventoryTour::class)
+                                        @can('update', \App\Models\ActivityInventoryTour::class)
                                             <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
@@ -217,7 +217,7 @@
                                     <td>{{ $flight["tour"]->flight_type }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        @can('edit', \App\Models\FlightInventoryTour::class)
+                                        @can('update', \App\Models\FlightInventoryTour::class)
                                             <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
@@ -260,7 +260,7 @@
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
                                     <td class="actions">
-                                        @can('edit', \App\Models\TransportInventoryTour::class)
+                                        @can('update', \App\Models\TransportInventoryTour::class)
                                             <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
