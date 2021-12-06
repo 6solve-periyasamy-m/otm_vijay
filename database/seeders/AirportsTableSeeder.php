@@ -39,6 +39,16 @@ class AirportsTableSeeder extends Seeder
                 'updated_at' => '2021-11-22 12:52:48',
                 'deleted_at' => NULL,
             ),
+            2 => 
+            array (
+                'id' => 3,
+                'name' => 'Birmingham Airport',
+                'address_id' => 8,
+                'iata_code' => 'BHX',
+                'created_at' => '2021-11-30 09:35:40',
+                'updated_at' => '2021-11-30 09:35:40',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

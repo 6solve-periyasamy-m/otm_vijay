@@ -178,6 +178,7 @@
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Travel Class</th>
+                                <th scope="col">Flight Type</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -187,6 +188,7 @@
                                     <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
+                                    <td>{{ $flight["tour"]->flight_type }}</td>
                                     <td>{{ $flight["tour"]->tour_component_type }}</td>
                                     <td class="actions">
                                         <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

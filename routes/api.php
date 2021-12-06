@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AirlinesController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\Api\ActivitiesController;
 use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\AccommodationController;
@@ -36,6 +37,16 @@ Route::prefix('booking')->group(function () {
 
     Route::get('/token/{token}', [BookingController::class, 'get']);
     Route::post('/create', [BookingController::class, 'create']);
+
+    // Activities
+    Route::get('/activities/tour/{tour}', [ActivitiesController::class, 'getActivitiesInventoryForTour']);
+    Route::get('/activities/booking/{token}/tour/{tour}', [ActivitiesController::class, 'getActivitiesBooking']);
+    Route::post('/activities/booking', [ActivitiesController::class, 'updateActivities']);
+
+    // Transports
+    Route::get('/transports/tour/{tour}', [TransportController::class, 'getTransportsInventoryForTour']);
+    Route::get('/transports/booking/{token}/tour/{tour}', [TransportController::class, 'getTransportsBooking']);
+    Route::post('/transports/booking', [TransportController::class, 'updateTransports']);
 
     // Accommodation
     Route::get('/accommodation/inventory/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);

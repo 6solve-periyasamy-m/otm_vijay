@@ -4,24 +4,19 @@
     <h5>Octopus Travel Matrix</h5>
     <h1>Frontend Tests</h1>
     <a href="/">HOME</a>
-    <atol-certificate
-        travellers="Traveller1, Traveller2, Traveller3 and Traveller4"
-        passengers="4"
-        tour="The Tour Details"
-        flight-outward="Flight Outward Details"
-        flight-inward="Flight Inward Details"
-        atol="ATOL123123123123"
-        issuer-long="Octopus Travel Matrix Company"
-        issuer="Octopus Travel Matrix"
-        msg="Customised ATOL Certificate Generator"
-    ></atol-certificate>
+
     <div class="container">
         <div class="panel">
             <h1>VueJS Components</h1>
             <vue-test></vue-test>
             <booking-info></booking-info>
             <div class="panel">
-            <h1>API Tests ... </h1>
+                <h3>Test output</h3>
+                <pre>
+                    <iframe height="200px" width="100%" name="test" style="font-size: 8px;">
+                    </iframe>
+                </pre>
+            <h1>API Tests </h1>
             <ul>
                 <h2>Tour</h2>
                 <li>
@@ -29,6 +24,22 @@
                 </li>
                 <li>
                     <a target="test" href="/booking/check/events">Check events</a>
+                </li>
+
+                <h2>Activities</h2>
+                <li>
+                    <a href="/api/booking/activities/tour/2" target="test">Get Activities for Tour 2</a>
+                </li>
+                <li>
+                    <a href="/api/booking/activities/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">Get Activities booked for Tour 2</a>
+                </li>
+
+                <h2>Transports</h2>
+                <li>
+                    <a href="/api/booking/transports/tour/2" target="test">Get Transports for Tour 2</a>
+                </li>
+                <li>
+                    <a href="/api/booking/transports/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">Get Transports booked for Tour 2</a>
                 </li>
 
                 <h2>Accommodation</h2>
@@ -85,9 +96,7 @@
                     </a>
                 </li>
             </ul>
-            <h3>Test output</h3>
-            <iframe height="200px" width="100%" name="test">
-            </iframe>
+
         </div>
         </div>
     </div>

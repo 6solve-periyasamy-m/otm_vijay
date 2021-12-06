@@ -1,14 +1,43 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\ApiController;
 use App\Models\Tour;
+use Illuminate\Http\Request;
 use App\Models\TransportInventory;
 use App\Models\TransportInventoryTour;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+use App\Repository\TransportBookingRepository;
 
 class TransportController extends ApiController
 {
+    /**
+     * Route::get('/transports/tour/{tour}', [TransportsController::class, 'getTransportsInventoryForTour']);
+     * Route::get('/transports/booking/{token}/tour/{tour}', [TransportsController::class, 'getTransportsBooking']);
+     * Route::post('/transports/booking', [TransportsController::class, 'updateTransports']);
+     */
+    /**
+     * getTransportsInventoryForTour
+     *
+     * @param Tour $tour
+     * @return Response (transports collection)
+     */
+    public function getTransportsInventoryForTour(Tour $tour)
+    {
+        $transportsRepo = new TransportBookingRepository();
+        $transports = $transportsRepo->get($tour);
+
+        return response()->json(['success' => true, 'transports' => $transports]);
+    }
+
+    public function getTransportsBooking($token, Tour $tour)
+    {
+
+    }
+    public function updateTransports(Request $request)
+    {
+
+    }
+
     public function addTransportInventoryToTour(Request $request, Tour $tour) {
         // TODO: Get actual enum values
         if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {

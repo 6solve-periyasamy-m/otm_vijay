@@ -7,11 +7,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use  \Illuminate\Auth\Authenticatable, HasFactory, Notifiable;
+    use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities;
 
     /**
      * The attributes that are mass assignable.
@@ -66,5 +66,23 @@ class User extends Authenticatable
     public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
     {
         UserRepository::purgeUserTokens($this, $limit);
+    }
+
+    public function getHighestRoleLevel()
+    {
+        $highest = 0;
+        foreach ($this->roles as $role) {
+            $highest = $highest >= ($role->level ?? 0) ? $highest : $role->level;
+        }
+        return $highest;
+    }
+
+    public function getCurrentRole()
+    {
+        $highest = null;
+        foreach ($this->roles as $role) {
+            $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
+        }
+        return $highest;
     }
 }

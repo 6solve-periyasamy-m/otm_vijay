@@ -20,15 +20,12 @@
     <!-- Preloader -->
     @include('pages.customer.layout.preloader')
 
-    <div id="app" data-layout="vertical">
+    <div id="app" data-layout="vertical" class="vh-100">
         <!-- Topbar header -->
         @include('pages.customer.layout.navbar')
 
-        <!-- Left Sidebar -->
-        @include('pages.customer.layout.sidebar')
-
         <!-- Main Body -->
-        <div class="page-wrapper">
+        <div class="container h-100">
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-md-6 col-8 align-self-center">
@@ -42,4 +39,6 @@
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
     <script src="{{ asset('js/customer/sidebarmenu.js') . '?' . date('U')  }}"></script>
     <script src="{{ asset('js/customer/customer.js') . '?' . date('U')  }}"></script>
+
+    @yield('footer-script')
 </body>

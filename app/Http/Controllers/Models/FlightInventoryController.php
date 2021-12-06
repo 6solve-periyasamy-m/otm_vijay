@@ -72,4 +72,11 @@ class FlightInventoryController extends Controller
         $flightInventory->delete();
         return redirect()->route('flights.view', ['flight' => $flight, ]);
     }
+
+    public function duplicate(Flight $flight, FlightInventory $flightInventory)
+    {
+        $inventory = $flightInventory->replicate();
+        $inventory->save();
+        return redirect()->route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $inventory,]);
+    }
 }

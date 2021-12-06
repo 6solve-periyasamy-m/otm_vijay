@@ -16,7 +16,8 @@ class TransportInventory extends Model
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         "departs_at" => "datetime",
-        "arrives_at" => "datetime"
+        "arrives_at" => "datetime",
+        "sales_price" => "double"
     ];
     const RULES = [
         'travel_class_id' => 'required|exists:travel_classes,id',
@@ -83,7 +84,7 @@ class TransportInventory extends Model
         $arrives_at = $this->arrives_at->format('d/m/Y H:i');
 
         return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}";
-	// build server edit: remove transport travelClass
+    // build server edit: remove transport travelClass
         //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}｜Travel Class: {$this->travelClass->name}";
     }
 }
