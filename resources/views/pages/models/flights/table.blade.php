@@ -9,6 +9,7 @@
 @endsection
 
 @section('content')
+@can('create', \App\Models\Flight::class)
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('flights.create') }}">
@@ -17,6 +18,7 @@
         </a>
     </div>
 </div>
+@endcan
 <div class="card">
     <div class="card-body">
         <table id="flight" style="width: 100%;" class="table table-striped">

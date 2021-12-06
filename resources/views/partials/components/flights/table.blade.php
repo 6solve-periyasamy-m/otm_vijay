@@ -43,20 +43,38 @@
                     <td>{{ $flightInventory->sales_price }}</td>
                     <td>{{ $flightInventory->notes }}</td>
                     <td class="actions-3">
-                        <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                            <i class="icon-layers"></i>
-                        </a>
-                        <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
-                            class="btn btn-outline-success btn-sm mb-1">
-                            <i class="icon-note"></i>
-                        </a>
-                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
-                        onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();">
-                            <i class="icon-trash"></i>
-                        </a>
-                        <form id="flightInventory-{{ $flightInventory->id }}-delete"
-                            action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $flightInventory,]) }}" method="POST"
-                            style="display: none;">{{ csrf_field() }}</form>
+                        @can('create', \App\Models\FlightInventory::class)
+                            <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                                <i class="icon-layers"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-layers"></i>
+                            </span>
+                        @endcan
+                        @can('edit', \App\Models\FlightInventory::class)
+                            <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
+                               class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </span>
+                        @endcan
+                        @can('delete', \App\Models\FlightInventory::class)
+                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                               onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();">
+                                <i class="icon-trash"></i>
+                            </a>
+                            <form id="flightInventory-{{ $flightInventory->id }}-delete"
+                                  action="{{ route('flight-inventories.delete', ['flight' => $flight, 'flightInventory' => $flightInventory,]) }}" method="POST"
+                                  style="display: none;">{{ csrf_field() }}</form>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-trash"></i>
+                            </span>
+                        @endcan
                     </td>
                 </tr>
             @endforeach
