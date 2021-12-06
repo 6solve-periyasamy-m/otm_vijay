@@ -12,9 +12,6 @@
             <div class="card-body compress" v-if="activated">
                     {{debug?activities:''}}
                     <div class="listing headings">
-                    <div class="column-id">
-                        #
-                    </div>
                     <div class="column-name">
                         Name
                     </div>
@@ -24,15 +21,18 @@
                     <div class="column-notes">
                         Notes
                     </div>
-                    <div class="column-price">
-                        Price
+                    <div class="column-ticket-type">
+                        Ticket type
+                    </div>
+                    <div class="column-starts-at">
+                        From
+                    </div>
+                    <div class="column-ends-at">
+                        To
                     </div>
                 </div>
+                <div class="listing" v-for="activity in activities" :key="activity.activity_inventory_tour_id">
 
-                <div class="listing" v-for="activity in activities" :key="activity.id">
-                    <div class="column-id">
-                        {{activity.activity_inventory_id}}
-                    </div>
                     <div class="column-name">
                         {{ activity.name }}
                     </div>
@@ -42,8 +42,14 @@
                     <div class="column-notes">
                         {{ activity.activity_notes }}
                     </div>
-                    <div class="column-price">
-                        {{activity.ticket_type_name}}<br>{{activity.sales_price.toFixed(2)}}
+                    <div class="column-ticket-type">
+                        {{activity.ticket_type_name}}
+                    </div>
+                    <div class="column-starts-at">
+                        {{startDate(activity)}}
+                    </div>
+                    <div class="column-ends-at">
+                        {{endDate(activity)}}
                     </div>
                 </div>
             </div>
@@ -89,6 +95,13 @@ export default {
     computed: {
     },
     methods: {
+        startDate(event) {
+            console.log(event.starts_at)
+            return dates.bookingTime(event.starts_at)
+        },
+        endDate(event) {
+            return dates.bookingTime(event.ends_at)
+        },
         toggleActivities() {
             this.activated = !this.activated
         },
@@ -130,7 +143,11 @@ export default {
     .column-notes {
         width: 12rem;
     }
-    .column-price {
+    .column-starts-at, 
+    .column-ends-at {
+        width: 10rem;
+    }
+    .column-ticket-type {
         width: 8rem;
     }
     @media screen and (max-width: 992px) {

@@ -31,9 +31,6 @@
                             <div class="heading address_to">
                                 To
                             </div>
-                            <div class="heading sales_price">
-                                Price
-                            </div>
                         </div>
                         <div v-for="transport in transports">
                             <div class="listing">
@@ -50,13 +47,10 @@
                                     {{transport.is_domestic ? 'Domestic' : 'International'}}
                                 </div>
                                 <div class="address_from">
-                                    {{transport.departure_address}}
+                                    {{transport.departure_address}}<br>Departure {{datetime(transport.departs_at)}}
                                 </div>
                                 <div class="address_to">
-                                    {{transport.arrival_address}}
-                                </div>
-                                <div class="sale_price">
-                                    {{transport.sales_price}}
+                                    {{transport.arrival_address}}<br>Arrival {{datetime(transport.arrives_at)}}
                                 </div>
                             </div>
                         </div>
@@ -96,6 +90,9 @@ export default {
         this.loadTransportsInventory()
     },
     methods: {
+        datetime(s) {
+            return dates.bookingTime(s)
+        },
         toggleTransports() {
             this.activated = !this.activated
         },

@@ -41,10 +41,13 @@ class TransportBookingRepository implements TransportBookingRepositoryInterface
                     'transports.is_domestic', 'transports.name',
                     'transports.description', 'transports.notes',
                     'transport_inventories.sales_price',
-                    'transport_inventories.notes as transport_notes',                    'transport_inventory_tours.tour_component_type',
-                    'transport_inventory_tours.tour_sales_price',
+                    'transport_inventories.notes as transport_notes',
+                    'transport_inventories.departs_at as departs_at',
+                    'transport_inventories.arrives_at as arrives_at',
+                    'transport_inventory_tours.tour_component_type',
                     'transport_types.name as transport_type_name')
                 ->where('transport_inventory_tours.tour_id', $tour->id)
+                // ->distinct()
                 ->whereNull('transports.deleted_at')
                 ->whereNull('transport_inventories.deleted_at')
                 ->whereNull('transport_inventory_tours.deleted_at')
