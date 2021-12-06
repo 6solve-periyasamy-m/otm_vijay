@@ -221,7 +221,6 @@ export default {
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
         // this.other_flights = this.flights.filter((flight) => flight.flight_type != 'Outbound' && flight.flight_type != 'Inbound')
@@ -237,7 +236,6 @@ export default {
 
         this.debug>1 && console.log('BookingFormFlights created', this.booking_id, that.booking_token, that.leadTraveller);
 
-        
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
@@ -340,10 +338,6 @@ export default {
             if (this.activated) {
                 this.showFlights = !this.showFlights
             }
-            if (this.showFlights) {
-                await this.loadFlightsForBooking(this.booking_id)
-                this.showwait = false
-            }
         },
         // filter out already selected item for this traveller
         flightOptionsCustomer(id) {
@@ -427,7 +421,7 @@ export default {
         },
 
         // loads current flight orders 
-        async loadFlightsForBooking(booking_token) {
+        loadFlightsForBooking(booking_token) {
             if (!booking_token) {
                 // alert('Form data seems to have missing data, please refresh or contact support')
                 console.log('WARNING: load flights for order missing booking_id?');
@@ -440,7 +434,7 @@ export default {
             let inbound = {}
             this.showwait = true
             // loads current fight bookings if there are any
-            await axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
+            axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
                     that.bookings = response.data.flightBooking
                     that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', that.bookings, that.travellers[0])
@@ -524,10 +518,10 @@ export default {
                 .catch(error => console.log('Error loading airports', error.message))
         },
         // loads the selectors for the flights related to this tour
-        async getFlights(tour) {
+        getFlights(tour) {
             var that = this
             this.debug>3 && console.log('BookingFormFlights: getFlights, tour ', tour)
-            await axios.get(`/api/booking/flights/tour/${tour.id}`)
+            axios.get(`/api/booking/flights/tour/${tour.id}`)
                 .then(response => {
                     this.debug>2 && console.log('&&&& flight response', response)
                     that.flights = response.data.data
@@ -538,9 +532,9 @@ export default {
                 })
                 .catch(error => console.log(error.message))
         },
-        async getFlightType(tour, type = '') {
+        getFlightType(tour, type = '') {
             var that = this
-            await axios.get(`/api/booking/flights/${tour}/${type}`)
+            axios.get(`/api/booking/flights/${tour}/${type}`)
                 .then(response => {
                     that.flights = response.data.data
                     that.getAirports()
