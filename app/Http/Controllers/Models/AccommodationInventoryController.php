@@ -17,7 +17,7 @@ class AccommodationInventoryController extends Controller
 
     public function create(Accommodation $accommodation)
     {
-        return view('pages.models.accommodation_inventories.create', ['accommodation' => $accommodation, ]);
+        return view('pages.models.accommodation_inventories.create', ['accommodation' => $accommodation,]);
     }
 
     public function store(Request $request, Accommodation $accommodation)
@@ -78,7 +78,8 @@ class AccommodationInventoryController extends Controller
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
-    public function duplicate(Accommodation $accommodation, AccommodationInventory $accommodationInventory) {
+    public function duplicate(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
+    {
         $inventory = $accommodationInventory->replicate();
         $inventory->save();
         return redirect()->route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $inventory,]);

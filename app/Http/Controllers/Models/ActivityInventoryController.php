@@ -17,7 +17,7 @@ class ActivityInventoryController extends Controller
 
     public function create(Activity $activity)
     {
-        return view('pages.models.activity_inventories.create', ['activity' => $activity, ]);
+        return view('pages.models.activity_inventories.create', ['activity' => $activity,]);
     }
 
     public function store(Request $request, Activity $activity)
@@ -34,7 +34,7 @@ class ActivityInventoryController extends Controller
             'notes' => $request->input('notes'),
         ]);
         $activity->activityInventory()->save($activityInventory);
-        return redirect()->route('activities.view', ['activity' => $activity, ]);
+        return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
     public function view(Activity $activity, ActivityInventory $activityInventory)
@@ -60,7 +60,7 @@ class ActivityInventoryController extends Controller
             'sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('activities.view', ['activity' => $activity, ]);
+        return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
     public function destroy(Activity $activity, ActivityInventory $activityInventory)
@@ -69,7 +69,7 @@ class ActivityInventoryController extends Controller
             return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Activity Inventory']));
         }
         $activityInventory->delete();
-        return redirect()->route('activities.view', ['activity' => $activity, ]);
+        return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
     public function duplicate(Activity $activity, ActivityInventory $activityInventory)

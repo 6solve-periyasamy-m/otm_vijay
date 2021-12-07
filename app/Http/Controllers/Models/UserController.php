@@ -10,7 +10,6 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class UserController extends Controller
 {
@@ -51,6 +50,21 @@ class UserController extends Controller
             'current' => $user->getCurrentRole()->name,]);
     }
 
+    private function verifyUser($user, $allowSelfEdit)
+    {
+        $allow = (Auth::guard('web')->check());
+        if ($allowSelfEdit) {
+            $allow = $allow &&
+                ((Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel()
+                    || Auth::user()->id == $user->id));
+        } else {
+            $allow = $allow &&
+                Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel();
+        }
+        if ($allow) return true;
+        return abort(403, 'You are not authorized to perform this action');
+    }
+
     public function update(Request $request, User $user)
     {
         $this->verifyUser($user, true);
@@ -75,19 +89,5 @@ class UserController extends Controller
         $this->verifyUser($user, false);
         $user->delete();
         return redirect()->route('users.all');
-    }
-
-    private function verifyUser($user, $allowSelfEdit) {
-        $allow = (Auth::guard('web')->check());
-        if ($allowSelfEdit) {
-            $allow = $allow &&
-                ((Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel()
-                    || Auth::user()->id == $user->id));
-        } else {
-            $allow = $allow &&
-                Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel();
-        }
-        if ($allow) return true;
-        return abort(403, 'You are not authorized to perform this action');
     }
 }

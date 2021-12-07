@@ -61,8 +61,7 @@ class FlightController extends Controller
 
     public function destroy(Flight $flight)
     {
-        foreach ($flight->flightInventory as $inventory)
-        {
+        foreach ($flight->flightInventory as $inventory) {
             if ($inventory->flightInventoryTour()->count() > 0) {
                 return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Flight']));
             }
@@ -71,7 +70,8 @@ class FlightController extends Controller
         return redirect()->route('flights.all');
     }
 
-    public function createReturn(Flight $flight) {
+    public function createReturn(Flight $flight)
+    {
         $returnFlight = $flight->replicate();
         $depart = $flight->arrival_airport_id;
         $arrival = $flight->departure_airport_id;

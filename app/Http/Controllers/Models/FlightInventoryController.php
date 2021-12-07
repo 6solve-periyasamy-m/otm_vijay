@@ -17,7 +17,7 @@ class FlightInventoryController extends Controller
 
     public function create(Flight $flight)
     {
-        return view('pages.models.flight_inventories.create', ['flight' => $flight, ]);
+        return view('pages.models.flight_inventories.create', ['flight' => $flight,]);
     }
 
     public function store(Request $request, Flight $flight)
@@ -64,7 +64,7 @@ class FlightInventoryController extends Controller
             'sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('flights.view', ['flight' => $flight, ]);
+        return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
     public function destroy(Flight $flight, FlightInventory $flightInventory)
@@ -73,7 +73,7 @@ class FlightInventoryController extends Controller
             return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Flight Inventory']));
         }
         $flightInventory->delete();
-        return redirect()->route('flights.view', ['flight' => $flight, ]);
+        return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
     public function duplicate(Flight $flight, FlightInventory $flightInventory)

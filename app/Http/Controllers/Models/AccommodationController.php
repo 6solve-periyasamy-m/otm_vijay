@@ -8,7 +8,6 @@ use App\Models\Address;
 use App\Models\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class AccommodationController extends Controller
 {
@@ -45,7 +44,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
-        return view('pages.components.accommodation', ['accommodation' => $accommodation, ]);
+        return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
     }
 
     public function edit(Accommodation $accommodation)
@@ -73,8 +72,7 @@ class AccommodationController extends Controller
 
     public function destroy(Accommodation $accommodation)
     {
-        foreach ($accommodation->inventory as $inventory)
-        {
+        foreach ($accommodation->inventory as $inventory) {
             if ($inventory->tourComponents()->count() > 0) {
                 return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation']));
             }

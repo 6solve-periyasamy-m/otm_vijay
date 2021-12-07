@@ -17,7 +17,7 @@ class TransportInventoryController extends Controller
 
     public function create(Transport $transport)
     {
-        return view('pages.models.transport_inventories.create', ['transport' => $transport, ]);
+        return view('pages.models.transport_inventories.create', ['transport' => $transport,]);
     }
 
     public function store(Request $request, Transport $transport)
