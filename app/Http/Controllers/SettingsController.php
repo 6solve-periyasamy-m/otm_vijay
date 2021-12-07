@@ -27,6 +27,7 @@ class SettingsController extends Controller
             'atol_stamp' => 'nullable|image',
             'currency_id' => 'required|exists:currencies,id',
             'stripe_key' => 'nullable',
+            'date_format' => 'required',
         ];
     }
 
@@ -50,6 +51,7 @@ class SettingsController extends Controller
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
             'billing.stripe.key' => $request->input('stripe_key'),
+            'system.format.date' => $request->input('date_format')
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             SettingsRepository::set('company.logo', $this->saveImage($request->file('company_logo')));

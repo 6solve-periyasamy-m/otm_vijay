@@ -22,8 +22,29 @@
 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.selector.default',
-    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Stripe Key', 'field' => 'stripe_key', 'value' => \App\Repository\SettingsRepository::getOrDefault('billing.stripe.key', ''), 'width' => 6])
+    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 4,])
+@include('partials.fields.text', ['name' => 'Stripe Key', 'field' => 'stripe_key', 'value' => \App\Repository\SettingsRepository::getOrDefault('billing.stripe.key', ''), 'width' => 4])
+@include('partials.fields.dropdown', [
+    'name' => 'Date Format',
+    'field' => 'date_format',
+    'values' => [
+        'd/m/Y' => '31/01/2021 12:30:45',
+        'm/d/Y' => '01/31/2021 12:30:45',
+        'Y/m/d' => '2021/01/31 12:30:45',
+        'd/M/Y' => '31/Jan/2021 12:30:45',
+        'M/d/Y' => 'Jan/31/2021 12:30:45',
+        'Y/M/d' => '2021/Jan/31 12:30:45',
+        'd-m-Y' => '31-01-2021 12:30:45',
+        'm-d-Y' => '01-31-2021 12:30:45',
+        'Y-m-d' => '2021-01-31 12:30:45',
+        'd-M-Y' => '31-Jan-2021 12:30:45',
+        'M-d-Y' => 'Jan-31-2021 12:30:45',
+        'Y-M-d' => '2021-Jan-31 12:30:45',
+        'dS F Y -' => '31st January 2021 - 12:30:45',
+        'F dS Y -' => 'January 31st 2021 - 12:30:45'
+    ],
+    'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'd/m/Y'),
+])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.submit')
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
