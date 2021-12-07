@@ -411,7 +411,7 @@ $(document).ready( function () {
                 </thead>
                 @foreach($order_customer->adjustments as $adjustment)
                     <tr>
-                        <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
+                        <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                         <td>{{ $adjustment->reason }}</td>
                         <td>{{ $adjustment->date }}</td>
                         <td class="actions">
