@@ -21,6 +21,7 @@ class TShirtSizeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(TShirtSize::getValidationRules());
         $tShirtSize = TShirtSize::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class TShirtSizeController extends Controller
 
     public function update(Request $request, TShirtSize $tShirtSize)
     {
+        $request->validate(TShirtSize::getValidationRules());
         $tShirtSize->update([
             'name' => $request->input('name'),
         ]);

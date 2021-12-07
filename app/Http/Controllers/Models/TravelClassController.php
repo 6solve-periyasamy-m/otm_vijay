@@ -21,6 +21,7 @@ class TravelClassController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(TravelClass::getValidationRules());
         $travelClass = TravelClass::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class TravelClassController extends Controller
 
     public function update(Request $request, TravelClass $travelClass)
     {
+        $request->validate(TravelClass::getValidationRules());
         $travelClass->update([
             'name' => $request->input('name'),
         ]);
