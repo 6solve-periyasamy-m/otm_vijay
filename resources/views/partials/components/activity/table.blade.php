@@ -5,7 +5,7 @@
 @endsection
 <div class="card">
     <div class="card-body">
-        <a href="#" class="btn btn-success float-end ms-1">Bulk Add Inventory</a>
+        {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('activity-inventories.create', ['activity' => $activity, ]) }}" class="btn btn-primary float-end">
             <i class="icon-plus"></i>
             <span>Add Inventory</span>
