@@ -22,28 +22,42 @@
 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.selector.default',
-    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 4,])
-@include('partials.fields.text', ['name' => 'Stripe Key', 'field' => 'stripe_key', 'value' => \App\Repository\SettingsRepository::getOrDefault('billing.stripe.key', ''), 'width' => 4])
+    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Stripe Key', 'field' => 'stripe_key', 'value' => \App\Repository\SettingsRepository::getOrDefault('billing.stripe.key', ''), 'width' => 6])
+<hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.dropdown', [
     'name' => 'Date Format',
     'field' => 'date_format',
     'values' => [
-        'd/m/Y' => '31/01/2021 12:30:45',
-        'm/d/Y' => '01/31/2021 12:30:45',
-        'Y/m/d' => '2021/01/31 12:30:45',
-        'd/M/Y' => '31/Jan/2021 12:30:45',
-        'M/d/Y' => 'Jan/31/2021 12:30:45',
-        'Y/M/d' => '2021/Jan/31 12:30:45',
-        'd-m-Y' => '31-01-2021 12:30:45',
-        'm-d-Y' => '01-31-2021 12:30:45',
-        'Y-m-d' => '2021-01-31 12:30:45',
-        'd-M-Y' => '31-Jan-2021 12:30:45',
-        'M-d-Y' => 'Jan-31-2021 12:30:45',
-        'Y-M-d' => '2021-Jan-31 12:30:45',
-        'dS F Y -' => '31st January 2021 - 12:30:45',
-        'F dS Y -' => 'January 31st 2021 - 12:30:45'
+        'd/m/Y' => '31/01/2021 (Time)',
+        'm/d/Y' => '01/31/2021 (Time)',
+        'Y/m/d' => '2021/01/31 (Time)',
+        'd/M/Y' => '31/Jan/2021 (Time)',
+        'M/d/Y' => 'Jan/31/2021 (Time)',
+        'Y/M/d' => '2021/Jan/31 (Time)',
+        'd-m-Y' => '31-01-2021 (Time)',
+        'm-d-Y' => '01-31-2021 (Time)',
+        'Y-m-d' => '2021-01-31 (Time)',
+        'd-M-Y' => '31-Jan-2021 (Time)',
+        'M-d-Y' => 'Jan-31-2021 (Time)',
+        'Y-M-d' => '2021-Jan-31 (Time)',
+        'dS F Y -' => '31st January 2021 - (Time)',
+        'F dS Y -' => 'January 31st 2021 - (Time)'
     ],
     'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'd/m/Y'),
+    'width' => 6,
+])
+@include('partials.fields.dropdown', [
+    'name' => 'Time Format',
+    'field' => 'time_format',
+    'values' => [
+        'H:i' => '14:30',
+        'h:i A' => '02:30 PM',
+        'H:i:s' => '14:30:45',
+        'h:i:s A'=> '02:30:45 PM'
+    ],
+    'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'H:i'),
+    'width' => 6,
 ])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.submit')

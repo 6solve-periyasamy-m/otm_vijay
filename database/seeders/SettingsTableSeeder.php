@@ -133,6 +133,11 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'system.format.date',
                 'value' => 'd/m/Y',
             ),
+            18 =>
+            array (
+                'key' => 'system.format.time',
+                'value' => 'H:i',
+            ),
         ));
         
         

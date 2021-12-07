@@ -22,7 +22,7 @@ class StringFormatter
     }
 
     public function formatDateTime($date) : string {
-        $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y') . ' H:i:s';
+        $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y') . ' ' . SettingsRepository::getOrDefault('system.format.time', 'H:i');
         return Carbon::parse($date)->format($format);
     }
 }
