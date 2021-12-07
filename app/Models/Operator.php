@@ -12,13 +12,15 @@ class Operator extends Model
     use SoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['name','notes',];
+    protected $fillable = ['name', 'notes',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return ['name' => 'required',];
     }
 
-    public function transports() {
+    public function transports()
+    {
         return $this->hasMany(Transport::class, 'operator_id');
     }
 }

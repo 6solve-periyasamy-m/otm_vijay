@@ -14,6 +14,13 @@ class OrderFlight extends Model
 
     protected $fillable = ['order_customer_id', 'flight_inventory_tour_id'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderFlights = OrderFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
+
+        return $orderFlights;
+    }
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrderCustomer::class);
@@ -29,7 +36,8 @@ class OrderFlight extends Model
         return FlightComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
-    public function flightInventoryTour() {
+    public function flightInventoryTour()
+    {
         return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
 
@@ -41,12 +49,5 @@ class OrderFlight extends Model
     public function arrivalAirport()
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'arrival_airport_id', 'id');
-    }
-
-    public static function findByOrderCustomer($orderCustomerId)
-    {
-        $orderFlights = OrderFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
-
-        return $orderFlights;
     }
 }

@@ -13,7 +13,8 @@ class TShirtSize extends Model
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return ['name' => 'required|unique:t_shirt_sizes,name',];
     }
 }

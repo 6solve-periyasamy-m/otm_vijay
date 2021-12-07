@@ -13,10 +13,11 @@ class Activity extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_type_id','address_id','name','description','currency_id','notes',];
+    protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes',];
     protected $cascadeDeletes = ['activityInventory'];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'activity_type_id' => 'required|exists:activity_types,id',
             'name' => 'required',

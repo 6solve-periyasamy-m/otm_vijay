@@ -13,7 +13,8 @@ class HatSize extends Model
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return ['name' => 'required|unique:hat_sizes,name',];
     }
 }

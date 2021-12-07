@@ -11,9 +11,10 @@ class Address extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name','address_parent_id','location_type_id','address_line_1','address_line_2','address_line_3','town','region','country_id','postcode',];
+    protected $fillable = ['name', 'address_parent_id', 'location_type_id', 'address_line_1', 'address_line_2', 'address_line_3', 'town', 'region', 'country_id', 'postcode',];
 
-    public static function getValidationRules($prefix = '') {
+    public static function getValidationRules($prefix = '')
+    {
         return [
             $prefix . 'location_type_id' => 'required|exists:location_types,id',
             $prefix . 'address_line_1' => 'required',
@@ -26,7 +27,7 @@ class Address extends Model
     {
         return $this->belongsTo(LocationType::class);
     }
-    
+
     public function country()
     {
         return $this->belongsTo(Country::class);

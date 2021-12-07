@@ -10,13 +10,15 @@ class Country extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['numeric_code','alpha_code','name','dialing_code'];
+    protected $fillable = ['numeric_code', 'alpha_code', 'name', 'dialing_code'];
 
-    public function currencies() {
+    public function currencies()
+    {
         return $this->belongsToMany(Currency::class, 'country_currencies');
     }
 
-    public function getCurrenciesList() {
+    public function getCurrenciesList()
+    {
         $codes = [];
         foreach ($this->currencies as $currency) {
             $codes[] = $currency->code;

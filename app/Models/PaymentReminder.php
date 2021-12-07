@@ -11,11 +11,13 @@ class PaymentReminder extends Model
 
     protected $fillable = ['order_id', 'payment_installment_id'];
 
-    public function order() {
+    public function order()
+    {
         return $this->belongsTo(Order::class);
     }
 
-    public function installment() {
+    public function installment()
+    {
         return $this->belongsTo(PaymentInstallment::class);
     }
 }
