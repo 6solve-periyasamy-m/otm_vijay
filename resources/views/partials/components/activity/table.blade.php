@@ -31,8 +31,8 @@
             @foreach($activity->activityInventory as $activityInventory)
                 <tr>
                     <td>{{ $activityInventory->ticketType->name }}</td>
-                    <td>{{ $activityInventory->starts_at }}</td>
-                    <td>{{ $activityInventory->ends_at }}</td>
+                    <td>{{ StringFormatter::formatDateTime($activityInventory->starts_at) }}</td>
+                    <td>{{ StringFormatter::formatDateTime($activityInventory->ends_at) }}</td>
                     <td>{{ $activityInventory->fit_selectable ? "Yes" : "No" }}</td>
                     <td>{{ $activityInventory->stock }}</td>
                     <td>{{ $activityInventory->purchase_price }}</td>

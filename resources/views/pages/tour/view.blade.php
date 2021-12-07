@@ -34,11 +34,11 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>From</p>
-                <h6 class="fw-bold">{{ $tour->date_from }}</h6>
+                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_from) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>To</p>
-                <h6 class="fw-bold">{{ $tour->date_to }}</h6>
+                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_to) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Margin</p>
@@ -122,7 +122,7 @@
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }} to {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}</td>
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
@@ -153,7 +153,7 @@
                             </thead>
                             @foreach($activities as $activity)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($activity["inventory"]->starts_at) }} to {{ StringFormatter::formatDateTime($activity["inventory"]->ends_at) }}</td>
                                     <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["tour"]->tour_component_type }}</td>
@@ -185,7 +185,7 @@
                             </thead>
                             @foreach($flights as $flight)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($flight["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($flight["inventory"]->arrives_at) }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->flight_type }}</td>
@@ -217,7 +217,7 @@
                             </thead>
                             @foreach($transports as $transport)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrives_at }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($transport["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($transport["inventory"]->arrives_at) }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>{{ $transport["tour"]->tour_component_type }}</td>
@@ -272,7 +272,7 @@
                 @foreach($tour->paymentInstallments as $installment)
                     <tr>
                         <th scope="row">Installment</th>
-                        <td>{{ $installment->due_on }}</td>
+                        <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
                         <td>{{ $installment->amount }}</td>
                         <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">

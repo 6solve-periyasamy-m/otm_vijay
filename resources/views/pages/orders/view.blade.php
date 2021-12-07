@@ -27,7 +27,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($order->tour->date_from) . " to " . StringFormatter::formatDate($order->tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
@@ -47,7 +47,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? $nextPayment['due'] . ' - ' . $nextPayment['amount'] : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? StringFormatter::formatDate($nextPayment['due']) . ' - ' . StringFormatter::formatCurrency($nextPayment['amount']) : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Internal Notes</p>
@@ -90,7 +90,7 @@
                         </a>
                     </h6>
                     <p>Born</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->date_of_birth }}</h6>
+                    <h6 class="fw-bold">{{ StringFormatter::formatDate($ordersCustomer->customer->date_of_birth) }}</h6>
                     <p>Passport Number</p>
                     <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>
@@ -130,7 +130,7 @@
                                     <th scope="col">Type</th>
                                     <th scope="col">Method</th>
                                     <th scope="col">Value</th>
-                                    <th scope="col">Paid Date</th>
+                                    <th scope="col">Paid</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -139,7 +139,7 @@
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
                                     <td>{{ StringFormatter::formatCurrency($payment->amount) }}</td>
-                                    <td>{{ $payment->paid_on }}</td>
+                                    <td>{{ StringFormatter::formatDateTime($payment->paid_on) }}</td>
                                     <td class="actions">
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>

@@ -3,7 +3,7 @@
     <td>{{ $flight->departureAirport->name }}</td>
     <td>{{ $flight->arrivalAirport->name }}</td>
     <td>{{ $is_domestic ? "Domestic" : "International" }}</td>
-    <td>{{ $available_after }}</td>
+    <td>{{ StringFormatter::formatDate($available_after) }}</td>
     <td>{{ $notes }}</td>
     <td class="actions-3">
         <a href="{{route('flights.return', ['flight' => $flight,])}}" class="btn btn-outline-blue btn-sm mb-1">
