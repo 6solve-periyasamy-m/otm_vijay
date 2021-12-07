@@ -6,7 +6,7 @@
 @can('create', \App\Models\AccommodationInventory::class)
 <div class="card">
     <div class="card-body ">
-        <a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>
+        {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}" class="btn btn-primary float-end me-1">
             <i class="icon-plus"></i>
             <span>Add Inventory</span>

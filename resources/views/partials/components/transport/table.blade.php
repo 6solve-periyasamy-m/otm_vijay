@@ -9,12 +9,12 @@ $(document).ready(function() {
 @endsection
 @can('create', \App\Models\TransportInventory::class)
 <div class="card">
-    <div class="card-body text-end">
-        <a href="{{ route('transport-inventories.create', ['transport' => $transport, ]) }}" class="btn btn-primary">
+    <div class="card-body">
+        {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
+        <a href="{{ route('transport-inventories.create', ['transport' => $transport, ]) }}" class="btn btn-primary float-end me-1">
             <i class="icon-plus"></i>
             <span>Add Inventory</span>
         </a>
-        <a href="#" class="btn btn-success">Bulk Add Inventory</a>
     </div>
 </div>
 @endcan

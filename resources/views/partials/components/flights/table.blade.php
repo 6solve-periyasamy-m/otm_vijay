@@ -6,7 +6,7 @@
 @can('create', \App\Models\FlightInventory::class)
 <div class="card">
     <div class="card-body">
-        <a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>
+        {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
         <a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}" class="btn btn-primary float-end me-1">
             <i class="icon-plus"></i>
             <span>Add Inventory</span>
