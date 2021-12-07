@@ -25,7 +25,7 @@ class AccommodationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Accommodation::RULES);
+        $request->validate(Accommodation::getValidationRules());
         $accommodation = Accommodation::make([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -54,7 +54,7 @@ class AccommodationController extends Controller
 
     public function update(Request $request, Accommodation $accommodation)
     {
-        $request->validate(Accommodation::RULES);
+        $request->validate(Accommodation::getValidationRules());
         $accommodation->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),

@@ -21,7 +21,7 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Event::RULES);
+        $request->validate(Event::getValidationRules());
         $event = Event::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -45,7 +45,7 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        $request->validate(Event::RULES);
+        $request->validate(Event::getValidationRules());
         $event->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),

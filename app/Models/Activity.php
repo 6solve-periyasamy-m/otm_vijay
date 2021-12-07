@@ -15,10 +15,13 @@ class Activity extends Model
 
     protected $fillable = ['activity_type_id','address_id','name','description','currency_id','notes',];
     protected $cascadeDeletes = ['activityInventory'];
-    const RULES = [
-        'activity_type_id' => 'required|exists:activity_types,id',
-        'name' => 'required',
-    ];
+
+    public static function getValidationRules() {
+        return [
+            'activity_type_id' => 'required|exists:activity_types,id',
+            'name' => 'required',
+        ];
+    }
 
     public function activityInventory()
     {

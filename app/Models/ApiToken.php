@@ -10,6 +10,7 @@ class ApiToken extends Model
     use HasFactory;
 
     protected $fillable = ['token', 'expiry'];
+    protected $casts = ['expiry' => 'datetime'];
 
     protected $primaryKey = 'token';
     public $incrementing = false;

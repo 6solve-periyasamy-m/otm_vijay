@@ -16,21 +16,27 @@ class AccommodationInventory extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['accommodation_id','room_type_id','board_type_id','check_in','check_in_time_confirmed','check_out','check_out_time_confirmed','fit_selectable','stock','purchase_price','sales_price','notes','currency_id'];
+
     protected $cascadeDeletes = ['tourComponents'];
-    const RULES = [
-        'room_type_id' => 'required|exists:room_types,id',
-        'board_type_id' => 'required|exists:board_types,id',
-        'check_in' => 'date',
-        'check_out' => 'date',
-        'stock' => 'required|numeric|integer',
-        'purchase_price' => 'required|numeric',
-        'sales_price' => 'required|numeric',
-    ];
 
     protected $casts = [
         'check_in' => 'datetime',
         'check_out' => 'datetime',
     ];
+
+    public static function getValidationRules()
+    {
+        return [
+            'room_type_id' => 'required|exists:room_types,id',
+            'board_type_id' => 'required|exists:board_types,id',
+            'check_in' => 'date',
+            'check_out' => 'date',
+            'stock' => 'required|numeric|integer',
+            'purchase_price' => 'required|numeric',
+            'sales_price' => 'required|numeric',
+        ];
+    }
+
     public $additional_attributes = ['Accommodation_for_tour'];
 
     public function accommodation()

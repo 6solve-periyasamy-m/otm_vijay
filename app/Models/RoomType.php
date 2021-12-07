@@ -11,4 +11,8 @@ class RoomType extends Model
     use SoftDeletes;
 
     protected $fillable = ['name','maximum_occupancy',];
+
+    public static function getValidationRules() {
+        return ['name' => 'required|unique:room_types,name',];
+    }
 }

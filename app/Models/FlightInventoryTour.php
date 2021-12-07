@@ -24,6 +24,10 @@ class FlightInventoryTour extends Model
                 'required',
                 Rule::in(['Included', 'Upgrade', 'Add-on'])
             ],
+            'flight_type' => [
+                'required',
+                Rule::in(['Inbound', 'Outbound']),
+            ],
             'tour_sales_price' => 'required|numeric',
             'flight_inventory_id' => 'required|exists:flight_inventories,id'
         ];

@@ -22,7 +22,7 @@ class TransportController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Transport::RULES);
+        $request->validate(Transport::getValidationRules());
         $transport = Transport::create([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
@@ -49,7 +49,7 @@ class TransportController extends Controller
 
     public function update(Request $request, Transport $transport)
     {
-        $request->validate(Transport::RULES);
+        $request->validate(Transport::getValidationRules());
         $transport->update([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),

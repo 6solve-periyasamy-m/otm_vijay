@@ -15,11 +15,13 @@ class Order extends Model
 
     protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
+    protected $casts = ['ordered_on' => 'datetime',];
 
     public static function getValidationRules() {
         return [
             'quote_id' => 'nullable|exists:quotes,id',
             'tour_id'=> 'required|exists:tours,id',
+            'ordered_on' => 'required|date'
         ];
     }
 

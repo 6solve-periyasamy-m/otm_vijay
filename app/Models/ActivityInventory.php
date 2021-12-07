@@ -19,7 +19,9 @@ class ActivityInventory extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
-    const RULES = [
+
+    public static function getValidationRules() {
+        return [
         'ticket_type_id' => 'required|exists:ticket_types,id',
         'starts_at' => 'date',
         'ends_at' => 'date',
@@ -27,6 +29,7 @@ class ActivityInventory extends Model
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
     ];
+    }
 
     public function activity()
     {

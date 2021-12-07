@@ -22,7 +22,7 @@ class FlightInventoryController extends Controller
 
     public function store(Request $request, Flight $flight)
     {
-        $request->validate(FlightInventory::RULES);
+        $request->validate(FlightInventory::getValidationRules());
         $flightInventory = FlightInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),
@@ -51,7 +51,7 @@ class FlightInventoryController extends Controller
 
     public function update(Request $request, Flight $flight, FlightInventory $flightInventory)
     {
-        $request->validate(FlightInventory::RULES);
+        $request->validate(FlightInventory::getValidationRules());
         $flightInventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'flight_number' => $request->input('flight_number'),

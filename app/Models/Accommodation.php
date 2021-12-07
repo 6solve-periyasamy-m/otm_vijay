@@ -17,12 +17,18 @@ class Accommodation extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['name','description','audit_date','address_id','currency_id',];
+
     protected $cascadeDeletes = ['inventory'];
-    const RULES = [
-        'name' => 'required',
-        'audit_date' => 'date',
-        'currency_id' => 'nullable|exists:currencies,id'
-    ];
+
+    protected $casts = ['audit_date' => 'date',];
+
+    public static function getValidationRules() {
+        return [
+            'name' => 'required',
+            'audit_date' => 'date',
+            'currency_id' => 'nullable|exists:currencies,id'
+        ];
+    }
 
     public function orderAccommodation()
     {

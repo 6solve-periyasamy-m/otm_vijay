@@ -11,6 +11,7 @@ class ManualAdjustment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['order_id','amount','reason','date',];
+    protected $casts = ['date' => 'date'];
 
     public static function getValidationRules() {
         return ['date' => 'required|date', 'amount' => 'required|numeric', ];

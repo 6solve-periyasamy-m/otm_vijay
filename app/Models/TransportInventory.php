@@ -18,14 +18,14 @@ class TransportInventory extends Model
         "departs_at" => "datetime",
         "arrives_at" => "datetime"
     ];
-    const RULES = [
+    public static function getValidationRules() { return [
         'travel_class_id' => 'required|exists:travel_classes,id',
         'departs_at' => 'date',
         'arrives_at' => 'date',
         'stock' => 'required|numeric|integer',
         'purchase_price' => 'required|numeric',
         'sales_price' => 'required|numeric',
-    ];
+    ];}
 
     public $additional_attributes = ['Transport_for_tour'];
 
@@ -75,10 +75,10 @@ class TransportInventory extends Model
         if (empty($this->transport)) {
             return 'not yet set';
         }
-        
+
         $departure_location = Location::getLocationById($this->transport->departure_location_id);
         $arrival_location = Location::getLocationById($this->transport->arrival_location_id);
- 
+
         $departs_at =  $this->departs_at->format('d/m/Y H:i');
         $arrives_at = $this->arrives_at->format('d/m/Y H:i');
 

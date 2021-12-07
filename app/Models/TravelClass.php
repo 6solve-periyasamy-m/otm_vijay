@@ -11,4 +11,8 @@ class TravelClass extends Model
     use SoftDeletes;
 
     protected $fillable = ['name',];
+
+    public static function getValidationRules() {
+        return ['name' => 'required|unique:travel_classes,name',];
+    }
 }

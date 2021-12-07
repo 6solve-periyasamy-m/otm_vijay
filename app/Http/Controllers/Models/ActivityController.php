@@ -24,7 +24,7 @@ class ActivityController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Activity::RULES);
+        $request->validate(Activity::getValidationRules());
         $activity = Activity::make([
             'activity_type_id' => $request->input('activity_type_id'),
             'name' => $request->input('name'),
@@ -54,7 +54,7 @@ class ActivityController extends Controller
 
     public function update(Request $request, Activity $activity)
     {
-        $request->validate(Activity::RULES);
+        $request->validate(Activity::getValidationRules());
         $activity->update([
             'activity_type_id' => $request->input('activity_type_id'),
             'name' => $request->input('name'),

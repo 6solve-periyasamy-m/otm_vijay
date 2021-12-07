@@ -12,17 +12,20 @@ class Tour extends Model
     use SoftDeletes;
 
     protected $fillable = ['event_id','name','description','date_from','date_to','base_price_per_person','margin','single_occupancy_surcharge','stock_control_active','stock','deposit','booking_form_url','tour_colour_id','is_active','notes',];
-    const RULES = [
-        'event_id' => 'nullable|exists:events,id',
-        'name' => 'required',
-        'date_from' => 'required|date',
-        'date_to' => 'required|date',
-        'base_price_per_person' => 'numeric',
-        'deposit' => 'numeric',
-        'margin' => 'numeric',
-        'single_occupancy_surcharge' => 'numeric',
-        'stock' => 'required_with:stock_control_active|nullable|numeric|integer',
-    ];
+    public static function getValidationRules()
+    {
+        return [
+            'event_id' => 'nullable|exists:events,id',
+            'name' => 'required',
+            'date_from' => 'required|date',
+            'date_to' => 'required|date',
+            'base_price_per_person' => 'numeric',
+            'deposit' => 'numeric',
+            'margin' => 'numeric',
+            'single_occupancy_surcharge' => 'numeric',
+            'stock' => 'required_with:stock_control_active|nullable|numeric|integer',
+        ];
+    }
 
     public function event()
     {

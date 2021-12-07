@@ -12,4 +12,8 @@ class TicketType extends Model
     use SoftDeletes;
 
     protected $fillable = ['name',];
+
+    public static function getValidationRules() {
+        return ['name' => 'required|unique:ticket_types,name',];
+    }
 }

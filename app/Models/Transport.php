@@ -14,13 +14,14 @@ class Transport extends Model
 
     protected $fillable = ['transport_type_id','operator_id','departure_address_id','arrival_address_id','name','description','currency_id','is_domestic','notes',];
     protected $cascadeDeletes = ['transportInventory'];
-    const RULES = [
+
+    public static function getValidationRules() { return [
         'transport_type_id' => 'required|exists:transport_types,id',
         'operator_id' => 'required|exists:operators,id',
         'departure_address_id' => 'required|exists:addresses,id',
         'arrival_address_id' => 'required|exists:addresses,id',
         'name' => 'required',
-    ];
+    ];}
 
     public function transportInventory()
     {

@@ -15,12 +15,16 @@ class Event extends Model
     public $additional_attributes = ['event_details'];
 
     protected $fillable = ['name','description','starts_at','ends_at','booking_url','notes',];
+    protected $casts = ['starts_at' => 'date', 'ends_at' => 'date'];
 
-    const RULES = [
-        'name' => 'required',
-        'starts_at' => 'required|date',
-        'ends_at' => 'required|date',
-    ];
+    public static function getValidationRules()
+    {
+        return [
+            'name' => 'required',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date',
+        ];
+    }
 
     function getEventDetailsAttribute() 
     {
