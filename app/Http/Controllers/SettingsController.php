@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Repository\SettingsRepository;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,8 @@ class SettingsController extends Controller
             'atol_number' => 'required',
             'company_logo' => 'nullable|image',
             'atol_stamp' => 'nullable|image',
+            'currency_id' => 'required|exists:currencies,id',
+            'stripe_key' => 'nullable',
         ];
     }
 
@@ -46,6 +49,7 @@ class SettingsController extends Controller
             'booking.prefix' => $request->input('booking_prefix'),
             'atol.issuer' => $request->input('atol_issuer'),
             'atol.number' => $request->input('atol_number'),
+            'billing.stripe.key' => $request->input('stripe_key'),
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             SettingsRepository::set('company.logo', $this->saveImage($request->file('company_logo')));
@@ -53,6 +57,8 @@ class SettingsController extends Controller
         if ($request->has('atol_stamp') && $request->file('atol_stamp') != null) {
             SettingsRepository::set('atol.stamp', $this->saveImage($request->file('atol_stamp')));
         }
+        $currency = Currency::where('id', '=', $request->input('currency_id'))->first();
+        SettingsRepository::set('system.currency', $currency->code);
         return redirect()->route('dash');
     }
 

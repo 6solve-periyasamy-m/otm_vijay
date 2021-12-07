@@ -95,8 +95,8 @@ $(document).ready( function () {
             <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Payment Status</p>
-            <h6 class="badge {{ true ? 'badge-success' : 'badge-danger' }} fw-bold">{{ true ? "Paid in Full" : "Balance Outstanding" }}</h6>
+            <p>Order Status</p>
+            <h6 class="badge badge-{{ $status['color'] }} fw-bold">{{ $status['status'] }}</h6>
         </div>
         <div class="col-12">
             <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
@@ -411,7 +411,7 @@ $(document).ready( function () {
                 </thead>
                 @foreach($order_customer->adjustments as $adjustment)
                     <tr>
-                        <td>{{ $adjustment->amount }}</td>
+                        <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
                         <td>{{ $adjustment->reason }}</td>
                         <td>{{ $adjustment->date }}</td>
                         <td class="actions">

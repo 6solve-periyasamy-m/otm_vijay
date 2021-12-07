@@ -1,4 +1,4 @@
-@include('partials.fields.adder',
+@include('partials.fields.selector.adder',
             ['name' => 'Customer', 'field' => 'customer_id', 'value' => $customer_id ?? 0,
              'route' => 'customers', 'createRoute' => route('customers.create')])
 @include('partials.fields.text', ['name' => 'Tour Cost', 'field' => 'tour_cost', 'value' => $tour_cost ?? null])

@@ -71,6 +71,9 @@ class AccommodationInventoryController extends Controller
 
     public function destroy(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
+        if ($accommodationInventory->tourComponents()->count() > 0) {
+            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation Inventory']));
+        }
         $accommodationInventory->delete();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }

@@ -30,20 +30,32 @@
             <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Payment Status</p>
-            <h6 class="badge {{ $totalPaid >= $totalOrderValue ? 'badge-success' : 'badge-danger' }} fw-bold">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</h6>
+            <p>Order Status</p>
+            <h6 class="badge badge-{{ $orderStatus['color'] }} fw-bold">{{ $orderStatus['status'] }}</h6>
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>
-            <h6 class="fw-bold">{{ $totalOrderValue }}</h6>
+            <h6 class="fw-bold">{{ CurrencyFormatter::format($totalOrderValue) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
-            <h6 class="fw-bold">{{ $totalPaid }}</h6>
+            <h6 class="fw-bold">{{ CurrencyFormatter::format($totalPaid) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ $totalOrderValue - $totalPaid }}</h6>
+            <h6 class="fw-bold">{{ CurrencyFormatter::format($totalOrderValue - $totalPaid) }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Next Payment Due</p>
+            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? $nextPayment['due'] . ' - ' . $nextPayment['amount'] : 'All installments paid' }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Internal Notes</p>
+            <h6 class="fw-bold">{!! nl2br($order->internal_notes) !!}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>External Notes</p>
+            <h6 class="fw-bold">{!! nl2br($order->external_notes) !!}</h6>
         </div>
         <div class="col-12">
             <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
@@ -71,7 +83,7 @@
             @foreach($customers as $ordersCustomer)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
-                    <p>Lead Broker</p>
+                    <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
                     <h6 class="fw-bold">
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
                             {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
@@ -80,7 +92,7 @@
                     <p>Born</p>
                     <h6 class="fw-bold">{{ $ordersCustomer->customer->date_of_birth }}</h6>
                     <p>Passport Number</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number }}</h6>
+                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>
             </div>
             @endforeach
@@ -118,7 +130,6 @@
                                     <th scope="col">Type</th>
                                     <th scope="col">Method</th>
                                     <th scope="col">Value</th>
-                                    <th scope="col">Due Date</th>
                                     <th scope="col">Paid Date</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -127,8 +138,7 @@
                                 <tr>
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
-                                    <td>{{ $payment->amount }}</td>
-                                    <td>{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
+                                    <td>{{ CurrencyFormatter::format($payment->amount) }}</td>
                                     <td>{{ $payment->paid_on }}</td>
                                     <td class="actions">
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -152,18 +162,20 @@
                         <table class="table table-striped" id="cost-table">
                             <thead>
                             <tr>
-                                <th scope="col" >Type</th>
-                                <th scope="col" >Value</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Value</th>
                             </tr>
                             </thead>
+                            @foreach($customers as $ordersCustomer)
                             <tr>
-                                <td>Base</td>
-                                <td>{{ $order->tour->base_price_per_person * sizeof($customers) }}</td>
+                                <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
+                                <td>{{ CurrencyFormatter::format($order->tour->base_price_per_person) }}</td>
                             </tr>
+                            @endforeach
                             @foreach($addons as $addon)
                                 <tr>
-                                    <td>Add-on</td>
-                                    <td>{{ $addon->tour_sales_price }}</td>
+                                    <td>Add-on: {{ $addon['customer']->customer->first_name . ' ' . $addon['customer']->customer->last_name }}</td>
+                                    <td>{{ CurrencyFormatter::format($addon['addon']->tour_sales_price) }}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -194,7 +206,7 @@
                             </thead>
                             @foreach($order->adjustments as $adjustment)
                                 <tr>
-                                    <td>{{ $adjustment->amount }}</td>
+                                    <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -228,7 +240,7 @@
                                 @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
-                                    <td>{{ $adjustment->amount }}</td>
+                                    <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

@@ -1,4 +1,5 @@
 <?php
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -246,5 +247,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::get('/transports/{oCustomerId}', [TourComponentController::class, 'getAvailableTransportAddons'])->name('transport');
             });
         });
+        // Hack method to get route in order screen. TODO: Better solution?
+        Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
+        Route::get('/status', function(){})->name('status.stub');
     });
 });

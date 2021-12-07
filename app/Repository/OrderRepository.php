@@ -2,19 +2,29 @@
 
 namespace App\Repository;
 
+use App\Mail\PaymentDueMailable;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\OrderTransport;
+use App\Models\PaymentInstallment;
+use App\Models\PaymentReminder;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
-interface OrderRepositoryInterface {
+interface OrderRepositoryInterface
+{
     public static function getSearchOrders($searchTerm = "", $archived = false);
+
     public static function getOrderDetails(Order $order);
+
     public static function getOrderCustomerDetails(OrderCustomer $orderCustomer);
+
     public static function addIncludedToCustomer(OrderCustomer $ordercustomer, Order $order);
+
     public static function getInvoiceDetails(Order $order);
 
 }
@@ -49,58 +59,148 @@ class OrderRepository implements OrderRepositoryInterface
     public static function getOrderDetails(Order $order)
     {
         $details = ['order' => $order,];
-        $customers = [];
-        $addons = [];
+        $customers = $order->orderCustomers;
         $totalOrderValue = 0;
-        $customerAdjustments = [];
-        foreach ($order->orderCustomers as $customer) {
-            $customers[] = $customer;
-            // Possible TODO: Find a more elegant way to do this?
-            foreach ($customer->orderAccommodation as $orderAccommodation) {
-                if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                    $addons[] = $orderAccommodation->accommodationInventoryTour;
-                    $totalOrderValue += $orderAccommodation->accommodationInventoryTour->tour_sales_price;
-                }
-            }
-            foreach ($customer->orderActivities as $orderActivity) {
-                if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                    $addons[] = $orderActivity->activityInventoryTour;
-                    $totalOrderValue += $orderActivity->activityInventoryTour->tour_sales_price;
-                }
-            }
-            foreach ($customer->orderFlights as $orderFlight) {
-                if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                    $addons[] = $orderFlight->flightInventoryTour;
-                    $totalOrderValue += $orderFlight->flightInventoryTour->tour_sales_price;
-                }
-            }
-            foreach ($customer->orderTransports as $orderTransport) {
-                if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                    $addons[] = $orderTransport->transportInventoryTour;
-                    $totalOrderValue += $orderTransport->transportInventoryTour->tour_sales_price;
-                }
-            }
-            foreach ($customer->adjustments as $adjustment) {
-                $totalOrderValue += $adjustment->amount;
-            }
-        }
-        foreach ($order->adjustments as $adjustment) {
-            $totalOrderValue += $adjustment->amount;
-        }
+        $addonData = self::getOrderAddons($order);
+        $totalOrderValue += $addonData['additionalValue'];
+        $totalOrderValue += self::getOrderAdjustmentTotal($order);
+        $totalOrderValue += self::getCustomerAdjustmentTotal($order);
         $totalOrderValue += $order->tour->base_price_per_person * count($customers);
         $details['customers'] = $customers;
-        $details['addons'] = $addons;
+        $details['addons'] = $addonData['addons'];
         $details['totalOrderValue'] = $totalOrderValue;
+        $paymentData = self::getPayments($order);
+        $details['totalPaid'] = $paymentData['amount'];
+        $details['payments'] = $paymentData['payments'];
+        $details['orderStatus'] = self::getOrderStatus($order);
+        $details['nextPayment'] = self::getNextPaymentDetails($order);
+        return $details;
+    }
+
+    public static function getOrderAddons(Order $order): array
+    {
+        $addons = [];
+        $additionalValue = 0;
+        foreach ($order->orderCustomers as $orderCustomer) {
+            $data = self::getCustomerAddons($orderCustomer);
+            $addons = array_merge($addons, $data['addons']);
+            $additionalValue += $data['additionalValue'];
+        }
+        return ['addons' => $addons, 'additionalValue' => $additionalValue,];
+    }
+
+    public static function getCustomerAddons(OrderCustomer $customer): array
+    {
+        $addons = [];
+        $additionalValue = 0;
+        foreach ($customer->orderAccommodation as $orderAccommodation) {
+            if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                $addons[] = ['addon' => $orderAccommodation->accommodationInventoryTour, 'customer' => $customer,];
+                $additionalValue += $orderAccommodation->accommodationInventoryTour->tour_sales_price;
+            }
+        }
+        foreach ($customer->orderActivities as $orderActivity) {
+            if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                $addons[] = ['addon' => $orderActivity->activityInventoryTour, 'customer' => $customer,];
+                $additionalValue += $orderActivity->activityInventoryTour->tour_sales_price;
+            }
+        }
+        foreach ($customer->orderFlights as $orderFlight) {
+            if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                $addons[] = ['addon' => $orderFlight->flightInventoryTour, 'customer' => $customer,];
+                $additionalValue += $orderFlight->flightInventoryTour->tour_sales_price;
+            }
+        }
+        foreach ($customer->orderTransports as $orderTransport) {
+            if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$addonId) {
+                $addons[] = ['addon' => $orderTransport->transportInventoryTour, 'customer' => $customer,];
+                $additionalValue += $orderTransport->transportInventoryTour->tour_sales_price;
+            }
+        }
+        return ['addons' => $addons, 'additionalValue' => $additionalValue,];
+    }
+
+    public static function getOrderAdjustmentTotal(Order $order)
+    {
+        $value = 0;
+        foreach ($order->adjustments as $adjustment) {
+            $value += $adjustment->amount;
+        }
+        return $value;
+    }
+
+    public static function getPayments(Order $order)
+    {
         $payments = [];
-        $totalPaid = 0;
+        $amount = 0;
         foreach ($order->payments as $payment) {
             $payments[] = $payment;
-            $totalPaid += $payment->amount;
+            $amount += $payment->amount;
         }
+        return ['payments' => $payments, 'amount' => $amount,];
+    }
 
-        $details['totalPaid'] = $totalPaid;
-        $details['payments'] = $payments;
-        return $details;
+    public static function getOrderStatus(Order $order)
+    {
+        $paidAmount = self::getPayments($order)['amount'];
+        $cost = self::getCosts($order);
+        $adjustments = self::getOrderAdjustmentTotal($order);
+        $customerAdjustments = self::getCustomerAdjustmentTotal($order);
+        if (($cost + $adjustments + $customerAdjustments) > $paidAmount) {
+            $next = self::getNextPaymentDetails($order);
+            if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
+                return ['status' => 'Payment Overdue', 'color' => 'danger'];
+            } else {
+                return ['status' => 'Balance Outstanding', 'color' => 'warning'];
+            }
+        } else {
+            return ['status' => 'Paid in Full', 'color' => 'success'];
+        }
+    }
+
+    public static function getCosts(Order $order)
+    {
+        $cost = $order->tour->base_price_per_person * self::getOrderCustomerCount($order);
+        foreach (self::getOrderAddons($order)['addons'] as $addon) {
+            $cost += $addon['addon']->tour_sales_price;
+        }
+        return $cost;
+    }
+
+    public static function getOrderCustomerCount(Order $order): int
+    {
+        return $order->orderCustomers()->count();
+    }
+
+    public static function getNextPaymentDetails(Order $order)
+    {
+        $paid = self::getTotalPaid($order);
+        $paid -= self::getOrderDepositAmount($order);
+        $paid -= self::getOrderAddons($order)['additionalValue'];
+        foreach ($order->tour->paymentInstallments as $installment) {
+            $paid -= ($installment->amount * self::getOrderCustomerCount($order));
+            if ($paid < 0) {
+                return [
+                    'amount' => $paid * -1,
+                    'due' => $installment->due_on,
+                    'installment' => $installment,
+                ];
+            }
+        }
+        return [
+            'amount' => 0,
+            'due' => $order->tour->date_from,
+            'installment' => null,
+        ];
+    }
+
+    public static function getTotalPaid(Order $order)
+    {
+        $paid = 0;
+        foreach ($order->payments as $payment) {
+            $paid += $payment->amount;
+        }
+        return $paid;
     }
 
     public static function getOrderCustomerDetails(OrderCustomer $orderCustomer)
@@ -149,12 +249,12 @@ class OrderRepository implements OrderRepositoryInterface
             $transports[] = $data;
         }
         $details['transports'] = $transports;
-
+        $details['status'] = self::getOrderStatus($orderCustomer->order);
         return $details;
     }
 
-
-    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order) {
+    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order)
+    {
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
@@ -181,8 +281,9 @@ class OrderRepository implements OrderRepositoryInterface
         }
     }
 
-    public static function getInvoiceDetails(Order $order) {
-        $data = ['order' => $order, ];
+    public static function getInvoiceDetails(Order $order)
+    {
+        $data = ['order' => $order,];
         $data['orderCustomers'] = [];
         $data['payments'] = [];
         $adjustments = [];
@@ -191,7 +292,7 @@ class OrderRepository implements OrderRepositoryInterface
         $data['totals']['paid'] = 0;
         $data['totals']['adjusted'] = 0;
 
-        foreach($order->orderCustomers as $orderCustomer) {
+        foreach ($order->orderCustomers as $orderCustomer) {
             $data['orderCustomers'][$orderCustomer->id] = [];
             $data['orderCustomers'][$orderCustomer->id]['customer'] = $orderCustomer;
             $data['orderCustomers'][$orderCustomer->id]['items'] = [];
@@ -310,5 +411,41 @@ class OrderRepository implements OrderRepositoryInterface
         $data['payments'] = collect($payments)->sortBy('date')->toArray();
         $data['totals']['combined'] = $data['totals']['orderValue'] - $data['totals']['paid'] + $data['totals']['adjusted'];
         return $data;
+    }
+
+    public static function sendAllOrderReminders()
+    {
+        foreach (Order::all() as $order) {
+            $nextPayment = self::getNextPaymentDetails($order);
+            if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > 7) continue;
+            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->first();
+            if (isset($reminder)) continue;
+            self::sendReminderEmail($order, $nextPayment['installment']->id);
+        }
+    }
+
+    public static function sendReminderEmail(Order $order, PaymentInstallment $installment)
+    {
+        PaymentReminder::create([
+            'order_id' => $order->id,
+            'payment_installment_id' => $installment->id,
+        ]);
+        Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+    }
+
+    public static function getOrderDepositAmount(Order $order)
+    {
+        return $order->tour->deposit * self::getOrderCustomerCount($order);
+    }
+
+    public static function getCustomerAdjustmentTotal(Order $order)
+    {
+        $total = 0;
+        foreach ($order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->adjustments as $adjustment) {
+                $total += $adjustment->amount;
+            }
+        }
+        return $total;
     }
 }

@@ -160,6 +160,9 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer)
     {
+        if ($customer->orderCustomers()->count() > 0) {
+            return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Customer', 'parent' => 'Order']));
+        }
         $customer->delete();
         return redirect()->route('customers.all');
     }

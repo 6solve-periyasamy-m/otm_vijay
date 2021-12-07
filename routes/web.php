@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BookingFormLoginController;
 use App\Http\Controllers\CustomerPortalController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
@@ -382,6 +383,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:ActivityInventory,update');
                     Route::post('/update', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update')->middleware('bouncer:ActivityInventory,update');
                     Route::post('/delete', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete')->middleware('bouncer:ActivityInventory,delete');
+                    Route::get('/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate')->middleware('bouncer:ActivityInventory,create');
                 });
             });
         });
@@ -405,7 +407,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('/update', [TicketTypeController::class, 'edit'])->name('ticket-types.edit')->middleware('bouncer:TicketType,update');
                 Route::post('/update', [TicketTypeController::class, 'update'])->name('ticket-types.update')->middleware('bouncer:TicketType,update');
                 Route::post('/delete', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete')->middleware('bouncer:TicketType,delete');
-                Route::get('/{activityInventory}/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate');
             });
         });
     });
@@ -588,6 +589,32 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/update', [PermissionsController::class, 'edit'])->name('roles.edit')->middleware('bouncer:User,update');
             Route::post('/update', [PermissionsController::class, 'update'])->name('roles.update')->middleware('bouncer:User,update');
             Route::post('/delete', [PermissionsController::class, 'destroy'])->name('roles.delete')->middleware('bouncer:User,delete');
+        });
+    });
+    Route::prefix('email/')->name('email.')->group(function () {
+        Route::prefix('booking')->name('booking.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editBooking'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storeBooking'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoBooking'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderBooking'])->name('order_demo');
+        });
+        Route::prefix('due-payment')->name('payment-due.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editPaymentDue'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storePaymentDue'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoPaymentDue'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentDue'])->name('order_demo');
+        });
+        Route::prefix('payment-made')->name('payment-made.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editPaymentMade'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storePaymentMade'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoPaymentMade'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentMade'])->name('order_demo');
+        });
+        Route::prefix('refund-given')->name('refund-given.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editRefundGiven'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storeRefundGiven'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoRefundGiven'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderRefundGiven'])->name('order_demo');
         });
     });
 });

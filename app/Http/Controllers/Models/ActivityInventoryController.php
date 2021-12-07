@@ -65,6 +65,9 @@ class ActivityInventoryController extends Controller
 
     public function destroy(Activity $activity, ActivityInventory $activityInventory)
     {
+        if ($activityInventory->tourComponents()->count() > 0) {
+            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Activity Inventory']));
+        }
         $activityInventory->delete();
         return redirect()->route('activities.view', ['activity' => $activity, ]);
     }
