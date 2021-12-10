@@ -43,5 +43,7 @@ class FlightInventoryTour extends Model
         return $this->hasMany(OrderFlight::class, 'flight_inventory_tour_id');
     }
 
-
+    public function upgrades() {
+        return $this->hasMany(FlightInventoryTourUpgrade::class, 'base_id');
+    }
 }

@@ -34,4 +34,8 @@ class ActivityInventoryTour extends Model
     public function orders() {
         return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
     }
+
+    public function upgrades() {
+        return $this->hasMany(ActivityInventoryTourUpgrade::class, 'base_id');
+    }
 }
