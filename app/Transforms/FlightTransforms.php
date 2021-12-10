@@ -68,7 +68,7 @@ class FlightTransforms implements FlightTransformsInterface
         foreach (FlightInventory::all() as $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
-            $subData['text'] = $inventory->flight_number . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
+            $subData['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -80,7 +80,7 @@ class FlightTransforms implements FlightTransformsInterface
         $inventory = FlightInventory::findOrFail($id);
         $data = [];
         $data['id'] = $inventory->id;
-        $data['text'] = $inventory->flight_number . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
+        $data['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
         return $data;
     }
 }

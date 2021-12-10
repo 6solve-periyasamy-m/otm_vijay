@@ -68,7 +68,7 @@ class ActivityTransforms implements ActivityTransformsInterface
         foreach (ActivityInventory::all() as $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
-            $subData['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name;
+            $subData['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name . ' - ' . $inventory->ticketType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -80,7 +80,7 @@ class ActivityTransforms implements ActivityTransformsInterface
         $inventory = ActivityInventory::findOrFail($id);
         $data = [];
         $data['id'] = $inventory->id;
-        $data['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name;
+        $data['text'] = $inventory->activity->name . ' - ' . $inventory->activity->activityType->name . ' - ' . $inventory->ticketType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
         return $data;
     }
 }

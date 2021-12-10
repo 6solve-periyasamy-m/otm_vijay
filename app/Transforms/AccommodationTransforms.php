@@ -68,7 +68,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         foreach (AccommodationInventory::all() as $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
-            $subData['text'] = $inventory->accommodation->name . " - " . $inventory->roomType->name;
+            $subData['text'] = $inventory->accommodation->name . " - " . $inventory->roomType->name . ' - ' . $inventory->boardType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
@@ -80,7 +80,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $inventory = AccommodationInventory::findOrFail($id);
         $data = [];
         $data['id'] = $inventory->id;
-        $data['text'] = $inventory->accommodation->name . " - " . $inventory->roomType->name;
+        $data['text'] = $inventory->accommodation->name . " - " . $inventory->roomType->name . ' - ' . $inventory->boardType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
         return $data;
     }
 }
