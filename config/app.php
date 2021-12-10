@@ -237,5 +237,5 @@ return [
     'setting' => [
         // if /booking path returns a form with event/tour selectors
         'booking-selection' => false
-    ]
+    ],
 ];
