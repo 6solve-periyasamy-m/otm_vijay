@@ -3,6 +3,7 @@
     $(document).ready(function () { $('#activityInventory').DataTable({fixedHeader: true}); });
 </script>
 @endsection
+@can('create', \App\Models\ActivityInventory::class)
 <div class="card">
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
@@ -12,6 +13,7 @@
         </a>
     </div>
 </div>
+@endcan
 <div class="card">
     <div class="card-body">
         <table id="activityInventory" style="width: 100%;" class="table table-striped">
@@ -39,20 +41,38 @@
                     <td>{{ $activityInventory->sales_price }}</td>
                     <td>{{ $activityInventory->notes }}</td>
                     <td class="actions-3">
-                        <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                            <i class="icon-layers"></i>
-                        </a>
-                        <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"
-                            class="btn btn-sm btn-outline-success mb-1">
-                            <i class="icon-note"></i>                            
-                        </a>
-                        <a href="#" class="btn btn-sm btn-outline-danger mb-1"
-                        onclick="event.preventDefault();document.getElementById('activityInventory-{{ $activityInventory->id }}-delete').submit();">
-                            <i class="icon-trash"></i>
-                        </a>
-                        <form id="activityInventory-{{ $activityInventory->id }}-delete"
-                            action="{{ route('activity-inventories.delete', ['activity' => $activity, 'activityInventory' => $activityInventory,]) }}"
-                            method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        @can('create', \App\Models\ActivityInventory::class)
+                            <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                                <i class="icon-layers"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-layers"></i>
+                            </span>
+                        @endcan
+                        @can('update', \App\Models\ActivityInventory::class)
+                            <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'activityInventory' => $activityInventory,])}}"
+                               class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </span>
+                        @endcan
+                        @can('delete', \App\Models\ActivityInventory::class)
+                            <a href="#" class="btn btn-sm btn-outline-danger mb-1"
+                               onclick="event.preventDefault();document.getElementById('activityInventory-{{ $activityInventory->id }}-delete').submit();">
+                                <i class="icon-trash"></i>
+                            </a>
+                            <form id="activityInventory-{{ $activityInventory->id }}-delete"
+                                  action="{{ route('activity-inventories.delete', ['activity' => $activity, 'activityInventory' => $activityInventory,]) }}"
+                                  method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-trash"></i>
+                            </span>
+                        @endcan
                     </td>
                 </tr>
             @endforeach

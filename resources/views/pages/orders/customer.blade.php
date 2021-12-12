@@ -99,10 +99,12 @@ $(document).ready( function () {
             <h6 class="badge badge-{{ $status['color'] }} fw-bold">{{ $status['status'] }}</h6>
         </div>
         <div class="col-12">
-            <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
-                <i class="icon-note"></i>
-                Edit Order
-            </a>
+            @can('update', \App\Models\Order::class)
+                <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
+                    <i class="icon-note"></i>
+                    Edit Order
+                </a>
+            @endcan
             <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-amber">
                 <i class="icon-home"></i>
                 Return to Order
@@ -180,14 +182,18 @@ $(document).ready( function () {
             @endif
         </div>
         <div class="col-12">
+            @can('create', \App\Models\OrderCustomerAdjustment::class)
             <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success mb-1">
                 <i class="icon-plus"></i>
                 Add Adjustment
             </a>
+            @endcan
+            @can('update', \App\Models\OrderCustomer::class)
             <a href="{{ route('order-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber mb-1">
                 <i class="icon-note"></i>
                 Edit Order Customer
             </a>
+            @endcan
         </div>
     </div>
 </div>
@@ -392,12 +398,14 @@ $(document).ready( function () {
     <div class="card-body">
         <div class="card-title">
             <h4 class="fw-bold">Customer Adjustments</h4>
+            @can('create', \App\Models\OrderCustomerAdjustment::class)
             <div class="pb-3 text-end">
                 <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer]) }}" class="btn btn-success text-white">
                     <i class="icon-plus"></i>
                     Add Adjustment
                 </a>
             </div>
+            @endcan
         </div>
         <div>
             <table class="table table-striped" id="customer-adjustment-table">
@@ -415,11 +423,23 @@ $(document).ready( function () {
                         <td>{{ $adjustment->reason }}</td>
                         <td>{{ $adjustment->date }}</td>
                         <td class="actions">
-                            <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                            <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                            <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
-                                @csrf
-                            </form>
+                            @can('update', \App\Models\OrderCustomerAdjustment::class)
+                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                            @endcan
+                            @can('delete', \App\Models\OrderCustomerAdjustment::class)
+                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                    @csrf
+                                </form>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

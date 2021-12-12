@@ -19,11 +19,13 @@
             <p>Notes</p>
             <h6 class="fw-bold">{{ $activity->notes }}</h6>
         </div>
+        @can('update', \App\Models\Activity::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">
                 <i class="icon-note"></i>
                 <span>Edit Activity</span>
             </a>
         </div>
+        @endcan
     </div>
 </div>

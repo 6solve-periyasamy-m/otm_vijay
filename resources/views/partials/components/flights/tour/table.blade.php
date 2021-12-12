@@ -27,6 +27,7 @@
             ]
         });
     });
+    @can('create', \App\Models\FlightInventoryTour::class)
     function getSelectedFlightInventory() {
         let ids = [];
         flightTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -46,7 +47,9 @@
                 "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
+    @endcan
 </script>
+@can('create', \App\Models\FlightInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <div class="d-inline-flex col-12 col-xl-10">
         <select class="form-select flight-component-type-select">
@@ -64,6 +67,7 @@
         <span>Add Components</span>
     </a>
 </div>
+@endcan
 <table style="width: 100%;" class="table table-striped flight-inventory-table">
     <thead class="thead-dark">
     <tr>

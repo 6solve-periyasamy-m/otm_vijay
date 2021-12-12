@@ -1,6 +1,12 @@
-@include('partials.fields.selector.adder',
+@can('create', \App\Models\ActivityType::class)
+    @include('partials.fields.selector.adder',
+                ['name' => 'Activity Type', 'field' => 'activity_type_id', 'value' => $activity_type_id ?? 0,
+                 'route' => 'activity-types', 'createRoute' => route('activity-types.create'),])
+@else
+    @include('partials.fields.selector.default',
             ['name' => 'Activity Type', 'field' => 'activity_type_id', 'value' => $activity_type_id ?? 0,
-             'route' => 'activity-types', 'createRoute' => route('activity-types.create'),])
+             'route' => 'activity-types',])
+@endcan
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @include('partials.fields.prefab.addresses.switcher', [
