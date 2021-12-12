@@ -37,9 +37,9 @@
                 <tr>
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
-                    <td>{{ $accommodationInventory->check_in }}</td>
+                    <td>{{ StringFormatter::formatDateTime($accommodationInventory->check_in) }}</td>
                     <td>{{ $accommodationInventory->check_in_time_confirmed == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ $accommodationInventory->check_out }}</td>
+                    <td>{{ StringFormatter::formatDateTime($accommodationInventory->check_out) }}</td>
                     <td>{{ $accommodationInventory->check_out_time_confirmed == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
                     <td>{{ $accommodationInventory->stock }}</td>

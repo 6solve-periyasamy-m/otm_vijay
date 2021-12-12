@@ -29,7 +29,7 @@ class PaymentInstallmentController extends Controller
         ]);
         $tour->paymentInstallments()->save($paymentInstallment);
         return redirect()->route('tours.view', ['tour' => $tour,]);
-  }
+    }
 
     public function view(Tour $tour, PaymentInstallment $paymentInstallment)
     {

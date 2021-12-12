@@ -21,6 +21,7 @@ class AddressController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Address::getValidationRules());
         $address = Address::create([
             'address_line_1' => $request->input('address_line_1'),
             'address_line_2' => $request->input('address_line_2'),
@@ -44,6 +45,7 @@ class AddressController extends Controller
 
     public function update(Request $request, Address $address)
     {
+        $request->validate(Address::getValidationRules());
         $address->update([
             'address_line_1' => $request->input('address_line_1'),
             'address_line_2' => $request->input('address_line_2'),

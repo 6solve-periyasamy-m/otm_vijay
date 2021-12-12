@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
 use App\Repository\OrderRepository;
-use App\Repository\SettingsRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller

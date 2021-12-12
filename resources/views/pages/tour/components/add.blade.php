@@ -22,11 +22,11 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>From</p>
-                <h6 class="fw-bold">{{ $tour->date_from }}</h6>
+                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_from) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>To</p>
-                <h6 class="fw-bold">{{ $tour->date_to }}</h6>
+                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_to) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Margin</p>

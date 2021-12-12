@@ -27,7 +27,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($order->tour->date_from) . " to " . StringFormatter::formatDate($order->tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
@@ -35,19 +35,19 @@
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>
-            <h6 class="fw-bold">{{ CurrencyFormatter::format($totalOrderValue) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($totalOrderValue) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
-            <h6 class="fw-bold">{{ CurrencyFormatter::format($totalPaid) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($totalPaid) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ CurrencyFormatter::format($totalOrderValue - $totalPaid) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($totalOrderValue - $totalPaid) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? $nextPayment['due'] . ' - ' . $nextPayment['amount'] : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? StringFormatter::formatDate($nextPayment['due']) . ' - ' . StringFormatter::formatCurrency($nextPayment['amount']) : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Internal Notes</p>
@@ -96,7 +96,7 @@
                         @endcan
                     </h6>
                     <p>Born</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->date_of_birth }}</h6>
+                    <h6 class="fw-bold">{{ StringFormatter::formatDate($ordersCustomer->customer->date_of_birth) }}</h6>
                     <p>Passport Number</p>
                     <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>
@@ -138,7 +138,7 @@
                                     <th scope="col">Type</th>
                                     <th scope="col">Method</th>
                                     <th scope="col">Value</th>
-                                    <th scope="col">Paid Date</th>
+                                    <th scope="col">Paid</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -146,8 +146,8 @@
                                 <tr>
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
-                                    <td>{{ CurrencyFormatter::format($payment->amount) }}</td>
-                                    <td>{{ $payment->paid_on }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($payment->amount) }}</td>
+                                    <td>{{ StringFormatter::formatDateTime($payment->paid_on) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -189,13 +189,13 @@
                             @foreach($customers as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
-                                <td>{{ CurrencyFormatter::format($order->tour->base_price_per_person) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($order->tour->base_price_per_person) }}</td>
                             </tr>
                             @endforeach
                             @foreach($addons as $addon)
                                 <tr>
                                     <td>Add-on: {{ $addon['customer']->customer->first_name . ' ' . $addon['customer']->customer->last_name }}</td>
-                                    <td>{{ CurrencyFormatter::format($addon['addon']->tour_sales_price) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($addon['addon']->tour_sales_price) }}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -228,7 +228,7 @@
                             </thead>
                             @foreach($order->adjustments as $adjustment)
                                 <tr>
-                                    <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\ManualAdjustment::class)
@@ -274,7 +274,7 @@
                                 @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
-                                    <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\OrderCustomerAdjustment::class)

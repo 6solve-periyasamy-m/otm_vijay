@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Flight;
 use App\Models\Transport;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class TransportController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Transport::RULES);
+        $request->validate(Transport::getValidationRules());
         $transport = Transport::create([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
@@ -49,7 +48,7 @@ class TransportController extends Controller
 
     public function update(Request $request, Transport $transport)
     {
-        $request->validate(Transport::RULES);
+        $request->validate(Transport::getValidationRules());
         $transport->update([
             'transport_type_id' => $request->input('transport_type_id'),
             'operator_id' => $request->input('operator_id'),
@@ -66,8 +65,7 @@ class TransportController extends Controller
 
     public function destroy(Transport $transport)
     {
-        foreach ($transport->transportInventory as $inventory)
-        {
+        foreach ($transport->transportInventory as $inventory) {
             if ($inventory->tourComponents()->count() > 0) {
                 return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Transport']));
             }
@@ -76,7 +74,8 @@ class TransportController extends Controller
         return redirect()->route('transports.all');
     }
 
-    public function createReturn(Transport $transport) {
+    public function createReturn(Transport $transport)
+    {
         $return = $transport->replicate();
         $depart = $transport->arrival_address_id;
         $arrival = $transport->departure_address_id;

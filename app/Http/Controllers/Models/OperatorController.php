@@ -21,6 +21,7 @@ class OperatorController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Operator::getValidationRules());
         $operator = Operator::create([
             'name' => $request->input('name'),
             'notes' => $request->input('notes'),
@@ -40,6 +41,7 @@ class OperatorController extends Controller
 
     public function update(Request $request, Operator $operator)
     {
+        $request->validate(Operator::getValidationRules());
         $operator->update([
             'name' => $request->input('name'),
             'notes' => $request->input('notes'),

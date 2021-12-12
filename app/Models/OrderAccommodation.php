@@ -14,6 +14,13 @@ class OrderAccommodation extends Model
 
     protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderAccommodations = OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
+
+        return $orderAccommodations;
+    }
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrderCustomer::class);
@@ -29,15 +36,8 @@ class OrderAccommodation extends Model
         return AccommodationComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
-    public function accommodationInventoryTour() {
-        return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
-    }
-
-
-    public static function findByOrderCustomer($orderCustomerId)
+    public function accommodationInventoryTour()
     {
-        $orderAccommodations = OrderAccommodation::where('order_customer_id',$orderCustomerId)->get();
-
-        return $orderAccommodations;
+        return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
 }

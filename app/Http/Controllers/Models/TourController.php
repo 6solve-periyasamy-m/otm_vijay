@@ -22,7 +22,7 @@ class TourController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Tour::RULES);
+        $request->validate(Tour::getValidationRules());
         $tour = Tour::create([
             'event_id' => $request->input('event_id'),
             'name' => $request->input('name'),
@@ -55,7 +55,7 @@ class TourController extends Controller
 
     public function update(Request $request, Tour $tour)
     {
-        $request->validate(Tour::RULES);
+        $request->validate(Tour::getValidationRules());
         $tour->update([
             'event_id' => $request->input('event_id'),
             'name' => $request->input('name'),

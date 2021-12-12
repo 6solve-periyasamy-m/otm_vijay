@@ -21,6 +21,7 @@ class HatSizeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(HatSize::getValidationRules());
         $hatSize = HatSize::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class HatSizeController extends Controller
 
     public function update(Request $request, HatSize $hatSize)
     {
+        $request->validate(HatSize::getValidationRules());
         $hatSize->update([
             'name' => $request->input('name'),
         ]);
