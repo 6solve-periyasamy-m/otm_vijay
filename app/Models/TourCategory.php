@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class TourCategory extends Model
 {
     use HasFactory;
+    protected $fillable = ['name',];
+
+    public static function getValidationRules()
+    {
+        return ['name' => 'required'];
+    }
 
     public function tours()
     {
