@@ -10,6 +10,7 @@
             $('#flights-table').DataTable({fixedHeader: true});
             $('#transports-table').DataTable({fixedHeader: true});
             $('#installments-table').DataTable({fixedHeader: true});
+            $('#merchandise-table').DataTable({fixedHeader: true});
         });
     </script>
 @endsection
@@ -286,6 +287,7 @@
             </div>
         </div>
     </div>
+    {{-- Payment Installment Section --}}
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Payment Installments</h2>        
@@ -335,6 +337,63 @@
                             <form id="paymentInstallment-{{ $installment->id }}-delete"
                                 action="{{ route('payment-installments.delete', ['tour' => $tour, 'paymentInstallment' => $installment,]) }}"
                                 method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+    {{-- Merchandise Section --}}
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Merchandise</h2>
+    </div>
+    <div class="card">
+        <div class="card-body text-end">
+            <a href="{{ route('merchandise.create', ['tour' => $tour,]) }}" class="btn btn-primary">
+                <i class="icon-plus"></i>
+                <span>Create</span>
+            </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table id="merchandise-table" class="table table-striped table-responsive-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Component Type</th>
+                    <th scope="col">Purchase Price</th>
+                    <th scope="col">Sales Price</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($tour->merchandise as $merchandise)
+                    <tr>
+                        <td style="min-width: 200px">{{ $merchandise->name }}</td>
+                        <td>{{ $merchandise->tour_component_type }}</td>
+                        <td>{{ $merchandise->purchase_price }}</td>
+                        <td>{{ $merchandise->sales_price }}</td>
+                        <td>{{ $merchandise->notes }}</td>
+                        <td class="actions">
+                            @can('update', \App\Models\Merchandise::class)
+                                <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <i class="icon-trash"></i>
+                                        </span>
+                            @endcan
+                            @can('delete', \App\Models\Merchandise::class)
+                                <a href="#" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                <form action="{{ route('merchandise.delete', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" method="post" id="merchandise-{{$merchandise->id}}-delete">
+                                    @csrf
+                                </form>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <i class="icon-trash"></i>
+                                        </span>
+                            @endcan
                         </td>
                     </tr>
                 @endforeach
