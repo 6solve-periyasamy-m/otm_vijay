@@ -128,6 +128,16 @@ class SettingsTableSeeder extends Seeder
 
 <p>[SETTING_COMPANY_NAME]</p>',
             ),
+            17 =>
+            array (
+                'key' => 'system.format.date',
+                'value' => 'd/m/Y',
+            ),
+            18 =>
+            array (
+                'key' => 'system.format.time',
+                'value' => 'H:i',
+            ),
         ));
         
         

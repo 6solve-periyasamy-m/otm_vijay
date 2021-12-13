@@ -11,7 +11,8 @@ class Currency extends Model
 
     protected $fillable = ['code', 'name', 'symbol'];
 
-    public function countries() {
+    public function countries()
+    {
         return $this->belongsToMany(Country::class, 'country_currencies');
     }
 

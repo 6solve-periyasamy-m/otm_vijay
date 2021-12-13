@@ -29,7 +29,7 @@
                         <th scope="col">Verified</th>
                         <th scope="col">Roles</th>
                         <th scope="col">Created</th>
-                        @can('edit', \App\Models\User::class)
+                        @can('update', \App\Models\User::class)
                             <th scope="col">Actions</th>
                         @endcan
                     </tr>
@@ -38,9 +38,9 @@
                     <tr>
                         <th scope="row">{{ $user->name }}</th>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->email_verified_at }}</td>
+                        <td>{{ StringFormatter::formatDateTime($user->email_verified_at) }}</td>
                         <td>{{ $user->roles->implode('title', ', ') }}</td>
-                        <td>{{ $user->created_at }}</td>
+                        <td>{{ StringFormatter::formatDateTime($user->created_at) }}</td>
                         @can('update', \App\Models\User::class)
                             @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel())
                             <td>

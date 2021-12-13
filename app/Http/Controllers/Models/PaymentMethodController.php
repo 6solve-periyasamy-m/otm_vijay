@@ -21,6 +21,7 @@ class PaymentMethodController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(PaymentMethod::getValidationRules());
         $paymentMethod = PaymentMethod::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class PaymentMethodController extends Controller
 
     public function update(Request $request, PaymentMethod $paymentMethod)
     {
+        $request->validate(PaymentMethod::getValidationRules());
         $paymentMethod->update([
             'name' => $request->input('name'),
         ]);

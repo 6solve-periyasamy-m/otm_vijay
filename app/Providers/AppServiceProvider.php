@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Customer;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use App\Actions\getTourComponentListAction;
-use App\Actions\getOrderCustomersAction;
-use App\Actions\getOrderCustomerComponentsAction;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        Cashier::useCustomerModel(Customer::class);
     }
 }

@@ -12,4 +12,9 @@ class HatSize extends Model
     use SoftDeletes;
 
     protected $fillable = ['name',];
+
+    public static function getValidationRules()
+    {
+        return ['name' => 'required|unique:hat_sizes,name',];
+    }
 }

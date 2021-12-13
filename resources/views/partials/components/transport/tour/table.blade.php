@@ -29,6 +29,7 @@
             ]
         });
     });
+    @can('create', \App\Models\TransportInventoryTour::class)
     function getSelectedTransportInventory() {
         let ids = [];
         transportTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -46,7 +47,9 @@
             data: { "type": $(".transport-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
+    @endcan
 </script>
+@can('create', \App\Models\TransportInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select transport-component-type-select">
         <option value="Included" selected>Included</option>
@@ -58,6 +61,7 @@
         <span>Add Components</span>
     </a>
 </div>
+@endcan
 <table style="width: 100%;" class="table table-striped transport-inventory-table">
     <thead class="thead-dark">
     <tr>
