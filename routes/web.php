@@ -24,6 +24,7 @@ use App\Http\Controllers\Models\FlightInventoryTourController;
 use App\Http\Controllers\Models\HatSizeController;
 use App\Http\Controllers\Models\LocationTypeController;
 use App\Http\Controllers\Models\ManualAdjustmentController;
+use App\Http\Controllers\Models\MerchandiseController;
 use App\Http\Controllers\Models\OperatorController;
 use App\Http\Controllers\Models\OrderController;
 use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
@@ -52,8 +53,6 @@ use App\Models\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -465,6 +464,17 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::get('/update', [PaymentInstallmentController::class, 'edit'])->name('payment-installments.edit')->middleware('bouncer:Tour,update');
                     Route::post('/update', [PaymentInstallmentController::class, 'update'])->name('payment-installments.update')->middleware('bouncer:Tour,update');
                     Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour,update');
+                });
+            });
+            Route::prefix('merchandise')->group(function () {
+                Route::get('/', [MerchandiseController::class, 'index'])->name('merchandise.all');
+                Route::get('/create', [MerchandiseController::class, 'create'])->name('merchandise.create');
+                Route::post('/create', [MerchandiseController::class, 'store'])->name('merchandise.store');
+                Route::prefix('{merchandise}')->group(function () {
+                    Route::get('/', [MerchandiseController::class, 'view'])->name('merchandise.view');
+                    Route::get('/update', [MerchandiseController::class, 'edit'])->name('merchandise.edit');
+                    Route::post('/update', [MerchandiseController::class, 'update'])->name('merchandise.update');
+                    Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('merchandise.delete');
                 });
             });
         });

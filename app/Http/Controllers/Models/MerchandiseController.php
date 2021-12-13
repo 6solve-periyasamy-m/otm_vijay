@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\Models;
+
+use App\Http\Controllers\Controller;
+use App\Models\Merchandise;
+use App\Models\Tour;
+use Illuminate\Http\Request;
+
+class MerchandiseController extends Controller
+{
+
+    public function index(Tour $tour)
+    {
+        return view('pages.models.merchandise.table', ['merchandises' => Merchandise::all(), 'tour' => $tour,]);
+    }
+
+    public function create(Tour $tour)
+    {
+        return view('pages.models.merchandise.create', ['tour' => $tour,]);
+    }
+
+    public function store(Request $request, Tour $tour)
+    {
+        $request->validate(Merchandise::getValidationRules());
+        $merchandise = Merchandise::make([
+            'name' => $request->input('name'),
+            'tour_component_type' => $request->input('tour_component_type'),
+            'stock' => $request->input('stock'),
+            'purchase_price' => $request->input('purchase_price'),
+            'sales_price' => $request->input('sales_price'),
+            'notes' => $request->input('notes'),
+        ]);
+        $tour->merchandise()->save($merchandise);
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
+    public function view(Tour $tour, Merchandise $merchandise)
+    {
+        return view('pages.models.merchandise.view', ['merchandise' => $merchandise, 'tour' => $tour,]);
+    }
+
+    public function edit(Tour $tour, Merchandise $merchandise)
+    {
+        return view('pages.models.merchandise.update', ['merchandise' => $merchandise, 'tour' => $tour,]);
+    }
+
+    public function update(Request $request, Tour $tour, Merchandise $merchandise)
+    {
+        $request->validate(Merchandise::getValidationRules());
+        $merchandise->update([
+            'name' => $request->input('name'),
+            'tour_component_type' => $request->input('tour_component_type'),
+            'stock' => $request->input('stock'),
+            'purchase_price' => $request->input('purchase_price'),
+            'sales_price' => $request->input('sales_price'),
+            'notes' => $request->input('notes'),
+        ]);
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
+    public function destroy(Tour $tour, Merchandise $merchandise)
+    {
+        $merchandise->delete();
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+}
