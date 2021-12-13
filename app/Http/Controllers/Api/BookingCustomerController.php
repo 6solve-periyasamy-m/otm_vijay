@@ -166,8 +166,8 @@ class BookingCustomerController extends ApiController
 
         $customerRepo = new CustomerRepository();
         $customerData = [
-            'home_address_id' => isset($customer) ? $customer->home_address_id : 0,
-            'billing_address_id' => isset($customer) ? $customer->billing_address_id : 0,
+            'home_address_id' => isset($customer) ? $customer->home_address_id : 1,
+            'billing_address_id' => isset($customer) ? $customer->billing_address_id : 1,
             'email_address' => $request->email_address,
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
@@ -208,7 +208,7 @@ class BookingCustomerController extends ApiController
             }
             $customer = $customerRepo->create($customerData);
         }
-
+Log::debug('customer check', [$customer]);
         if (!$isLead) {
             $bookingRepo = new BookingRepository();
             $booking = $bookingRepo->findBookingByToken($token);
