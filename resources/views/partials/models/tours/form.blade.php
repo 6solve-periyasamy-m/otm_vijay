@@ -1,11 +1,23 @@
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
+@can('create', \App\Models\Event::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
              'route' => 'events', 'createRoute' => route('events.create'), 'width' => 6,])
+@else
+@include('partials.fields.selector.default',
+            ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
+             'route' => 'events', 'width' => 6,])
+@endcan
+@can('create', \App\Models\TourCategory::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
              'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 6,])
+@else
+@include('partials.fields.selector.default',
+        ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
+         'route' => 'tour-categories', 'width' => 6,])
+@endcan
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.date',
             ['name' => 'Start Date', 'field' => 'date_from', 'value' => $date_from ?? null,
