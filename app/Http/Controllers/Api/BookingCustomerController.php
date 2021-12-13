@@ -208,7 +208,7 @@ class BookingCustomerController extends ApiController
             }
             $customer = $customerRepo->create($customerData);
         }
-Log::debug('customer check', [$customer]);
+        // Log::debug('customer check', [$customer]);
         if (!$isLead) {
             $bookingRepo = new BookingRepository();
             $booking = $bookingRepo->findBookingByToken($token);
