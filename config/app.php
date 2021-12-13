@@ -1,6 +1,6 @@
 <?php
 
-use App\Facades\CurrencyFacade;
+use App\Facades\StringFormatterFacade;
 
 return [
 
@@ -176,7 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\CurrencyFacadesProvider::class,
+        App\Providers\StringFormatProvider::class,
 
     ],
 
@@ -230,12 +230,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
-        'CurrencyFormatter' => CurrencyFacade::class,
+        'StringFormatter' => StringFormatterFacade::class,
 
     ],
     // this apps settings
     'setting' => [
         // if /booking path returns a form with event/tour selectors
         'booking-selection' => false
-    ]
+    ],
 ];

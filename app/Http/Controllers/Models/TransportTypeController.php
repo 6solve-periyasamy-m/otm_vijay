@@ -21,6 +21,7 @@ class TransportTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(TransportType::getValidationRules());
         $transportType = TransportType::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class TransportTypeController extends Controller
 
     public function update(Request $request, TransportType $transportType)
     {
+        $request->validate(TransportType::getValidationRules());
         $transportType->update([
             'name' => $request->input('name'),
         ]);

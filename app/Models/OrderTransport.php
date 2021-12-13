@@ -14,6 +14,13 @@ class OrderTransport extends Model
 
     protected $fillable = ['order_customer_id', 'transport_inventory_tour_id'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderTransports = OrderTransport::where('order_customer_id', $orderCustomerId)->get();
+
+        return $orderTransports;
+    }
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrderCustomer::class);
@@ -29,14 +36,8 @@ class OrderTransport extends Model
         return TransportComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
-    public function transportInventoryTour() {
-        return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
-    }
-
-    public static function findByOrderCustomer($orderCustomerId)
+    public function transportInventoryTour()
     {
-        $orderTransports = OrderTransport::where('order_customer_id',$orderCustomerId)->get();
-
-        return $orderTransports;
+        return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 }

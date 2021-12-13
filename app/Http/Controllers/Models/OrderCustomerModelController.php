@@ -18,7 +18,7 @@ class OrderCustomerModelController extends Controller
 
     public function create(Order $order)
     {
-        return view('pages.models.order_customers.create', ['order' => $order, ]);
+        return view('pages.models.order_customers.create', ['order' => $order,]);
     }
 
     public function store(Request $request, Order $order)
@@ -57,6 +57,6 @@ class OrderCustomerModelController extends Controller
     public function destroy(Order $order, OrderCustomer $orderCustomer)
     {
         $orderCustomer->delete();
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

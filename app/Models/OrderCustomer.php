@@ -12,10 +12,11 @@ class OrderCustomer extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['order_id','customer_id','tour_cost','single_occupancy_surcharge','travel_insurer','policy_number',];
+    protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',];
     protected $cascadeDeletes = ['orderAccommodation', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'customer_id' => 'exists:customers,id',
             'tour_cost' => 'numeric',
@@ -23,12 +24,12 @@ class OrderCustomer extends Model
         ];
     }
 
-    public function order() 
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function customer() 
+    public function customer()
     {
         return $this->belongsTo(Customer::class);
     }
@@ -38,19 +39,23 @@ class OrderCustomer extends Model
         return $this->hasMany(OrderAccommodation::class, 'order_customer_id');
     }
 
-    public function orderActivities() {
+    public function orderActivities()
+    {
         return $this->hasMany(OrderActivity::class, 'order_customer_id');
     }
 
-    public function orderFlights() {
+    public function orderFlights()
+    {
         return $this->hasMany(OrderFlight::class, 'order_customer_id');
     }
 
-    public function orderTransports() {
+    public function orderTransports()
+    {
         return $this->hasMany(OrderTransport::class, 'order_customer_id');
     }
 
-    public function adjustments() {
+    public function adjustments()
+    {
         return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
     }
 }

@@ -14,9 +14,10 @@ class ActivityInventoryTour extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $cascadeDeletes = ['orders'];
-    protected $fillable = ['tour_id','activity_inventory_id','tour_component_type','tour_sales_price',];
+    protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'tour_component_type' => [
                 'required',
@@ -27,11 +28,13 @@ class ActivityInventoryTour extends Model
         ];
     }
 
-    public function activityInventory() {
+    public function activityInventory()
+    {
         return $this->belongsTo(ActivityInventory::class);
     }
 
-    public function orders() {
+    public function orders()
+    {
         return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
     }
 }

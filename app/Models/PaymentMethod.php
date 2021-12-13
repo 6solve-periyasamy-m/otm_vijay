@@ -11,4 +11,9 @@ class PaymentMethod extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name',];
+
+    public static function getValidationRules()
+    {
+        return ['name' => 'required|unique:payment_methods,name'];
+    }
 }

@@ -14,6 +14,14 @@ class OrderActivity extends Model
 
     protected $fillable = ['order_customer_id', 'activity_inventory_tour_id'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderActivities = OrderActivity::where('order_customer_id', $orderCustomerId)->get();
+
+
+        return $orderActivities;
+    }
+
     public function orderCustomers()
     {
         return $this->belongsTo(OrderCustomer::class);
@@ -32,14 +40,6 @@ class OrderActivity extends Model
     public function activityInventoryTour()
     {
         return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
-    }
-
-    public static function findByOrderCustomer($orderCustomerId)
-    {
-        $orderActivities = OrderActivity::where('order_customer_id',$orderCustomerId)->get();
-
-
-        return $orderActivities;
     }
 
 }
