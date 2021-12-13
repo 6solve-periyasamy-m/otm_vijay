@@ -19,7 +19,7 @@ interface AccommodationRepositoryInterface {
     public function getAccommodationInventoryForTour(Tour $tour);
     public function getAccommodationBooking(Booking $booking, $travellerIds);
     public function loadRoomsForTour(Tour $tour);
-    public function updateAccommodationBooking($booking, $room, $traveller, $customer_id);
+    public function updateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id);
     public function remove($tourIds, $groupIds);
 }
 
@@ -146,13 +146,15 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         return true;
     }
 
-    public function updateAccommodationBooking($booking, $room, $traveller, $customer_id)
+    public function updateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id)
     {
         /**
          * customer_id books room
          * if shares, then shares is an array of customer_id
          */
-        Log::debug('UpdateAccommodationBooking', [$room]);
+// inspect room: does accommodation_inventory_id exist here?
+// inspect $accommodation_inventory_tour_id passed in
+Log::debug('UpdateAccommodationBooking', [$room, $accommodation_inventory_tour_id]);
         $booking_id = $booking->id;
         $customer_id = $customer_id;
         $room_share_ids = null;

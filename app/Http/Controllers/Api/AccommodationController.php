@@ -111,7 +111,7 @@ class AccommodationController extends ApiController
     public function postAccommodationReservation(Request $request)
     {
         $traveller = $request->traveller;
-
+        $accommodation_inventory_tour_id = $request->accommodation_inventory_tour_id;
         $booking_token = $request->token;
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($booking_token);
@@ -124,7 +124,7 @@ class AccommodationController extends ApiController
         }
 
         $accommodationRepository = new AccommodationRepository();
-        $results = $accommodationRepository->updateAccommodationBooking($booking, $room, $traveller, $customer_id);
+        $results = $accommodationRepository->updateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id);
  
         return response()->json(['success' => true, 'accommodation' => $results]);
     }

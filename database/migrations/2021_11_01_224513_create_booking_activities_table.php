@@ -17,7 +17,7 @@ class CreateBookingActivitiesTable extends Migration
             $table->id();
             $table->foreignId('booking_id')->constrained();
             $table->foreignId('customer_id')->constrained();
-            $table->foreignId('activity_inventory_id')->constrained();
+            $table->foreignId('activity_inventory_tour_id')->constrained();
             $table->timestamps();
         });
     }

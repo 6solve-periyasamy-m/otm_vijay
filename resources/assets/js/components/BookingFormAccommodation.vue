@@ -239,6 +239,7 @@ export default {
                         type: 'accommodation',
                         traveller: data,
                         tour: this.tour,
+                        inventory_tour_id: this.accommodation_inventory_tour_id,
                         token: this.booking_token
                     })
                     .then(response => {

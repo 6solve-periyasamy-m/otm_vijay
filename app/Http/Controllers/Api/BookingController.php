@@ -5,19 +5,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Order;
-use App\Models\Flight;
-use App\Models\Booking;
-
-use App\Models\Customer;
-// use App\Models\Tour;
 use Illuminate\Http\Request;
-use App\Models\OrderCustomer;
-use App\Models\CustomerOrderDetail;
 use Illuminate\Support\Facades\Log;
-use App\Repository\ActionsRepository;
 use App\Repository\BookingRepository;
+use App\Repository\FlightsRepository;
+use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
+use App\Repository\AccommodationRepository;
+use App\Repository\ActivityBookingRepository;
+use App\Repository\TransportBookingRepository;
+use App\Repository\AdditionalTravellerRepository;
 
 class BookingController extends ApiController
 {
@@ -66,47 +63,16 @@ Log::debug('Booking:Create', [$tour_id, $token]);
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
-    /***
-     * order section :: use booking->create to make a booking
-     * this may be used to create an order when booking paid
-     */
-    /**
-     * createOrder 
-     *
-     * @param Request $request
-     * @return JSON (order object)
-     */
-    public function createOrder(Request $request)
+    public function gatherDetails($token)
     {
-        throw new \Exception('Booking:createOrder deprecated call');
-    
-        $order = new Order();
-        $order->quote_id = null;
-        $order->tour_id = $request->tour;
-        //$order->total_order_value = null;
-        $order->internal_notes = 'Created by '.$_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'];
-        $order->order_status_id = 1;
-        $order->token = md5(uniqId());
-        $order->save();
-        // Order::insert([
-        //     'tour_id' => $order->tour_id, 
-        //     'notes' => $order->notes,
-        //     'token' => $order->token]);
-        $this->logging == 'orders' && Log::info('create order for tour ' . $request->tour);
-        $this->logging == 'orders' && Log::info('order id ', $order->toArray());
+        $bookingRepo = new BookingRepository();
+        $booking = $bookingRepo->findBookingByToken($token);
 
-        return response()->json(["success" => true, "order" => $order]);
-    }
-
-    public function getInfo() 
-    {
-        $cod = new CustomerOrderDetail();
-        $orders = $cod->select('orders_customer_id')->groupBy('orders_customer_id')->get();
-        $customers = $cod->select('orders_customer_id')->join('orders_customers', 'customer_order_details.orders_customer_id', 'orders_customers.id')
-            ->groupBy('orders_customer_id')
-            ->get();
-        $active = $orders->count();
-        $customers = $customers->count();
-        return response()->json(["success" => true, "customers" => $customers, "active" => $active]);
+        $customerRepo = new CustomerRepository();
+        $travellerRepo = new AdditionalTravellerRepository();
+        $flightsRepo = new FlightsRepository();
+        $accommodationRepo = new AccommodationRepository();
+        $activityRepo = new ActivityBookingRepository();
+        $transportRepo = new TransportBookingRepository();
     }
 }
