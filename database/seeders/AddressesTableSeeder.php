@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AddressesTableSeeder extends Seeder
 {
@@ -14,14 +15,28 @@ class AddressesTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
-        \DB::table('addresses')->delete();
-        
-        \DB::table('addresses')->insert(array (
+        DB::table('addresses')->delete();
+        DB::table('addresses')->insert(array (
             0 => 
             array (
                 'id' => 1,
+                'name' => 'No address',
+                'address_parent_id' => 1,
+                'location_type_id' => 1,
+                'address_line_1' => '',
+                'address_line_2' => NULL,
+                'address_line_3' => NULL,
+                'town' => '',
+                'region' => '',
+                'country_id' => 1,
+                'postcode' => '',
+                'deleted_at' => NULL,
+                'created_at' => '2021-11-22 12:36:26',
+                'updated_at' => '2021-11-22 12:36:26',
+            ),
+            1 => 
+            array (
+                'id' => 2,
                 'name' => 'Hilton London Kensington',
                 'address_parent_id' => 2,
                 'location_type_id' => 7,
@@ -36,9 +51,9 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2021-11-22 12:36:26',
                 'updated_at' => '2021-11-22 12:36:26',
             ),
-            1 => 
+            2 => 
             array (
-                'id' => 2,
+                'id' => 3,
                 'name' => 'The Queens Hotel',
                 'address_parent_id' => 2,
                 'location_type_id' => 7,
@@ -53,9 +68,9 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2021-11-22 12:43:22',
                 'updated_at' => '2021-11-22 12:43:22',
             ),
-            2 => 
+            3 => 
             array (
-                'id' => 3,
+                'id' => 4,
                 'name' => 'Trip to Leeds City Museum',
                 'address_parent_id' => 3,
                 'location_type_id' => 6,
@@ -70,9 +85,9 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2021-11-22 12:46:26',
                 'updated_at' => '2021-11-22 12:46:26',
             ),
-            3 => 
+            4 => 
             array (
-                'id' => 4,
+                'id' => 5,
                 'name' => 'London Heathrow Airport',
                 'address_parent_id' => 4,
                 'location_type_id' => 1,
@@ -87,9 +102,9 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2021-11-22 12:50:10',
                 'updated_at' => '2021-11-22 12:50:10',
             ),
-            4 => 
+            5 => 
             array (
-                'id' => 5,
+                'id' => 6,
                 'name' => 'Leeds Bradford Airport',
                 'address_parent_id' => 4,
                 'location_type_id' => 1,
@@ -103,23 +118,6 @@ class AddressesTableSeeder extends Seeder
                 'deleted_at' => NULL,
                 'created_at' => '2021-11-22 12:52:48',
                 'updated_at' => '2021-11-22 12:52:48',
-            ),
-            5 => 
-            array (
-                'id' => 6,
-                'name' => 'Miss Celeste Gateley',
-                'address_parent_id' => 1,
-                'location_type_id' => NULL,
-                'address_line_1' => '65 Lumley Road',
-                'address_line_2' => 'Burley',
-                'address_line_3' => NULL,
-                'town' => 'Leeds',
-                'region' => 'West Yorkshire',
-                'country_id' => 66,
-                'postcode' => 'LS11 7NU',
-                'deleted_at' => NULL,
-                'created_at' => '2021-11-22 13:50:17',
-                'updated_at' => '2021-11-22 13:50:17',
             ),
             6 => 
             array (
@@ -141,6 +139,23 @@ class AddressesTableSeeder extends Seeder
             7 => 
             array (
                 'id' => 8,
+                'name' => 'Miss Celeste Gateley',
+                'address_parent_id' => 1,
+                'location_type_id' => NULL,
+                'address_line_1' => '65 Lumley Road',
+                'address_line_2' => 'Burley',
+                'address_line_3' => NULL,
+                'town' => 'Leeds',
+                'region' => 'West Yorkshire',
+                'country_id' => 66,
+                'postcode' => 'LS11 7NU',
+                'deleted_at' => NULL,
+                'created_at' => '2021-11-22 13:50:17',
+                'updated_at' => '2021-11-22 13:50:17',
+            ),
+            8 => 
+            array (
+                'id' => 9,
                 'name' => 'Birmingham Airport',
                 'address_parent_id' => 4,
                 'location_type_id' => 1,
@@ -156,7 +171,5 @@ class AddressesTableSeeder extends Seeder
                 'updated_at' => '2021-11-30 09:35:40',
             ),
         ));
-        
-        
     }
 }
