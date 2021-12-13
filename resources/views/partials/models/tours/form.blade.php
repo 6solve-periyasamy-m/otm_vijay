@@ -16,7 +16,7 @@
 @include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'value' => $stock_control_active ?? null,])
 @include('partials.fields.text', ['name' => 'Stock', 'field' => 'stock', 'value' => $stock ?? null,])
 @include('partials.fields.text', ['name' => 'Booking Form Url', 'field' => 'booking_form_url', 'value' => $booking_form_url ?? null,])
-@include('partials.fields.text', ['name' => 'Tour Colour Id', 'field' => 'tour_colour_id', 'value' => $tour_colour_id ?? null,])
+@include('partials.fields.text', ['name' => 'Tour Colour Id', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,])
 @include('partials.fields.checkbox', ['name' => 'Is Active', 'field' => 'is_active', 'value' => $is_active ?? null,])
 @include('partials.fields.prefab.notes')
 @include('partials.fields.submit')
