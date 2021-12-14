@@ -425,7 +425,7 @@ $(document).ready( function () {
                 @foreach($merchandise as $merch)
                     <tr>
                         <td>{{ $merch["tour"]->name }}</td>
-                        <td>{{ $merch["tour"]->tour_sales_price }}</td>
+                        <td>{{ StringFormatter::formatCurrency($merch["tour"]->tour_sales_price) }}</td>
                         <td>{{ $merch["tour"]->tour_component_type }}</td>
                         <td>
                             <form action="{{ route('orderMerchandiseDelete', ['id' => $merch['order']->id,]) }}" method="post">
