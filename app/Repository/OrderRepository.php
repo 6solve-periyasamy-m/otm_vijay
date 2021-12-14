@@ -185,6 +185,8 @@ class OrderRepository implements OrderRepositoryInterface
         $paid = self::getTotalPaid($order);
         $paid -= self::getOrderDepositAmount($order);
         $paid -= self::getOrderAddons($order)['additionalValue'];
+        $paid -= self::getCustomerAdjustmentTotal($order);
+        $paid -= self::getOrderAdjustmentTotal($order);
         foreach ($order->tour->paymentInstallments as $installment) {
             $paid -= ($installment->amount * self::getOrderCustomerCount($order));
             if ($paid < 0) {
