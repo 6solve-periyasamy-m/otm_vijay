@@ -6,6 +6,7 @@ use App\Models\OrderCustomer;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
+use App\Repository\OrderRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -54,5 +55,11 @@ class TourComponentController extends Controller
         $oCustomerId = $request->input('customer_id');
         $transportInventoryTourId = $request->input('transport_id');
         return TransportComponentRepository::grantAddonToCustomer($oCustomerId, $transportInventoryTourId);
+    }
+
+    public function addMerchandiseAddon(Request $request) {
+        $oCustomerId = $request->input('customer_id');
+        $merchandiseId = $request->input('merchandise_id');
+        return OrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
     }
 }

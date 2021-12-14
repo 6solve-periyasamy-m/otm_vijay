@@ -7,7 +7,7 @@
       'name' => $merchandise->name,
       'stock' => $merchandise->stock,
       'purchase_price' => $merchandise->purchase_price,
-      'sales_price' => $merchandise->sales_price,
+      'sales_price' => $merchandise->tour_sales_price,
       'notes' => $merchandise->notes,
     ])
 @endsection

@@ -28,7 +28,7 @@ class MerchandiseController extends Controller
             'tour_component_type' => $request->input('tour_component_type'),
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'tour_sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
         $tour->merchandise()->save($merchandise);
@@ -53,7 +53,7 @@ class MerchandiseController extends Controller
             'tour_component_type' => $request->input('tour_component_type'),
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price'),
-            'sales_price' => $request->input('sales_price'),
+            'tour_sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);

@@ -3,8 +3,10 @@
 namespace App\Transforms;
 
 use App\Models\Customer;
+use App\Models\OrderCustomer;
 use App\Models\PaymentMethod;
 use App\Models\Quote;
+use Illuminate\Support\Facades\Log;
 
 interface OrderTransformsInterface
 {
@@ -19,6 +21,8 @@ interface OrderTransformsInterface
     public static function getSelectPaymentMethods($filter);
 
     public static function getSelectedPaymentMethod($id);
+
+    public static function getAvailableMerchandise(OrderCustomer $orderCustomer, $filter);
 }
 
 class OrderTransforms implements OrderTransformsInterface
@@ -90,6 +94,24 @@ class OrderTransforms implements OrderTransformsInterface
         $data = [];
         $data['id'] = $method->id;
         $data['text'] = $method->name;
+        return $data;
+    }
+
+    public static function getAvailableMerchandise(OrderCustomer $orderCustomer, $filter)
+    {
+        $tour = $orderCustomer->order->tour;
+        $data = [];
+        $owned = [];
+        foreach ($orderCustomer->orderMerchandise as $orderMerch) $owned[] = $orderMerch->merchandise->id;
+        foreach ($tour->merchandise as $merch) {
+            if ($merch->tour_component_type === "Add-on") {
+                if (in_array($merch->id, $owned)) continue;
+                $subData = [];
+                $subData['id'] = $merch->id;
+                $subData['text'] = $merch->name . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($merch->tour_sales_price);
+                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            }
+        }
         return $data;
     }
 }

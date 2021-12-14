@@ -198,6 +198,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete')->middleware('bouncer:OrderCustomer,update');
             Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete')->middleware('bouncer:OrderCustomer,update');
             Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete')->middleware('bouncer:OrderCustomer,update');
+            Route::post('merchandise/{id}/delete', [OrderComponentController::class, 'deleteMerchandise'])->name('orderMerchandiseDelete')->middleware('bouncer:OrderCustomer,update');
         });
     });
 
@@ -635,3 +636,4 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
+Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderCustomerDetails($value));});

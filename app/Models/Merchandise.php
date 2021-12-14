@@ -10,7 +10,7 @@ class Merchandise extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','tour_component_type','stock','purchase_price','sales_price','notes'];
+    protected $fillable = ['name','tour_component_type','stock','purchase_price','tour_sales_price','notes'];
 
     public static function getValidationRules()
     {

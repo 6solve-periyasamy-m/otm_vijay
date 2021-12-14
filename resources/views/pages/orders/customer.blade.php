@@ -65,11 +65,19 @@ function addTransportAddon() {
     }
     location.reload();
 }
+function addMerchandiseAddon() {
+    let id = $('#merchandise_id-input').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('api.order.addon.add.merchandise') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'merchandise_id': id});
+    }
+    location.reload();
+}
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
+    $('#merchandise-table').DataTable({fixedHeader: true});
     $('#customer-adjustment-table').DataTable({fixedHeader: true});
     updateAccommodationSelectFields();
     updateActivitySelectFields();
@@ -113,11 +121,9 @@ $(document).ready( function () {
     </div>
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-
 <div class="heading pt-2 pb-md-3 pb-2">
     <h2 class="fw-bold">Customer</h2>        
 </div>
-
 <div class="otm-callout">
     <div class="row">
         <div class="col-12">
@@ -394,6 +400,47 @@ $(document).ready( function () {
         </div>
     </div>
 </div>
+{{-- Merchandise Section --}}
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="fw-bold">Merchandise</h4>
+        </div>
+        <div id="merchandise-new" class="d-flex justify-content-between mb-3 flex-wrap">
+            @include('partials.fields.selector.adder',
+                        ['field' => 'merchandise_id', 'preselect' => false,
+                        'fullRoute' => route('api.available-merchandise.select', ['orderCustomer' => $customer,]),
+                        'createRoute' => '#', 'onclick' => 'addMerchandiseAddon()', 'target' => ''])
+        </div>
+        <div id="merchandise-details">
+            <table id="merchandise-table" class="table table-striped table-responsive-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Cost</th>
+                    <th scope="col">Component Type</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($merchandise as $merch)
+                    <tr>
+                        <td>{{ $merch["tour"]->name }}</td>
+                        <td>{{ $merch["tour"]->tour_sales_price }}</td>
+                        <td>{{ $merch["tour"]->tour_component_type }}</td>
+                        <td>
+                            <form action="{{ route('orderMerchandiseDelete', ['id' => $merch['order']->id,]) }}" method="post">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+</div>
+{{-- Adjustments Section --}}
 <div class="card">
     <div class="card-body">
         <div class="card-title">

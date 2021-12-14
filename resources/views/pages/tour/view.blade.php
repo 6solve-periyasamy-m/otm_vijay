@@ -374,7 +374,7 @@
                         <td style="min-width: 200px">{{ $merchandise->name }}</td>
                         <td>{{ $merchandise->tour_component_type }}</td>
                         <td>{{ $merchandise->purchase_price }}</td>
-                        <td>{{ $merchandise->sales_price }}</td>
+                        <td>{{ $merchandise->tour_sales_price }}</td>
                         <td>{{ $merchandise->notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise::class)
