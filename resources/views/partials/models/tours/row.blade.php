@@ -2,8 +2,8 @@
     <td><a href="{{ route('tours.view', ['tour' => $tour->id,]) }}">{{ $tour->name }}</a></td>
     <td>{{ $event }}</td>
     <td>{{ $description }}</td>
-    <td>{{ $date_from }}</td>
-    <td>{{ $date_to }}</td>
+    <td>{{ StringFormatter::formatDate($date_from) }}</td>
+    <td>{{ StringFormatter::formatDate($date_to) }}</td>
     <td>{{ $base_price_per_person }}</td>
     <td>{{ $margin }}</td>
     <td>{{ $deposit }}</td>

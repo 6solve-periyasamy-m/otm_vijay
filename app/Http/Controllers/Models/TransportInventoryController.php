@@ -17,12 +17,12 @@ class TransportInventoryController extends Controller
 
     public function create(Transport $transport)
     {
-        return view('pages.models.transport_inventories.create', ['transport' => $transport, ]);
+        return view('pages.models.transport_inventories.create', ['transport' => $transport,]);
     }
 
     public function store(Request $request, Transport $transport)
     {
-        $request->validate(TransportInventory::RULES);
+        $request->validate(TransportInventory::getValidationRules());
         $transportInventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
             'departs_at' => $request->input('departs_at'),
@@ -51,7 +51,7 @@ class TransportInventoryController extends Controller
 
     public function update(Request $request, Transport $transport, TransportInventory $transportInventory)
     {
-        $request->validate(TransportInventory::RULES);
+        $request->validate(TransportInventory::getValidationRules());
         $transportInventory->update([
             'travel_class_id' => $request->input('travel_class_id'),
             'departs_at' => $request->input('departs_at'),
@@ -69,6 +69,9 @@ class TransportInventoryController extends Controller
 
     public function destroy(Transport $transport, TransportInventory $transportInventory)
     {
+        if ($transportInventory->tourComponents()->count() > 0) {
+            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Transport Inventory']));
+        }
         $transportInventory->delete();
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }

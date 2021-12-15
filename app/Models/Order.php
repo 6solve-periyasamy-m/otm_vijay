@@ -13,13 +13,16 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
+    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes',];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
+    protected $casts = ['ordered_on' => 'datetime',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'quote_id' => 'nullable|exists:quotes,id',
-            'tour_id'=> 'required|exists:tours,id',
+            'tour_id' => 'required|exists:tours,id',
+            'ordered_on' => 'required|date'
         ];
     }
 
@@ -29,10 +32,10 @@ class Order extends Model
             . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
-            . substr(str_shuffle(str_repeat($x='ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4/strlen($x)))), 1, 4);
+            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
 
-    public function quote() 
+    public function quote()
     {
         return $this->hasOne(Quote::class);
     }
@@ -47,27 +50,33 @@ class Order extends Model
         return $this->hasOne(OrderStatus::class);
     }
 
-    public function orderCustomers() {
+    public function orderCustomers()
+    {
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
-    public function payments() {
+    public function payments()
+    {
         return $this->hasMany(Payment::class, 'order_id');
     }
 
-    public function leadBooker() {
+    public function leadBooker()
+    {
         return $this->belongsTo(OrderCustomer::class, 'lead_booker_id');
     }
 
-    public function adjustments() {
+    public function adjustments()
+    {
         return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 
-    public function reminders() {
+    public function reminders()
+    {
         return $this->hasMany(PaymentReminder::class, 'order_id');
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return OrderRepository::getOrderStatus($this);
     }
 

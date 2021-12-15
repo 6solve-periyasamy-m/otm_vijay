@@ -65,6 +65,7 @@ class OrderRepository implements OrderRepositoryInterface
         $addonData = self::getOrderAddons($order);
         $totalOrderValue += $addonData['additionalValue'];
         $totalOrderValue += self::getOrderAdjustmentTotal($order);
+        $totalOrderValue += self::getCustomerAdjustmentTotal($order);
         $totalOrderValue += $order->tour->base_price_per_person * count($customers);
         $details['customers'] = $customers;
         $details['addons'] = $addonData['addons'];
@@ -145,7 +146,8 @@ class OrderRepository implements OrderRepositoryInterface
         $paidAmount = self::getPayments($order)['amount'];
         $cost = self::getCosts($order);
         $adjustments = self::getOrderAdjustmentTotal($order);
-        if (($cost + $adjustments) > $paidAmount) {
+        $customerAdjustments = self::getCustomerAdjustmentTotal($order);
+        if (($cost + $adjustments + $customerAdjustments) > $paidAmount) {
             $next = self::getNextPaymentDetails($order);
             if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
                 return ['status' => 'Payment Overdue', 'color' => 'danger'];
@@ -437,86 +439,14 @@ class OrderRepository implements OrderRepositoryInterface
         return $order->tour->deposit * self::getOrderCustomerCount($order);
     }
 
-    public static function getOrderFromBookingReference(string $bookingReference) : ?Order
+    public static function getCustomerAdjustmentTotal(Order $order)
     {
-        return Order::where('booking_reference', '=', $bookingReference)->first();
-    }
-
-    public static function isLeadBooker(Order $order, Customer $customer) : bool {
-        return $order->leadBooker->customer_id == $customer->id;
-    }
-
-    public static function isOrderCustomer(Order $order, Customer $customer) : bool {
+        $total = 0;
         foreach ($order->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->customer_id == $customer->id) return true;
-        }
-        return false;
-    }
-
-    public static function getCustomersForOrder(Order $order) {
-        $customers = [];
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $customers[] = $orderCustomer->customer;
-        }
-        return collect($customers);
-    }
-
-    public static function getCustomerInstallments(Order $order) {
-        $paid = self::getTotalPaid($order);
-        $paid -= self::getOrderDepositAmount($order);
-        $paid -= self::getOrderAddons($order)['additionalValue'];
-        $installments = [];
-        $installments[] = ['name' => 'Deposit', 'due' => 'With Order',
-            'status' => 'Paid in Full', 'color' => 'success',
-            'total' => self::getOrderDepositAmount($order), 'remaining' =>
-                self::getOrderDepositAmount($order), ];
-        $installmentNumber = 1;
-        foreach ($order->tour->paymentInstallments as $installment) {
-            $paid -= ($installment->amount * self::getOrderCustomerCount($order));
-            if ($paid <  0) {
-                if (Carbon::now()->isAfter($installment->due_on)) {
-                    $status = 'Payment Overdue';
-                    $color = 'danger';
-                } else {
-                    $status = 'Balance Outstanding';
-                    $color = 'warning';
-                }
-                $installmentDue = abs($paid);
-                $paid = 0;
-                $installmentPaid = $installment->amount - $installmentDue;
-            } else {
-                $status = 'Paid in Full';
-                $color = 'success';
-                $installmentDue = 0;
-                $installmentPaid = $installment->amount;
+            foreach ($orderCustomer->adjustments as $adjustment) {
+                $total += $adjustment->amount;
             }
-            $installments[] = ['name' => 'Installment ' . $installmentNumber, 'due' => $installment->due_on,
-                'status' => $status, 'color' => $color, 'total' => $installment->amount, 'remaining' => $installmentDue, 'paid' => $installmentPaid];
         }
-        return $installments;
-    }
-
-    public static function getCustomerOrderDetails(Customer $customer, Order $order)
-    {
-        if (!self::isLeadBooker($order, $customer)) abort(404);
-        $data = [];
-        $data['order'] = $order;
-        $data['lead'] = $customer;
-        $data['orderCustomers'] = $order->orderCustomers;
-        $data['customers'] = $order->customers()->toArray();
-        $data['payments'] = $order->payments;
-        $data['status'] = $order->getStatus();
-        $data['installments'] = self::getCustomerInstallments($order);
-        return $data;
-    }
-
-    public static function getCustomerOrders(Customer $customer) {
-        $data = [];
-        foreach ($customer->orderCustomers as $orderCustomer) {
-            $order = $orderCustomer->order;
-            if (!self::isLeadBooker($order, $customer)) continue;
-            $data[$order->booking_reference] = self::getCustomerOrderDetails($customer, $order);
-        }
-        return $data;
+        return $total;
     }
 }

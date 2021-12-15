@@ -17,7 +17,7 @@ class ActivityInventoryTourController extends Controller
 
     public function create(Tour $tour)
     {
-        return view('pages.models.activity_inventory_tours.create', ['tour' => $tour, ]);
+        return view('pages.models.activity_inventory_tours.create', ['tour' => $tour,]);
     }
 
     public function store(Request $request, Tour $tour)
@@ -29,7 +29,7 @@ class ActivityInventoryTourController extends Controller
             'tour_sales_price' => $request->input('tour_sales_price'),
         ]);
         $tour->activityInventoryTours()->save($activityInventoryTour);
-        return redirect()->route('tours.view', ['tour' => $tour, ]);
+        return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
     public function view(Tour $tour, ActivityInventoryTour $activityInventoryTour)
@@ -50,12 +50,12 @@ class ActivityInventoryTourController extends Controller
             'tour_component_type' => $request->input('tour_component_type'),
             'tour_sales_price' => $request->input('tour_sales_price'),
         ]);
-        return redirect()->route('tours.view', ['tour' => $tour, ]);
+        return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
     public function destroy(Tour $tour, ActivityInventoryTour $activityInventoryTour)
     {
         $activityInventoryTour->delete();
-        return redirect()->route('tours.view', ['tour' => $tour, ]);
+        return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 }

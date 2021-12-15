@@ -28,6 +28,7 @@
             ]
         });
     });
+    @can('create', \App\Models\AccommodationInventoryTour::class)
     function getSelectedAccommodationInventory() {
         let ids = [];
         accommodationTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -45,18 +46,21 @@
             data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
+    @endcan
 </script>
+@can('create', \App\Models\AccommodationInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select accommodation-component-type-select">
         <option value="Included" selected>Included</option>
         <option value="Upgrade">Upgrade</option>
         <option value="Add-on">Add-on</option>
-    </select>    
+    </select>
     <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
         <i class="icon-plus"></i>
         <span>Add Components</span>
     </a>
 </div>
+@endcan
 <table style="width: 100%;" class="table table-striped accommodation-inventory-table">
     <thead class="thead-dark">
     <tr>

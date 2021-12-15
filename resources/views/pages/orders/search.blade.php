@@ -10,12 +10,14 @@
     </div>
     <div class="card">
         <div class="card-body text-end">
+            @can('create', \App\Models\Order::class)
             <div class="mb-3">
                 <a href="{{ route('orders.create') }}" class="btn btn-primary text-white">
                     <i class="icon-plus"></i>
                     Create Order
                 </a>
             </div>
+            @endcan
             <div>
                 <form action="{{ route("orders.all")}}" method="get">
                     <div class="input-group mb-3">

@@ -21,6 +21,7 @@ class TicketTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(TicketType::getValidationRules());
         $ticketType = TicketType::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class TicketTypeController extends Controller
 
     public function update(Request $request, TicketType $ticketType)
     {
+        $request->validate(TicketType::getValidationRules());
         $ticketType->update([
             'name' => $request->input('name'),
         ]);

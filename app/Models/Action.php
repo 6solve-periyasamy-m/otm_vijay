@@ -11,5 +11,5 @@ class Action extends Model
 
     // actions is a simple log for logging booking form actions and expecting it to evolve quickly
     // there are two controller actions
-    
+
 }

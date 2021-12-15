@@ -11,6 +11,7 @@
 @endsection
 
 @section('content')
+@can('create', \App\Models\Activity::class)
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('activities.create') }}">
@@ -19,6 +20,7 @@
         </a>
     </div>
 </div>
+@endcan
 <div class="card">
     <div class="card-body">
         <table id="activity" style="width: 100%;" class="table table-striped">

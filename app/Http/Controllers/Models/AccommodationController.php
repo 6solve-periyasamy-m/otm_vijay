@@ -24,7 +24,7 @@ class AccommodationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Accommodation::RULES);
+        $request->validate(Accommodation::getValidationRules());
         $accommodation = Accommodation::make([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -34,6 +34,7 @@ class AccommodationController extends Controller
         if ($request->input('use_existing') == 'on') {
             $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('accommodation'));
         } else {
+            $request->validate(Address::getValidationRules());
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
         }
         $accommodation->address_id = $address->id;
@@ -43,7 +44,7 @@ class AccommodationController extends Controller
 
     public function view(Accommodation $accommodation)
     {
-        return view('pages.components.accommodation', ['accommodation' => $accommodation, ]);
+        return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
     }
 
     public function edit(Accommodation $accommodation)
@@ -53,7 +54,7 @@ class AccommodationController extends Controller
 
     public function update(Request $request, Accommodation $accommodation)
     {
-        $request->validate(Accommodation::RULES);
+        $request->validate(Accommodation::getValidationRules());
         $accommodation->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -63,6 +64,7 @@ class AccommodationController extends Controller
         if ($request->input('use_existing') == 'on') {
             LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('accommodation'), $accommodation->address);
         } else {
+            $request->validate(Address::getValidationRules());
             LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'));
         }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
@@ -70,6 +72,11 @@ class AccommodationController extends Controller
 
     public function destroy(Accommodation $accommodation)
     {
+        foreach ($accommodation->inventory as $inventory) {
+            if ($inventory->tourComponents()->count() > 0) {
+                return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Accommodation']));
+            }
+        }
         $accommodation->delete();
         return redirect()->route('accommodations.all');
     }

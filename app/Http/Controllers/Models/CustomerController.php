@@ -57,7 +57,7 @@ class CustomerController extends Controller
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
         $homeAddress = Address::create([
-            'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' .  $request->input('last_name'),
+            'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' . $request->input('last_name'),
             'address_parent_id' => AddressParent::getParentId('customer'),
             'address_line_1' => $request->input('home_address_line_1'),
             'address_line_2' => $request->input('home_address_line_2'),
@@ -69,10 +69,9 @@ class CustomerController extends Controller
         $customer->home_address_id = $homeAddress->id;
         if ($request->input('home_is_billing') == 'on') {
             $customer->billing_address_id = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'))->id;
-        }
-        else {
+        } else {
             $billingAddress = Address::create([
-                'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' .  $request->input('last_name'),
+                'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' . $request->input('last_name'),
                 'address_parent_id' => AddressParent::getParentId('customer'),
                 'address_line_1' => $request->input('billing_address_line_1'),
                 'address_line_2' => $request->input('billing_address_line_2'),
@@ -83,7 +82,7 @@ class CustomerController extends Controller
             ]);
             $customer->billing_address_id = $billingAddress->id;
         }
-        if ($request->has('profile_picture')  && $request->file('profile_picture') != null) {
+        if ($request->has('profile_picture') && $request->file('profile_picture') != null) {
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         $customer->save();
@@ -139,8 +138,7 @@ class CustomerController extends Controller
         $customer->homeAddress->save();
         if ($request->input('home_is_billing') == 'on') {
             LocationsRepository::cloneAddressToAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->billingAddress);
-        }
-        else {
+        } else {
             $customer->billingAddress->update([
                 'address_line_1' => $request->input('billing_address_line_1'),
                 'address_line_2' => $request->input('billing_address_line_2'),
@@ -151,7 +149,7 @@ class CustomerController extends Controller
             ]);
             $customer->billingAddress->save();
         }
-        if ($request->has('profile_picture')  && $request->file('profile_picture') != null) {
+        if ($request->has('profile_picture') && $request->file('profile_picture') != null) {
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         $customer->save();
@@ -160,6 +158,9 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer)
     {
+        if ($customer->orderCustomers()->count() > 0) {
+            return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Customer', 'parent' => 'Order']));
+        }
         $customer->delete();
         return redirect()->route('customers.all');
     }
