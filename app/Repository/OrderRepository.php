@@ -191,7 +191,7 @@ class OrderRepository implements OrderRepositoryInterface
             $paid -= ($installment->amount * self::getOrderCustomerCount($order));
             if ($paid < 0) {
                 return [
-                    'amount' => $paid * -1,
+                    'amount' => $installment->amount < $paid * -1 ? $installment->amount : $paid * -1,
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
