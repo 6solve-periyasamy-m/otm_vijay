@@ -414,7 +414,7 @@ class OrderRepository implements OrderRepositoryInterface
                 }
             }
             foreach ($orderCustomer->orderMerchandise as $orderInventory) {
-                $merchandise = $orderInventory->transportInventoryTour;
+                $merchandise = $orderInventory->merchandise;
                 if ($merchandise->tour_component_type !== "Included") {
                     if (isset($data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id])) {
                         $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] + 1;
