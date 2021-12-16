@@ -31,6 +31,9 @@ class MerchandiseController extends Controller
             'tour_sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
+        if ($request->has('image')) {
+            $merchandise->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
         $tour->merchandise()->save($merchandise);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
@@ -56,6 +59,9 @@ class MerchandiseController extends Controller
             'tour_sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
+        if ($request->has('image')) {
+            $merchandise->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 

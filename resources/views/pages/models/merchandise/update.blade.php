@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('merchandise.update', ['tour' => $tour, 'merchandise' => $merchandise,]),])
+@extends('layout.form', ['action' => route('merchandise.update', ['tour' => $tour, 'merchandise' => $merchandise,]), 'multipart' => true,])
 
 @section('title', 'Update Merchandise')
 

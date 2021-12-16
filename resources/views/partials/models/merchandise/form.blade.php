@@ -7,8 +7,9 @@
         'Add-on' => 'Add-on',
     ],
     'selected' => $value ?? 'Add-on',
-    'width' => 6,
+    'width' => 4,
 ])
+@include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2,])
 @include('partials.fields.text',
     ['name' => 'Stock', 'field' => 'stock', 'value' => $stock ?? null, 'width' => 4,])
 @include('partials.fields.text',

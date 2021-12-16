@@ -18,7 +18,8 @@ class CreateMerchandisesTable extends Migration
             $table->string('name');
             $table->string('tour_component_type');
             $table->foreignId('tour_id')->constrained()->onDelete('cascade');
-            $table->float('stock');
+            $table->string('image_url')->nullable();
+            $table->integer('stock');
             $table->float('purchase_price');
             $table->float('tour_sales_price');
             $table->text('notes')->nullable();

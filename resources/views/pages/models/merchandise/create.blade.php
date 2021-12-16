@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('merchandise.store', ['tour' => $tour, ]),])
+@extends('layout.form', ['action' => route('merchandise.store', ['tour' => $tour, ]), 'multipart' => true,])
 
 @section('title', 'Create Merchandise')
 
