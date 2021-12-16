@@ -87,7 +87,7 @@ Route::prefix('booking')->group(function () {
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
     // Booking summary for payment
-    Route::get('/bookings/{token}/gather', [BookingController::class, 'gatherDetails']);
+    Route::get('/summary/{token}/gather', [BookingController::class, 'gatherDetails']);
 
     // store travellers
     Route::post('/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);

@@ -43,6 +43,7 @@ export default {
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+            that.loadBooking(that.booking_token)
         })
     },
     mounted() {
@@ -52,9 +53,19 @@ export default {
         togglePayments() {
             this.paymentsActive = !this.paymentsActive
         },
-        loadBooking() {
+        loadPaymentSchedule() {
             let that = this
-            axios.get(`/bookings/${token}/gather`)
+            axios.get(`/api/bookings/payment-schedules`)
+                .then(response => {
+                    that.paymentSchedule = response.data.paymentSchedule
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+        loadBooking(token) {
+            let that = this
+            axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking
                     console.log('booking data ', that.booking)
