@@ -40,36 +40,41 @@ function updateTransportSelectFields() {
 function addAccommodationAddon() {
     let id = $('#accommodation-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
-        location.reload();
+        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
 function addActivityAddon() {
     let id = $('#activities-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
-        location.reload();
+        $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
 function addFlightAddon() {
     let id = $('#flights-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
-        location.reload();
+        $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
 function addTransportAddon() {
     let id = $('#transports-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
-        location.reload();
+        $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
 function addMerchandiseAddon() {
     let id = $('#merchandise_id-input').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.merchandise') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'merchandise_id': id});
-        location.reload();
+        $.post('{{ route('api.order.addon.add.merchandise') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'merchandise_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
 $(document).ready( function () {
