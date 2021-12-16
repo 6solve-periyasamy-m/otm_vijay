@@ -496,9 +496,9 @@ class OrderRepository implements OrderRepositoryInterface
         $oCustomer = OrderCustomer::findOrFail($oCustomerId);
         Merchandise::findOrFail($merchandiseId);
         foreach ($oCustomer->orderMerchandise as $oMerch) {
-            if ($oMerch->merchandise->id = $merchandiseId) return abort(400, 'Customer already has selected merchandise');
+            if ($oMerch->merchandise->id == $merchandiseId) return abort(400, 'Customer already has selected merchandise');
         }
-        $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId]);
+        $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId,]);
         $oCustomer->orderMerchandise()->save($oMerch);
         return $oMerch;
     }
