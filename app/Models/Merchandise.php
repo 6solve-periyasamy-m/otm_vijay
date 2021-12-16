@@ -11,7 +11,7 @@ class Merchandise extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name','tour_component_type','stock','purchase_price','tour_sales_price','notes'];
+    protected $fillable = ['name','tour_component_type','stock','purchase_price','tour_sales_price','notes','image_url'];
 
     public static function getValidationRules()
     {
