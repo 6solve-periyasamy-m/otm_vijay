@@ -33,7 +33,7 @@ class ToursTableSeeder extends Seeder
                 'stock_control_active' => 1,
                 'stock' => 150,
                 'booking_form_url' => 'dino-tour',
-                'tour_colour_id' => NULL,
+                'tour_category_id' => NULL,
                 'tour_merchandise_id' => NULL,
                 'is_active' => 1,
                 'date_from' => '2021-11-22',

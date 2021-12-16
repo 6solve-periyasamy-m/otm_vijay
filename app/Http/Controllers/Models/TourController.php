@@ -35,7 +35,7 @@ class TourController extends Controller
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
-            'tour_colour_id' => $request->input('tour_colour_id'),
+            'tour_category_id' => $request->input('tour_category_id'),
             'deposit' => $request->input('deposit'),
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
@@ -69,7 +69,7 @@ class TourController extends Controller
             'stock_control_active' => $request->input('stock_control_active') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'booking_form_url' => $request->input('booking_form_url'),
-            'tour_colour_id' => $request->input('tour_colour_id'),
+            'tour_category_id' => $request->input('tour_category_id'),
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
