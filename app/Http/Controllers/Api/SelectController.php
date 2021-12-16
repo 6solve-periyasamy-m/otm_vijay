@@ -254,4 +254,13 @@ class SelectController extends ApiController
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return OrderTransforms::getAvailableMerchandise($orderCustomer, $filter);
     }
+
+    public function getTourCategories(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TourTransforms::getSelectTourCategories($filter);
+    }
+
+    public function getSelectedTourCategory($id) {
+        return TourTransforms::getSelectedTourCategory($id);
+    }
 }

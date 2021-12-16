@@ -34,6 +34,7 @@ use App\Http\Controllers\Models\PaymentInstallmentController;
 use App\Http\Controllers\Models\PaymentMethodController;
 use App\Http\Controllers\Models\RoomTypeController;
 use App\Http\Controllers\Models\TicketTypeController;
+use App\Http\Controllers\Models\TourCategoryController;
 use App\Http\Controllers\Models\TransportController;
 use App\Http\Controllers\Models\TransportInventoryController;
 use App\Http\Controllers\Models\TransportInventoryTourController;
@@ -477,6 +478,18 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::post('/update', [MerchandiseController::class, 'update'])->name('merchandise.update');
                     Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('merchandise.delete');
                 });
+            });
+        });
+        Route::prefix('tour-categories')->group(function () {
+            Route::get('/', [TourCategoryController::class, 'index'])->name('tour-categories.all')->middleware('bouncer:TourCategory,read');
+            Route::get('/create', [TourCategoryController::class, 'create'])->name('tour-categories.create')->middleware('bouncer:TourCategory,create');
+            Route::post('/create', [TourCategoryController::class, 'store'])->name('tour-categories.store')->middleware('bouncer:TourCategory,create');
+
+            Route::prefix('{tourCategory}')->group(function () {
+                Route::get('/', [TourCategoryController::class, 'view'])->name('tour-categories.view')->middleware('bouncer:TourCategory,read');
+                Route::get('/update', [TourCategoryController::class, 'edit'])->name('tour-categories.edit')->middleware('bouncer:TourCategory,update');
+                Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:TourCategory,update');
+                Route::post('/delete', [TourCategoryController::class, 'destroy'])->name('tour-categories.delete')->middleware('bouncer:TourCategory,delete');
             });
         });
     });

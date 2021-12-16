@@ -62,25 +62,30 @@ class PermissionsRepository implements PermissionsRepositoryInterface
                 'group' => 'Tour and Components',
                 'order' => 1,
             ],
+            'TourCategory' => [
+                'name' => 'Category',
+                'group' => 'Tour and Components',
+                'order' => 2,
+            ],
             'AccommodationInventoryTour' => [
                 'name' => 'Accommodation Tour',
                 'group' => 'Tour and Components',
-                'order' => 2,
+                'order' => 3,
             ],
             'ActivityInventoryTour' => [
                 'name' => 'Activity Tour',
                 'group' => 'Tour and Components',
-                'order' => 3,
+                'order' => 4,
             ],
             'FlightInventoryTour' => [
                 'name' => 'Flight Tour',
                 'group' => 'Tour and Components',
-                'order' => 4,
+                'order' => 5,
             ],
             'TransportInventoryTour' => [
                 'name' => 'Transport Tour',
                 'group' => 'Tour and Components',
-                'order' => 5,
+                'order' => 6,
             ],
             'Merchandise' => [
                 'name' => 'Merchandise',

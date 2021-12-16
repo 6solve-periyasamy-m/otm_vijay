@@ -114,6 +114,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
+        Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
@@ -143,6 +144,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
             Route::post('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
             Route::post('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('payment-method.selected');
+            Route::post('tour-category/{id}', [SelectController::class, 'getSelectedTourCategory'])->name('tour-categories.selected');
             Route::prefix('inventory/{id}')->group(function () {
                 Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');

@@ -24,6 +24,7 @@
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Event</th>
+                    <th scope="col">Category</th>
                     <th scope="col">Description</th>
                     <th scope="col">Date From</th>
                     <th scope="col">Date To</th>
