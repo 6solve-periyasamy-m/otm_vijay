@@ -12,7 +12,9 @@ use App\Repository\FlightsRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
 use App\Repository\AccommodationRepository;
+use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
+use App\Repository\ActivityRepository;
 use App\Repository\TransportBookingRepository;
 use App\Repository\AdditionalTravellerRepository;
 
@@ -67,12 +69,33 @@ Log::debug('Booking:Create', [$tour_id, $token]);
     {
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
-
+        if (empty($booking)) {
+            return 'No booking';
+        }
+        $tour = $booking->tour;
         $customerRepo = new CustomerRepository();
         $travellerRepo = new AdditionalTravellerRepository();
-        $flightsRepo = new FlightsRepository();
+        $flightsBookingRepo = new FlightBookingRepository();
         $accommodationRepo = new AccommodationRepository();
-        $activityRepo = new ActivityBookingRepository();
-        $transportRepo = new TransportBookingRepository();
+
+        $customer = $customerRepo->get($booking->customer_id);
+        $travellers = $travellerRepo->getGroup($booking->id);
+        $flightsOutbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Outbound', 'Included');
+        $flightsInbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Inbound', 'Included');
+        $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
+    
+        $activityBookingRepo = new ActivityBookingRepository();
+        $transportBookingRepo = new TransportBookingRepository();
+        $activities = $activityBookingRepo->getBookingsForTour($booking);
+        $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
+
+        return response()->json(['success' => true,
+            'customer' => $customer,
+            'travellers' => $travellers,
+            'flights' => ['outbound' => $flightsOutbound, 'inbound' => $flightsInbound],
+            'accommodations' => $accommodation,
+            'activities' => $activities,
+            'transports' => $transports
+        ]);
     }
 }

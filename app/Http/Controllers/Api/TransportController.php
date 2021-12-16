@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TransportInventory;
 use App\Models\TransportInventoryTour;
 use App\Http\Controllers\ApiController;
+use App\Repository\TransportRepository;
 use App\Repository\TransportBookingRepository;
 
 class TransportController extends ApiController
@@ -23,7 +24,7 @@ class TransportController extends ApiController
      */
     public function getTransportsInventoryForTour(Tour $tour)
     {
-        $transportsRepo = new TransportBookingRepository();
+        $transportsRepo = new TransportRepository();
         $transports = $transportsRepo->get($tour);
 
         return response()->json(['success' => true, 'transports' => $transports]);

@@ -1,9 +1,32 @@
 <template>
-
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-1 dropdownbutt">
+                <button class="btn btn-link cardhead" @click="togglePayments">
+                    Payment
+                </button>
+            </h5>
+        </div>
+        <div class="card-body" v-if="paymentsActive">
+            <div class="row">
+                <div class="summary">
+                    
+                </div>
+                <payment-schedule status="new" tour="1" :total_price="10000" :passengers="4"></payment-schedule>
+                <payment-installments></payment-installments>
+            </div>
+            <div class="row">
+    
+            </div>
+        </div>
+    </div>
+</div>
 </template>
 
-<script>import axios from "axios"
-
+<script>
+import axios from "axios"
+import { bus } from '../bus'
 export default {
     props: ['tour'],
     data() {
@@ -11,20 +34,24 @@ export default {
             moduleName: 'Payments',
             booking_token: null,
             debug: false,
+            paymentsActive: false,
             booking: {}
         }    
     },
     created() {
+        let that = this
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
-            loadBooking()
         })
     },
     mounted() {
 
     },
     methods: {
+        togglePayments() {
+            this.paymentsActive = !this.paymentsActive
+        },
         loadBooking() {
             let that = this
             axios.get(`/bookings/${token}/gather`)

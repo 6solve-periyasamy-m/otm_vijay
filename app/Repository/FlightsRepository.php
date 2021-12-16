@@ -105,5 +105,4 @@ class FlightsRepository implements FlightsRepositoryInterface
             ];
             })->toArray();
     }
-
 }

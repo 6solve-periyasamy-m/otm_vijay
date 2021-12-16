@@ -60,6 +60,19 @@ class AdditionalTravellerRepository implements AdditionalTravellerRepositoryInte
         return $customers;
     }
 
+    private function getId($a)
+    {
+        return $a->id;
+    }
+    public function getIds($booking_id)
+    {
+        $customers = $this->getGroup($booking_id);
+        return $customers->map(function($item, $key) {
+            return $item->id;
+        });
+
+    }   
+
     public function create($booking_id, $customer_id)
     {
         if ($this->find($booking_id, $customer_id)) {

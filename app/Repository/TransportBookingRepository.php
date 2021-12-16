@@ -55,31 +55,29 @@ class TransportBookingRepository implements TransportBookingRepositoryInterface
         } else {
             dd('tour not set');
         }
-        $query = $transports->toSql();
-        Log::debug('Transports query:', [$query]);
+        // $query = $transports->toSql();
+        // Log::debug('Transports query:', [$query]);
+
         $transports = $transports->get();
-        Log::debug('transports result', [$transports]);
+        // Log::debug('transports result', [$transports]);
 
         foreach($transports as &$transport) {
             // $transportType = TransportType::find($transport->transport_type_id);
             // $transport->transport_type = $transportType->name;
-            Log::debug('type:', [$transport->transport_type_id, $transport->transport_type_name, $transport->transport_type, $transport->sales_price]);
+            // Log::debug('type:', [$transport->transport_type_id, $transport->transport_type_name, $transport->transport_type, $transport->sales_price]);
             $departure = Address::find($transport->departure_address_id);
             $arrival = Address::find($transport->arrival_address_id);
             $transport->departure_address = $this->addressFormat($departure);
             $transport->arrival_address = $this->addressFormat($arrival);                
-        } 
-
-        Log::debug('transports!', [$transports]);
+        }
+        // Log::debug('transports!', [$transports]);
 
         return $transports;
     }
 
     public function getBookingsForTour(Tour $tour, Booking $booking)
     {
-        Log::debug('getBookingsForTour', [$tour, $booking]);
-
-        return 'no data yet';
+        return $this->get($tour);
     }
 
     public function create($booking)

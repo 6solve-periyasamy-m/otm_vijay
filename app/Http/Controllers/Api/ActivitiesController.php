@@ -6,6 +6,7 @@ use App\Models\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Repository\BookingRepository;
+use App\Repository\ActivityRepository;
 use App\Http\Controllers\ApiController;
 use App\Repository\ActivityBookingRepository;
 
@@ -16,10 +17,10 @@ class ActivitiesController extends ApiController
      *
      * @return void
      */
-    public function getActivities($tour)
+    public function getActivities()
     {
-        $activitiesRepository = new ActivityBookingRepository();
-        $activities = $activitiesRepository->get();
+        $activitiesRepository = new ActivityRepository();
+        $activities = $activitiesRepository->getAll();
 
         return response()->json(['success' => true, 'activities' => $activities]);
     }
@@ -32,7 +33,7 @@ class ActivitiesController extends ApiController
      */
     public function getActivitiesInventoryForTour(Tour $tour)
     {
-        $activitiesRepository = new ActivityBookingRepository();
+        $activitiesRepository = new ActivityRepository();
         $activities = $activitiesRepository->get($tour);
 
         return response()->json(['success' => true, 'activities' => $activities]);
@@ -50,8 +51,8 @@ class ActivitiesController extends ApiController
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($token);
 
-        $activitiesRepository = new ActivityBookingRepository();
-        $bookings = $activitiesRepository->getBookingsForTour($tour, $booking);
+        $activityBookingRepository = new ActivityBookingRepository();
+        $bookings = $activityBookingRepository->getBookingsForTour($booking);
 
         return response()->json(['success' => true, 'bookings' => $bookings]);
     }

@@ -1,5 +1,9 @@
 @extends ('layout.main')
 @section('content')
+@php
+$token = 'e5xlzpb2csi2z11h1n74u9';
+@endphp
+@endphp
 <div class="container-fluid page-testing" id="app">
     <h5>Octopus Travel Matrix</h5>
     <h1>Frontend Tests</h1>
@@ -18,6 +22,11 @@
                 </pre>
             <h1>API Tests </h1>
             <ul>
+                <h2>Booking</h2>
+                <li>
+                    <a href="/api/booking/bookings/{{$token}}/gather" target="test">Gather Booking details</a>
+                </li>
+
                 <h2>Tour</h2>
                 <li>
                     <a target="test" href="/booking/check/tour/1">Check Tour for event 1</a>
@@ -31,7 +40,7 @@
                     <a href="/api/booking/activities/tour/2" target="test">Get Activities for Tour 2</a>
                 </li>
                 <li>
-                    <a href="/api/booking/activities/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">Get Activities booked for Tour 2</a>
+                    <a href="/api/booking/activities/booking/{{$token}}/tour/2" target="test">Get Activities booked for Tour 2</a>
                 </li>
 
                 <h2>Transports</h2>

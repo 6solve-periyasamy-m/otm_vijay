@@ -4,13 +4,13 @@ namespace App\Repository;
 
 use App\Models\Tour;
 use App\Models\Booking;
-use App\Models\Activity;
+use App\Models\BookingActivities;
 use Illuminate\Support\Facades\Log;
 
 interface ActivityBookingRepositoryInterface {
     public function __construct();
     public function get(Tour $tour);
-    public function getBookingsForTour(Tour $tour, Booking $booking);
+    public function getBookingsForTour(Booking $booking);
     public function create($booking);
 }
 
@@ -20,7 +20,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
 
     public function __construct()
     {
-        $this->model = new Activity();
+        $this->model = new BookingActivities();
     }
 
     public function get(Tour $tour = null)
@@ -32,11 +32,11 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activities.*', 
                     'activity_inventories.starts_at', 'activity_inventories.ends_at',
                     'ticket_types.name as ticket_type_name')
+                ->join('activities', 'booking_activites.activity_id', 'activities.id')
                 ->join('activity_inventories', 'activity_inventories.activity_id', 'activities.id')
                 ->join('activity_inventory_tours', 'activity_inventory_tours.activity_inventory_id', 'activity_inventories.activity_id')
                 ->join('ticket_types', 'activity_inventories.ticket_type_id', 'ticket_types.id')
                 ->where('tour_id', $tour->id)
-                // ->distinct()
                 ->whereNull('activities.deleted_at')
                 ->whereNull('activity_inventories.deleted_at')
                 ->whereNull('activity_inventory_tours.deleted_at')
@@ -45,16 +45,22 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
             $activities = $this->model->get();
         }
 
-        Log::debug('activities!', [$activities]);
+        Log::debug('ActivityBookingsRepository: get()', [$activities]);
 
         return $activities;
     }
 
-    public function getBookingsForTour(Tour $tour, Booking $booking)
+    /**
+     * getBookingsForTour
+     * When bookings for activities are stored
+     *
+     * @param Booking $booking
+     * @return void
+     */
+    public function getBookingsForTour(Booking $booking)
     {
-        Log::debug('getBookingsForTour', [$tour, $booking]);
-
-        return 'no data yet';
+        $activitiesBooking = $this->model->where('booking_id', $booking->id)->get();
+        return $activitiesBooking;
     }
 
     public function create($booking)

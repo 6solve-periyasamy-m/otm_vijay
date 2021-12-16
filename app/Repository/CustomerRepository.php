@@ -78,4 +78,12 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
         return null;
     }
+
+    public function get($customer_id)
+    {
+        $customer = $this->model->find($customer_id);
+        
+        return $customer;
+    }
+
 }
