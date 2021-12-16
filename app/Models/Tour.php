@@ -11,7 +11,7 @@ class Tour extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_colour_id', 'is_active', 'notes',];
+    protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes',];
 
     public static function getValidationRules()
     {
@@ -101,5 +101,10 @@ class Tour extends Model
     public function orders()
     {
         return $this->hasMany(Order::class, 'tour_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(TourCategory::class, 'tour_category_id');
     }
 }

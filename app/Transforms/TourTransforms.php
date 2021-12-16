@@ -4,6 +4,7 @@ namespace App\Transforms;
 
 use App\Models\Event;
 use App\Models\Tour;
+use App\Models\TourCategory;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
@@ -20,6 +21,8 @@ interface TourTransformsInterface {
     public static function getActivityInventoryDataTable(Tour $tour, $from = "", $to = "");
     public static function getTransportInventoryDataTable(Tour $tour, $from = "", $to = "");
     public static function getFlightInventoryDataTable(Tour $tour, $from = "", $to = "");
+    public static function getSelectTourCategories($filter);
+    public static function getSelectedTourCategory($id);
 }
 
 class TourTransforms implements TourTransformsInterface
@@ -103,5 +106,27 @@ class TourTransforms implements TourTransformsInterface
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
         return ["data" => FlightComponentRepository::getBetweenDates($tour, $dateFrom, $dateTo),];
+    }
+
+    public static function getSelectTourCategories($filter)
+    {
+        $data = [];
+        foreach (TourCategory::all() as $category) {
+            $subData = [];
+            $subData['id'] = $category->id;
+            $subData['text'] = $category->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedTourCategory($id)
+    {
+        if ($id == 0) return null;
+        $category = TourCategory::findOrFail($id);
+        $data = [];
+        $data['id'] = $category->id;
+        $data['text'] = $category->name;
+        return $data;
     }
 }
