@@ -649,4 +649,4 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
-Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderCustomerDetails($value));});
+Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderAddons($value->order));});

@@ -23,6 +23,7 @@ class CreateMerchandisesTable extends Migration
             $table->float('tour_sales_price');
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

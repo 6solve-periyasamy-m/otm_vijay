@@ -120,7 +120,7 @@ class OrderRepository implements OrderRepositoryInterface
             }
         }
         foreach ($customer->orderMerchandise as $orderMerchandise) {
-            if ($orderMerchandise->tour_component_type == OrderRepository::$addonId) {
+            if ($orderMerchandise->merchandise->tour_component_type == OrderRepository::$addonId) {
                 $addons[] = ['addon' => $orderMerchandise->merchandise, 'customer' => $customer,];
                 $additionalValue += $orderMerchandise->merchandise->tour_sales_price;
             }
