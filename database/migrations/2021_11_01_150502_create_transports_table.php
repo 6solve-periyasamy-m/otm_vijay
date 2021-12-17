@@ -21,6 +21,7 @@ class CreateTransportsTable extends Migration
             $table->foreignId('arrival_address_id')->constrained('addresses')->onDelete('cascade');
             $table->boolean('is_domestic')->default(true);
             $table->text('name');
+            $table->string('image_url')->nullable();
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->foreignId('currency_id')->nullable()->constrained()->onDelete('set null');
