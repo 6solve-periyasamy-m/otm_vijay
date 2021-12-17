@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Merchandise;
 use App\Models\Tour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class MerchandiseController extends Controller
 {
@@ -60,6 +61,9 @@ class MerchandiseController extends Controller
             'notes' => $request->input('notes'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {
+            if (isset($merchandise->image_url)) {
+                File::delete(public_path($merchandise->image_url));
+            }
             $merchandise->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         return redirect()->route('tours.view', ['tour' => $tour,]);
