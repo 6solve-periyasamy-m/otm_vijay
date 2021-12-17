@@ -17,7 +17,7 @@ class Accommodation extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     public $additional_attributes = ['inventory_relation'];
-    protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id',];
+    protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id','image_url'];
     protected $cascadeDeletes = ['inventory'];
     protected $casts = ['audit_date' => 'date',];
 
@@ -26,7 +26,8 @@ class Accommodation extends Model
         return [
             'name' => 'required',
             'audit_date' => 'date',
-            'currency_id' => 'nullable|exists:currencies,id'
+            'currency_id' => 'nullable|exists:currencies,id',
+            'image' => 'nullable|image',
         ];
     }
 
