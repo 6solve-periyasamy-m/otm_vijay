@@ -35,7 +35,9 @@
                     <td>{{ $activityInventory->ticketType->name }}</td>
                     <td>{{ StringFormatter::formatDateTime($activityInventory->starts_at) }}</td>
                     <td>{{ StringFormatter::formatDateTime($activityInventory->ends_at) }}</td>
-                    <td>{{ $activityInventory->fit_selectable ? "Yes" : "No" }}</td>
+                    <td>
+                        <input type="checkbox" disabled @if($activityInventory->fit_selectable == 1) checked @endif>
+                    </td>
                     <td>{{ $activityInventory->stock }}</td>
                     <td>{{ $activityInventory->purchase_price }}</td>
                     <td>{{ $activityInventory->sales_price }}</td>
