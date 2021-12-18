@@ -341,4 +341,36 @@
             </table>
         </div>
     </div>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Orders</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table id="orders-table" class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Booking Reference</th>
+                    <th scope="col">Lead Booker</th>
+                    <th scope="col">Customers</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($tour->orders as $order)
+                    <tr>
+                        <th scope="row"><a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a></th>
+                        <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
+                        <td>{{ sizeof($order->orderCustomers) }}</td>
+                        <td><h6 class="badge badge-{{ \App\Repository\OrderRepository::getOrderStatus($order)['color'] }} fw-bold">{{\App\Repository\OrderRepository::getOrderStatus($order)['status'] }}</h6></td>
+                        <td class="actions">
+                            <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
 @endsection
