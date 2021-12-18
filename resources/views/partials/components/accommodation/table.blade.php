@@ -47,8 +47,8 @@
                         <input type="checkbox" disabled @if($accommodationInventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>{{ $accommodationInventory->stock }}</td>
-                    <td>{{ $accommodationInventory->purchase_price }}</td>
-                    <td>{{ $accommodationInventory->sales_price }}</td>
+                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->purchase_price) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\AccommodationInventory::class)

@@ -49,8 +49,8 @@ $(document).ready(function() {
                     <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
                 </td>
                 <td>{{ $transportInventory->stock }}</td>
-                <td>{{ $transportInventory->purchase_price }}</td>
-                <td>{{ $transportInventory->sales_price }}</td>
+                <td>{{ StringFormatter::formatCurrency($transportInventory->purchase_price) }}</td>
+                <td>{{ StringFormatter::formatCurrency($transportInventory->sales_price) }}</td>
                 <td>{{ $transportInventory->notes }}</td>
                 <td class="actions-3">
                     @can('create', \App\Models\TransportInventory::class)
