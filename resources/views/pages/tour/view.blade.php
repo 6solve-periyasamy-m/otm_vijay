@@ -20,9 +20,13 @@
             <div class="col-12">
                 <h4 class="fw-bold">{{ $tour->name }}</h4>
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <p>Event</p>
                 <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "None" }}</h6>
+            </div>
+            <div class="col-12 col-xl-6">
+                <p>Booking URL</p>
+                <h6 class="fw-bold"><a href="{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}">{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}</a></h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
@@ -48,14 +52,10 @@
                 <p>Is Active</p>
                 <h6 class="fw-bold">{{ $tour->is_active ? "Yes" : "No" }}</h6>
             </div>
-            <div class="col-12 col-xl-6">
-                <p>Internal Notes</p>
+            <div class="col-12 col-xl-12">
+                <p>Notes</p>
                 <h6 class="fw-bold">{{ $tour->notes }}</h6>
             </div>
-            <div class="col-12 col-xl-6">
-                <p>External Notes</p>
-                <h6 class="fw-bold">{{ $tour->notes }}</h6>
-            </div>                
             <div class="col-12 col-xl-6">
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
