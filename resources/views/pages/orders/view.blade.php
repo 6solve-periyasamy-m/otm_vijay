@@ -62,6 +62,10 @@
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="btn btn-warning">
+                <i class="icon-globe"></i>
+                View Tour
+            </a>
         </div>
     </div>
 </div>
