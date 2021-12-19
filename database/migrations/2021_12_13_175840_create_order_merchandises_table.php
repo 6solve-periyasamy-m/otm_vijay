@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddressParentsTable extends Migration
+class CreateOrderMerchandisesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateAddressParentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('address_parents', function (Blueprint $table) {
+        Schema::create('order_merchandises', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('merchandise_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +29,6 @@ class CreateAddressParentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('address_parents');
+        Schema::dropIfExists('order_merchandises');
     }
 }

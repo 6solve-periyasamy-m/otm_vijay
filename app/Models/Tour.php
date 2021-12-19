@@ -103,6 +103,11 @@ class Tour extends Model
         return $this->hasMany(Order::class, 'tour_id');
     }
 
+    public function merchandise()
+    {
+        return $this->hasMany(Merchandise::class, 'tour_id');
+    }
+
     public function category()
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
