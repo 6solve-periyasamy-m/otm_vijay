@@ -13,7 +13,7 @@ class Activity extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes',];
+    protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes','image_url'];
     protected $cascadeDeletes = ['activityInventory'];
 
     public static function getValidationRules()
@@ -21,6 +21,7 @@ class Activity extends Model
         return [
             'activity_type_id' => 'required|exists:activity_types,id',
             'name' => 'required',
+            'image' => 'nullable|image',
         ];
     }
 

@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('activities.update', ['activity' => $activity,]),])
+@extends('layout.form', ['action' => route('activities.update', ['activity' => $activity,]),'multipart' => true,])
 
 @section('title', 'Update Activity')
 
