@@ -70,8 +70,8 @@ class TourRepository implements TourRepositoryInterface
     {
         $tour = $tourInventory->tour;
         $included = [];
-        foreach ($tour->accommodationInventoryTours as $inventory) {
-            $included[$inventory->id] = $inventory->id;
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->accommodationInventory->id] = $inventoryTour->accommodationInventory->id;
         }
         $data = [];
         foreach ($tourInventory->accommodationInventory->accommodation->inventory as $inventory) {
@@ -87,8 +87,8 @@ class TourRepository implements TourRepositoryInterface
     {
         $tour = $tourInventory->tour;
         $included = [];
-        foreach ($tour->activityInventoryTours as $inventory) {
-            $included[$inventory->id] = $inventory->id;
+        foreach ($tour->activityInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->activityInventory->id] = $inventoryTour->activityInventory->id;
         }
         $data = [];
         foreach ($tourInventory->activityInventory->activity->activityInventory as $inventory) {
@@ -104,8 +104,8 @@ class TourRepository implements TourRepositoryInterface
     {
         $tour = $tourInventory->tour;
         $included = [];
-        foreach ($tour->flightInventoryTours as $inventory) {
-            $included[$inventory->id] = $inventory->id;
+        foreach ($tour->flightInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->flightInventory->id] = $inventoryTour->flightInventory->id;
         }
         $data = [];
         foreach ($tourInventory->flightInventory->flight->flightInventory as $inventory) {
@@ -121,8 +121,8 @@ class TourRepository implements TourRepositoryInterface
     {
         $tour = $tourInventory->tour;
         $included = [];
-        foreach ($tour->transportInventoryTours as $inventory) {
-            $included[$inventory->id] = $inventory->id;
+        foreach ($tour->transportInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->transportInventory->id] = $inventoryTour->transportInventory->id;
         }
         $data = [];
         foreach ($tourInventory->transportInventory->transport->transportInventory as $inventory) {
