@@ -19,6 +19,7 @@ class CreateTransportInventoryTourUpgradesTable extends Migration
             $table->foreignId('upgrade_id')->constrained('transport_inventory_tours')->onDelete('cascade');
             $table->text('description');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -14,7 +14,7 @@ class AccommodationInventoryTour extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price',];
-    protected $cascadeDeletes = ['orders'];
+    protected $cascadeDeletes = ['orders', 'upgrades'];
 
     public static function getValidationRules()
     {

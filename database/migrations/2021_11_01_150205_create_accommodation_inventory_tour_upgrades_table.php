@@ -19,6 +19,7 @@ class CreateAccommodationInventoryTourUpgradesTable extends Migration
             $table->foreignId('upgrade_id')->constrained('accommodation_inventory_tours')->onDelete('cascade');
             $table->text('description');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

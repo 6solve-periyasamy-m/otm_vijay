@@ -13,7 +13,7 @@ class ActivityInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['orders'];
+    protected $cascadeDeletes = ['orders', 'upgrades'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
 
     public static function getValidationRules()
