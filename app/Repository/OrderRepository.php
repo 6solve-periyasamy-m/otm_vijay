@@ -134,8 +134,10 @@ class OrderRepository implements OrderRepositoryInterface
     {
         $payments = [];
         $amount = 0;
-        foreach ($order->payments as $payment) {
+        foreach ($order->payments as $payment) {            
+            $payment['payment_method'] = $payment->paymentMethod->name;
             $payments[] = $payment;
+                        
             $amount += $payment->amount;
         }
         return ['payments' => $payments, 'amount' => $amount,];
@@ -521,6 +523,7 @@ class OrderRepository implements OrderRepositoryInterface
         $data['payments'] = $order->payments;
         $data['status'] = $order->getStatus();
         $data['installments'] = self::getCustomerInstallments($order);
+        $data['detail'] = self::getOrderDetails($order);
         return $data;
     }
 
@@ -531,6 +534,7 @@ class OrderRepository implements OrderRepositoryInterface
             if (!self::isLeadBooker($order, $customer)) continue;
             $data[$order->booking_reference] = self::getCustomerOrderDetails($customer, $order);
         }
-        return $data;
+
+        return ['orders' => $data];        
     }
 }
