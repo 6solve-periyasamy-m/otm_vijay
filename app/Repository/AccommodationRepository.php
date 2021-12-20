@@ -81,18 +81,19 @@ class AccommodationRepository implements AccommodationRepositoryInterface
     {
         $bookingAccommodation = new BookingAccommodation();
         $bookings = $bookingAccommodation
-            ->select('booking_accommodations.booking_id', 'booking_accommodations.customer_id', 'booking_accommodations.accommodation_inventory_id',
+            ->select('booking_accommodations.booking_id',
+                'booking_accommodations.customer_id', 
+                'booking_accommodations.accommodation_inventory_tour_id',
                 'accommodation_inventory_tours.booking_policy', 'room_types.maximum_occupancy',
                 'accommodations.name as accommodation_name',
                 'board_types.name as board_type_name', 'room_types.name as room_type_name')
-            ->join('accommodation_inventories', 'booking_accommodations.accommodation_inventory_id', 'accommodation_inventories.id')
+            ->join('accommodation_inventory_tours', 'booking_accommodations.accommodation_inventory_tour_id', 'accommodation_inventory_tours.id')
+            ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventory_tours.id')
             ->join('accommodations', 'accommodation_inventories.accommodation_id', 'accommodations.id')
-            ->join('accommodation_inventory_tours', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->where('accommodation_inventory_tours.tour_id', $booking->tour_id)
             ->whereIn('booking_accommodations.customer_id', $travellerIds)
-            ->distinct()
             ->get();
 
         return $bookings;

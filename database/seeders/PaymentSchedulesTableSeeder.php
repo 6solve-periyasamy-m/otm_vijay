@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class PaymentScheduleTableSeeder extends Seeder
+class PaymentSchedulesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -57,12 +58,12 @@ class PaymentScheduleTableSeeder extends Seeder
             ],
             5 => [
                 'name' => 'Long term',
-                'deposit_type' => 'amount',
+                'deposit_type' => 'fixed',
                 'deposit' => '100',
                 'installment_period' => 'monthly',
                 'installment_type' => 'percentage',
                 'installment' => '5',
             ]
-        ])
+        ]);
     }
 }

@@ -383,7 +383,7 @@ export default {
                 tour_id: that.tour.id,
                 booking_id: that.booking_id,
                 flight_type: flight_type,
-                inventory_tour_id: flight_inventory_tour_id,
+                flight_inventory_tour_id: flight_inventory_tour_id,
                 custom: custom,
                 token: token
             }
@@ -436,7 +436,7 @@ export default {
             // loads current fight bookings if there are any
             axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
-                    that.bookings = response.data.flightBooking
+                    that.bookings = response.data.flightBookings
                     that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', that.bookings, that.travellers[0])
 
                     if (that.bookings === null || that.bookings.length === 0) {
