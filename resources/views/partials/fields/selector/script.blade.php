@@ -1,7 +1,7 @@
 let {{ $field }}Select = $('.{{ $field }}-input');
 {{ $field }}Select.select2({
     ajax: {
-        url: '{{ route('api.' . $route . '.select') }}',
+        url: '{{ $fullRoute ?? route('api.' . $route . '.select') }}',
         data: function (params) {
             return {
                 filter: params.term,
@@ -12,6 +12,7 @@ let {{ $field }}Select = $('.{{ $field }}-input');
         type: 'post',
 }
 });
+@if(!isset($preselect) || $preselect)
 $.ajax({
     url: '{{ route('api.' . $route . '.selected', ['id' => old($field) ?? $id ?? 0, ]) }}',
     type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
@@ -23,3 +24,4 @@ $.ajax({
         params: { data: data, }
     });
 });
+@endif

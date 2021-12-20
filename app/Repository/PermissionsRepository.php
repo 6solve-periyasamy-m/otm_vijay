@@ -87,6 +87,11 @@ class PermissionsRepository implements PermissionsRepositoryInterface
                 'group' => 'Tour and Components',
                 'order' => 6,
             ],
+            'Merchandise' => [
+                'name' => 'Merchandise',
+                'group' => 'Tour and Components',
+                'order' => 7,
+            ],
             // Accommodations
             'Accommodation' => [
                 'name' => 'Accommodation',

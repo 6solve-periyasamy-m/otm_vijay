@@ -19,6 +19,7 @@ class CreateCurrenciesTable extends Migration
             $table->string('name');
             $table->string('symbol', 10)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

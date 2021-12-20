@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ActivityController extends Controller
 {
@@ -37,6 +38,9 @@ class ActivityController extends Controller
         } else {
             $request->validate(Address::getValidationRules());
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+        }
+        if ($request->has('image') && $request->file('image') != null) {
+            $activity->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $activity->address_id = $address->id;
         $activity->save();
@@ -68,6 +72,12 @@ class ActivityController extends Controller
         } else {
             $request->validate(Address::getValidationRules());
             LocationsRepository::storeAddressFromGenericRequest($activity->address, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+        }
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($activity->image_url)) {
+                File::delete(public_path($activity->image_url));
+            }
+            $activity->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
