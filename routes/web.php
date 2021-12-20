@@ -96,7 +96,7 @@ Route::prefix("/booking")->group(function () {
     Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
     Route::get('/', [BookingController::class, 'bookingForm']);
 
-    Route::get('/{url}', [BookingController::class, 'tourBookingForm']);
+    Route::get('/{url}', [BookingController::class, 'tourBookingForm'])->name('booking.url');
 
 });
 

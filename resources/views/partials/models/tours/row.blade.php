@@ -5,10 +5,10 @@
     <td>{{ $description }}</td>
     <td>{{ StringFormatter::formatDate($date_from) }}</td>
     <td>{{ StringFormatter::formatDate($date_to) }}</td>
-    <td>{{ $base_price_per_person }}</td>
-    <td>{{ $margin }}</td>
-    <td>{{ $deposit }}</td>
-    <td>{{ $single_occupancy_surcharge }}</td>
+    <td>{{ StringFormatter::formatCurrency($base_price_per_person) }}</td>
+    <td>{{ StringFormatter::formatCurrency($margin) }}</td>
+    <td>{{ StringFormatter::formatCurrency($deposit) }}</td>
+    <td>{{ StringFormatter::formatCurrency($single_occupancy_surcharge) }}</td>
     <td>{{ $stock_control_active ? "Yes" : "No" }}</td>
     <td>{{ $stock }}</td>
     <td>{{ $booking_form_url }}</td>

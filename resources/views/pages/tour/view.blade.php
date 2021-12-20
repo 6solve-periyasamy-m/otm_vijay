@@ -21,9 +21,13 @@
             <div class="col-12">
                 <h4 class="fw-bold">{{ $tour->name }}</h4>
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <p>Event</p>
                 <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "None" }}</h6>
+            </div>
+            <div class="col-12 col-xl-6">
+                <p>Booking URL</p>
+                <h6 class="fw-bold"><a href="{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}">{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}</a></h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
@@ -49,14 +53,10 @@
                 <p>Is Active</p>
                 <h6 class="fw-bold">{{ $tour->is_active ? "Yes" : "No" }}</h6>
             </div>
-            <div class="col-12 col-xl-6">
-                <p>Internal Notes</p>
+            <div class="col-12 col-xl-12">
+                <p>Notes</p>
                 <h6 class="fw-bold">{{ $tour->notes }}</h6>
             </div>
-            <div class="col-12 col-xl-6">
-                <p>External Notes</p>
-                <h6 class="fw-bold">{{ $tour->notes }}</h6>
-            </div>                
             <div class="col-12 col-xl-6">
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
@@ -314,7 +314,7 @@
                 <tr>
                     <th scope="row">Deposit</th>
                     <td>With Order</td>
-                    <td>{{ $tour->deposit }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->deposit) }}</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>
@@ -325,7 +325,7 @@
                     <tr>
                         <th scope="row">Installment</th>
                         <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                        <td>{{ $installment->amount }}</td>
+                        <td>{{ StringFormatter::formatCurrency($installment->amount) }}</td>
                         <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -394,6 +394,38 @@
                                             <i class="icon-trash"></i>
                                         </span>
                             @endcan
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Orders</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table id="orders-table" class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Booking Reference</th>
+                    <th scope="col">Lead Booker</th>
+                    <th scope="col">Customers</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($tour->orders as $order)
+                    <tr>
+                        <th scope="row"><a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a></th>
+                        <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
+                        <td>{{ sizeof($order->orderCustomers) }}</td>
+                        <td><h6 class="badge badge-{{ \App\Repository\OrderRepository::getOrderStatus($order)['color'] }} fw-bold">{{\App\Repository\OrderRepository::getOrderStatus($order)['status'] }}</h6></td>
+                        <td class="actions">
+                            <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
