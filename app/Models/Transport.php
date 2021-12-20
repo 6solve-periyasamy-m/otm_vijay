@@ -13,7 +13,7 @@ class Transport extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     public $additional_attributes = ['inventory_relation'];
-    protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes',];
+    protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes','image_url'];
     protected $cascadeDeletes = ['transportInventory'];
 
     public static function getValidationRules()
@@ -24,6 +24,7 @@ class Transport extends Model
             'departure_address_id' => 'required|exists:addresses,id',
             'arrival_address_id' => 'required|exists:addresses,id',
             'name' => 'required',
+            'image' => 'nullable|image',
         ];
     }
 

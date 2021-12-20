@@ -18,7 +18,8 @@
 @endcan
 @include('partials.fields.prefab.addresses.selector', ['namePrefix' => 'Departure', 'prefix' => 'departure_', 'value' => $departure_address_id ?? 0,])
 @include('partials.fields.prefab.addresses.selector', ['namePrefix' => 'Arrival', 'prefix' => 'arrival_', 'value' => $arrival_address_id ?? 0,])
-@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,'width'=>10,])
+@include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
 @include('partials.fields.checkbox', ['name' => 'Is Domestic', 'field' => 'is_domestic', 'value' => $is_domestic ?? null,])
 @include('partials.fields.selector.default',

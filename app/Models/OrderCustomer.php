@@ -58,4 +58,9 @@ class OrderCustomer extends Model
     {
         return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
     }
+
+    public function orderMerchandise()
+    {
+        return $this->hasMany(OrderMerchandise::class, 'order_customer_id');
+    }
 }

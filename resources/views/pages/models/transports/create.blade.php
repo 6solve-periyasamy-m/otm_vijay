@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('transports.store'),])
+@extends('layout.form', ['action' => route('transports.store'),'multipart' => true,])
 
 @section('title', 'Create Transport')
 
