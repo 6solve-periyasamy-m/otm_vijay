@@ -21,6 +21,7 @@ class LocationTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(LocationType::getValidationRules());
         $locationType = LocationType::create([
             'name' => $request->input('name'),
         ]);
@@ -39,6 +40,7 @@ class LocationTypeController extends Controller
 
     public function update(Request $request, LocationType $locationType)
     {
+        $request->validate(LocationType::getValidationRules());
         $locationType->update([
             'name' => $request->input('name'),
         ]);

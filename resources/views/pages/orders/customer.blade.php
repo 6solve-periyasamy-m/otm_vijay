@@ -40,36 +40,49 @@ function updateTransportSelectFields() {
 function addAccommodationAddon() {
     let id = $('#accommodation-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id});
+        $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'accommodation_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
-    location.reload();
 }
 function addActivityAddon() {
     let id = $('#activities-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id});
+        $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'activity_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
-    location.reload();
 }
 function addFlightAddon() {
     let id = $('#flights-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id});
+        $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'flight_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
-    location.reload();
 }
 function addTransportAddon() {
     let id = $('#transports-select').find(':selected').val()
     if (id != null) {
-        $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id});
+        $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'transport_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
-    location.reload();
+}
+function addMerchandiseAddon() {
+    let id = $('#merchandise_id-input').find(':selected').val()
+    if (id != null) {
+        $.post('{{ route('api.order.addon.add.merchandise') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $order_customer->id }}', 'merchandise_id': id})
+            .done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+    }
 }
 $(document).ready( function () {
     $('#accommodation-table').DataTable({fixedHeader: true});
     $('#activities-table').DataTable({fixedHeader: true});
     $('#flights-table').DataTable({fixedHeader: true});
     $('#transports-table').DataTable({fixedHeader: true});
+    $('#merchandise-table').DataTable({fixedHeader: true});
     $('#customer-adjustment-table').DataTable({fixedHeader: true});
     updateAccommodationSelectFields();
     updateActivitySelectFields();
@@ -92,17 +105,19 @@ $(document).ready( function () {
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($order->tour->date_from) . " to " . StringFormatter::formatDate($order->tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
             <h6 class="badge badge-{{ $status['color'] }} fw-bold">{{ $status['status'] }}</h6>
         </div>
         <div class="col-12">
-            <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
-                <i class="icon-note"></i>
-                Edit Order
-            </a>
+            @can('update', \App\Models\Order::class)
+                <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
+                    <i class="icon-note"></i>
+                    Edit Order
+                </a>
+            @endcan
             <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-amber">
                 <i class="icon-home"></i>
                 Return to Order
@@ -111,11 +126,9 @@ $(document).ready( function () {
     </div>
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;">
-
 <div class="heading pt-2 pb-md-3 pb-2">
     <h2 class="fw-bold">Customer</h2>        
 </div>
-
 <div class="otm-callout">
     <div class="row">
         <div class="col-12">
@@ -123,7 +136,7 @@ $(document).ready( function () {
         </div>
         <div class="col-xl-4">
             <p>Date of Birth</p>
-            <h6 class="fw-bold">{{ $customer->date_of_birth }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDateTime($customer->date_of_birth) }}</h6>
             <p>Passport Number</p>
             <h6 class="fw-bold">{{ $customer->passport_number }}</h6>
             <p>Password Expire Date</p>
@@ -180,14 +193,18 @@ $(document).ready( function () {
             @endif
         </div>
         <div class="col-12">
+            @can('create', \App\Models\OrderCustomerAdjustment::class)
             <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-success mb-1">
                 <i class="icon-plus"></i>
                 Add Adjustment
             </a>
+            @endcan
+            @can('update', \App\Models\OrderCustomer::class)
             <a href="{{ route('order-customers.edit', ['order' => $order, 'orderCustomer' => $order_customer, ]) }}" class="btn btn-amber mb-1">
                 <i class="icon-note"></i>
                 Edit Order Customer
             </a>
+            @endcan
         </div>
     </div>
 </div>
@@ -251,7 +268,7 @@ $(document).ready( function () {
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ $accommodationEntry["inventory"]->check_in }} to {{ $accommodationEntry["inventory"]->check_out }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }} to {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}</td>
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>TBI</td> {{-- TODO: Discuss and Implement--}}
@@ -291,7 +308,7 @@ $(document).ready( function () {
                         </thead>
                         @foreach($activities as $activity)
                             <tr>
-                                <td style="min-width: 200px">{{ $activity["inventory"]->starts_at }} to {{ $activity["inventory"]->ends_at }}</td>
+                                <td style="min-width: 200px">{{ StringFormatter::formatDateTime($activity["inventory"]->starts_at) }} to {{ StringFormatter::formatDateTime($activity["inventory"]->ends_at) }}</td>
                                 <td>{{ $activity["component"]->name }}</td>
                                 <td>{{ $activity["component"]->activityType->name }}</td>
                                 <td>{{ $activity["tour"]->tour_component_type }}</td>
@@ -330,7 +347,7 @@ $(document).ready( function () {
                         </thead>
                         @foreach($flights as $flight)
                             <tr>
-                                <td style="min-width: 200px">{{ $flight["inventory"]->departs_at }} to {{ $flight["inventory"]->arrives_at }}</td>
+                                <td style="min-width: 200px">{{ StringFormatter::formatDateTime($flight["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($flight["inventory"]->arrives_at) }}</td>
                                 <td>{{ $flight["inventory"]->flight_number }}</td>
                                 <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                 <td>{{ $flight["tour"]->tour_component_type }}</td>
@@ -369,7 +386,7 @@ $(document).ready( function () {
                         </thead>
                         @foreach($transports as $transport)
                             <tr>
-                                <td style="min-width: 200px">{{ $transport["inventory"]->departs_at }} to {{ $transport["inventory"]->arrives_at }}</td>
+                                <td style="min-width: 200px">{{ StringFormatter::formatDateTime($transport["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($transport["inventory"]->arrives_at) }}</td>
                                 <td>{{ $transport["component"]->name }}</td>
                                 <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                 <td>{{ $transport["tour"]->tour_component_type }}</td>
@@ -388,16 +405,59 @@ $(document).ready( function () {
         </div>
     </div>
 </div>
+{{-- Merchandise Section --}}
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <h4 class="fw-bold">Merchandise</h4>
+        </div>
+        <div id="merchandise-new" class="d-flex justify-content-between mb-3 flex-wrap">
+            @include('partials.fields.selector.adder',
+                        ['field' => 'merchandise_id', 'preselect' => false,
+                        'fullRoute' => route('api.available-merchandise.select', ['orderCustomer' => $customer,]),
+                        'createRoute' => '#', 'onclick' => 'addMerchandiseAddon()', 'target' => ''])
+        </div>
+        <div id="merchandise-details">
+            <table id="merchandise-table" class="table table-striped table-responsive-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Cost</th>
+                    <th scope="col">Component Type</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($merchandise as $merch)
+                    <tr>
+                        <td>{{ $merch["tour"]->name }}</td>
+                        <td>{{ StringFormatter::formatCurrency($merch["tour"]->tour_sales_price) }}</td>
+                        <td>{{ $merch["tour"]->tour_component_type }}</td>
+                        <td>
+                            <form action="{{ route('orderMerchandiseDelete', ['id' => $merch['order']->id,]) }}" method="post">
+                                @csrf
+                                <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $order, 'orderCustomer' => $order_customer,]) }}" />
+                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+</div>
+{{-- Adjustments Section --}}
 <div class="card">
     <div class="card-body">
         <div class="card-title">
             <h4 class="fw-bold">Customer Adjustments</h4>
+            @can('create', \App\Models\OrderCustomerAdjustment::class)
             <div class="pb-3 text-end">
                 <a href="{{ route('order-customer-adjustments.create', ['order' => $order, 'orderCustomer' => $order_customer]) }}" class="btn btn-success text-white">
                     <i class="icon-plus"></i>
                     Add Adjustment
                 </a>
             </div>
+            @endcan
         </div>
         <div>
             <table class="table table-striped" id="customer-adjustment-table">
@@ -411,15 +471,27 @@ $(document).ready( function () {
                 </thead>
                 @foreach($order_customer->adjustments as $adjustment)
                     <tr>
-                        <td>{{ CurrencyFormatter::format($adjustment->amount) }}</td>
+                        <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                         <td>{{ $adjustment->reason }}</td>
-                        <td>{{ $adjustment->date }}</td>
+                        <td>{{ StringFormatter::formatDate($adjustment->date) }}</td>
                         <td class="actions">
-                            <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                            <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                            <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
-                                @csrf
-                            </form>
+                            @can('update', \App\Models\OrderCustomerAdjustment::class)
+                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                            @endcan
+                            @can('delete', \App\Models\OrderCustomerAdjustment::class)
+                                <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                    @csrf
+                                </form>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

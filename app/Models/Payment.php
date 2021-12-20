@@ -11,9 +11,11 @@ class Payment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['order_id','payment_method_id','amount','paid_on','payment_type'];
+    protected $fillable = ['order_id', 'payment_method_id', 'amount', 'paid_on', 'payment_type'];
+    protected $casts = ['paid_on' => 'datetime',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'payment_method_id' => 'required|exists:payment_methods,id',
             'amount' => 'required|numeric',
@@ -25,11 +27,13 @@ class Payment extends Model
         ];
     }
 
-    public function order() {
+    public function order()
+    {
         return $this->belongsTo(Order::class, 'order_id');
     }
 
-    public function paymentMethod() {
+    public function paymentMethod()
+    {
         return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
     }
 }

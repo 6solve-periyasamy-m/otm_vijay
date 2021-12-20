@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ActivityController extends Controller
 {
@@ -24,7 +25,7 @@ class ActivityController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Activity::RULES);
+        $request->validate(Activity::getValidationRules());
         $activity = Activity::make([
             'activity_type_id' => $request->input('activity_type_id'),
             'name' => $request->input('name'),
@@ -35,7 +36,11 @@ class ActivityController extends Controller
         if ($request->input('use_existing') == 'on') {
             $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'));
         } else {
+            $request->validate(Address::getValidationRules());
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+        }
+        if ($request->has('image') && $request->file('image') != null) {
+            $activity->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $activity->address_id = $address->id;
         $activity->save();
@@ -54,7 +59,7 @@ class ActivityController extends Controller
 
     public function update(Request $request, Activity $activity)
     {
-        $request->validate(Activity::RULES);
+        $request->validate(Activity::getValidationRules());
         $activity->update([
             'activity_type_id' => $request->input('activity_type_id'),
             'name' => $request->input('name'),
@@ -65,7 +70,14 @@ class ActivityController extends Controller
         if ($request->input('use_existing') == 'on') {
             LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'), $activity->address);
         } else {
+            $request->validate(Address::getValidationRules());
             LocationsRepository::storeAddressFromGenericRequest($activity->address, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+        }
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($activity->image_url)) {
+                File::delete(public_path($activity->image_url));
+            }
+            $activity->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         $activity->save();
         return redirect()->route('activities.view', ['activity' => $activity,]);
@@ -73,8 +85,7 @@ class ActivityController extends Controller
 
     public function destroy(Activity $activity)
     {
-        foreach ($activity->activityInventory as $inventory)
-        {
+        foreach ($activity->activityInventory as $inventory) {
             if ($inventory->tourComponents()->count() > 0) {
                 return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Activity']));
             }

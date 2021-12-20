@@ -17,12 +17,12 @@ class AccommodationInventoryController extends Controller
 
     public function create(Accommodation $accommodation)
     {
-        return view('pages.models.accommodation_inventories.create', ['accommodation' => $accommodation, ]);
+        return view('pages.models.accommodation_inventories.create', ['accommodation' => $accommodation,]);
     }
 
     public function store(Request $request, Accommodation $accommodation)
     {
-        $request->validate(AccommodationInventory::RULES);
+        $request->validate(AccommodationInventory::getValidationRules());
         $accommodationInventory = AccommodationInventory::make([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
@@ -52,7 +52,7 @@ class AccommodationInventoryController extends Controller
 
     public function update(Request $request, Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
-        $request->validate(AccommodationInventory::RULES);
+        $request->validate(AccommodationInventory::getValidationRules());
         $accommodationInventory->update([
             'room_type_id' => $request->input('room_type_id'),
             'board_type_id' => $request->input('board_type_id'),
@@ -78,7 +78,8 @@ class AccommodationInventoryController extends Controller
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
-    public function duplicate(Accommodation $accommodation, AccommodationInventory $accommodationInventory) {
+    public function duplicate(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
+    {
         $inventory = $accommodationInventory->replicate();
         $inventory->save();
         return redirect()->route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $inventory,]);

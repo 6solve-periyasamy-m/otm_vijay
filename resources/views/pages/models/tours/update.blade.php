@@ -16,7 +16,7 @@
       'stock_control_active' => $tour->stock_control_active,
       'stock' => $tour->stock,
       'booking_form_url' => $tour->booking_form_url,
-      'tour_colour_id' => $tour->tour_colour_id,
+      'tour_category_id' => $tour->tour_category_id,
       'is_active' => $tour->is_active,
       'notes' => $tour->notes,
     ])

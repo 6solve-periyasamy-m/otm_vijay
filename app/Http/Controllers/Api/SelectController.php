@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\OrderCustomer;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
 use App\Transforms\OrderTransforms;
@@ -247,5 +248,19 @@ class SelectController extends ApiController
 
     public function getSelectedCurrency($id) {
         return LocationsTransforms::getSelectedCurrency($id);
+    }
+
+    public function getAvailableMerchandise(Request $request, OrderCustomer $orderCustomer) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getAvailableMerchandise($orderCustomer, $filter);
+    }
+
+    public function getTourCategories(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TourTransforms::getSelectTourCategories($filter);
+    }
+
+    public function getSelectedTourCategory($id) {
+        return TourTransforms::getSelectedTourCategory($id);
     }
 }

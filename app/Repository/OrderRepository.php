@@ -3,11 +3,13 @@
 namespace App\Repository;
 
 use App\Mail\PaymentDueMailable;
+use App\Models\Merchandise;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
+use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
 use App\Models\PaymentInstallment;
 use App\Models\PaymentReminder;
@@ -23,7 +25,7 @@ interface OrderRepositoryInterface
 
     public static function getOrderCustomerDetails(OrderCustomer $orderCustomer);
 
-    public static function addIncludedToCustomer(OrderCustomer $ordercustomer, Order $order);
+    public static function addIncludedToCustomer(OrderCustomer $orderCustomer, Order $order);
 
     public static function getInvoiceDetails(Order $order);
 
@@ -117,6 +119,12 @@ class OrderRepository implements OrderRepositoryInterface
                 $additionalValue += $orderTransport->transportInventoryTour->tour_sales_price;
             }
         }
+        foreach ($customer->orderMerchandise as $orderMerchandise) {
+            if ($orderMerchandise->merchandise->tour_component_type == OrderRepository::$addonId) {
+                $addons[] = ['addon' => $orderMerchandise->merchandise, 'customer' => $customer,];
+                $additionalValue += $orderMerchandise->merchandise->tour_sales_price;
+            }
+        }
         return ['addons' => $addons, 'additionalValue' => $additionalValue,];
     }
 
@@ -177,11 +185,13 @@ class OrderRepository implements OrderRepositoryInterface
         $paid = self::getTotalPaid($order);
         $paid -= self::getOrderDepositAmount($order);
         $paid -= self::getOrderAddons($order)['additionalValue'];
+        $paid -= self::getCustomerAdjustmentTotal($order);
+        $paid -= self::getOrderAdjustmentTotal($order);
         foreach ($order->tour->paymentInstallments as $installment) {
             $paid -= ($installment->amount * self::getOrderCustomerCount($order));
             if ($paid < 0) {
                 return [
-                    'amount' => $paid * -1,
+                    'amount' => $installment->amount < $paid * -1 ? $installment->amount : $paid * -1,
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
@@ -249,6 +259,15 @@ class OrderRepository implements OrderRepositoryInterface
             $transports[] = $data;
         }
         $details['transports'] = $transports;
+
+        $merchandise = [];
+        foreach ($orderCustomer->orderMerchandise as $orderMerchandise) {
+            $data = [];
+            $data['order'] = $orderMerchandise;
+            $data['tour'] = $orderMerchandise->merchandise;
+            $merchandise[] = $data;
+        }
+        $details['merchandise'] = $merchandise;
         $details['status'] = self::getOrderStatus($orderCustomer->order);
         return $details;
     }
@@ -277,6 +296,12 @@ class OrderRepository implements OrderRepositoryInterface
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderTransports()->save($orderInventory);
+            }
+        }
+        foreach ($order->tour->merchandise as $merchandise) {
+            if ($merchandise->tour_component_type === "Included") {
+                $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id,]);
+                $orderCustomer->orderMerchandise()->save($orderMerchandise);
             }
         }
     }
@@ -377,16 +402,33 @@ class OrderRepository implements OrderRepositoryInterface
                             $tourInventory->transportInventory->transport->arrivalAddress->name . ' - ' .
                             $tourInventory->transportInventory->transport->transportType->name . ' - ' .
                             $tourInventory->transportInventory->travelClass->name;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['quantity'] = 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
                     }
+                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
                 } else {
                     $included .= $tourInventory->transportInventory->transport->departureAddress->name . ' to ' .
                         $tourInventory->transportInventory->transport->arrivalAddress->name . ' - ' .
                         $tourInventory->transportInventory->transport->transportType->name . ' - ' .
                         $tourInventory->transportInventory->travelClass->name . "\n";
                 }
-                $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
+            }
+            foreach ($orderCustomer->orderMerchandise as $orderInventory) {
+                $merchandise = $orderInventory->merchandise;
+                if ($merchandise->tour_component_type !== "Included") {
+                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id])) {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] + 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['cost'] + $merchandise->tour_sales_price;
+                    } else {
+                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id] = [];
+                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['description'] = $merchandise->name;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] = 1;
+                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['cost'] = $merchandise->tour_sales_price;
+                    }
+                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $merchandise->tour_sales_price;
+                } else {
+                    $included .= $merchandise->name . "\n";
+                }
             }
             $data['totals']['orderValue'] += $data['orderCustomers'][$orderCustomer->id]['cost'];
             $data['orderCustomers'][$orderCustomer->id]['included'] = $included;
@@ -447,5 +489,17 @@ class OrderRepository implements OrderRepositoryInterface
             }
         }
         return $total;
+    }
+
+    public static function grantMerchandiseToCustomer($oCustomerId, $merchandiseId)
+    {
+        $oCustomer = OrderCustomer::findOrFail($oCustomerId);
+        Merchandise::findOrFail($merchandiseId);
+        foreach ($oCustomer->orderMerchandise as $oMerch) {
+            if ($oMerch->merchandise->id == $merchandiseId) return abort(400, 'Customer already has selected merchandise');
+        }
+        $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId,]);
+        $oCustomer->orderMerchandise()->save($oMerch);
+        return $oMerch;
     }
 }

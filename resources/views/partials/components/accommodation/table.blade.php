@@ -3,6 +3,7 @@
     $(document).ready(function () { $('#accommodationInventory').DataTable({fixedHeader: true}); });
 </script>
 @endsection
+@can('create', \App\Models\AccommodationInventory::class)
 <div class="card">
     <div class="card-body ">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
@@ -12,6 +13,7 @@
         </a>
     </div>
 </div>
+@endcan
 <div class="card">
     <div class="card-body">
         <table id="accommodationInventory" style="width: 100%;" class="table table-striped">
@@ -20,9 +22,7 @@
                 <th scope="col">Room Type</th>
                 <th scope="col">Board Type</th>
                 <th scope="col">Check In Time</th>
-                <th scope="col">Confirmed</th>
                 <th scope="col">Check Out Time</th>
-                <th scope="col">Confirmed</th>
                 <th scope="col">Fit Selectable</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
@@ -35,30 +35,54 @@
                 <tr>
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
-                    <td>{{ $accommodationInventory->check_in }}</td>
-                    <td>{{ $accommodationInventory->check_in_time_confirmed == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ $accommodationInventory->check_out }}</td>
-                    <td>{{ $accommodationInventory->check_out_time_confirmed == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
+                    <td>
+                        {{ StringFormatter::formatDateTime($accommodationInventory->check_in) }}&nbsp
+                        <input type="checkbox" disabled @if($accommodationInventory->check_in_time_confirmed == 1) checked @endif>
+                    </td>
+                    <td>
+                        {{ StringFormatter::formatDateTime($accommodationInventory->check_out) }}&nbsp
+                        <input type="checkbox" disabled @if($accommodationInventory->check_out_time_confirmed == 1) checked @endif>
+                    </td>
+                    <td>
+                        <input type="checkbox" disabled @if($accommodationInventory->fit_selectable == 1) checked @endif>
+                    </td>
                     <td>{{ $accommodationInventory->stock }}</td>
-                    <td>{{ $accommodationInventory->purchase_price }}</td>
-                    <td>{{ $accommodationInventory->sales_price }}</td>
+                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->purchase_price) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
                     <td class="actions-3">
-                        <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
-                            <i class="icon-layers"></i>
-                        </a>
-                        <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" 
-                            class="btn btn-outline-success btn-sm mb-1">
-                            <i class="icon-note"></i>
-                        </a>
-                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
-                        onclick="event.preventDefault();document.getElementById('accommodationInventory-{{ $accommodationInventory->id }}-delete').submit();">
-                            <i class="icon-trash"></i>
-                        </a>
-                        <form id="accommodationInventory-{{ $accommodationInventory->id }}-delete"
-                            action="{{ route('accommodation-inventories.delete', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]) }}"
-                            method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        @can('create', \App\Models\AccommodationInventory::class)
+                            <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
+                                <i class="icon-layers"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-layers"></i>
+                            </span>
+                        @endcan
+                        @can('update', \App\Models\AccommodationInventory::class)
+                            <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}"
+                                class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </span>
+                        @endcan
+                        @can('delete', \App\Models\AccommodationInventory::class)
+                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                            onclick="event.preventDefault();document.getElementById('accommodationInventory-{{ $accommodationInventory->id }}-delete').submit();">
+                                <i class="icon-trash"></i>
+                            </a>
+                            <form id="accommodationInventory-{{ $accommodationInventory->id }}-delete"
+                                action="{{ route('accommodation-inventories.delete', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]) }}"
+                                method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-trash"></i>
+                            </span>
+                        @endcan
                     </td>
                 </tr>
             @endforeach

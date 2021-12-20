@@ -10,5 +10,4 @@ class CustomerOrderDetail extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    
 }

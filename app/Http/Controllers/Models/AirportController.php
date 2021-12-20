@@ -24,6 +24,7 @@ class AirportController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Airport::getValidationRules());
         $airport = Airport::make([
             'name' => $request->input('name'),
             'iata_code' => $request->input('iata_code'),
@@ -31,6 +32,7 @@ class AirportController extends Controller
         if ($request->input('use_existing') == 'on') {
             $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('airport'));
         } else {
+            $request->validate(Address::getValidationRules());
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('airport'), $request, $request->input('name'), '');
         }
         $airport->address_id = $address->id;
@@ -50,6 +52,7 @@ class AirportController extends Controller
 
     public function update(Request $request, Airport $airport)
     {
+        $request->validate(Airport::getValidationRules());
         $airport->update([
             'name' => $request->input('name'),
             'iata_code' => $request->input('iata_code'),
@@ -57,6 +60,7 @@ class AirportController extends Controller
         if ($request->input('use_existing') == 'on') {
             LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('airport'), $airport->address);
         } else {
+            $request->validate(Address::getValidationRules());
             LocationsRepository::storeAddressFromGenericRequest($airport->address, AddressParent::getParentId('airport'), $request, $request->input('name'));
         }
         return redirect()->route('airports.view', ['airport' => $airport,]);

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Repository\Facades\Currency;
+use App\Repository\Facades\StringFormatter;
 use Illuminate\Support\ServiceProvider;
 
-class CurrencyFacadesProvider extends ServiceProvider
+class StringFormatProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +14,8 @@ class CurrencyFacadesProvider extends ServiceProvider
      */
     public function register()
     {
-        app()->bind('currency', function () {
-            return new Currency;
+        app()->bind('string-formatter', function () {
+            return new StringFormatter;
         });
     }
 

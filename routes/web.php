@@ -24,6 +24,7 @@ use App\Http\Controllers\Models\FlightInventoryTourController;
 use App\Http\Controllers\Models\HatSizeController;
 use App\Http\Controllers\Models\LocationTypeController;
 use App\Http\Controllers\Models\ManualAdjustmentController;
+use App\Http\Controllers\Models\MerchandiseController;
 use App\Http\Controllers\Models\OperatorController;
 use App\Http\Controllers\Models\OrderController;
 use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\Models\PaymentInstallmentController;
 use App\Http\Controllers\Models\PaymentMethodController;
 use App\Http\Controllers\Models\RoomTypeController;
 use App\Http\Controllers\Models\TicketTypeController;
+use App\Http\Controllers\Models\TourCategoryController;
 use App\Http\Controllers\Models\TransportController;
 use App\Http\Controllers\Models\TransportInventoryController;
 use App\Http\Controllers\Models\TransportInventoryTourController;
@@ -52,8 +54,6 @@ use App\Models\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ Route::prefix("/booking")->group(function () {
     Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
     Route::get('/', [BookingController::class, 'bookingForm']);
 
-    Route::get('/{url}', [BookingController::class, 'tourBookingForm']);
+    Route::get('/{url}', [BookingController::class, 'tourBookingForm'])->name('booking.url');
 
 });
 
@@ -199,6 +199,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete')->middleware('bouncer:OrderCustomer,update');
             Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete')->middleware('bouncer:OrderCustomer,update');
             Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete')->middleware('bouncer:OrderCustomer,update');
+            Route::post('merchandise/{id}/delete', [OrderComponentController::class, 'deleteMerchandise'])->name('orderMerchandiseDelete')->middleware('bouncer:OrderCustomer,update');
         });
     });
 
@@ -467,6 +468,29 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                     Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour,update');
                 });
             });
+            Route::prefix('merchandise')->group(function () {
+                Route::get('/', [MerchandiseController::class, 'index'])->name('merchandise.all');
+                Route::get('/create', [MerchandiseController::class, 'create'])->name('merchandise.create');
+                Route::post('/create', [MerchandiseController::class, 'store'])->name('merchandise.store');
+                Route::prefix('{merchandise}')->group(function () {
+                    Route::get('/', [MerchandiseController::class, 'view'])->name('merchandise.view');
+                    Route::get('/update', [MerchandiseController::class, 'edit'])->name('merchandise.edit');
+                    Route::post('/update', [MerchandiseController::class, 'update'])->name('merchandise.update');
+                    Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('merchandise.delete');
+                });
+            });
+        });
+        Route::prefix('tour-categories')->group(function () {
+            Route::get('/', [TourCategoryController::class, 'index'])->name('tour-categories.all')->middleware('bouncer:TourCategory,read');
+            Route::get('/create', [TourCategoryController::class, 'create'])->name('tour-categories.create')->middleware('bouncer:TourCategory,create');
+            Route::post('/create', [TourCategoryController::class, 'store'])->name('tour-categories.store')->middleware('bouncer:TourCategory,create');
+
+            Route::prefix('{tourCategory}')->group(function () {
+                Route::get('/', [TourCategoryController::class, 'view'])->name('tour-categories.view')->middleware('bouncer:TourCategory,read');
+                Route::get('/update', [TourCategoryController::class, 'edit'])->name('tour-categories.edit')->middleware('bouncer:TourCategory,update');
+                Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:TourCategory,update');
+                Route::post('/delete', [TourCategoryController::class, 'destroy'])->name('tour-categories.delete')->middleware('bouncer:TourCategory,delete');
+            });
         });
     });
 
@@ -625,3 +649,4 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
+Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderAddons($value->order));});

@@ -14,7 +14,7 @@
     Stock Control Active: {{ $tour->stock_control_active }}<br/>
     Stock: {{ $tour->stock }}<br/>
     Booking Form Url: {{ $tour->booking_form_url }}<br/>
-    Tour Colour Id: {{ $tour->tour_colour_id }}<br/>
+    Tour Colour Id: {{ $tour->tour_category_id }}<br/>
     Is Active: {{ $tour->is_active }}<br/>
     Notes: {{ $tour->notes }}<br/>
 @endsection

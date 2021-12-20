@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Flight;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class FlightController extends Controller
 {
@@ -21,7 +22,7 @@ class FlightController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(Flight::RULES);
+        $request->validate(Flight::getValidationRules());
         $flight = Flight::create([
             'airline_id' => $request->input('airline_id'),
             'departure_airport_id' => $request->input('departure_airport_id'),
@@ -31,6 +32,9 @@ class FlightController extends Controller
             'notes' => $request->input('notes'),
             'available_after' => $request->input('available_after'),
         ]);
+        if ($request->has('image') && $request->file('image') != null) {
+            $flight->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
@@ -46,7 +50,7 @@ class FlightController extends Controller
 
     public function update(Request $request, Flight $flight)
     {
-        $request->validate(Flight::RULES);
+        $request->validate(Flight::getValidationRules());
         $flight->update([
             'airline_id' => $request->input('airline_id'),
             'departure_airport_id' => $request->input('departure_airport_id'),
@@ -56,13 +60,19 @@ class FlightController extends Controller
             'notes' => $request->input('notes'),
             'available_after' => $request->input('available_after'),
         ]);
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($flight->image_url)) {
+                File::delete(public_path($flight->image_url));
+            }
+            $flight->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
     public function destroy(Flight $flight)
     {
-        foreach ($flight->flightInventory as $inventory)
-        {
+        foreach ($flight->flightInventory as $inventory) {
             if ($inventory->flightInventoryTour()->count() > 0) {
                 return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Flight']));
             }
@@ -71,7 +81,8 @@ class FlightController extends Controller
         return redirect()->route('flights.all');
     }
 
-    public function createReturn(Flight $flight) {
+    public function createReturn(Flight $flight)
+    {
         $returnFlight = $flight->replicate();
         $depart = $flight->arrival_airport_id;
         $arrival = $flight->departure_airport_id;

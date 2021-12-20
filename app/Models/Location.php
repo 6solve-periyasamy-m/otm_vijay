@@ -10,7 +10,7 @@ class Location extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['region_id','location_type_id','name','address',];
+    protected $fillable = ['region_id', 'location_type_id', 'name', 'address',];
 
     public static function getLocationById($location_id)
     {

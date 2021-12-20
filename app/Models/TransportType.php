@@ -11,4 +11,9 @@ class TransportType extends Model
     use SoftDeletes;
 
     protected $fillable = ['name',];
+
+    public static function getValidationRules()
+    {
+        return ['name' => 'required|unique:transport_types,name',];
+    }
 }

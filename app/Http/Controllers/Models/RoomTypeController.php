@@ -21,6 +21,7 @@ class RoomTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(RoomType::getValidationRules());
         $roomType = RoomType::create([
             'name' => $request->input('name'),
             'maximum_occupancy' => $request->input('maximum_occupancy'),
@@ -40,6 +41,7 @@ class RoomTypeController extends Controller
 
     public function update(Request $request, RoomType $roomType)
     {
+        $request->validate(RoomType::getValidationRules());
         $roomType->update([
             'name' => $request->input('name'),
             'maximum_occupancy' => $request->input('maximum_occupancy'),

@@ -11,10 +11,12 @@ class PaymentInstallment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['due_on','amount',];
+    protected $fillable = ['due_on', 'amount',];
+    protected $casts = ['due_on' => 'date',];
 
-    public static function getValidationRules() {
-        return ['due_on' => 'required|date', 'amount' => 'required|numeric', ];
+    public static function getValidationRules()
+    {
+        return ['due_on' => 'required|date', 'amount' => 'required|numeric',];
     }
 
     public function paymentPlan()

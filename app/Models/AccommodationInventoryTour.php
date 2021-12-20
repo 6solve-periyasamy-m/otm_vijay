@@ -13,10 +13,11 @@ class AccommodationInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['tour_id','accommodation_inventory_id','tour_component_type','tour_sales_price',];
+    protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price',];
     protected $cascadeDeletes = ['orders'];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'tour_component_type' => [
                 'required',
@@ -32,7 +33,8 @@ class AccommodationInventoryTour extends Model
         return $this->belongsTo(AccommodationInventory::class, 'accommodation_inventory_id');
     }
 
-    public function orders() {
+    public function orders()
+    {
         return $this->hasMany(OrderAccommodation::class, 'accommodation_inventory_tour_id');
     }
 

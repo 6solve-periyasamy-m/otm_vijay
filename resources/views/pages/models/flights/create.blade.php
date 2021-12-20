@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('flights.store'),])
+@extends('layout.form', ['action' => route('flights.store'),'multipart' => true,])
 
 @section('title', 'Create Flight')
 
