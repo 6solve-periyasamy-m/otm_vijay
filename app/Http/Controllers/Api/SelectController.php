@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\AccommodationInventoryTour;
+use App\Models\ActivityInventoryTour;
+use App\Models\FlightInventoryTour;
 use App\Models\OrderCustomer;
+use App\Models\TransportInventoryTour;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
 use App\Transforms\OrderTransforms;
@@ -262,5 +266,41 @@ class SelectController extends ApiController
 
     public function getSelectedTourCategory($id) {
         return TourTransforms::getSelectedTourCategory($id);
+    }
+    
+    public function getAccommodationInventoryForUpgrade(Request $request, AccommodationInventoryTour $inventoryTour) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return AccommodationTransforms::getSelectInventoryForAccommodation($inventoryTour, $filter);
+    }
+    
+    public function getSelectedAccommodationInventoryForUpgrade($id) {
+        return AccommodationTransforms::getSelectedInventoryForAccommodation($id);
+    }
+    
+    public function getActivityInventoryForUpgrade(Request $request, ActivityInventoryTour $inventoryTour) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return ActivityTransforms::getSelectInventoryForActivity($inventoryTour, $filter);
+    }
+    
+    public function getSelectedActivityInventoryForUpgrade($id) {
+        return ActivityTransforms::getSelectedInventoryForActivity($id);
+    }
+    
+    public function getFlightInventoryForUpgrade(Request $request, FlightInventoryTour $inventoryTour) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return FlightTransforms::getSelectInventoryForFlight($inventoryTour, $filter);
+    }
+    
+    public function getSelectedFlightInventoryForUpgrade($id) {
+        return FlightTransforms::getSelectedInventoryForFlight($id);
+    }
+    
+    public function getTransportInventoryForUpgrade(Request $request, TransportInventoryTour $inventoryTour) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getSelectInventoryForTransport($inventoryTour, $filter);
+    }
+    
+    public function getSelectedTransportInventoryForUpgrade($id) {
+        return TransportTransforms::getSelectedInventoryForTransport($id);
     }
 }

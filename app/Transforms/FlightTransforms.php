@@ -5,6 +5,8 @@ namespace App\Transforms;
 use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\FlightInventory;
+use App\Models\FlightInventoryTour;
+use App\Repository\TourRepository;
 
 interface FlightTransformsInterface {
     public static function getSelectAirlines($filter);
@@ -82,5 +84,26 @@ class FlightTransforms implements FlightTransformsInterface
         $data['id'] = $inventory->id;
         $data['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->flight->departureAirport->name . ' to ' . $inventory->flight->arrivalAirport->name;
         return $data;
+    }
+
+    public static function getSelectInventoryForFlight(FlightInventoryTour $tourInventory, $filter) {
+        $available = TourRepository::getAvailableFlightForUpgrades($tourInventory);
+        $data = [];
+        foreach ($available as $id => $inventory) {
+            $subData = [];
+            $subData['id'] = $inventory->id;
+            $subData['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedInventoryForFlight($id) {
+        if ($id == 0) return null;
+        $inventory = FlightInventory::findOrFail($id);
+        $subData = [];
+        $subData['id'] = $inventory->id;
+        $subData['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;
+        return $subData;
     }
 }

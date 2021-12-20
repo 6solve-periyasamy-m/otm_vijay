@@ -4,8 +4,11 @@ namespace App\Transforms;
 
 use App\Models\Accommodation;
 use App\Models\AccommodationInventory;
+use App\Models\AccommodationInventoryTour;
 use App\Models\BoardType;
 use App\Models\RoomType;
+use App\Repository\AccommodationComponentRepository;
+use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {
     public static function getSelectRoomTypes($filter);
@@ -85,9 +88,10 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         return $data;
     }
 
-    public static function getSelectInventoryForAccommodation(Accommodation $accommodation, $filter) {
+    public static function getSelectInventoryForAccommodation(AccommodationInventoryTour $tourInventory, $filter) {
+        $available = TourRepository::getAvailableAccommodationForUpgrades($tourInventory);
         $data = [];
-        foreach ($accommodation->inventory as $inventory) {
+        foreach ($available as $id => $inventory) {
             $subData = [];
             $subData['id'] = $inventory->id;
             $subData['text'] = $inventory->roomType->name . ' - ' . $inventory->boardType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;

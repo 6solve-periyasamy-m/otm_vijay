@@ -4,8 +4,10 @@ namespace App\Transforms;
 
 use App\Models\Operator;
 use App\Models\TransportInventory;
+use App\Models\TransportInventoryTour;
 use App\Models\TransportType;
 use App\Models\TravelClass;
+use App\Repository\TourRepository;
 
 interface TransportTransformsInterface {
     public static function getSelectTransportTypes($filter);
@@ -106,5 +108,26 @@ class TransportTransforms implements TransportTransformsInterface
         $data['id'] = $inventory->id;
         $data['text'] = $inventory->transport->name . ' - ' . $inventory->transport->transportType->name . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->departureAddress->name . ' to ' . $inventory->arrivalAddress->name;
         return $data;
+    }
+
+    public static function getSelectInventoryForTransport(TransportInventoryTour $tourInventory, $filter) {
+        $available = TourRepository::getAvailableTransportForUpgrades($tourInventory);
+        $data = [];
+        foreach ($available as $id => $inventory) {
+            $subData = [];
+            $subData['id'] = $inventory->id;
+            $subData['text'] = $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedInventoryForTransport($id) {
+        if ($id == 0) return null;
+        $inventory = TransportInventory::findOrFail($id);
+        $subData = [];
+        $subData['id'] = $inventory->id;
+        $subData['text'] = $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;
+        return $subData;
     }
 }

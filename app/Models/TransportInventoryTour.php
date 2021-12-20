@@ -41,4 +41,8 @@ class TransportInventoryTour extends Model
     public function upgrades() {
         return $this->hasMany(TransportInventoryTourUpgrade::class, 'base_id');
     }
+
+    public function tour() {
+        return $this->belongsTo(Tour::class, 'tour_id');
+    }
 }
