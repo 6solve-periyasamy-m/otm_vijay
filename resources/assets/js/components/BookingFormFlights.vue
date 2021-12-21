@@ -447,7 +447,8 @@ export default {
                     this.debug>4 && console.log('BookingFormFlight: flight orders', response)
 
                     outbound = that.flightSelected('Outbound', 'Included', that.lead_traveller)[0]
-                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0];    this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
+                    inbound = that.flightSelected('Inbound', 'Included', that.lead_traveller)[0];
+                    this.debug>3 && console.log('outbound flights selected', outbound,' inbound flights selected', inbound)
 
                     // set the selected_outbound_flight (group selector)
                     if (typeof outbound !== 'undefined' && outbound != null && outbound.flight_inventory_tour_id) {
@@ -506,7 +507,7 @@ export default {
                     that.showwait = false
                 })
                 .catch(error => {
-                    console.log('error loading flights', error)
+                    console.log('loadFlightsForBooking >>>> error loading flights', error)
                 })
         },
         async getAirports() {

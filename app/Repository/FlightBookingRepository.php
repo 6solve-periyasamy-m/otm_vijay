@@ -28,6 +28,7 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
         // $booking = new Booking();
         $flightBooking = $this->model
             ->select('bookings.id as booking_id', 
+                'bookings.customer_id',
                 'booking_flights.id as booking_flight_id',
                 'flights.id as flight_id',
                 'flight_inventory_tours.id as flight_inventory_tour_id',
