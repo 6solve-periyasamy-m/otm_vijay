@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Repository\AccommodationComponentRepository;
+use StringFormatter;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,7 +44,18 @@ class AccommodationInventoryTour extends Model
         return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'base_id');
     }
 
+    public function parent() {
+        return AccommodationComponentRepository::getParentComponent($this);
+    }
+
     public function tour() {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function __toString()
+    {
+        $component = $this->accommodationInventory->accommodation;
+        $inventory = $this->accommodationInventory;
+        return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 }

@@ -119,20 +119,46 @@
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Room Type</th>
+                                <th scope="col">Board Type</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }} to {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}</td>
+                                    <td style="min-width: 200px">
+                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }}
+                                        <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_in_time_confirmed == 1) checked @endif>
+                                        &nbspto&nbsp
+                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}
+                                        <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_out_time_confirmed == 1) checked @endif>
+                                    </td>
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
-                                    <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
-                                    <td class="actions">
+                                    <td>{{ $accommodationEntry["inventory"]->boardType->name }}</td>
+                                    <td>
+                                        @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $accommodationEntry["tour"]->parent() }}">
+                                        @endif
+                                        {{ $accommodationEntry["tour"]->tour_component_type }}
+                                        @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
+                                    <td class="actions-3">
                                         @can('update', \App\Models\AccommodationInventoryTour::class)
+                                            @if($accommodationEntry["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $accommodationEntry["tour"]->tour_component_type == 'Upgrade' ? $accommodationEntry["tour"]->parent() : $accommodationEntry["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-arrow-up"></i>
+                                            </span>
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
