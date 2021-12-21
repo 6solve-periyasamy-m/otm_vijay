@@ -9,6 +9,8 @@ use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventoryTourUpgrade;
 use App\Models\Tour;
+use App\Models\TransportInventoryTour;
+use App\Models\TransportInventoryTourUpgrade;
 use Illuminate\Http\Request;
 
 class UpgradeController extends Controller
@@ -155,5 +157,48 @@ class UpgradeController extends Controller
         $upgrade->upgrade->save();
         $upgrade->save();
         return redirect()->route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    // Transport
+    public function createTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour) {
+        return view('pages.upgrades.create', ['action' => route('transport-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+            'name' => 'Transport Inventory', 'model' => 'transport', 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function storeTransportUpgrade(Request $request, Tour $tour, TransportInventoryTour $inventoryTour) {
+        $request->validate(self::getValidationRules('transport_inventories'));
+        $tourInventory = TransportInventoryTour::make([
+            'tour_component_type' => 'Upgrade',
+            'transport_inventory_id' => $request->input('inventory_id'),
+            'tour_sales_price' => $request->input('sales_price'),
+        ]);
+        $tour->transportInventoryTours()->save($tourInventory);
+        $upgrade = TransportInventoryTourUpgrade::make([
+            'upgrade_id' => $tourInventory->id,
+            'description' => $request->input('description'),
+        ]);
+        $inventoryTour->upgrades()->save($upgrade);
+        return redirect()->route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function viewTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour) {
+        return view('pages.upgrades.view.transport', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function editTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade) {
+        return view('pages.upgrades.update', ['action' => route('transport-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
+            'name' => 'Transport Inventory']);
+    }
+
+    public function updateTransportUpgrade(Request $request, Tour $tour, TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->update([
+            'tour_sales_price' => $request->input('sales_price'),
+        ]);
+        $upgrade->update([
+            'description' => $request->input('description'),
+        ]);
+        $upgrade->upgrade->save();
+        $upgrade->save();
+        return redirect()->route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 }

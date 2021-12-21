@@ -484,6 +484,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update')->middleware('bouncer:TransportInventoryTour,update');
                         Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:TransportInventoryTour,delete=');
                     });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewTransportUpgrade'])->name('transport-upgrade.view')->middleware('bouncer:TransportInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createTransportUpgrade'])->name('transport-upgrade.create')->middleware('bouncer:TransportInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeTransportUpgrade'])->name('transport-upgrade.store')->middleware('bouncer:TransportInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editTransportUpgrade'])->name('transport-upgrade.edit')->middleware('bouncer:TransportInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateTransportUpgrade'])->name('transport-upgrade.update')->middleware('bouncer:TransportInventoryTour,update');
+                        });
+                    });
                 });
             });
             Route::prefix('payment-installments')->group(function () {
