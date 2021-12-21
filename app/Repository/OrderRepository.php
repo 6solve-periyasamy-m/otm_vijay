@@ -568,7 +568,8 @@ class OrderRepository implements OrderRepositoryInterface
         return $data;
     }
 
-    public static function getCustomerOrders(Customer $customer) {
+    public static function getCustomerOrders(Customer $customer)
+    {
         $data = [];
         foreach ($customer->orderCustomers as $orderCustomer) {
             $order = $orderCustomer->order;
@@ -576,7 +577,8 @@ class OrderRepository implements OrderRepositoryInterface
             $data[$order->booking_reference] = self::getCustomerOrderDetails($customer, $order);
         }
 
-        return ['orders' => $data];        
+        return ['orders' => $data];
+    }
 
     public static function grantMerchandiseToCustomer($oCustomerId, $merchandiseId)
     {
