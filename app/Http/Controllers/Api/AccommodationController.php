@@ -80,7 +80,7 @@ class AccommodationController extends ApiController
 
         $accommodationRepository = new AccommodationRepository();
         $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
-
+Log::debug('accommodation booked', [$booked]);
         return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
@@ -115,17 +115,18 @@ class AccommodationController extends ApiController
         $booking_token = $request->token;
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($booking_token);
-
+Log::debug('postAccommodationReservation id, traveller contains: ', [$accommodation_inventory_tour_id, $traveller]);
         $customer_id = $traveller['customer_id'];
         $room = isset($traveller['room']) ? $traveller['room'] : null;
-        $shares = [$traveller['shares']];
-        foreach ($shares as $key => $value) {
-            $shared[$key] = $shares[$key];
-        }
+        // $shares = [$traveller['shares']];
+        // foreach ($shares as $key => $value) {
+        //     $shared[$key] = $shares[$key];
+        // }
 
         $accommodationRepository = new AccommodationRepository();
         $results = $accommodationRepository->updateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id);
- 
+ Log::debug('updateAccommodationBooking Results', [$results]);
+
         return response()->json(['success' => true, 'accommodation' => $results]);
     }
 

@@ -15,7 +15,7 @@
 
                         <div class="col">{{accommodation.first_name}} {{accommodation.last_name}}</div>
                         <div class="col">{{accommodation.room ? accommodation.room['room_type_name'] : ''}}</div>
-                        <div class="col" :class="`colorise-${accommodation.accommodation_inventory_id} % 4`">{{accommodation.accommodation_name}} {{accommodation.maximum_occupancy}}</div>
+                        <div class="col" :class="`colorise-${accommodation.accommodation_inventory_tour_id} % 4`">{{accommodation.accommodation_name}} {{accommodation.maximum_occupancy}}</div>
                         <div class="col">{{accommodation.room_type_name}} {{accommodation.board_type_name}} {{accommodation.shared?'sharer':''}}</div>
                         <div class="col">{{accommodation.shared !== undefined && accommodation.shared.sharename !== null ? accommodation.shared.sharename : '-'}}</div>
                         <div class="col">{{accommodation.shared !== undefined && accommodation.shared.sharename !== undefined && accommodation.shared.sharename.length ? accommodation.shared.sharename.join(',') : '-'}}</div>
@@ -239,7 +239,7 @@ export default {
                         type: 'accommodation',
                         traveller: data,
                         tour: this.tour,
-                        inventory_tour_id: this.accommodation_inventory_tour_id,
+                        accommodation_inventory_tour_id: this.accommodation_inventory_tour_id,
                         token: this.booking_token
                     })
                     .then(response => {

@@ -26,7 +26,7 @@ interface AccommodationRepositoryInterface {
 class AccommodationRepository implements AccommodationRepositoryInterface
 {
     protected $model;
-    private $debug = false;
+    private $debug = 0;
 
     public function __construct()
     {
@@ -71,6 +71,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->where('accommodation_inventory_tours.tour_id', $tour->id)
             ->get();
 
+        Log::debug('getAccommodationInventoryForTour', [$result]);
         return $result;
     }
 
@@ -80,7 +81,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
     public function getAccommodationBooking(Booking $booking, $travellerIds)
     {
         $bookingAccommodation = new BookingAccommodation();
-        $bookings = $bookingAccommodation
+        $booking = $bookingAccommodation
             ->select('booking_accommodations.booking_id',
                 'booking_accommodations.customer_id', 
                 'booking_accommodations.accommodation_inventory_tour_id',
@@ -88,13 +89,15 @@ class AccommodationRepository implements AccommodationRepositoryInterface
                 'accommodations.name as accommodation_name',
                 'board_types.name as board_type_name', 'room_types.name as room_type_name')
             ->join('accommodation_inventory_tours', 'booking_accommodations.accommodation_inventory_tour_id', 'accommodation_inventory_tours.id')
-            ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventory_tours.id')
+            ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
             ->join('accommodations', 'accommodation_inventories.accommodation_id', 'accommodations.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->where('accommodation_inventory_tours.tour_id', $booking->tour_id)
-            ->whereIn('booking_accommodations.customer_id', $travellerIds)
-            ->get();
+            ->whereIn('booking_accommodations.customer_id', $travellerIds);
+        
+        $bookings = $booking->get();
+        Log::debug('getAccommodationBooking', [$booking->toSql(), $travellerIds, $bookings]);
 
         return $bookings;
     }
@@ -120,28 +123,37 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->where('accommodation_inventory_tours.tour_id', $tour->id)
             ->get();
-        $this->debug > 5 && Log::info( 'rooms for tour', $rooms->toArray());
+
+        $this->debug > 5 && Log::debug( 'rooms for tour', $rooms->toArray());
         
         return $rooms;
     }
 
-    private function update($booking) {
+    private function update($booking) 
+    {
+        Log::debug('Accommodation update:', [$booking]);
+
         $bookingAccommodation = new BookingAccommodation();
-        $current = $bookingAccommodation->where('customer_id', $booking['customer_id'])
-            ->where('booking_id', $booking['booking_id'])->get();
+        $current = $bookingAccommodation
+            ->where('customer_id', $booking['customer_id'])
+            ->where('booking_id', $booking['booking_id'])
+            ->get();
+
         if ($current->count() > 1) {
             Log::error('BookingAccommodation table has a duplicate record for customer booking', $booking);
             var_dump($current);
             throw new Exception('more than one accommodation booking record found');
         }
+Log::debug('accommodation update loaded', [$current]);
         if ($current->count() === 1) {
             $updateBooking = $current[0];
-            $updateBooking->accommodation_inventory_id = $booking['accommodation_inventory_id'];
+            $updateBooking->accommodation_inventory_tour_id = $booking['accommodation_inventory_tour_id'];
             $updateBooking->save();
             return true;
         }
+
         $bookingAccommodation->customer_id = $booking['customer_id'];
-        $bookingAccommodation->accommodation_inventory_id = $booking['accommodation_inventory_id'];
+        $bookingAccommodation->accommodation_inventory_tour_id = $booking['accommodation_inventory_tour_id'];
         $bookingAccommodation->booking_id = $booking['booking_id'];
         $bookingAccommodation->save();
         return true;
@@ -155,26 +167,26 @@ class AccommodationRepository implements AccommodationRepositoryInterface
          */
 // inspect room: does accommodation_inventory_id exist here?
 // inspect $accommodation_inventory_tour_id passed in
-Log::debug('UpdateAccommodationBooking', [$room, $accommodation_inventory_tour_id]);
+Log::debug('UpdateAccommodationBooking (id, room, booking) ', [$accommodation_inventory_tour_id, $room, $booking]);
         $booking_id = $booking->id;
         $customer_id = $customer_id;
         $room_share_ids = null;
         $accommodation_inventory_id = null;
         if (isset($room) && count($room)) {
-            $accommodation_inventory_id = $room['accommodation_inventory_id'];
+            $accommodation_inventory_tour_id = $room['accommodation_inventory_tour_id'];
             if (isset($traveller) && isset($traveller['shared'])) {
                 $room_share_ids = $traveller['shares'];
             }
         }
-        $this->debug && Log::debug('data:', [$booking_id, $customer_id, $accommodation_inventory_id, $room_share_ids]);
+        $this->debug && Log::debug('data:', [$booking_id, $customer_id, $accommodation_inventory_tour_id, $room_share_ids]);
         // create the booking records 
-        if (empty($accommodation_inventory_id)) {
+        if (empty($accommodation_inventory_tour_id)) {
             return false;
         }
         $booking = [
             'booking_id' => $booking_id,
             'customer_id' => $customer_id,
-            'accommodation_inventory_id' => $accommodation_inventory_id,
+            'accommodation_inventory_tour_id' => $accommodation_inventory_tour_id,
         ];
         
         $this->debug && Log::debug('updating booking', $booking);
@@ -185,7 +197,7 @@ Log::debug('UpdateAccommodationBooking', [$room, $accommodation_inventory_tour_i
                     $booking = [
                         'booking_id' => $booking_id,
                         'customer_id' => $share_id,
-                        'accommodation_inventory_id' => $accommodation_inventory_id,
+                        'accommodation_inventory_tour_id' => $accommodation_inventory_tour_id,
                     ];
                     $this->update($booking);
                 }

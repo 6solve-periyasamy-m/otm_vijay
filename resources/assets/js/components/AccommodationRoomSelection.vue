@@ -35,7 +35,7 @@ export default {
     name: 'RoomSelection',
     data() {
         return {
-            debug: 0,
+            debug: 5,
             rooms: [],
             room_selected: {}, 
             sharer: [],
