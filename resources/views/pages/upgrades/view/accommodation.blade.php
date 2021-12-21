@@ -90,7 +90,7 @@
                                         @endcan
                                         @can('delete', \App\Models\AccommodationInventoryTour::class)
                                             <a href="#" onclick="$('#accommodation-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                            <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $upgrade->upgrade->id,]) }}" method="post" id="accommodation-{{$upgrade->upgrade->id}}-delete">
+                                            <form action="{{ route('accommodation-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="accommodation-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else

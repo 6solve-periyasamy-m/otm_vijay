@@ -92,7 +92,7 @@
                                         @endcan
                                         @can('delete', \App\Models\FlightInventoryTour::class)
                                             <a href="#" onclick="$('#flight-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                            <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $upgrade->upgrade->id,]) }}" method="post" id="flight-{{$upgrade->upgrade->id}}-delete">
+                                            <form action="{{ route('flight-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="flight-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else

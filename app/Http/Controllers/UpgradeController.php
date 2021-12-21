@@ -72,6 +72,12 @@ class UpgradeController extends Controller
         $upgrade->save();
         return redirect()->route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
+    
+    public function deleteAccommodationUpgrade(Tour $tour, AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->delete();
+        $upgrade->delete();
+        return redirect()->route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
 
     // Activity
     public function createActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour) {
@@ -115,6 +121,12 @@ class UpgradeController extends Controller
         $upgrade->save();
         return redirect()->route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
+    
+    public function deleteActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->delete();
+        $upgrade->delete();
+        return redirect()->route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }    
 
     // Flight
     public function createFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour) {
@@ -128,6 +140,7 @@ class UpgradeController extends Controller
             'tour_component_type' => 'Upgrade',
             'flight_inventory_id' => $request->input('inventory_id'),
             'tour_sales_price' => $request->input('sales_price'),
+            'flight_type' => $inventoryTour->flightType,
         ]);
         $tour->flightInventoryTours()->save($tourInventory);
         $upgrade = FlightInventoryTourUpgrade::make([
@@ -156,6 +169,12 @@ class UpgradeController extends Controller
         ]);
         $upgrade->upgrade->save();
         $upgrade->save();
+        return redirect()->route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function deleteFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->delete();
+        $upgrade->delete();
         return redirect()->route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
@@ -199,6 +218,12 @@ class UpgradeController extends Controller
         ]);
         $upgrade->upgrade->save();
         $upgrade->save();
+        return redirect()->route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function deleteTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->delete();
+        $upgrade->delete();
         return redirect()->route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 }

@@ -95,7 +95,7 @@
                                         @endcan
                                         @can('delete', \App\Models\TransportInventoryTour::class)
                                             <a href="#" onclick="$('#transport-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                            <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $upgrade->upgrade->id,]) }}" method="post" id="transport-{{$upgrade->upgrade->id}}-delete">
+                                            <form action="{{ route('transport-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="transport-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else

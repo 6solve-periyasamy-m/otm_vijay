@@ -88,7 +88,7 @@
                                         @endcan
                                         @can('delete', \App\Models\ActivityInventoryTour::class)
                                             <a href="#" onclick="$('#activity-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                            <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $upgrade->upgrade->id,]) }}" method="post" id="activity-{{$upgrade->upgrade->id}}-delete">
+                                            <form action="{{ route('activity-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="activity-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
                                             </form>
                                         @else
