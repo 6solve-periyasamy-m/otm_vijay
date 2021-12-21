@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    @include('pages.upgrades.pages.upgrades.view.header')
+    @include('pages.upgrades.view.header')
     {{-- Upgrades Section --}}
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Included</h2>
