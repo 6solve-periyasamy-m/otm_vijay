@@ -67,6 +67,7 @@
                                 <th scope="col">Arrives At</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Upgrade Price</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>

@@ -67,6 +67,7 @@
                                 <th scope="col">Board Type</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Upgrade Price</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -77,6 +78,7 @@
                                     <td>{{ $upgrade->upgrade->accommodationInventory->roomType->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->boardType->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->stock }}</td>
+                                    <td>{{ $upgrade->description }}</td>
                                     <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\AccommodationInventoryTour::class)
