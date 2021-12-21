@@ -49,6 +49,7 @@ use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
+use App\Http\Controllers\UpgradeController;
 use App\Models\Order;
 use App\Models\Tour;
 use App\Repository\OrderRepository;
@@ -425,6 +426,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit')->middleware('bouncer:AccommodationInventoryTour,update');
                         Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('bouncer:AccommodationInventoryTour,update');
                         Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('bouncer:AccommodationInventoryTour,delete');
+                    });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewAccommodationUpgrade'])->name('accommodation-upgrade.view')->middleware('bouncer:AccommodationInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createAccommodationUpgrade'])->name('accommodation-upgrade.create')->middleware('bouncer:AccommodationInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeAccommodationUpgrade'])->name('accommodation-upgrade.store')->middleware('bouncer:AccommodationInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editAccommodationUpgrade'])->name('accommodation-upgrade.edit')->middleware('bouncer:AccommodationInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateAccommodationUpgrade'])->name('accommodation-upgrade.update')->middleware('bouncer:AccommodationInventoryTour,update');
+                        });
                     });
                 });
                 Route::prefix('activity')->group(function () {
