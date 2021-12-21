@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class AccommodationController extends Controller
 {
@@ -37,6 +38,10 @@ class AccommodationController extends Controller
             $request->validate(Address::getValidationRules());
             $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('accommodation'), $request, $request->input('name'), '');
         }
+        if ($request->has('image') && $request->file('image') != null) {
+            $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+
         $accommodation->address_id = $address->id;
         $accommodation->save();
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
@@ -66,6 +71,12 @@ class AccommodationController extends Controller
         } else {
             $request->validate(Address::getValidationRules());
             LocationsRepository::storeAddressFromGenericRequest($accommodation->address, AddressParent::getParentId('accommodation'), $request, $request->input('name'));
+        }
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($accommodation->image_url)) {
+                File::delete(public_path($accommodation->image_url));
+            }
+            $accommodation->image_url = $request->file('image')->storePublicly('uploads/images');
         }
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActivitiesTable extends Migration
+class CreateMerchandisesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateActivitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('activities', function (Blueprint $table) {
+        Schema::create('merchandises', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_type_id')->index()->constrained()->onDelete('cascade');
-            $table->text('description')->nullable();
+            $table->string('name');
+            $table->string('tour_component_type');
+            $table->foreignId('tour_id')->constrained()->onDelete('cascade');
             $table->string('image_url')->nullable();
-            $table->foreignId('address_id')->index()->constrained()->onDelete('cascade');
-            $table->foreignId('currency_id')->nullable()->constrained()->onDelete('set null');
-            $table->text('name')->nullable();
+            $table->integer('stock');
+            $table->float('purchase_price');
+            $table->float('tour_sales_price');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +35,6 @@ class CreateActivitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activities');
+        Schema::dropIfExists('merchandises');
     }
 }

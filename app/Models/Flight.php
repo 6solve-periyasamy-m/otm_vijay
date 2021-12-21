@@ -16,7 +16,7 @@ class Flight extends Model
 
     public $additional_attributes = ['flight_details'];
     protected $cascadeDeletes = ['flightInventory'];
-    protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_after',];
+    protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_after','image_url'];
     protected $casts = ['available_after' => 'date',];
 
     public static function getValidationRules()
@@ -25,7 +25,8 @@ class Flight extends Model
             'airline_id' => 'required|exists:airlines,id',
             'departure_airport_id' => 'required|exists:airports,id',
             'arrival_airport_id' => 'required|exists:airports,id',
-            'available_after' => 'date'
+            'available_after' => 'date',
+            'image' => 'nullable|image',
         ];
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Transport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class TransportController extends Controller
 {
@@ -33,6 +34,9 @@ class TransportController extends Controller
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
+        if ($request->has('image') && $request->file('image') != null) {
+            $transport->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
@@ -60,6 +64,12 @@ class TransportController extends Controller
             'is_domestic' => $request->input('is_domestic') == "on" ? 1 : 0,
             'notes' => $request->input('notes'),
         ]);
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($transport->image_url)) {
+                File::delete(public_path($transport->image_url));
+            }
+            $transport->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
         return redirect()->route('transports.view', ['transport' => $transport,]);
     }
 
