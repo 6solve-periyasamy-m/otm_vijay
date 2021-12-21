@@ -286,7 +286,7 @@
                                                     <i class="icon-arrow-up"></i>
                                                 </span>
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <i class="icon-trash"></i>
+                                                <i class="icon-note"></i>
                                             </span>
                                         @endcan
                                         @can('delete', \App\Models\FlightInventoryTour::class)
@@ -323,13 +323,31 @@
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($transport["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($transport["inventory"]->arrives_at) }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
-                                    <td>{{ $transport["tour"]->tour_component_type }}</td>
+                                    <td>
+                                        @if($transport["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $transport["tour"]->parent() }}">
+                                                @endif
+                                                {{ $transport["tour"]->tour_component_type }}
+                                                @if($transport["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
                                     <td class="actions">
                                         @can('update', \App\Models\TransportInventoryTour::class)
+                                            @if($transport["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <i class="icon-trash"></i>
+                                                    <i class="icon-arrow-up"></i>
+                                            </span>
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
                                             </span>
                                         @endcan
                                         @can('delete', \App\Models\TransportInventoryTour::class)
