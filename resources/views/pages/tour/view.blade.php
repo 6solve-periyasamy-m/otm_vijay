@@ -188,6 +188,7 @@
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Activity Type</th>
+                                <th scope="col">Ticket Type</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -197,11 +198,30 @@
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($activity["inventory"]->starts_at) }} to {{ StringFormatter::formatDateTime($activity["inventory"]->ends_at) }}</td>
                                     <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
-                                    <td>{{ $activity["tour"]->tour_component_type }}</td>
-                                    <td class="actions">
+                                    <td>{{ $activity["inventory"]->ticketType->name }}</td>
+                                    <td>
+                                        @if($activity["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $activity["tour"]->parent() }}">
+                                        @endif
+                                            {{ $activity["tour"]->tour_component_type }}
+                                        @if($activity["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
+                                    <td class="actions-3">
                                         @can('update', \App\Models\ActivityInventoryTour::class)
+                                            @if($activity["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $activity["tour"]->tour_component_type == 'Upgrade' ? $activity["tour"]->parent() : $activity["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>

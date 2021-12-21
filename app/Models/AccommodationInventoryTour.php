@@ -54,8 +54,8 @@ class AccommodationInventoryTour extends Model
 
     public function __toString()
     {
-        $component = $this->accommodationInventory->accommodation;
         $inventory = $this->accommodationInventory;
+        $component = $inventory->accommodation;
         return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 }
