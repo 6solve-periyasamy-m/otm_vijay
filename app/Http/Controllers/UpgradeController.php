@@ -6,6 +6,8 @@ use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityInventoryTourUpgrade;
+use App\Models\FlightInventoryTour;
+use App\Models\FlightInventoryTourUpgrade;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 
@@ -110,5 +112,48 @@ class UpgradeController extends Controller
         $upgrade->upgrade->save();
         $upgrade->save();
         return redirect()->route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    // Flight
+    public function createFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour) {
+        return view('pages.upgrades.create', ['action' => route('flight-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+            'name' => 'Flight Inventory', 'model' => 'flight', 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function storeFlightUpgrade(Request $request, Tour $tour, FlightInventoryTour $inventoryTour) {
+        $request->validate(self::getValidationRules('flight_inventories'));
+        $tourInventory = FlightInventoryTour::make([
+            'tour_component_type' => 'Upgrade',
+            'flight_inventory_id' => $request->input('inventory_id'),
+            'tour_sales_price' => $request->input('sales_price'),
+        ]);
+        $tour->flightInventoryTours()->save($tourInventory);
+        $upgrade = FlightInventoryTourUpgrade::make([
+            'upgrade_id' => $tourInventory->id,
+            'description' => $request->input('description'),
+        ]);
+        $inventoryTour->upgrades()->save($upgrade);
+        return redirect()->route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function viewFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour) {
+        return view('pages.upgrades.view.flight', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function editFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade) {
+        return view('pages.upgrades.update', ['action' => route('flight-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
+            'name' => 'Flight Inventory']);
+    }
+
+    public function updateFlightUpgrade(Request $request, Tour $tour, FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->update([
+            'tour_sales_price' => $request->input('sales_price'),
+        ]);
+        $upgrade->update([
+            'description' => $request->input('description'),
+        ]);
+        $upgrade->upgrade->save();
+        $upgrade->save();
+        return redirect()->route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 }
