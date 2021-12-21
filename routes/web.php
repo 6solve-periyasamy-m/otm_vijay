@@ -446,6 +446,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update')->middleware('bouncer:ActivityInventoryTour,update');
                         Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete')->middleware('bouncer:ActivityInventoryTour,delete');
                     });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewActivityUpgrade'])->name('activity-upgrade.view')->middleware('bouncer:ActivityInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createActivityUpgrade'])->name('activity-upgrade.create')->middleware('bouncer:ActivityInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeActivityUpgrade'])->name('activity-upgrade.store')->middleware('bouncer:ActivityInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editActivityUpgrade'])->name('activity-upgrade.edit')->middleware('bouncer:ActivityInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateActivityUpgrade'])->name('activity-upgrade.update')->middleware('bouncer:ActivityInventoryTour,update');
+                        });
+                    });
                 });
                 Route::prefix('flight')->group(function () {
                     Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create')->middleware('bouncer:FlightInventoryTour,create');

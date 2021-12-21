@@ -69,4 +69,46 @@ class UpgradeController extends Controller
         return redirect()->route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
     }
 
+    // Activity
+    public function createActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour) {
+        return view('pages.upgrades.create', ['action' => route('activity-upgrade.store', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]),
+            'name' => 'Activity Inventory', 'model' => 'activity', 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function storeActivityUpgrade(Request $request, Tour $tour, ActivityInventoryTour $inventoryTour) {
+        $request->validate(self::getValidationRules('activity_inventories'));
+        $tourInventory = ActivityInventoryTour::make([
+            'tour_component_type' => 'Upgrade',
+            'activity_inventory_id' => $request->input('inventory_id'),
+            'tour_sales_price' => $request->input('sales_price'),
+        ]);
+        $tour->activityInventoryTours()->save($tourInventory);
+        $upgrade = ActivityInventoryTourUpgrade::make([
+            'upgrade_id' => $tourInventory->id,
+            'description' => $request->input('description'),
+        ]);
+        $inventoryTour->upgrades()->save($upgrade);
+        return redirect()->route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function viewActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour) {
+        return view('pages.upgrades.view.activity', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
+
+    public function editActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade) {
+        return view('pages.upgrades.update', ['action' => route('activity-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
+            'name' => 'Activity Inventory']);
+    }
+
+    public function updateActivityUpgrade(Request $request, Tour $tour, ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade) {
+        $upgrade->upgrade->update([
+            'tour_sales_price' => $request->input('sales_price'),
+        ]);
+        $upgrade->update([
+            'description' => $request->input('description'),
+        ]);
+        $upgrade->upgrade->save();
+        $upgrade->save();
+        return redirect()->route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $inventoryTour,]);
+    }
 }
