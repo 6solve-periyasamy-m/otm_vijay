@@ -262,11 +262,29 @@
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->flight_type }}</td>
-                                    <td>{{ $flight["tour"]->tour_component_type }}</td>
-                                    <td class="actions">
+                                    <td>
+                                        @if($flight["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $flight["tour"]->parent() }}">
+                                        @endif
+                                            {{ $flight["tour"]->tour_component_type }}
+                                        @if($flight["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
+                                    <td class="actions-3">
                                         @can('update', \App\Models\FlightInventoryTour::class)
+                                            @if($flight["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $flight["tour"]->tour_component_type == 'Upgrade' ? $flight["tour"]->parent() : $flight["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-trash"></i>
                                             </span>

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Repository\FlightComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
+use StringFormatter;
 
 class FlightInventoryTour extends Model
 {
@@ -52,7 +54,20 @@ class FlightInventoryTour extends Model
         return $this->hasMany(FlightInventoryTourUpgrade::class, 'base_id');
     }
 
+    public function parent() {
+        return FlightComponentRepository::getParentComponent($this);
+    }
+
     public function tour() {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function __toString()
+    {
+        $inventory = $this->flightInventory;
+        $component = $inventory->flight;
+        return $component->airline->name . '('. $inventory->flight_number . ')' . $component->departureAirport->name . ' to ' .  $component->arrivalAirport->name .
+            ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
+            ' (' . $inventory->travelClass->name . ')';
     }
 }
