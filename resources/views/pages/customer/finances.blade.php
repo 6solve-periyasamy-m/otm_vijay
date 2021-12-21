@@ -46,56 +46,6 @@ $keys = array_keys($orders);
             <div class="card-body">
                 <div class="row" id="payment_records">
                     <p class="heading">Payment Schedule</p>
-                    <div class="col-md-6">
-                        <div class="payment-record">
-                            <div class="d-flex align-items-center">
-                                <div class="date">
-                                    <div class="month-day">JAN 22</div>
-                                    <div class="year">2021</div>
-                                </div>
-                                <div class="method">
-                                    <div class="value">Paypal</div>
-                                    <div class="deposit">Deposit</div>
-                                </div>
-                            </div>
-                            <div class="value">
-                                £125.0 GBP
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="payment-record">
-                            <div class="d-flex align-items-center">
-                                <div class="date">
-                                    <div class="month-day">SEP 22</div>
-                                    <div class="year">2021</div>
-                                </div>
-                                <div class="method">
-                                    <div class="value">Paypal</div>
-                                    <div class="deposit">Deposit</div>
-                                </div>
-                            </div>
-                            <div class="value">
-                                £25.0 GBP
-                            </div>
-                        </div>
-                    </div><div class="col-md-6">
-                        <div class="payment-record">
-                            <div class="d-flex align-items-center">
-                                <div class="date">
-                                    <div class="month-day">DEC 22</div>
-                                    <div class="year">2021</div>
-                                </div>
-                                <div class="method">
-                                    <div class="value">Paypal</div>
-                                    <div class="deposit">Deposit</div>
-                                </div>
-                            </div>
-                            <div class="value">
-                                £75.0 GBP
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -151,7 +101,7 @@ $keys = array_keys($orders);
     const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     var json_order = '{{ json_encode($orders) }}';
     json_order = json_order.replace(/&quot;/g, '"');
-    var orders = JSON.parse(json_order);
+    const orders = JSON.parse(json_order);
     console.log(orders[0]);
 
     $(document).ready(function() {
@@ -160,7 +110,6 @@ $keys = array_keys($orders);
     
     
     function initializeContent() {
-        console.log("initialize");
         var keys = Object.keys(orders);
         if (keys.length == 0) {
             return;
@@ -169,8 +118,7 @@ $keys = array_keys($orders);
         setContent(keys[0]);
     }
 
-    function setContent(order_id) {        
-        console.log("set content");
+    function setContent(order_id) {
         var order = orders[order_id];
 
         setPaymentBalance(order);
@@ -178,7 +126,6 @@ $keys = array_keys($orders);
     }
 
     function setPaymentBalance(order) {
-        console.log(order.detail);
         var totalOrderValue = order.detail.totalOrderValue;
         var totalPaid = order.detail.totalPaid;
         var order_status_color = order.detail.orderStatus.color;
@@ -224,8 +171,7 @@ $keys = array_keys($orders);
     }
 
     function onOrderChange() {        
-        var booking_reference = $('#booking_reference').val();
-        console.log('Order Change:' + booking_reference);
+        var booking_reference = $('#booking_reference').val();        
         setContent(booking_reference);
     }
 
