@@ -11,6 +11,7 @@
             $('#transports-table').DataTable({fixedHeader: true});
             $('#installments-table').DataTable({fixedHeader: true});
             $('#merchandise-table').DataTable({fixedHeader: true});
+            $('#orders-table').DataTable({fixedHeader: true});
         });
     </script>
 @endsection
