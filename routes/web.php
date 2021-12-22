@@ -47,6 +47,7 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
 use App\Models\Order;
@@ -632,6 +633,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/demo', [MailController::class, 'demoRefundGiven'])->name('demo');
             Route::get('/demo/{order}', [MailController::class, 'demoOrderRefundGiven'])->name('order_demo');
         });
+    });
+
+    Route::prefix('reports')->group(function () {
+       Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
+       Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
     });
 });
 
