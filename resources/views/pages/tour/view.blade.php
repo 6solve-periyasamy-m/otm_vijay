@@ -460,7 +460,7 @@
                         <td>{{ $merchandise->notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise::class)
-                                <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                             <i class="icon-trash"></i>
