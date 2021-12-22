@@ -67,9 +67,11 @@ class AdditionalTravellerRepository implements AdditionalTravellerRepositoryInte
     public function getIds($booking_id)
     {
         $customers = $this->getGroup($booking_id);
-        return $customers->map(function($item, $key) {
-            return $item->id;
+        Log::debug('>>>>>>>customers', [$customers]);
+        $ids = $customers->map(function($item, $key) {
+            return $item->customer_id;
         });
+        return $ids;
 
     }   
 

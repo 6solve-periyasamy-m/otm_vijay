@@ -102,7 +102,7 @@ Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue')
 Vue.component('validation-errors', require('./components/ValidationErrors.vue').default);
 // Vue.component('booking-store', require('./components/BookingStore.vue').default);
 
-Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
+// Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
 Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
 Vue.component('booking-info', require('./components/BookingInfo.vue').default);
 Vue.component('vue-test', require('./components/VueTest.vue').default);

@@ -83,7 +83,7 @@ Log::debug('Booking:Create', [$tour_id, $token]);
         $flightsOutbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Outbound', 'Included');
         $flightsInbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Inbound', 'Included');
         $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
-    
+
         $activityBookingRepo = new ActivityBookingRepository();
         $transportBookingRepo = new TransportBookingRepository();
         $activities = $activityBookingRepo->getBookingsForTour($booking);

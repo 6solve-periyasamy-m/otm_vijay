@@ -116,8 +116,8 @@ Route::prefix('booking')->group(function () {
     // Route::get('/findOrderByEmail/{email}', [CustomerController::class, 'getCustomerOrdersByEmail']);
     Route::post('/recover/token', [CustomerController::class, 'getTokenLink']);
     Route::get('/accomodation', [ApiController::class, 'getAccommodationFromTour']);
-    Route::get('/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
-    Route::get('/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
+    // Route::get('/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
+    // Route::get('/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
     Route::get('/countries', [CountryApiController::class, 'getCountries']);
 });
 

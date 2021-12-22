@@ -81,7 +81,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
     public function getAccommodationBooking(Booking $booking, $travellerIds)
     {
         $bookingAccommodation = new BookingAccommodation();
-        $booking = $bookingAccommodation
+        $bookingObj = $bookingAccommodation
             ->select('booking_accommodations.booking_id',
                 'booking_accommodations.customer_id', 
                 'booking_accommodations.accommodation_inventory_tour_id',
@@ -95,9 +95,12 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->where('accommodation_inventory_tours.tour_id', $booking->tour_id)
             ->whereIn('booking_accommodations.customer_id', $travellerIds);
-        
-        $bookings = $booking->get();
-        Log::debug('getAccommodationBooking', [$booking->toSql(), $travellerIds, $bookings]);
+        try {
+            $bookings = $bookingObj->get();
+            Log::debug('getAccommodationBooking', [$booking, $travellerIds, $bookings]);
+        } catch (Exception $e) {
+            Log::error('Retrieving booking data error', $e->getMessage());
+        }
 
         return $bookings;
     }

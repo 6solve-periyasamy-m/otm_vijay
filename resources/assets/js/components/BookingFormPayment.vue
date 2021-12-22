@@ -13,8 +13,6 @@
                 <div class="summary">
                     
                 </div>
-                <payment-schedule status="new" tour="1" :total_price="10000" :passengers="4"></payment-schedule>
-                <payment-installments></payment-installments>
             </div>
             <div class="row">
     
@@ -68,7 +66,7 @@ export default {
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking
-                    console.log('booking data ', that.booking)
+                    console.log('booking data ', response)
                 })
                 .catch(error => {
                     console.log(error)
