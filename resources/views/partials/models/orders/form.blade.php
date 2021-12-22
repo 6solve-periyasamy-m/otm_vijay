@@ -7,9 +7,6 @@
           ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
            'route' => 'tours',])
 @endcan
-@include('partials.fields.selector.default',
-            ['name' => 'Quote', 'field' => 'quote_id', 'value' => $quote_id ?? 0,
-             'route' => 'quotes',])
 @if(!isset($update))
 @can('create', \App\Models\Customer::class)
 @include('partials.fields.selector.adder',
