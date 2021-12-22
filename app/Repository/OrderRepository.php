@@ -577,6 +577,7 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         return ['orders' => $data];        
+    }
 
     public static function grantMerchandiseToCustomer($oCustomerId, $merchandiseId)
     {
