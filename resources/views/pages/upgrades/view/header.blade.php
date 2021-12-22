@@ -44,5 +44,9 @@
             <h6 class="fw-bold">{{ $tour->description }}</h6>
         </div>
     </div>
+    <a href="{{ route('tours.view', ['tour' => $tour, ])}}" class="btn btn-primary text-white">
+        <i class="icon-arrow-left"></i>
+        Back to Tour
+    </a>
 </div>
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
