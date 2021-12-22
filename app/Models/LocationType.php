@@ -16,4 +16,12 @@ class LocationType extends Model
     {
         return ['name' => 'required|unique:location_types,name',];
     }
+
+    public static function firstOrCreate(string $name) {
+        $type = self::where('name', '=', $name)->first();
+        if (!isset($type)) {
+            $type = self::create(['name' => $name,]);
+        }
+        return $type;
+    }
 }
