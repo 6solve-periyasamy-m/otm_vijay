@@ -66,8 +66,8 @@
                                 <th scope="col">Departs At</th>
                                 <th scope="col">Arrives At</th>
                                 <th scope="col">Stock</th>
-                                <th scope="col">Upgrade Price</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Upgrade Price</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -84,6 +84,7 @@
                                         <input type="checkbox" disabled @if($transportInventory->arrival_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>{{ $upgrade->upgrade->transportInventory->stock }}</td>
+                                    <td>{{ $upgrade->upgrade->description }}</td>
                                     <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\TransportInventoryTour::class)

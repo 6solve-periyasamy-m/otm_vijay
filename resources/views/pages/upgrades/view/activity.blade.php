@@ -65,8 +65,8 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Ticket Type</th>
                                 <th scope="col">Stock</th>
-                                <th scope="col">Upgrade Price</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Upgrade Price</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
@@ -76,8 +76,8 @@
                                     <td>{{ $upgrade->upgrade->activityInventory->activity->name }}</td>
                                     <td>{{ $upgrade->upgrade->activityInventory->ticketType->name }}</td>
                                     <td>{{ $upgrade->upgrade->activityInventory->stock }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td>{{ $upgrade->description }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\ActivityInventoryTour::class)
                                             <a href="{{ route('activity-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
