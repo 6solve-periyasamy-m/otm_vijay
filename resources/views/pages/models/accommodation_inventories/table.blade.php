@@ -14,7 +14,7 @@
             <th scope="col">Checkin Confirmed</th>
             <th scope="col">Check Out</th>
             <th scope="col">Checkout Confirmed</th>
-            <th scope="col">Fit Selectable</th>
+            <th scope="col">FIT Selectable</th>
             <th scope="col">Stock</th>
             <th scope="col">Purchase Price</th>
             <th scope="col">Sales Price</th>
