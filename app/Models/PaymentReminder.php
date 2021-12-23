@@ -9,7 +9,7 @@ class PaymentReminder extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['order_id', 'payment_installment_id'];
+    protected $fillable = ['order_id', 'order_installment_id'];
 
     public function order()
     {
@@ -18,6 +18,6 @@ class PaymentReminder extends Model
 
     public function installment()
     {
-        return $this->belongsTo(PaymentInstallment::class);
+        return $this->belongsTo(OrderInstallment::class);
     }
 }

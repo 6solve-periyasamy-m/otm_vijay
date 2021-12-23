@@ -9,6 +9,7 @@ use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
+use App\Models\OrderInstallment;
 use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
 use App\Models\PaymentInstallment;
@@ -275,7 +276,7 @@ class OrderRepository implements OrderRepositoryInterface
             $total += $customerValue;
             $breakdown['customers'][] = $customerData;
         }
-        $breakdown['deposit'] = self::getOrderDepositAmount($order);
+        $breakdown['deposit'] = $order->deposit;
         $breakdown['total'] = $total;
         return $breakdown;
     }
@@ -287,22 +288,22 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public static function getOrderDepositAmount(Order $order): float
     {
-        return $order->tour->deposit;
+        return $order->deposit;
     }
 
     /**
      * Get details about the next payment
      * @param Order $order
-     * @return array{amount:float,due:Carbon|null,installment:PaymentInstallment|null} Details about the next installment. If installment is null, then no more installments are required
+     * @return array{amount:float,due:Carbon|null,installment:OrderInstallment|null} Details about the next installment. If installment is null, then no more installments are required
      */
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getOrderDepositAmount($order);
+        $paid -= $order->deposit;
         $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $paid -= self::getCustomerAdjustmentTotal($order);
         $paid -= self::getOrderAdjustmentTotal($order);
-        foreach ($order->tour->paymentInstallments as $installment) {
+        foreach ($order->installments as $installment) {
             $paid -= ($installment->amount * $order->getCustomerCount());
             if ($paid < 0) {
                 return [
@@ -648,12 +649,26 @@ class OrderRepository implements OrderRepositoryInterface
      * @param Order $order
      * @param PaymentInstallment $installment
      */
-    public static function sendReminderEmail(Order $order, PaymentInstallment $installment)
+    public static function sendReminderEmail(Order $order, OrderInstallment $installment)
     {
         PaymentReminder::create([
             'order_id' => $order->id,
-            'payment_installment_id' => $installment->id,
+            'order_installment_id' => $installment->id,
         ]);
         Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+    }
+
+    /**
+     * Clone tour installments into order installments
+     * @param Order $order
+     */
+    public static function cloneInstallments(Order $order) {
+        foreach ($order->tour->paymentInstallments as $installment) {
+            $oInstallment = OrderInstallment::make([
+                'amount' => $installment->amount,
+                'due_on' => $installment->due_on,
+            ]);
+            $order->installments()->save($oInstallment);
+        }
     }
 }

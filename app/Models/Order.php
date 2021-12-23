@@ -102,4 +102,8 @@ class Order extends Model
     public function getAdjustmentValue() {
         return OrderRepository::getTotalAdjustedValue($this);
     }
+
+    public function installments() {
+        return $this->hasMany(OrderInstallment::class, 'order_id');
+    }
 }

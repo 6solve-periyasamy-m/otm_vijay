@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentRemindersTable extends Migration
+class CreateOrderInstallmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreatePaymentRemindersTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_reminders', function (Blueprint $table) {
+        Schema::create('order_installments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('order_installment_id')->constrained()->onDelete('cascade');
-            $table->integer('period')->default('7');
+            $table->float('amount', 10, 2);
+            $table->date('due_on')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,6 @@ class CreatePaymentRemindersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_reminders');
+        Schema::dropIfExists('order_installments');
     }
 }

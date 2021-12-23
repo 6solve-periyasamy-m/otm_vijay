@@ -17,6 +17,8 @@
         ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
          'route' => 'customers',])
 @endcan
+@else
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, ])
 @endif
 @include('partials.fields.text', ['name' => 'Token', 'field' => 'token', 'value' => $token ?? null, ])
 @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $ordered_on ?? null, ])
