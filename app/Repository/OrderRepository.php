@@ -299,10 +299,9 @@ class OrderRepository implements OrderRepositoryInterface
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= $order->deposit;
         $paid -= self::getOrderAdditionals($order)['additionalValue'];
-        $paid -= self::getCustomerAdjustmentTotal($order);
-        $paid -= self::getOrderAdjustmentTotal($order);
+        $paid -= self::getTotalAdjustedValue($order);
+        $paid -= $order->deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         foreach ($order->installments as $installment) {
             $paid -= ($installment->amount * $order->getCustomerCount());
             if ($paid < 0) {
