@@ -42,7 +42,7 @@ class OrderController extends Controller
         $order->lead_booker_id = $orderCustomer->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        OrderRepository::addIncludedToCustomer($orderCustomer, $order);
+        OrderRepository::addIncludedToCustomer($orderCustomer);
         event(new OrderCreatedEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }

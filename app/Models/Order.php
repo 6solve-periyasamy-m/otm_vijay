@@ -79,4 +79,27 @@ class Order extends Model
     {
         return OrderRepository::getOrderStatus($this);
     }
+
+    public function getCustomerCount() : int
+    {
+        return $this->orderCustomers->count();
+    }
+
+    public function getCost()
+    {
+        return OrderRepository::getCost($this);
+    }
+
+    public function getCostBreakdown(): array
+    {
+        return OrderRepository::getCostBreakdown($this);
+    }
+
+    public function getPaid() {
+        return OrderRepository::getTotalPaid($this);
+    }
+
+    public function getAdjustmentValue() {
+        return OrderRepository::getTotalAdjustedValue($this);
+    }
 }
