@@ -26,27 +26,6 @@ class Order extends Model
         ];
     }
 
-    public static function getStatusArray(int $status): array {
-        switch ($status) {
-            case -3:
-                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
-            case -2:
-                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
-            case -1:
-                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
-            case 0:
-                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
-            case 1:
-                return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
-            case 2:
-                return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
-            case 3:
-                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
-            default:
-                return ['status' => 'Status Unknown', 'color' => 'dark'];
-        }
-    }
-
     public static function generateBookingReference(Order $order)
     {
         return SettingsRepository::get('booking.prefix')
@@ -101,7 +80,29 @@ class Order extends Model
         return self::getStatusArray(OrderRepository::getOrderStatus($this));
     }
 
-    public function getCustomerCount() : int
+    public static function getStatusArray(int $status): array
+    {
+        switch ($status) {
+            case -3:
+                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
+            case -2:
+                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
+            case -1:
+                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
+            case 0:
+                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
+            case 1:
+                return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
+            case 2:
+                return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
+            case 3:
+                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            default:
+                return ['status' => 'Status Unknown', 'color' => 'dark'];
+        }
+    }
+
+    public function getCustomerCount(): int
     {
         return $this->orderCustomers->count();
     }
@@ -116,27 +117,33 @@ class Order extends Model
         return OrderRepository::getCostBreakdown($this);
     }
 
-    public function getPaid() {
+    public function getPaid()
+    {
         return OrderRepository::getTotalPaid($this);
     }
 
-    public function getAdjustmentValue() {
+    public function getAdjustmentValue()
+    {
         return OrderRepository::getTotalAdjustedValue($this);
     }
 
-    public function installments() {
+    public function installments()
+    {
         return $this->hasMany(OrderInstallment::class, 'order_id');
     }
 
-    public function getRemaining(): float {
+    public function getRemaining(): float
+    {
         return OrderRepository::getRemainingToPay($this);
     }
 
-    public function getNextInstallment(): array {
+    public function getNextInstallment(): array
+    {
         return OrderRepository::getNextPaymentDetails($this);
     }
 
-    public function getAdditionals(): array {
+    public function getAdditionals(): array
+    {
         return OrderRepository::getOrderAdditionals($this);
     }
 }
