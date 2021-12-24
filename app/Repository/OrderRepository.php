@@ -342,17 +342,29 @@ class OrderRepository
     {
         $paidAmount = self::getPayments($order)['amount'];
         $cost = self::getCost($order);
-        $adjustments = self::getOrderAdjustmentTotal($order);
-        $customerAdjustments = self::getCustomerAdjustmentTotal($order);
-        if (($cost + $adjustments + $customerAdjustments) > $paidAmount) {
-            $next = self::getNextPaymentDetails($order);
-            if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
-                return ['status' => 'Payment Overdue', 'color' => 'danger'];
+        $adjustments = self::getTotalAdjustedValue($order);;
+        $total = $cost + $adjustments;
+        if ($order->trashed()) {
+            if ($paidAmount == 0) {
+                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
+            } else if ($paidAmount <= $order->deposit) {
+                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
             } else {
-                return ['status' => 'Balance Outstanding', 'color' => 'warning'];
+                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
             }
         } else {
-            return ['status' => 'Paid in Full', 'color' => 'success'];
+            if ($total > $paidAmount) {
+                $next = self::getNextPaymentDetails($order);
+                if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
+                    return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
+                } else {
+                    return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
+                }
+            } elseif ($total < $paidAmount) {
+                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            } else {
+                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
+            }
         }
     }
 
