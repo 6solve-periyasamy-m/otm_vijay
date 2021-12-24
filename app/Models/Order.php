@@ -106,4 +106,16 @@ class Order extends Model
     public function installments() {
         return $this->hasMany(OrderInstallment::class, 'order_id');
     }
+
+    public function getRemaining(): float {
+        return OrderRepository::getRemainingToPay($this);
+    }
+
+    public function getNextInstallment(): array {
+        return OrderRepository::getNextPaymentDetails($this);
+    }
+
+    public function getAdditionals(): array {
+        return OrderRepository::getOrderAdditionals($this);
+    }
 }
