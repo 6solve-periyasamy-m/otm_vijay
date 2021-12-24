@@ -205,6 +205,14 @@ $(document).ready( function () {
                 Edit Order Customer
             </a>
             @endcan
+            @can('delete', \App\Models\OrderCustomer::class)
+                @if($orderCustomer->id !== $orderCustomer->order->lead_booker_id)
+                    <a href="#" onclick="$('#customer-delete').submit()" class="btn btn-danger mb-1"><i class="icon-trash"></i>Remove Customer</a>
+                    <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" method="post" id="customer-delete">
+                        @csrf
+                    </form>
+                @endcan
+            @endcan
         </div>
     </div>
 </div>
