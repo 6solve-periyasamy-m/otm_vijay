@@ -30,7 +30,6 @@ class OrderController extends Controller
         $order = Order::create([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
-            'token' => $request->input('token'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
@@ -67,7 +66,6 @@ class OrderController extends Controller
         $order->update([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
-            'token' => $request->input('token'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),

@@ -20,7 +20,6 @@
 @else
 @include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, ])
 @endif
-@include('partials.fields.text', ['name' => 'Token', 'field' => 'token', 'value' => $token ?? null, ])
 @include('partials.fields.datetime', ['name' => 'Ordered On', 'field' => 'ordered_on', 'value' => $ordered_on ?? null, ])
 @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, ])
 @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, ])
