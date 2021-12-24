@@ -336,34 +336,34 @@ class OrderRepository
     /**
      * Get the current status of the order
      * @param Order $order
-     * @return array{status:string,color:string} The string status, and the color to be used (uses bootstrap colors)
+     * @return int Status code for order
      */
-    public static function getOrderStatus(Order $order): array
+    public static function getOrderStatus(Order $order): int
     {
         $paidAmount = self::getPayments($order)['amount'];
         $cost = self::getCost($order);
-        $adjustments = self::getTotalAdjustedValue($order);;
+        $adjustments = self::getTotalAdjustedValue($order);
         $total = $cost + $adjustments;
         if ($order->trashed()) {
             if ($paidAmount == 0) {
-                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
+                return -3;
             } else if ($paidAmount <= $order->deposit) {
-                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
+                return -2;
             } else {
-                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
+                return -1;
             }
         } else {
             if ($total > $paidAmount) {
                 $next = self::getNextPaymentDetails($order);
                 if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
-                    return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
+                    return 2;
                 } else {
-                    return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
+                    return 1;
                 }
             } elseif ($total < $paidAmount) {
-                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+                return 3;
             } else {
-                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
+                return 0;
             }
         }
     }

@@ -26,6 +26,27 @@ class Order extends Model
         ];
     }
 
+    public static function getStatusArray(int $status): array {
+        switch ($status) {
+            case -3:
+                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
+            case -2:
+                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
+            case -1:
+                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
+            case 0:
+                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
+            case 1:
+                return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
+            case 2:
+                return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
+            case 3:
+                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            default:
+                return ['status' => 'Status Unknown', 'color' => 'dark'];
+        }
+    }
+
     public static function generateBookingReference(Order $order)
     {
         return SettingsRepository::get('booking.prefix')
@@ -77,7 +98,7 @@ class Order extends Model
 
     public function getStatus()
     {
-        return OrderRepository::getOrderStatus($this);
+        return self::getStatusArray(OrderRepository::getOrderStatus($this));
     }
 
     public function getCustomerCount() : int
