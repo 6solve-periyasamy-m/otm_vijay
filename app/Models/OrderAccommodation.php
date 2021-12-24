@@ -40,4 +40,9 @@ class OrderAccommodation extends Model
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
+
+    public function isCancelled(): bool
+    {
+        return $this->orderCustomers->order->cancelled;
+    }
 }

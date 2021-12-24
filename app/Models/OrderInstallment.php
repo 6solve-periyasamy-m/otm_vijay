@@ -17,4 +17,9 @@ class OrderInstallment extends Model
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
+
+    public function isCancelled(): bool
+    {
+        return $this->order->cancelled;
+    }
 }

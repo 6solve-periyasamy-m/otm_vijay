@@ -78,7 +78,15 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
-        $order->delete();
-        return redirect()->route('orders.all');
+        $order->cancelled = true;
+        $order->save();
+        return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
+    public function restore(Order $order)
+    {
+        $order->cancelled = false;
+        $order->save();
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

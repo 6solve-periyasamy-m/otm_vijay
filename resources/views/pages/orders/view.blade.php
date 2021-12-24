@@ -66,6 +66,19 @@
                 <i class="icon-globe"></i>
                 View Tour
             </a>
+            @can('delete', \App\Models\Order::class)
+                @if($order->cancelled)
+                    <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning"><i class="icon-trash"></i>Restore Order</a>
+                    <form action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">
+                        @csrf
+                    </form>
+                @else
+                    <a href="#" onclick="$('#order-delete').submit()" class="btn btn-danger"><i class="icon-trash"></i>Cancel Order</a>
+                    <form action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
+                        @csrf
+                    </form>
+                @endif
+            @endcan
         </div>
     </div>
 </div>

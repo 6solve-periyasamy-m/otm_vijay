@@ -50,4 +50,9 @@ class OrderFlight extends Model
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'arrival_airport_id', 'id');
     }
+
+    public function isCancelled(): bool
+    {
+        return $this->orderCustomers->order->cancelled;
+    }
 }

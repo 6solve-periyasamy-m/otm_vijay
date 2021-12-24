@@ -15,7 +15,7 @@ class Order extends Model
 
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes',];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
-    protected $casts = ['ordered_on' => 'datetime',];
+    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
     public static function getValidationRules()
     {

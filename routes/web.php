@@ -125,6 +125,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit')->middleware('bouncer:Order,update');
             Route::post('/update/', [OrderController::class, 'update'])->name('orders.update')->middleware('bouncer:Order,update');
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
+            Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
             Route::get('/invoice', function (Order $order) {
                 return view('pdf.invoices.columns', OrderRepository::getInvoiceDetails($order));
             })->name('orders.invoice.latest')->middleware('bouncer:Order,read');

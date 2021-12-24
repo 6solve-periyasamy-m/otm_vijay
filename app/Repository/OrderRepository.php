@@ -344,7 +344,7 @@ class OrderRepository
         $cost = self::getCost($order);
         $adjustments = self::getTotalAdjustedValue($order);
         $total = $cost + $adjustments;
-        if ($order->trashed()) {
+        if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
                 return -3;
             } else if ($paidAmount <= $order->deposit) {
