@@ -476,7 +476,7 @@ $(document).ready( function () {
                         <td>{{ StringFormatter::formatDate($adjustment->date) }}</td>
                         <td class="actions">
                             @can('update', \App\Models\OrderCustomerAdjustment::class)
-                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
@@ -484,7 +484,7 @@ $(document).ready( function () {
                             @endcan
                             @can('delete', \App\Models\OrderCustomerAdjustment::class)
                                 <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
+                                <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $order_customer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                     @csrf
                                 </form>
                             @else
