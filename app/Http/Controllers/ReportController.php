@@ -8,6 +8,10 @@ use Excel;
 
 class ReportController extends Controller
 {
+    public function viewReports() {
+        return view('pages.reports.table', ['reports' => ReportRepository::getAvailableReports(),]);
+    }
+
     public function getOrderReport() {
         return view('pages.reports.view', ['tableView' => 'partials.reports.tables.orders',
             'data' => ReportRepository::getOrderReport(),'title' => 'Orders',

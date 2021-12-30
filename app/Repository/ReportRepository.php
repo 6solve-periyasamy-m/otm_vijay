@@ -7,10 +7,27 @@ use App\Models\Order;
 class ReportRepository
 {
     /**
+     * Get a list of available reports
+     * @return array list of available reports
+     */
+    public static function getAvailableReports(): array
+    {
+        return [
+            [
+                'name' => 'Orders',
+                'details' => 'Details about all orders, lead bookers, payments and the orders overall status',
+                'view' => 'reports.order',
+                'export' => 'reports.order.export',
+            ],
+        ];
+    }
+
+    /**
      * Get a report of all orders
      * @return array List of orders and their data
      */
-    public static function getOrderReport() {
+    public static function getOrderReport(): array
+    {
         $data = [];
         foreach (Order::withTrashed()->get() as $order) {
             $row = collect();

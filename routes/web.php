@@ -636,8 +636,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     });
 
     Route::prefix('reports')->group(function () {
-       Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
-       Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
+        Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
+        Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
+        Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
     });
 });
 
