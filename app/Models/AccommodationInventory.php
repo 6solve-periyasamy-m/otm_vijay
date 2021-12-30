@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -87,6 +88,11 @@ class AccommodationInventory extends Model
         $check_out = !is_null($this->check_out) ? $this->check_out->format('d/m/Y H:i') : "Unconfirmed";
 
         return "{$this->accommodation->name} - {$this->accommodation->region->name}｜Check in: {$check_in} - Check out: {$check_out}｜Room Type: {$this->roomType->name} - Board Type: {$this->boardType->name}";
+    }
+
+    public function getUsedStock(): int
+    {
+        return StockRepository::getAccommodationStock($this);
     }
 }
 
