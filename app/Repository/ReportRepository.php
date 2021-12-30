@@ -4,13 +4,12 @@ namespace App\Repository;
 
 use App\Models\Order;
 
-interface ReportRepositoryInterface
+class ReportRepository
 {
-    public static function getOrderReport();
-}
-
-class ReportRepository implements ReportRepositoryInterface
-{
+    /**
+     * Get a report of all orders
+     * @return array List of orders and their data
+     */
     public static function getOrderReport() {
         $data = [];
         foreach (Order::withTrashed()->get() as $order) {
