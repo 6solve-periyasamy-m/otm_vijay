@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\OrderReportExport;
+use App\Exports\TourStockReportExport;
 use App\Repository\ReportRepository;
 use Excel;
 
@@ -21,5 +22,16 @@ class ReportController extends Controller
 
     public function exportOrderReport(string $extension = 'xlsx') {
         return Excel::download(new OrderReportExport, 'orders.' . $extension);
+    }
+
+    public function getTourStockReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.tour-stock',
+            'data' => ReportRepository::getTourStockReport(),'title' => 'Tour Stock',
+            'xlsxExport' => route('reports.tour-stock.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.tour-stock.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportTourStockReport(string $extension = 'xlsx') {
+        return Excel::download(new TourStockReportExport, 'tour-stock.' . $extension);
     }
 }

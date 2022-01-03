@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Order;
+use App\Models\Tour;
 
 class ReportRepository
 {
@@ -18,6 +19,12 @@ class ReportRepository
                 'details' => 'Details about all orders, lead bookers, payments and the orders overall status',
                 'view' => 'reports.order',
                 'export' => 'reports.order.export',
+            ],
+            [
+                'name' => 'Tour Stock',
+                'details' => 'Details about all tours, and their available stock',
+                'view' => 'reports.tour-stock',
+                'export' => 'reports.tour-stock.export',
             ],
         ];
     }
@@ -41,6 +48,25 @@ class ReportRepository
             $row->balance_outstanding = OrderRepository::getCosts($order) - OrderRepository::getTotalPaid($order);
             $row->orderStatus = OrderRepository::getOrderStatus($order);
             $data[$order->id] = $row;
+        }
+        return $data;
+    }
+
+    /**
+     * Get a report of tour stock
+     * @return array List of tours and their data
+     */
+    public static function getTourStockReport(): array {
+        $data = [];
+        foreach (Tour::all() as $tour) {
+            $row = collect();
+            $row->name = $tour->name;
+            $row->event = isset($tour->event) ? $tour->event->name : 'No Event';
+            $row->stock = $tour->stock_control_active ? $tour->stock : 'Not Controlled';
+            $row->booked = $tour->getUsedStock();
+            $row->available = $tour->stock_control_active ? $tour->stock - $tour->getUsedStock() : 'Not Controlled';
+            $row->percentage = $tour->stock_control_active ? round(($tour->getUsedStock() / $tour->stock)*100, 2) . '%' : 'Not Controlled';
+            $data[] = $row;
         }
         return $data;
     }

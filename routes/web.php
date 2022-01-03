@@ -639,6 +639,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
         Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
         Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
+        Route::get('/tour-stock', [ReportController::class, 'getTourStockReport'])->name('reports.tour-stock');
+        Route::get('/tour-stock/{extension}', [ReportController::class, 'exportTourStockReport'])->name('reports.tour-stock.export');
     });
 });
 
