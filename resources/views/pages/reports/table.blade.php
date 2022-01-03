@@ -2,10 +2,18 @@
 
 @section('title', 'View Reports')
 
+@push('header-stack')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#reports').DataTable({fixedHeader: true,});
+        });
+    </script>
+@endpush
+
 @section('content')
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped">
+            <table class="table table-striped" id="reports">
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -16,10 +24,10 @@
                 <tbody>
                 @foreach($reports as $report)
                     <tr>
-                        <th scope="row">{{ $report['name'] }}</th>
+                        <th scope="row"><a href="{{ route($report['view']) }}">{{ $report['name'] }}</a></th>
                         <td>{{ $report['details'] }}</td>
                         <td>
-                            <a href="{{ route($report['export'], ['extension' => 'csv']) }}" class="btn btn-outline-success"><i class="icon-list"></i> Export CSV</a>
+                            <a href="{{ route($report['export'], ['extension' => 'csv']) }}" class="btn btn-outline-warning"><i class="icon-list"></i> Export CSV</a>
                             <a href="{{ route($report['export'], ['extension' => 'xlsx']) }}" class="btn btn-outline-success"><i class="icon-chart"></i> Export XLSX</a>
                         </td>
                     </tr>
