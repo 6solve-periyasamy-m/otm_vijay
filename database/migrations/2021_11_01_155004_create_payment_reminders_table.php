@@ -17,6 +17,7 @@ class CreatePaymentRemindersTable extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('payment_installment_id')->constrained()->onDelete('cascade');
+            $table->integer('period');
             $table->timestamps();
         });
     }

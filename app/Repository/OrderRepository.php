@@ -455,22 +455,23 @@ class OrderRepository implements OrderRepositoryInterface
         return $data;
     }
 
-    public static function sendAllOrderReminders()
+    public static function sendAllOrderReminders(int $days)
     {
         foreach (Order::all() as $order) {
             $nextPayment = self::getNextPaymentDetails($order);
-            if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > 7) continue;
-            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->first();
+            if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $days) continue;
+            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->andWhere('period', '=', $days)->first();
             if (isset($reminder)) continue;
-            self::sendReminderEmail($order, $nextPayment['installment']->id);
+            self::sendReminderEmail($order, $nextPayment['installment']->id, $days);
         }
     }
 
-    public static function sendReminderEmail(Order $order, PaymentInstallment $installment)
+    public static function sendReminderEmail(Order $order, PaymentInstallment $installment, int $days)
     {
         PaymentReminder::create([
             'order_id' => $order->id,
             'payment_installment_id' => $installment->id,
+            'period' => $days
         ]);
         Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
     }
