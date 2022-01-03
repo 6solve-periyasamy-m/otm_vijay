@@ -26,6 +26,12 @@ class ReportRepository
                 'view' => 'reports.tour-stock',
                 'export' => 'reports.tour-stock.export',
             ],
+            [
+                'name' => 'Payments',
+                'details' => 'Details about all payments in the system',
+                'view' => 'reports.payment',
+                'export' => 'reports.payment.export',
+            ]
         ];
     }
 
@@ -67,6 +73,29 @@ class ReportRepository
             $row->available = $tour->stock_control_active ? $tour->stock - $tour->getUsedStock() : 'Not Controlled';
             $row->percentage = $tour->stock_control_active ? round(($tour->getUsedStock() / $tour->stock)*100, 2) . '%' : 'Not Controlled';
             $data[] = $row;
+        }
+        return $data;
+    }
+
+    /**
+     * Get a report of all payments on the system
+     * @return array
+     */
+    public static function getPaymentReport(): array {
+        $data = [];
+        foreach (Order::with('payments', 'leadBooker', 'tour')->get() as $order) {
+            foreach ($order->payments as $payment) {
+                $row = collect();
+                $row->booking_reference = $order->booking_reference;
+                $row->tour_name = $order->tour->name;
+                $row->lb_first_name = $order->leadBooker->customer->first_name;
+                $row->lb_last_name = $order->leadBooker->customer->last_name;
+                $row->payment_method = $payment->paymentMethod->name;
+                $row->payment_type = $payment->payment_type;
+                $row->amount = $payment->amount;
+                $row->paid_on = $payment->paid_on;
+                $data[] = $row;
+            }
         }
         return $data;
     }
