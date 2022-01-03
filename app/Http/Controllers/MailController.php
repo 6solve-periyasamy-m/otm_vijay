@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\BookingConfirmationMailable;
 use App\Mail\PaymentDueMailable;
 use App\Mail\PaymentMadeMailable;
+use App\Mail\PaymentOverdueMailable;
 use App\Mail\RefundGivenMailable;
 use App\Models\Order;
 use App\Models\Payment;
@@ -66,6 +67,31 @@ class MailController extends Controller
     public function demoOrderPaymentDue(Order $order) {
         Mail::to($order->leadBooker->customer->email_address)->send(new PaymentDueMailable($order));
         return redirect()->route('email.payment-due.edit');
+    }
+
+    public function editPaymentOverdue() {
+        return view('pages.email.editor', [
+            'body' => MailRepository::getEmailTemplate('email.payment.overdue'),
+            'codes' => ShortCodeRepository::getOrderShortCodes(),
+            'action' => route('email.payment-overdue.update'),
+            'demo' => route('email.payment-overdue.demo'),
+            'templateName' => 'Payment Overdue'
+        ]);
+    }
+
+    public function storePaymentOverdue(Request $request) {
+        SettingsRepository::set('email.payment.overdue', $request->input('body'));
+        return redirect()->route('email.payment-overdue.edit');
+    }
+
+    public function demoPaymentOverdue() {
+        Mail::to(Auth::user())->send(new PaymentOverdueMailable(null));
+        return redirect()->route('email.payment-overdue.edit');
+    }
+
+    public function demoOrderPaymentOverdue(Order $order) {
+        Mail::to($order->leadBooker->customer->email_address)->send(new PaymentOverdueMailable($order));
+        return redirect()->route('email.payment-overdue.edit');
     }
 
     public function editPaymentMade() {

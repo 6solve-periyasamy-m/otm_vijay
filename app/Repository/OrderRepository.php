@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Mail\PaymentDueMailable;
+use App\Mail\PaymentOverdueMailable;
 use App\Models\Merchandise;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
@@ -473,7 +474,11 @@ class OrderRepository implements OrderRepositoryInterface
             'payment_installment_id' => $installment->id,
             'period' => $days
         ]);
-        Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+        if ($days < 0) {
+            Mail::to($order->leadBooker->email_address)->send(new PaymentOverdueMailable($order));
+        } else {
+            Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+        }
     }
 
     public static function getOrderDepositAmount(Order $order)

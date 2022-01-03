@@ -620,6 +620,12 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/demo', [MailController::class, 'demoPaymentDue'])->name('demo');
             Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentDue'])->name('order_demo');
         });
+        Route::prefix('overdue-payment')->name('payment-overdue.')->group(function () {
+            Route::get('/edit', [MailController::class, 'editPaymentOverdue'])->name('edit');
+            Route::post('/edit', [MailController::class, 'storePaymentOverdue'])->name('update');
+            Route::get('/demo', [MailController::class, 'demoPaymentOverdue'])->name('demo');
+            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentOverdue'])->name('order_demo');
+        });
         Route::prefix('payment-made')->name('payment-made.')->group(function () {
             Route::get('/edit', [MailController::class, 'editPaymentMade'])->name('edit');
             Route::post('/edit', [MailController::class, 'storePaymentMade'])->name('update');
