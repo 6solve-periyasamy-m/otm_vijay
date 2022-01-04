@@ -163,7 +163,7 @@
         @endcan
         @if(Auth::guard('web')->check())
             <li>
-                @if(strpos(Request::url(), 'roles') !== false)
+                @if(strpos(Request::url(), 'reports') !== false)
                     <a href="{{ route('reports.all') }}" class="nav-link active">
                 @else
                     <a href="{{ route('reports.all') }}" class="nav-link ">
