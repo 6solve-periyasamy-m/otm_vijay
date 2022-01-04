@@ -146,4 +146,8 @@ class Order extends Model
     {
         return OrderRepository::getOrderAdditionals($this);
     }
+
+    public function customers() {
+        return OrderRepository::getCustomersForOrder($this);
+    }
 }
