@@ -601,16 +601,16 @@ class OrderRepository
 
     public static function getCustomerInstallments(Order $order) {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getOrderDepositAmount($order);
-        $paid -= self::getOrderAddons($order)['additionalValue'];
+        $paid -= $order->deposit;
+        $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $installments = [];
         $installments[] = ['name' => 'Deposit', 'due' => 'With Order',
             'status' => 'Paid in Full', 'color' => 'success',
-            'total' => self::getOrderDepositAmount($order), 'remaining' =>
-                self::getOrderDepositAmount($order), ];
+            'total' => $order->deposit, 'remaining' =>
+                $order->deposit, ];
         $installmentNumber = 1;
         foreach ($order->tour->paymentInstallments as $installment) {
-            $paid -= ($installment->amount * self::getOrderCustomerCount($order));
+            $paid -= ($installment->amount * $order->getCustomerCount());
             if ($paid <  0) {
                 if (Carbon::now()->isAfter($installment->due_on)) {
                     $status = 'Payment Overdue';
@@ -647,6 +647,27 @@ class OrderRepository
         $data['installments'] = self::getCustomerInstallments($order);
         $data['detail'] = self::getOrderDetails($order);
         return $data;
+    }
+
+    public static function getOrderDetails(Order $order)
+    {
+        $details = ['order' => $order,];
+        $customers = $order->orderCustomers;
+        $totalOrderValue = 0;
+        $addonData = self::getOrderAdditionals($order);
+        $totalOrderValue += $addonData['additionalValue'];
+        $totalOrderValue += self::getOrderAdjustmentTotal($order);
+        $totalOrderValue += self::getCustomerAdjustmentTotal($order);
+        $totalOrderValue += $order->tour->base_price_per_person * count($customers);
+        $details['customers'] = $customers;
+        $details['addons'] = $addonData['addons'];
+        $details['totalOrderValue'] = $totalOrderValue;
+        $paymentData = self::getPayments($order);
+        $details['totalPaid'] = $paymentData['amount'];
+        $details['payments'] = $paymentData['payments'];
+        $details['orderStatus'] = self::getOrderStatus($order);
+        $details['nextPayment'] = self::getNextPaymentDetails($order);
+        return $details;
     }
 
     public static function getCustomerOrders(Customer $customer)
