@@ -169,7 +169,7 @@
                     <a href="{{ route('reports.all') }}" class="nav-link ">
                 @endif
                     <i class="icon-list"></i>
-                    <span>Roles</span>
+                    <span>Reports</span>
                 @if(strpos(Request::url(), 'reports') !== false)
                     <span class="selected"></span>
                 @endif
