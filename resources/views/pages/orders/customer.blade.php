@@ -73,7 +73,10 @@ function addMerchandiseAddon() {
     let id = $('#merchandise_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.merchandise') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'merchandise_id': id})
-            .done(function () { location.reload();})
+            .done(function (xhr, textStatus, errorThrown) {
+                if (xhr.success) location.reload();
+                else alert(xhr.message);
+            })
             .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }

@@ -66,7 +66,7 @@ class TourComponentController extends Controller
         $oCustomerId = $request->input('customer_id');
         $merchandiseId = $request->input('merchandise_id');
         $oMerch = OrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
-        if (!isset($oMerch)) abort(400, 'Customer already has selected merchandise');
+        if (!isset($oMerch)) return response()->json(['success' => false, 'message' => 'Customer already has selected merchandise']);
         return $oMerch;
     }
 }
