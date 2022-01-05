@@ -3,5 +3,6 @@
 @section('title', 'Create New Report')
 
 @section('form-body')
+    <input type="hidden" name="parent" value="{{ $parent }}">
     @include('partials.reports.bespoke.list')
 @endsection

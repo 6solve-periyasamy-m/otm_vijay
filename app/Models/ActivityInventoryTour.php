@@ -15,6 +15,7 @@ class ActivityInventoryTour extends Model
 
     protected $cascadeDeletes = ['orders'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
+    public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
     {
@@ -36,5 +37,20 @@ class ActivityInventoryTour extends Model
     public function orders()
     {
         return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
+    }
+
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->activityInventory();
     }
 }

@@ -119,6 +119,110 @@ class BespokeReportRepository
         ];
     }
 
+    public static function getActivityFields(): array
+    {
+        return [
+            0 => [
+                'class' => 'Activity',
+                'type' => 'component',
+                'fields' => [
+                    'name' => [
+                        'name' => 'Name',
+                        'method' => 'name',
+                    ],
+                    'description' => [
+                        'name' => 'Description',
+                        'method' => 'description',
+                    ],
+                    'activity_type' => [
+                        'name' => 'Activity Type',
+                        'method' => 'activityType',
+                    ],
+                    'image_url' => [
+                        'name' => 'Image URL',
+                        'method' => 'image_url',
+                    ],
+                    'currency' => [
+                        'name' => 'Currency',
+                        'method' => 'currency',
+                    ],
+                    'address' => [
+                        'name' => 'Address',
+                        'method' => 'address',
+                    ],
+                    'notes' => [
+                        'name' => 'Notes',
+                        'method' => 'notes',
+                    ],
+                ],
+            ],
+            1 => [
+                'class' => 'ActivityInventory',
+                'type' => 'inventory',
+                'fields' => [
+                    'ticket_type' => [
+                        'name' => 'Ticket Type',
+                        'method' => 'ticketType',
+                    ],
+                    'starts_at' => [
+                        'name' => 'Starts At',
+                        'method' => 'starts_at',
+                    ],
+                    'ends_at' => [
+                        'name' => 'Ends At',
+                        'method' => 'ends_at',
+                    ],
+                    'fit_selectable' => [
+                        'name' => 'FIT Selectable',
+                        'method' => 'fit_selectable',
+                    ],
+                    'total_stock' => [
+                        'name' => 'Total Stock',
+                        'method' => 'stock',
+                    ],
+                    'used_stock' => [
+                        'name' => 'Used Stock',
+                        'method' => 'used_stock',
+                    ],
+                    'purchase_price' => [
+                        'name' => 'Purchase Price',
+                        'method' => 'purchase_price',
+                    ],
+                    'sales_price' => [
+                        'name' => 'Sales Price',
+                        'method' => 'sales_price',
+                    ],
+                    'notes' => [
+                        'name' => 'Notes',
+                        'method' => 'notes',
+                    ],
+                    'tour_count' => [
+                        'name' => 'Used on Tours',
+                        'method' => 'used_on_tour_count',
+                    ],
+                ],
+            ],
+            2 => [
+                'class' => 'ActivityInventoryTour',
+                'type' => 'tour',
+                'fields' => [
+                    'tour_sales_price' => [
+                        'name' => 'Tour Sales Price',
+                        'method' => 'tour_sales_price',
+                    ],
+                    'tour_component_type' => [
+                        'name' => 'Tour Component Type',
+                        'method' => 'tour_component_type',
+                    ],
+                    'tour_name' => [
+                        'name' => 'Tour Name',
+                        'method' => 'tour_name'
+                    ],
+                ]
+            ],
+        ];
+    }
+
     public static function convertFieldsToOutput(array $fields, int $lowest = -1): array
     {
         $output = [];
@@ -155,11 +259,23 @@ class BespokeReportRepository
         return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
     }
 
-    public static function generateAccommodationReport(Request $request): array
+    public static function getFieldsFromParent(string $parent)
     {
-        $fields = self::convertFieldsToOutput(self::getAccommodationFields());
+        switch ($parent) {
+            case 'accommodation':
+                return self::getAccommodationFields();
+            case 'activity':
+                return self::getActivityFields();
+            default:
+                return [];
+        }
+    }
+
+    public static function generateReport(Request $request): array
+    {
+        $fields = self::convertFieldsToOutput(self::getFieldsFromParent($request->input('parent')));
         $lowest = self::getLowestDepth($request, $fields);
-        $fields = self::convertFieldsToOutput(self::getAccommodationFields(), $lowest['depth']);
+        $fields = self::convertFieldsToOutput(self::getFieldsFromParent($request->input('parent')), $lowest['depth']);
 
         if ($lowest['type'] == 'component') {
             return self::getDataForComponent($request, $fields, $lowest['class']);
