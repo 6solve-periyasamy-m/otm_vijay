@@ -23,4 +23,9 @@ class Operator extends Model
     {
         return $this->hasMany(Transport::class, 'operator_id');
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

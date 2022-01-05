@@ -13,7 +13,7 @@ class TransportInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['tour_id', 'transport_inventory_id',];
+    protected $fillable = ['tour_id', 'transport_inventory_id','tour_name'];
     protected $cascadeDeletes = ['orders'];
 
     public static function getValidationRules()
@@ -36,5 +36,20 @@ class TransportInventoryTour extends Model
     public function orders()
     {
         return $this->hasMany(OrderTransport::class, 'transport_inventory_tour_id');
+    }
+
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->transportInventory();
     }
 }

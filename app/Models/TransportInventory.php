@@ -13,7 +13,7 @@ class TransportInventory extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['Transport_for_tour'];
+    public $additional_attributes = ['Transport_for_tour','used_stock','used_on_tour_count'];
     protected $fillable = ['transport_id', 'travel_class_id', 'departs_at', 'departure_time_confirmed', 'arrives_at', 'arrival_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
@@ -95,5 +95,20 @@ class TransportInventory extends Model
     public function getUsedStock(): int
     {
         return StockRepository::getTransportStock($this);
+    }
+
+
+    public function getUsedStockAttribute()
+    {
+        return $this->getUsedStock();
+    }
+
+    public function getUsedOnTourCountAttribute()
+    {
+        return $this->tourComponents()->count();
+    }
+
+    public function component() {
+        return $this->transport();
     }
 }
