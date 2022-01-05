@@ -36,4 +36,9 @@ class AddressParent extends Model
                 return 63;
         }
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

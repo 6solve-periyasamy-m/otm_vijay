@@ -17,4 +17,9 @@ class HatSize extends Model
     {
         return ['name' => 'required|unique:hat_sizes,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
