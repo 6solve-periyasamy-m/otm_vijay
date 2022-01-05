@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class FlightInventoryTour extends Model
 {
-    public $additional_attributes = ['flight_inventory_for_tour'];
+    public $additional_attributes = ['flight_inventory_for_tour','tour_name'];
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
@@ -48,5 +48,18 @@ class FlightInventoryTour extends Model
         return $this->hasMany(OrderFlight::class, 'flight_inventory_tour_id');
     }
 
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class, 'tour_id');
+    }
 
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->flightInventory();
+    }
 }
