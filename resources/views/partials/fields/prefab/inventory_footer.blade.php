@@ -1,5 +1,5 @@
 @include('partials.fields.checkbox',
-    ['name' => 'Fit Selectable', 'field' => 'fit_selectable', 'value' => $fit_selectable ?? null, ])
+    ['name' => 'FIT Selectable', 'field' => 'fit_selectable', 'value' => $fit_selectable ?? null, ])
 @include('partials.fields.text',
     ['name' => 'Stock', 'field' => 'stock', 'value' => $stock ?? null, ])
 @include('partials.fields.text',

@@ -32,7 +32,7 @@ class OrderCustomerModelController extends Controller
             'policy_number' => $request->input('policy_number'),
         ]);
         $order->orderCustomers()->save($orderCustomer);
-        OrderRepository::addIncludedToCustomer($orderCustomer, $order);
+        OrderRepository::addIncludedToCustomer($orderCustomer);
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
