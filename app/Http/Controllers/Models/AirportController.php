@@ -37,7 +37,7 @@ class AirportController extends Controller
         }
         $airport->address_id = $address->id;
         $airport->save();
-        return redirect()->route('airports.view', ['airport' => $airport,]);
+        return view('pages.close');
     }
 
     public function view(Airport $airport)
@@ -63,7 +63,7 @@ class AirportController extends Controller
             $request->validate(Address::getValidationRules());
             LocationsRepository::storeAddressFromGenericRequest($airport->address, AddressParent::getParentId('airport'), $request, $request->input('name'));
         }
-        return redirect()->route('airports.view', ['airport' => $airport,]);
+        return view('pages.close');
     }
 
     public function destroy(Airport $airport)

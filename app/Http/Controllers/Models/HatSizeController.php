@@ -25,7 +25,7 @@ class HatSizeController extends Controller
         $hatSize = HatSize::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('hat-sizes.view', ['hatSize' => $hatSize,]);
+        return view('pages.close');
     }
 
     public function view(HatSize $hatSize)
@@ -44,7 +44,7 @@ class HatSizeController extends Controller
         $hatSize->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('hat-sizes.view', ['hatSize' => $hatSize,]);
+        return view('pages.close');
     }
 
     public function destroy(HatSize $hatSize)

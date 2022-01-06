@@ -25,7 +25,7 @@ class TicketTypeController extends Controller
         $ticketType = TicketType::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('ticket-types.view', ['ticketType' => $ticketType,]);
+        return view('pages.close');
     }
 
     public function view(TicketType $ticketType)
@@ -44,7 +44,7 @@ class TicketTypeController extends Controller
         $ticketType->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('ticket-types.view', ['ticketType' => $ticketType,]);
+        return view('pages.close');
     }
 
     public function destroy(TicketType $ticketType)

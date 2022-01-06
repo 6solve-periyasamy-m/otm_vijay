@@ -26,7 +26,7 @@ class OperatorController extends Controller
             'name' => $request->input('name'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('operators.view', ['operator' => $operator,]);
+        return view('pages.close');
     }
 
     public function view(Operator $operator)
@@ -46,7 +46,7 @@ class OperatorController extends Controller
             'name' => $request->input('name'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('operators.view', ['operator' => $operator,]);
+        return view('pages.close');
     }
 
     public function destroy(Operator $operator)
