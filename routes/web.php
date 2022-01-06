@@ -680,8 +680,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::prefix('reports')->group(function () {
         Route::prefix('bespoke')->group(function () {
-            Route::get('builder/{parent}', [BespokeReportController::class, 'create']);
-            Route::post('builder', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
+            Route::get('create/{parent}', [BespokeReportController::class, 'create'])->name('reports.bespoke.create');
+            Route::post('temporary', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
             Route::prefix('{report}')->group(function () {
                 Route::get('view', [BespokeReportController::class, 'show'])->name('reports.bespoke.show');
                 Route::get('edit', [BespokeReportController::class, 'edit'])->name('reports.bespoke.edit');
