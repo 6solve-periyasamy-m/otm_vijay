@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Models\ActivityInventoryTour;
+use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
 use App\Models\Tour;
@@ -102,5 +104,10 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
         return $query->get();
+    }
+
+    public static function getParentComponent(ActivityInventoryTour $inventoryTour) {
+        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        return $upgrade->base;
     }
 }

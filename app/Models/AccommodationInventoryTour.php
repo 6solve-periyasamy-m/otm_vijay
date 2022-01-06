@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Repository\AccommodationComponentRepository;
+use StringFormatter;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +16,7 @@ class AccommodationInventoryTour extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price',];
-    protected $cascadeDeletes = ['orders'];
+    protected $cascadeDeletes = ['orders', 'upgrades'];
 
     public static function getValidationRules()
     {
@@ -36,5 +38,24 @@ class AccommodationInventoryTour extends Model
     public function orders()
     {
         return $this->hasMany(OrderAccommodation::class, 'accommodation_inventory_tour_id');
+    }
+
+    public function upgrades() {
+        return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'base_id');
+    }
+
+    public function parent() {
+        return AccommodationComponentRepository::getParentComponent($this);
+    }
+
+    public function tour() {
+        return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function __toString()
+    {
+        $inventory = $this->accommodationInventory;
+        $component = $inventory->accommodation;
+        return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 }

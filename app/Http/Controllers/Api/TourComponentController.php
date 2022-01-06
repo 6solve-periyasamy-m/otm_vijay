@@ -65,6 +65,8 @@ class TourComponentController extends Controller
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:merchandises,id']);
         $oCustomerId = $request->input('customer_id');
         $merchandiseId = $request->input('merchandise_id');
-        return OrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
+        $oMerch = OrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
+        if (!isset($oMerch)) return response()->json(['success' => false, 'message' => 'Customer already has selected merchandise']);
+        return $oMerch;
     }
 }

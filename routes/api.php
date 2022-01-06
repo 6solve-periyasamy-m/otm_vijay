@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\TransportController;
+use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -120,6 +121,12 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
             Route::post('flight', [SelectController::class, 'getFlightInventory'])->name('inventory.flight.select');
             Route::post('transport', [SelectController::class, 'getTransportInventory'])->name('inventory.transport.select');
+            Route::prefix('{inventoryTour}')->group(function () {
+                Route::post('accommodation', [SelectController::class, 'getAccommodationInventoryForUpgrade'])->name('inventory.accommodation.upgrade.select');
+                Route::post('activity', [SelectController::class, 'getActivityInventoryForUpgrade'])->name('inventory.activity.upgrade.select');
+                Route::post('flight', [SelectController::class, 'getFlightInventoryForUpgrade'])->name('inventory.flight.upgrade.select');
+                Route::post('transport', [SelectController::class, 'getTransportInventoryForUpgrade'])->name('inventory.transport.upgrade.select');
+            });
         });
         Route::prefix('selected')->group(function () {
             Route::post('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('locations.selected');
@@ -150,6 +157,12 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
                 Route::post('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('inventory.flight.selected');
                 Route::post('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('inventory.transport.selected');
+                Route::prefix('upgrade')->group(function () {
+                    Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventoryForUpgrade'])->name('inventory.accommodation.upgrade.selected');
+                    Route::post('activity', [SelectController::class, 'getSelectedActivityInventoryForUpgrade'])->name('inventory.activity.upgrade.selected');
+                    Route::post('flight', [SelectController::class, 'getSelectedFlightInventoryForUpgrade'])->name('inventory.flight.upgrade.selected');
+                    Route::post('transport', [SelectController::class, 'getSelectedTransportInventoryForUpgrade'])->name('inventory.transport.upgrade.selected');
+                });
             });
         });
     });
@@ -199,3 +212,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::get('/status', function(){})->name('status.stub');
     });
 });
+
+Route::get('/customer/finances', function () { return OrderRepository::getCustomerOrders(\App\Models\Customer::findOrFail(1)); });
+// TODO: Remove
