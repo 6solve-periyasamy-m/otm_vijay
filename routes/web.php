@@ -680,6 +680,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::prefix('reports')->group(function () {
         Route::prefix('bespoke')->group(function () {
+            Route::get('/', [BespokeReportController::class, 'index'])->name('reports.bespoke.all');
             Route::get('create/{parent}', [BespokeReportController::class, 'create'])->name('reports.bespoke.create');
             Route::post('temporary', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
             Route::prefix('{report}')->group(function () {
@@ -687,6 +688,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                 Route::get('edit', [BespokeReportController::class, 'edit'])->name('reports.bespoke.edit');
                 Route::post('edit', [BespokeReportController::class, 'update'])->name('reports.bespoke.update');
                 Route::get('export/{extension}', [BespokeReportController::class, 'export'])->name('reports.bespoke.export');
+                Route::post('delete', [BespokeReportController::class, 'delete'])->name('reports.bespoke.delete');
             });
 
         });
