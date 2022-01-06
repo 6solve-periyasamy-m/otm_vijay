@@ -28,7 +28,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('api-token:regenerate-all')->hourlyAt(0); // Regenerate all API tokens once an hour
         $schedule->command('api-token:purge-old')->dailyAt('00:00'); // Automatically purge API tokens older than 2 days
         $schedule->command('countries:update')->weeklyOn(0);
-        $schedule->command('payments:remind')->dailyAt('00:00'); // Send payment reminders at midnight evey day
+        $schedule->command('payments:remind 14')->dailyAt('00:00'); // Send payment reminders at midnight evey day
+        $schedule->command('payments:remind 7')->dailyAt('00:00'); // Send payment reminders at midnight evey day
+        $schedule->command('payments:remind 0')->dailyAt('00:00'); // Send payment reminders at midnight evey day
+        $schedule->command('payments:remind -1')->dailyAt('00:00'); // Send payment reminders at midnight evey day
+        $schedule->command('payments:remind -7')->dailyAt('00:00'); // Send payment reminders at midnight evey day
+        $schedule->command('payments:remind -14')->dailyAt('00:00'); // Send payment reminders at midnight evey day
     }
 
     /**

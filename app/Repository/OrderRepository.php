@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Mail\PaymentDueMailable;
+use App\Mail\PaymentOverdueMailable;
 use App\Models\Customer;
 use App\Models\Merchandise;
 use App\Models\Order;
@@ -535,14 +536,14 @@ class OrderRepository
     /**
      * Iterates through all orders, and if they have a due installment, sends an email reminder
      */
-    public static function sendAllOrderReminders()
+    public static function sendAllOrderReminders(int $days)
     {
         foreach (Order::all() as $order) {
             $nextPayment = self::getNextPaymentDetails($order);
-            if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > 7) continue;
-            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->first();
+            if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $days) continue;
+            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->andWhere('period', '=', $days)->first();
             if (isset($reminder)) continue;
-            self::sendReminderEmail($order, $nextPayment['installment']->id);
+            self::sendReminderEmail($order, $nextPayment['installment']->id, $days);
         }
     }
 
@@ -555,9 +556,14 @@ class OrderRepository
     {
         PaymentReminder::create([
             'order_id' => $order->id,
-            'order_installment_id' => $installment->id,
+            'payment_installment_id' => $installment->id,
+            'period' => $days
         ]);
-        Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+        if ($days < 0) {
+            Mail::to($order->leadBooker->email_address)->send(new PaymentOverdueMailable($order));
+        } else {
+            Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+        }
     }
 
     /**

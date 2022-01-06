@@ -37,6 +37,16 @@ class MailRepository implements MailRepositoryInterface
         return $template;
     }
 
+    public static function getPaymentOverdueBody($payment)
+    {
+        $fillables = ShortCodeRepository::getPaymentShortCodes($payment);
+        $template = self::getEmailTemplate('email.payment.overdue');
+        foreach ($fillables as $key => $value) {
+            $template = str_replace('['.$key.']', $value, $template);
+        }
+        return $template;
+    }
+
     public static function getPaymentMadeBody($payment)
     {
         $fillables = ShortCodeRepository::getPaymentShortCodes($payment);
