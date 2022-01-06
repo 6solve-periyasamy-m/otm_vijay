@@ -50,6 +50,7 @@ use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
+use App\Http\Controllers\UpgradeController;
 use App\Models\Order;
 use App\Models\Tour;
 use App\Repository\OrderRepository;
@@ -125,6 +126,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit')->middleware('bouncer:Order,update');
             Route::post('/update/', [OrderController::class, 'update'])->name('orders.update')->middleware('bouncer:Order,update');
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
+            Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
             Route::get('/invoice', function (Order $order) {
                 return view('pdf.invoices.columns', OrderRepository::getInvoiceDetails($order));
             })->name('orders.invoice.latest')->middleware('bouncer:Order,read');
@@ -427,6 +429,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('bouncer:AccommodationInventoryTour,update');
                         Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('bouncer:AccommodationInventoryTour,delete');
                     });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewAccommodationUpgrade'])->name('accommodation-upgrade.view')->middleware('bouncer:AccommodationInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createAccommodationUpgrade'])->name('accommodation-upgrade.create')->middleware('bouncer:AccommodationInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeAccommodationUpgrade'])->name('accommodation-upgrade.store')->middleware('bouncer:AccommodationInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editAccommodationUpgrade'])->name('accommodation-upgrade.edit')->middleware('bouncer:AccommodationInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateAccommodationUpgrade'])->name('accommodation-upgrade.update')->middleware('bouncer:AccommodationInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteAccommodationUpgrade'])->name('accommodation-upgrade.delete')->middleware('bouncer:AccommodationInventoryTour,delete');
+                        });
+                    });
                 });
                 Route::prefix('activity')->group(function () {
                     Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create')->middleware('bouncer:ActivityInventoryTour,create');
@@ -436,6 +448,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::get('/update', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit')->middleware('bouncer:ActivityInventoryTour,update');
                         Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update')->middleware('bouncer:ActivityInventoryTour,update');
                         Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete')->middleware('bouncer:ActivityInventoryTour,delete');
+                    });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewActivityUpgrade'])->name('activity-upgrade.view')->middleware('bouncer:ActivityInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createActivityUpgrade'])->name('activity-upgrade.create')->middleware('bouncer:ActivityInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeActivityUpgrade'])->name('activity-upgrade.store')->middleware('bouncer:ActivityInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editActivityUpgrade'])->name('activity-upgrade.edit')->middleware('bouncer:ActivityInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateActivityUpgrade'])->name('activity-upgrade.update')->middleware('bouncer:ActivityInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteActivityUpgrade'])->name('activity-upgrade.delete')->middleware('bouncer:ActivityInventoryTour,delete');
+                        });
                     });
                 });
                 Route::prefix('flight')->group(function () {
@@ -447,6 +469,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update')->middleware('bouncer:FlightInventoryTour,update');
                         Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete')->middleware('bouncer:FlightInventoryTour,delete');
                     });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewFlightUpgrade'])->name('flight-upgrade.view')->middleware('bouncer:FlightInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createFlightUpgrade'])->name('flight-upgrade.create')->middleware('bouncer:FlightInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeFlightUpgrade'])->name('flight-upgrade.store')->middleware('bouncer:FlightInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editFlightUpgrade'])->name('flight-upgrade.edit')->middleware('bouncer:FlightInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateFlightUpgrade'])->name('flight-upgrade.update')->middleware('bouncer:FlightInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteFlightUpgrade'])->name('flight-upgrade.delete')->middleware('bouncer:FlightInventoryTour,delete');
+                        });
+                    });
                 });
                 Route::prefix('transport')->group(function () {
                     Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create')->middleware('bouncer:TransportInventoryTour,create');
@@ -456,6 +488,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
                         Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit')->middleware('bouncer:TransportInventoryTour,update');
                         Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update')->middleware('bouncer:TransportInventoryTour,update');
                         Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:TransportInventoryTour,delete=');
+                    });
+                    Route::prefix('upgrade/{inventoryTour}')->group(function () {
+                        Route::get('/', [UpgradeController::class, 'viewTransportUpgrade'])->name('transport-upgrade.view')->middleware('bouncer:TransportInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createTransportUpgrade'])->name('transport-upgrade.create')->middleware('bouncer:TransportInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeTransportUpgrade'])->name('transport-upgrade.store')->middleware('bouncer:TransportInventoryTour,create');
+                        Route::prefix('{upgrade}')->group(function () {
+                            Route::get('/update', [UpgradeController::class, 'editTransportUpgrade'])->name('transport-upgrade.edit')->middleware('bouncer:TransportInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateTransportUpgrade'])->name('transport-upgrade.update')->middleware('bouncer:TransportInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteTransportUpgrade'])->name('transport-upgrade.delete')->middleware('bouncer:TransportInventoryTour,delete');
+                        });
                     });
                 });
             });
@@ -661,4 +703,4 @@ Route::prefix('customer')->name('customer.')->group(function () {
 });
 
 Auth::routes(['verify' => true,'register' => false]);
-Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderAddons($value->order));});
+Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderAdditionals($value->order));});

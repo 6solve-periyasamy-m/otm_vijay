@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
+use App\Repository\AccommodationComponentRepository;
+use App\Repository\ActivityComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
+use StringFormatter;
 
 class ActivityInventoryTour extends Model
 {
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['orders'];
+    protected $cascadeDeletes = ['orders', 'upgrades'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
     public $additional_attributes = ['tour_name',];
 
@@ -39,9 +42,23 @@ class ActivityInventoryTour extends Model
         return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
     }
 
-    public function tour()
-    {
+    public function upgrades() {
+        return $this->hasMany(ActivityInventoryTourUpgrade::class, 'base_id');
+    }
+
+    public function parent() {
+        return ActivityComponentRepository::getParentComponent($this);
+    }
+
+    public function tour() {
         return $this->belongsTo(Tour::class, 'tour_id');
+    }
+
+    public function __toString()
+    {
+        $inventory = $this->activityInventory;
+        $component = $inventory->activity;
+        return $component->name . ' (' . StringFormatter::formatDateTime($inventory->starts_at) . ' to ' . StringFormatter::formatDateTime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
     }
 
     public function getTourNameAttribute()

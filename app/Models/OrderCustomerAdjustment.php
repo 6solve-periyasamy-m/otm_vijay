@@ -22,4 +22,11 @@ class OrderCustomerAdjustment extends Model
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
+
+
+
+    public function isCancelled(): bool
+    {
+        return $this->orderCustomer->order->cancelled;
+    }
 }

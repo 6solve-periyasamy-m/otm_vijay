@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         }
         Artisan::call('countries:update');
         $this->call(UserSeeder::class);
+        $this->call(PaymentMethodsTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
 
         if (config('app.debug')) {
             $this->call(LocationTypesTableSeeder::class);
@@ -30,15 +32,13 @@ class DatabaseSeeder extends Seeder
             $this->call(BoardTypesTableSeeder::class);
             $this->call(ActivityTypesTableSeeder::class);
             $this->call(EventsTableSeeder::class);
-
             $this->call(OperatorsTableSeeder::class);
-            $this->call(PaymentMethodsTableSeeder::class);
+
             $this->call(ToursTableSeeder::class);
             $this->call(CustomersTableSeeder::class);
             $this->call(TransportTypesTableSeeder::class);
             $this->call(TravelClassesTableSeeder::class);
             $this->call(RoomTypesTableSeeder::class);
-            $this->call(SettingsTableSeeder::class);
             $this->call(TicketTypesTableSeeder::class);
 
             $this->call(AccommodationsTableSeeder::class);
@@ -66,6 +66,7 @@ class DatabaseSeeder extends Seeder
             $this->call(OrderTransportsTableSeeder::class);
             $this->call(PaymentInstallmentsTableSeeder::class);
             $this->call(PaymentsTableSeeder::class);
+            $this->call(OrderInstallmentsTableSeeder::class);
         }
     }
 }

@@ -75,6 +75,14 @@ class PaymentMethodsTableSeeder extends Seeder
                 'created_at' => '2021-09-07 13:04:39',
                 'updated_at' => '2021-09-07 13:04:39',
             ),
+            7 =>
+            array (
+                'id' => 8,
+                'name' => 'Transferred Credit',
+                'deleted_at' => NULL,
+                'created_at' => '2021-09-07 13:04:39',
+                'updated_at' => '2021-09-07 13:04:39',
+            ),
         ));
         
         

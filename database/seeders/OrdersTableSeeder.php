@@ -28,6 +28,7 @@ class OrdersTableSeeder extends Seeder
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100010001LSAF',
                 'ordered_on' => '2021-11-22 11:11:00',
+                'deposit' => 150,
                 'internal_notes' => NULL,
                 'external_notes' => NULL,
                 'created_at' => '2021-11-22 13:50:51',

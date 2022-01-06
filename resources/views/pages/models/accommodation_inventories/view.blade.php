@@ -10,7 +10,7 @@
     Checkin Confirmed: {{ $accommodationInventory->check_in_time_confirmed }}<br/>
     Check Out: {{ $accommodationInventory->check_out }}<br/>
     Checkout Confirmed: {{ $accommodationInventory->check_out_time_confirmed }}<br/>
-    Fit Selectable: {{ $accommodationInventory->fit_selectable }}<br/>
+    FIT Selectable: {{ $accommodationInventory->fit_selectable }}<br/>
     Stock: {{ $accommodationInventory->stock }}<br/>
     Purchase Price: {{ $accommodationInventory->purchase_price }}<br/>
     Sales Price: {{ $accommodationInventory->sales_price }}<br/>

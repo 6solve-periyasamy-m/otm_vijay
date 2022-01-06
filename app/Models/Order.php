@@ -13,9 +13,9 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes',];
+    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit'];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
-    protected $casts = ['ordered_on' => 'datetime',];
+    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
     public static function getValidationRules()
     {
@@ -77,7 +77,74 @@ class Order extends Model
 
     public function getStatus()
     {
-        return OrderRepository::getOrderStatus($this);
+        return self::getStatusArray(OrderRepository::getOrderStatus($this));
+    }
+
+    public static function getStatusArray(int $status): array
+    {
+        switch ($status) {
+            case -3:
+                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
+            case -2:
+                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
+            case -1:
+                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
+            case 0:
+                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
+            case 1:
+                return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
+            case 2:
+                return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
+            case 3:
+                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            default:
+                return ['status' => 'Status Unknown', 'color' => 'dark'];
+        }
+    }
+
+    public function getCustomerCount(): int
+    {
+        return $this->orderCustomers->count();
+    }
+
+    public function getCost()
+    {
+        return OrderRepository::getCost($this);
+    }
+
+    public function getCostBreakdown(): array
+    {
+        return OrderRepository::getCostBreakdown($this);
+    }
+
+    public function getPaid()
+    {
+        return OrderRepository::getTotalPaid($this);
+    }
+
+    public function getAdjustmentValue()
+    {
+        return OrderRepository::getTotalAdjustedValue($this);
+    }
+
+    public function installments()
+    {
+        return $this->hasMany(OrderInstallment::class, 'order_id');
+    }
+
+    public function getRemaining(): float
+    {
+        return OrderRepository::getRemainingToPay($this);
+    }
+
+    public function getNextInstallment(): array
+    {
+        return OrderRepository::getNextPaymentDetails($this);
+    }
+
+    public function getAdditionals(): array
+    {
+        return OrderRepository::getOrderAdditionals($this);
     }
 
     public function customers() {
