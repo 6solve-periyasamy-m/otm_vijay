@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -112,5 +113,10 @@ class Tour extends Model
     public function category()
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
+    }
+
+    public function getUsedStock(): int
+    {
+        return StockRepository::getTourStock($this);
     }
 }

@@ -161,5 +161,20 @@
                 </a>
             </li>
         @endcan
+        @if(Auth::guard('web')->check())
+            <li>
+                @if(strpos(Request::url(), 'reports') !== false)
+                    <a href="{{ route('reports.all') }}" class="nav-link active">
+                @else
+                    <a href="{{ route('reports.all') }}" class="nav-link ">
+                @endif
+                    <i class="icon-list"></i>
+                    <span>Reports</span>
+                @if(strpos(Request::url(), 'reports') !== false)
+                    <span class="selected"></span>
+                @endif
+                </a>
+            </li>
+        @endif
     </ul>
 </div>

@@ -47,6 +47,7 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
@@ -674,6 +675,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::get('/demo', [MailController::class, 'demoRefundGiven'])->name('demo');
             Route::get('/demo/{order}', [MailController::class, 'demoOrderRefundGiven'])->name('order_demo');
         });
+    });
+
+    Route::prefix('reports')->group(function () {
+        Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
+        Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
+        Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');
+        Route::get('/tour-stock', [ReportController::class, 'getTourStockReport'])->name('reports.tour-stock');
+        Route::get('/tour-stock/{extension}', [ReportController::class, 'exportTourStockReport'])->name('reports.tour-stock.export');
+        Route::get('/payments', [ReportController::class, 'getPaymentsReport'])->name('reports.payment');
+        Route::get('/payments/{extension}', [ReportController::class, 'exportPaymentsReport'])->name('reports.payment.export');
     });
 });
 

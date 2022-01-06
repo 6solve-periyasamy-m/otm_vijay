@@ -48,7 +48,10 @@ $(document).ready(function() {
                 <td>
                     <input type="checkbox" disabled @if($transportInventory->fit_selectable == 1) checked @endif>
                 </td>
-                <td>{{ $transportInventory->stock }}</td>
+                <td>
+                    {{$transportInventory->stock - $transportInventory->getUsedStock()}}/{{ $transportInventory->stock }}<br/>
+                    ({{$transportInventory->getUsedStock()}} Sold)
+                </td>
                 <td>{{ StringFormatter::formatCurrency($transportInventory->purchase_price) }}</td>
                 <td>{{ StringFormatter::formatCurrency($transportInventory->sales_price) }}</td>
                 <td>{{ $transportInventory->notes }}</td>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -71,5 +72,10 @@ class ActivityInventory extends Model
         $ends_at = $this->ends_at->format('d/m/Y H:i');
 
         return "{$this->activity->name}｜Activity Start: {$starts_at}｜Activity End: {$ends_at}｜Ticket Type: {$this->ticketType->name}";
+    }
+
+    public function getUsedStock(): int
+    {
+        return StockRepository::getActivityStock($this);
     }
 }

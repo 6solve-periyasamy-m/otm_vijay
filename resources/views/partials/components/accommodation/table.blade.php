@@ -46,7 +46,10 @@
                     <td>
                         <input type="checkbox" disabled @if($accommodationInventory->fit_selectable == 1) checked @endif>
                     </td>
-                    <td>{{ $accommodationInventory->stock }}</td>
+                    <td>
+                        {{$accommodationInventory->stock - $accommodationInventory->getUsedStock()}}/{{ $accommodationInventory->stock }}<br/>
+                        ({{$accommodationInventory->getUsedStock()}} Sold)
+                    </td>
                     <td>{{ StringFormatter::formatCurrency($accommodationInventory->purchase_price) }}</td>
                     <td>{{ StringFormatter::formatCurrency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>

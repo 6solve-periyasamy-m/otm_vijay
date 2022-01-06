@@ -10,7 +10,14 @@
     <td>{{ StringFormatter::formatCurrency($deposit) }}</td>
     <td>{{ StringFormatter::formatCurrency($single_occupancy_surcharge) }}</td>
     <td>{{ $stock_control_active ? "Yes" : "No" }}</td>
-    <td>{{ $stock }}</td>
+    <td>
+        @if($stock_control_active)
+            {{$tour->stock - $tour->getUsedStock()}}/{{ $tour->stock }}<br/>
+            ({{$tour->getUsedStock()}} Sold)
+        @else
+            {{$tour->getUsedStock()}} Sold
+        @endif
+    </td>
     <td>{{ $booking_form_url }}</td>
     <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
