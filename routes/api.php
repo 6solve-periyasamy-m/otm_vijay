@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\BespokeReportController;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -210,6 +211,10 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
         Route::get('/status', function(){})->name('status.stub');
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function() {
+       Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
     });
 });
 

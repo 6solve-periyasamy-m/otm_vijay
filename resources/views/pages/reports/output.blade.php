@@ -4,33 +4,25 @@
 
 @push('header-stack')
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#report').DataTable({fixedHeader: true,});
-        });
+        function save() {
+            $.post('{{ route('api.reports.bespoke.save') }}', {!! json_encode(array_merge($report->toArray(), ['__api_token' => Auth::user()->getCurrentToken()->token,])) !!})
+            .done(function (xhr, textStatus, errorThrown) {
+                window.location = xhr.message;
+            });
+        }
     </script>
 @endpush
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-striped" id="report">
-                <thead>
-                <tr>
-                    @foreach($header as $item)
-                        <th scope="col">{{ $item }}</th>
-                    @endforeach
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($data as $dataset)
-                    <tr>
-                        @foreach($dataset as $field)
-                            <td>{{ $field ?? 'Not Set' }}</td>
-                        @endforeach
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+    @can('create', \App\Models\Report::class)
+        <div class="card">
+            <div class="card-body">
+                <a class="btn btn-primary float-end" href="#" onclick="save()">
+                    <i class="icon-plus"></i>
+                    <span>Create New</span>
+                </a>
+            </div>
         </div>
-    </div>
+    @endcan
+    @include('partials.reports.bespoke.output')
 @endsection

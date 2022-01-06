@@ -1,3 +1,10 @@
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'report_name', 'value' => $name ?? null, 'width' => 2,])
+@include('partials.fields.text', ['name' => 'Description', 'field' => 'report_description', 'value' => $description ?? null, 'width' => 8,])
+<div class="form-group col-12 col-xl-2">
+    <label for="submit">Apply Changes</label>
+    <button id="submit" type="submit" class="form-control btn btn-primary">Submit</button>
+</div>
+
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr >
@@ -26,4 +33,3 @@
     @endforeach
     </tbody>
 </table>
-@include('partials.fields.submit')

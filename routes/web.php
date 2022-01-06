@@ -47,6 +47,7 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
@@ -678,6 +679,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     });
 
     Route::prefix('reports')->group(function () {
+        Route::prefix('bespoke')->group(function () {
+            Route::get('builder/{parent}', [BespokeReportController::class, 'create']);
+            Route::post('builder', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
+            Route::get('view/{report}', [BespokeReportController::class, 'show'])->name('reports.bespoke.show');
+        });
         Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
         Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
         Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');

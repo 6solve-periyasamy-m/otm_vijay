@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('report.bespoke.results'),])
+@extends('layout.form', ['action' => route('reports.bespoke.temporary.show'),])
 
 @section('title', 'Create New Report')
 

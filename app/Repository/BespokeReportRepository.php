@@ -2,10 +2,20 @@
 
 namespace App\Repository;
 
+use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BespokeReportRepository
 {
+    public static function getValidationRules(): array
+    {
+        return [
+            'report_name' => 'required',
+            'report_description' => 'required',
+            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport'])]
+        ];
+    }
 
     public static function getAccommodationFields(): array
     {
@@ -483,12 +493,13 @@ class BespokeReportRepository
         return $output;
     }
 
-    public static function getLowestDepth(Request $request, array $fields) {
+    public static function getLowestDepth(array $used, array $available): array
+    {
         $lowestDepth = -1;
         $lowestClass = null;
         $lowestType = null;
-        foreach ($fields as $field => $data) {
-            if ($request->has($field)) {
+        foreach ($available as $field => $data) {
+            if (in_array($field, $used)) {
                 if ($lowestDepth < $data->depth) {
                     $lowestDepth = $data->depth;
                     $lowestClass = $data->class;
@@ -499,7 +510,7 @@ class BespokeReportRepository
         return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
     }
 
-    public static function getFieldsFromParent(string $parent)
+    public static function getFieldsFromParent(string $parent): array
     {
         switch ($parent) {
             case 'accommodation':
@@ -515,37 +526,37 @@ class BespokeReportRepository
         }
     }
 
-    public static function generateReport(Request $request): array
+    public static function showReport(Report $report): array
     {
-        $fields = self::convertFieldsToOutput(self::getFieldsFromParent($request->input('parent')));
-        $lowest = self::getLowestDepth($request, $fields);
-        $fields = self::convertFieldsToOutput(self::getFieldsFromParent($request->input('parent')), $lowest['depth']);
+        $fields = self::convertFieldsToOutput(self::getFieldsFromParent($report->parent));
+        $lowest = self::getLowestDepth($report->fields, $fields);
+        $fields = self::convertFieldsToOutput(self::getFieldsFromParent($report->parent), $lowest['depth']);
 
         if ($lowest['type'] == 'component') {
-            return self::getDataForComponent($request, $fields, $lowest['class']);
+            return self::getDataForComponent($report->fields, $fields, $lowest['class']);
         } elseif ($lowest['type'] == 'inventory') {
-            return self::getDataForInventory($request, $fields, $lowest['class']);
+            return self::getDataForInventory($report->fields, $fields, $lowest['class']);
         } elseif ($lowest['type'] == 'tour') {
-            return self::getDataForTourInventory($request, $fields, $lowest['class']);
+            return self::getDataForTourInventory($report->fields, $fields, $lowest['class']);
         } else {
             return [];
         }
     }
 
-    private static function getDataForComponent(Request $request, array $fields, string $class): array
+    private static function getDataForComponent(array $used, array $available, string $class): array
     {
         $output = [];
         $output['header'] = [];
         $output['data'] = [];
-        foreach ($fields as $key => $data) {
-            if ($request->has($key)) {
+        foreach ($available as $key => $data) {
+            if (in_array($key, $used)) {
                 $output['header'][] = $data->description;
             }
         }
         foreach (app('\\App\\Models\\' . $class)->all() as $row) {
             $data = [];
-            foreach ($fields as $key => $info) {
-                if ($request->has($key)) {
+            foreach ($available as $key => $info) {
+                if (in_array($key, $used)) {
                     if ($info->type == 'component') {
                         $data[] = $row->{$info->accessor};
                     }
@@ -556,21 +567,21 @@ class BespokeReportRepository
         return $output;
     }
 
-    private static function getDataForInventory(Request $request, array $fields, string $class): array
+    private static function getDataForInventory(array $used, array $available, string $class): array
     {
         $output = [];
         $output['header'] = [];
         $output['data'] = [];
-        foreach ($fields as $key => $data) {
-            if ($request->has($key)) {
+        foreach ($available as $key => $data) {
+            if (in_array($key, $used)) {
                 $output['header'][] = $data->description;
             }
         }
         foreach (app('\\App\\Models\\' . $class)->all() as $row) {
             $data = [];
             $component = $row->component;
-            foreach ($fields as $key => $info) {
-                if ($request->has($key)) {
+            foreach ($available as $key => $info) {
+                if (in_array($key, $used)) {
                     if ($info->type == 'component') {
                         $data[] = $component->{$info->accessor};
                     }
@@ -584,13 +595,13 @@ class BespokeReportRepository
         return $output;
     }
 
-    private static function getDataForTourInventory(Request $request, array $fields, string $class): array
+    private static function getDataForTourInventory(array $used, array $available, string $class): array
     {
         $output = [];
         $output['header'] = [];
         $output['data'] = [];
-        foreach ($fields as $key => $data) {
-            if ($request->has($key)) {
+        foreach ($available as $key => $data) {
+            if (in_array($key, $used)) {
                 $output['header'][] = $data->description;
             }
         }
@@ -598,8 +609,8 @@ class BespokeReportRepository
             $data = [];
             $inventory = $row->inventory;
             $component = $inventory->component;
-            foreach ($fields as $key => $info) {
-                if ($request->has($key)) {
+            foreach ($available as $key => $info) {
+                if (in_array($key, $used)) {
                     if ($info->type == 'component') {
                         $data[] = $component->{$info->accessor};
                     }
