@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BespokeReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
@@ -18,7 +19,7 @@ class BespokeReportController extends Controller
     }
 
     public function create(string $parent) {
-        return view('pages.reports.builder', ['parent' => $parent, 'fieldList' => BespokeReportRepository::getFieldsFromParent($parent)]);
+        return view('pages.reports.create', ['parent' => $parent, 'fieldList' => BespokeReportRepository::getFieldsFromParent($parent)]);
     }
 
     public function showTemporary(Request $request) {
@@ -53,12 +54,29 @@ class BespokeReportController extends Controller
         return view('pages.reports.show', BespokeReportRepository::showReport($report));
     }
 
+    public function export(Report $report, string $extension) {
+        return Excel::download(new BespokeReportExport($report), $report->parent . '-report-' . now() . '.' . $extension);
+    }
+
     public function edit(Report $report) {
-        // TODO: Stub (Implement)
+        return view('pages.reports.edit', ['report' => $report, 'fieldList' => BespokeReportRepository::getFieldsFromParent($report->parent),]);
     }
 
     public function update(Request $request, Report $report) {
-        // TODO: Stub (Implement)
+        $fields = BespokeReportRepository::convertFieldsToOutput(BespokeReportRepository::getFieldsFromParent($report->parent));
+        $usedFields = [];
+        foreach ($fields as $field => $data) {
+            if ($request->has($field)) {
+                $usedFields[] = $field;
+            }
+        }
+        $report->update([
+            'name' => $request->input('report_name'),
+            'description' => $request->input('report_description'),
+            'fields' => $usedFields,
+        ]);
+        $report->save();
+        return redirect()->route('reports.bespoke.show', ['report' => $report,]);
     }
 
     public function delete(Report $report) {

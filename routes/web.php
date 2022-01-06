@@ -682,7 +682,13 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::prefix('bespoke')->group(function () {
             Route::get('builder/{parent}', [BespokeReportController::class, 'create']);
             Route::post('builder', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
-            Route::get('view/{report}', [BespokeReportController::class, 'show'])->name('reports.bespoke.show');
+            Route::prefix('{report}')->group(function () {
+                Route::get('view', [BespokeReportController::class, 'show'])->name('reports.bespoke.show');
+                Route::get('edit', [BespokeReportController::class, 'edit'])->name('reports.bespoke.edit');
+                Route::post('edit', [BespokeReportController::class, 'update'])->name('reports.bespoke.update');
+                Route::get('export/{extension}', [BespokeReportController::class, 'export'])->name('reports.bespoke.export');
+            });
+
         });
         Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
         Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');

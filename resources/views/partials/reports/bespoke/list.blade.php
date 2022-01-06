@@ -1,5 +1,5 @@
-@include('partials.fields.text', ['name' => 'Name', 'field' => 'report_name', 'value' => $name ?? null, 'width' => 2,])
-@include('partials.fields.text', ['name' => 'Description', 'field' => 'report_description', 'value' => $description ?? null, 'width' => 8,])
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'report_name', 'value' => isset($report) ? $report->name : null, 'width' => 2,])
+@include('partials.fields.text', ['name' => 'Description', 'field' => 'report_description', 'value' => isset($report) ? $report->description : null, 'width' => 8,])
 <div class="form-group col-12 col-xl-2">
     <label for="submit">Apply Changes</label>
     <button id="submit" type="submit" class="form-control btn btn-primary">Submit</button>
@@ -26,7 +26,7 @@
                 <td>{{ $data['class'] }}</td>
                 <td>{{ $info['name'] }}</td>
                 <td>
-                    <input type="checkbox" name="{{ $field }}">
+                    <input type="checkbox" name="{{ $field }}" @if(isset($report) && in_array($field, $report->fields)) checked @endif>
                 </td>
             </tr>
         @endforeach
