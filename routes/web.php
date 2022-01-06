@@ -656,6 +656,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
         Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
         Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
+        Route::get('/finances', [CustomerPortalController::class, 'showFinancesPage'])->name('finances');
     });
 });
 
