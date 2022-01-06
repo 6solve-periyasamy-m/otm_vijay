@@ -16,7 +16,8 @@ class CreatePaymentRemindersTable extends Migration
         Schema::create('payment_reminders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('payment_installment_id')->constrained()->onDelete('cascade');
+            $table->foreignId('order_installment_id')->constrained()->onDelete('cascade');
+            $table->integer('period')->default('7');
             $table->timestamps();
         });
     }

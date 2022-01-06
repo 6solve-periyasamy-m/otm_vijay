@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Models\FlightInventoryTour;
+use App\Models\FlightInventoryTourUpgrade;
 use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\Tour;
@@ -103,5 +105,11 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departs_at` AND `flight_inventories`.`arrives_at`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `flight_inventories`.`departs_at` AND `flight_inventories`.`arrives_at`");
         return $query->get();
+    }
+
+    public static function getParentComponent(FlightInventoryTour $inventoryTour)
+    {
+        $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        return $upgrade->base;
     }
 }

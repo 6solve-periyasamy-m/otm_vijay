@@ -11,7 +11,7 @@
             <th scope="col">Ticket Type Id</th>
             <th scope="col">Activity Start Date Time</th>
             <th scope="col">Activity End Date Time</th>
-            <th scope="col">Fit Selectable</th>
+            <th scope="col">FIT Selectable</th>
             <th scope="col">Stock</th>
             <th scope="col">Purchase Price</th>
             <th scope="col">Sales Price</th>

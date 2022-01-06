@@ -13,6 +13,6 @@ use App\Models\OrderCustomer;
 class OrderController extends ApiController
 {
     public function getOrderStatus(Order $order) {
-        return OrderRepository::getOrderStatus($order);
+        return $order->getStatus();
     }
 }

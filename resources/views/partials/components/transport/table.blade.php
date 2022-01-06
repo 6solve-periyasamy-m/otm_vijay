@@ -26,7 +26,7 @@ $(document).ready(function() {
                     <th scope="col">Travel Class</th>
                     <th scope="col">Departure Date Time</th>
                     <th scope="col">Arrival Date Time</th>
-                    <th scope="col">Fit Selectable</th>
+                    <th scope="col">FIT Selectable</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Purchase Price</th>
                     <th scope="col">Sales Price</th>
@@ -46,7 +46,7 @@ $(document).ready(function() {
                     <input type="checkbox" disabled @if($transportInventory->arrival_time_confirmed == 1) checked @endif>
                 </td>
                 <td>
-                    <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
+                    <input type="checkbox" disabled @if($transportInventory->fit_selectable == 1) checked @endif>
                 </td>
                 <td>{{ $transportInventory->stock }}</td>
                 <td>{{ StringFormatter::formatCurrency($transportInventory->purchase_price) }}</td>

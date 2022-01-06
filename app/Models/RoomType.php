@@ -14,6 +14,6 @@ class RoomType extends Model
 
     public static function getValidationRules()
     {
-        return ['name' => 'required|unique:room_types,name',];
+        return ['name' => 'required|unique:room_types,name','maximum_occupancy'=>'required|integer'];
     }
 }
