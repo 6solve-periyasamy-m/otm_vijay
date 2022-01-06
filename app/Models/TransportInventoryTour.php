@@ -17,6 +17,7 @@ class TransportInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'transport_inventory_id',];
     protected $cascadeDeletes = ['orders', 'upgrades'];
+    public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
     {
