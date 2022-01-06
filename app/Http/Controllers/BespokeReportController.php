@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class BespokeReportController extends Controller
 {
     public function index() {
-        return view('pages.reports.table', ['reports' => Report::all(),]);
+        return view('pages.reports.table', ['reports' => Report::all(), 'system' => ReportRepository::getAvailableReports(),]);
     }
 
     public function create(string $parent) {
