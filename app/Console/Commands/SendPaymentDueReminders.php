@@ -12,7 +12,7 @@ class SendPaymentDueReminders extends Command
      *
      * @var string
      */
-    protected $signature = 'payment:remind';
+    protected $signature = 'payment:remind {days?}';
 
     /**
      * The console command description.
@@ -38,7 +38,8 @@ class SendPaymentDueReminders extends Command
      */
     public function handle()
     {
-        OrderRepository::sendAllOrderReminders();
+        $days = $this->argument('days') ?? 7;
+        OrderRepository::sendAllOrderReminders($days);
         return 0;
     }
 }

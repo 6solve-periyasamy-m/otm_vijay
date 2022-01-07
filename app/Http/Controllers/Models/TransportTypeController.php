@@ -25,7 +25,7 @@ class TransportTypeController extends Controller
         $transportType = TransportType::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('transport-types.view', ['transportType' => $transportType,]);
+        return view('pages.close');
     }
 
     public function view(TransportType $transportType)
@@ -44,7 +44,7 @@ class TransportTypeController extends Controller
         $transportType->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('transport-types.view', ['transportType' => $transportType,]);
+        return view('pages.close');
     }
 
     public function destroy(TransportType $transportType)
