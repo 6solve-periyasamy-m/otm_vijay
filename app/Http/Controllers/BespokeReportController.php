@@ -80,6 +80,7 @@ class BespokeReportController extends Controller
     }
 
     public function delete(Report $report) {
-        // TODO: Stub (Implement)
+        $report->delete();
+        return redirect()->route('reports.bespoke.all');
     }
 }
