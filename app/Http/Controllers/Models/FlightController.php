@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Flight;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class FlightController extends Controller
 {
@@ -31,6 +32,9 @@ class FlightController extends Controller
             'notes' => $request->input('notes'),
             'available_after' => $request->input('available_after'),
         ]);
+        if ($request->has('image') && $request->file('image') != null) {
+            $flight->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 
@@ -56,6 +60,13 @@ class FlightController extends Controller
             'notes' => $request->input('notes'),
             'available_after' => $request->input('available_after'),
         ]);
+        if ($request->has('image') && $request->file('image') != null) {
+            if (isset($flight->image_url)) {
+                File::delete(public_path($flight->image_url));
+            }
+            $flight->image_url = $request->file('image')->storePublicly('uploads/images');
+        }
+
         return redirect()->route('flights.view', ['flight' => $flight,]);
     }
 

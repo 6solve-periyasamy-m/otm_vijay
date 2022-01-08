@@ -10,6 +10,8 @@
             $('#flights-table').DataTable({fixedHeader: true});
             $('#transports-table').DataTable({fixedHeader: true});
             $('#installments-table').DataTable({fixedHeader: true});
+            $('#merchandise-table').DataTable({fixedHeader: true});
+            $('#orders-table').DataTable({fixedHeader: true});
         });
     </script>
 @endsection
@@ -20,9 +22,13 @@
             <div class="col-12">
                 <h4 class="fw-bold">{{ $tour->name }}</h4>
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <p>Event</p>
                 <h6 class="fw-bold">{{ isset($tour->event) ? $tour->event->name : "None" }}</h6>
+            </div>
+            <div class="col-12 col-xl-6">
+                <p>Booking URL</p>
+                <h6 class="fw-bold"><a href="{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}">{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}</a></h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
@@ -48,14 +54,10 @@
                 <p>Is Active</p>
                 <h6 class="fw-bold">{{ $tour->is_active ? "Yes" : "No" }}</h6>
             </div>
-            <div class="col-12 col-xl-6">
-                <p>Internal Notes</p>
+            <div class="col-12 col-xl-12">
+                <p>Notes</p>
                 <h6 class="fw-bold">{{ $tour->notes }}</h6>
             </div>
-            <div class="col-12 col-xl-6">
-                <p>External Notes</p>
-                <h6 class="fw-bold">{{ $tour->notes }}</h6>
-            </div>                
             <div class="col-12 col-xl-6">
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
@@ -118,20 +120,46 @@
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Room Type</th>
+                                <th scope="col">Board Type</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }} to {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}</td>
+                                    <td style="min-width: 200px">
+                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }}
+                                        <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_in_time_confirmed == 1) checked @endif>
+                                        &nbspto&nbsp
+                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}
+                                        <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_out_time_confirmed == 1) checked @endif>
+                                    </td>
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
-                                    <td>{{ $accommodationEntry["tour"]->tour_component_type }}</td>
-                                    <td class="actions">
+                                    <td>{{ $accommodationEntry["inventory"]->boardType->name }}</td>
+                                    <td>
+                                        @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $accommodationEntry["tour"]->parent() }}">
+                                        @endif
+                                        {{ $accommodationEntry["tour"]->tour_component_type }}
+                                        @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
+                                    <td class="actions-3">
                                         @can('update', \App\Models\AccommodationInventoryTour::class)
+                                            @if($accommodationEntry["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $accommodationEntry["tour"]->tour_component_type == 'Upgrade' ? $accommodationEntry["tour"]->parent() : $accommodationEntry["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('accommodation-inventory-tours.edit', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-arrow-up"></i>
+                                            </span>
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
@@ -161,6 +189,7 @@
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Activity Type</th>
+                                <th scope="col">Ticket Type</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -170,11 +199,30 @@
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($activity["inventory"]->starts_at) }} to {{ StringFormatter::formatDateTime($activity["inventory"]->ends_at) }}</td>
                                     <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
-                                    <td>{{ $activity["tour"]->tour_component_type }}</td>
-                                    <td class="actions">
+                                    <td>{{ $activity["inventory"]->ticketType->name }}</td>
+                                    <td>
+                                        @if($activity["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $activity["tour"]->parent() }}">
+                                        @endif
+                                            {{ $activity["tour"]->tour_component_type }}
+                                        @if($activity["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
+                                    <td class="actions-3">
                                         @can('update', \App\Models\ActivityInventoryTour::class)
+                                            @if($activity["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $activity["tour"]->tour_component_type == 'Upgrade' ? $activity["tour"]->parent() : $activity["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('activity-inventory-tours.edit', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
@@ -215,13 +263,31 @@
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->flight_type }}</td>
-                                    <td>{{ $flight["tour"]->tour_component_type }}</td>
-                                    <td class="actions">
+                                    <td>
+                                        @if($flight["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $flight["tour"]->parent() }}">
+                                        @endif
+                                            {{ $flight["tour"]->tour_component_type }}
+                                        @if($flight["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
+                                    <td class="actions-3">
                                         @can('update', \App\Models\FlightInventoryTour::class)
+                                            @if($flight["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $flight["tour"]->tour_component_type == 'Upgrade' ? $flight["tour"]->parent() : $flight["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('flight-inventory-tours.edit', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <i class="icon-trash"></i>
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
                                             </span>
                                         @endcan
                                         @can('delete', \App\Models\FlightInventoryTour::class)
@@ -258,13 +324,31 @@
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($transport["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($transport["inventory"]->arrives_at) }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
-                                    <td>{{ $transport["tour"]->tour_component_type }}</td>
+                                    <td>
+                                        @if($transport["tour"]->tour_component_type == 'Upgrade')
+                                            <abbr title="{{ $transport["tour"]->parent() }}">
+                                                @endif
+                                                {{ $transport["tour"]->tour_component_type }}
+                                                @if($transport["tour"]->tour_component_type == 'Upgrade')
+                                            </abbr>
+                                        @endif
+                                    </td>
                                     <td class="actions">
                                         @can('update', \App\Models\TransportInventoryTour::class)
+                                            @if($transport["tour"]->tour_component_type !== 'Add-on')
+                                                <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                            @else
+                                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                                    <i class="icon-arrow-up"></i>
+                                                </span>
+                                            @endif
                                             <a href="{{ route('transport-inventory-tours.edit', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
-                                                <i class="icon-trash"></i>
+                                                    <i class="icon-arrow-up"></i>
+                                            </span>
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
                                             </span>
                                         @endcan
                                         @can('delete', \App\Models\TransportInventoryTour::class)
@@ -286,6 +370,7 @@
             </div>
         </div>
     </div>
+    {{-- Payment Installment Section --}}
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Payment Installments</h2>        
@@ -312,7 +397,7 @@
                 <tr>
                     <th scope="row">Deposit</th>
                     <td>With Order</td>
-                    <td>{{ $tour->deposit }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->deposit) }}</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>
@@ -323,7 +408,7 @@
                     <tr>
                         <th scope="row">Installment</th>
                         <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                        <td>{{ $installment->amount }}</td>
+                        <td>{{ StringFormatter::formatCurrency($installment->amount) }}</td>
                         <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -335,6 +420,95 @@
                             <form id="paymentInstallment-{{ $installment->id }}-delete"
                                 action="{{ route('payment-installments.delete', ['tour' => $tour, 'paymentInstallment' => $installment,]) }}"
                                 method="POST" style="display: none;">{{ csrf_field() }}</form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+    {{-- Merchandise Section --}}
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Merchandise</h2>
+    </div>
+    <div class="card">
+        <div class="card-body text-end">
+            <a href="{{ route('merchandise.create', ['tour' => $tour,]) }}" class="btn btn-primary">
+                <i class="icon-plus"></i>
+                <span>Create</span>
+            </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table id="merchandise-table" class="table table-striped table-responsive-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Component Type</th>
+                    <th scope="col">Purchase Price</th>
+                    <th scope="col">Sales Price</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($tour->merchandise as $merchandise)
+                    <tr>
+                        <td style="min-width: 200px">{{ $merchandise->name }}</td>
+                        <td>{{ $merchandise->tour_component_type }}</td>
+                        <td>{{ $merchandise->purchase_price }}</td>
+                        <td>{{ $merchandise->tour_sales_price }}</td>
+                        <td>{{ $merchandise->notes }}</td>
+                        <td class="actions">
+                            @can('update', \App\Models\Merchandise::class)
+                                <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <i class="icon-trash"></i>
+                                        </span>
+                            @endcan
+                            @can('delete', \App\Models\Merchandise::class)
+                                <a href="#" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                <form action="{{ route('merchandise.delete', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" method="post" id="merchandise-{{$merchandise->id}}-delete">
+                                    @csrf
+                                </form>
+                            @else
+                                <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <i class="icon-trash"></i>
+                                        </span>
+                            @endcan
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Orders</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table id="orders-table" class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Booking Reference</th>
+                    <th scope="col">Lead Booker</th>
+                    <th scope="col">Customers</th>
+                    <th scope="col">Order Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                @foreach($tour->orders as $order)
+                    <tr>
+                        <th scope="row"><a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a></th>
+                        <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
+                        <td>{{ sizeof($order->orderCustomers) }}</td>
+                        <td><h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status']  }}</h6></td>
+                        <td class="actions">
+                            <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

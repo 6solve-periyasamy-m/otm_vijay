@@ -25,7 +25,7 @@ class AirlineController extends Controller
         $airline = Airline::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('airlines.view', ['airline' => $airline,]);
+        return view('pages.close');
     }
 
     public function view(Airline $airline)
@@ -44,7 +44,7 @@ class AirlineController extends Controller
         $airline->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('airlines.view', ['airline' => $airline,]);
+        return view('pages.close');
     }
 
     public function destroy(Airline $airline)

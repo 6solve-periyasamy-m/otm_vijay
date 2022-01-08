@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,6 +28,9 @@ use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\FlightDetailsController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\BookingCustomerController;
+
+use App\Http\Controllers\Api\OrderController;
+use App\Repository\OrderRepository;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
@@ -171,12 +173,19 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
         Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
+        Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
             Route::post('flight', [SelectController::class, 'getFlightInventory'])->name('inventory.flight.select');
             Route::post('transport', [SelectController::class, 'getTransportInventory'])->name('inventory.transport.select');
+            Route::prefix('{inventoryTour}')->group(function () {
+                Route::post('accommodation', [SelectController::class, 'getAccommodationInventoryForUpgrade'])->name('inventory.accommodation.upgrade.select');
+                Route::post('activity', [SelectController::class, 'getActivityInventoryForUpgrade'])->name('inventory.activity.upgrade.select');
+                Route::post('flight', [SelectController::class, 'getFlightInventoryForUpgrade'])->name('inventory.flight.upgrade.select');
+                Route::post('transport', [SelectController::class, 'getTransportInventoryForUpgrade'])->name('inventory.transport.upgrade.select');
+            });
         });
         Route::prefix('selected')->group(function () {
             Route::post('location/{id}', [SelectController::class, 'getSelectedLocation'])->name('locations.selected');
@@ -207,6 +216,12 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
                 Route::post('flight', [SelectController::class, 'getSelectedFlightInventory'])->name('inventory.flight.selected');
                 Route::post('transport', [SelectController::class, 'getSelectedTransportInventory'])->name('inventory.transport.selected');
+                Route::prefix('upgrade')->group(function () {
+                    Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventoryForUpgrade'])->name('inventory.accommodation.upgrade.selected');
+                    Route::post('activity', [SelectController::class, 'getSelectedActivityInventoryForUpgrade'])->name('inventory.activity.upgrade.selected');
+                    Route::post('flight', [SelectController::class, 'getSelectedFlightInventoryForUpgrade'])->name('inventory.flight.upgrade.selected');
+                    Route::post('transport', [SelectController::class, 'getSelectedTransportInventoryForUpgrade'])->name('inventory.transport.upgrade.selected');
+                });
             });
         });
     });
@@ -242,6 +257,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::post('/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('activity');
                 Route::post('/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('flight');
                 Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('transport');
+                Route::post('/merchandise/add', [TourComponentController::class, 'addMerchandiseAddon'])->name('merchandise');
             });
             Route::prefix('available')->name('get.')->group(function () {
                 Route::get('/accommodation/{oCustomerId}', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('accommodation');
@@ -255,3 +271,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::get('/status', function(){})->name('status.stub');
     });
 });
+
+Route::get('/customer/finances', function () { return OrderRepository::getCustomerOrders(\App\Models\Customer::findOrFail(1)); });
+// TODO: Remove

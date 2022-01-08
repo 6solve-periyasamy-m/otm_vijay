@@ -31,23 +31,23 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
-            <h6 class="badge badge-{{ $orderStatus['color'] }} fw-bold">{{ $orderStatus['status'] }}</h6>
+            <h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status'] }}</h6>
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($totalOrderValue) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getCost() + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before adjustments)</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($totalPaid) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getPaid()) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($totalOrderValue - $totalPaid) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getRemaining()) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ isset($nextPayment['installment']) ? StringFormatter::formatDate($nextPayment['due']) . ' - ' . StringFormatter::formatCurrency($nextPayment['amount']) : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">{{ isset($order->getNextInstallment()['installment']) ? StringFormatter::formatDate($order->getNextInstallment()['due']) . ' - ' . StringFormatter::formatCurrency($order->getNextInstallment()['amount']) : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Internal Notes</p>
@@ -62,6 +62,23 @@
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="btn btn-warning">
+                <i class="icon-globe"></i>
+                View Tour
+            </a>
+            @can('delete', \App\Models\Order::class)
+                @if($order->cancelled)
+                    <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning"><i class="icon-trash"></i>Restore Order</a>
+                    <form action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">
+                        @csrf
+                    </form>
+                @else
+                    <a href="#" onclick="$('#order-delete').submit()" class="btn btn-danger"><i class="icon-trash"></i>Cancel Order</a>
+                    <form action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
+                        @csrf
+                    </form>
+                @endif
+            @endcan
         </div>
     </div>
 </div>
@@ -82,7 +99,7 @@
         </div>
         @endcan
         <div class="row">
-            @foreach($customers as $ordersCustomer)
+            @foreach($order->orderCustomers as $ordersCustomer)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
                     <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
@@ -128,8 +145,8 @@
                         </a>
                         @endcan
                         <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" class="btn btn-primary text-white mb-1">View Invoice</a>
-                        <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>
-                        <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>                    
+                        {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>--}}
+                        {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
                     </div>
                     <div class="pt-1">
                         <table class="table table-striped" id="payment-table">
@@ -142,7 +159,7 @@
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            @foreach($payments as $payment)
+                            @foreach($order->payments as $payment)
                                 <tr>
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
@@ -186,13 +203,19 @@
                                 <th scope="col">Value</th>
                             </tr>
                             </thead>
-                            @foreach($customers as $ordersCustomer)
+                            @foreach($order->orderCustomers as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
                                 <td>{{ StringFormatter::formatCurrency($order->tour->base_price_per_person) }}</td>
                             </tr>
                             @endforeach
-                            @foreach($addons as $addon)
+                            @foreach($order->getAdditionals()['upgrades'] as $upgrade)
+                                <tr>
+                                    <td>Upgrade: {{ $upgrade['customer']->customer->first_name . ' ' . $upgrade['customer']->customer->last_name }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($upgrade['upgrade']->tour_sales_price) }}</td>
+                                </tr>
+                            @endforeach
+                            @foreach($order->getAdditionals()['addons'] as $addon)
                                 <tr>
                                     <td>Add-on: {{ $addon['customer']->customer->first_name . ' ' . $addon['customer']->customer->last_name }}</td>
                                     <td>{{ StringFormatter::formatCurrency($addon['addon']->tour_sales_price) }}</td>
@@ -270,7 +293,7 @@
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
-                            @foreach($customers as $ordersCustomer)
+                            @foreach($order->orderCustomers as $ordersCustomer)
                                 @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>

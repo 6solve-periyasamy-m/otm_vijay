@@ -42,4 +42,8 @@ class OrderActivity extends Model
         return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
     }
 
+    public function isCancelled(): bool
+    {
+        return $this->orderCustomers->order->cancelled;
+    }
 }

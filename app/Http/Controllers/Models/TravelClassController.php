@@ -25,7 +25,7 @@ class TravelClassController extends Controller
         $travelClass = TravelClass::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('travel-classes.view', ['travelClass' => $travelClass,]);
+        return view('pages.close');
     }
 
     public function view(TravelClass $travelClass)
@@ -44,7 +44,7 @@ class TravelClassController extends Controller
         $travelClass->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('travel-classes.view', ['travelClass' => $travelClass,]);
+        return view('pages.close');
     }
 
     public function destroy(TravelClass $travelClass)

@@ -6,6 +6,7 @@ use App\Events\OrderCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
+use App\Models\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
@@ -25,13 +26,14 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate(Order::getValidationRules());
+        $tour = Tour::findOrFail($request->input('tour_id'));
         $order = Order::create([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
-            'token' => $request->input('token'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
+            'deposit' => $tour->deposit,
         ]);
         $orderCustomer = OrderCustomer::make([
             'customer_id' => $request->input('lead_booker_id'),
@@ -42,7 +44,7 @@ class OrderController extends Controller
         $order->lead_booker_id = $orderCustomer->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        OrderRepository::addIncludedToCustomer($orderCustomer, $order);
+        OrderRepository::addIncludedToCustomer($orderCustomer);
         event(new OrderCreatedEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
@@ -60,20 +62,29 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $request->validate(Order::getValidationRules());
+        $request->validate(['deposit' => 'required|numeric',]);
         $order->update([
             'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
-            'token' => $request->input('token'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
+            'deposit' => $request->input('deposit'),
         ]);
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function destroy(Order $order)
     {
-        $order->delete();
-        return redirect()->route('orders.all');
+        $order->cancelled = true;
+        $order->save();
+        return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
+    public function restore(Order $order)
+    {
+        $order->cancelled = false;
+        $order->save();
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

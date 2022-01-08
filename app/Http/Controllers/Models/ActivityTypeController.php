@@ -25,7 +25,7 @@ class ActivityTypeController extends Controller
         $activityType = ActivityType::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('activity-types.view', ['activityType' => $activityType,]);
+        return view('pages.close');
     }
 
     public function view(ActivityType $activityType)
@@ -44,7 +44,7 @@ class ActivityTypeController extends Controller
         $activityType->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('activity-types.view', ['activityType' => $activityType,]);
+        return view('pages.close');
     }
 
     public function destroy(ActivityType $activityType)

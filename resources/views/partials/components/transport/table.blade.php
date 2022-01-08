@@ -25,10 +25,8 @@ $(document).ready(function() {
                 <tr>
                     <th scope="col">Travel Class</th>
                     <th scope="col">Departure Date Time</th>
-                    <th scope="col">Departure Confirmed</th>
                     <th scope="col">Arrival Date Time</th>
-                    <th scope="col">Arrival Confirmed</th>
-                    <th scope="col">Fit Selectable</th>
+                    <th scope="col">FIT Selectable</th>
                     <th scope="col">Stock</th>
                     <th scope="col">Purchase Price</th>
                     <th scope="col">Sales Price</th>
@@ -39,14 +37,23 @@ $(document).ready(function() {
             @foreach($transport->transportInventory as $transportInventory)
             <tr>
                 <td>{{ $transportInventory->travelClass->name }}</td>
-                <td>{{ StringFormatter::formatDateTime($transportInventory->departs_at) }}</td>
-                <td>{{ $transportInventory->departure_time_confirmed ? "Yes" : "No" }}</td>
-                <td>{{ StringFormatter::formatDateTime($transportInventory->arrives_at) }}</td>
-                <td>{{ $transportInventory->arrival_time_confirmed ? "Yes" : "No" }}</td>
-                <td>{{ $transportInventory->fit_selectable ? "Yes" : "No" }}</td>
-                <td>{{ $transportInventory->stock }}</td>
-                <td>{{ $transportInventory->purchase_price }}</td>
-                <td>{{ $transportInventory->sales_price }}</td>
+                <td>
+                    {{ StringFormatter::formatDateTime($transportInventory->departs_at) }}&nbsp
+                    <input type="checkbox" disabled @if($transportInventory->departure_time_confirmed == 1) checked @endif>
+                </td>
+                <td>
+                    {{ StringFormatter::formatDateTime($transportInventory->arrives_at) }}
+                    <input type="checkbox" disabled @if($transportInventory->arrival_time_confirmed == 1) checked @endif>
+                </td>
+                <td>
+                    <input type="checkbox" disabled @if($transportInventory->fit_selectable == 1) checked @endif>
+                </td>
+                <td>
+                    {{$transportInventory->stock - $transportInventory->getUsedStock()}}/{{ $transportInventory->stock }}<br/>
+                    ({{$transportInventory->getUsedStock()}} Sold)
+                </td>
+                <td>{{ StringFormatter::formatCurrency($transportInventory->purchase_price) }}</td>
+                <td>{{ StringFormatter::formatCurrency($transportInventory->sales_price) }}</td>
                 <td>{{ $transportInventory->notes }}</td>
                 <td class="actions-3">
                     @can('create', \App\Models\TransportInventory::class)

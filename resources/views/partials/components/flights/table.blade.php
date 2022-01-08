@@ -24,7 +24,7 @@
                 <th scope="col">Check In Time</th>
                 <th scope="col">Departure Time</th>
                 <th scope="col">Arrival Time</th>
-                <th scope="col">Fit Selectable</th>
+                <th scope="col">FIT Selectable</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
@@ -39,10 +39,15 @@
                     <td>{{ StringFormatter::formatDateTime($flightInventory->check_in) }}</td>
                     <td>{{ StringFormatter::formatDateTime($flightInventory->departs_at) }}</td>
                     <td>{{ StringFormatter::formatDateTime($flightInventory->arrives_at) }}</td>
-                    <td>{{ $flightInventory->fit_selectable ? "Yes" : "No" }}</td>
-                    <td>{{ $flightInventory->stock }}</td>
-                    <td>{{ $flightInventory->purchase_price }}</td>
-                    <td>{{ $flightInventory->sales_price }}</td>
+                    <td>
+                        <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
+                    </td>
+                    <td>
+                        {{$flightInventory->stock - $flightInventory->getUsedStock()}}/{{ $flightInventory->stock }}<br/>
+                        ({{$flightInventory->getUsedStock()}} Sold)
+                    </td>
+                    <td>{{ StringFormatter::formatCurrency($flightInventory->purchase_price) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($flightInventory->sales_price) }}</td>
                     <td>{{ $flightInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\FlightInventory::class)

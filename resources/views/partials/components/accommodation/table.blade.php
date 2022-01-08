@@ -22,10 +22,8 @@
                 <th scope="col">Room Type</th>
                 <th scope="col">Board Type</th>
                 <th scope="col">Check In Time</th>
-                <th scope="col">Confirmed</th>
                 <th scope="col">Check Out Time</th>
-                <th scope="col">Confirmed</th>
-                <th scope="col">Fit Selectable</th>
+                <th scope="col">FIT Selectable</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
@@ -37,14 +35,23 @@
                 <tr>
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
-                    <td>{{ StringFormatter::formatDateTime($accommodationInventory->check_in) }}</td>
-                    <td>{{ $accommodationInventory->check_in_time_confirmed == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ StringFormatter::formatDateTime($accommodationInventory->check_out) }}</td>
-                    <td>{{ $accommodationInventory->check_out_time_confirmed == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ $accommodationInventory->fit_selectable == 1 ? 'True' : 'False' }}</td>
-                    <td>{{ $accommodationInventory->stock }}</td>
-                    <td>{{ $accommodationInventory->purchase_price }}</td>
-                    <td>{{ $accommodationInventory->sales_price }}</td>
+                    <td>
+                        {{ StringFormatter::formatDateTime($accommodationInventory->check_in) }}&nbsp
+                        <input type="checkbox" disabled @if($accommodationInventory->check_in_time_confirmed == 1) checked @endif>
+                    </td>
+                    <td>
+                        {{ StringFormatter::formatDateTime($accommodationInventory->check_out) }}&nbsp
+                        <input type="checkbox" disabled @if($accommodationInventory->check_out_time_confirmed == 1) checked @endif>
+                    </td>
+                    <td>
+                        <input type="checkbox" disabled @if($accommodationInventory->fit_selectable == 1) checked @endif>
+                    </td>
+                    <td>
+                        {{$accommodationInventory->stock - $accommodationInventory->getUsedStock()}}/{{ $accommodationInventory->stock }}<br/>
+                        ({{$accommodationInventory->getUsedStock()}} Sold)
+                    </td>
+                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->purchase_price) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\AccommodationInventory::class)

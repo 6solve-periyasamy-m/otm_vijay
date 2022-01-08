@@ -17,6 +17,7 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->foreignId('activity_type_id')->index()->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
+            $table->string('image_url')->nullable();
             $table->foreignId('address_id')->index()->constrained()->onDelete('cascade');
             $table->foreignId('currency_id')->nullable()->constrained()->onDelete('set null');
             $table->text('name')->nullable();

@@ -14,6 +14,14 @@ class RoomType extends Model
 
     public static function getValidationRules()
     {
-        return ['name' => 'required|unique:room_types,name',];
+        return ['name' => 'required|unique:room_types,name','maximum_occupancy'=>'required|integer'];
+    }
+
+    public static function firstOrCreate(string $name, int $maximumOccupancy) {
+        $type = self::where('name', '=', $name)->first();
+        if (!isset($type)) {
+            $type = self::create(['name' => $name,'maximum_occupancy' => $maximumOccupancy,]);
+        }
+        return $type;
     }
 }

@@ -22,7 +22,7 @@
                 <th scope="col">Ticket Type</th>
                 <th scope="col">Start Time</th>
                 <th scope="col">End Time</th>
-                <th scope="col">Fit Selectable</th>
+                <th scope="col">FIT Selectable</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
@@ -35,10 +35,15 @@
                     <td>{{ $activityInventory->ticketType->name }}</td>
                     <td>{{ StringFormatter::formatDateTime($activityInventory->starts_at) }}</td>
                     <td>{{ StringFormatter::formatDateTime($activityInventory->ends_at) }}</td>
-                    <td>{{ $activityInventory->fit_selectable ? "Yes" : "No" }}</td>
-                    <td>{{ $activityInventory->stock }}</td>
-                    <td>{{ $activityInventory->purchase_price }}</td>
-                    <td>{{ $activityInventory->sales_price }}</td>
+                    <td>
+                        <input type="checkbox" disabled @if($activityInventory->fit_selectable == 1) checked @endif>
+                    </td>
+                    <td>
+                        {{$activityInventory->stock - $activityInventory->getUsedStock()}}/{{ $activityInventory->stock }}<br/>
+                        ({{$activityInventory->getUsedStock()}} Sold)
+                    </td>
+                    <td>{{ StringFormatter::formatCurrency($activityInventory->purchase_price) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($activityInventory->sales_price) }}</td>
                     <td>{{ $activityInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\ActivityInventory::class)

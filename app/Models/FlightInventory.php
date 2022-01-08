@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
 use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
@@ -103,4 +104,9 @@ class FlightInventory extends Model
     // {
     //     return "{$this->flight->airline->name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
     // }
+
+    public function getUsedStock(): int
+    {
+        return StockRepository::getFlightStock($this);
+    }
 }

@@ -1,4 +1,5 @@
 @extends('layout.master')
+@section('title', 'Homepage')
 @section('header-script')
 <style>
     .page {
@@ -19,8 +20,8 @@
 </style>
 @endsection
 @section('content')
-<div class="container">
-    <div class="page">
+<div class="card">
+    <div class="card-body">
             <h6>Home Page for an agency: to be rewritten</h6>
             <em>Octopus Travel Matrix offers the travel agency a complete tour solution.</em>
             <dl class="definition">
@@ -71,8 +72,8 @@
         </div>
     </div>
 
-    <hr>
-
+<div class="card">
+    <div class="card-body">
     <h4>Sections</h4>
     <div style="display: flex; flex-direction: column">
         <div>
@@ -122,6 +123,7 @@
         <a href="https://github.com/sponsors/taylorotwell" class="ml-1 underline">
             Like OTM
         </a>
+    </div>
     </div>
 </div>
 @endsection
