@@ -23,6 +23,7 @@ class BespokeReportController extends Controller
     }
 
     public function showTemporary(Request $request) {
+        $request->validate(BespokeReportRepository::getValidationRules());
         $parent = $request->input('parent');
         $fields = BespokeReportRepository::convertFieldsToOutput(BespokeReportRepository::getFieldsFromParent($parent));
         $usedFields = [];
@@ -63,6 +64,7 @@ class BespokeReportController extends Controller
     }
 
     public function update(Request $request, Report $report) {
+        $request->validate(BespokeReportRepository::getValidationRules());
         $fields = BespokeReportRepository::convertFieldsToOutput(BespokeReportRepository::getFieldsFromParent($report->parent));
         $usedFields = [];
         foreach ($fields as $field => $data) {
