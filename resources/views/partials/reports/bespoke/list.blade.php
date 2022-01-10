@@ -26,7 +26,7 @@
                 <td>{{ $data['class'] }}</td>
                 <td>{{ $info['name'] }}</td>
                 <td>
-                    <input type="checkbox" name="{{ $field }}" @if(isset($report) && in_array($field, $report->fields)) checked @endif>
+                    <input type="checkbox" name="{{ $field }}" @if(old($field) || (isset($report) && in_array($field, $report->fields))) checked @endif>
                 </td>
             </tr>
         @endforeach
