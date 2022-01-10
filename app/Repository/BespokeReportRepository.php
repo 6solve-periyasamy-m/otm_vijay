@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Models\Report;
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class BespokeReportRepository
@@ -532,98 +531,79 @@ class BespokeReportRepository
         $lowest = self::getLowestDepth($report->fields, $fields);
         $fields = self::convertFieldsToOutput(self::getFieldsFromParent($report->parent), $lowest['depth']);
 
-        if ($lowest['type'] == 'component') {
-            return self::getDataForComponent($report->fields, $fields, $lowest['class']);
-        } elseif ($lowest['type'] == 'inventory') {
-            return self::getDataForInventory($report->fields, $fields, $lowest['class']);
-        } elseif ($lowest['type'] == 'tour') {
-            return self::getDataForTourInventory($report->fields, $fields, $lowest['class']);
-        } else {
-            return [];
-        }
-    }
-
-    private static function getDataForComponent(array $used, array $available, string $class): array
-    {
         $output = [];
         $output['header'] = [];
         $output['data'] = [];
-        foreach ($available as $key => $data) {
-            if (in_array($key, $used)) {
+        foreach ($fields as $key => $data) {
+            if (in_array($key, $report->fields)) {
                 $output['header'][] = $data->description;
             }
         }
-        foreach (app('\\App\\Models\\' . $class)->all() as $row) {
-            $data = [];
-            foreach ($available as $key => $info) {
-                if (in_array($key, $used)) {
-                    if ($info->type == 'component') {
-                        $data[] = $row->{$info->accessor};
-                    }
-                }
+        foreach (app('\\App\\Models\\' . $lowest['class'])->all() as $row) {
+            switch ($lowest['type']) {
+                case 'component':
+                    $output['data'][] = self::processComponent($row, $report->fields, $fields);
+                    break;
+                case 'inventory':
+                    $output['data'][] = self::processInventory($row, $report->fields, $fields);
+                    break;
+                case 'tour':
+                    $output['data'][] = self::processTourInventory($row, $report->fields, $fields);
+                    break;
             }
-            $output['data'][] = $data;
         }
         return $output;
+
     }
 
-    private static function getDataForInventory(array $used, array $available, string $class): array
+    public static function processComponent($row, array $used, array $available): array
     {
-        $output = [];
-        $output['header'] = [];
-        $output['data'] = [];
-        foreach ($available as $key => $data) {
+        $data = [];
+        foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
-                $output['header'][] = $data->description;
-            }
-        }
-        foreach (app('\\App\\Models\\' . $class)->all() as $row) {
-            $data = [];
-            $component = $row->component;
-            foreach ($available as $key => $info) {
-                if (in_array($key, $used)) {
-                    if ($info->type == 'component') {
-                        $data[] = $component->{$info->accessor};
-                    }
-                    if ($info->type == 'inventory') {
-                        $data[] = $row->{$info->accessor};
-                    }
+                if ($info->type == 'component') {
+                    $data[] = $row->{$info->accessor};
                 }
             }
-            $output['data'][] = $data;
         }
-        return $output;
+        return $data;
     }
 
-    private static function getDataForTourInventory(array $used, array $available, string $class): array
+    public static function processInventory($row, array $used, array $available): array
     {
-        $output = [];
-        $output['header'] = [];
-        $output['data'] = [];
-        foreach ($available as $key => $data) {
+        $data = [];
+        $component = $row->component;
+        foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
-                $output['header'][] = $data->description;
-            }
-        }
-        foreach (app('\\App\\Models\\' . $class)->all() as $row) {
-            $data = [];
-            $inventory = $row->inventory;
-            $component = $inventory->component;
-            foreach ($available as $key => $info) {
-                if (in_array($key, $used)) {
-                    if ($info->type == 'component') {
-                        $data[] = $component->{$info->accessor};
-                    }
-                    if ($info->type == 'inventory') {
-                        $data[] = $inventory->{$info->accessor};
-                    }
-                    if ($info->type == 'tour') {
-                        $data[] = $row->{$info->accessor};
-                    }
+                if ($info->type == 'component') {
+                    $data[] = $component->{$info->accessor};
+                }
+                if ($info->type == 'inventory') {
+                    $data[] = $row->{$info->accessor};
                 }
             }
-            $output['data'][] = $data;
         }
-        return $output;
+        return $data;
+    }
+
+    public static function processTourInventory($row, array $used, array $available): array
+    {
+        $data = [];
+        $inventory = $row->inventory;
+        $component = $inventory->component;
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'component') {
+                    $data[] = $component->{$info->accessor};
+                }
+                if ($info->type == 'inventory') {
+                    $data[] = $inventory->{$info->accessor};
+                }
+                if ($info->type == 'tour') {
+                    $data[] = $row->{$info->accessor};
+                }
+            }
+        }
+        return $data;
     }
 }
