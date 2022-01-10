@@ -50,9 +50,10 @@
 @include('partials.fields.text', ['name' => 'Passport First Name', 'field' => 'passport_first_name', 'value' => $passport_first_name ?? null, 'width' => 4,])
 @include('partials.fields.text', ['name' => 'Passport Middle Name', 'field' => 'passport_middle_name', 'value' => $passport_middle_name ?? null, 'width' => 4,])
 @include('partials.fields.text', ['name' => 'Passport Last Name', 'field' => 'passport_last_name', 'value' => $passport_last_name ?? null, 'width' => 4,])
-@include('partials.fields.text', ['name' => 'Passport Number', 'field' => 'passport_number', 'value' => $passport_number ?? null, 'width' => 4,])
-@include('partials.fields.date', ['name' => 'Passport Issue Date', 'field' => 'passport_issue_date', 'value' => $passport_issue_date ?? null, 'width' => 4,])
-@include('partials.fields.date', ['name' => 'Passport Expiry Date', 'field' => 'passport_expiry_date', 'value' => $passport_expiry_date ?? null, 'width' => 4,])
+@include('partials.fields.text', ['name' => 'Passport Number', 'field' => 'passport_number', 'value' => $passport_number ?? null, 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Passport Issue Country', 'field' => 'passport_country_of_issue', 'value' => $passport_country_of_issue1 ?? null, 'width' => 3,])
+@include('partials.fields.date', ['name' => 'Passport Issue Date', 'field' => 'passport_issue_date', 'value' => $passport_issue_date ?? null, 'width' => 3,])
+@include('partials.fields.date', ['name' => 'Passport Expiry Date', 'field' => 'passport_expiry_date', 'value' => $passport_expiry_date ?? null, 'width' => 3,])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.selector.adder', ['name' => 'T-Shirt Size', 'field' => 't_shirt_size_id', 'value' => $t_shirt_size_id ?? 0,
 'route' => 't-shirt-size', 'createRoute' => route('t-shirt-sizes.create'), 'width' => 4])
