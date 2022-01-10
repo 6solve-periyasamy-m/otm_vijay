@@ -30,6 +30,10 @@
                     <i class="icon-plus"></i>
                     <span>Transport Report</span>
                 </a>
+                <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'customer']) }}">
+                    <i class="icon-plus"></i>
+                    <span>Customer Report</span>
+                </a>
             </div>
         </div>
     @endcan
