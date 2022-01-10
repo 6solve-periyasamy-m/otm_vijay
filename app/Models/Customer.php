@@ -14,8 +14,7 @@ class Customer extends Model
     use HasFactory;
     use Billable;
 
-    public $additional_attributes = ['customer_full_name'];
-    public $full_name;
+    public $additional_attributes = ['customer_full_name', 'full_name'];
 
     protected $fillable = ['title', 'first_name', 'middle_names', 'last_name', 'date_of_birth', 'mobile_number', 'other_phone_number', 'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone', 'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id', 'billing_address_id',];
 
@@ -39,8 +38,7 @@ class Customer extends Model
 
     public function getFullName()
     {
-        $this->full_name = $this->first_name . ' ' . $this->last_name;
-        return $this->full_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function getCustomerFullNameAttribute()
@@ -48,6 +46,10 @@ class Customer extends Model
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function getFullNameAttribute(): string
+    {
+        return $this->getFullName();
+    }
 
     public function homeAddress()
     {

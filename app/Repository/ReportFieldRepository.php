@@ -460,4 +460,172 @@ class ReportFieldRepository
         ];
     }
 
+    public static function getCustomerFields(): array
+    {
+        return [
+            0 => [
+                'class' => 'Customer',
+                'type' => 'customer',
+                'fields' => [
+                    'email' => [
+                        'name' => 'Email',
+                        'method' => 'email_address',
+                    ],
+                    'full_name' => [
+                        'name' => 'Full Name',
+                        'method' => 'full_name',
+                    ],
+                    'title' => [
+                        'name' => 'Title',
+                        'method' => 'title',
+                    ],
+                    'first_name' => [
+                        'name' => 'First Name',
+                        'method' => 'first_name',
+                    ],
+                    'middle_names' => [
+                        'name' => 'Middle Names',
+                        'method' => 'middle_names',
+                    ],
+                    'last_name' => [
+                        'name' => 'Last Name',
+                        'method' => 'last_name',
+                    ],
+                    'date_of_birth' => [
+                        'name' => 'Date of Birth',
+                        'method' => 'date_of_birth',
+                    ],
+                    'mobile_number' => [
+                        'name' => 'Mobile Number',
+                        'method' => 'mobile_number',
+                    ],
+                    'other_phone_number' => [
+                        'name' => 'Other Phone Number',
+                        'method' => 'other_phone_number',
+                    ],
+                    'home_address' => [
+                        'name' => 'Home Address',
+                        'method' => 'homeAddress',
+                    ],
+                    'billing_address' => [
+                        'name' => 'Billing Address',
+                        'method' => 'billingAddress',
+                    ],
+                    'emergency_contact_name' => [
+                        'name' => 'Emergency Contact Name',
+                        'method' => 'emergency_contact_name',
+                    ],
+                    'emergency_contact_relationship' => [
+                        'name' => 'Emergency Contact Relationship',
+                        'method' => 'emergency_contact_relationship',
+                    ],
+                    'emergency_contact_telephone' => [
+                        'name' => 'Emergency Contact Telephone',
+                        'method' => 'emergency_contact_telephone',
+                    ],
+                    'passport_first_name' => [
+                        'name' => 'Passport First Name',
+                        'method' => 'passport_first_name',
+                    ],
+                    'passport_middle_name' => [
+                        'name' => 'Passport Middle Name',
+                        'method' => 'passport_middle_name',
+                    ],
+                    'passport_last_name' => [
+                        'name' => 'Passport Last Name',
+                        'method' => 'passport_last_name',
+                    ],
+                    'passport_number' => [
+                        'name' => 'Passport Number',
+                        'method' => 'passport_number',
+                    ],
+                    'passport_expiry_date' => [
+                        'name' => 'Passport Expiry Date',
+                        'method' => 'passport_expiry_date',
+                    ],
+                    'passport_country_of_issue' => [
+                        'name' => 'Passport Country of Issue',
+                        'method' => 'passport_country_of_issue',
+                    ],
+                    'loyalty_number' => [
+                        'name' => 'Loyalty Number',
+                        'method' => 'loyalty_number',
+                    ],
+                    'profile_picture' => [
+                        'name' => 'Profile Picture',
+                        'method' => 'profile_picture',
+                    ],
+                    't_shirt_size' => [
+                        'name' => 'T-Shirt Size',
+                        'method' => 'tShirtSize',
+                    ],
+                    'hat_size' => [
+                        'name' => 'Hat Size',
+                        'method' => 'hatSize',
+                    ],
+                    'notes' => [
+                        'name' => 'Notes',
+                        'method' => 'notes',
+                    ],
+                ],
+            ],
+            1 => [
+                'class' => 'OrderCustomer',
+                'type' => 'ordercustomer',
+                'fields' => [
+                    'tour_cost' => [
+                        'name' => 'Tour Cost',
+                        'method' => 'tour_cost'
+                    ],
+                    'single_occupancy_surcharge' => [
+                        'name' => 'Single Occupancy Surcharge',
+                        'method' => 'single_occupancy_surcharge'
+                    ],
+                    'travel_insurer' => [
+                        'name' => 'Travel Insurer',
+                        'method' => 'travel_insurer'
+                    ],
+                    'policy_number' => [
+                        'name' => 'Policy Number',
+                        'method' => 'policy_number'
+                    ],
+                    'is_lead_booker' => [
+                        'name' => 'Is Lead Booker',
+                        'method' => 'is_lead_booker'
+                    ],
+                    'booking_reference' => [
+                        'name' => 'Booking Reference',
+                        'method' => 'booking_reference'
+                    ],
+                    'ordered_on' => [
+                        'name' => 'Ordered On',
+                        'method' => 'ordered_on'
+                    ],
+                    'lead_booker_name' => [
+                        'name' => 'Lead Booker Name',
+                        'method' => 'lead_booker_name'
+                    ],
+                ]
+            ],
+            2 => [
+                'class' => 'OrderComponent',
+                'type' => 'ordercomponent',
+                'fields' => [
+                    'details' => [
+                        'name' => 'Details',
+                        'method' => 'details'
+                    ],
+                    'tour_sales_price' => [
+                        'name' => 'Tour Sales Price',
+                        'method' => 'tour_sales_price'
+                    ],
+                    'tour_component_type' => [
+                        'name' => 'Tour Component Type',
+                        'method' => 'tour_component_type'
+                    ],
+                ]
+            ]
+        ];
+    }
+
 }

@@ -111,4 +111,9 @@ class TransportInventory extends Model
     public function component() {
         return $this->transport();
     }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->travelClass} ({$this->departs_at} to {$this->arrives_at})";
+    }
 }

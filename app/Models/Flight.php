@@ -63,4 +63,9 @@ class Flight extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public function __toString()
+    {
+        return "{$this->airline} ({$this->departureAirport} to {$this->arrivalAirport})";
+    }
 }

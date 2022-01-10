@@ -128,4 +128,9 @@ class FlightInventory extends Model
     {
         return $this->flightInventoryTour();
     }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) ({$this->departs_at} to {$this->arrives_at})";
+    }
 }

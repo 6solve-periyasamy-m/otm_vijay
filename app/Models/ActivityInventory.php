@@ -92,4 +92,9 @@ class ActivityInventory extends Model
     public function component() {
         return $this->activity();
     }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->ticketType} ({$this->starts_at} to {$this->ends_at})";
+    }
 }

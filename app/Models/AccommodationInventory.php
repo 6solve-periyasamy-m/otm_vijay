@@ -108,6 +108,11 @@ class AccommodationInventory extends Model
     public function component() {
         return $this->accommodation();
     }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->roomType} {$this->boardType} ({$this->check_in} to {$this->check_out})";
+    }
 }
 
 $logFields = ['accommodation_id', 'purchase_price'];

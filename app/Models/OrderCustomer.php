@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\OrderRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class OrderCustomer extends Model
 
     protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',];
     protected $cascadeDeletes = ['orderAccommodation', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
+    public $additional_attributes = ['booking_reference', 'ordered_on', 'lead_booker_name', 'is_lead_booker'];
 
     public static function getValidationRules()
     {
@@ -67,5 +69,25 @@ class OrderCustomer extends Model
     public function isCancelled(): bool
     {
         return $this->order->cancelled;
+    }
+
+    public function getBookingReferenceAttribute()
+    {
+        return $this->order->booking_reference;
+    }
+
+    public function getOrderedOnAttribute()
+    {
+        return $this->order->ordered_on;
+    }
+
+    public function getLeadBookerNameAttribute()
+    {
+        return "{$this->order->leadBooker->customer->first_name} {$this->order->leadBooker->customer->last_name}";
+    }
+
+    public function getIsLeadBookerAttribute()
+    {
+        return OrderRepository::isLeadBooker($this->order, $this->customer);
     }
 }
