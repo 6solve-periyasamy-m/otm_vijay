@@ -34,6 +34,14 @@
                     <i class="icon-plus"></i>
                     <span>Customer Report</span>
                 </a>
+                <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'order-installment']) }}">
+                    <i class="icon-plus"></i>
+                    <span>Order Installment Report</span>
+                </a>
+                <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'payment']) }}">
+                    <i class="icon-plus"></i>
+                    <span>Payment Report</span>
+                </a>
             </div>
         </div>
     @endcan
