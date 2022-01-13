@@ -631,52 +631,7 @@ class ReportFieldRepository
     public static function getOrderInstallmentFields(): array
     {
         return [
-            0 => [
-                'class' => 'Order',
-                'type' => 'order',
-                'fields' => [
-                    'booking_reference' => [
-                        'name' => 'Booking Reference',
-                        'method' => 'booking_reference',
-                    ],
-                    'ordered_on' => [
-                        'name' => 'Ordered On',
-                        'method' => 'ordered_on',
-                    ],
-                    'lead_booker_name' => [
-                        'name' => 'Lead Booker Name',
-                        'method' => 'lead_booker_name',
-                    ],
-                    'deposit' => [
-                        'name' => 'Deposit',
-                        'method' => 'deposit',
-                    ],
-                    'status' => [
-                        'name' => 'Status',
-                        'method' => 'status',
-                    ],
-                    'total' => [
-                        'name' => 'Cost',
-                        'method' => 'total',
-                    ],
-                    'order_paid' => [
-                        'name' => 'Paid',
-                        'method' => 'paid',
-                    ],
-                    'remaining' => [
-                        'name' => 'Remaining',
-                        'method' => 'remaining',
-                    ],
-                    'internal_notes' => [
-                        'name' => 'Internal Notes',
-                        'method' => 'internal_notes',
-                    ],
-                    'external_notes' => [
-                        'name' => 'External Notes',
-                        'method' => 'external_notes',
-                    ]
-                ],
-            ],
+            0 => self::getOrderFields(),
             1 => [
                 'class' => 'OrderInstallment',
                 'type' => 'orderinstallment',
@@ -694,6 +649,85 @@ class ReportFieldRepository
                         'method' => 'paid',
                     ],
                 ],
+            ],
+        ];
+    }
+
+    public static function getOrderPaymentFields(): array
+    {
+        return [
+            0 => self::getOrderFields(),
+            1 => [
+                'class' => 'Payment',
+                'type' => 'payment',
+                'fields' => [
+                    'payment_method' => [
+                        'name' => 'Payment Method',
+                        'method' => 'paymentMethod',
+                    ],
+                    'type' => [
+                        'name' => 'Payment Type',
+                        'method' => 'payment_type',
+                    ],
+                    'amount' => [
+                        'name' => 'Amount',
+                        'method' => 'amount',
+                    ],
+                    'paid_on' => [
+                        'name' => 'Paid On',
+                        'method' => 'paid_on',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private static function getOrderFields(): array
+    {
+        return [
+            'class' => 'Order',
+            'type' => 'order',
+            'fields' => [
+                'booking_reference' => [
+                    'name' => 'Booking Reference',
+                    'method' => 'booking_reference',
+                ],
+                'ordered_on' => [
+                    'name' => 'Ordered On',
+                    'method' => 'ordered_on',
+                ],
+                'lead_booker_name' => [
+                    'name' => 'Lead Booker Name',
+                    'method' => 'lead_booker_name',
+                ],
+                'deposit' => [
+                    'name' => 'Deposit',
+                    'method' => 'deposit',
+                ],
+                'status' => [
+                    'name' => 'Status',
+                    'method' => 'status',
+                ],
+                'total' => [
+                    'name' => 'Cost',
+                    'method' => 'total',
+                ],
+                'order_paid' => [
+                    'name' => 'Paid',
+                    'method' => 'paid',
+                ],
+                'remaining' => [
+                    'name' => 'Remaining',
+                    'method' => 'remaining',
+                ],
+                'internal_notes' => [
+                    'name' => 'Internal Notes',
+                    'method' => 'internal_notes',
+                ],
+                'external_notes' => [
+                    'name' => 'External Notes',
+                    'method' => 'external_notes',
+                ]
             ],
         ];
     }

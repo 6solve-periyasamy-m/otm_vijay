@@ -17,7 +17,7 @@ class BespokeReportRepository
         return [
             'report_name' => 'required',
             'report_description' => 'required',
-            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer','orderinstallment'])]
+            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer','orderinstallment','payment'])]
         ];
     }
 
@@ -73,6 +73,8 @@ class BespokeReportRepository
                 return ReportFieldRepository::getCustomerFields();
             case 'orderinstallment':
                 return ReportFieldRepository::getOrderInstallmentFields();
+            case 'payment':
+                return ReportFieldRepository::getOrderPaymentFields();
             default:
                 return [];
         }
@@ -132,6 +134,11 @@ class BespokeReportRepository
                     case 'orderinstallment':
                         $output['data'][] = self::processOrderInstallment($row, $report->fields, $fields);
                         break;
+                    case 'payment':
+                        $output['data'][] = self::processOrderPayment($row, $report->fields, $fields);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -171,6 +178,23 @@ class BespokeReportRepository
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
                 if ($info->type == 'orderinstallment') {
+                    $data[] = $row->{$info->accessor};
+                }
+                if ($info->type == 'order') {
+                    $data[] = $order->{$info->accessor};
+                }
+            }
+        }
+        return $data;
+    }
+
+    public static function processOrderPayment($row, array $used, array $available): array
+    {
+        $data = [];
+        $order = $row->order;
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'payment') {
                     $data[] = $row->{$info->accessor};
                 }
                 if ($info->type == 'order') {
