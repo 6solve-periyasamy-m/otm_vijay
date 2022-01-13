@@ -17,67 +17,8 @@ class BespokeReportRepository
         return [
             'report_name' => 'required',
             'report_description' => 'required',
-            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer','order-installment','payment'])]
+            'parent' => ['required', Rule::in(['accommodation', 'activity', 'flight', 'transport', 'customer', 'order-installment', 'payment'])]
         ];
-    }
-
-    public static function convertFieldsToOutput(array $fields, int $lowest = -1): array
-    {
-        $output = [];
-        foreach ($fields as $depth => $data) {
-            if ($lowest < 0 || $depth <= $lowest) {
-                foreach ($data['fields'] as $key => $field) {
-                    $subData = collect();
-                    $subData->name = $key;
-                    $subData->class = $data['class'];
-                    $subData->depth = $depth;
-                    $subData->description = $field['name'];
-                    $subData->accessor = $field['method'];
-                    $subData->type = $data['type'];
-                    $output[$key] = $subData;
-                }
-            }
-        }
-        return $output;
-    }
-
-    public static function getLowestDepth(array $used, array $available): array
-    {
-        $lowestDepth = -1;
-        $lowestClass = null;
-        $lowestType = null;
-        foreach ($available as $field => $data) {
-            if (in_array($field, $used)) {
-                if ($lowestDepth < $data->depth) {
-                    $lowestDepth = $data->depth;
-                    $lowestClass = $data->class;
-                    $lowestType = $data->type;
-                }
-            }
-        }
-        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
-    }
-
-    public static function getFieldsFromParent(string $parent): array
-    {
-        switch ($parent) {
-            case 'accommodation':
-                return ReportFieldRepository::getAccommodationFields();
-            case 'activity':
-                return ReportFieldRepository::getActivityFields();
-            case 'flight':
-                return ReportFieldRepository::getFlightFields();
-            case 'transport':
-                return ReportFieldRepository::getTransportFields();
-            case 'customer':
-                return ReportFieldRepository::getCustomerFields();
-            case 'order-installment':
-                return ReportFieldRepository::getOrderInstallmentFields();
-            case 'payment':
-                return ReportFieldRepository::getOrderPaymentFields();
-            default:
-                return [];
-        }
     }
 
     public static function showReport(Report $report): array
@@ -145,6 +86,90 @@ class BespokeReportRepository
         return $output;
     }
 
+    public static function convertFieldsToOutput(array $fields, int $lowest = -1): array
+    {
+        $output = [];
+        foreach ($fields as $depth => $data) {
+            if ($lowest < 0 || $depth <= $lowest) {
+                foreach ($data['fields'] as $key => $field) {
+                    $subData = collect();
+                    $subData->name = $key;
+                    $subData->class = $data['class'];
+                    $subData->depth = $depth;
+                    $subData->description = $field['name'];
+                    $subData->accessor = $field['method'];
+                    $subData->type = $data['type'];
+                    $output[$key] = $subData;
+                }
+            }
+        }
+        return $output;
+    }
+
+    public static function getFieldsFromParent(string $parent): array
+    {
+        switch ($parent) {
+            case 'accommodation':
+                return ReportFieldRepository::getAccommodationFields();
+            case 'activity':
+                return ReportFieldRepository::getActivityFields();
+            case 'flight':
+                return ReportFieldRepository::getFlightFields();
+            case 'transport':
+                return ReportFieldRepository::getTransportFields();
+            case 'customer':
+                return ReportFieldRepository::getCustomerFields();
+            case 'order-installment':
+                return ReportFieldRepository::getOrderInstallmentFields();
+            case 'payment':
+                return ReportFieldRepository::getOrderPaymentFields();
+            default:
+                return [];
+        }
+    }
+
+    public static function getLowestDepth(array $used, array $available): array
+    {
+        $lowestDepth = -1;
+        $lowestClass = null;
+        $lowestType = null;
+        foreach ($available as $field => $data) {
+            if (in_array($field, $used)) {
+                if ($lowestDepth < $data->depth) {
+                    $lowestDepth = $data->depth;
+                    $lowestClass = $data->class;
+                    $lowestType = $data->type;
+                }
+            }
+        }
+        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
+    }
+
+    public static function processOrderComponent($row, array $used, array $available): array
+    {
+        $data = [];
+        $orderCustomer = $row->orderCustomer;
+        $customer = $orderCustomer->customer;
+        $order = $orderCustomer->order;
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'customer') {
+                    $data[] = $customer->{$info->accessor};
+                }
+                if ($info->type == 'order-customer') {
+                    $data[] = $orderCustomer->{$info->accessor};
+                }
+                if ($info->type == 'order') {
+                    $data[] = $order->{$info->accessor};
+                }
+                if ($info->type == 'order-component') {
+                    $data[] = $row->{$info->accessor};
+                }
+            }
+        }
+        return $data;
+    }
+
     public static function processComponent($row, array $used, array $available): array
     {
         $data = [];
@@ -152,53 +177,6 @@ class BespokeReportRepository
             if (in_array($key, $used)) {
                 if ($info->type == 'component') {
                     $data[] = $row->{$info->accessor};
-                }
-            }
-        }
-        return $data;
-    }
-
-    public static function processOrder($row, array $used, array $available): array
-    {
-        $data = [];
-        foreach ($available as $key => $info) {
-            if (in_array($key, $used)) {
-                if ($info->type == 'order') {
-                    $data[] = $row->{$info->accessor};
-                }
-            }
-        }
-        return $data;
-    }
-
-    public static function processOrderInstallment($row, array $used, array $available): array
-    {
-        $data = [];
-        $order = $row->order;
-        foreach ($available as $key => $info) {
-            if (in_array($key, $used)) {
-                if ($info->type == 'order-installment') {
-                    $data[] = $row->{$info->accessor};
-                }
-                if ($info->type == 'order') {
-                    $data[] = $order->{$info->accessor};
-                }
-            }
-        }
-        return $data;
-    }
-
-    public static function processOrderPayment($row, array $used, array $available): array
-    {
-        $data = [];
-        $order = $row->order;
-        foreach ($available as $key => $info) {
-            if (in_array($key, $used)) {
-                if ($info->type == 'payment') {
-                    $data[] = $row->{$info->accessor};
-                }
-                if ($info->type == 'order') {
-                    $data[] = $order->{$info->accessor};
                 }
             }
         }
@@ -277,25 +255,47 @@ class BespokeReportRepository
         return $data;
     }
 
-    public static function processOrderComponent($row, array $used, array $available): array
+    public static function processOrder($row, array $used, array $available): array
     {
         $data = [];
-        $orderCustomer = $row->orderCustomer;
-        $customer = $orderCustomer->customer;
-        $order = $orderCustomer->order;
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
-                if ($info->type == 'customer') {
-                    $data[] = $customer->{$info->accessor};
+                if ($info->type == 'order') {
+                    $data[] = $row->{$info->accessor};
                 }
-                if ($info->type == 'order-customer') {
-                    $data[] = $orderCustomer->{$info->accessor};
+            }
+        }
+        return $data;
+    }
+
+    public static function processOrderInstallment($row, array $used, array $available): array
+    {
+        $data = [];
+        $order = $row->order;
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'order-installment') {
+                    $data[] = $row->{$info->accessor};
                 }
                 if ($info->type == 'order') {
                     $data[] = $order->{$info->accessor};
                 }
-                if ($info->type == 'order-component') {
+            }
+        }
+        return $data;
+    }
+
+    public static function processOrderPayment($row, array $used, array $available): array
+    {
+        $data = [];
+        $order = $row->order;
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'payment') {
                     $data[] = $row->{$info->accessor};
+                }
+                if ($info->type == 'order') {
+                    $data[] = $order->{$info->accessor};
                 }
             }
         }
