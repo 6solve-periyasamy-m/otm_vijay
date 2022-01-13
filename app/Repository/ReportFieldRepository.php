@@ -4,6 +4,71 @@ namespace App\Repository;
 
 class ReportFieldRepository
 {
+    public static function getFieldsFromParent(string $parent): array
+    {
+        switch ($parent) {
+            case 'accommodation':
+                $fields = ReportFieldRepository::getAccommodationFields();
+                break;
+            case 'activity':
+                $fields = ReportFieldRepository::getActivityFields();
+                break;
+            case 'flight':
+                $fields = ReportFieldRepository::getFlightFields();
+                break;
+            case 'transport':
+                $fields = ReportFieldRepository::getTransportFields();
+                break;
+            case 'customer':
+                $fields = ReportFieldRepository::getCustomerFields();
+                break;
+            case 'order-installment':
+                $fields = ReportFieldRepository::getOrderInstallmentFields();
+                break;
+            case 'payment':
+                $fields = ReportFieldRepository::getOrderPaymentFields();
+                break;
+            default:
+                $fields = [];
+        }
+        return $fields;
+    }
+
+    public static function convertFieldsToOutput(array $fields, int $lowest = -1): array
+    {
+        $output = [];
+        foreach ($fields as $depth => $data) {
+            if ($lowest < 0 || $depth <= $lowest) {
+                foreach ($data['fields'] as $key => $field) {
+                    $subData = collect();
+                    $subData->name = $key;
+                    $subData->class = $data['class'];
+                    $subData->depth = $depth;
+                    $subData->description = $field['name'];
+                    $subData->accessor = $field['method'];
+                    $subData->type = $data['type'];
+                    $output[$key] = $subData;
+                }
+            }
+        }
+        return $output;
+    }
+
+    public static function getLowestDepth(array $used, array $available): array
+    {
+        $lowestDepth = -1;
+        $lowestClass = null;
+        $lowestType = null;
+        foreach ($available as $field => $data) {
+            if (in_array($field, $used) && $lowestDepth < $data->depth) {
+                $lowestDepth = $data->depth;
+                $lowestClass = $data->class;
+                $lowestType = $data->type;
+            }
+        }
+        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
+    }
+
     public static function getAccommodationFields(): array
     {
         return [
