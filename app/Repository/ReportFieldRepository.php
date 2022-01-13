@@ -47,6 +47,7 @@ class ReportFieldRepository
                     $subData->description = $field['name'];
                     $subData->accessor = $field['method'];
                     $subData->type = $data['type'];
+                    $subData->format = $field['format'] ?? 'string';
                     $output[$key] = $subData;
                 }
             }
@@ -87,10 +88,12 @@ class ReportFieldRepository
                     'audit_date' => [
                         'name' => 'Audit Date',
                         'method' => 'audit_date',
+                        'format' => 'date',
                     ],
                     'image_url' => [
                         'name' => 'Image URL',
                         'method' => 'image_url',
+                        'format' => 'asset',
                     ],
                     'currency' => [
                         'name' => 'Currency',
@@ -117,18 +120,22 @@ class ReportFieldRepository
                     'check_in' => [
                         'name' => 'Check In',
                         'method' => 'check_in',
+                        'format' => 'datetime',
                     ],
                     'check_out' => [
                         'name' => 'Check Out',
                         'method' => 'check_out',
+                        'format' => 'datetime',
                     ],
                     'check_in_time_confirmed' => [
                         'name' => 'Check In Time Confirmed',
-                        'method' => 'check_in_time_confirmed'
+                        'method' => 'check_in_time_confirmed',
+                        'format' => 'boolean',
                     ],
                     'check_out_time_confirmed' => [
                         'name' => 'Check Out Time Confirmed',
-                        'method' => 'check_out_time_confirmed'
+                        'method' => 'check_out_time_confirmed',
+                        'format' => 'boolean',
                     ],
                 ], self::getInventoryFooter()),
             ],
@@ -158,6 +165,7 @@ class ReportFieldRepository
                     'image_url' => [
                         'name' => 'Image URL',
                         'method' => 'image_url',
+                        'format' => 'asset',
                     ],
                     'currency' => [
                         'name' => 'Currency',
@@ -184,10 +192,12 @@ class ReportFieldRepository
                     'starts_at' => [
                         'name' => 'Starts At',
                         'method' => 'starts_at',
+                        'format' => 'datetime',
                     ],
                     'ends_at' => [
                         'name' => 'Ends At',
                         'method' => 'ends_at',
+                        'format' => 'datetime',
                     ],
                 ], self::getInventoryFooter()),
             ],
@@ -217,10 +227,12 @@ class ReportFieldRepository
                     'is_domestic' => [
                         'name' => 'Is Domestic',
                         'method' => 'is_domestic',
+                        'format' => 'boolean',
                     ],
                     'image_url' => [
                         'name' => 'Image URL',
                         'method' => 'image_url',
+                        'format' => 'asset',
                     ],
                     'currency' => [
                         'name' => 'Currency',
@@ -247,14 +259,17 @@ class ReportFieldRepository
                     'check_in' => [
                         'name' => 'Check In',
                         'method' => 'check_in',
+                        'format' => 'datetime',
                     ],
                     'starts_at' => [
                         'name' => 'Departs At',
                         'method' => 'departs_at',
+                        'format' => 'datetime',
                     ],
                     'ends_at' => [
                         'name' => 'Arrives At',
                         'method' => 'arrives_at',
+                        'format' => 'datetime',
                     ],
                 ], self::getInventoryFooter()),
             ],
@@ -296,10 +311,12 @@ class ReportFieldRepository
                     'is_domestic' => [
                         'name' => 'Is Domestic',
                         'method' => 'is_domestic',
+                        'format' => 'boolean',
                     ],
                     'image_url' => [
                         'name' => 'Image URL',
                         'method' => 'image_url',
+                        'format' => 'asset',
                     ],
                     'currency' => [
                         'name' => 'Currency',
@@ -322,18 +339,22 @@ class ReportFieldRepository
                     'departs_at' => [
                         'name' => 'Departs At',
                         'method' => 'departs_at',
+                        'format' => 'datetime',
                     ],
                     'arrives_at' => [
                         'name' => 'Arrives At',
                         'method' => 'arrives_at',
+                        'format' => 'datetime',
                     ],
                     'departure_time_confirmed' => [
                         'name' => 'Departure Time Confirmed',
                         'method' => 'departure_time_confirmed',
+                        'format' => 'boolean',
                     ],
                     'arrival_time_confirmed' => [
                         'name' => 'Arrival Time Confirmed',
                         'method' => 'arrival_time_confirmed',
+                        'format' => 'boolean',
                     ],
                 ], self::getInventoryFooter()),
             ],
@@ -375,6 +396,7 @@ class ReportFieldRepository
                     'date_of_birth' => [
                         'name' => 'Date of Birth',
                         'method' => 'date_of_birth',
+                        'format' => 'date',
                     ],
                     'mobile_number' => [
                         'name' => 'Mobile Number',
@@ -423,6 +445,7 @@ class ReportFieldRepository
                     'passport_expiry_date' => [
                         'name' => 'Passport Expiry Date',
                         'method' => 'passport_expiry_date',
+                        'format' => 'date',
                     ],
                     'passport_country_of_issue' => [
                         'name' => 'Passport Country of Issue',
@@ -435,6 +458,7 @@ class ReportFieldRepository
                     'profile_picture' => [
                         'name' => 'Profile Picture',
                         'method' => 'profile_picture',
+                        'format' => 'asset',
                     ],
                     't_shirt_size' => [
                         'name' => 'T-Shirt Size',
@@ -454,37 +478,41 @@ class ReportFieldRepository
                 'class' => 'OrderCustomer',
                 'type' => 'order-customer',
                 'fields' => [
-                    'tour_cost' => [
-                        'name' => 'Tour Cost',
-                        'method' => 'tour_cost'
-                    ],
-                    'single_occupancy_surcharge' => [
-                        'name' => 'Single Occupancy Surcharge',
-                        'method' => 'single_occupancy_surcharge'
-                    ],
-                    'travel_insurer' => [
-                        'name' => 'Travel Insurer',
-                        'method' => 'travel_insurer'
-                    ],
-                    'policy_number' => [
-                        'name' => 'Policy Number',
-                        'method' => 'policy_number'
-                    ],
-                    'is_lead_booker' => [
-                        'name' => 'Is Lead Booker',
-                        'method' => 'is_lead_booker'
-                    ],
                     'booking_reference' => [
                         'name' => 'Booking Reference',
-                        'method' => 'booking_reference'
+                        'method' => 'booking_reference',
                     ],
                     'ordered_on' => [
                         'name' => 'Ordered On',
-                        'method' => 'ordered_on'
+                        'method' => 'ordered_on',
+                        'format' => 'datetime',
                     ],
                     'lead_booker_name' => [
                         'name' => 'Lead Booker Name',
-                        'method' => 'lead_booker_name'
+                        'method' => 'lead_booker_name',
+                    ],
+                    'tour_cost' => [
+                        'name' => 'Tour Cost',
+                        'method' => 'tour_cost',
+                        'format' => 'currency',
+                    ],
+                    'single_occupancy_surcharge' => [
+                        'name' => 'Single Occupancy Surcharge',
+                        'method' => 'single_occupancy_surcharge',
+                        'format' => 'currency',
+                    ],
+                    'travel_insurer' => [
+                        'name' => 'Travel Insurer',
+                        'method' => 'travel_insurer',
+                    ],
+                    'policy_number' => [
+                        'name' => 'Policy Number',
+                        'method' => 'policy_number',
+                    ],
+                    'is_lead_booker' => [
+                        'name' => 'Is Lead Booker',
+                        'method' => 'is_lead_booker',
+                        'format' => 'boolean',
                     ],
                 ]
             ],
@@ -494,15 +522,16 @@ class ReportFieldRepository
                 'fields' => [
                     'details' => [
                         'name' => 'Details',
-                        'method' => 'details'
+                        'method' => 'details',
                     ],
                     'tour_sales_price' => [
                         'name' => 'Tour Sales Price',
-                        'method' => 'tour_sales_price'
+                        'method' => 'tour_sales_price',
+                        'format' => 'currency',
                     ],
                     'tour_component_type' => [
                         'name' => 'Tour Component Type',
-                        'method' => 'tour_component_type'
+                        'method' => 'tour_component_type',
                     ],
                 ]
             ]
@@ -520,14 +549,17 @@ class ReportFieldRepository
                     'amount' => [
                         'name' => 'Amount',
                         'method' => 'amount',
+                        'format' => 'currency',
                     ],
                     'due_on' => [
                         'name' => 'Due On',
                         'method' => 'due_on',
+                        'format' => 'date',
                     ],
                     'paid' => [
                         'name' => 'Paid',
                         'method' => 'paid',
+                        'format' => 'boolean',
                     ],
                 ],
             ],
@@ -553,10 +585,12 @@ class ReportFieldRepository
                     'amount' => [
                         'name' => 'Amount',
                         'method' => 'amount',
+                        'format' => 'currency',
                     ],
                     'paid_on' => [
                         'name' => 'Paid On',
                         'method' => 'paid_on',
+                        'format' => 'datetime',
                     ],
                 ],
             ],
@@ -576,6 +610,7 @@ class ReportFieldRepository
                 'ordered_on' => [
                     'name' => 'Ordered On',
                     'method' => 'ordered_on',
+                    'format' => 'datetime',
                 ],
                 'lead_booker_name' => [
                     'name' => 'Lead Booker Name',
@@ -584,6 +619,7 @@ class ReportFieldRepository
                 'deposit' => [
                     'name' => 'Deposit',
                     'method' => 'deposit',
+                    'format' => 'currency',
                 ],
                 'status' => [
                     'name' => 'Status',
@@ -592,14 +628,17 @@ class ReportFieldRepository
                 'total' => [
                     'name' => 'Cost',
                     'method' => 'total',
+                    'format' => 'currency',
                 ],
                 'order_paid' => [
                     'name' => 'Paid',
                     'method' => 'paid',
+                    'format' => 'currency',
                 ],
                 'remaining' => [
                     'name' => 'Remaining',
                     'method' => 'remaining',
+                    'format' => 'currency',
                 ],
                 'internal_notes' => [
                     'name' => 'Internal Notes',
@@ -619,6 +658,7 @@ class ReportFieldRepository
             'fit_selectable' => [
                 'name' => 'FIT Selectable',
                 'method' => 'fit_selectable',
+                'format' => 'boolean',
             ],
             'total_stock' => [
                 'name' => 'Total Stock',
@@ -631,10 +671,12 @@ class ReportFieldRepository
             'purchase_price' => [
                 'name' => 'Purchase Price',
                 'method' => 'purchase_price',
+                'format' => 'currency',
             ],
             'sales_price' => [
                 'name' => 'Sales Price',
                 'method' => 'sales_price',
+                'format' => 'currency',
             ],
             'notes' => [
                 'name' => 'Notes',
@@ -653,17 +695,18 @@ class ReportFieldRepository
             'class' => $class,
             'type' => 'tour',
             'fields' => [
+                'tour_name' => [
+                    'name' => 'Tour Name',
+                    'method' => 'tour_name'
+                ],
                 'tour_sales_price' => [
                     'name' => 'Tour Sales Price',
                     'method' => 'tour_sales_price',
+                    'format' => 'currency',
                 ],
                 'tour_component_type' => [
                     'name' => 'Tour Component Type',
                     'method' => 'tour_component_type',
-                ],
-                'tour_name' => [
-                    'name' => 'Tour Name',
-                    'method' => 'tour_name'
                 ],
             ]
         ];

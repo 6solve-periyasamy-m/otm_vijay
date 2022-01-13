@@ -39,7 +39,7 @@ class BespokeReportController extends Controller
             'parent' => $parent,
             'fields' => $usedFields,
         ]);
-        return view('pages.reports.output', array_merge(['report' => $report,], BespokeReportRepository::showReport($report)));
+        return view('pages.reports.output', array_merge(['report' => $report,], BespokeReportRepository::showReport($report, true)));
     }
 
     public function store(Request $request) {
@@ -53,7 +53,7 @@ class BespokeReportController extends Controller
     }
 
     public function show(Report $report) {
-        return view('pages.reports.show', BespokeReportRepository::showReport($report));
+        return view('pages.reports.show', BespokeReportRepository::showReport($report, true));
     }
 
     public function export(Report $report, string $extension) {

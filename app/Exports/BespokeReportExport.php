@@ -17,6 +17,6 @@ class BespokeReportExport implements FromView
 
     public function view(): View
     {
-        return view('partials.reports.bespoke.output', BespokeReportRepository::showReport($this->report));
+        return view('partials.reports.bespoke.output', BespokeReportRepository::showReport($this->report, false));
     }
 }
