@@ -571,7 +571,7 @@ class ReportFieldRepository
             ],
             1 => [
                 'class' => 'OrderCustomer',
-                'type' => 'ordercustomer',
+                'type' => 'order-customer',
                 'fields' => [
                     'tour_cost' => [
                         'name' => 'Tour Cost',
@@ -609,7 +609,7 @@ class ReportFieldRepository
             ],
             2 => [
                 'class' => 'OrderComponent',
-                'type' => 'ordercomponent',
+                'type' => 'order-component',
                 'fields' => [
                     'details' => [
                         'name' => 'Details',
@@ -634,7 +634,7 @@ class ReportFieldRepository
             0 => self::getOrderFields(),
             1 => [
                 'class' => 'OrderInstallment',
-                'type' => 'orderinstallment',
+                'type' => 'order-installment',
                 'fields' => [
                     'amount' => [
                         'name' => 'Amount',

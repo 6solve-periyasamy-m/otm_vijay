@@ -17,7 +17,7 @@ class BespokeReportRepository
         return [
             'report_name' => 'required',
             'report_description' => 'required',
-            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer','orderinstallment','payment'])]
+            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer','order-installment','payment'])]
         ];
     }
 
@@ -71,7 +71,7 @@ class BespokeReportRepository
                 return ReportFieldRepository::getTransportFields();
             case 'customer':
                 return ReportFieldRepository::getCustomerFields();
-            case 'orderinstallment':
+            case 'order-installment':
                 return ReportFieldRepository::getOrderInstallmentFields();
             case 'payment':
                 return ReportFieldRepository::getOrderPaymentFields();
@@ -94,7 +94,7 @@ class BespokeReportRepository
                 $output['header'][] = $data->description;
             }
         }
-        if ($lowest['type'] == 'ordercomponent') {
+        if ($lowest['type'] == 'order-component') {
             foreach (OrderAccommodation::all() as $row) {
                 $output['data'][] = self::processOrderComponent($row, $report->fields, $fields);
             }
@@ -125,13 +125,13 @@ class BespokeReportRepository
                     case 'customer':
                         $output['data'][] = self::processCustomer($row, $report->fields, $fields);
                         break;
-                    case 'ordercustomer':
+                    case 'order-customer':
                         $output['data'][] = self::processOrderCustomer($row, $report->fields, $fields);
                         break;
                     case 'order':
                         $output['data'][] = self::processOrder($row, $report->fields, $fields);
                         break;
-                    case 'orderinstallment':
+                    case 'order-installment':
                         $output['data'][] = self::processOrderInstallment($row, $report->fields, $fields);
                         break;
                     case 'payment':
@@ -177,7 +177,7 @@ class BespokeReportRepository
         $order = $row->order;
         foreach ($available as $key => $info) {
             if (in_array($key, $used)) {
-                if ($info->type == 'orderinstallment') {
+                if ($info->type == 'order-installment') {
                     $data[] = $row->{$info->accessor};
                 }
                 if ($info->type == 'order') {
@@ -266,7 +266,7 @@ class BespokeReportRepository
                 if ($info->type == 'customer') {
                     $data[] = $customer->{$info->accessor};
                 }
-                if ($info->type == 'ordercustomer') {
+                if ($info->type == 'order-customer') {
                     $data[] = $row->{$info->accessor};
                 }
                 if ($info->type == 'order') {
@@ -288,13 +288,13 @@ class BespokeReportRepository
                 if ($info->type == 'customer') {
                     $data[] = $customer->{$info->accessor};
                 }
-                if ($info->type == 'ordercustomer') {
+                if ($info->type == 'order-customer') {
                     $data[] = $orderCustomer->{$info->accessor};
                 }
                 if ($info->type == 'order') {
                     $data[] = $order->{$info->accessor};
                 }
-                if ($info->type == 'ordercomponent') {
+                if ($info->type == 'order-component') {
                     $data[] = $row->{$info->accessor};
                 }
             }
