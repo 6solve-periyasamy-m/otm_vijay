@@ -628,4 +628,73 @@ class ReportFieldRepository
         ];
     }
 
+    public static function getOrderInstallmentFields(): array
+    {
+        return [
+            0 => [
+                'class' => 'Order',
+                'type' => 'order',
+                'fields' => [
+                    'booking_reference' => [
+                        'name' => 'Booking Reference',
+                        'method' => 'booking_reference',
+                    ],
+                    'ordered_on' => [
+                        'name' => 'Ordered On',
+                        'method' => 'ordered_on',
+                    ],
+                    'lead_booker_name' => [
+                        'name' => 'Lead Booker Name',
+                        'method' => 'lead_booker_name',
+                    ],
+                    'deposit' => [
+                        'name' => 'Deposit',
+                        'method' => 'deposit',
+                    ],
+                    'status' => [
+                        'name' => 'Status',
+                        'method' => 'status',
+                    ],
+                    'total' => [
+                        'name' => 'Cost',
+                        'method' => 'total',
+                    ],
+                    'order_paid' => [
+                        'name' => 'Paid',
+                        'method' => 'paid',
+                    ],
+                    'remaining' => [
+                        'name' => 'Remaining',
+                        'method' => 'remaining',
+                    ],
+                    'internal_notes' => [
+                        'name' => 'Internal Notes',
+                        'method' => 'internal_notes',
+                    ],
+                    'external_notes' => [
+                        'name' => 'External Notes',
+                        'method' => 'external_notes',
+                    ]
+                ],
+            ],
+            1 => [
+                'class' => 'OrderInstallment',
+                'type' => 'orderinstallment',
+                'fields' => [
+                    'amount' => [
+                        'name' => 'Amount',
+                        'method' => 'amount',
+                    ],
+                    'due_on' => [
+                        'name' => 'Due On',
+                        'method' => 'due_on',
+                    ],
+                    'paid' => [
+                        'name' => 'Paid',
+                        'method' => 'paid',
+                    ],
+                ],
+            ],
+        ];
+    }
 }

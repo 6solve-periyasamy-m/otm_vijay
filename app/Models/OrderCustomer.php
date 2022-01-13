@@ -15,7 +15,7 @@ class OrderCustomer extends Model
 
     protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',];
     protected $cascadeDeletes = ['orderAccommodation', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
-    public $additional_attributes = ['booking_reference', 'ordered_on', 'lead_booker_name', 'is_lead_booker'];
+    public $additional_attributes = ['booking_reference', 'ordered_on', 'lead_booker_name', 'is_lead_booker', 'customer_name'];
 
     public static function getValidationRules()
     {
@@ -84,6 +84,11 @@ class OrderCustomer extends Model
     public function getLeadBookerNameAttribute()
     {
         return "{$this->order->leadBooker->customer->first_name} {$this->order->leadBooker->customer->last_name}";
+    }
+
+    public function getCustomerNameAttribute()
+    {
+        return "{$this->customer->first_name} {$this->customer->last_name}";
     }
 
     public function getIsLeadBookerAttribute()

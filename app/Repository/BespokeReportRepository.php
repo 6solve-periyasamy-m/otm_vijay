@@ -17,7 +17,7 @@ class BespokeReportRepository
         return [
             'report_name' => 'required',
             'report_description' => 'required',
-            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer'])]
+            'parent' => ['required', Rule::in(['accommodation','activity','flight','transport','customer','orderinstallment'])]
         ];
     }
 
@@ -71,6 +71,8 @@ class BespokeReportRepository
                 return ReportFieldRepository::getTransportFields();
             case 'customer':
                 return ReportFieldRepository::getCustomerFields();
+            case 'orderinstallment':
+                return ReportFieldRepository::getOrderInstallmentFields();
             default:
                 return [];
         }
@@ -124,12 +126,16 @@ class BespokeReportRepository
                     case 'ordercustomer':
                         $output['data'][] = self::processOrderCustomer($row, $report->fields, $fields);
                         break;
+                    case 'order':
+                        $output['data'][] = self::processOrder($row, $report->fields, $fields);
+                        break;
+                    case 'orderinstallment':
+                        $output['data'][] = self::processOrderInstallment($row, $report->fields, $fields);
+                        break;
                 }
             }
         }
-
         return $output;
-
     }
 
     public static function processComponent($row, array $used, array $available): array
@@ -139,6 +145,36 @@ class BespokeReportRepository
             if (in_array($key, $used)) {
                 if ($info->type == 'component') {
                     $data[] = $row->{$info->accessor};
+                }
+            }
+        }
+        return $data;
+    }
+
+    public static function processOrder($row, array $used, array $available): array
+    {
+        $data = [];
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'order') {
+                    $data[] = $row->{$info->accessor};
+                }
+            }
+        }
+        return $data;
+    }
+
+    public static function processOrderInstallment($row, array $used, array $available): array
+    {
+        $data = [];
+        $order = $row->order;
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                if ($info->type == 'orderinstallment') {
+                    $data[] = $row->{$info->accessor};
+                }
+                if ($info->type == 'order') {
+                    $data[] = $order->{$info->accessor};
                 }
             }
         }
