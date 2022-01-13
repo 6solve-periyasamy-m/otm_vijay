@@ -40,7 +40,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'AccommodationInventory',
                 'type' => 'inventory',
-                'fields' => [
+                'fields' => array_merge([
                     'room_type' => [
                         'name' => 'Room Type',
                         'method' => 'roomType',
@@ -65,54 +65,9 @@ class ReportFieldRepository
                         'name' => 'Check Out Time Confirmed',
                         'method' => 'check_out_time_confirmed'
                     ],
-                    'fit_selectable' => [
-                        'name' => 'FIT Selectable',
-                        'method' => 'fit_selectable',
-                    ],
-                    'total_stock' => [
-                        'name' => 'Total Stock',
-                        'method' => 'stock',
-                    ],
-                    'used_stock' => [
-                        'name' => 'Used Stock',
-                        'method' => 'used_stock',
-                    ],
-                    'purchase_price' => [
-                        'name' => 'Purchase Price',
-                        'method' => 'purchase_price',
-                    ],
-                    'sales_price' => [
-                        'name' => 'Sales Price',
-                        'method' => 'sales_price',
-                    ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
-                    ],
-                    'tour_count' => [
-                        'name' => 'Used on Tours',
-                        'method' => 'used_on_tour_count',
-                    ],
-                ],
+                ], self::getInventoryFooter()),
             ],
-            2 => [
-                'class' => 'AccommodationInventoryTour',
-                'type' => 'tour',
-                'fields' => [
-                    'tour_sales_price' => [
-                        'name' => 'Tour Sales Price',
-                        'method' => 'tour_sales_price',
-                    ],
-                    'tour_component_type' => [
-                        'name' => 'Tour Component Type',
-                        'method' => 'tour_component_type',
-                    ],
-                    'tour_name' => [
-                        'name' => 'Tour Name',
-                        'method' => 'tour_name'
-                    ],
-                ]
-            ],
+            2 => self::getTourInventoryFooter('AccommodationInventoryTour'),
         ];
     }
 
@@ -156,7 +111,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'ActivityInventory',
                 'type' => 'inventory',
-                'fields' => [
+                'fields' => array_merge([
                     'ticket_type' => [
                         'name' => 'Ticket Type',
                         'method' => 'ticketType',
@@ -169,54 +124,9 @@ class ReportFieldRepository
                         'name' => 'Ends At',
                         'method' => 'ends_at',
                     ],
-                    'fit_selectable' => [
-                        'name' => 'FIT Selectable',
-                        'method' => 'fit_selectable',
-                    ],
-                    'total_stock' => [
-                        'name' => 'Total Stock',
-                        'method' => 'stock',
-                    ],
-                    'used_stock' => [
-                        'name' => 'Used Stock',
-                        'method' => 'used_stock',
-                    ],
-                    'purchase_price' => [
-                        'name' => 'Purchase Price',
-                        'method' => 'purchase_price',
-                    ],
-                    'sales_price' => [
-                        'name' => 'Sales Price',
-                        'method' => 'sales_price',
-                    ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
-                    ],
-                    'tour_count' => [
-                        'name' => 'Used on Tours',
-                        'method' => 'used_on_tour_count',
-                    ],
-                ],
+                ], self::getInventoryFooter()),
             ],
-            2 => [
-                'class' => 'ActivityInventoryTour',
-                'type' => 'tour',
-                'fields' => [
-                    'tour_sales_price' => [
-                        'name' => 'Tour Sales Price',
-                        'method' => 'tour_sales_price',
-                    ],
-                    'tour_component_type' => [
-                        'name' => 'Tour Component Type',
-                        'method' => 'tour_component_type',
-                    ],
-                    'tour_name' => [
-                        'name' => 'Tour Name',
-                        'method' => 'tour_name'
-                    ],
-                ]
-            ],
+            2 => self::getTourInventoryFooter('ActivityInventoryTour')
         ];
     }
 
@@ -260,7 +170,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'FlightInventory',
                 'type' => 'inventory',
-                'fields' => [
+                'fields' => array_merge([
                     'flight_number' => [
                         'name' => 'Flight Number',
                         'method' => 'flight_number',
@@ -281,58 +191,9 @@ class ReportFieldRepository
                         'name' => 'Arrives At',
                         'method' => 'arrives_at',
                     ],
-                    'fit_selectable' => [
-                        'name' => 'FIT Selectable',
-                        'method' => 'fit_selectable',
-                    ],
-                    'total_stock' => [
-                        'name' => 'Total Stock',
-                        'method' => 'stock',
-                    ],
-                    'used_stock' => [
-                        'name' => 'Used Stock',
-                        'method' => 'used_stock',
-                    ],
-                    'purchase_price' => [
-                        'name' => 'Purchase Price',
-                        'method' => 'purchase_price',
-                    ],
-                    'sales_price' => [
-                        'name' => 'Sales Price',
-                        'method' => 'sales_price',
-                    ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
-                    ],
-                    'tour_count' => [
-                        'name' => 'Used on Tours',
-                        'method' => 'used_on_tour_count',
-                    ],
-                ],
+                ], self::getInventoryFooter()),
             ],
-            2 => [
-                'class' => 'FlightInventoryTour',
-                'type' => 'tour',
-                'fields' => [
-                    'tour_sales_price' => [
-                        'name' => 'Tour Sales Price',
-                        'method' => 'tour_sales_price',
-                    ],
-                    'tour_component_type' => [
-                        'name' => 'Tour Component Type',
-                        'method' => 'tour_component_type',
-                    ],
-                    'flight_type' => [
-                        'name' => 'Flight Type',
-                        'method' => 'flight_type',
-                    ],
-                    'tour_name' => [
-                        'name' => 'Tour Name',
-                        'method' => 'tour_name'
-                    ],
-                ]
-            ],
+            2 => self::getTourInventoryFooter('FlightInventoryTour')
         ];
     }
 
@@ -388,7 +249,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'TransportInventory',
                 'type' => 'inventory',
-                'fields' => [
+                'fields' => array_merge([
                     'travel_class' => [
                         'name' => 'Travel Class',
                         'method' => 'travelClass',
@@ -409,54 +270,9 @@ class ReportFieldRepository
                         'name' => 'Arrival Time Confirmed',
                         'method' => 'arrival_time_confirmed',
                     ],
-                    'fit_selectable' => [
-                        'name' => 'FIT Selectable',
-                        'method' => 'fit_selectable',
-                    ],
-                    'total_stock' => [
-                        'name' => 'Total Stock',
-                        'method' => 'stock',
-                    ],
-                    'used_stock' => [
-                        'name' => 'Used Stock',
-                        'method' => 'used_stock',
-                    ],
-                    'purchase_price' => [
-                        'name' => 'Purchase Price',
-                        'method' => 'purchase_price',
-                    ],
-                    'sales_price' => [
-                        'name' => 'Sales Price',
-                        'method' => 'sales_price',
-                    ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
-                    ],
-                    'tour_count' => [
-                        'name' => 'Used on Tours',
-                        'method' => 'used_on_tour_count',
-                    ],
-                ],
+                ], self::getInventoryFooter()),
             ],
-            2 => [
-                'class' => 'TransportInventoryTour',
-                'type' => 'tour',
-                'fields' => [
-                    'tour_sales_price' => [
-                        'name' => 'Tour Sales Price',
-                        'method' => 'tour_sales_price',
-                    ],
-                    'tour_component_type' => [
-                        'name' => 'Tour Component Type',
-                        'method' => 'tour_component_type',
-                    ],
-                    'tour_name' => [
-                        'name' => 'Tour Name',
-                        'method' => 'tour_name'
-                    ],
-                ]
-            ],
+            2 => self::getTourInventoryFooter('TransportInventoryTour'),
         ];
     }
 
@@ -729,6 +545,62 @@ class ReportFieldRepository
                     'method' => 'external_notes',
                 ]
             ],
+        ];
+    }
+
+    private static function getInventoryFooter(): array
+    {
+        return [
+            'fit_selectable' => [
+                'name' => 'FIT Selectable',
+                'method' => 'fit_selectable',
+            ],
+            'total_stock' => [
+                'name' => 'Total Stock',
+                'method' => 'stock',
+            ],
+            'used_stock' => [
+                'name' => 'Used Stock',
+                'method' => 'used_stock',
+            ],
+            'purchase_price' => [
+                'name' => 'Purchase Price',
+                'method' => 'purchase_price',
+            ],
+            'sales_price' => [
+                'name' => 'Sales Price',
+                'method' => 'sales_price',
+            ],
+            'notes' => [
+                'name' => 'Notes',
+                'method' => 'notes',
+            ],
+            'tour_count' => [
+                'name' => 'Used on Tours',
+                'method' => 'used_on_tour_count',
+            ],
+        ];
+    }
+
+    private static function getTourInventoryFooter(string $class): array
+    {
+        return [
+            'class' => $class,
+            'type' => 'tour',
+            'fields' => [
+                'tour_sales_price' => [
+                    'name' => 'Tour Sales Price',
+                    'method' => 'tour_sales_price',
+                ],
+                'tour_component_type' => [
+                    'name' => 'Tour Component Type',
+                    'method' => 'tour_component_type',
+                ],
+                'tour_name' => [
+                    'name' => 'Tour Name',
+                    'method' => 'tour_name'
+                ],
+            ]
         ];
     }
 }
