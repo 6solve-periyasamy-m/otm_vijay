@@ -23,6 +23,7 @@
       'passport_number' => $customer->passport_number,
       'passport_issue_date' => $customer->passport_issue_date,
       'passport_expiry_date' => $customer->passport_expiry_date,
+      'passport_country_of_issue' => $customer->passport_country_of_issue,
       't_shirt_size_id' => $customer->t_shirt_size_id,
       'hat_size_id' => $customer->hat_size_id,
       'notes' => $customer->notes,
