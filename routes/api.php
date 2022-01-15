@@ -84,6 +84,8 @@ Route::get('/booking/accomodation', [ApiController::class, 'getAccommodationFrom
 Route::get('/booking/payment-schedules', [PaymentController::class, 'getPaymentSchedules']);
 Route::get('/booking/payment-schedule/{id}', [PaymentController::class, 'getPaymentSchedule']);
 
+Route::stripeWebhooks('/stripe/webhooks');
+
 Route::middleware('auth:api')->group(function() {
     
 });

@@ -6,6 +6,7 @@ use App\Models\Customer;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Cashier\Cashier;
+use Stripe\Stripe;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Cashier::useCustomerModel(Customer::class);
+        Stripe::setApiKey(config('app.gateways.stripe.secret'));
     }
 }
