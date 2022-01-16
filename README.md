@@ -29,8 +29,14 @@ You will need to point the webhook to `{url}/api/stripe/webhooks`, for example, 
 
 ## Importing Data
 
-You can import certain data into the application using `php artisan import:{class} {file}`. The file should be a CSV file without a header row.
-Listed below are the available imports, and the structure required.
+You can import certain data into the application using `php artisan import:{class} {file}`. The file should be a CSV file without a header row.<br />
+
+Fields will need to be formatted in a specific way:<br />
+- Dates should be formatted as dd/mm/yyyy
+- Dates with time should be 24 hours and formatted as dd/MM/yyyy hh:mm:ss
+- Booleans (true/false, yes/no) should be either `YES` or `NO`, with capitals
+
+Listed below are the available imports, and the structure required.<br />
 
 ### Accommodation (`import:accommodation`)
 
