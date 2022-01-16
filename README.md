@@ -27,6 +27,23 @@ You will need to point the webhook to `{url}/api/stripe/webhooks`, for example, 
 
 <hr />
 
+## Importing Data
+
+You can import certain data into the application using `php artisan import:{class} {file}`. The file should be a CSV file without a header row.
+Listed below are the available imports, and the structure required.
+
+### Accommodation (`import:accommodation`)
+
+`name,description,audit_date,address_line_1,address_line_2,town,region,country,postcode,currency`
+
+### Accommodation Inventory (`import:accommodation-inventory`)
+
+Hotel Name should be the same as it is on the accommodation import
+
+`hotel_name,room_type_name,room_type_maximum_occupancy,board_type,check_in,check_out,FIT_selectable,stock,purchase_price,sales_price,notes`
+
+<hr />
+
 ## Booking Form
 
 This is the frontend booking-form.  It is accessed via
