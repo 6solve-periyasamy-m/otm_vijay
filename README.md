@@ -58,6 +58,14 @@ Activity Name should be the same as on the activity import
 
 `activity_name,ticket_type,starts_at,ends_at,FIT_selectable,stock,purchase_price,sales_price,notes`
 
+### Airport (`import:airport`)
+
+`name,iata_code,address_line_1,address_line_2,town,region,country,postcode`
+
+### Flights and Inventory (`import:flight-inventory`)
+
+`airline_name,departure_airport_name,arrival_airport_name,is_domestic,currency,flight_notes,flight_number,travel_class,check_in,departs_at,arrives_at,FIT_selectable,stock,purchase_price,sales_price,inventory_notes`
+
 <hr />
 
 ## Booking Form
