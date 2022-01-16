@@ -22,7 +22,7 @@ more of the additional setup below.
 
 ### Stripe Setup
 
-An extra step is required for setting up stripe. You will need to set both of the keys and a webhook within stripe.<br />
+An extra step is required for setting up stripe. You will need to set both of the keys and a webhook within stripe. This webhook should receive the `checkout.session.completed` event<br />
 You will need to point the webhook to `{url}/api/stripe/webhooks`, for example, `https://octopustravelmatrix.com/api/stripe/webhooks`.
 
 <hr />
