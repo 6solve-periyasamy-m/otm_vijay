@@ -29,7 +29,7 @@ class AccommodationImport implements ToModel
             'location_type_id' => LocationType::firstOrCreate('Hotel')->id,
             'address_line_1' => trim($row[3]),
             'address_line_2' => trim($row[4]),
-            'town' => trim($row[1]),
+            'town' => trim($row[5]),
             'region' => trim($row[6]),
             'country_id' => $country->id,
             'postcode' => trim($row[8]),
