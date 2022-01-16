@@ -34,13 +34,23 @@ Listed below are the available imports, and the structure required.
 
 ### Accommodation (`import:accommodation`)
 
-`name,description,audit_date,address_line_1,address_line_2,town,region,country,postcode,currency`
+`name,description,audit_date,address_line_1,address_line_2,town,region,country,postcode,currency,notes`
 
 ### Accommodation Inventory (`import:accommodation-inventory`)
 
 Hotel Name should be the same as it is on the accommodation import
 
 `hotel_name,room_type_name,room_type_maximum_occupancy,board_type,check_in,check_out,FIT_selectable,stock,purchase_price,sales_price,notes`
+
+### Activity (`import:activity`)
+
+`name,description,activity_type,location_type,address_line_1,address_line_2,town,region,country,postcode,currency,notes`
+
+### Activity Inventory (`import:activity-inventory`)
+
+Activity Name should be the same as on the activity import
+
+`activity_name,ticket_type,starts_at,ends_at,FIT_selectable,stock,purchase_price,sales_price,notes`
 
 <hr />
 
