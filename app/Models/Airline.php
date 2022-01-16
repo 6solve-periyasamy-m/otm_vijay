@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Airline extends Model
+class Airline extends SimpleModel
 {
     use SoftDeletes;
 

@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class LocationType extends Model
+class LocationType extends SimpleModel
 {
     use SoftDeletes;
 
@@ -15,13 +14,5 @@ class LocationType extends Model
     public static function getValidationRules()
     {
         return ['name' => 'required|unique:location_types,name',];
-    }
-
-    public static function firstOrCreate(string $name) {
-        $type = self::where('name', '=', $name)->first();
-        if (!isset($type)) {
-            $type = self::create(['name' => $name,]);
-        }
-        return $type;
     }
 }

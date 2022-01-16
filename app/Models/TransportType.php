@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class TransportType extends Model
+class TransportType extends SimpleModel
 {
     use SoftDeletes;
 
