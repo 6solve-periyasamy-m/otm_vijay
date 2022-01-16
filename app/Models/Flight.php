@@ -63,4 +63,23 @@ class Flight extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public static function firstOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes)
+    {
+        $flight = self::where('airline_id', '=', $airline->id)
+            ->andWhere('departure_airport_id', '=', $departure->id)
+            ->andWhere('arrival_airport_id', '=', $arrival->id)
+            ->andWhere('is_domestic', '=', $isDomestic)->first();
+        if ($flight == null) {
+            $flight = Flight::create([
+                'airline_id' => $airline->id,
+                'departure_airport_id' => $departure->id,
+                'arrival_airport_id' => $arrival->id,
+                'is_domestic' => $isDomestic,
+                'currency_id' => $currency->id,
+                'notes' => $notes,
+            ]);
+        }
+        return $flight;
+    }
 }
