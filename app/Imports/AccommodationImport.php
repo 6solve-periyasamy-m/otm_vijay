@@ -40,6 +40,7 @@ class AccommodationImport implements ToModel
             'audit_date' => Carbon::createFromFormat('d/m/Y', trim($row[2])),
             'address_id' => $address->id,
             'currency_id' => $currency->id,
+            'notes' => trim($row[10] ?? ''),
         ]);
     }
 }
