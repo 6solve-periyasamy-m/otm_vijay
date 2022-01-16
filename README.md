@@ -4,6 +4,29 @@ Octopus Travel Matrix development docs
 
 You can document your branch by adding a section.
 
+<hr />
+
+## Installation 
+
+
+### Basic Installation instructions
+
+These are the basic steps for setting up an instance of the app. If you are setting up the app for development purposes, 
+then these steps will be enough to get you up and running. If you need to test payment methods, then you will need to use
+more of the additional setup below.
+
+1) Copy `.env.example` to `.env` and fill in the values.
+2) Run `composer install` and `nmp i && npm run dev` to install all dependencies and build the front-end.
+3) Run `php artisan key:generate` to generate your app key.
+4) Run `php artisan migrate:fresh --seed` to initialise the database. If `APP_DEBUG` is set to true, then some demo data will be loaded.
+
+### Stripe Setup
+
+An extra step is required for setting up stripe. You will need to set both of the keys and a webhook within stripe.<br />
+You will need to point the webhook to `{url}/api/stripe/webhooks`, for example, `https://octopustravelmatrix.com/api/stripe/webhooks`.
+
+<hr />
+
 ## Booking Form
 
 This is the frontend booking-form.  It is accessed via
