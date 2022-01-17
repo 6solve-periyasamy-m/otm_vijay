@@ -110,9 +110,9 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6 form-group field-separation">
+                                <div class="col-sm-6 form-group field-separation">{{date_of_birth}}
                                     <label class="form-label" for="date_of_birth">Date of Birth</label>
-                                    <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
+                                    <input type="date" v-model="date_of_birth" class="form-control" />
                                 </div>
                                 <div class="col-sm-6 form-group field-separation">
                                     <label class="form-label" for="gender">Gender</label>
@@ -260,6 +260,7 @@ import axios from 'axios'
 import { isThisQuarter } from 'date-fns'
 import { bus } from '../bus'
 import ValidationErrors from './ValidationErrors.vue'
+import dates from '../utilities'
 export default {
     props: ['booked', 'tour'],
     data() {
@@ -311,7 +312,7 @@ export default {
             mobile_number_invalid: false,
             mobile_number_validation: 'Please enter a valid phone number',
             other_number_invalid: false,
-            other_number_validation: 'Please enter a valid phone number'.date_of_birth,
+            other_number_validation: 'Please enter a valid phone number',
             fields: [
                 'title', 'first_name', 'middle_names', 'last_name',
                 'date_of_birth', 'gender', 'email_address',
@@ -340,6 +341,7 @@ export default {
             console.log('BFL: EH leadTravellerLoaded', customer)
             that.setCustomer(customer)
             that.email = that.email_address
+            that.date_of_birth = dates.isoString(customer.date_of_birth)
         })
         bus.$on('homeAddressLoaded', home_address => {
             // that.name = home_address.name
@@ -506,7 +508,7 @@ export default {
                     field = customer.businessAddressFields.field
                 })
             }
-            this.full_name = customer.first_name + ' ' + customer.last_name
+            that.full_name = customer.first_name + ' ' + customer.last_name
         },
         toggleTraveller() {
             this.show_traveller = !this.show_traveller
@@ -576,6 +578,7 @@ export default {
                 })
                 .then(response => {
                     console.log('createBooking response', response)
+                    bus.$emit('bookingCreated', response.data.booking)
                 })
                 .catch(error => {
                     console.log('error createBooking', eachQuarterOfInterval)

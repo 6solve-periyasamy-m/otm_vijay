@@ -3,7 +3,7 @@
         <div class="card card-options">
             <div class="card-header" id="headingTwo">
                 <h5 class="dropdown-button">
-                    <p v-if="!lead_traveller && !showAdditional">{{ additionalTravellers.length ? `Group Size: ${additionalTravellers.length+1}`: 'Please add all travellers to your tour party'}}</p>
+                    <p v-if="!lead_traveller && !showAdditional">{{ TravellerBookings.length ? `Group Size: ${TravellerBookings.length+1}`: 'Please add all travellers to your tour party'}}</p>
                     <button :disabled="!booking_token" class="btn btn-link collapsed cardhead" @click="toggleAdditional">
                         <font-awesome-icon icon="book-reader" /> Additional Travellers <div v-if="form_info">on order {{order_id}}</div>
                     </button>
@@ -14,7 +14,7 @@
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
-                <div v-for="item in additionalTravellers" :key="item.id">
+                <div v-for="item in TravellerBookings" :key="item.id">
                     <booking-form-add-traveller 
                         :booking_token="booking_token"
                         :tour="tour"
@@ -51,21 +51,21 @@
                 formId: 0,
                 showAdditional: false,
                 showInstruction: true,
-                additionalTravellers: [],
+                TravellerBookings: [],
                 booking: {}
             }
         },
         created() {
             let that = this
-            this.debug && console.log('AdditionalTravellers created: check props', this.form_info, this.booked, this.tour, this.is_lead_traveller)
+            this.debug && console.log('TravellerBookings created: check props', this.form_info, this.booked, this.tour, this.is_lead_traveller)
             
             bus.$on('setBookingToken', (token) => {
                 that.booking_token = token
                 that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)            
-                that.loadAdditionalTravellers()
+                that.loadTravellerBookings()
             })
             bus.$on('checkEmailUnique', email => {
-                that.additionalTravellers.map(traveller => {
+                that.TravellerBookings.map(traveller => {
                     if (traveller.email == email) {
                         bus.$emit('emailUsed', true)
                     }
@@ -82,7 +82,7 @@
                 this.toggleAdditional()
             },
             getFormId() {
-                return this.additionalTravellers.length + 1; //this.id++
+                return this.TravellerBookings.length + 1; //this.id++
                 
                 return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             },
@@ -93,15 +93,15 @@
             toggleAdditional() {
                 this.showAdditional = !this.showAdditional
             },
-            loadAdditionalTravellers() {
+            loadTravellerBookings() {
                 let that = this
                 this.debug && console.log(`...... loading additional travellers for ${this.booking_token}`)
                 axios.get(`/api/booking/travellers/${this.booking_token}`)
                     .then(response => {
                         console.log(response)
                         if (response.data.success) {
-                            that.additionalTravellers = response.data.travellers
-                            bus.$emit('additionalTravellersLoaded', that.additionalTravellers)
+                            that.TravellerBookings = response.data.travellers
+                            bus.$emit('TravellerBookingsLoaded', that.TravellerBookings)
                         }
                     })
                     .catch(error => {
@@ -111,7 +111,7 @@
             addAdditional() {
                 this.formId = this.getFormId()
                 this.showInstruction = false
-                this.additionalTravellers.push(`traveller_${this.formId}`) 
+                this.TravellerBookings.push(`traveller_${this.formId}`) 
                 this.showAdditional = true
                 this.debug && console.log('????? additional added', this.formId)
                 // Event handler in BookingFormAddTraveller used this.formId (which was not defined?)

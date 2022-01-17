@@ -103,7 +103,10 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on("additionalTravellersLoaded", (travellers) => {
+        bus.$on('bookingCreated', (booking) => {
+            console.log('accommodation: booking created', booking)
+        })
+        bus.$on("TravellerBookingsLoaded", (travellers) => {
             this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadAccommodationBooking(this.travellers)
@@ -112,7 +115,7 @@ export default {
     },
     methods: {
         setup() {
-            return
+            //return
 
             if (this.group != undefined && this.group.length) {
                 this.group.map(t => {

@@ -125,11 +125,14 @@ class FlightController extends ApiController
 
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($booking_token);
-
-        $flightBookingRepository = new FlightBookingRepository();
-        $flightBookings = $flightBookingRepository->getFlightBookings($booking->id, $type);
+        if (isset($booking->id)) {
+            $flightBookingRepository = new FlightBookingRepository();
+            $flightBookings = $flightBookingRepository->getFlightBookings($booking->id, $type);
 Log::debug('loadFlightsForBooking: flight bookings', [$booking->id, $flightBookings]);
-        return response()->json(["success" => true, "flightBookings" => $flightBookings]);
+            return response()->json(["success" => true, "flightBookings" => $flightBookings]);
+        } else {
+            return response()->json(["success" => false, "message" => "no flight bookings"]);
+        }
     }
 }
 

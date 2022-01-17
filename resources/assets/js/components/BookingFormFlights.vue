@@ -243,8 +243,8 @@ export default {
             that.loadFlightsForBooking(that.booking_token)
         })
 
-        bus.$on('additionalTravellersLoaded', travellers => {
-            this.debug>1 && console.log(`${that.moduleName}: additionalTravellersLoaded`, travellers)
+        bus.$on('TravellerBookingsLoaded', travellers => {
+            this.debug>1 && console.log(`${that.moduleName}: TravellerBookingsLoaded`, travellers)
             that.travellers = travellers
         })
 
