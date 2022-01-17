@@ -196,7 +196,7 @@ class OrderRepository
         }
 
         foreach ($order->payments as $payment) {
-            $payments[] = ['date' => $payment->paid_on, 'amount' => $payment->amount, 'method' => $payment->payment_type . ': ' . $payment->paymentMethod->name,];
+            $payments[] = ['date' => $payment->paid_on, 'amount' => $payment->amount, 'method' => $payment->paymentMethod->name . ': ' . $payment->payment_type,];
             $data['totals']['paid'] += $payment->amount;
         }
 
