@@ -87,18 +87,18 @@
             @include('partials.pdf.invoices.row',
                         ['quantity' => "",
                         'description' => "<strong>Base Cost of Package, including:</strong>\n" . $oCustomer['included'],
-                        'cost' => $order->tour->base_price_per_person,
+                        'cost' => \StringFormatter::formatCurrency($order->tour->base_price_per_person),
                         'class' => $order->tour->base_price_per_person > 0  ? "amount-negative" : "amount-positive"])
             @foreach($oCustomer['items'] as $item)
                 @include('partials.pdf.invoices.row',
                         ['quantity' => $item['quantity'],
                         'description' => $item['description'],
-                        'cost' => $item['cost'],
+                        'cost' => \StringFormatter::formatCurrency($item['cost']),
                         'class' => $item['cost'] > 0  ? "amount-negative" : "amount-positive"])
             @endforeach
             <tr>
                 <td></td>
-                <td colspan="2" class="t-align-right"><strong>Total: {{ $oCustomer['cost'] }}</strong></td>
+                <td colspan="2" class="t-align-right"><strong>Total: {{ \StringFormatter::formatCurrency($oCustomer['cost']) }}</strong></td>
             </tr>
         @endforeach
         <tr>
@@ -109,18 +109,18 @@
         @foreach($adjustments as $adjustment)
             @include('partials.pdf.invoices.row',
                     ['quantity' => "",
-                    'description' => $adjustment['reason'] . ' (' . $adjustment['date'] . ')',
-                    'cost' => $adjustment['amount'],
+                    'description' => $adjustment['reason'] . ' (' . StringFormatter::formatDateTime($adjustment['date']) . ')',
+                    'cost' => StringFormatter::formatCurrency($adjustment['amount']),
                     'class' => $adjustment['amount'] > 0  ? "amount-negative" : "amount-positive"])
         @endforeach
         <tr>
             <td></td>
-            <td colspan="2" class="t-align-right"><strong>Total: {{ $totals['adjusted'] }}</strong></td>
+            <td colspan="2" class="t-align-right"><strong>Total: {{ StringFormatter::formatCurrency($totals['adjusted']) }}</strong></td>
         </tr>
     </table>
 </div>
 <div class="section t-align-right">
-    <h2>Total Amount Owed: {{ $totals['orderValue'] + $totals['adjusted'] }}</h2>
+    <h2>Total Amount Owed: {{ StringFormatter::formatCurrency($totals['orderValue'] + $totals['adjusted']) }}</h2>
 </div>
 <div class="section t-align-center">
     <h2>Payments</h2>
@@ -136,18 +136,18 @@
         </thead>
         @foreach($payments as $payment)
             @include('partials.pdf.invoices.row',
-                    ['quantity' => $payment['date'],
+                    ['quantity' => StringFormatter::formatDateTime($payment['date']),
                     'description' => $payment['method'],
-                    'cost' => $payment['amount'],
+                    'cost' => StringFormatter::formatCurrency($payment['amount']),
                     'class' => "amount",])
         @endforeach
     </table>
 </div>
 <div class="section t-align-right">
-    <h2>Total Paid: {{ $totals['paid'] }}</h2>
+    <h2>Total Paid: {{ StringFormatter::formatCurrency($totals['paid']) }}</h2>
 </div>
 <div class="t-align-right">
-    <h2>Remaining Amount: {{ $totals['combined'] }}</h2>
+    <h2>Remaining Amount: {{ StringFormatter::formatCurrency($totals['combined']) }}</h2>
 </div>
 </body>
 </html>
