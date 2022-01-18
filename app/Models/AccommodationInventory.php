@@ -17,7 +17,7 @@ class AccommodationInventory extends Model
     // use ModelLogging;
     use SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['Accommodation_for_tour'];
+    public $additional_attributes = ['Accommodation_for_tour','used_stock','used_on_tour_count'];
     protected $fillable = ['accommodation_id', 'room_type_id', 'board_type_id', 'check_in', 'check_in_time_confirmed', 'check_out', 'check_out_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'notes', 'currency_id'];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
@@ -93,6 +93,25 @@ class AccommodationInventory extends Model
     public function getUsedStock(): int
     {
         return StockRepository::getAccommodationStock($this);
+    }
+
+    public function getUsedStockAttribute()
+    {
+        return $this->getUsedStock();
+    }
+
+    public function getUsedOnTourCountAttribute()
+    {
+        return $this->tourComponents()->count();
+    }
+
+    public function component() {
+        return $this->accommodation();
+    }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->roomType} {$this->boardType} ({$this->check_in} to {$this->check_out})";
     }
 }
 

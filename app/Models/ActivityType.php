@@ -16,4 +16,9 @@ class ActivityType extends SimpleModel
     {
         return ['name' => 'required|unique:activity_types,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

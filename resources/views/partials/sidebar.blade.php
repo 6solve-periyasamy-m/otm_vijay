@@ -161,12 +161,12 @@
                 </a>
             </li>
         @endcan
-        @if(Auth::guard('web')->check())
+        @can('read', \App\Models\Report::class)
             <li>
                 @if(strpos(Request::url(), 'reports') !== false)
-                    <a href="{{ route('reports.all') }}" class="nav-link active">
+                    <a href="{{ route('reports.bespoke.all') }}" class="nav-link active">
                 @else
-                    <a href="{{ route('reports.all') }}" class="nav-link ">
+                    <a href="{{ route('reports.bespoke.all') }}" class="nav-link ">
                 @endif
                     <i class="icon-list"></i>
                     <span>Reports</span>
@@ -175,6 +175,6 @@
                 @endif
                 </a>
             </li>
-        @endif
+        @endcan
     </ul>
 </div>

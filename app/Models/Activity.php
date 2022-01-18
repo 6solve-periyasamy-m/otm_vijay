@@ -44,4 +44,10 @@ class Activity extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public function __toString()
+    {
+
+        return "{$this->name} ({$this->activityType}) ({$this->address->region}, {$this->address->country})";
+    }
 }

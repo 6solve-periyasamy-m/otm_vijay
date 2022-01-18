@@ -16,4 +16,9 @@ class TicketType extends SimpleModel
     {
         return ['name' => 'required|unique:ticket_types,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

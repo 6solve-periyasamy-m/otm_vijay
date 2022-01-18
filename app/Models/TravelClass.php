@@ -15,4 +15,9 @@ class TravelClass extends SimpleModel
     {
         return ['name' => 'required|unique:travel_classes,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

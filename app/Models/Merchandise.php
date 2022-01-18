@@ -33,4 +33,9 @@ class Merchandise extends Model
     {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
+
+    public function __toString()
+    {
+        return "{$this->name}";
+    }
 }

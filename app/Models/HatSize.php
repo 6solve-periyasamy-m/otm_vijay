@@ -16,4 +16,9 @@ class HatSize extends SimpleModel
     {
         return ['name' => 'required|unique:hat_sizes,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

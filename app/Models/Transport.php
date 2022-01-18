@@ -76,4 +76,9 @@ class Transport extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public function __toString()
+    {
+        return "{$this->name} ({$this->transportType}) ({$this->departureAddress->name} to {$this->arrivalAddress->name}) ({$this->operator})";
+    }
 }

@@ -15,4 +15,9 @@ class PaymentMethod extends SimpleModel
     {
         return ['name' => 'required|unique:payment_methods,name'];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

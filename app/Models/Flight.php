@@ -82,4 +82,9 @@ class Flight extends Model
         }
         return $flight;
     }
+
+    public function __toString()
+    {
+        return "{$this->airline} ({$this->departureAirport} to {$this->arrivalAirport})";
+    }
 }

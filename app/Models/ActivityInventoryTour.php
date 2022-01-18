@@ -18,6 +18,7 @@ class ActivityInventoryTour extends Model
 
     protected $cascadeDeletes = ['orders', 'upgrades'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
+    public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
     {
@@ -58,5 +59,15 @@ class ActivityInventoryTour extends Model
         $inventory = $this->activityInventory;
         $component = $inventory->activity;
         return $component->name . ' (' . StringFormatter::formatDateTime($inventory->starts_at) . ' to ' . StringFormatter::formatDateTime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
+    }
+
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->activityInventory();
     }
 }

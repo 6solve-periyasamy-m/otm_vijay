@@ -16,4 +16,9 @@ class TShirtSize extends SimpleModel
     {
         return ['name' => 'required|unique:t_shirt_sizes,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

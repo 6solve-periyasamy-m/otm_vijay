@@ -19,4 +19,9 @@ class TourCategory extends SimpleModel
     {
         return $this->hasMany(Tour::class, 'tour_category_id');
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

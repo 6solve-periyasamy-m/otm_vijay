@@ -10,6 +10,7 @@ class OrderMerchandise extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ['merchandise_id',];
+    public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
     public function orderCustomer()
     {
@@ -24,5 +25,25 @@ class OrderMerchandise extends Model
     public function isCancelled(): bool
     {
         return $this->orderCustomer->order->cancelled;
+    }
+
+    public function tourComponent()
+    {
+        return $this->merchandise();
+    }
+
+    public function getDetailsAttribute()
+    {
+        return "{$this->tourComponent}";
+    }
+
+    public function getTourComponentTypeAttribute()
+    {
+        return $this->tourComponent->tour_component_type;
+    }
+
+    public function getTourSalesPriceAttribute()
+    {
+        return $this->tourComponent->tour_sales_price;
     }
 }

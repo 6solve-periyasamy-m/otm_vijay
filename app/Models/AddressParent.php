@@ -35,4 +35,9 @@ class AddressParent extends SimpleModel
                 return 63;
         }
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

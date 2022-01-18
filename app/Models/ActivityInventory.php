@@ -14,7 +14,7 @@ class ActivityInventory extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    public $additional_attributes = ['Activity_for_tour'];
+    public $additional_attributes = ['Activity_for_tour','used_stock','used_on_tour_count'];
     protected $fillable = ['activity_id', 'ticket_type_id', 'starts_at', 'ends_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
@@ -77,5 +77,24 @@ class ActivityInventory extends Model
     public function getUsedStock(): int
     {
         return StockRepository::getActivityStock($this);
+    }
+
+    public function getUsedStockAttribute()
+    {
+        return $this->getUsedStock();
+    }
+
+    public function getUsedOnTourCountAttribute()
+    {
+        return $this->tourComponents()->count();
+    }
+
+    public function component() {
+        return $this->activity();
+    }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->ticketType} ({$this->starts_at} to {$this->ends_at})";
     }
 }

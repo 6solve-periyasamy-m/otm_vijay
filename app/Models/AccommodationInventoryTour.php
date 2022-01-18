@@ -17,6 +17,7 @@ class AccommodationInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price',];
     protected $cascadeDeletes = ['orders', 'upgrades'];
+    public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
     {
@@ -57,5 +58,15 @@ class AccommodationInventoryTour extends Model
         $inventory = $this->accommodationInventory;
         $component = $inventory->accommodation;
         return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
+    }
+
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->accommodationInventory();
     }
 }

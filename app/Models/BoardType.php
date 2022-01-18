@@ -24,4 +24,9 @@ class BoardType extends SimpleModel
         }
         return $type;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
