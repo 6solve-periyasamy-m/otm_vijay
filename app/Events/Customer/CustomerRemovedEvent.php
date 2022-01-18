@@ -1,28 +1,16 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Customer;
 
-use Illuminate\Broadcasting\Channel;
+use App\Events\Parent\CustomerEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CustomerRemovedEvent
+class CustomerRemovedEvent extends CustomerEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Get the channels the event should broadcast on.
@@ -31,6 +19,6 @@ class CustomerRemovedEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel('customer-removed');
     }
 }
