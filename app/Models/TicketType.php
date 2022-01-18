@@ -17,4 +17,9 @@ class TicketType extends Model
     {
         return ['name' => 'required|unique:ticket_types,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

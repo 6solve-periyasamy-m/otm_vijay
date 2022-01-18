@@ -36,4 +36,9 @@ class Airport extends Model
     {
         return $this->hasMany(Flight::class);
     }
+
+    public function __toString()
+    {
+        return $this->name . ' - ' . $this->iata_code . ' - ' . $this->address->country;
+    }
 }
