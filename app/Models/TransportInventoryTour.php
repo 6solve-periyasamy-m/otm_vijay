@@ -17,6 +17,7 @@ class TransportInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'transport_inventory_id',];
     protected $cascadeDeletes = ['orders', 'upgrades'];
+    public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
     {
@@ -60,5 +61,15 @@ class TransportInventoryTour extends Model
             ' (' . $component->transportType->name . ') ' .
             ' (' . StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
+    }
+
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->transportInventory();
     }
 }

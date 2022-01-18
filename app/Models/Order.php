@@ -150,4 +150,29 @@ class Order extends Model
     public function customers() {
         return OrderRepository::getCustomersForOrder($this);
     }
+
+    public function getLeadBookerNameAttribute(): string
+    {
+        return $this->leadBooker->customer_name;
+    }
+
+    public function getStatusAttribute(): string
+    {
+        return $this->getStatus()['status'];
+    }
+
+    public function getPaidAttribute(): float
+    {
+        return $this->getPaid();
+    }
+
+    public function getTotalAttribute(): float
+    {
+        return $this->getCost();
+    }
+
+    public function getRemainingAttribute(): float
+    {
+        return $this->getRemaining();
+    }
 }

@@ -16,4 +16,9 @@ class TravelClass extends Model
     {
         return ['name' => 'required|unique:travel_classes,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

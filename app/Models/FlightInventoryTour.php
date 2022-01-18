@@ -12,7 +12,7 @@ use StringFormatter;
 
 class FlightInventoryTour extends Model
 {
-    public $additional_attributes = ['flight_inventory_for_tour'];
+    public $additional_attributes = ['flight_inventory_for_tour','tour_name'];
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
@@ -57,8 +57,8 @@ class FlightInventoryTour extends Model
     public function parent() {
         return FlightComponentRepository::getParentComponent($this);
     }
-
-    public function tour() {
+    public function tour()
+    {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
@@ -69,5 +69,15 @@ class FlightInventoryTour extends Model
         return $component->airline->name . '('. $inventory->flight_number . ')' . $component->departureAirport->name . ' to ' .  $component->arrivalAirport->name .
             ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
+    }
+
+    public function getTourNameAttribute()
+    {
+        return $this->tour->name;
+    }
+
+    public function inventory()
+    {
+        return $this->flightInventory();
     }
 }

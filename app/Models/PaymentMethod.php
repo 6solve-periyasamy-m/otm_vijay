@@ -24,4 +24,9 @@ class PaymentMethod extends Model
         }
         return $type;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

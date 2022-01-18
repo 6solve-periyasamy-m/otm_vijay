@@ -12,7 +12,7 @@ class FlightInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['flight_for_tour'];
+    public $additional_attributes = ['flight_for_tour','used_stock','used_on_tour_count'];
     protected $cascadeDeletes = ['flightInventoryTour'];
     protected $fillable = ['flight_id', 'travel_class_id', 'flight_number', 'check_in', 'departs_at', 'arrives_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected $casts = [
@@ -108,5 +108,29 @@ class FlightInventory extends Model
     public function getUsedStock(): int
     {
         return StockRepository::getFlightStock($this);
+    }
+
+    public function getUsedStockAttribute()
+    {
+        return $this->getUsedStock();
+    }
+
+    public function getUsedOnTourCountAttribute()
+    {
+        return $this->tourComponents()->count();
+    }
+
+    public function component() {
+        return $this->flight();
+    }
+
+    public function tourComponents()
+    {
+        return $this->flightInventoryTour();
+    }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) ({$this->departs_at} to {$this->arrives_at})";
     }
 }
