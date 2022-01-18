@@ -17,6 +17,7 @@ abstract class OrderCustomerComponentEvent extends OrderCustomerEvent
 
     /**
      * @param OrderAccommodation|OrderActivity|OrderFlight|OrderTransport|OrderMerchandise $orderComponent
+     * @param bool $shouldInvoice
      */
     public function __construct($orderComponent, bool $shouldInvoice = true) {
         parent::__construct($orderComponent->orderCustomer, $shouldInvoice);

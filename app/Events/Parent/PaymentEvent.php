@@ -2,6 +2,7 @@
 
 namespace App\Events\Parent;
 
+use App\Events\Parent\Traits\ShouldInvoice;
 use App\Models\Payment;
 
 abstract class PaymentEvent extends OrderEvent
@@ -14,6 +15,7 @@ abstract class PaymentEvent extends OrderEvent
 
     /**
      * @param Payment $payment
+     * @param bool $shouldInvoice
      */
     public function __construct(Payment $payment, bool $shouldInvoice = true) {
         parent::__construct($payment->order, $shouldInvoice);
