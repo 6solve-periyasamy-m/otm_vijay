@@ -16,4 +16,9 @@ class Airline extends Model
     {
         return ['name' => 'required|unique:airlines,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

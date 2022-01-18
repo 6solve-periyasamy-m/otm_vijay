@@ -687,4 +687,16 @@ class OrderRepository
 
         return ['orders' => $data];
     }
+
+    public static function isInstallmentPaid(OrderInstallment $installment): bool
+    {
+        $order = $installment->order;
+        $paid = $order->getAdjustmentValue() + $order->getPaid();
+        foreach ($order->installments as $orderInstallment) {
+            $paid -= $orderInstallment->amount;
+            if ($paid < 0) return false;
+            if ($orderInstallment->id == $installment->id) return true;
+        }
+        return $paid >= 0;
+    }
 }

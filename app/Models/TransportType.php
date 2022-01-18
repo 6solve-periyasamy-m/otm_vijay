@@ -16,4 +16,9 @@ class TransportType extends Model
     {
         return ['name' => 'required|unique:transport_types,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

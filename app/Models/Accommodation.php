@@ -60,4 +60,10 @@ class Accommodation extends Model
     {
         return $this->belongsTo(Currency::class);
     }
+
+    public function __toString()
+    {
+
+        return "{$this->name} ({$this->address->region}, {$this->address->country})";
+    }
 }

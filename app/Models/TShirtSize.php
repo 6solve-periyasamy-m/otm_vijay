@@ -17,4 +17,9 @@ class TShirtSize extends Model
     {
         return ['name' => 'required|unique:t_shirt_sizes,name',];
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
