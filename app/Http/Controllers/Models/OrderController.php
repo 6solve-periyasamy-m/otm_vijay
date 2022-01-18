@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\OrderCreatedEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;

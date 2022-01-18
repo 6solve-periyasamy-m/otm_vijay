@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Order\Customer\Component;
 
-use App\Models\Order;
+use App\Events\Parent\OrderCustomerComponentEvent;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,21 +11,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreatedEvent
+class OrderCustomerComponentEditedEvent extends OrderCustomerComponentEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $order;
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
 
     /**
      * Get the channels the event should broadcast on.
@@ -34,6 +22,6 @@ class OrderCreatedEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('order-created');
+        return new PrivateChannel('order-customer-component-edited');
     }
 }

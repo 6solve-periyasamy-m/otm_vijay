@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\OrderCreatedEvent;
-use App\Events\PaymentMadeEvent;
+use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendPaymentMadeEmail;
 use Illuminate\Auth\Events\Registered;
@@ -25,7 +25,7 @@ class EventServiceProvider extends ServiceProvider
         OrderCreatedEvent::class => [
           SendBookingConfirmedEmail::class,
         ],
-        PaymentMadeEvent::class => [
+        PaymentCreatedEvent::class => [
           SendPaymentMadeEmail::class,
         ],
     ];
