@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\Order\OrderCancelledEvent;
 use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderEditedEvent;
+use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
@@ -71,6 +74,7 @@ class OrderController extends Controller
             'external_notes' => $request->input('external_notes'),
             'deposit' => $request->input('deposit'),
         ]);
+        event(new OrderEditedEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -78,6 +82,7 @@ class OrderController extends Controller
     {
         $order->cancelled = true;
         $order->save();
+        event(new OrderCancelledEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -85,6 +90,7 @@ class OrderController extends Controller
     {
         $order->cancelled = false;
         $order->save();
+        event(new OrderRestoredEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

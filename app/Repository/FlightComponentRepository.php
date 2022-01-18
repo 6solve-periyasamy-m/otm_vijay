@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventoryTourUpgrade;
 use App\Models\OrderCustomer;
@@ -65,10 +66,12 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
 
     public static function grantAddonToCustomer($oCustomerId, $flightInventoryTourId)
     {
-        return OrderFlight::create([
+        $orderComponent = OrderFlight::create([
             'order_customer_id' => $oCustomerId,
             'flight_inventory_tour_id' => $flightInventoryTourId,
         ]);
+        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        return $orderComponent;
     }
 
     public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)

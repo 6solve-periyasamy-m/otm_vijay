@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\Customer\CustomerCreatedEvent;
+use App\Events\Customer\CustomerEditedEvent;
+use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\AddressParent;
@@ -87,6 +90,7 @@ class CustomerController extends Controller
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         $customer->save();
+        event(new CustomerCreatedEvent($customer));
         return redirect()->route('customers.view', ['customer' => $customer,]);
     }
 
@@ -155,6 +159,7 @@ class CustomerController extends Controller
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         $customer->save();
+        event(new CustomerEditedEvent($customer));
         return redirect()->route('customers.view', ['customer' => $customer,]);
     }
 
@@ -164,6 +169,7 @@ class CustomerController extends Controller
             return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Customer', 'parent' => 'Order']));
         }
         $customer->delete();
+        event(new CustomerRemovedEvent($customer));
         return redirect()->route('customers.all');
     }
 }

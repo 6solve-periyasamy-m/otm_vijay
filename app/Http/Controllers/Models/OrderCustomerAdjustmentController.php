@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\Order\Customer\Adjustment\CustomerAdjustmentCreatedEvent;
+use App\Events\Order\Customer\Adjustment\CustomerAdjustmentEditedEvent;
+use App\Events\Order\Customer\Adjustment\CustomerAdjustmentRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
@@ -30,6 +33,7 @@ class OrderCustomerAdjustmentController extends Controller
             'date' => $request->input('date'),
         ]);
         $orderCustomer->adjustments()->save($orderCustomerAdjustment);
+        event(new CustomerAdjustmentCreatedEvent($orderCustomerAdjustment));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
@@ -51,12 +55,14 @@ class OrderCustomerAdjustmentController extends Controller
             'reason' => $request->input('reason'),
             'date' => $request->input('date'),
         ]);
+        event(new CustomerAdjustmentEditedEvent($orderCustomerAdjustment));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
     public function destroy(Order $order, OrderCustomer $orderCustomer, OrderCustomerAdjustment $orderCustomerAdjustment)
     {
         $orderCustomerAdjustment->delete();
+        event(new CustomerAdjustmentRemovedEvent($orderCustomerAdjustment));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 }

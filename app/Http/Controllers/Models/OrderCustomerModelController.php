@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\Order\Customer\OrderCustomerCreatedEvent;
+use App\Events\Order\Customer\OrderCustomerEditedEvent;
+use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
@@ -33,6 +36,7 @@ class OrderCustomerModelController extends Controller
         ]);
         $order->orderCustomers()->save($orderCustomer);
         OrderRepository::addIncludedToCustomer($orderCustomer);
+        event(new OrderCustomerCreatedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
@@ -51,12 +55,14 @@ class OrderCustomerModelController extends Controller
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
         ]);
+        event(new OrderCustomerEditedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 
     public function destroy(Order $order, OrderCustomer $orderCustomer)
     {
         $orderCustomer->delete();
+        event(new OrderCustomerRemovedEvent($orderCustomer));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 }
