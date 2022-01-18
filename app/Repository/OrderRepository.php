@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Mail\PaymentDueMailable;
 use App\Mail\PaymentOverdueMailable;
 use App\Models\Customer;
@@ -478,6 +479,8 @@ class OrderRepository
 
     /**
      * Adds the included components to an order-customer
+     * Adding the included should not be invoiced, as it would create many invoices with little to no changes on them
+     * This method should only be called when an order is intially created
      * @param OrderCustomer $orderCustomer
      */
     public static function addIncludedToCustomer(OrderCustomer $orderCustomer)
@@ -487,30 +490,35 @@ class OrderRepository
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderAccommodation()->save($orderInventory);
+                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderActivities()->save($orderInventory);
+                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderFlights()->save($orderInventory);
+                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
                 $orderCustomer->orderTransports()->save($orderInventory);
+                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->merchandise as $merchandise) {
             if ($merchandise->tour_component_type === "Included") {
                 $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id,]);
                 $orderCustomer->orderMerchandise()->save($orderMerchandise);
+                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
     }
@@ -530,6 +538,7 @@ class OrderRepository
         }
         $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId,]);
         $oCustomer->orderMerchandise()->save($oMerch);
+        event(new OrderCustomerComponentAddedEvent($omerch));
         return $oMerch;
     }
 
