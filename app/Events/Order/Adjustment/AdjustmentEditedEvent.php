@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Events\Order\Customer;
+namespace App\Events\Order\Adjustment;
 
-use App\Events\Parent\OrderCustomerEvent;
+use App\Events\Parent\OrderAdjustmentEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCustomerRemovedEvent extends OrderCustomerEvent
+class AdjustmentEditedEvent extends OrderAdjustmentEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,6 +19,6 @@ class OrderCustomerRemovedEvent extends OrderCustomerEvent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('order-customer-removed');
+        return new PrivateChannel('adjustment-edited');
     }
 }
