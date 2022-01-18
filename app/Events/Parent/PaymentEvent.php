@@ -6,6 +6,7 @@ use App\Models\Payment;
 
 abstract class PaymentEvent extends OrderEvent
 {
+    use ShouldInvoice;
     /**
      * @var Payment
      */
@@ -14,8 +15,8 @@ abstract class PaymentEvent extends OrderEvent
     /**
      * @param Payment $payment
      */
-    public function __construct(Payment $payment) {
-        parent::__construct($payment->order);
+    public function __construct(Payment $payment, bool $shouldInvoice = true) {
+        parent::__construct($payment->order, $shouldInvoice);
         $this->payment = $payment;
     }
 }

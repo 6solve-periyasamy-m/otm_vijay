@@ -14,8 +14,8 @@ abstract class OrderCustomerEvent extends OrderEvent
     /**
      * @param OrderCustomer $orderCustomer
      */
-    public function __construct(OrderCustomer $orderCustomer) {
-        parent::__construct($orderCustomer->order);
+    public function __construct(OrderCustomer $orderCustomer, bool $shouldInvoice = true) {
+        parent::__construct($orderCustomer->order, $shouldInvoice);
         $this->orderCustomer = $orderCustomer;
     }
 }
