@@ -18,7 +18,7 @@ interface FlightsRepositoryInterface {
 class FlightsRepository implements FlightsRepositoryInterface
 {
     protected $model;
-    private $logging = 1;
+    private $logging = false;
 
     public function __construct()
     {
@@ -54,6 +54,9 @@ class FlightsRepository implements FlightsRepositoryInterface
         ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
         ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
         ->join('flight_inventory_tours', 'flight_inventory_tours.flight_inventory_id', 'flight_inventories.id')
+        ->whereNull('flight_inventory_tours.deleted_at')
+        ->whereNull('flight_inventories.deleted_at')
+        ->whereNull('flights.deleted_at')
         ->where('flight_inventory_tours.tour_id', $tour_id)
         ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
         ->where(function($q) {
@@ -64,9 +67,8 @@ class FlightsRepository implements FlightsRepositoryInterface
             $flights = $flights->where('flight_inventory_tours.flight_type', $flight_type);
         } else {
             $flights = $flights->whereIn('flight_inventory_tours.flight_type', ['Outbound', 'Inbound'])
-            ->orderBy('flight_inventory_tours.flight_type', 'desc');
+                ->orderBy('flight_inventory_tours.flight_type', 'desc');
         }
-        $this->logging && Log::info("\n".'flightsAvaiableForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
         $flightData = $flights
             ->orderBy('airlines.name', 'asc')
             ->get();

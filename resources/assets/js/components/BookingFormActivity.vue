@@ -86,7 +86,7 @@ export default {
             this.leadTraveller = leadTraveller
             console.log('leadtravllerloaded')
         })
-        bus.$on("additionalTravellersLoaded", (travellers) => {
+        bus.$on("TravellerBookingsLoaded", (travellers) => {
             this.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadActivityBooking(this.travellers)

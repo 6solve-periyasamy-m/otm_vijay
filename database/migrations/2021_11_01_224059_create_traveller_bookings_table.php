@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdditionalTravellersTable extends Migration
+class CreateTravellerBookingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAdditionalTravellersTable extends Migration
      */
     public function up()
     {
-        Schema::create('additional_travellers', function (Blueprint $table) {
+        Schema::create('traveller_bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained();
             $table->foreignId('customer_id')->constrained();
@@ -28,6 +28,6 @@ class CreateAdditionalTravellersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('additional_travellers');
+        Schema::dropIfExists('traveller_bookings');
     }
 }

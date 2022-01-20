@@ -109,6 +109,7 @@
 <script>
 import axios from 'axios'
 import { bus } from '../bus'
+import dates from '../utilities'
 export default {
     props: ['traveller', 'tour', 'form_id', 'booking_token'],
     data() {
@@ -140,7 +141,7 @@ export default {
             validphone: false,
             other_phone_number_type: '',
             otherNumberType: '',
-            additionalTraveller: 'checked',
+            TravellerBooking: 'checked',
             customer: {},
             removed: false,
             removal: false,
@@ -195,6 +196,7 @@ export default {
                     that[key] = that.customer[key]
                 }
             })
+            that.date_of_birth = dates.isoString(that.customer.date_of_birth)
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
@@ -224,6 +226,7 @@ export default {
             return true
         },
         validEmail() {
+            let that = this
             if (!this.email_address.length) {
                 return false
             }
@@ -245,14 +248,14 @@ export default {
                     console.log(response)
                     if (response.data.success) {
                         const customer = response.data.customer
-                        this.title = customer.title
-                        this.first_name = customer.first_name
-                        this.middle_name = customer.middle_name
-                        this.last_name = customer.last_name
-                        this.mobile_number = customer.mobile_number
-                        this.other_phone_number = customer.other_phone_number
-                        this.gender = customer.gender
-                        this.date_of_birth = customer.date_of_birth
+                        that.title = customer.title
+                        that.first_name = customer.first_name
+                        that.middle_name = customer.middle_name
+                        that.last_name = customer.last_name
+                        that.mobile_number = customer.mobile_number
+                        that.other_phone_number = customer.other_phone_number
+                        that.gender = customer.gender
+                        that.date_of_birth = dates.isoString(customer.date_of_birth)
                     }
                 })
                 .catch(error => {
@@ -295,7 +298,7 @@ export default {
                         that.mobile_number = customer.mobile_number
                         that.other_phone_number = customer.other_phone_number
                         that.other_phone_number_type = customer.other_phone_number_type
-                        that.date_of_birth = customer.date_of_birth
+                        that.date_of_birth = dates.isoString(customer.date_of_birth)
                         that.gender = customer.gender
                         that.validated = true
                         that.validationErrors = ''

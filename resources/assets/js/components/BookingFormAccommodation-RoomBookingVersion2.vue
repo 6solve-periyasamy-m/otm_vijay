@@ -258,7 +258,7 @@ export default {
       this.debug>2 && console.log('Accommodation lead traveller loaded', leadTraveller);
       //this.travellers.push(leadTraveller)
     })
-    bus.$on("additionalTravellersLoaded", (travellers) => {
+    bus.$on("TravellerBookingsLoaded", (travellers) => {
       this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
       travellers.map(traveller => this.travellers.push(traveller));
     })

@@ -35,6 +35,11 @@ $token = 'e5xlzpb2csi2z11h1n74u9';
                     <a target="test" href="/booking/check/events">Check events</a>
                 </li>
 
+                <h2>Flights</h2>
+                <li>
+                    <a href="/api/booking/flights/tour/2" target="test">Get Flights for Tour 2</a>
+                </li>
+
                 <h2>Activities</h2>
                 <li>
                     <a href="/api/booking/activities/tour/2" target="test">Get Activities for Tour 2</a>
