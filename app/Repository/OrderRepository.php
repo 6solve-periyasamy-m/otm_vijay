@@ -17,6 +17,7 @@ use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
 use App\Models\PaymentInstallment;
 use App\Models\PaymentReminder;
+use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -210,6 +211,89 @@ class OrderRepository
         $data['payments'] = collect($payments)->sortBy('date')->toArray();
         $data['totals']['combined'] = $data['totals']['orderValue'] - $data['totals']['paid'] + $data['totals']['adjusted'];
         return $data;
+    }
+
+    public static function generateInvoice(Order $order): Invoice
+    {
+        $customers = [];
+        $adjustments = [];
+        $payments = [];
+        foreach ($order->orderCustomers as $customer) {
+            $customers[$customer->customer_name] = self::processCustomerComponentsForInvoice($customer);
+            foreach ($customer->adjustments as $adjustment) {
+                $adjustments[] = ['description' => "Customer Adjustment ({$customer->customer_name}): {$adjustment->reason}", 'cost' => $adjustment->amount,];
+            }
+        }
+        foreach ($order->adjustments as $adjustment) {
+            $adjustments[] = ['description' => "Manual Adjustment: {$adjustment->reason}", 'cost' => $adjustment->amount,];
+        }
+        foreach ($order->payments as $payment) {
+            $payments[] = ['date' => $payment->paid_on, 'description' => "{$payment->paymentMethod}: {$payment->payment_type}", 'cost' => $payment->amount,];
+        }
+        return Invoice::make([
+            'order_id' => $order->id,
+            'number' => $order->invoices->count() + 1,
+            'generated' => now(),
+            'customers' => $customers,
+            'adjustments' => ['total_cost' => $order->getAdjustmentValue(), 'billables' => $adjustments,],
+            'payments' => ['total_cost' => $order->paid, 'billables' => $payments,],
+            'footer' => "", // TODO: Implement
+            'total_cost' => $order->getCost() + $order->getAdjustmentValue(),
+        ]);
+    }
+
+    private static function processCustomerComponentsForInvoice(OrderCustomer $orderCustomer): array
+    {
+        $data = [];
+        $totalCost = 0;
+        $included = "Base Components Include:\n";
+        foreach ($orderCustomer->orderAccommodation as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            } else {
+                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        foreach ($orderCustomer->orderActivities as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            } else {
+                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        foreach ($orderCustomer->orderFlights as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            } else {
+                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        foreach ($orderCustomer->orderTransports as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            } else {
+                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        foreach ($orderCustomer->orderMerchandise as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            } else {
+                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        $totalCost += $orderCustomer->tour_cost;
+        return ['total_cost' => $totalCost, 'billables' => array_merge([['description' => $included, 'cost' => $orderCustomer->tour_cost,]], $data),];
     }
 
     // Order Addons/Upgrades
@@ -488,35 +572,35 @@ class OrderRepository
         $order = $orderCustomer->order;
         foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderAccommodation()->save($orderInventory);
                 event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderActivities()->save($orderInventory);
                 event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderFlights()->save($orderInventory);
                 event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id,]);
+                $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderTransports()->save($orderInventory);
                 event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
         }
         foreach ($order->tour->merchandise as $merchandise) {
             if ($merchandise->tour_component_type === "Included") {
-                $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id,]);
+                $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderMerchandise()->save($orderMerchandise);
                 event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
@@ -532,11 +616,11 @@ class OrderRepository
     public static function grantMerchandiseToCustomer(int $oCustomerId, int $merchandiseId): ?OrderMerchandise
     {
         $oCustomer = OrderCustomer::findOrFail($oCustomerId);
-        Merchandise::findOrFail($merchandiseId);
+        $merchandise = Merchandise::findOrFail($merchandiseId);
         foreach ($oCustomer->orderMerchandise as $oMerch) {
             if ($oMerch->merchandise->id == $merchandiseId) return null;
         }
-        $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId,]);
+        $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId, 'cost' => $merchandise->tour_sales_price,]);
         $oCustomer->orderMerchandise()->save($oMerch);
         event(new OrderCustomerComponentAddedEvent($omerch));
         return $oMerch;

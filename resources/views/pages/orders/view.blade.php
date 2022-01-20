@@ -1,3 +1,9 @@
+@php
+/**
+ * @param \App\Models\Order $order;
+ */
+@endphp
+
 @extends('layout.master')
 
 @section('title', 'View Order')

@@ -80,6 +80,11 @@ class Order extends Model
         return self::getStatusArray(OrderRepository::getOrderStatus($this));
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'order_id');
+    }
+
     public static function getStatusArray(int $status): array
     {
         switch ($status) {

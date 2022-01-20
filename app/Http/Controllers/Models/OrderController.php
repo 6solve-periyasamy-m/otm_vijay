@@ -57,6 +57,11 @@ class OrderController extends Controller
         return view('pages.models.orders.view', ['order' => $order,]);
     }
 
+    public function invoice(Order $order)
+    {
+        return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
+    }
+
     public function edit(Order $order)
     {
         return view('pages.models.orders.update', ['order' => $order,]);

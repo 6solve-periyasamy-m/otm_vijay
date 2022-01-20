@@ -1,4 +1,13 @@
-<html>
+@php
+/**
+ * @var App\Models\Invoice $invoice
+ * @var App\Models\Order $order
+ */
+$order = $invoice->order;
+//dd($invoice->customers);
+@endphp
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Invoice</title>
     <style>
@@ -36,8 +45,8 @@
             <h1>Your Invoice</h1>
         </span>
         <div class="invoice-details t-align-left">
-            Invoice Number: 1010101010101<br/>
-            Invoice Date: {{ now() }}<br/>
+            Invoice Number: {{ $invoice->number }}<br/>
+            Invoice Date: {{ StringFormatter::formatDateTime($invoice->generated) }}<br/>
             Booking Ref: {{ $order->booking_reference }}<br/>
         </div>
     </div>
@@ -46,7 +55,7 @@
             <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}">
         </div>
         <div class="header-company-details">
-            Website: {{ URL::to('/') }}<br/>
+            Website: <a href="{{ URL::to('/') }}">{{ URL::to('/') }}</a><br/>
             Email: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}<br/>
             Telephone: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}<br/>
         </div>
@@ -54,7 +63,7 @@
 </div>
 <div class="section">
     <div class="header-cell">
-        {{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}<br /><br />
+        {{ $order->leadBooker->customer_name }}<br /><br />
         {{-- Only include a newline if the address part is included --}}
         {{ $order->leadBooker->customer->billingAddress->address_line_1 }}{!! isset($order->leadBooker->customer->billingAddress->address_line_1) ? "<br />" : "" !!}
         {{ $order->leadBooker->customer->billingAddress->address_line_2 }}{!! isset($order->leadBooker->customer->billingAddress->address_line_2) ? "<br />" : "" !!}
@@ -78,27 +87,22 @@
             <th scope="col" class="amount">Amount</th>
         </tr>
         </thead>
-        @foreach($orderCustomers as $oCustomer)
+        @foreach($invoice->customers as $name => $data)
             <tr>
                 <td colspan="3" class="t-align-center">
-                    <strong>{{ $oCustomer['customer']->customer->title }} {{ $oCustomer['customer']->customer->first_name }} {{ $oCustomer['customer']->customer->middle_names }} {{ $oCustomer['customer']->customer->last_name }}</strong>
+                    <strong>{{ $name }}</strong>
                 </td>
             </tr>
-            @include('partials.pdf.invoices.row',
-                        ['quantity' => "",
-                        'description' => "<strong>Base Cost of Package, including:</strong>\n" . $oCustomer['included'],
-                        'cost' => \StringFormatter::formatCurrency($order->tour->base_price_per_person),
-                        'class' => $order->tour->base_price_per_person > 0  ? "amount-negative" : "amount-positive"])
-            @foreach($oCustomer['items'] as $item)
+            @foreach($data['billables'] as $billable)
                 @include('partials.pdf.invoices.row',
-                        ['quantity' => $item['quantity'],
-                        'description' => $item['description'],
-                        'cost' => \StringFormatter::formatCurrency($item['cost']),
-                        'class' => $item['cost'] > 0  ? "amount-negative" : "amount-positive"])
+                        ['quantity' => "",
+                        'description' => $billable['description'],
+                        'cost' => \StringFormatter::formatCurrency($billable['cost']),
+                        'class' => $billable['cost'] > 0  ? "amount-negative" : "amount-positive"])
             @endforeach
             <tr>
                 <td></td>
-                <td colspan="2" class="t-align-right"><strong>Total: {{ \StringFormatter::formatCurrency($oCustomer['cost']) }}</strong></td>
+                <td colspan="2" class="t-align-right"><strong>Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</strong></td>
             </tr>
         @endforeach
         <tr>
@@ -106,21 +110,21 @@
                 <strong>Order Adjustments</strong>
             </td>
         </tr>
-        @foreach($adjustments as $adjustment)
+        @foreach($invoice->adjustments['billables'] as $billable)
             @include('partials.pdf.invoices.row',
                     ['quantity' => "",
-                    'description' => $adjustment['reason'] . ' (' . StringFormatter::formatDateTime($adjustment['date']) . ')',
-                    'cost' => StringFormatter::formatCurrency($adjustment['amount']),
-                    'class' => $adjustment['amount'] > 0  ? "amount-negative" : "amount-positive"])
+                    'description' => $billable['description'],
+                    'cost' => StringFormatter::formatCurrency( $billable['cost']),
+                    'class' => $billable['cost'] > 0  ? "amount-negative" : "amount-positive"])
         @endforeach
         <tr>
             <td></td>
-            <td colspan="2" class="t-align-right"><strong>Total: {{ StringFormatter::formatCurrency($totals['adjusted']) }}</strong></td>
+            <td colspan="2" class="t-align-right"><strong>Total: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</strong></td>
         </tr>
     </table>
 </div>
 <div class="section t-align-right">
-    <h2>Total Amount Owed: {{ StringFormatter::formatCurrency($totals['orderValue'] + $totals['adjusted']) }}</h2>
+    <h2>Total Amount Owed: {{ StringFormatter::formatCurrency($invoice->total_cost) }}</h2>
 </div>
 <div class="section t-align-center">
     <h2>Payments</h2>
@@ -134,20 +138,20 @@
             <th scope="col" class="amount">Amount</th>
         </tr>
         </thead>
-        @foreach($payments as $payment)
+        @foreach($invoice->payments['billables'] as $billable)
             @include('partials.pdf.invoices.row',
-                    ['quantity' => StringFormatter::formatDateTime($payment['date']),
-                    'description' => $payment['method'],
-                    'cost' => StringFormatter::formatCurrency($payment['amount']),
+                    ['quantity' => StringFormatter::formatDateTime($billable['date']),
+                    'description' => $billable['description'],
+                    'cost' => StringFormatter::formatCurrency($billable['cost']),
                     'class' => "amount",])
         @endforeach
     </table>
 </div>
 <div class="section t-align-right">
-    <h2>Total Paid: {{ StringFormatter::formatCurrency($totals['paid']) }}</h2>
+    <h2>Total Paid: {{ StringFormatter::formatCurrency($invoice->payments['total_cost']) }}</h2>
 </div>
 <div class="t-align-right">
-    <h2>Remaining Amount: {{ StringFormatter::formatCurrency($totals['combined']) }}</h2>
+    <h2>Remaining Amount: {{ StringFormatter::formatCurrency($invoice->total_cost - $invoice->payments['total_cost']) }}</h2>
 </div>
 </body>
 </html>
