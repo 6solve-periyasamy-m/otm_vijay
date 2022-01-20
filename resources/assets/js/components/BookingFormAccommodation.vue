@@ -103,8 +103,8 @@ export default {
             console.log('accommodation: booking created', booking)
         })
         bus.$on("TravellerBookingsLoaded", (travellers) => {
-            this.debug>2 && console.log("Accommodation: travellers loaded", travellers)
-            travellers.map(traveller => this.travellers.push(traveller))
+            this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
+            travellers.map(traveller => this.travellers.push(traveller));
             this.loadAccommodationBooking(this.travellers)
         })
         bus.$emit('loadOthers', this.group)
