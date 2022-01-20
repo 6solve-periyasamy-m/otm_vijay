@@ -16,7 +16,7 @@ use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\TransportBookingRepository;
-use App\Repository\AdditionalTravellerRepository;
+use App\Repository\TravellerBookingRepository;
 
 class BookingController extends ApiController
 {
@@ -61,7 +61,11 @@ class BookingController extends ApiController
 
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->create($customer_id, $tour_id, $token);
-Log::debug('Booking:Create', [$tour_id, $token]);
+
+        $travellerBookingRepo = new TravellerBookingRepository();
+        $traveller_id = $travellerBookingRepo->create($booking->id, $customer_id);
+
+        // Log::debug('Booking:Create', [$tour_id, $token]);
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
@@ -74,12 +78,15 @@ Log::debug('Booking:Create', [$tour_id, $token]);
         }
         $tour = $booking->tour;
         $customerRepo = new CustomerRepository();
-        $travellerRepo = new AdditionalTravellerRepository();
+        $travellerRepo = new TravellerBookingRepository();
         $flightsBookingRepo = new FlightBookingRepository();
         $accommodationRepo = new AccommodationRepository();
 
         $customer = $customerRepo->get($booking->customer_id);
         $travellers = $travellerRepo->getGroup($booking->id);
+        foreach($travellers as &$traveller) {
+            $traveller->customer = $customerRepo->get($traveller->customer_id);
+        }
         $flightsOutbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Outbound', 'Included');
         $flightsInbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Inbound', 'Included');
         $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
@@ -89,13 +96,16 @@ Log::debug('Booking:Create', [$tour_id, $token]);
         $activities = $activityBookingRepo->getBookingsForTour($booking);
         $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
 
-        return response()->json(['success' => true,
-            'customer' => $customer,
-            'travellers' => $travellers,
-            'flights' => ['outbound' => $flightsOutbound, 'inbound' => $flightsInbound],
-            'accommodations' => $accommodation,
-            'activities' => $activities,
-            'transports' => $transports
+        return response()->json([
+            'success' => true, 
+            'booking' => [
+                'customer' => $customer,
+                'travellers' => $travellers,
+                'flights' => ['outbound' => $flightsOutbound, 'inbound' => $flightsInbound],
+                'accommodations' => $accommodation,
+                'activities' => $activities,
+                'transports' => $transports
+            ]
         ]);
     }
 }

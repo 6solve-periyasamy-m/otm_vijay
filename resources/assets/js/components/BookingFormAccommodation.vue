@@ -11,22 +11,18 @@
                 <div v-if="showRegistered">
 
                     <h2>Accommodation Registered</h2>
-                    <div v-for="accommodation in accommodations" class="row"> 
-
+                    <div v-for="accommodation in accommodations" class="row">
                         <div class="col">{{accommodation.first_name}} {{accommodation.last_name}}</div>
                         <div class="col">{{accommodation.room ? accommodation.room['room_type_name'] : ''}}</div>
                         <div class="col" :class="`colorise-${accommodation.accommodation_inventory_tour_id} % 4`">{{accommodation.accommodation_name}} {{accommodation.maximum_occupancy}}</div>
                         <div class="col">{{accommodation.room_type_name}} {{accommodation.board_type_name}} {{accommodation.shared?'sharer':''}}</div>
                         <div class="col">{{accommodation.shared !== undefined && accommodation.shared.sharename !== null ? accommodation.shared.sharename : '-'}}</div>
                         <div class="col">{{accommodation.shared !== undefined && accommodation.shared.sharename !== undefined && accommodation.shared.sharename.length ? accommodation.shared.sharename.join(',') : '-'}}</div>
-
                     </div>
                     <button class="btn btn-default" @click="resetButton">Reset</button>
-    
                 </div>
                 <div v-else>
                     <h2>Accommodation options</h2>
-                    <!-- {{travellers}} -->
                     <div class="accommodation_travellers" v-for="(traveller, index) in group" v-bind:key="index">
                         <div class="accommodation_traveller">
                             <div class="accommodation_traveller__name">
@@ -42,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-default" @click="reloadButton">Reset</button>
+                    <button class="btn btn-default" @click="resetButton">Reset</button>
                     <button class="btn btn-primary" @click="register">register</button>
                     <p>Set your preferred accommodation selections and register to save settings. Availability of your settings is confirmed when the booking is completed.</p>
                 </div>
@@ -52,9 +48,9 @@
 </template>
 
 <script>
-import dates from "../utilities";
-import { bus } from "../bus";
 import Vue from "vue";
+import { bus } from "../bus";
+import dates from "../utilities";
 import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
 /**
  * accommodation is found related to the tour
@@ -86,10 +82,10 @@ export default {
     components: { AccommodationRoomSelection },
     props: ["tour"],
     data() {
-        return initialState();
+        return initialState()
     },
     mounted() {
-        
+        // console.log('Accommodation component mounted')
     },
     created() {
         let that = this
@@ -103,33 +99,34 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on("additionalTravellersLoaded", (travellers) => {
-            this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
-            travellers.map(traveller => this.travellers.push(traveller));
+        bus.$on('bookingCreated', (booking) => {
+            console.log('accommodation: booking created', booking)
+        })
+        bus.$on("TravellerBookingsLoaded", (travellers) => {
+            this.debug>2 && console.log("Accommodation: travellers loaded", travellers)
+            travellers.map(traveller => this.travellers.push(traveller))
             this.loadAccommodationBooking(this.travellers)
         })
         bus.$emit('loadOthers', this.group)
     },
-    methods: {
+    methods: {  
         setup() {
-            return
-
             if (this.group != undefined && this.group.length) {
                 this.group.map(t => {
                     t.shared = false
                 })
             } else {
-                console.log('ACCOMODATION MODULE GROUP IS NOT DEFINED');
+                console.log('ACCOMODATION MODULE GROUP IS NOT DEFINED')
             }
             console.log('setup', this.group)
         },
         eventInit() {
             let that = this
             bus.$on('setRoomSelection', function(traveller, room) {
-                console.log('setRoomSelection', traveller, room)
                 that.travellers.filter(t => t.id == traveller.id).map(t => t.room_selected = room)
                 const others = that.others.filter(t => t.id != traveller.id)
                 bus.$emit('setOthers', others, traveller)
+                bus.$emit('ReloadBooking', that.booking_token)
                 that.others = others
             })
             bus.$on('setRoomShare', function(traveller, sharer, room) {
@@ -156,30 +153,26 @@ export default {
                     return t.id != sharer.id
                 })
                 that.group = reducedGroup
-
+                bus.$emit('BookingReload', that.booking_token)
                 that.$forceUpdate()
             })
             bus.$on('AccommodationRoomSelectorReset', function(bookings, group) {
-                console.log('AccommodationRoomSelectorReset accommodations:',bookings, group)
-                // console.log('AccommodationRoomSelectorReset', bookings.map(a => a.room)) //, that.room_selection);
+                // console.log('AccommodationRoomSelectorReset accommodations:',bookings, group)
                 const url = '/api/booking/accommodation/delete'
                 const groupIds = group.map(g => g.order_customer_id)
                 const inventoryTourIds = that.room_selection.map(booking => {
-                    console.log('booking: ', booking)
+                    // console.log('booking: ', booking)
                     return booking.inventory_tour_id
                 })
                 const data = {
-                    //tour_id: that.tour.id,
                     inventoryTourIds: inventoryTourIds,
                     groupIds: groupIds
                 }
-                // axios.post(url, data)
-                //     .then(response => console.log('reset response', response))
-                //     .catch(error => console.log('error', error))
+                this.$emit('BookingReload', this.booking_token)
             })
             bus.$on('accommodationBookingsLoaded', function(booked) {
                 that.booked = booked
-                console.log('---- that.booked set', that.booked)
+                // console.log('---- that.booked set', that.booked)
             })
         },
         init() {
@@ -199,24 +192,20 @@ export default {
             })
             this.getAccommodationOptions()
         },
-        reloadButton() {
-            document.location.reload()
-        },
         resetButton() {
-            console.log('reset: ', this.travellers)
-
             // bus.$emit('AccommodationRoomSelectorReset', this.booked, this.group)
             // Object.assign(this.$data, initialState())
             this.init()
-            // this.$forceUpdate()
-            // this.setup()
+            this.$forceUpdate()
+            this.setup()
             this.showAccommodation = true
-            this.showRegistered = false            
+            this.showRegistered = false
+            this.$emit('ReloadBooking', this.booking_token)
             console.log('reset: ', this.travellers)
 
         },
         register() {
-            console.log('register ... travellers', this.travellers)
+            console.log('Accommodation register ... travellers', this.travellers)
             this.travellers.map(traveller => {
                 let that = this
                 const data = {}
@@ -234,7 +223,7 @@ export default {
                 data.customer_id = traveller.id
                 data.room = traveller.room_selected //this.room_selection[traveller.id]
                 this.accommodations = []
-                console.log('booking reservation:', traveller, data)
+                console.log('>><<>><<>><<>> booking reservation:', traveller, data)
                 axios.post('/api/booking/accommodation/reserve', {
                         type: 'accommodation',
                         traveller: data,
@@ -247,6 +236,7 @@ export default {
                         let accommodation = response.data.accommodation
                         that.loadAccommodationBooking(that.travellers)
                         that.showRegistered = true
+                        bus.$emit('ReloadBooking', that.booking_token)
                         //that.accommodations=accommodation
                         //console.log('registered accommodations', accommodation, accommodation.length > 0, accommodation.length > 1)
                         // if (response.data.accommodation) {

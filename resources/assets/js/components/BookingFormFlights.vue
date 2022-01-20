@@ -163,7 +163,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: 9,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
@@ -236,15 +236,15 @@ export default {
 
         this.debug>1 && console.log('BookingFormFlights created', this.booking_id, that.booking_token, that.leadTraveller);
 
-        bus.$on('setBookingToken', (bookingData) => {
-            that.booking_token = bookingData
+        bus.$on('setBookingToken', (token) => {
+            that.booking_token = token
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
             that.getFlights(that.tour)
             that.loadFlightsForBooking(that.booking_token)
         })
 
-        bus.$on('additionalTravellersLoaded', travellers => {
-            this.debug>1 && console.log(`${that.moduleName}: additionalTravellersLoaded`, travellers)
+        bus.$on('TravellerBookingsLoaded', travellers => {
+            this.debug>1 && console.log(`${that.moduleName}: TravellerBookingsLoaded`, travellers)
             that.travellers = travellers
         })
 
@@ -392,6 +392,7 @@ export default {
                 .then(response => {
                     that.debug > 3 && console.log('flight booking response', response)
                     that.loadFlightsForBooking(that.booking_id)
+                    bus.$emit('ReloadBooking', token)
                 })
                 .catch(error => {
                     console.log(error)

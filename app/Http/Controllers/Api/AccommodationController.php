@@ -15,7 +15,7 @@ use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 
 use App\Repository\AccommodationRepository;
-use App\Repository\AdditionalTravellerRepository;
+use App\Repository\TravellerBookingRepository;
 use App\Repository\BookingRepository;
 
 class AccommodationController extends ApiController
@@ -71,7 +71,7 @@ class AccommodationController extends ApiController
     {
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($token);
-        $traveller = new AdditionalTravellerRepository();
+        $traveller = new TravellerBookingRepository();
 
         $travellers = $traveller->getGroup($booking->id);
         $ids = $travellers->map(function($item, $key) {

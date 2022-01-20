@@ -19,8 +19,6 @@ use App\Models\FlightInventoryTour;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController;
 
-// TODO: refactor
-
 class FlightDetailsController extends ApiController
 {
     /**
@@ -34,9 +32,12 @@ class FlightDetailsController extends ApiController
     private function storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour)
     {
         $bookingFlight = new BookingFlight();
-        $existing = $bookingFlight->where('flight_type', $flight_type)->where('booking_id', $booking->id)->where('customer_id', $booking->customer_id)->first();
+        $existing = $bookingFlight->where('flight_type', $flight_type)
+            ->where('booking_id', $booking->id)
+            ->where('customer_id', $booking->customer_id)
+            ->first();
+
         if (empty($existing)) {
-            Log::debug('storeOrUpdateFlightBooking: NEW ', [$existing, $booking, $flightInventoryTour]);
             $bookingFlight->booking_id = $booking->id;
             $bookingFlight->customer_id = $booking->customer_id;
             $bookingFlight->flight_type = $flight_type;
@@ -46,14 +47,10 @@ class FlightDetailsController extends ApiController
                 throw new Exception('can not store a new flight booking with the flightInventoryTour (id)');
             }
         } else {
-            Log::debug('storeOrUpdateFlightBooking: existing ', [$existing, $booking, $flightInventoryTour]);
-
             $bookingFlight = $existing;
             $bookingFlight->flight_inventory_tour_id = $flightInventoryTour->id;
         }
         
-        Log::debug('storeOrUpdateFlightBooking', [$bookingFlight]);
-
         try {
             $bookingFlight->save();
         } catch (Exception $e) {
@@ -62,13 +59,17 @@ class FlightDetailsController extends ApiController
 
         return $bookingFlight;
     }
+
     private function getFlightInventoryTour($inventory_tour_id)
     {
-Log::debug('pre getFlightInventoryTour:', [$inventory_tour_id]);
         $flightInventoryTour = FlightInventoryTour::where('id', $inventory_tour_id)->whereNull('deleted_at')->first();
-Log::debug('getFlightInventoryTour:', [$inventory_tour_id, $flightInventoryTour]);
+        if (empty($flightInventoryTour) || $flightInventoryTour->count() === 0) {
+            throw new Exception('no Flight InventoryTour record for '.$inventory_tour_id);
+        }
+
         return $flightInventoryTour;
     }
+
     /**
      * bookFlightDetails  WIP (convert to booking tables)
      * save flight details for a pax tour flight
@@ -107,7 +108,6 @@ Log::debug('getFlightInventoryTour:', [$inventory_tour_id, $flightInventoryTour]
 
         $tours = new Tour();
         $rejection = 0;
-Log::debug('inventory_tour_id:', [$flight_inventory_tour_id]);
         // validate parameters are valid
         if ($flight_inventory_tour_id) {
             $flightInventoryTour = $this->getFlightInventoryTour($flight_inventory_tour_id);
@@ -131,14 +131,8 @@ Log::debug('inventory_tour_id:', [$flight_inventory_tour_id]);
         if ($customer_id !== $booking->customer_id) {
             throw new Exception('BookFlightDetails: booking and customer IDs do not agree');
         }
-Log::debug('flightInventoryTour', [$flightInventoryTour]);
         if (isset($flightInventoryTour)) {
             $result = $this->storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour);
-            //$result = $this->storeOrUpdateCustomerOrderDetail($orderCustomer, $flightTour, $flight_type, $custom, $token);
-            $this->logging && Log::info('storeOrUpdateCustomerOrderDetail returned!', [$result]);
-        // } else {
-        //     $this->logging && Log::info('removeCustomerOrderDetail');
-        //     $result = $this->removeFlightBooking($booking, $flightInventoryTour);
         } else {
             throw new Exception('ERROR: can not store a flight without a flightInventoryTour record');
         }

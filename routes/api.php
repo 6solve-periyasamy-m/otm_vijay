@@ -75,7 +75,7 @@ Route::prefix('booking')->group(function () {
     // Travellers
     Route::get('/tourparty', [CustomerController::class, 'getTravellers']);
     Route::get('/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
-    Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadAdditionalTravellers']);
+    Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadTravellers']);
 
     // Flights
     Route::get('/flight/bookings/{booking_token}/{type?}', [FlightController::class, 'loadFlightsForBooking']);
@@ -93,8 +93,8 @@ Route::prefix('booking')->group(function () {
 
     // store travellers
     Route::post('/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
-    Route::post('/additional-traveller', [BookingCustomerController::class, 'additionalTraveller']);
-    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeAdditionalTraveller']);
+    Route::post('/additional-traveller', [BookingCustomerController::class, 'travellerBooking']);
+    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeTravellerBooking']);
     Route::post('/customer/email/check', [CustomerController::class, 'findCustomerByEmail']);
 
     // is email registered
