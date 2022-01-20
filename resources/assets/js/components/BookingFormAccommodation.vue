@@ -97,14 +97,14 @@ export default {
 
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
-            that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+            that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
         bus.$on('bookingCreated', (booking) => {
             console.log('accommodation: booking created', booking)
         })
         bus.$on("TravellerBookingsLoaded", (travellers) => {
-            this.debug>2 && console.log("Accommodation: travellers loaded", travellers)
-            travellers.map(traveller => this.travellers.push(traveller))
+            this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
+            travellers.map(traveller => this.travellers.push(traveller));
             this.loadAccommodationBooking(this.travellers)
         })
         bus.$emit('loadOthers', this.group)
@@ -130,7 +130,7 @@ export default {
                 that.others = others
             })
             bus.$on('setRoomShare', function(traveller, sharer, room) {
-                that.debug > 2 && console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
+                that.debug > 2 && console.log('setRoomShare for traveller', traveller.first_name, sharer.first_name)
                 if (typeof traveller.shares == 'undefined') {
                     traveller.shares = []
                 }
@@ -280,7 +280,6 @@ export default {
                     } else {
                         console.log('null data?', response)
                     }
-                    console.log('>>>>>> getAccommodationOptions <<<<<')
                 })
                 .catch((error) => console.log(error))
         },
