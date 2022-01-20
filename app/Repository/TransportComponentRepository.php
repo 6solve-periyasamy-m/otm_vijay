@@ -69,6 +69,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         $orderComponent = OrderTransport::create([
             'order_customer_id' => $oCustomerId,
             'transport_inventory_tour_id' => $transportInventoryTourId,
+            'cost' => TransportInventoryTour::findOrFail($transportInventoryTourId)->tour_sales_price,
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent;

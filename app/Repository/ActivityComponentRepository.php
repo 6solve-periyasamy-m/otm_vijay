@@ -71,6 +71,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $orderComponent = OrderActivity::create([
             'order_customer_id' => $oCustomerId,
             'activity_inventory_tour_id' => $activityInventoryTourId,
+            'cost' => ActivityInventoryTour::findOrFail($activityInventoryTourId)->tour_sales_price,
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent;

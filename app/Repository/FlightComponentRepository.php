@@ -69,6 +69,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         $orderComponent = OrderFlight::create([
             'order_customer_id' => $oCustomerId,
             'flight_inventory_tour_id' => $flightInventoryTourId,
+            'cost' => FlightInventoryTour::findOrFail($flightInventoryTourId)->tour_sales_price,
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent;

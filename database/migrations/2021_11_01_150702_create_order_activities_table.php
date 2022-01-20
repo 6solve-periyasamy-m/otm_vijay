@@ -17,6 +17,7 @@ class CreateOrderActivitiesTable extends Migration
             $table->id();
             $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
             $table->foreignId('activity_inventory_tour_id')->constrained()->onDelete('cascade');
+            $table->float('cost', 2);
             $table->timestamps();
             $table->softDeletes();
         });

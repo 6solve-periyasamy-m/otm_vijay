@@ -75,7 +75,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $orderComponent = OrderAccommodation::create([
             'order_customer_id' => $oCustomerId,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
-            'share_with_user_id' => null
+            'share_with_user_id' => null,
+            'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent;

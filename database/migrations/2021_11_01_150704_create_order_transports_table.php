@@ -17,6 +17,7 @@ class CreateOrderTransportsTable extends Migration
             $table->id();
             $table->foreignId('order_customer_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('transport_inventory_tour_id')->nullable()->constrained()->onDelete('cascade');
+            $table->float('cost', 2);
             $table->timestamps();
             $table->softDeletes();
         });
