@@ -48,7 +48,45 @@
                 </div>
             </div>
             <div class="row">
-    
+                <div class="price">
+                    Accommodation
+                </div>
+                <div class="price_amount">
+                    {{priceFormat(totals.accommodations)}} x {{travellers}} = {{priceFormat(travellers * totals.accommodations)}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="price">
+                    Flights
+                </div>
+                <div class="price_amount">
+                    {{priceFormat(totals.flights)}} x {{travellers}} = {{priceFormat(travellers * totals.flights)}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="price">
+                    Activities
+                </div>
+                <div class="price_amount">
+                    {{priceFormat(totals.activities)}} x {{travellers}} = {{priceFormat(travellers * totals.activities)}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="price">
+                    Transport
+                </div>
+                <div class="price_amount">
+                    {{priceFormat(totals.transports)}} x {{travellers}} = {{priceFormat(travellers * totals.transports)}}
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="price">
+                    Tour Price total
+                </div>
+                <div class="price_amount">
+                    {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
+                </div>
             </div>
         </div>
     </div>
@@ -67,7 +105,9 @@ export default {
             booking_token: null,
             debug: 3,
             paymentsActive: false,
-            booking: {}
+            booking: {},
+            totals: {},
+            totalPrice: 0
         }    
     },
     created() {
@@ -81,15 +121,35 @@ export default {
             this.debug>2 && console.log(">>>> Payment: booking reloaded", token);
             if (this.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
                 this.loadBooking(this.booking_token)
+                this.calcPrice()
             } else {
                 console.log('Payment ignored: ', token);
             }
         })
+        console.log('payment created')
     },
     mounted() {
-
+        console.log('payment mounted')
+        this.loadBooking(this.booking_token)
+    },
+    computed: {
+        travellers: function() {
+            return this.booking.travellers.length
+        }
     },
     methods: {
+        priceFormat(a) {
+            const currency = 'GBP'
+            // Create our number formatter.
+            let formatter = new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: currency
+            })
+            return formatter.format(a)
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+        },
         formatDate(s) {
             return dates.makeDateFromString(s)
         },
@@ -106,12 +166,77 @@ export default {
                     console.log(error)
                 })
         },
+        calcPrice() {
+            let price = 0
+            this.totals = {accommodations:0, flights:0, activities:0, transports:0}
+            this.totalPrice = 0
+            console.log('calcPrice', this.booking)
+            if (this.booking.accommodations != undefined) {
+                this.booking.accommodations.map(a => {
+                    if (a.tour_sales_price > 0) {
+                        price += a.tour_sales_price
+                    } else {
+                        price += a.sales_price
+                    }
+                })
+
+            }
+            this.totals.accommodations = price
+            this.totalPrice += price
+
+            price = 0
+            if (this.booking.flights != undefined) {
+                this.booking.flights.inbound.map(f => {
+                    if (f.tour_sales_price > 0) {
+                        price += f.tour_sales_price
+                    } else {
+                        price += f.sales_price
+                    }
+                })
+                this.booking.flights.outbound.map(f => {
+                    if (f.tour_sales_price > 0) {
+                        price += f.tour_sales_price
+                    } else {
+                        price += f.sales_price
+                    }
+                })
+            }
+            this.totals.flights = price
+            this.totalPrice += price
+
+            price = 0
+            if (this.booking.activities != undefined) {
+                this.booking.activities.map(a => {
+                    if (a.tour_sales_price > 0) {
+                        price += a.tour_sales_price
+                    } else {
+                        price += a.sales_price
+                    }
+                })
+            }
+            this.totals.activities = price
+            this.totalPrice += price
+    console.log('*** price calcs', this.totals, price, this.booking.activities)
+            price = 0
+            if (this.booking.transports != undefined) {
+                this.booking.accommodations.map(a => {
+                    if (a.tour_sales_price > 0) {
+                        price += a.tour_sales_price
+                    } else {
+                        price += a.sales_price
+                    }
+                })
+            }
+            this.totals.transports += price
+            this.totalPrice += price
+        },
         loadBooking(token) {
             let that = this
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     console.log('>>>> booking data ', response.data)
                     that.booking = response.data.booking
+                    that.calcPrice()
                     // that.booking.accommodation = response.data.accommodation
                     // that.booking.customer = response.data.customer
                     // that.booking.travellers = response.data.travellers
@@ -132,5 +257,13 @@ export default {
 <style scoped lang="scss">
 .block {
     margin-bottom: 1rem;
+}
+.price {
+    width: 20rem;
+    margin-left: 10rem;
+}
+.price_amount {
+    width: 20rem;
+    text-align: right;
 }
 </style>

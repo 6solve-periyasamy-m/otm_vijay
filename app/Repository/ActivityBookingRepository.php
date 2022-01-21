@@ -36,6 +36,8 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.notes as activity_notes', 
                     'activity_inventory_tours.id as activity_inventory_tour_id', 
                     'activity_inventories.starts_at', 'activity_inventories.ends_at',
+                    // 'activity_inventories.sale_price', 'activity_inventories.purchase_price',
+                    // 'acitity_inventory_tours.tour_sale_price',
                     'ticket_types.name as ticket_type_name')
                 ->join('activity_inventory_tours', 'booking_activities.activity_inventory_tour_id', 'activity_inventory_tours.id')
                 ->join('activity_inventories', 'activity_inventory_tours.activity_inventory_id', 'activity_inventories.id')
@@ -70,6 +72,8 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.notes as activity_notes', 
                     'activity_inventory_tours.id as activity_inventory_tour_id', 
                     'activity_inventories.starts_at', 'activity_inventories.ends_at',
+                    'activity_inventories.sales_price', 'activity_inventories.purchase_price',
+                    'activity_inventory_tours.tour_sales_price',
                     'ticket_types.name as ticket_type_name')
                 ->where('tour_id', $tour->id)
                 ->whereNull('activities.deleted_at')

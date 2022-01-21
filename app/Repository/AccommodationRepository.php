@@ -87,6 +87,8 @@ class AccommodationRepository implements AccommodationRepositoryInterface
                 'booking_accommodations.accommodation_inventory_tour_id',
                 'accommodation_inventory_tours.booking_policy', 'room_types.maximum_occupancy',
                 'accommodations.name as accommodation_name',
+                'accommodation_inventory_tours.tour_sales_price',
+                'accommodation_inventories.sales_price', 'accommodation_inventories.purchase_price',
                 'board_types.name as board_type_name', 'room_types.name as room_type_name')
             ->join('accommodation_inventory_tours', 'booking_accommodations.accommodation_inventory_tour_id', 'accommodation_inventory_tours.id')
             ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
@@ -99,7 +101,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             $bookings = $bookingObj->get();
             Log::debug('getAccommodationBooking', [$booking, $travellerIds, $bookings]);
         } catch (Exception $e) {
-            Log::error('Retrieving booking data error', $e->getMessage());
+            Log::error('Retrieving booking data error: ' . $e->getMessage());
         }
 
         return $bookings;

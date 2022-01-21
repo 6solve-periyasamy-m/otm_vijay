@@ -390,9 +390,10 @@ export default {
             this.debug>1 && console.log('booking a flight', data);
             axios.post('/api/booking/flight', data)
                 .then(response => {
-                    that.debug > 3 && console.log('flight booking response', response)
+                    that.debug > 3 && console.log('flight booking update response', response)
                     that.loadFlightsForBooking(that.booking_id)
-                    bus.$emit('ReloadBooking', token)
+    console.log('FLIGHTS reloading data')
+                    this.$emit('ReloadBooking', this.booking_token)
                 })
                 .catch(error => {
                     console.log(error)
