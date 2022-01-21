@@ -179,7 +179,6 @@ export default {
                         price += a.sales_price
                     }
                 })
-
             }
             this.totals.accommodations = price
             this.totalPrice += price
@@ -216,7 +215,6 @@ export default {
             }
             this.totals.activities = price
             this.totalPrice += price
-    console.log('*** price calcs', this.totals, price, this.booking.activities)
             price = 0
             if (this.booking.transports != undefined) {
                 this.booking.accommodations.map(a => {
