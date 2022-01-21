@@ -242,6 +242,12 @@ class OrderRepository
         ]);
     }
 
+    public static function saveInvoice(Order $order) {
+        $invoice = self::generateInvoice($order);
+        $invoice->save();
+        return $invoice;
+    }
+
     private static function processCustomerComponentsForInvoice(OrderCustomer $orderCustomer): array
     {
         $data = [];
