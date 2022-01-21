@@ -17,7 +17,7 @@ class CreateOrderFlightsTable extends Migration
             $table->id();
             $table->foreignId('order_customer_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('flight_inventory_tour_id')->nullable()->constrained()->onDelete('cascade');
-            $table->float('cost', 2);
+            $table->decimal('cost');;
             $table->timestamps();
             $table->softDeletes();
         });

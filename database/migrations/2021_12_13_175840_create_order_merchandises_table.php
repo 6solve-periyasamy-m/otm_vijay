@@ -17,7 +17,7 @@ class CreateOrderMerchandisesTable extends Migration
             $table->id();
             $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
             $table->foreignId('merchandise_id')->constrained()->onDelete('cascade');
-            $table->float('cost', 2);
+            $table->decimal('cost');
             $table->timestamps();
             $table->softDeletes();
         });
