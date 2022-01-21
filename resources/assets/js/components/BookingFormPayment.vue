@@ -48,7 +48,12 @@
                 </div>
             </div>
             <div class="row">
-    
+                <div class="price">
+                    Tour Price total
+                </div>
+                <div class="price_amount">
+                    {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
+                </div>
             </div>
         </div>
     </div>
@@ -81,15 +86,38 @@ export default {
             this.debug>2 && console.log(">>>> Payment: booking reloaded", token);
             if (this.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
                 this.loadBooking(this.booking_token)
+                this.calcPrice()
             } else {
                 console.log('Payment ignored: ', token);
             }
         })
+        console.log('payment created')
     },
     mounted() {
-
+        console.log('payment mounted')
+        this.calcPrice()
+    },
+    computed: {
+        travellers: function() {
+            return this.booking.travellers.length
+        },
+        totalPrice: function() {
+            return this.calcPrice()
+        }
     },
     methods: {
+        priceFormat(a) {
+            const currency = 'GBP'
+            // Create our number formatter.
+            let formatter = new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: currency
+            })
+            return formatter.format(a)
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+        },
         formatDate(s) {
             return dates.makeDateFromString(s)
         },
@@ -105,6 +133,54 @@ export default {
                 .catch(error => {
                     console.log(error)
                 })
+        },
+        calcPrice() {
+            let price = 0
+            console.log('calcPrice', this.booking)
+            if (this.booking.accommodations != undefined) {
+                this.booking.accommodations.map(a => {
+                    if (a.tour_sales_price > 0) {
+                        price += a.tour_sales_price
+                    } else {
+                        price += a.sales_price
+                    }
+                })
+            }
+            if (this.booking.flights != undefined) {
+                this.booking.flights.inbound.map(f => {
+                    if (f.tour_sales_price > 0) {
+                        price += f.tour_sales_price
+                    } else {
+                        price += f.sales_price
+                    }
+                })
+                this.booking.flights.outbound.map(f => {
+                    if (f.tour_sales_price > 0) {
+                        price += f.tour_sales_price
+                    } else {
+                        price += f.sales_price
+                    }
+                })
+            }
+            if (this.booking.activities != undefined) {
+                this.booking.accommodations.map(a => {
+                    if (a.tour_sales_price > 0) {
+                        price += a.tour_sales_price
+                    } else {
+                        price += a.sales_price
+                    }
+                })
+            }
+            if (this.booking.transports != undefined) {
+                this.booking.accommodations.map(a => {
+                    if (a.tour_sales_price > 0) {
+                        price += a.tour_sales_price
+                    } else {
+                        price += a.sales_price
+                    }
+                })
+            }
+            return price
         },
         loadBooking(token) {
             let that = this

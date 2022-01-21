@@ -35,7 +35,8 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
                 'flight_inventories.travel_class_id',
                 'travel_classes.name as travel_class',
                 'flight_inventory_tours.tour_component_type', 
-                'flight_inventory_tours.flight_type', 
+                'flight_inventory_tours.flight_type',
+                'flight_inventories.sales_price', 'flight_inventories.purchase_price',
                 'flight_inventory_tours.tour_sales_price') 
             ->join('bookings', 'booking_flights.booking_id', 'bookings.id')
             ->join('flight_inventory_tours', 'flight_inventory_tours.id', 'booking_flights.flight_inventory_tour_id')
@@ -46,7 +47,6 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
             ->where('bookings.id', $booking_id)
             ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
             ->whereNull('bookings.deleted_at');
-Log::info($flightBooking->toSql());
         if ($type !== 'Both') {
             $flightBooking = $flightBooking->where('flight_inventory_tours.flight_type', $type);
         }
