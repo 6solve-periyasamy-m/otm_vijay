@@ -47,6 +47,7 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TourController;
@@ -692,6 +693,19 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     });
 
     Route::prefix('reports')->group(function () {
+        Route::prefix('bespoke')->group(function () {
+            Route::get('/', [BespokeReportController::class, 'index'])->name('reports.bespoke.all');
+            Route::get('create/{parent}', [BespokeReportController::class, 'create'])->name('reports.bespoke.create');
+            Route::post('temporary', [BespokeReportController::class, 'showTemporary'])->name('reports.bespoke.temporary.show');
+            Route::prefix('{report}')->group(function () {
+                Route::get('view', [BespokeReportController::class, 'show'])->name('reports.bespoke.show');
+                Route::get('edit', [BespokeReportController::class, 'edit'])->name('reports.bespoke.edit');
+                Route::post('edit', [BespokeReportController::class, 'update'])->name('reports.bespoke.update');
+                Route::get('export/{extension}', [BespokeReportController::class, 'export'])->name('reports.bespoke.export');
+                Route::post('delete', [BespokeReportController::class, 'delete'])->name('reports.bespoke.delete');
+            });
+
+        });
         Route::get('/', [ReportController::class, 'viewReports'])->name('reports.all');
         Route::get('/orders', [ReportController::class, 'getOrderReport'])->name('reports.order');
         Route::get('/orders/{extension}', [ReportController::class, 'exportOrderReport'])->name('reports.order.export');

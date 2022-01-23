@@ -13,6 +13,7 @@ class OrderFlight extends Model
     use SoftDeletes;
 
     protected $fillable = ['order_customer_id', 'flight_inventory_tour_id'];
+    public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
     public static function findByOrderCustomer($orderCustomerId)
     {
@@ -21,9 +22,10 @@ class OrderFlight extends Model
         return $orderFlights;
     }
 
+    // TODO: Deprecate
     public function orderCustomers()
     {
-        return $this->belongsTo(OrderCustomer::class);
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
     public function flight()
@@ -54,5 +56,30 @@ class OrderFlight extends Model
     public function isCancelled(): bool
     {
         return $this->orderCustomers->order->cancelled;
+    }
+
+    public function tourComponent()
+    {
+        return $this->flightInventoryTour();
+    }
+
+    public function getDetailsAttribute()
+    {
+        return "{$this->tourComponent->inventory} - {$this->tourComponent->flight_type}";
+    }
+
+    public function getTourComponentTypeAttribute()
+    {
+        return $this->tourComponent->tour_component_type;
+    }
+
+    public function getTourSalesPriceAttribute()
+    {
+        return $this->tourComponent->tour_sales_price;
+    }
+
+    public function orderCustomer()
+    {
+        return $this->orderCustomers();
     }
 }

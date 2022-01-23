@@ -25,4 +25,8 @@ class StringFormatter
         $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y') . ' ' . SettingsRepository::getOrDefault('system.format.time', 'H:i');
         return Carbon::parse($date)->format($format);
     }
+
+    public function formatBoolean($boolean) : string {
+        return $boolean ? 'Yes' : 'No';
+    }
 }

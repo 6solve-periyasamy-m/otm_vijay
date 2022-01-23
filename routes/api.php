@@ -3,11 +3,6 @@
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -269,6 +264,10 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
         Route::get('/status', function(){})->name('status.stub');
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function() {
+       Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
     });
 });
 
