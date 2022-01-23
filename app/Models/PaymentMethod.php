@@ -17,6 +17,14 @@ class PaymentMethod extends Model
         return ['name' => 'required|unique:payment_methods,name'];
     }
 
+    public static function firstOrCreate(string $name) {
+        $type = self::where('name', '=', $name)->first();
+        if (!isset($type)) {
+            $type = self::create(['name' => $name,]);
+        }
+        return $type;
+    }
+
     public function __toString()
     {
         return $this->name;
