@@ -22,10 +22,10 @@ class OperatorsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'Northern Rail',
+                'name' => 'ZAF Rail',
                 'notes' => NULL,
-                'created_at' => '2021-11-22 12:57:22',
-                'updated_at' => '2021-11-22 12:57:22',
+                'created_at' => '2022-01-21 12:41:23',
+                'updated_at' => '2022-01-21 12:41:23',
                 'deleted_at' => NULL,
             ),
         ));
