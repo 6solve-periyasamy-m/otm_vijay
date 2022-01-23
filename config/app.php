@@ -238,4 +238,13 @@ return [
         // if /booking path returns a form with event/tour selectors
         'booking-selection' => false
     ],
+
+    'currency' => env('CASHIER_CURRENCY', 'gbp'),
+
+    'gateways' => [
+        'stripe' => [
+            'publishable' => env('STRIPE_KEY'),
+            'secret' => env('STRIPE_SECRET'),
+        ]
+    ]
 ];

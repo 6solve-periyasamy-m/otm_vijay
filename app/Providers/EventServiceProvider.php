@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\OrderCreatedEvent;
 use App\Events\PaymentMadeEvent;
+use App\Listeners\CheckoutSuccessfulListener;
 use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendPaymentMadeEmail;
 use Illuminate\Auth\Events\Registered;
@@ -28,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         PaymentMadeEvent::class => [
           SendPaymentMadeEmail::class,
         ],
+        'stripe-webhooks::checkout.session.completed' => [
+            CheckoutSuccessfulListener::class,
+        ]
     ];
 
     /**

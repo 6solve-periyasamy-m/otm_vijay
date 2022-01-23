@@ -134,7 +134,8 @@ Route::prefix('/orders')->group(function () {
      */
 });
 
-// main ordering sytem: requires AUTH
+Route::stripeWebhooks('/stripe/webhooks');
+
 Route::middleware('auth:api')->group(function() {
     Route::get('/booking/info', [BookingController::class, 'getInfo']);
     Route::get('/user', function (Request $request) {
