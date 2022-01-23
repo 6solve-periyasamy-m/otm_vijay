@@ -237,7 +237,7 @@ class OrderRepository
             'customers' => $customers,
             'adjustments' => ['total_cost' => $order->getAdjustmentValue(), 'billables' => $adjustments,],
             'payments' => ['total_cost' => $order->paid, 'billables' => $payments,],
-            'footer' => "", // TODO: Implement
+            'footer' => $order->invoice_footer,
             'total_cost' => $order->getCost() + $order->getAdjustmentValue(),
         ]);
     }

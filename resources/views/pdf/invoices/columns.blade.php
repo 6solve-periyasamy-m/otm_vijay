@@ -153,5 +153,8 @@ $order = $invoice->order;
 <div class="t-align-right">
     <h2>Remaining Amount: {{ StringFormatter::formatCurrency($invoice->total_cost - $invoice->payments['total_cost']) }}</h2>
 </div>
+<div class="section t-align-center">
+    {!! $invoice->footer !!}
+</div>
 </body>
 </html>
