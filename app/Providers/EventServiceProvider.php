@@ -22,6 +22,7 @@ use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Events\Order\Payment\PaymentEditedEvent;
 use App\Events\Order\Payment\PaymentRemovedEvent;
 use App\Listeners\InvoiceUpdateListener;
+use App\Listeners\CheckoutSuccessfulListener;
 use App\Listeners\SendBookingConfirmedEmail;
 use App\Listeners\SendPaymentMadeEmail;
 use Illuminate\Auth\Events\Registered;
@@ -99,6 +100,9 @@ class EventServiceProvider extends ServiceProvider
         CustomerAdjustmentRemovedEvent::class => [
             InvoiceUpdateListener::class,
         ],
+        'stripe-webhooks::checkout.session.completed' => [
+            CheckoutSuccessfulListener::class,
+        ]
     ];
 
     /**
