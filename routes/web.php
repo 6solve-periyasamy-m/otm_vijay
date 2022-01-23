@@ -50,6 +50,7 @@ use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
 use App\Models\Order;
@@ -727,6 +728,15 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
         Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
         Route::get('/finances', [CustomerPortalController::class, 'showFinancesPage'])->name('finances');
+    });
+});
+
+Route::prefix('payment')->name('payment.')->group(function () {
+    Route::prefix('gateway')->name('gateway.')->group(function () {
+        Route::prefix('stripe')->name('stripe.')->group(function () {
+            Route::get('success', [StripeController::class, 'success'])->name('success');
+            Route::get('cancelled', [StripeController::class, 'cancelled'])->name('cancelled');
+        });
     });
 });
 
