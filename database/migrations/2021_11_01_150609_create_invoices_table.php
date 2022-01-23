@@ -21,7 +21,8 @@ class CreateInvoicesTable extends Migration
             $table->longText('customers');
             $table->longText('adjustments');
             $table->longText('payments');
-            $table->text('footer');
+            $table->longText('installments');
+            $table->text('footer')->nullable();
             $table->float('total_cost');
             $table->timestamps();
             $table->softDeletes();

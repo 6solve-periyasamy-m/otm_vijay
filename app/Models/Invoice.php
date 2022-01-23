@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Invoice extends Model
 {
     use SoftDeletes;
-    protected $casts = ['customers' => 'array', 'adjustments' => 'array', 'payments' => 'array',];
-    protected $fillable = ['order_id','number','generated','customers','adjustments','payments','footer','total_cost'];
+    protected $casts = ['customers' => 'array', 'adjustments' => 'array', 'payments' => 'array', 'installments' => 'array',];
+    protected $fillable = ['order_id','number','generated','customers','adjustments','payments','footer','total_cost','installments'];
 
     public function order()
     {

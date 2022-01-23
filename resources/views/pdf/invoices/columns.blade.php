@@ -150,8 +150,29 @@ $order = $invoice->order;
 <div class="section t-align-right">
     <h2>Total Paid: {{ StringFormatter::formatCurrency($invoice->payments['total_cost']) }}</h2>
 </div>
-<div class="t-align-right">
+<div class="section t-align-right">
     <h2>Remaining Amount: {{ StringFormatter::formatCurrency($invoice->total_cost - $invoice->payments['total_cost']) }}</h2>
+</div>
+<div class="section t-align-center">
+    <h2>Installments</h2>
+</div>
+<div class="section">
+    <table>
+        <thead>
+        <tr>
+            <th scope="col" class="date">Date</th>
+            <th scope="col" class="description">Amount</th>
+            <th scope="col" class="amount">Paid</th>
+        </tr>
+        </thead>
+        @foreach($invoice->installments as $installment)
+            @include('partials.pdf.invoices.row',
+                    ['quantity' => StringFormatter::formatDateTime($installment['due']),
+                    'description' => StringFormatter::formatCurrency($installment['amount']),
+                    'cost' => StringFormatter::formatBoolean($installment['paid']),
+                    'class' => "amount",])
+        @endforeach
+    </table>
 </div>
 <div class="section t-align-center">
     {!! $invoice->footer !!}

@@ -237,6 +237,7 @@ class OrderRepository
             'customers' => $customers,
             'adjustments' => ['total_cost' => $order->getAdjustmentValue(), 'billables' => $adjustments,],
             'payments' => ['total_cost' => $order->paid, 'billables' => $payments,],
+            'installments' => self::snapshotInstallments($order),
             'footer' => $order->invoice_footer,
             'total_cost' => $order->getCost() + $order->getAdjustmentValue(),
         ]);
@@ -246,6 +247,14 @@ class OrderRepository
         $invoice = self::generateInvoice($order);
         $invoice->save();
         return $invoice;
+    }
+
+    public static function snapshotInstallments(Order $order) {
+        $data = [['due' => 'With Order', 'amount' => $order->deposit, 'paid' => $order->paid >= $order->deposit, ]];
+        foreach ($order->installments as $installment) {
+            $data[] = ['due' => $installment->due_on, 'amount' => $installment->amount, 'paid' => $installment->paid,];
+        }
+        return $data;
     }
 
     private static function processCustomerComponentsForInvoice(OrderCustomer $orderCustomer): array
