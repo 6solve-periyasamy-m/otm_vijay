@@ -799,7 +799,7 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = $order->getAdjustmentValue() + $order->getPaid();
+        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->deposit;
         foreach ($order->installments as $orderInstallment) {
             $paid -= $orderInstallment->amount;
             if ($paid < 0) return false;
