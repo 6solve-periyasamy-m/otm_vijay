@@ -20,6 +20,8 @@ class Customer extends Model
 
     protected $casts = ['date_of_birth' => 'date', 'passport_issue_date' => 'date', 'passport_expiry_date' => 'date',];
 
+    protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
+
     public static function getValidationRules()
     {
         return [
