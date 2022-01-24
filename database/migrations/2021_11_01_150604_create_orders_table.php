@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('cancelled')->default(false);
             $table->text('internal_notes')->nullable();
             $table->text('external_notes')->nullable();
+            $table->text('invoice_footer')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->string('token', 255)->nullable();

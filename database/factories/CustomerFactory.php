@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
+use App\Models\AddressParent;
 use App\Models\Customer;
+use App\Models\LocationType;
+use App\Repository\LocationsRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerFactory extends Factory
@@ -20,6 +24,16 @@ class CustomerFactory extends Factory
      */
     public function definition()
     {
+        $homeAddress = Address::create([
+            'name' => 'Pregenerated Customer Name',
+            'address_parent_id' => AddressParent::getParentId('customer'),
+            'address_line_1' => $this->faker->streetAddress,
+            'town' => $this->faker->city,
+            'region' => $this->faker->state,
+            'country_id' => 1,
+            'postcode' => $this->faker->postcode
+        ]);
+        $billingAddress = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'));
         return [
             'title' => $this->faker->title,
             'first_name' => $this->faker->firstName,
@@ -29,8 +43,8 @@ class CustomerFactory extends Factory
             'email_address' => $this->faker->email,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', //password
             'gender' => ['male', 'female', 'other'][array_rand(['male', 'female', 'other'])],
-            'home_address_id' => $this->faker->numberBetween(1, 5),
-            'billing_address_id' => $this->faker->numberBetween(1, 5),
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
             'emergency_contact_name' => $this->faker->firstName . ' ' . $this->faker->lastName,
             'emergency_contact_relationship' => 'Partner',
             'emergency_contact_telephone' => $this->faker->phoneNumber,

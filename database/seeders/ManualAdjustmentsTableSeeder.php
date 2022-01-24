@@ -23,23 +23,12 @@ class ManualAdjustmentsTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'order_id' => 1,
-                'amount' => -25.0,
-                'reason' => '10% Discount with coupon: 1DJRTL',
-                'date' => '2021-11-22',
-                'deleted_at' => '2021-11-22 14:33:20',
-                'created_at' => '2021-11-22 13:57:36',
-                'updated_at' => '2021-11-22 14:33:20',
-            ),
-            1 => 
-            array (
-                'id' => 2,
-                'order_id' => 1,
-                'amount' => -25.0,
-                'reason' => '10% Discount with coupon: 1DJRTL',
-                'date' => '2021-11-22',
+                'amount' => -398.0,
+                'reason' => 'Discount for Repeat Customer',
+                'date' => '2022-01-23',
                 'deleted_at' => NULL,
-                'created_at' => '2021-11-22 14:34:02',
-                'updated_at' => '2021-11-22 14:34:02',
+                'created_at' => '2022-01-23 13:20:06',
+                'updated_at' => '2022-01-23 13:20:52',
             ),
         ));
         

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\OrderCreatedEvent;
+use App\Events\Order\Customer\OrderCustomerCreatedEvent;
+use App\Events\Order\OrderCancelledEvent;
+use App\Events\Order\OrderCreatedEvent;
+use App\Events\Order\OrderEditedEvent;
+use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderCustomer;
@@ -34,6 +38,7 @@ class OrderController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'deposit' => $tour->deposit,
+            'invoice_footer' => $tour->invoice_footer,
         ]);
         $orderCustomer = OrderCustomer::make([
             'customer_id' => $request->input('lead_booker_id'),
@@ -45,13 +50,20 @@ class OrderController extends Controller
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
         OrderRepository::addIncludedToCustomer($orderCustomer);
+        OrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
+        event(new OrderCustomerCreatedEvent($orderCustomer, false));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function view(Order $order)
     {
         return view('pages.models.orders.view', ['order' => $order,]);
+    }
+
+    public function invoice(Order $order)
+    {
+        return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
     }
 
     public function edit(Order $order)
@@ -70,7 +82,9 @@ class OrderController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'deposit' => $request->input('deposit'),
+            'invoice_footer' => $request->input('invoice_footer'),
         ]);
+        event(new OrderEditedEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -78,6 +92,7 @@ class OrderController extends Controller
     {
         $order->cancelled = true;
         $order->save();
+        event(new OrderCancelledEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -85,6 +100,7 @@ class OrderController extends Controller
     {
         $order->cancelled = false;
         $order->save();
+        event(new OrderRestoredEvent($order));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

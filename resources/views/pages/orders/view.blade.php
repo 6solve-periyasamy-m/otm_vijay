@@ -1,3 +1,9 @@
+@php
+/**
+ * @param \App\Models\Order $order;
+ */
+@endphp
+
 @extends('layout.master')
 
 @section('title', 'View Order')
@@ -212,13 +218,13 @@
                             @foreach($order->getAdditionals()['upgrades'] as $upgrade)
                                 <tr>
                                     <td>Upgrade: {{ $upgrade['customer']->customer->first_name . ' ' . $upgrade['customer']->customer->last_name }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade['upgrade']->tour_sales_price) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($upgrade['upgrade']->cost) }}</td>
                                 </tr>
                             @endforeach
                             @foreach($order->getAdditionals()['addons'] as $addon)
                                 <tr>
                                     <td>Add-on: {{ $addon['customer']->customer->first_name . ' ' . $addon['customer']->customer->last_name }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($addon['addon']->tour_sales_price) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($addon['addon']->cost) }}</td>
                                 </tr>
                             @endforeach
                         </table>

@@ -23,16 +23,24 @@ class TravelClassesTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'name' => 'Economy',
-                'created_at' => '2021-04-02 16:51:57',
-                'updated_at' => '2021-04-02 16:51:57',
+                'created_at' => '2022-01-21 11:20:00',
+                'updated_at' => '2022-01-21 11:20:00',
                 'deleted_at' => NULL,
             ),
             1 => 
             array (
                 'id' => 2,
                 'name' => 'First Class',
-                'created_at' => '2021-04-02 16:52:15',
-                'updated_at' => '2021-04-02 16:52:15',
+                'created_at' => '2022-01-21 11:21:20',
+                'updated_at' => '2022-01-21 11:21:20',
+                'deleted_at' => NULL,
+            ),
+            2 => 
+            array (
+                'id' => 3,
+                'name' => 'Included Meal',
+                'created_at' => '2022-01-21 11:21:41',
+                'updated_at' => '2022-01-21 11:21:41',
                 'deleted_at' => NULL,
             ),
         ));

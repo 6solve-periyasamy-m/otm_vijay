@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\OrderCustomer;
 use App\Models\OrderTransport;
 use App\Models\Tour;
@@ -65,10 +66,13 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
 
     public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId)
     {
-        return OrderTransport::create([
+        $orderComponent = OrderTransport::create([
             'order_customer_id' => $oCustomerId,
             'transport_inventory_tour_id' => $transportInventoryTourId,
+            'cost' => TransportInventoryTour::findOrFail($transportInventoryTourId)->tour_sales_price,
         ]);
+        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        return $orderComponent;
     }
 
     public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)

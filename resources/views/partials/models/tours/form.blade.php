@@ -37,5 +37,7 @@
 @include('partials.fields.checkbox', ['name' => 'Is Active', 'field' => 'is_active', 'value' => $is_active ?? null,])
 @include('partials.fields.text', ['name' => 'Booking Form Url', 'field' => 'booking_form_url', 'value' => $booking_form_url ?? null,])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+@include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => isset($tour) ? $tour->invoice_footer : null, ])
+<hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.prefab.notes')
 @include('partials.fields.submit')

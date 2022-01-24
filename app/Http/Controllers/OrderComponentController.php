@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentRemovedEvent;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderFlight;
@@ -12,27 +13,37 @@ use Illuminate\Http\Request;
 class OrderComponentController extends Controller
 {
     public function deleteAccommodation(Request $request, $id) {
-        OrderAccommodation::findOrFail($id)->delete();
+        $orderComponent = OrderAccommodation::findOrFail($id);
+        $orderComponent->delete();
+        event(new OrderCustomerComponentRemovedEvent($orderComponent));
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 
     public function deleteActivity(Request $request, $id) {
-        OrderActivity::findOrFail($id)->delete();
+        $orderComponent = OrderActivity::findOrFail($id);
+        $orderComponent->delete();
+        event(new OrderCustomerComponentRemovedEvent($orderComponent));
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 
     public function deleteFlight(Request $request, $id) {
-        OrderFlight::findOrFail($id)->delete();
+        $orderComponent = OrderFlight::findOrFail($id);
+        $orderComponent->delete();
+        event(new OrderCustomerComponentRemovedEvent($orderComponent));
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 
     public function deleteTransport(Request $request, $id) {
-        OrderTransport::findOrFail($id)->delete();
+        $orderComponent = OrderTransport::findOrFail($id);
+        $orderComponent->delete();
+        event(new OrderCustomerComponentRemovedEvent($orderComponent));
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 
     public function deleteMerchandise(Request $request, $id) {
-        OrderMerchandise::findOrFail($id)->delete();
+        $orderComponent = OrderMerchandise::findOrFail($id);
+        $orderComponent->delete();
+        event(new OrderCustomerComponentRemovedEvent($orderComponent));
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 

@@ -15,7 +15,7 @@ class TransportInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['tour_id', 'transport_inventory_id',];
+    protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price'];
     protected $cascadeDeletes = ['orders', 'upgrades'];
     public $additional_attributes = ['tour_name',];
 
@@ -57,7 +57,7 @@ class TransportInventoryTour extends Model
     {
         $inventory = $this->transportInventory;
         $component = $inventory->transport;
-        return $component->transport->name . ' (' . $component->departureAddress->name . ' to ' .  $component->arrivalAddress->name . ')'.
+        return $component->name . ' (' . $component->departureAddress->name . ' to ' .  $component->arrivalAddress->name . ')'.
             ' (' . $component->transportType->name . ') ' .
             ' (' . StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
