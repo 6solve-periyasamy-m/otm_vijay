@@ -40,6 +40,7 @@ class TourController extends Controller
             'is_active' => $request->input('is_active') === 'on' ? 1 : 0,
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
+            'final_payment' => $request->input('final_payment'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
