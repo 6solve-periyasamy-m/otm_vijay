@@ -28,7 +28,7 @@ class Customer extends Model
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
             'mobile_number' => 'required',
-            'email_address' => 'required|email',
+            'email_address' => 'required|email|unique:customers,email_address',
             'gender' => 'required',
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
