@@ -20,8 +20,8 @@ class CreateMerchandisesTable extends Migration
             $table->foreignId('tour_id')->constrained()->onDelete('cascade');
             $table->string('image_url')->nullable();
             $table->integer('stock');
-            $table->float('purchase_price');
-            $table->float('tour_sales_price');
+            $table->decimal('purchase_price', 12);
+            $table->decimal('tour_sales_price', 12);
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

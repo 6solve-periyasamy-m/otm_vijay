@@ -23,7 +23,7 @@ class CreateCustomerOrderDetailTable extends Migration
             $table->string('status');
             $table->string('reference');
             $table->boolean('addon')->default(false);
-            $table->decimal('cost', $precision = 8, $scale = 2);
+            $table->decimal('cost', 12);
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             // $table->foreign('customers_orders_id')->references('id')->on('order_customers');
