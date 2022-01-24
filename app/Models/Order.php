@@ -183,7 +183,7 @@ class Order extends Model
 
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->getCost();
+        $cost = $this->getCost() - $this->deposit;
         foreach ($this->installments as $installment)
         {
             $cost -= $installment->amount;
