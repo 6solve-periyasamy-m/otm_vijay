@@ -423,6 +423,16 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr>
+                    <th scope="row">Remaining Balance</th>
+                    <td>{{ StringFormatter::formatDate($tour->final_payment) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }}</td>
+                    <td>
+                        <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                            <i class="icon-note"></i>
+                        </a>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

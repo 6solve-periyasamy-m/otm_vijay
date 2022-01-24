@@ -120,4 +120,14 @@ class Tour extends Model
     {
         return StockRepository::getTourStock($this);
     }
+
+    public function getRemainingInstallmentAttribute()
+    {
+        $cost = $this->base_price_per_person - $this->deposit;
+        foreach ($this->paymentInstallments as $installment)
+        {
+            $cost -= $installment->amount;
+        }
+        return $cost;
+    }
 }
