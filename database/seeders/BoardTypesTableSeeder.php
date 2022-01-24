@@ -22,33 +22,17 @@ class BoardTypesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'Full Board',
-                'created_at' => '2021-09-10 08:58:48',
-                'updated_at' => '2021-09-10 08:58:48',
+                'name' => 'Self-Catered',
+                'created_at' => '2022-01-20 11:50:05',
+                'updated_at' => '2022-01-20 11:50:05',
                 'deleted_at' => NULL,
             ),
             1 => 
             array (
                 'id' => 2,
-                'name' => 'Half Board',
-                'created_at' => '2021-09-10 08:58:57',
-                'updated_at' => '2021-09-10 08:58:57',
-                'deleted_at' => NULL,
-            ),
-            2 => 
-            array (
-                'id' => 3,
-                'name' => 'Self Catered',
-                'created_at' => '2021-09-10 08:59:00',
-                'updated_at' => '2021-09-10 08:59:00',
-                'deleted_at' => NULL,
-            ),
-            3 => 
-            array (
-                'id' => 4,
                 'name' => 'Bed & Breakfast',
-                'created_at' => '2021-09-10 08:59:20',
-                'updated_at' => '2021-09-10 08:59:20',
+                'created_at' => '2022-01-20 11:59:07',
+                'updated_at' => '2022-01-20 11:59:07',
                 'deleted_at' => NULL,
             ),
         ));

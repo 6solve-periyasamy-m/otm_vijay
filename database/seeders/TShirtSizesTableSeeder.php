@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class OrderCustomerAdjustmentsTableSeeder extends Seeder
+class TShirtSizesTableSeeder extends Seeder
 {
 
     /**
@@ -16,7 +16,7 @@ class OrderCustomerAdjustmentsTableSeeder extends Seeder
     {
         
 
-        \DB::table('order_customer_adjustments')->delete();
+        \DB::table('t_shirt_sizes')->delete();
         
         
         
