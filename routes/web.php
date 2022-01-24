@@ -29,6 +29,7 @@ use App\Http\Controllers\Models\OperatorController;
 use App\Http\Controllers\Models\OrderController;
 use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
 use App\Http\Controllers\Models\OrderCustomerModelController;
+use App\Http\Controllers\Models\OrderInstallmentController;
 use App\Http\Controllers\Models\PaymentController;
 use App\Http\Controllers\Models\PaymentInstallmentController;
 use App\Http\Controllers\Models\PaymentMethodController;
@@ -130,6 +131,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
             Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
             Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order,read');
+
+            Route::prefix('installments')->group(function () {
+                Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order,update');
+                Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order,update');
+                Route::prefix('{orderInstallment}')->group(function () {
+                    Route::get('/update', [OrderInstallmentController::class, 'edit'])->name('order-installments.edit')->middleware('bouncer:Order,update');
+                    Route::post('/update', [OrderInstallmentController::class, 'update'])->name('order-installments.update')->middleware('bouncer:Order,update');
+                    Route::post('/delete', [OrderInstallmentController::class, 'destroy'])->name('order-installments.delete')->middleware('bouncer:Order,update');
+                });
+            });
 
             Route::prefix('adjustments')->group(function () {
                 Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all')->middleware('bouncer:ManualAdjustment,read');

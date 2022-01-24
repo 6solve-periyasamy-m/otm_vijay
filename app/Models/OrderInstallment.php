@@ -15,6 +15,11 @@ class OrderInstallment extends Model
     protected $fillable = ['amount', 'due_on',];
     protected $additional_attributes = ['paid', 'cancelled'];
 
+    public static function getValidationRules()
+    {
+        return ['due_on' => 'required|date', 'amount' => 'required|numeric',];
+    }
+
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');
