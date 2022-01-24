@@ -139,7 +139,7 @@ class Order extends Model
 
     public function getRemaining(): float
     {
-        return OrderRepository::getRemainingToPay($this);
+        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
     }
 
     public function getNextInstallment(): array
