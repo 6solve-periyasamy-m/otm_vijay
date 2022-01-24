@@ -13,7 +13,7 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit'];
+    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
@@ -78,6 +78,11 @@ class Order extends Model
     public function getStatus()
     {
         return self::getStatusArray(OrderRepository::getOrderStatus($this));
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'order_id');
     }
 
     public static function getStatusArray(int $status): array

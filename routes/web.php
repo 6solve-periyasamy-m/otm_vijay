@@ -129,9 +129,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::post('/update/', [OrderController::class, 'update'])->name('orders.update')->middleware('bouncer:Order,update');
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
             Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
-            Route::get('/invoice', function (Order $order) {
-                return view('pdf.invoices.columns', OrderRepository::getInvoiceDetails($order));
-            })->name('orders.invoice.latest')->middleware('bouncer:Order,read');
+            Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order,read');
 
             Route::prefix('adjustments')->group(function () {
                 Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all')->middleware('bouncer:ManualAdjustment,read');

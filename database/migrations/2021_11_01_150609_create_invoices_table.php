@@ -16,8 +16,14 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->string('invoice_code');
-            $table->binary('pdf');
+            $table->string('number');
+            $table->dateTime('generated');
+            $table->longText('customers');
+            $table->longText('adjustments');
+            $table->longText('payments');
+            $table->longText('installments');
+            $table->text('footer')->nullable();
+            $table->float('total_cost');
             $table->timestamps();
             $table->softDeletes();
             $table->text('notes')->nullable();
