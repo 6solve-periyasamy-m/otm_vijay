@@ -18,7 +18,7 @@ class CreateOrderAccommodationsTable extends Migration
             $table->foreignId('order_customer_id')->constrained()->onDelete('cascade');
             $table->foreignId('accommodation_inventory_tour_id')->constrained()->onDelete('cascade');
             $table->foreignId('share_with_user_id')->nullable();
-            $table->decimal('cost');
+            $table->decimal('cost', 12);
             $table->timestamps();
             $table->softDeletes();
         });
