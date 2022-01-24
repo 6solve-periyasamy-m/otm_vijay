@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TShirtSize extends Model
+class TShirtSize extends SimpleModel
 {
     use HasFactory;
     use SoftDeletes;
