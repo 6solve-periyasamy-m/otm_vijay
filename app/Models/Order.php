@@ -180,4 +180,14 @@ class Order extends Model
     {
         return $this->getRemaining();
     }
+
+    public function getRemainingInstallmentAttribute(): float
+    {
+        $cost = $this->getCost();
+        foreach ($this->installments as $installment)
+        {
+            $cost -= $installment->amount;
+        }
+        return $cost;
+    }
 }
