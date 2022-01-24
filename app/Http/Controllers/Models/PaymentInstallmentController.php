@@ -26,6 +26,7 @@ class PaymentInstallmentController extends Controller
         $paymentInstallment = PaymentInstallment::make([
             'due_on' => $request->input('due_on'),
             'amount' => $request->input('amount'),
+            'is_percentage' => $request->input('is_percentage') == 'on',
         ]);
         $tour->paymentInstallments()->save($paymentInstallment);
         return redirect()->route('tours.view', ['tour' => $tour,]);
@@ -47,6 +48,7 @@ class PaymentInstallmentController extends Controller
         $paymentInstallment->update([
             'due_on' => $request->input('due_on'),
             'amount' => $request->input('amount'),
+            'is_percentage' => $request->input('is_percentage') == 'on',
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }

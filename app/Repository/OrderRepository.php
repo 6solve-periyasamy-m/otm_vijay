@@ -681,7 +681,7 @@ class OrderRepository
     public static function cloneInstallments(Order $order) {
         foreach ($order->tour->paymentInstallments as $installment) {
             $oInstallment = OrderInstallment::make([
-                'amount' => $installment->amount,
+                'amount' => $installment->cost,
                 'due_on' => $installment->due_on,
             ]);
             $order->installments()->save($oInstallment);

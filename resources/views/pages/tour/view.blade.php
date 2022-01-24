@@ -397,7 +397,7 @@
                 <tr>
                     <th scope="row">Deposit</th>
                     <td>With Order</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->deposit) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>
@@ -408,7 +408,7 @@
                     <tr>
                         <th scope="row">Installment</th>
                         <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($installment->amount) }}</td>
+                        <td>{{ StringFormatter::formatCurrency($installment->cost) }} ({{ $installment->percentage }}%)</td>
                         <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -426,7 +426,7 @@
                 <tr>
                     <th scope="row">Remaining Balance</th>
                     <td>{{ StringFormatter::formatDate($tour->final_payment) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>

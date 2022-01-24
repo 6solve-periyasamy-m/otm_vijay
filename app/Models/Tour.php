@@ -124,10 +124,19 @@ class Tour extends Model
     public function getRemainingInstallmentAttribute()
     {
         $cost = $this->base_price_per_person - $this->deposit;
-        foreach ($this->paymentInstallments as $installment)
-        {
-            $cost -= $installment->amount;
+        foreach ($this->paymentInstallments as $installment) {
+            $cost -= $installment->cost;
         }
         return $cost;
     }
+
+    public function getDepositPercentageAttribute()
+    {
+        return round(($this->deposit / $this->base_price_per_person) * 100, 2);
+    }
+
+    public function getRemainingPercentageAttribute()
+    {
+        return round(($this->remaining_installment / $this->base_price_per_person) * 100, 2);
+}
 }
