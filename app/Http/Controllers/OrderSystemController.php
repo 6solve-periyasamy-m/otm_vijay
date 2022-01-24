@@ -16,6 +16,10 @@ class OrderSystemController extends Controller
         return view('pages.orders.search', ['data' => OrderRepository::getSearchOrders($searchQuery, $showArchived), 'query' => $searchQuery, 'archived' => $showArchived,]);
     }
 
+    public function newSearch() {
+        return view('pages.orders.search2', ['orders' => Order::all(),]);
+    }
+
     public function create()
     {
         //
@@ -28,7 +32,7 @@ class OrderSystemController extends Controller
 
     public function show(Order $order)
     {
-        return view('pages.orders.view', OrderRepository::getOrderDetails($order));
+        return view('pages.orders.view', ['order' => $order,]);
     }
 
     public function edit($id)

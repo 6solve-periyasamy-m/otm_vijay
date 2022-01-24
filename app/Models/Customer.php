@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 
 
 class Customer extends Authenticatable
@@ -14,15 +15,18 @@ class Customer extends Authenticatable
     use SoftDeletes;
     use HasFactory;
     use Notifiable;
+    use Billable;
 
     protected $guard = 'customer';
 
-    public $additional_attributes = ['customer_full_name'];
-    public $full_name;
+    public $additional_attributes = ['customer_full_name', 'full_name'];
 
-    protected $fillable = ['title','first_name','middle_names','last_name','date_of_birth','mobile_number','other_phone_number','email_address','password','gender','emergency_contact_name','emergency_contact_relationship','emergency_contact_telephone','passport_first_name','passport_middle_name','passport_last_name','passport_number','passport_issue_date','passport_expiry_date','t_shirt_size_id','hat_size_id','notes','loyalty_number','login_token','home_address_id','billing_address_id',];
+    protected $fillable = ['title', 'first_name', 'middle_names', 'last_name', 'date_of_birth', 'mobile_number', 'other_phone_number', 'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone', 'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date','passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id', 'billing_address_id',];
 
-    public static function getValidationRules() {
+    protected $casts = ['date_of_birth' => 'date', 'passport_issue_date' => 'date', 'passport_expiry_date' => 'date',];
+
+    public static function getValidationRules()
+    {
         return [
             'title' => 'required',
             'first_name' => 'required',
@@ -39,8 +43,7 @@ class Customer extends Authenticatable
 
     public function getFullName()
     {
-        $this->full_name = $this->first_name . ' ' . $this->last_name;
-        return $this->full_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function getCustomerFullNameAttribute()
@@ -48,24 +51,33 @@ class Customer extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function getFullNameAttribute(): string
+    {
+        return $this->getFullName();
+    }
 
-    public function homeAddress() {
+    public function homeAddress()
+    {
         return $this->belongsTo(Address::class, 'home_address_id');
     }
 
-    public function billingAddress() {
+    public function billingAddress()
+    {
         return $this->belongsTo(Address::class, 'billing_address_id');
     }
-    
-    public function tShirtSize() {
+
+    public function tShirtSize()
+    {
         return $this->belongsTo(TShirtSize::class, 't_shirt_size_id');
     }
 
-    public function hatSize() {
+    public function hatSize()
+    {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
     }
 
-    public function orderCustomers() {
+    public function orderCustomers()
+    {
         return $this->hasMany(OrderCustomer::class, 'customer_id');
     }
 }

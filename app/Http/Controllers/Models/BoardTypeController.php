@@ -21,10 +21,11 @@ class BoardTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(BoardType::getValidationRules());
         $boardType = BoardType::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('board-types.view', ['boardType' => $boardType,]);
+        return view('pages.close');
     }
 
     public function view(BoardType $boardType)
@@ -39,10 +40,11 @@ class BoardTypeController extends Controller
 
     public function update(Request $request, BoardType $boardType)
     {
+        $request->validate(BoardType::getValidationRules());
         $boardType->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('board-types.view', ['boardType' => $boardType,]);
+        return view('pages.close');
     }
 
     public function destroy(BoardType $boardType)

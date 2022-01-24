@@ -12,15 +12,26 @@ class Transport extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_type_id','operator_id','departure_address_id','arrival_address_id','name','description','currency_id','is_domestic','notes',];
+    public $additional_attributes = ['inventory_relation'];
+    protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes','image_url'];
     protected $cascadeDeletes = ['transportInventory'];
-    const RULES = [
-        'transport_type_id' => 'required|exists:transport_types,id',
-        'operator_id' => 'required|exists:operators,id',
-        'departure_address_id' => 'required|exists:addresses,id',
-        'arrival_address_id' => 'required|exists:addresses,id',
-        'name' => 'required',
-    ];
+
+    public static function getValidationRules()
+    {
+        return [
+            'transport_type_id' => 'required|exists:transport_types,id',
+            'operator_id' => 'required|exists:operators,id',
+            'departure_address_id' => 'required|exists:addresses,id',
+            'arrival_address_id' => 'required|exists:addresses,id',
+            'name' => 'required',
+            'image' => 'nullable|image',
+        ];
+    }
+
+    public static function findDepartureAddress(OrderTransport $ordersTransport)
+    {
+        return Location::where('id', $ordersTransport->transport->departure_location_id);
+    }
 
     public function transportInventory()
     {
@@ -52,11 +63,6 @@ class Transport extends Model
         return $this->hasOne(Address::class, 'id', 'arrival_address_id');
     }
 
-    public static function findDepartureAddress(OrderTransport $ordersTransport)
-    {
-       return Location::where('id', $ordersTransport->transport->departure_location_id);
-    }
-
     public function getInventoryRelationAttribute()
     {
         $operator = !is_null($this->operator) ? $this->operator->name : "Not Set";
@@ -66,10 +72,13 @@ class Transport extends Model
         return "{$this->name} | Operator: {$operator} | Departs: {$departureAddress} | Arrives: {$arrivalAddress}";
     }
 
-    public $additional_attributes = ['inventory_relation'];
-
     public function currency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function __toString()
+    {
+        return "{$this->name} ({$this->transportType}) ({$this->departureAddress->name} to {$this->arrivalAddress->name}) ({$this->operator})";
     }
 }

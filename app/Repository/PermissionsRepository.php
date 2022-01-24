@@ -62,25 +62,35 @@ class PermissionsRepository implements PermissionsRepositoryInterface
                 'group' => 'Tour and Components',
                 'order' => 1,
             ],
+            'TourCategory' => [
+                'name' => 'Category',
+                'group' => 'Tour and Components',
+                'order' => 2,
+            ],
             'AccommodationInventoryTour' => [
                 'name' => 'Accommodation Tour',
                 'group' => 'Tour and Components',
-                'order' => 2,
+                'order' => 3,
             ],
             'ActivityInventoryTour' => [
                 'name' => 'Activity Tour',
                 'group' => 'Tour and Components',
-                'order' => 3,
+                'order' => 4,
             ],
             'FlightInventoryTour' => [
                 'name' => 'Flight Tour',
                 'group' => 'Tour and Components',
-                'order' => 4,
+                'order' => 5,
             ],
             'TransportInventoryTour' => [
                 'name' => 'Transport Tour',
                 'group' => 'Tour and Components',
-                'order' => 5,
+                'order' => 6,
+            ],
+            'Merchandise' => [
+                'name' => 'Merchandise',
+                'group' => 'Tour and Components',
+                'order' => 7,
             ],
             // Accommodations
             'Accommodation' => [
@@ -334,5 +344,9 @@ class PermissionsRepository implements PermissionsRepositoryInterface
     public static function getRoleFromName(string $role)
     {
         return Role::where('name', '=', $role)->first();
+    }
+
+    public static function revokeEverything(Role $role) {
+        Bouncer::disallow($role)->everything();
     }
 }

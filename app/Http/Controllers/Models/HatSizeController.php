@@ -21,10 +21,11 @@ class HatSizeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(HatSize::getValidationRules());
         $hatSize = HatSize::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('hat-sizes.view', ['hatSize' => $hatSize,]);
+        return view('pages.close');
     }
 
     public function view(HatSize $hatSize)
@@ -39,10 +40,11 @@ class HatSizeController extends Controller
 
     public function update(Request $request, HatSize $hatSize)
     {
+        $request->validate(HatSize::getValidationRules());
         $hatSize->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('hat-sizes.view', ['hatSize' => $hatSize,]);
+        return view('pages.close');
     }
 
     public function destroy(HatSize $hatSize)

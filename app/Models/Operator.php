@@ -3,18 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Operator extends Model
+class Operator extends SimpleModel
 {
     use SoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['name','notes',];
+    protected $fillable = ['name', 'notes',];
 
-    public function transports() {
+    public static function getValidationRules()
+    {
+        return ['name' => 'required',];
+    }
+
+    public function transports()
+    {
         return $this->hasMany(Transport::class, 'operator_id');
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

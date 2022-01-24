@@ -21,10 +21,11 @@ class AirlineController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(Airline::getValidationRules());
         $airline = Airline::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('airlines.view', ['airline' => $airline,]);
+        return view('pages.close');
     }
 
     public function view(Airline $airline)
@@ -39,10 +40,11 @@ class AirlineController extends Controller
 
     public function update(Request $request, Airline $airline)
     {
+        $request->validate(Airline::getValidationRules());
         $airline->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('airlines.view', ['airline' => $airline,]);
+        return view('pages.close');
     }
 
     public function destroy(Airline $airline)

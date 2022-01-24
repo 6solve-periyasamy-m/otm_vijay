@@ -29,7 +29,7 @@
                         <th scope="col">Verified</th>
                         <th scope="col">Roles</th>
                         <th scope="col">Created</th>
-                        @can('edit', \App\Models\User::class)
+                        @can('update', \App\Models\User::class)
                             <th scope="col">Actions</th>
                         @endcan
                     </tr>
@@ -38,23 +38,29 @@
                     <tr>
                         <th scope="row">{{ $user->name }}</th>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->email_verified_at }}</td>
+                        <td>{{ StringFormatter::formatDateTime($user->email_verified_at) }}</td>
                         <td>{{ $user->roles->implode('title', ', ') }}</td>
-                        <td>{{ $user->created_at }}</td>
+                        <td>{{ StringFormatter::formatDateTime($user->created_at) }}</td>
                         @can('update', \App\Models\User::class)
-                            @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel())
+                            @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel() || Auth::user()->id == $user->id)
                             <td>
                                 <a href="{{route('users.edit', ['user' => $user,])}}" class="btn btn-outline-success btn-sm mb-1">
                                     <i class="icon-note"></i>
                                 </a>
                                 @can('delete', \App\Models\User::class)
-                                <a href="#" class="btn btn-outline-danger btn-sm mb-1"
-                                   onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-delete').submit();">
-                                    <i class="icon-trash"></i>
-                                </a>
-                                <form id="user-{{ $user->id }}-delete"
-                                      action="{{ route('users.delete', ['user' => $user,]) }}" method="POST"
-                                      style="display: none;">{{ csrf_field() }}</form
+                                    @if(Auth::user()->id == $user->id)
+                                        <span class="btn btn-outline-dark btn-sm mb-1">
+                                            <i class="icon-trash"></i>
+                                        </span>
+                                    @else
+                                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                                           onclick="event.preventDefault();document.getElementById('user-{{ $user->id }}-delete').submit();">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                        <form id="user-{{ $user->id }}-delete"
+                                              action="{{ route('users.delete', ['user' => $user,]) }}" method="POST"
+                                              style="display: none;">{{ csrf_field() }}</form
+                                    @endif
                                 @endcan
                             </td>
                             @else

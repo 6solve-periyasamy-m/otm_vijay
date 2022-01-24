@@ -12,11 +12,20 @@ class OrderAccommodation extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id'];
+    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id','cost'];
+    public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderAccommodations = OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
+
+        return $orderAccommodations;
+    }
+
+    // TODO: Deprecate
     public function orderCustomers()
     {
-        return $this->belongsTo(OrderCustomer::class);
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
     public function accommodation()
@@ -29,15 +38,38 @@ class OrderAccommodation extends Model
         return AccommodationComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
-    public function accommodationInventoryTour() {
+    public function accommodationInventoryTour()
+    {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
 
-
-    public static function findByOrderCustomer($orderCustomerId)
+    public function isCancelled(): bool
     {
-        $orderAccommodations = OrderAccommodation::where('order_customer_id',$orderCustomerId)->get();
+        return $this->orderCustomers->order->cancelled;
+    }
 
-        return $orderAccommodations;
+    public function tourComponent()
+    {
+        return $this->accommodationInventoryTour();
+    }
+
+    public function getDetailsAttribute()
+    {
+        return "{$this->tourComponent->inventory} - {$this->tourComponent->booking_policy}";
+    }
+
+    public function getTourComponentTypeAttribute()
+    {
+        return $this->tourComponent->tour_component_type;
+    }
+
+    public function getTourSalesPriceAttribute()
+    {
+        return $this->tourComponent->tour_sales_price;
+    }
+
+    public function orderCustomer()
+    {
+        return $this->orderCustomers();
     }
 }

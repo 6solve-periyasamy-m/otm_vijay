@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\OrderCustomer;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderFlight;
 use App\Models\OrderTransport;
-use App\Models\Transport;
-use App\Repository\OrderRepository;
 
 class OrderCustomerController extends Controller
 {
@@ -29,7 +28,7 @@ class OrderCustomerController extends Controller
         ]);
     }
 
-    public function show($order, OrderCustomer $orderCustomer) {
-        return view('pages.orders.customer', OrderRepository::getOrderCustomerDetails($orderCustomer));
+    public function show(Order $order, OrderCustomer $orderCustomer) {
+        return view('pages.orders.customer', ['orderCustomer' => $orderCustomer,]);
     }
 }

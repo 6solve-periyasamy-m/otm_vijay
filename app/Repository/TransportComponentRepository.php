@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\OrderCustomer;
 use App\Models\OrderTransport;
 use App\Models\Tour;
+use App\Models\TransportInventoryTour;
+use App\Models\TransportInventoryTourUpgrade;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -63,10 +66,13 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
 
     public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId)
     {
-        return OrderTransport::create([
+        $orderComponent = OrderTransport::create([
             'order_customer_id' => $oCustomerId,
             'transport_inventory_tour_id' => $transportInventoryTourId,
+            'cost' => TransportInventoryTour::findOrFail($transportInventoryTourId)->tour_sales_price,
         ]);
+        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        return $orderComponent;
     }
 
     public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
@@ -107,5 +113,11 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrives_at`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `transport_inventories`.`departs_at` AND `transport_inventories`.`arrives_at`");
         return $query->get();
+    }
+
+    public static function getParentComponent(TransportInventoryTour $inventoryTour)
+    {
+        $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        return $upgrade->base;
     }
 }

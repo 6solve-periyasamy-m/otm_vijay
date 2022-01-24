@@ -77,24 +77,6 @@ $menu_colors : #4cc1ef, #c13018, #f7931f, #a2b969;
 
         @include menu_color;
 
-        .menu-text {
-            position: absolute;
-            color: black;
-            font-size: 20px;
-            font-weight: 600;
-            transform: rotate(-45deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            .menu-icon {
-                margin-bottom: 0.25rem;
-                font-size: 25px;
-                font-weight: bold;
-            }
-        }
-
         &:nth-child(1) {
             top: $margin_value;            
         }
@@ -230,7 +212,12 @@ $right_offset: 312px, 276px, 210px, 117px, 10px;
                     text-align: center;
                     overflow-wrap: anywhere;
                     font-size: 15px;
-                    font-weight: 600;                   
+                    font-weight: 600;     
+                    
+                    .menu-icon {
+                        font-size: 21px;
+                        font-weight: 500;
+                    }
                 }
             }
         }

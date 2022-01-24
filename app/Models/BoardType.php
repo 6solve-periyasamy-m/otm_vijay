@@ -6,9 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class BoardType extends Model
+class BoardType extends SimpleModel
 {
     use SoftDeletes;
 
     protected $fillable = ['name',];
+
+    public static function getValidationRules()
+    {
+        return ['name' => 'required|unique:board_types,name',];
+    }
+
+    public static function firstOrCreate(string $name) {
+        $type = self::where('name', '=', $name)->first();
+        if (!isset($type)) {
+            $type = self::create(['name' => $name,]);
+        }
+        return $type;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

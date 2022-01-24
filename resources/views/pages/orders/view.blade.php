@@ -1,3 +1,9 @@
+@php
+/**
+ * @param \App\Models\Order $order;
+ */
+@endphp
+
 @extends('layout.master')
 
 @section('title', 'View Order')
@@ -27,29 +33,58 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ $order->tour->date_from . " to " . $order->tour->date_to }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($order->tour->date_from) . " to " . StringFormatter::formatDate($order->tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
-            <p>Payment Status</p>
-            <h6 class="badge {{ $totalPaid >= $totalOrderValue ? 'badge-success' : 'badge-danger' }} fw-bold">{{ $totalPaid >= $totalOrderValue ? "Paid in Full" : "Balance Outstanding" }}</h6>
+            <p>Order Status</p>
+            <h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status'] }}</h6>
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>
-            <h6 class="fw-bold">{{ $totalOrderValue }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getCost() + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before adjustments)</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
-            <h6 class="fw-bold">{{ $totalPaid }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getPaid()) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ $totalOrderValue - $totalPaid }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getRemaining()) }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Next Payment Due</p>
+            <h6 class="fw-bold">{{ isset($order->getNextInstallment()['installment']) ? StringFormatter::formatDate($order->getNextInstallment()['due']) . ' - ' . StringFormatter::formatCurrency($order->getNextInstallment()['amount']) : 'All installments paid' }}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>Internal Notes</p>
+            <h6 class="fw-bold">{!! nl2br($order->internal_notes) !!}</h6>
+        </div>
+        <div class="col-12 col-xl-6">
+            <p>External Notes</p>
+            <h6 class="fw-bold">{!! nl2br($order->external_notes) !!}</h6>
         </div>
         <div class="col-12">
             <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="btn btn-warning">
+                <i class="icon-globe"></i>
+                View Tour
+            </a>
+            @can('delete', \App\Models\Order::class)
+                @if($order->cancelled)
+                    <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning"><i class="icon-trash"></i>Restore Order</a>
+                    <form action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">
+                        @csrf
+                    </form>
+                @else
+                    <a href="#" onclick="$('#order-delete').submit()" class="btn btn-danger"><i class="icon-trash"></i>Cancel Order</a>
+                    <form action="{{ route('orders.delete', ['order' => $order,]) }}" method="post" id="order-delete">
+                        @csrf
+                    </form>
+                @endif
+            @endcan
         </div>
     </div>
 </div>
@@ -61,26 +96,32 @@
 </div>
 <div class="card" id="section-1">
     <div class="card-body">
+        @can('create', \App\Models\OrderCustomer::class)
         <div class="py-2 mb-3 text-end">            
             <a href="{{ route('order-customers.create', ['order' => $order, ]) }}" class="btn btn-primary text-white">
                 <i class="icon-plus"></i>
                 <span>Add Customer</span>
             </a>
-        </div>               
+        </div>
+        @endcan
         <div class="row">
-            @foreach($customers as $ordersCustomer)
+            @foreach($order->orderCustomers as $ordersCustomer)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
-                    <p>Lead Broker</p>
+                    <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
                     <h6 class="fw-bold">
+                        @can('read', \App\Models\OrderCustomer::class)
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
                             {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                         </a>
+                        @else
+                            {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
+                        @endcan
                     </h6>
                     <p>Born</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->date_of_birth }}</h6>
+                    <h6 class="fw-bold">{{ StringFormatter::formatDate($ordersCustomer->customer->date_of_birth) }}</h6>
                     <p>Passport Number</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number }}</h6>
+                    <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>
             </div>
             @endforeach
@@ -103,13 +144,15 @@
                         <h4 class="fw-bold">Payments</h4>
                     </div>
                     <div class="pb-3 text-end">
+                        @can('create', \App\Models\Payment::class)
                         <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
                             <i class="icon-plus"></i>
                             New Payment
                         </a>
+                        @endcan
                         <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" class="btn btn-primary text-white mb-1">View Invoice</a>
-                        <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>
-                        <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>                    
+                        {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>--}}
+                        {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
                     </div>
                     <div class="pt-1">
                         <table class="table table-striped" id="payment-table">
@@ -118,24 +161,34 @@
                                     <th scope="col">Type</th>
                                     <th scope="col">Method</th>
                                     <th scope="col">Value</th>
-                                    <th scope="col">Due Date</th>
-                                    <th scope="col">Paid Date</th>
+                                    <th scope="col">Paid</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            @foreach($payments as $payment)
+                            @foreach($order->payments as $payment)
                                 <tr>
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
-                                    <td>{{ $payment->amount }}</td>
-                                    <td>{{ $payment->paid_on }}</td> {{-- TODO: Get actual due date --}}
-                                    <td>{{ $payment->paid_on }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($payment->amount) }}</td>
+                                    <td>{{ StringFormatter::formatDateTime($payment->paid_on) }}</td>
                                     <td class="actions">
+                                        @can('update', \App\Models\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}" method="post" id="payment-{{$payment->id}}-delete">
-                                            @csrf
-                                        </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\Payment::class)
+                                            <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}" method="post" id="payment-{{$payment->id}}-delete">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -152,18 +205,26 @@
                         <table class="table table-striped" id="cost-table">
                             <thead>
                             <tr>
-                                <th scope="col" >Type</th>
-                                <th scope="col" >Value</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Value</th>
                             </tr>
                             </thead>
+                            @foreach($order->orderCustomers as $ordersCustomer)
                             <tr>
-                                <td>Base</td>
-                                <td>{{ $order->tour->base_price_per_person * sizeof($customers) }}</td>
+                                <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
+                                <td>{{ StringFormatter::formatCurrency($order->tour->base_price_per_person) }}</td>
                             </tr>
-                            @foreach($addons as $addon)
+                            @endforeach
+                            @foreach($order->getAdditionals()['upgrades'] as $upgrade)
                                 <tr>
-                                    <td>Add-on</td>
-                                    <td>{{ $addon->tour_sales_price }}</td>
+                                    <td>Upgrade: {{ $upgrade['customer']->customer->first_name . ' ' . $upgrade['customer']->customer->last_name }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($upgrade['upgrade']->cost) }}</td>
+                                </tr>
+                            @endforeach
+                            @foreach($order->getAdditionals()['addons'] as $addon)
+                                <tr>
+                                    <td>Add-on: {{ $addon['customer']->customer->first_name . ' ' . $addon['customer']->customer->last_name }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($addon['addon']->cost) }}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -177,12 +238,14 @@
                     <div class="card-title">
                         <h4 class="fw-bold">Order Adjustments</h4>
                     </div>
+                    @can('create', \App\Models\ManualAdjustment::class)
                     <div class="pb-3 text-end">
                         <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="btn btn-success text-white">
                             <i class="icon-plus"></i>
                             Add Adjustment
                         </a>
                     </div>
+                    @endcan
                     <div class="pt-2">
                         <table class="table table-striped" id="order-adjustment-table">
                             <thead>
@@ -194,14 +257,26 @@
                             </thead>
                             @foreach($order->adjustments as $adjustment)
                                 <tr>
-                                    <td>{{ $adjustment->amount }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
-                                        <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
-                                        <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                        <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" method="post" id="madjustment-{{$adjustment->id}}-delete">
-                                            @csrf
-                                        </form>
+                                        @can('update', \App\Models\ManualAdjustment::class)
+                                            <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\ManualAdjustment::class)
+                                            <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
+                                            <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" method="post" id="madjustment-{{$adjustment->id}}-delete">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -224,18 +299,30 @@
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
-                            @foreach($customers as $ordersCustomer)
+                            @foreach($order->orderCustomers as $ordersCustomer)
                                 @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
-                                    <td>{{ $adjustment->amount }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
+                                        @can('update', \App\Models\OrderCustomerAdjustment::class)
                                         <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-note"></i>
+                                            </span>
+                                        @endcan
+                                        @can('delete', \App\Models\OrderCustomerAdjustment::class)
                                         <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                         <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                             @csrf
                                         </form>
+                                        @else
+                                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                                <i class="icon-trash"></i>
+                                            </span>
+                                        @endcan
                                     </td>
                                 </tr>
                                 @endforeach

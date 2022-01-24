@@ -12,11 +12,21 @@ class OrderActivity extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id'];
+    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id','cost'];
+    public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderActivities = OrderActivity::where('order_customer_id', $orderCustomerId)->get();
+
+
+        return $orderActivities;
+    }
+
+    // TODO: Deprecate
     public function orderCustomers()
     {
-        return $this->belongsTo(OrderCustomer::class);
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
     public function activity()
@@ -34,12 +44,33 @@ class OrderActivity extends Model
         return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
     }
 
-    public static function findByOrderCustomer($orderCustomerId)
+    public function isCancelled(): bool
     {
-        $orderActivities = OrderActivity::where('order_customer_id',$orderCustomerId)->get();
-
-
-        return $orderActivities;
+        return $this->orderCustomers->order->cancelled;
     }
 
+    public function tourComponent()
+    {
+        return $this->activityInventoryTour();
+    }
+
+    public function getDetailsAttribute()
+    {
+        return "{$this->tourComponent->inventory}";
+    }
+
+    public function getTourComponentTypeAttribute()
+    {
+        return $this->tourComponent->tour_component_type;
+    }
+
+    public function getTourSalesPriceAttribute()
+    {
+        return $this->tourComponent->tour_sales_price;
+    }
+
+    public function orderCustomer()
+    {
+        return $this->orderCustomers();
+    }
 }

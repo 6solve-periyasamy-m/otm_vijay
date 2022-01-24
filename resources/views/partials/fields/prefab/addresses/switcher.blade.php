@@ -25,9 +25,15 @@
     @include('partials.fields.prefab.addresses.selector', ['value' => isset($address) ? $address->id : 0, ])
 </div>
 <div class="switcher-new">
+    @can('create', \App\Models\LocationType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
                  'route' => 'location-types', 'createRoute' => route('location-types.create')])
+    @else
+        @include('partials.fields.selector.default',
+                ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
+                 'route' => 'location-types', ])
+    @endcan
     <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
     @include('partials.fields.text', ['name' => 'Address Line 1', 'field' => ($prefix ?? "") . 'address_line_1', 'value' => $address_line_1 ?? null,])
     @include('partials.fields.text', ['name' => 'Address Line 2', 'field' => ($prefix ?? "") . 'address_line_2', 'value' => $address_line_2 ?? null,])

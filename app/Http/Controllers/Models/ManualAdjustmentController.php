@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\Order\Adjustment\AdjustmentCreatedEvent;
+use App\Events\Order\Adjustment\AdjustmentEditedEvent;
+use App\Events\Order\Adjustment\AdjustmentRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\ManualAdjustment;
 use App\Models\Order;
@@ -17,7 +20,7 @@ class ManualAdjustmentController extends Controller
 
     public function create(Order $order)
     {
-        return view('pages.models.manual_adjustments.create', ['order' => $order, ]);
+        return view('pages.models.manual_adjustments.create', ['order' => $order,]);
     }
 
     public function store(Request $request, Order $order)
@@ -29,7 +32,8 @@ class ManualAdjustmentController extends Controller
             'date' => $request->input('date'),
         ]);
         $order->adjustments()->save($manualAdjustment);
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        event(new AdjustmentCreatedEvent($manualAdjustment));
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function view(Order $order, ManualAdjustment $manualAdjustment)
@@ -49,14 +53,15 @@ class ManualAdjustmentController extends Controller
             'amount' => $request->input('amount'),
             'reason' => $request->input('reason'),
             'date' => $request->input('date'),
-
         ]);
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        event(new AdjustmentEditedEvent($manualAdjustment));
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function destroy(Order $order, ManualAdjustment $manualAdjustment)
     {
         $manualAdjustment->delete();
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        event(new AdjustmentRemovedEvent($manualAdjustment));
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

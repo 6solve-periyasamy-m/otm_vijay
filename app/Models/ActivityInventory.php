@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,20 +14,32 @@ class ActivityInventory extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_id','ticket_type_id','starts_at','ends_at','fit_selectable','stock','purchase_price','sales_price','currency_id','notes',];
+    public $additional_attributes = ['Activity_for_tour','used_stock','used_on_tour_count'];
+    protected $fillable = ['activity_id', 'ticket_type_id', 'starts_at', 'ends_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
-    const RULES = [
-        'ticket_type_id' => 'required|exists:ticket_types,id',
-        'starts_at' => 'date',
-        'ends_at' => 'date',
-        'stock' => 'required|numeric|integer',
-        'purchase_price' => 'required|numeric',
-        'sales_price' => 'required|numeric',
-    ];
+
+    public static function getValidationRules()
+    {
+        return [
+            'ticket_type_id' => 'required|exists:ticket_types,id',
+            'starts_at' => 'date',
+            'ends_at' => 'date',
+            'stock' => 'required|numeric|integer',
+            'purchase_price' => 'required|numeric',
+            'sales_price' => 'required|numeric',
+        ];
+    }
+
+    public static function findByTour($tour_id)
+    {
+        return ActivityInventory::with(['tour' => function ($q) use ($tour_id) {
+            $q->where('tour_id', $tour_id);
+        }])->get();
+    }
 
     public function activity()
     {
@@ -48,24 +61,40 @@ class ActivityInventory extends Model
         return $this->belongsToMany(Tour::class, 'activity_inventory_tour')->withPivot('sales_price', 'tour_component_type');
     }
 
-    public function tourComponents() {
-        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
-    }
-
-    public static function findByTour($tour_id)
+    public function tourComponents()
     {
-        return ActivityInventory::with(['tour' => function ($q) use ($tour_id) {
-            $q->where('tour_id', $tour_id);
-        }])->get();
+        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
     }
 
     public function getActivityForTourAttribute()
     {
-        $starts_at =  $this->starts_at->format('d/m/Y H:i');
+        $starts_at = $this->starts_at->format('d/m/Y H:i');
         $ends_at = $this->ends_at->format('d/m/Y H:i');
 
         return "{$this->activity->name}｜Activity Start: {$starts_at}｜Activity End: {$ends_at}｜Ticket Type: {$this->ticketType->name}";
     }
 
-    public $additional_attributes = ['Activity_for_tour'];
+    public function getUsedStock(): int
+    {
+        return StockRepository::getActivityStock($this);
+    }
+
+    public function getUsedStockAttribute()
+    {
+        return $this->getUsedStock();
+    }
+
+    public function getUsedOnTourCountAttribute()
+    {
+        return $this->tourComponents()->count();
+    }
+
+    public function component() {
+        return $this->activity();
+    }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->ticketType} ({$this->starts_at} to {$this->ends_at})";
+    }
 }

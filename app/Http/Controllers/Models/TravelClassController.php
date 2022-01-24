@@ -21,10 +21,11 @@ class TravelClassController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(TravelClass::getValidationRules());
         $travelClass = TravelClass::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('travel-classes.view', ['travelClass' => $travelClass,]);
+        return view('pages.close');
     }
 
     public function view(TravelClass $travelClass)
@@ -39,10 +40,11 @@ class TravelClassController extends Controller
 
     public function update(Request $request, TravelClass $travelClass)
     {
+        $request->validate(TravelClass::getValidationRules());
         $travelClass->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('travel-classes.view', ['travelClass' => $travelClass,]);
+        return view('pages.close');
     }
 
     public function destroy(TravelClass $travelClass)

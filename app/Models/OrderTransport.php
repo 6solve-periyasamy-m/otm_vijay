@@ -12,11 +12,20 @@ class OrderTransport extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'transport_inventory_tour_id'];
+    protected $fillable = ['order_customer_id', 'transport_inventory_tour_id','cost'];
+    public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
+    public static function findByOrderCustomer($orderCustomerId)
+    {
+        $orderTransports = OrderTransport::where('order_customer_id', $orderCustomerId)->get();
+
+        return $orderTransports;
+    }
+
+    // TODO: Deprecate
     public function orderCustomers()
     {
-        return $this->belongsTo(OrderCustomer::class);
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
     public function transport()
@@ -29,14 +38,38 @@ class OrderTransport extends Model
         return TransportComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
-    public function transportInventoryTour() {
+    public function transportInventoryTour()
+    {
         return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 
-    public static function findByOrderCustomer($orderCustomerId)
+    public function isCancelled(): bool
     {
-        $orderTransports = OrderTransport::where('order_customer_id',$orderCustomerId)->get();
+        return $this->orderCustomers->order->cancelled;
+    }
 
-        return $orderTransports;
+    public function tourComponent()
+    {
+        return $this->transportInventoryTour();
+    }
+
+    public function getDetailsAttribute()
+    {
+        return "{$this->tourComponent->inventory}";
+    }
+
+    public function getTourComponentTypeAttribute()
+    {
+        return $this->tourComponent->tour_component_type;
+    }
+
+    public function getTourSalesPriceAttribute()
+    {
+        return $this->tourComponent->tour_sales_price;
+    }
+
+    public function orderCustomer()
+    {
+        return $this->orderCustomers();
     }
 }

@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => route('activities.store'),])
+@extends('layout.form', ['action' => route('activities.store'), 'multipart' => true,])
 
 @section('title', 'Create Activity')
 

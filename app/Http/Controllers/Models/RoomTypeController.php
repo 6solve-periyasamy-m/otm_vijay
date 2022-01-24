@@ -21,11 +21,12 @@ class RoomTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(RoomType::getValidationRules());
         $roomType = RoomType::create([
             'name' => $request->input('name'),
-            'maximum_occupancy' => $request->input('maximum_occupancy'),
+            'maximum_occupancy' => abs($request->input('maximum_occupancy')),
         ]);
-        return redirect()->route('room-types.view', ['roomType' => $roomType,]);
+        return view('pages.close');
     }
 
     public function view(RoomType $roomType)
@@ -40,11 +41,12 @@ class RoomTypeController extends Controller
 
     public function update(Request $request, RoomType $roomType)
     {
+        $request->validate(RoomType::getValidationRules());
         $roomType->update([
             'name' => $request->input('name'),
-            'maximum_occupancy' => $request->input('maximum_occupancy'),
+            'maximum_occupancy' => abs($request->input('maximum_occupancy')),
         ]);
-        return redirect()->route('room-types.view', ['roomType' => $roomType,]);
+        return view('pages.close');
     }
 
     public function destroy(RoomType $roomType)

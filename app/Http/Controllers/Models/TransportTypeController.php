@@ -21,10 +21,11 @@ class TransportTypeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(TransportType::getValidationRules());
         $transportType = TransportType::create([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('transport-types.view', ['transportType' => $transportType,]);
+        return view('pages.close');
     }
 
     public function view(TransportType $transportType)
@@ -39,10 +40,11 @@ class TransportTypeController extends Controller
 
     public function update(Request $request, TransportType $transportType)
     {
+        $request->validate(TransportType::getValidationRules());
         $transportType->update([
             'name' => $request->input('name'),
         ]);
-        return redirect()->route('transport-types.view', ['transportType' => $transportType,]);
+        return view('pages.close');
     }
 
     public function destroy(TransportType $transportType)

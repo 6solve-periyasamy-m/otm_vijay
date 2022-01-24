@@ -17,12 +17,12 @@ class ActivityInventoryController extends Controller
 
     public function create(Activity $activity)
     {
-        return view('pages.models.activity_inventories.create', ['activity' => $activity, ]);
+        return view('pages.models.activity_inventories.create', ['activity' => $activity,]);
     }
 
     public function store(Request $request, Activity $activity)
     {
-        $request->validate(ActivityInventory::RULES);
+        $request->validate(ActivityInventory::getValidationRules());
         $activityInventory = ActivityInventory::make([
             'ticket_type_id' => $request->input('ticket_type_id'),
             'starts_at' => $request->input('starts_at'),
@@ -34,7 +34,7 @@ class ActivityInventoryController extends Controller
             'notes' => $request->input('notes'),
         ]);
         $activity->activityInventory()->save($activityInventory);
-        return redirect()->route('activities.view', ['activity' => $activity, ]);
+        return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
     public function view(Activity $activity, ActivityInventory $activityInventory)
@@ -49,7 +49,7 @@ class ActivityInventoryController extends Controller
 
     public function update(Request $request, Activity $activity, ActivityInventory $activityInventory)
     {
-        $request->validate(ActivityInventory::RULES);
+        $request->validate(ActivityInventory::getValidationRules());
         $activityInventory->update([
             'ticket_type_id' => $request->input('ticket_type_id'),
             'starts_at' => $request->input('starts_at'),
@@ -60,13 +60,16 @@ class ActivityInventoryController extends Controller
             'sales_price' => $request->input('sales_price'),
             'notes' => $request->input('notes'),
         ]);
-        return redirect()->route('activities.view', ['activity' => $activity, ]);
+        return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
     public function destroy(Activity $activity, ActivityInventory $activityInventory)
     {
+        if ($activityInventory->tourComponents()->count() > 0) {
+            return back()->withErrors(trans('custom.used-in-tour', ['model' => 'Activity Inventory']));
+        }
         $activityInventory->delete();
-        return redirect()->route('activities.view', ['activity' => $activity, ]);
+        return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
     public function duplicate(Activity $activity, ActivityInventory $activityInventory)

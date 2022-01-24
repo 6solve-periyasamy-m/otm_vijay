@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,13 +13,16 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    protected $fillable = ['quote_id','tour_id','lead_booker_id','token','booking_reference','ordered_on','internal_notes','external_notes',];
+    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
+    protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
-    public static function getValidationRules() {
+    public static function getValidationRules()
+    {
         return [
             'quote_id' => 'nullable|exists:quotes,id',
-            'tour_id'=> 'required|exists:tours,id',
+            'tour_id' => 'required|exists:tours,id',
+            'ordered_on' => 'required|date'
         ];
     }
 
@@ -28,10 +32,10 @@ class Order extends Model
             . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
-            . substr(str_shuffle(str_repeat($x='ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4/strlen($x)))), 1, 4);
+            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
 
-    public function quote() 
+    public function quote()
     {
         return $this->hasOne(Quote::class);
     }
@@ -46,19 +50,134 @@ class Order extends Model
         return $this->hasOne(OrderStatus::class);
     }
 
-    public function orderCustomers() {
+    public function orderCustomers()
+    {
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
-    public function payments() {
+    public function payments()
+    {
         return $this->hasMany(Payment::class, 'order_id');
     }
 
-    public function leadBooker() {
+    public function leadBooker()
+    {
         return $this->belongsTo(OrderCustomer::class, 'lead_booker_id');
     }
 
-    public function adjustments() {
+    public function adjustments()
+    {
         return $this->hasMany(ManualAdjustment::class, 'order_id');
+    }
+
+    public function reminders()
+    {
+        return $this->hasMany(PaymentReminder::class, 'order_id');
+    }
+
+    public function getStatus()
+    {
+        return self::getStatusArray(OrderRepository::getOrderStatus($this));
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'order_id');
+    }
+
+    public static function getStatusArray(int $status): array
+    {
+        switch ($status) {
+            case -3:
+                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
+            case -2:
+                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
+            case -1:
+                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
+            case 0:
+                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
+            case 1:
+                return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
+            case 2:
+                return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
+            case 3:
+                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            default:
+                return ['status' => 'Status Unknown', 'color' => 'dark'];
+        }
+    }
+
+    public function getCustomerCount(): int
+    {
+        return $this->orderCustomers->count();
+    }
+
+    public function getCost()
+    {
+        return OrderRepository::getCost($this);
+    }
+
+    public function getCostBreakdown(): array
+    {
+        return OrderRepository::getCostBreakdown($this);
+    }
+
+    public function getPaid()
+    {
+        return OrderRepository::getTotalPaid($this);
+    }
+
+    public function getAdjustmentValue()
+    {
+        return OrderRepository::getTotalAdjustedValue($this);
+    }
+
+    public function installments()
+    {
+        return $this->hasMany(OrderInstallment::class, 'order_id');
+    }
+
+    public function getRemaining(): float
+    {
+        return OrderRepository::getRemainingToPay($this);
+    }
+
+    public function getNextInstallment(): array
+    {
+        return OrderRepository::getNextPaymentDetails($this);
+    }
+
+    public function getAdditionals(): array
+    {
+        return OrderRepository::getOrderAdditionals($this);
+    }
+
+    public function customers() {
+        return OrderRepository::getCustomersForOrder($this);
+    }
+
+    public function getLeadBookerNameAttribute(): string
+    {
+        return $this->leadBooker->customer_name;
+    }
+
+    public function getStatusAttribute(): string
+    {
+        return $this->getStatus()['status'];
+    }
+
+    public function getPaidAttribute(): float
+    {
+        return $this->getPaid();
+    }
+
+    public function getTotalAttribute(): float
+    {
+        return $this->getCost();
+    }
+
+    public function getRemainingAttribute(): float
+    {
+        return $this->getRemaining();
     }
 }

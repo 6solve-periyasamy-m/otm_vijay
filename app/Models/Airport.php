@@ -10,7 +10,12 @@ class Airport extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name','iata_code','address_id'];
+    protected $fillable = ['name', 'iata_code', 'address_id'];
+
+    public static function getValidationRules()
+    {
+        return ['name' => 'required|unique:airports,name', 'iata_code' => 'required|size:3',];
+    }
 
     public function flightInventory()
     {
@@ -30,5 +35,10 @@ class Airport extends Model
     public function flight()
     {
         return $this->hasMany(Flight::class);
+    }
+
+    public function __toString()
+    {
+        return $this->name . ' - ' . $this->iata_code . ' - ' . $this->address->country;
     }
 }

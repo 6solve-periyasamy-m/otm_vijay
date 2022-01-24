@@ -1,1 +1,148 @@
 // In this scss you can overwrite all our scss, we suggested you to add your scss into this, so whenever the update comes it will not affect your code.
+#app {
+    overflow: auto;
+}
+
+.card {
+    border-width: 0px;
+    box-shadow: 0px 2px 8px rgb(0 0 0 / 10%);
+}
+
+.stamp-logo {
+    height: 90px;
+}
+
+.setting-logo {
+    height: 110px;
+}
+
+.order-select {
+    width: fit-content;
+    margin-left: 1rem;
+}
+
+.payment-balance {
+    .heading {
+        font-size: 20px;
+        color: #0070BA;
+        font-weight: 600;
+        margin-bottom: 2rem;
+    }
+
+    .sub-heading {        
+        background-color: #0070BA;
+        color: white;
+        padding: 0.3rem 0.5rem;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .payment-value {
+        font-size: 30px;
+        color: black;
+        margin-bottom: 0;
+        line-height: 30px;
+
+        span {
+            font-size: 30px;
+        }
+
+        &.badge {            
+            font-size: .75rem;
+            display: table;
+            padding: 0.35em 0.65em;            
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.2rem;
+
+            &.danger {
+                color: #fff !important;
+                background-color: #ff3547 !important;
+            }
+
+            &.success {
+                color: #fff !important;
+                background-color: #38c172 !important;
+            }
+
+            &.warning {
+                color: white !important;
+                background-color: #ffed4a !important;
+            }
+        }
+    }
+
+    .payment-label {
+        color: grey;
+        font-weight: 100;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.payment-record {
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-color: lightgrey;
+    border-style: dotted;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    
+    .date {
+        font-size: 15px;
+        width: 57px;
+        line-height: 24px;
+        color: black;
+        font-weight: 600;
+        text-align: center;
+
+        .year {
+            font-size: 14px;
+            color: grey;
+        }
+    }
+
+    .method {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin-left: 20px;
+        height: 100%;
+
+        .value {
+            color: black;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 27px;
+        }
+
+        .deposit {
+            font-size: 14px;
+            color: grey;
+        }
+    }
+
+    .value {
+        color: #0070BA;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .col-md-6:last-child {
+        .payment-record {
+            margin-bottom: 0rem;
+        }
+    }    
+}

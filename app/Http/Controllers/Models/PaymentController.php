@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Models;
 
+use App\Events\Order\Payment\PaymentCreatedEvent;
+use App\Events\Order\Payment\PaymentEditedEvent;
+use App\Events\Order\Payment\PaymentRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Payment;
@@ -17,13 +20,13 @@ class PaymentController extends Controller
 
     public function create(Order $order)
     {
-        return view('pages.models.payments.create', ['order' => $order, ]);
+        return view('pages.models.payments.create', ['order' => $order,]);
     }
 
     public function store(Request $request, Order $order)
     {
         $request->validate(Payment::getValidationRules());
-        $value = $request->input('payment_type') === "Refund" ? abs($request->input('amount'))*-1 : abs($request->input('amount'));
+        $value = $request->input('payment_type') === "Refund" ? abs($request->input('amount')) * -1 : abs($request->input('amount'));
         $payment = Payment::make([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $value,
@@ -31,7 +34,8 @@ class PaymentController extends Controller
             'paid_on' => $request->input('paid_on'),
         ]);
         $order->payments()->save($payment);
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        event(new PaymentCreatedEvent($payment));
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function view(Order $order, Payment $payment)
@@ -47,19 +51,21 @@ class PaymentController extends Controller
     public function update(Request $request, Order $order, Payment $payment)
     {
         $request->validate(Payment::getValidationRules());
-        $value = $request->input('payment_type') === "Refund" ? abs($request->input('amount'))*-1 : abs($request->input('amount'));
+        $value = $request->input('payment_type') === "Refund" ? abs($request->input('amount')) * -1 : abs($request->input('amount'));
         $payment->update([
             'payment_method_id' => $request->input('payment_method_id'),
             'amount' => $value,
             'payment_type' => $request->input('payment_type'),
             'paid_on' => $request->input('paid_on'),
         ]);
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        event(new PaymentEditedEvent($payment));
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function destroy(Order $order, Payment $payment)
     {
         $payment->delete();
-        return redirect()->route('orders.view', ['order' => $order, ]);
+        event(new PaymentRemovedEvent($payment));
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

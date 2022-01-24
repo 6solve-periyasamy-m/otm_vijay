@@ -2,9 +2,13 @@
 
 namespace App\Repository;
 
+use App\Models\AccommodationInventoryTour;
+use App\Models\ActivityInventoryTour;
+use App\Models\FlightInventoryTour;
 use App\Models\Order;
 use App\Models\OrderCustomer;
 use App\Models\Tour;
+use App\Models\TransportInventoryTour;
 use Illuminate\Support\Facades\DB;
 
 interface TourRepositoryInterface {
@@ -60,5 +64,73 @@ class TourRepository implements TourRepositoryInterface
         $details['transports'] = $transports;
 
         return $details;
+    }
+
+    public static function getAvailableAccommodationForUpgrades(AccommodationInventoryTour $tourInventory)
+    {
+        $tour = $tourInventory->tour;
+        $included = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->accommodationInventory->id] = $inventoryTour->accommodationInventory->id;
+        }
+        $data = [];
+        foreach ($tourInventory->accommodationInventory->accommodation->inventory as $inventory) {
+            if (in_array($inventory->id, $included)) continue;
+            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->check_out->lte($tour->date_to->setTime(11, 59, 59))) {
+                $data[$inventory->id] = $inventory;
+            }
+        }
+        return $data;
+    }
+
+    public static function getAvailableActivityForUpgrades(ActivityInventoryTour $tourInventory)
+    {
+        $tour = $tourInventory->tour;
+        $included = [];
+        foreach ($tour->activityInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->activityInventory->id] = $inventoryTour->activityInventory->id;
+        }
+        $data = [];
+        foreach ($tourInventory->activityInventory->activity->activityInventory as $inventory) {
+            if (in_array($inventory->id, $included)) continue;
+            if ($inventory->starts_at->gte($tour->date_from->setTime(0,0,0)) && $inventory->ends_at->lte($tour->date_to->setTime(11, 59, 59))) {
+                $data[$inventory->id] = $inventory;
+            }
+        }
+        return $data;
+    }
+
+    public static function getAvailableFlightForUpgrades(FlightInventoryTour $tourInventory)
+    {
+        $tour = $tourInventory->tour;
+        $included = [];
+        foreach ($tour->flightInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->flightInventory->id] = $inventoryTour->flightInventory->id;
+        }
+        $data = [];
+        foreach ($tourInventory->flightInventory->flight->flightInventory as $inventory) {
+            if (in_array($inventory->id, $included)) continue;
+            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(11, 59, 59))) {
+                $data[$inventory->id] = $inventory;
+            }
+        }
+        return $data;
+    }
+
+    public static function getAvailableTransportForUpgrades(TransportInventoryTour $tourInventory)
+    {
+        $tour = $tourInventory->tour;
+        $included = [];
+        foreach ($tour->transportInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->transportInventory->id] = $inventoryTour->transportInventory->id;
+        }
+        $data = [];
+        foreach ($tourInventory->transportInventory->transport->transportInventory as $inventory) {
+            if (in_array($inventory->id, $included)) continue;
+            if ($inventory->departs_at->gte($tour->date_from->setTime(0,0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(11, 59, 59))) {
+                $data[$inventory->id] = $inventory;
+            }
+        }
+        return $data;
     }
 }

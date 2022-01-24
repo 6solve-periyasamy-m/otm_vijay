@@ -2,6 +2,9 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\AccommodationInventoryTour;
+use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\OrderAccommodation;
 use App\Models\OrderCustomer;
 use App\Models\Tour;
@@ -21,6 +24,8 @@ interface AccommodationComponentRepositoryInterface
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
 
     public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
+
+    public static function getParentComponent(AccommodationInventoryTour $inventoryTour);
 }
 
 class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
@@ -67,11 +72,14 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
     {
-        return OrderAccommodation::create([
+        $orderComponent = OrderAccommodation::create([
             'order_customer_id' => $oCustomerId,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
-            'share_with_user_id' => null
+            'share_with_user_id' => null,
+            'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
         ]);
+        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        return $orderComponent;
     }
 
     public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
@@ -107,5 +115,10 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in` AND `accommodation_inventories`.`check_out`");
         if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `accommodation_inventories`.`check_in` AND `accommodation_inventories`.`check_out`");
         return  $query->get();
+    }
+
+    public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
+        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        return $upgrade->base;
     }
 }

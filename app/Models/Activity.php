@@ -13,12 +13,17 @@ class Activity extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasFactory;
 
-    protected $fillable = ['activity_type_id','address_id','name','description','currency_id','notes',];
+    protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes','image_url'];
     protected $cascadeDeletes = ['activityInventory'];
-    const RULES = [
-        'activity_type_id' => 'required|exists:activity_types,id',
-        'name' => 'required',
-    ];
+
+    public static function getValidationRules()
+    {
+        return [
+            'activity_type_id' => 'required|exists:activity_types,id',
+            'name' => 'required',
+            'image' => 'nullable|image',
+        ];
+    }
 
     public function activityInventory()
     {
@@ -38,5 +43,11 @@ class Activity extends Model
     public function currency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function __toString()
+    {
+
+        return "{$this->name} ({$this->activityType}) ({$this->address->region}, {$this->address->country})";
     }
 }

@@ -89,6 +89,55 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'company.vat',
                 'value' => '6210102',
             ),
+            14 => 
+            array (
+                'key' => 'email.payment.due',
+                'value' => '<p>Dear [TITLE] [FIRST_NAME] [LAST_NAME],</p>
+
+<p>You have a payment due on [DUE_PAYMENT_DATE], for [DUE_PAYMENT_AMOUNT]. This payment will need to be paid before this date, or your reservation may be at stake.</p>
+
+<p>If you have any issues, please contact us and we can work towards a solution.</p>
+
+<p>With thanks!</p>
+
+<p>[SETTING_COMPANY_NAME]</p>',
+            ),
+            15 => 
+            array (
+                'key' => 'email.payment.made',
+                'value' => '<p>Dear [TITLE] [FIRST_NAME] [LAST_NAME],</p>
+
+<p>This is an email to inform you that we have recieved a payment of [PAYMENT_AMOUNT], as of [PAYMENT_DATE]. This payment has been made using [PAYMENT_METHOD], and should be shown in your account within 7 working days.</p>
+
+<p>If any issues occur with this payment, we will be in touch to resolve the issue.</p>
+
+<p>With thanks!</p>
+
+<p>[SETTING_COMPANY_NAME]</p>',
+            ),
+            16 => 
+            array (
+                'key' => 'email.refund.given',
+                'value' => '<p>Dear [TITLE] [FIRST_NAME] [LAST_NAME],</p>
+
+<p>This is an email to inform you that you have recieved a refund of [PAYMENT_AMOUNT], as of [PAYMENT_DATE]. This will be paid back to you using [PAYMENT_METHOD], and should be with you within 7 working days.</p>
+
+<p>If you do not recieve this refund within 20 working days, please contact us and we will help to resolve this issue.</p>
+
+<p>With thanks!</p>
+
+<p>[SETTING_COMPANY_NAME]</p>',
+            ),
+            17 =>
+            array (
+                'key' => 'system.format.date',
+                'value' => 'd/m/Y',
+            ),
+            18 =>
+            array (
+                'key' => 'system.format.time',
+                'value' => 'H:i',
+            ),
         ));
         
         

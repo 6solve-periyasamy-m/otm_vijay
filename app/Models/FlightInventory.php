@@ -2,35 +2,45 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
+use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FlightInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['flight_for_tour'];
+    public $additional_attributes = ['flight_for_tour','used_stock','used_on_tour_count'];
     protected $cascadeDeletes = ['flightInventoryTour'];
-    protected $fillable = ['flight_id','travel_class_id','flight_number','check_in','departs_at','arrives_at','fit_selectable','stock','purchase_price','sales_price','currency_id','notes',];
-
-    const RULES = [
-        'travel_class_id' => 'required|exists:travel_classes,id',
-        'flight_number' => 'required',
-        'check_in' => 'date',
-        'departs_at' => 'date',
-        'arrives_at' => 'date',
-        'stock' => 'required|numeric|integer',
-        'purchase_price' => 'required|numeric',
-        'sales_price' => 'required|numeric',
-    ];
-
+    protected $fillable = ['flight_id', 'travel_class_id', 'flight_number', 'check_in', 'departs_at', 'arrives_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected $casts = [
         'check_in' => 'datetime',
         'departs_at' => 'datetime',
         'arrives_at' => 'datetime',
     ];
+
+    public static function getValidationRules()
+    {
+        return [
+            'travel_class_id' => 'required|exists:travel_classes,id',
+            'flight_number' => 'required',
+            'check_in' => 'date',
+            'departs_at' => 'date',
+            'arrives_at' => 'date',
+            'stock' => 'required|numeric|integer',
+            'purchase_price' => 'required|numeric',
+            'sales_price' => 'required|numeric',
+        ];
+    }
+
+    public static function findByTour($tour_id)
+    {
+        return FlightInventory::with(['tour' => function ($q) use ($tour_id) {
+            $q->where('tour_id', $tour_id);
+        }])->get();
+    }
 
     public function flight()
     {
@@ -67,23 +77,6 @@ class FlightInventory extends Model
         return $this->hasOneThrough(Airport::class, Flight::class, 'arrival_airport_id', 'id');
     }
 
-    public static function findByTour($tour_id)
-    {
-        return FlightInventory::with(['tour' => function ($q) use ($tour_id) {
-            $q->where('tour_id', $tour_id);
-        }])->get();
-    }
-
-    public function getDepartureAirport()
-    {
-        return Airport::findOrFail($this->flight->departure_airport_id);
-    }
-
-    public function getArrivalAirport()
-    {
-        return Airport::findOrFail($this->flight->arrival_airport_id);
-    }
-
     public function getFlightForTourAttribute()
     {
         $departure_airport = $this->getDepartureAirport()->name; //Airport::getAirportById($this->flight->departure_airport_id);
@@ -97,8 +90,47 @@ class FlightInventory extends Model
         return "{$this->flight->airline->name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
     }
 
+    public function getDepartureAirport()
+    {
+        return Airport::findOrFail($this->flight->departure_airport_id);
+    }
+
+    public function getArrivalAirport()
+    {
+        return Airport::findOrFail($this->flight->arrival_airport_id);
+    }
+
     // public function getFlightDetails()
     // {
     //     return "{$this->flight->airline->name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
     // }
+
+    public function getUsedStock(): int
+    {
+        return StockRepository::getFlightStock($this);
+    }
+
+    public function getUsedStockAttribute()
+    {
+        return $this->getUsedStock();
+    }
+
+    public function getUsedOnTourCountAttribute()
+    {
+        return $this->tourComponents()->count();
+    }
+
+    public function component() {
+        return $this->flight();
+    }
+
+    public function tourComponents()
+    {
+        return $this->flightInventoryTour();
+    }
+
+    public function __toString()
+    {
+        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) ({$this->departs_at} to {$this->arrives_at})";
+    }
 }

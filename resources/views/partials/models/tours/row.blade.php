@@ -1,15 +1,23 @@
 <tr>
     <td><a href="{{ route('tours.view', ['tour' => $tour->id,]) }}">{{ $tour->name }}</a></td>
     <td>{{ $event }}</td>
+    <td>{{ isset($tour->category) ? $tour->category->name : "No Category" }}</td>
     <td>{{ $description }}</td>
-    <td>{{ $date_from }}</td>
-    <td>{{ $date_to }}</td>
-    <td>{{ $base_price_per_person }}</td>
-    <td>{{ $margin }}</td>
-    <td>{{ $deposit }}</td>
-    <td>{{ $single_occupancy_surcharge }}</td>
+    <td>{{ StringFormatter::formatDate($date_from) }}</td>
+    <td>{{ StringFormatter::formatDate($date_to) }}</td>
+    <td>{{ StringFormatter::formatCurrency($base_price_per_person) }}</td>
+    <td>{{ StringFormatter::formatCurrency($margin) }}</td>
+    <td>{{ StringFormatter::formatCurrency($deposit) }}</td>
+    <td>{{ StringFormatter::formatCurrency($single_occupancy_surcharge) }}</td>
     <td>{{ $stock_control_active ? "Yes" : "No" }}</td>
-    <td>{{ $stock }}</td>
+    <td>
+        @if($stock_control_active)
+            {{$tour->stock - $tour->getUsedStock()}}/{{ $tour->stock }}<br/>
+            ({{$tour->getUsedStock()}} Sold)
+        @else
+            {{$tour->getUsedStock()}} Sold
+        @endif
+    </td>
     <td>{{ $booking_form_url }}</td>
     <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
