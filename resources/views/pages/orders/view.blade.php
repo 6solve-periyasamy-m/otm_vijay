@@ -251,7 +251,7 @@
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
-                                <td>{{ StringFormatter::formatCurrency($order->deposit) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($order->deposit) }} ({{ $order->deposit_percentage }}%)</td>
                                 <td>{{ StringFormatter::formatBoolean($order->deposit < $order->paid) }}</td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
@@ -263,7 +263,7 @@
                                 <tr>
                                     <th scope="row">Installment</th>
                                     <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($installment->amount) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($installment->amount) }} ({{ $installment->percentage }}%)</td>
                                     <td>{{ StringFormatter::formatBoolean($installment->paid) }}</td>
                                     <td class="actions">
                                         <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
@@ -282,7 +282,7 @@
                             <tr>
                                 <th scope="row">Remaining Balance</th>
                                 <td>{{ StringFormatter::formatDate($order->tour->final_payment) }}</td>
-                                <td>{{ StringFormatter::formatCurrency($order->remaining_installment) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
                                 <td>{{ StringFormatter::formatBoolean($order->remaining <= 0) }}</td>
                                 <td class="actions">
                                     <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">

@@ -34,4 +34,9 @@ class OrderInstallment extends Model
     {
         return OrderRepository::isInstallmentPaid($this);
     }
+
+    public function getPercentageAttribute(): float
+    {
+        return round((($this->amount * $this->order->getCustomerCount()) / $this->order->getCost()) * 100, 2);
+    }
 }
