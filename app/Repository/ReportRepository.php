@@ -52,6 +52,7 @@ class ReportRepository
             $row->tour_name = $order->tour->name;
             $row->total_order_value = $order->getCost();
             $row->balance_outstanding = $order->getRemaining();
+            $row->balance_paid = $order->getPaid();
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }
