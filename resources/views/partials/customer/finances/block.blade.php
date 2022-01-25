@@ -29,6 +29,45 @@
         <div class="card">
             <div class="card-body">
                 <div class="row" id="payment_records">
+                    <p class="heading">Payments</p>
+                </div>
+                <div class="text-center">
+                    <div class="row payment-value" style="font-size: 24px !important;">
+                        <div class="col-3">
+                            Type
+                        </div><div class="col-3">
+                            Paid On
+                        </div>
+                        <div class="col-3">
+                            Amount Paid
+                        </div>
+                        <div class="col-3">
+                            Method
+                        </div>
+                    </div>
+                    @foreach($order->payments as $payment)
+                        <div class="row">
+                            <div class="col-3">
+                                {{ $payment->payment_type }}
+                            </div><div class="col-3">
+                                {{ StringFormatter::formatDate($payment->paid_on) }}
+                            </div>
+                            <div class="col-3">
+                                {{ StringFormatter::formatCurrency($payment->amount) }}
+                            </div>
+                            <div class="col-3">
+                                {{ $payment->paymentMethod }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" id="payment_records">
                     <p class="heading">Payment Schedule</p>
                 </div>
                 <div class="text-center">
