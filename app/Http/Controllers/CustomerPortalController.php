@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Repository\OrderRepository;
+use Auth;
 use Illuminate\Http\Request;
 
 class CustomerPortalController extends Controller
 {
+    private function getCustomer(): ?Customer
+    {
+        return Customer::find(Auth::guard('customer')->id());
+    }
+
     public function showMainPortal(Customer $customer) {
-        return view('pages.customer.portal', ['customer' => $customer,]);
+        return view('pages.customer.portal', ['customer' => $this->getCustomer(),]);
     }
 
     public function showCustomerLogin() {
@@ -20,31 +26,33 @@ class CustomerPortalController extends Controller
         return view('pages.customer.auth.register');
     }
 
-    public function showDetailsPage(Customer $customer) {
-        return view('pages.customer.details', ['customer' => $customer,]);
+    public function showDetailsPage() {
+        return view('pages.customer.details', ['customer' => $this->getCustomer(),]);
     }
 
-    public function showAtol(Customer $customer) {
-        return view('pages.customer.atol', ['customer' => $customer,]);
+    public function showAtol() {
+        return view('pages.customer.atol', ['customer' => $this->getCustomer(),]);
     }
 
-    public function showEditDetailsPage(Customer $customer) {
-        return view('pages.customer.edit', ['customer' => $customer,]);
+    public function showEditDetailsPage() {
+        return view('pages.customer.edit', ['customer' => $this->getCustomer(),]);
     }
 
-    public function showFinancesPage(Customer $customer) {
+    public function showFinancesPage() {
         //echo json_encode(OrderRepository::getCustomerOrders($customer));
-        return view('pages.customer.finances', OrderRepository::getCustomerOrders($customer));
+        return view('pages.customer.finances', OrderRepository::getCustomerOrders($this->getCustomer()));
     }
 
     public function login(Request $request) {
-        // TODO: (Celeste) Implement
-        return redirect()->route('customer.portal', ['customer' => Customer::findOrFail(1),]);
+        if (Auth::guard('customer')->attempt(['email_address' => $request->email, 'password' => $request->password])) {
+            return redirect()->intended(route('customer.portal'));
+        }
+        return back()->withErrors('Could not authenticate with those credentials');
     }
 
     public function register(Request $request) {
         // TODO: (Celeste) Implement
-        return redirect()->route('customer.portal', ['customer' => Customer::findOrFail(1),]);
+        return redirect()->route('customer.portal');
     }
 
     public function storeDetails(Request $request, Customer $customer) {
