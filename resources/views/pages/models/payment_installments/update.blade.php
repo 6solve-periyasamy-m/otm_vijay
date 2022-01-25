@@ -1,6 +1,6 @@
 @extends('layout.form', ['action' => route('payment-installments.update', ['tour' => $tour, 'paymentInstallment' => $paymentInstallment,]),])
 
-@section('title', 'Update PaymentInstallment')
+@section('title', 'Update Payment Installment')
 
 @section('form-body')
   @include('partials.models.payment_installments.form', [

@@ -16,6 +16,7 @@
         $('#cost-table').DataTable({fixedHeader: true});
         $('#order-adjustment-table').DataTable({fixedHeader: true});
         $('#customer-adjustment-table').DataTable({fixedHeader: true});
+        $('#schedule-table').DataTable({fixedHeader: true,});
     });
 </script>
 @endsection
@@ -231,7 +232,69 @@
                     </div>
                 </div>
             </div>
-        </div>        
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Schedule</h4>
+                    </div>
+                    <div>
+                        <table class="table table-striped" id="schedule-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Type</th>
+                                <th scope="col">Due</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Paid</th>
+                                <th scope="col" class="actions">Actions</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">Deposit</th>
+                                <td>With Order</td>
+                                <td>{{ StringFormatter::formatCurrency($order->deposit) }} ({{ $order->deposit_percentage }}%)</td>
+                                <td>{{ StringFormatter::formatBoolean($order->deposit < $order->paid) }}</td>
+                                <td class="actions">
+                                    <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @foreach($order->installments as $installment)
+                                <tr>
+                                    <th scope="row">Installment</th>
+                                    <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($installment->amount) }} ({{ $installment->percentage }}%)</td>
+                                    <td>{{ StringFormatter::formatBoolean($installment->paid) }}</td>
+                                    <td class="actions">
+                                        <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                            <i class="icon-note"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                                           onclick="event.preventDefault();document.getElementById('orderInstallment-{{ $installment->id }}-delete').submit();">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                        <form id="orderInstallment-{{ $installment->id }}-delete"
+                                              action="{{ route('order-installments.delete', ['order' => $order, 'orderInstallment' => $installment,]) }}"
+                                              method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr>
+                                <th scope="row">Remaining Balance</th>
+                                <td>{{ StringFormatter::formatDate($order->tour->final_payment) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
+                                <td>{{ StringFormatter::formatBoolean($order->remaining <= 0) }}</td>
+                                <td class="actions">
+                                    <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-body">
@@ -331,7 +394,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>    
 </div>
 
