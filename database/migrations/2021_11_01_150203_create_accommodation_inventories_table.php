@@ -24,8 +24,8 @@ class CreateAccommodationInventoriesTable extends Migration
             $table->boolean('check_out_time_confirmed')->default(false);
             $table->boolean('fit_selectable')->default(true);
             $table->integer('stock');
-            $table->double('purchase_price')->nullable();
-            $table->double('sales_price')->nullable();
+            $table->decimal('purchase_price', 12)->nullable();
+            $table->decimal('sales_price', 12)->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

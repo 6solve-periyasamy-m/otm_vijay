@@ -23,8 +23,8 @@ class CreateFlightInventoriesTable extends Migration
             $table->string('flight_number', 255);
             $table->boolean('fit_selectable')->default(true);
             $table->integer('stock')->nullable();
-            $table->float('purchase_price', 10, 0)->nullable();
-            $table->float('sales_price', 10, 0)->nullable();
+            $table->decimal('purchase_price', 12)->nullable();
+            $table->decimal('sales_price', 12)->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

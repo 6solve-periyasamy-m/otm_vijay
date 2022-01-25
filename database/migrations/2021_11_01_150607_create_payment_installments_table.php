@@ -17,7 +17,7 @@ class CreatePaymentInstallmentsTable extends Migration
             $table->id();
             $table->foreignId('tour_id')->index()->constrained()->onDelete('cascade');
             $table->boolean('is_percentage')->default(false);
-            $table->float('amount', 10, 2);
+            $table->decimal('amount', 12);
             $table->date('due_on')->nullable();
             $table->timestamps();
             $table->softDeletes();

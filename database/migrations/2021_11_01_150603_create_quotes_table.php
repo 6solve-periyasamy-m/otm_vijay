@@ -20,7 +20,7 @@ class CreateQuotesTable extends Migration
             $table->foreignId('customer_id')->index()->constrained()->onDelete('cascade');
             $table->foreignId('tour_id')->index()->constrained()->onDelete('cascade');
             $table->integer('pax_number');
-            $table->float('total_quote_value');
+            $table->decimal('total_quote_value', 12);
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

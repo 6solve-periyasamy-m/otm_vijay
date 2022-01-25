@@ -17,7 +17,7 @@ class CreateAccommodationInventoryToursTable extends Migration
             $table->id();
             $table->foreignId('tour_id')->constrained()->onDelete('cascade');
             $table->foreignId('accommodation_inventory_id')->constrained()->onDelete('cascade');
-            $table->float('tour_sales_price', 10, 0)->nullable();
+            $table->decimal('tour_sales_price', 12)->nullable();
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
             $table->string('booking_policy', 12)->default('overbook');
             $table->timestamps();
