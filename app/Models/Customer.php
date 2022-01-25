@@ -20,6 +20,8 @@ class Customer extends Model
 
     protected $casts = ['date_of_birth' => 'date', 'passport_issue_date' => 'date', 'passport_expiry_date' => 'date',];
 
+    protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
+
     public static function getValidationRules()
     {
         return [
@@ -28,7 +30,7 @@ class Customer extends Model
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
             'mobile_number' => 'required',
-            'email_address' => 'required|email',
+            'email_address' => 'required|email|unique:customers,email_address',
             'gender' => 'required',
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
