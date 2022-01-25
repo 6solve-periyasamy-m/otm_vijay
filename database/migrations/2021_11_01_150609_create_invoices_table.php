@@ -23,7 +23,7 @@ class CreateInvoicesTable extends Migration
             $table->longText('payments');
             $table->longText('installments');
             $table->text('footer')->nullable();
-            $table->float('total_cost');
+            $table->decimal('total_cost', 12);
             $table->timestamps();
             $table->softDeletes();
             $table->text('notes')->nullable();

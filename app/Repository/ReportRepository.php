@@ -51,7 +51,7 @@ class ReportRepository
             $row->customer_count = $order->getCustomerCount();
             $row->tour_name = $order->tour->name;
             $row->total_order_value = $order->getCost();
-            $row->balance_outstanding = $order->getCost() - OrderRepository::getTotalPaid($order);
+            $row->balance_outstanding = $order->getRemaining();
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }
