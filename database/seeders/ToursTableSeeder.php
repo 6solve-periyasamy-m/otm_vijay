@@ -40,6 +40,7 @@ class ToursTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 12:05:20',
                 'deleted_at' => NULL,
                 'invoice_footer' => 'This is a demo tour, and will not be fulfilled',
+                'final_payment' => '2022-06-30',
             ),
             1 => 
             array (

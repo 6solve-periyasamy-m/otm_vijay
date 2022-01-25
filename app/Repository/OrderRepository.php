@@ -681,7 +681,7 @@ class OrderRepository
     public static function cloneInstallments(Order $order) {
         foreach ($order->tour->paymentInstallments as $installment) {
             $oInstallment = OrderInstallment::make([
-                'amount' => $installment->amount,
+                'amount' => $installment->cost,
                 'due_on' => $installment->due_on,
             ]);
             $order->installments()->save($oInstallment);
@@ -799,7 +799,7 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = $order->getAdjustmentValue() + $order->getPaid();
+        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->deposit;
         foreach ($order->installments as $orderInstallment) {
             $paid -= $orderInstallment->amount;
             if ($paid < 0) return false;

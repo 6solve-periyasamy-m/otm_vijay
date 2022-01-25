@@ -16,7 +16,8 @@ class CreatePaymentInstallmentsTable extends Migration
         Schema::create('payment_installments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tour_id')->index()->constrained()->onDelete('cascade');
-            $table->float('amount', 10, 2);
+            $table->boolean('is_percentage')->default(false);
+            $table->decimal('amount', 12);
             $table->date('due_on')->nullable();
             $table->timestamps();
             $table->softDeletes();

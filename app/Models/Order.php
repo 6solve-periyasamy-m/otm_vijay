@@ -139,7 +139,7 @@ class Order extends Model
 
     public function getRemaining(): float
     {
-        return OrderRepository::getRemainingToPay($this);
+        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
     }
 
     public function getNextInstallment(): array
@@ -179,5 +179,25 @@ class Order extends Model
     public function getRemainingAttribute(): float
     {
         return $this->getRemaining();
+    }
+
+    public function getRemainingInstallmentAttribute(): float
+    {
+        $cost = $this->getCost() - $this->deposit;
+        foreach ($this->installments as $installment)
+        {
+            $cost -= ($installment->amount) * $this->getCustomerCount();
+        }
+        return $cost;
+    }
+
+    public function getDepositPercentageAttribute(): float
+    {
+        return round(($this->deposit / $this->getCost()) * 100, 2);
+    }
+
+    public function getRemainingPercentageAttribute(): float
+    {
+        return round(($this->remaining_installment / $this->getCost()) * 100, 2);
     }
 }

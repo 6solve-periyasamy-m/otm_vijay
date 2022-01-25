@@ -16,7 +16,7 @@ class CreateOrderInstallmentsTable extends Migration
         Schema::create('order_installments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->float('amount', 10, 2);
+            $table->decimal('amount', 12);
             $table->date('due_on')->nullable();
             $table->timestamps();
             $table->softDeletes();

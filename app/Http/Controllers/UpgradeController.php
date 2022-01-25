@@ -140,7 +140,7 @@ class UpgradeController extends Controller
             'tour_component_type' => 'Upgrade',
             'flight_inventory_id' => $request->input('inventory_id'),
             'tour_sales_price' => $request->input('sales_price'),
-            'flight_type' => $inventoryTour->flightType,
+            'flight_type' => $inventoryTour->flight_type,
         ]);
         $tour->flightInventoryTours()->save($tourInventory);
         $upgrade = FlightInventoryTourUpgrade::make([

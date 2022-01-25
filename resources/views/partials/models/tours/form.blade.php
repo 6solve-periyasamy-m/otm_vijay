@@ -21,10 +21,11 @@
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.date',
             ['name' => 'Start Date', 'field' => 'date_from', 'value' => $date_from ?? null,
-             'onChange' => 'changeDate($(\'#date_from-input\'), $(\'#date_to-input\'))', 'width' => 6, ])
+             'onChange' => 'changeDate($(\'#date_from-input\'), $(\'#date_to-input\'))', 'width' => 4, ])
+@include('partials.fields.date', ['name' => 'Final Payment Date', 'field' => 'final_payment', 'value' => isset($tour) ? $tour->final_payment : null, 'width' => 4])
 @include('partials.fields.date',
             ['name' => 'End Date', 'field' => 'date_to', 'value' => $date_to ?? null,
-             'onChange' => 'removeAutoset($(\'#date_from-input\'), $(\'#date_to-input\'));', 'classes' => 'autoset', 'width' => 6,])
+             'onChange' => 'removeAutoset($(\'#date_from-input\'), $(\'#date_to-input\'));', 'classes' => 'autoset', 'width' => 4,])
 <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
 @include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $base_price_per_person ?? null, 'width' => 6,])
 @include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $margin ?? null, 'width' => 6,])
