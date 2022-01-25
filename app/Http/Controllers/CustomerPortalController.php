@@ -39,8 +39,7 @@ class CustomerPortalController extends Controller
     }
 
     public function showFinancesPage() {
-        //echo json_encode(OrderRepository::getCustomerOrders($customer));
-        return view('pages.customer.finances', OrderRepository::getCustomerOrders($this->getCustomer()));
+        return view('pages.customer.finances', ['orders' => $this->getCustomer()->orders]);
     }
 
     public function login(Request $request) {

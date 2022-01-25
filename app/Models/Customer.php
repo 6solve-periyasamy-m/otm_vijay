@@ -80,4 +80,9 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(OrderCustomer::class, 'customer_id');
     }
+
+    public function orders()
+    {
+        return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'id');
+    }
 }
