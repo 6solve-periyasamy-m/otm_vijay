@@ -24,35 +24,17 @@
             <div class="card-body">                
                 <div class="row">
                     <p class="heading">Make Payment</p>
-                    <div class="col-md-5">
-                        <p class="sub-heading">Bill Information</p>
-                        <form class="form-material">
-                            <div class="form-group">                                
-                                <input class="form-control form-control-line" type="text" placeholder="First Name" />
-                            </div>
-                            <div class="form-group">                                
-                                <input class="form-control form-control-line" type="text" placeholder="Last Name" />
-                            </div>
-                            <div class="form-group">                                
-                                <input class="form-control form-control-line" type="text" placeholder="Address" />
-                            </div>
-                            <div class="form-group">                                
-                                <input class="form-control form-control-line" type="text" placeholder="City" />
-                            </div>
-                            <div class="form-group">                                
-                                <input class="form-control form-control-line" type="text" placeholder="Country" />
-                            </div>
-                            <div class="form-group">                                
-                                <input class="form-control form-control-line" type="text" placeholder="Postcode" />
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-12">
                         <p class="sub-heading">Make Payment</p>
-                        <form class="form-material">
-                            <div class="form-material">
-                                <div class="form-group">
-                                    <input class="form-control form-control-line" type="text" placeholder="Amount to Pay"/>
+                        <form class="form-material" action="{{ route('customer.payment.make') }}" method="post">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="booking_reference" id="form-booking-reference">
+                            <div class="form-material row">
+                                <div class="form-group col-12 col-xl-10">
+                                    <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay"/>
+                                </div>
+                                <div class="form-group col-12 col-xl-2">
+                                    <input class="form-control form-control-line" type="submit">
                                 </div>
                             </div>
                         </form>
@@ -71,6 +53,7 @@
         let newBooking = $('.order-select').val()
         $('.order').hide();
         $('.order-' + newBooking).show();
+        $('#form-booking-reference').val(newBooking);
     }
     onOrderChange();
 </script>

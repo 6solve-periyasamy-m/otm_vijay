@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Gateways\StripeGateway;
 use App\Models\Customer;
 use App\Repository\OrderRepository;
 use Auth;
@@ -57,5 +58,19 @@ class CustomerPortalController extends Controller
     public function storeDetails(Request $request, Customer $customer) {
         // TODO: (Celeste) Implement
         return redirect()->route('customer.details', ['customer' => $customer,]);
+    }
+
+    public function makePayment(Request $request)
+    {
+        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric']);
+        $order = OrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
+        $amount = $request->input('amount');
+        if (!isset($order) || $order->leadBooker->customer->id != $this->getCustomer()->id) {
+            return back()->withErrors('Cannot make a payment for an invalid order');
+        }
+        if ($amount > $order->remaining) {
+            return back()->withErrors('Cannot pay more than you owe');
+        }
+        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order, 'Installment');
     }
 }
