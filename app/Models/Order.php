@@ -13,7 +13,7 @@ class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit'];
+    protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
@@ -80,6 +80,11 @@ class Order extends Model
         return self::getStatusArray(OrderRepository::getOrderStatus($this));
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'order_id');
+    }
+
     public static function getStatusArray(int $status): array
     {
         switch ($status) {
@@ -134,7 +139,7 @@ class Order extends Model
 
     public function getRemaining(): float
     {
-        return OrderRepository::getRemainingToPay($this);
+        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
     }
 
     public function getNextInstallment(): array
@@ -174,5 +179,25 @@ class Order extends Model
     public function getRemainingAttribute(): float
     {
         return $this->getRemaining();
+    }
+
+    public function getRemainingInstallmentAttribute(): float
+    {
+        $cost = $this->getCost() - $this->deposit;
+        foreach ($this->installments as $installment)
+        {
+            $cost -= ($installment->amount) * $this->getCustomerCount();
+        }
+        return $cost;
+    }
+
+    public function getDepositPercentageAttribute(): float
+    {
+        return round(($this->deposit / $this->getCost()) * 100, 2);
+    }
+
+    public function getRemainingPercentageAttribute(): float
+    {
+        return round(($this->remaining_installment / $this->getCost()) * 100, 2);
     }
 }

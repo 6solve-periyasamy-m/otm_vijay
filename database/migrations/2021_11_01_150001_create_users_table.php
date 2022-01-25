@@ -20,7 +20,6 @@ class CreateUsersTable extends Migration
             $table->string('avatar', 255)->nullable()->default('images/exampleavatar.jpg');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 255);
-            $table->integer('customer_id')->nullable(); // Store the ID only for customers. TODO: Better solution maybe?
             $table->rememberToken();
             $table->text('settings')->nullable();
             $table->timestamps();

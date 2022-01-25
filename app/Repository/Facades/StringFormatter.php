@@ -4,6 +4,7 @@ namespace App\Repository\Facades;
 
 use App\Repository\SettingsRepository;
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Facades\App;
 use NumberFormatter;
 
@@ -18,12 +19,20 @@ class StringFormatter
 
     public function formatDate($date) : string {
         $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y');
-        return Carbon::parse($date)->format($format);
+        try {
+            return Carbon::parse($date)->format($format);
+        } catch (InvalidFormatException $exception) {
+            return $date;
+        }
     }
 
     public function formatDateTime($date) : string {
         $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y') . ' ' . SettingsRepository::getOrDefault('system.format.time', 'H:i');
-        return Carbon::parse($date)->format($format);
+        try {
+            return Carbon::parse($date)->format($format);
+        } catch (InvalidFormatException $exception) {
+            return $date;
+        }
     }
 
     public function formatBoolean($boolean) : string {

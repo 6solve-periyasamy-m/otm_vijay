@@ -20,14 +20,14 @@ class EventsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'Dinosaur Exhibit at Leeds City Museum',
-                'description' => 'Leeds City Museum is holding an exibit to show off a skeleton found recently.',
-                'starts_at' => '2021-11-22',
-                'ends_at' => '2021-11-30',
-                'booking_url' => 'dino-museum',
+                'name' => 'The Pride',
+                'description' => 'This is a description',
+                'starts_at' => '2021-07-01',
+                'ends_at' => '2021-07-28',
+                'booking_url' => 'the-pride-event',
                 'notes' => NULL,
-                'created_at' => '2021-11-22 13:26:28',
-                'updated_at' => '2021-11-22 13:26:28',
+                'created_at' => '2022-01-20 11:28:17',
+                'updated_at' => '2022-01-20 11:28:17',
                 'deleted_at' => NULL,
             ),
             1 => 

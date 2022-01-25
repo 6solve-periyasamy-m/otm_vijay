@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Models;
 
-use App\Events\PaymentMadeEvent;
+use App\Events\Order\Payment\PaymentCreatedEvent;
+use App\Events\Order\Payment\PaymentEditedEvent;
+use App\Events\Order\Payment\PaymentRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Payment;
@@ -32,7 +34,7 @@ class PaymentController extends Controller
             'paid_on' => $request->input('paid_on'),
         ]);
         $order->payments()->save($payment);
-        event(new PaymentMadeEvent($payment));
+        event(new PaymentCreatedEvent($payment));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
@@ -56,12 +58,14 @@ class PaymentController extends Controller
             'payment_type' => $request->input('payment_type'),
             'paid_on' => $request->input('paid_on'),
         ]);
+        event(new PaymentEditedEvent($payment));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function destroy(Order $order, Payment $payment)
     {
         $payment->delete();
+        event(new PaymentRemovedEvent($payment));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 }

@@ -8,6 +8,7 @@
             <th scope="col">Passenger Count</th>
             <th scope="col">Tour Name</th>
             <th scope="col">Total Order Value</th>
+            <th scope="col">Balance Paid</th>
             <th scope="col">Balance Outstanding</th>
             <th scope="col">Order Status</th>
         </tr>
@@ -22,6 +23,7 @@
                 <td>{{ $row->customer_count }}</td>
                 <td>{{ $row->tour_name }}</td>
                 <td>{{ $row->total_order_value }}</td>
+                <td>{{ $row->balance_paid }}</td>
                 <td>{{ $row->balance_outstanding }}</td>
                 <td class="bg-{{ $row->orderStatus['color'] }}">{{ $row->orderStatus['status'] }}</td>
             </tr>

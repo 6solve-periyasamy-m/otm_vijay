@@ -1,6 +1,6 @@
 <tr>
     <td><a href="{{ route('tours.view', ['tour' => $tour->id,]) }}">{{ $tour->name }}</a></td>
-    <td>{{ $event }}</td>
+    <td>{{ isset($tour->event) ? $tour->event->name : "No Event" }}</td>
     <td>{{ isset($tour->category) ? $tour->category->name : "No Category" }}</td>
     <td>{{ $description }}</td>
     <td>{{ StringFormatter::formatDate($date_from) }}</td>

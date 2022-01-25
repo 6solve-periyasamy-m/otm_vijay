@@ -22,25 +22,17 @@ class AirlinesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'British Airways',
-                'created_at' => '2021-01-15 15:36:53',
-                'updated_at' => '2021-01-15 15:36:53',
+                'name' => 'RyanAir',
+                'created_at' => '2022-01-21 11:14:12',
+                'updated_at' => '2022-01-21 11:14:12',
                 'deleted_at' => NULL,
             ),
             1 => 
             array (
                 'id' => 2,
-                'name' => 'EasyJet',
-                'created_at' => '2021-01-15 15:43:42',
-                'updated_at' => '2021-01-15 15:43:42',
-                'deleted_at' => NULL,
-            ),
-            2 => 
-            array (
-                'id' => 3,
-                'name' => 'KLM',
-                'created_at' => '2021-01-15 15:43:50',
-                'updated_at' => '2021-01-15 15:43:50',
+                'name' => 'ZAF Local',
+                'created_at' => '2022-01-21 12:26:13',
+                'updated_at' => '2022-01-21 12:26:13',
                 'deleted_at' => NULL,
             ),
         ));

@@ -34,28 +34,28 @@ class TourComponentController extends Controller
     }
 
     public function addAccommodationAddon(Request $request) {
-        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:accommodations,id']);
+        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'accommodation_id' => 'required|exists:accommodation_inventory_tours,id']);
         $oCustomerId = $request->input('customer_id');
         $accommodationInventoryTourId = $request->input('accommodation_id');
         return AccommodationComponentRepository::grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
     }
 
     public function addActivityAddon(Request $request) {
-        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:activities,id']);
+        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'activity_id' => 'required|exists:activity_inventory_tours,id']);
         $oCustomerId = $request->input('customer_id');
         $activityInventoryTourId = $request->input('activity_id');
         return ActivityComponentRepository::grantAddonToCustomer($oCustomerId, $activityInventoryTourId);
     }
 
     public function addFlightAddon(Request $request) {
-        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:flights,id']);
+        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'flight_id' => 'required|exists:flight_inventory_tours,id']);
         $oCustomerId = $request->input('customer_id');
         $flightInventoryTourId = $request->input('flight_id');
         return FlightComponentRepository::grantAddonToCustomer($oCustomerId, $flightInventoryTourId);
     }
 
     public function addTransportAddon(Request $request) {
-        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:transports,id']);
+        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'transport_id' => 'required|exists:transport_inventory_tours,id']);
         $oCustomerId = $request->input('customer_id');
         $transportInventoryTourId = $request->input('transport_id');
         return TransportComponentRepository::grantAddonToCustomer($oCustomerId, $transportInventoryTourId);

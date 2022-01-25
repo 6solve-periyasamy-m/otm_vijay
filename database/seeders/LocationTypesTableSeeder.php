@@ -22,57 +22,49 @@ class LocationTypesTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'Airport',
-                'created_at' => '2021-01-15 15:40:29',
-                'updated_at' => '2021-01-15 15:40:29',
+                'name' => 'Hotel',
+                'created_at' => '2022-01-20 11:46:33',
+                'updated_at' => '2022-01-20 11:46:33',
                 'deleted_at' => NULL,
             ),
             1 => 
             array (
                 'id' => 2,
-                'name' => 'Sea Port',
-                'created_at' => '2021-01-15 15:40:38',
-                'updated_at' => '2021-01-15 15:40:38',
+                'name' => 'Beach',
+                'created_at' => '2022-01-20 13:31:11',
+                'updated_at' => '2022-01-20 13:31:11',
                 'deleted_at' => NULL,
             ),
             2 => 
             array (
                 'id' => 3,
-                'name' => 'Train Station',
-                'created_at' => '2021-01-15 15:40:47',
-                'updated_at' => '2021-01-15 15:40:47',
+                'name' => 'Vineyard',
+                'created_at' => '2022-01-20 15:30:46',
+                'updated_at' => '2022-01-20 15:30:46',
                 'deleted_at' => NULL,
             ),
             3 => 
             array (
                 'id' => 4,
-                'name' => 'Bus Station',
-                'created_at' => '2021-01-15 15:40:53',
-                'updated_at' => '2021-01-15 15:40:53',
+                'name' => 'Restaurant',
+                'created_at' => '2022-01-21 10:45:03',
+                'updated_at' => '2022-01-21 10:45:03',
                 'deleted_at' => NULL,
             ),
             4 => 
             array (
                 'id' => 5,
-                'name' => 'Accommodation',
-                'created_at' => '2021-01-15 15:41:00',
-                'updated_at' => '2021-01-15 15:41:16',
+                'name' => 'Tourist Center',
+                'created_at' => '2022-01-21 11:00:43',
+                'updated_at' => '2022-01-21 11:00:43',
                 'deleted_at' => NULL,
             ),
             5 => 
             array (
                 'id' => 6,
-                'name' => 'Point of Interest',
-                'created_at' => '2021-01-15 15:41:27',
-                'updated_at' => '2021-01-15 15:41:27',
-                'deleted_at' => NULL,
-            ),
-            6 => 
-            array (
-                'id' => 7,
-                'name' => 'Hotel',
-                'created_at' => '2021-11-22 12:35:00',
-                'updated_at' => '2021-11-22 12:35:00',
+                'name' => 'Airport',
+                'created_at' => '2022-01-21 11:15:52',
+                'updated_at' => '2022-01-21 11:15:52',
                 'deleted_at' => NULL,
             ),
         ));

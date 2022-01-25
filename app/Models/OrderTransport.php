@@ -12,7 +12,7 @@ class OrderTransport extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'transport_inventory_tour_id'];
+    protected $fillable = ['order_customer_id', 'transport_inventory_tour_id','cost'];
     public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
     public static function findByOrderCustomer($orderCustomerId)
