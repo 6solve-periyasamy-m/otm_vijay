@@ -18,7 +18,7 @@ class CreateActivityInventoryToursTable extends Migration
             $table->foreignId('tour_id')->constrained()->onDelete('cascade');
             $table->foreignId('activity_inventory_id')->constrained()->onDelete('cascade');
             $table->enum('tour_component_type', ['Included', 'Add-on', 'Upgrade'])->default('Included');
-            $table->float('tour_sales_price', 10, 0)->nullable();
+            $table->decimal('tour_sales_price', 12)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,11 +18,11 @@ class CreateActivityInventoriesTable extends Migration
             $table->foreignId('activity_id')->index()->constrained()->onDelete('cascade');
             $table->dateTime('starts_at')->nullable();
             $table->dateTime('ends_at')->nullable();
-            $table->tinyInteger('fit_selectable')->nullable();
+            $table->boolean('fit_selectable')->nullable();
             $table->foreignId('ticket_type_id')->index()->constrained()->onDelete('cascade');
             $table->integer('stock');
-            $table->double('purchase_price');
-            $table->double('sales_price');
+            $table->decimal('purchase_price', 12);
+            $table->decimal('sales_price', 12);
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
