@@ -117,7 +117,11 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard');
 });
 
-Route::middleware('auth')->prefix('admin')->group(function () {
+Route::prefix('admin')->group(function () {
+    Auth::routes(['verify' => true,'register' => false]);
+});
+
+Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderSystemController::class, 'index'])->name("orders.all")->middleware('bouncer:Order,read');
@@ -723,12 +727,13 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('/register', [CustomerPortalController::class, 'showCustomerRegister'])->name('register');
     Route::post('/login', [CustomerPortalController::class, 'login'])->name('confirm-login');
     Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
-    Route::prefix('{customer}')->group(function () {
+    Route::middleware('auth:customer')->group(function () {
         Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
         Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
         Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
         Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
         Route::get('/finances', [CustomerPortalController::class, 'showFinancesPage'])->name('finances');
+        Route::post('/payment/make', [CustomerPortalController::class, 'makePayment'])->name('payment.make');
     });
 });
 
@@ -741,5 +746,5 @@ Route::prefix('payment')->name('payment.')->group(function () {
     });
 });
 
-Auth::routes(['verify' => true,'register' => false]);
+
 Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderAdditionals($value->order));});
