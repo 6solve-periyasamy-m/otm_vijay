@@ -66,7 +66,7 @@
             </div>
         </div>
     </div>        
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <hr class="splitter"/>
     <div class="card">
         <div class="card-body">
             <table class="table table-striped order-table">
