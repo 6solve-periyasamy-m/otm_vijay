@@ -219,6 +219,3 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
        Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
     });
 });
-
-Route::get('/customer/finances', function () { return OrderRepository::getCustomerOrders(\App\Models\Customer::findOrFail(1)); });
-// TODO: Remove
