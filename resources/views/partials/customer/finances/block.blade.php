@@ -32,7 +32,7 @@
                     <p class="heading">Payments</p>
                 </div>
                 <div class="text-center">
-                    <div class="row payment-value" style="font-size: 24px !important;">
+                    <div class="row payment-value table-header">
                         <div class="col-3">
                             Type
                         </div>
@@ -73,7 +73,7 @@
                     <p class="heading">Payment Schedule</p>
                 </div>
                 <div class="text-center">
-                    <div class="row payment-value" style="font-size: 24px !important;">
+                    <div class="row payment-value table-header">
                         <div class="col-3">
                             Type
                         </div>
