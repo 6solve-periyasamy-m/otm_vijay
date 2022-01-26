@@ -183,7 +183,7 @@ class Order extends Model
 
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->getCost() - $this->deposit;
+        $cost = $this->getCost() - $this->calculated_deposit;
         foreach ($this->installments as $installment)
         {
             $cost -= ($installment->amount) * $this->getCustomerCount();
@@ -193,11 +193,16 @@ class Order extends Model
 
     public function getDepositPercentageAttribute(): float
     {
-        return round(($this->deposit / $this->getCost()) * 100, 2);
+        return round(($this->calculated_deposit / $this->getCost()) * 100, 2);
     }
 
     public function getRemainingPercentageAttribute(): float
     {
         return round(($this->remaining_installment / $this->getCost()) * 100, 2);
+    }
+
+    public function getCalculatedDepositAttribute(): float
+    {
+        return $this->deposit * $this->getCustomerCount();
     }
 }
