@@ -35,7 +35,8 @@
                     <div class="row payment-value" style="font-size: 24px !important;">
                         <div class="col-3">
                             Type
-                        </div><div class="col-3">
+                        </div>
+                        <div class="col-3">
                             Paid On
                         </div>
                         <div class="col-3">
@@ -49,7 +50,8 @@
                         <div class="row">
                             <div class="col-3">
                                 {{ $payment->payment_type }}
-                            </div><div class="col-3">
+                            </div>
+                            <div class="col-3">
                                 {{ StringFormatter::formatDate($payment->paid_on) }}
                             </div>
                             <div class="col-3">
@@ -74,7 +76,8 @@
                     <div class="row payment-value" style="font-size: 24px !important;">
                         <div class="col-3">
                             Type
-                        </div><div class="col-3">
+                        </div>
+                        <div class="col-3">
                             Due On
                         </div>
                         <div class="col-3">
@@ -101,7 +104,8 @@
                         <div class="row">
                             <div class="col-3">
                                 Installment
-                            </div><div class="col-3">
+                            </div>
+                            <div class="col-3">
                                 {{ StringFormatter::formatDate($installment->due_on) }}
                             </div>
                             <div class="col-3">
