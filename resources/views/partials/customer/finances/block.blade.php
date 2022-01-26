@@ -109,7 +109,7 @@
                                 {{ StringFormatter::formatDate($installment->due_on) }}
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatCurrency($installment->amount) }}
+                                {{ StringFormatter::formatCurrency($installment->calculated_amount) }}
                             </div>
                             <div class="col-3">
                                 {{ StringFormatter::formatBoolean($installment->paid) }}
