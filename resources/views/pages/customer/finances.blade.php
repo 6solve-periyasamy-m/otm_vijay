@@ -34,7 +34,7 @@
                                     <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay"/>
                                 </div>
                                 <div class="form-group col-12 col-xl-2">
-                                    <input class="form-control form-control-line" type="submit">
+                                    <input class="form-control form-control-line" type="submit" value="Make Payment">
                                 </div>
                             </div>
                         </form>
