@@ -734,6 +734,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
         Route::get('/finances', [CustomerPortalController::class, 'showFinancesPage'])->name('finances');
         Route::post('/payment/make', [CustomerPortalController::class, 'makePayment'])->name('payment.make');
+        Route::get('/finances/invoice/{reference}', [CustomerPortalController::class, 'showInvoice'])->name('invoice');
     });
 });
 

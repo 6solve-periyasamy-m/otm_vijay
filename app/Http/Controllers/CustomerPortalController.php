@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Gateways\StripeGateway;
 use App\Models\Customer;
+use App\Models\Order;
 use App\Repository\OrderRepository;
 use Auth;
 use Illuminate\Http\Request;
@@ -72,5 +73,17 @@ class CustomerPortalController extends Controller
             return back()->withErrors('Cannot pay more than you owe');
         }
         return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order, 'Installment');
+    }
+
+    public function showInvoice(string $reference)
+    {
+        $order = OrderRepository::getOrderFromBookingReference($reference);
+        if (!isset($order)) {
+            abort(404);
+        }
+        if ($this->getCustomer()->id != $order->lead_booker_id) {
+            abort(404);
+        }
+        return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
     }
 }
