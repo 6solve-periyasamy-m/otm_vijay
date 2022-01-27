@@ -47,7 +47,7 @@ class CustomerPortalController extends Controller
         if (Auth::guard('customer')->attempt(['email_address' => $request->email, 'password' => $request->password])) {
             return redirect()->intended(route('customer.portal'));
         }
-        return back()->withErrors('Could not authenticate with those credentials');
+        return back()->withErrors('Could not authenticate with those credentials')->withInput($request->only('email', 'remember'));
     }
 
     public function register(Request $request) {
