@@ -724,9 +724,9 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 
 Route::prefix('customer')->name('customer.')->group(function () {
     Route::get('/login', [CustomerPortalController::class, 'showCustomerLogin'])->name('login');
-    Route::get('/register', [CustomerPortalController::class, 'showCustomerRegister'])->name('register');
+    //Route::get('/register', [CustomerPortalController::class, 'showCustomerRegister'])->name('register');
     Route::post('/login', [CustomerPortalController::class, 'login'])->name('confirm-login');
-    Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
+    //Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
     Route::middleware('auth:customer')->group(function () {
         Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
         Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
@@ -745,6 +745,3 @@ Route::prefix('payment')->name('payment.')->group(function () {
         });
     });
 });
-
-
-Route::get('test/{value}', function(\App\Models\OrderCustomer $value) { dd(OrderRepository::getOrderAdditionals($value->order));});
