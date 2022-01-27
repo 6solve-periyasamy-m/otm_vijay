@@ -21,6 +21,11 @@
     margin-left: 1rem;
 }
 
+.splitter {
+    border-bottom: 5px solid #cccccc;
+    border-radius: 2px;
+}
+
 .payment-balance {
     .heading {
         font-size: 20px;
@@ -45,6 +50,10 @@
 
         span {
             font-size: 30px;
+        }
+
+        &.table-header {
+            font-size: 24px;
         }
 
         &.badge {            
