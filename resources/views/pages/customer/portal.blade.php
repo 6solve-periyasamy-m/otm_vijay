@@ -26,10 +26,10 @@
             <ul class="sub-menu">
                 <li class="menu-link hide"></li>
                 <li class="menu-link">
-                    <a href="">Update Details</a>
+                    <a href="{{ route('customer.edit') }}">Update Details</a>
                 </li>                
                 <li class="menu-link">
-                    <a href="">View ATOL</a>
+                    <a href="{{ route('customer.atol') }}">View ATOL</a>
                 </li>                
             </ul>
         </div>
@@ -41,13 +41,13 @@
             <ul class="sub-menu">
                 <li class="menu-link hide"></li>
                 <li class="menu-link">
-                    <a href="">View Balance</a>
+                    <a href="{{ route('customer.finances') }}">View Balance</a>
                 </li>
                 <li class="menu-link">
-                    <a href="">Make Payments</a>
+                    <a href="{{ route('customer.finances') }}">Make Payments</a>
                 </li>
                 <li class="menu-link">
-                    <a href="">View Invoice</a>
+                    <a href="{{ route('customer.finances') }}">View Invoice</a>
                 </li>               
             </ul>
         </div>
@@ -59,10 +59,10 @@
             <ul class="sub-menu">
                 <li class="menu-link hide"></li>
                 <li class="menu-link">
-                    <a href="">Add-ons</a>
+                    <a href="#">Add-ons</a>
                 </li>                
                 <li class="menu-link">
-                    <a href="">Upgrades</a>
+                    <a href="#">Upgrades</a>
                 </li>                
             </ul>
         </div>
@@ -73,19 +73,19 @@
             </div>
             <ul class="sub-menu">
                 <li class="menu-link">
-                    <a href=""><font-awesome-icon icon="futbol" class="menu-icon" /></a>
+                    <a href="#"><font-awesome-icon icon="futbol" class="menu-icon" /></a>
                 </li>
                 <li class="menu-link">
-                    <a href=""><font-awesome-icon icon="home" class="menu-icon" /></a>
+                    <a href="#"><font-awesome-icon icon="home" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href=""><font-awesome-icon icon="plane" class="menu-icon" /></a>
+                    <a href="#"><font-awesome-icon icon="plane" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href=""><font-awesome-icon icon="train" class="menu-icon" /></a>
+                    <a href="#"><font-awesome-icon icon="train" class="menu-icon" /></a>
                 </li> 
                 <li class="menu-link">
-                    <a href=""><font-awesome-icon icon="list-alt" class="menu-icon" /></a>
+                    <a href="#"><font-awesome-icon icon="list-alt" class="menu-icon" /></a>
                 </li>                
             </ul>
         </div>
