@@ -250,7 +250,7 @@ class OrderRepository
     }
 
     public static function snapshotInstallments(Order $order) {
-        $data = [['due' => 'With Order', 'amount' => $order->deposit, 'paid' => $order->paid >= $order->deposit, ]];
+        $data = [['due' => 'With Order', 'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit, ]];
         foreach ($order->installments as $installment) {
             $data[] = ['due' => $installment->due_on, 'amount' => $installment->amount, 'paid' => $installment->paid,];
         }
@@ -449,7 +449,7 @@ class OrderRepository
         if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
                 return -3;
-            } else if ($paidAmount <= $order->deposit) {
+            } else if ($paidAmount <= $order->calculated_deposit) {
                 return -2;
             } else {
                 return -1;
@@ -490,7 +490,7 @@ class OrderRepository
             $total += $customerValue;
             $breakdown['customers'][] = $customerData;
         }
-        $breakdown['deposit'] = $order->deposit;
+        $breakdown['deposit'] = $order->calculated_deposit;
         $breakdown['total'] = $total;
         return $breakdown;
     }
@@ -556,12 +556,12 @@ class OrderRepository
         $paid = self::getTotalPaid($order);
         $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $paid -= self::getTotalAdjustedValue($order);
-        $paid -= $order->deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
+        $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         foreach ($order->installments as $installment) {
-            $paid -= ($installment->amount * $order->getCustomerCount());
+            $paid -= $installment->calculated_amount;
             if ($paid < 0) {
                 return [
-                    'amount' => $installment->amount < $paid * -1 ? $installment->amount : $paid * -1,
+                    'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
@@ -716,9 +716,9 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->deposit;
+        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->calculated_deposit;
         foreach ($order->installments as $orderInstallment) {
-            $paid -= $orderInstallment->amount;
+            $paid -= $orderInstallment->calculated_amount;
             if ($paid < 0) return false;
             if ($orderInstallment->id == $installment->id) return true;
         }

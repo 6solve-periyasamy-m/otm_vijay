@@ -39,4 +39,9 @@ class OrderInstallment extends Model
     {
         return round((($this->amount * $this->order->getCustomerCount()) / $this->order->getCost()) * 100, 2);
     }
+
+    public function getCalculatedAmountAttribute(): float
+    {
+        return $this->amount * $this->order->getCustomerCount();
+    }
 }
