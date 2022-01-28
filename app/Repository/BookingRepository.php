@@ -68,13 +68,15 @@ class BookingRepository implements BookingRepositoryInterface
             'tour_cost' => $tour->base_price_per_person,
             'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
         ]);
+        $customers = [];
         $order->orderCustomers()->save($leadBooker);
+        $customers[$booking->customer_id] = $leadBooker;
         $order->lead_booker_id = $leadBooker->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        $customers = [];
 
         foreach ($booking->travellers as $traveller) {
+            if (array_key_exists($traveller->customer_id, $customers)) continue;
             $customer = OrderCustomer::make([
                 'customer_id' => $traveller->customer_id,
                 'tour_cost' => $tour->base_price_per_person,
