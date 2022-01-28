@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 abstract class Gateway
 {
-    public static abstract function checkout(array $items, Order $order, string $paymentType);
+    public static abstract function checkout(array $items, string $reference, string $paymentType);
 
     public static function success(Request $request) {
         return view('pages.payments.success');
