@@ -80,4 +80,13 @@ class FlightInventoryTour extends Model
     {
         return $this->flightInventory();
     }
+
+    public function addToOrder(OrderCustomer $orderCustomer): OrderFlight
+    {
+        return OrderFlight::create([
+            'order_customer_id' => $orderCustomer->id,
+            'flight_inventory_tour_id' => $this->id,
+            'cost' => $this->tour_sales_price
+        ]);
+    }
 }

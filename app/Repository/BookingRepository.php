@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Models\Order;
+use App\Models\OrderCustomer;
 use Exception;
 use App\Models\Action;
 
@@ -50,5 +52,48 @@ class BookingRepository implements BookingRepositoryInterface
             return $this->model;
         }
         throw new Exception('Can not create booking record');
+    }
+
+    public static function convertBookingToOrder(Booking $booking): Order
+    {
+        $tour = $booking->tour;
+        $order = Order::create([
+            'tour_id' => $booking->tour_id,
+            'ordered_on' => now(),
+            'deposit' => $tour->deposit,
+            'invoice_footer' => $tour->invoice_footer
+        ]);
+        $leadBooker = OrderCustomer::make([
+            'customer_id' => $booking->customer_id,
+            'tour_cost' => $tour->base_price_per_person,
+            'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
+        ]);
+        $order->orderCustomers()->save($leadBooker);
+        $order->lead_booker_id = $leadBooker->id;
+        $order->booking_reference = Order::generateBookingReference($order);
+        $order->save();
+        $customers = [];
+
+        foreach ($booking->travellers as $traveller) {
+            $customer = OrderCustomer::make([
+                'customer_id' => $traveller->customer_id,
+                'tour_cost' => $tour->base_price_per_person,
+                'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
+            ]);
+            $order->orderCustomers()->save($customer);
+            $customers[$traveller->customer_id] = $customer;
+        }
+        self::processComponent($customers, 'accommodation', $booking);
+        self::processComponent($customers, 'activities', $booking);
+        self::processComponent($customers, 'flights', $booking);
+        self::processComponent($customers, 'transports', $booking);
+        return $order;
+    }
+
+    private static function processComponent(array $customers, string $component, Booking $booking)
+    {
+        foreach ($booking->{$component} as $bookingComponent) {
+            $bookingComponent->tourComponent->addToOrder($customers[$bookingComponent->customer_id]);
+        }
     }
 }
