@@ -704,5 +704,7 @@ class AccommodationInventoriesTableSeeder extends Seeder
                 'deleted_at' => NULL,
             ),
         ));
+        
+        
     }
 }

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class AddressesTableSeeder extends Seeder
 {
@@ -15,8 +14,11 @@ class AddressesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('addresses')->delete();
-        DB::table('addresses')->insert(array (
+        
+
+        \DB::table('addresses')->delete();
+        
+        \DB::table('addresses')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -34,7 +36,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 11:47:54',
                 'updated_at' => '2022-01-20 11:47:54',
             ),
-            2 => 
+            1 => 
             array (
                 'id' => 2,
                 'name' => 'Signature Lux Hotel by ONOMO, Sandton',
@@ -51,7 +53,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 12:44:50',
                 'updated_at' => '2022-01-20 12:44:50',
             ),
-            3 => 
+            2 => 
             array (
                 'id' => 3,
                 'name' => 'False Bay Braai',
@@ -68,7 +70,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 13:34:06',
                 'updated_at' => '2022-01-21 10:54:13',
             ),
-            4 => 
+            3 => 
             array (
                 'id' => 4,
                 'name' => 'Vineyards Tour',
@@ -85,7 +87,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-20 15:32:09',
                 'updated_at' => '2022-01-20 15:32:09',
             ),
-            5 => 
+            4 => 
             array (
                 'id' => 5,
                 'name' => 'Pregenerated Customer Name',
@@ -102,7 +104,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-21 10:27:43',
                 'updated_at' => '2022-01-21 10:27:43',
             ),
-            6 => 
+            5 => 
             array (
                 'id' => 6,
                 'name' => 'Pregenerated Customer Name',
@@ -119,7 +121,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-21 10:27:43',
                 'updated_at' => '2022-01-21 10:27:43',
             ),
-            7 => 
+            6 => 
             array (
                 'id' => 7,
                 'name' => 'Pregenerated Customer Name',
@@ -136,7 +138,7 @@ class AddressesTableSeeder extends Seeder
                 'created_at' => '2022-01-21 10:29:13',
                 'updated_at' => '2022-01-21 10:29:13',
             ),
-            8 => 
+            7 => 
             array (
                 'id' => 8,
                 'name' => 'Pregenerated Customer Name',
@@ -1225,5 +1227,7 @@ class AddressesTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 12:32:40',
             ),
         ));
+        
+        
     }
 }
