@@ -251,8 +251,8 @@
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
-                                <td>{{ StringFormatter::formatCurrency($order->deposit) }} ({{ $order->deposit_percentage }}%)</td>
-                                <td>{{ StringFormatter::formatBoolean($order->deposit < $order->paid) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
+                                <td>{{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}</td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         <i class="icon-note"></i>
@@ -263,7 +263,7 @@
                                 <tr>
                                     <th scope="row">Installment</th>
                                     <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($installment->amount) }} ({{ $installment->percentage }}%)</td>
+                                    <td>{{ StringFormatter::formatCurrency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
                                     <td>{{ StringFormatter::formatBoolean($installment->paid) }}</td>
                                     <td class="actions">
                                         <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">

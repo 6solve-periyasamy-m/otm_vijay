@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <hr class="splitter"/>
     {{-- Upgrades Section --}}
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Upgrades</h2>

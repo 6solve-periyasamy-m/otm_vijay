@@ -43,6 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    protected $guard = 'web';
+
     public function tokens()
     {
         return $this->hasMany(ApiToken::class, 'user_id');

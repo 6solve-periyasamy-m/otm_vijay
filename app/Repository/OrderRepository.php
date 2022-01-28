@@ -250,7 +250,7 @@ class OrderRepository
     }
 
     public static function snapshotInstallments(Order $order) {
-        $data = [['due' => 'With Order', 'amount' => $order->deposit, 'paid' => $order->paid >= $order->deposit, ]];
+        $data = [['due' => 'With Order', 'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit, ]];
         foreach ($order->installments as $installment) {
             $data[] = ['due' => $installment->due_on, 'amount' => $installment->amount, 'paid' => $installment->paid,];
         }
@@ -449,7 +449,7 @@ class OrderRepository
         if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
                 return -3;
-            } else if ($paidAmount <= $order->deposit) {
+            } else if ($paidAmount <= $order->calculated_deposit) {
                 return -2;
             } else {
                 return -1;
@@ -490,7 +490,7 @@ class OrderRepository
             $total += $customerValue;
             $breakdown['customers'][] = $customerData;
         }
-        $breakdown['deposit'] = $order->deposit;
+        $breakdown['deposit'] = $order->calculated_deposit;
         $breakdown['total'] = $total;
         return $breakdown;
     }
@@ -556,12 +556,12 @@ class OrderRepository
         $paid = self::getTotalPaid($order);
         $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $paid -= self::getTotalAdjustedValue($order);
-        $paid -= $order->deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
+        $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         foreach ($order->installments as $installment) {
-            $paid -= ($installment->amount * $order->getCustomerCount());
+            $paid -= $installment->calculated_amount;
             if ($paid < 0) {
                 return [
-                    'amount' => $installment->amount < $paid * -1 ? $installment->amount : $paid * -1,
+                    'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
@@ -713,95 +713,12 @@ class OrderRepository
         return collect($customers);
     }
 
-    public static function getCustomerInstallments(Order $order) {
-        $paid = self::getTotalPaid($order);
-        $paid -= $order->deposit;
-        $paid -= self::getOrderAdditionals($order)['additionalValue'];
-        $installments = [];
-        $installments[] = ['name' => 'Deposit', 'due' => 'With Order',
-            'status' => 'Paid in Full', 'color' => 'success',
-            'total' => $order->deposit, 'remaining' =>
-                $order->deposit, ];
-        $installmentNumber = 1;
-        foreach ($order->tour->paymentInstallments as $installment) {
-            $paid -= ($installment->amount * $order->getCustomerCount());
-            if ($paid <  0) {
-                if (Carbon::now()->isAfter($installment->due_on)) {
-                    $status = 'Payment Overdue';
-                    $color = 'danger';
-                } else {
-                    $status = 'Balance Outstanding';
-                    $color = 'warning';
-                }
-                $installmentDue = abs($paid);
-                $paid = 0;
-                $installmentPaid = $installment->amount - $installmentDue;
-            } else {
-                $status = 'Paid in Full';
-                $color = 'success';
-                $installmentDue = 0;
-                $installmentPaid = $installment->amount;
-            }
-            $installments[] = ['name' => 'Installment ' . $installmentNumber, 'due' => $installment->due_on,
-                'status' => $status, 'color' => $color, 'total' => $installment->amount, 'remaining' => $installmentDue, 'paid' => $installmentPaid];
-        }
-        return $installments;
-    }
-
-    public static function getCustomerOrderDetails(Customer $customer, Order $order)
-    {
-        if (!self::isLeadBooker($order, $customer)) abort(404);
-        $data = [];
-        $data['order'] = $order;
-        $data['lead'] = $customer;
-        $data['orderCustomers'] = $order->orderCustomers;
-        $data['customers'] = $order->customers()->toArray();
-        $data['payments'] = $order->payments;
-        $data['status'] = $order->getStatus();
-        $data['installments'] = self::getCustomerInstallments($order);
-        $data['detail'] = self::getOrderDetails($order);
-        return $data;
-    }
-
-    public static function getOrderDetails(Order $order)
-    {
-        $details = ['order' => $order,];
-        $customers = $order->orderCustomers;
-        $totalOrderValue = 0;
-        $addonData = self::getOrderAdditionals($order);
-        $totalOrderValue += $addonData['additionalValue'];
-        $totalOrderValue += self::getOrderAdjustmentTotal($order);
-        $totalOrderValue += self::getCustomerAdjustmentTotal($order);
-        $totalOrderValue += $order->tour->base_price_per_person * count($customers);
-        $details['customers'] = $customers;
-        $details['addons'] = $addonData['addons'];
-        $details['totalOrderValue'] = $totalOrderValue;
-        $paymentData = self::getPayments($order);
-        $details['totalPaid'] = $paymentData['amount'];
-        $details['payments'] = $paymentData['payments'];
-        $details['orderStatus'] = self::getOrderStatus($order);
-        $details['nextPayment'] = self::getNextPaymentDetails($order);
-        return $details;
-    }
-
-    public static function getCustomerOrders(Customer $customer)
-    {
-        $data = [];
-        foreach ($customer->orderCustomers as $orderCustomer) {
-            $order = $orderCustomer->order;
-            if (!self::isLeadBooker($order, $customer)) continue;
-            $data[$order->booking_reference] = self::getCustomerOrderDetails($customer, $order);
-        }
-
-        return ['orders' => $data];
-    }
-
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->deposit;
+        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->calculated_deposit;
         foreach ($order->installments as $orderInstallment) {
-            $paid -= $orderInstallment->amount;
+            $paid -= $orderInstallment->calculated_amount;
             if ($paid < 0) return false;
             if ($orderInstallment->id == $installment->id) return true;
         }

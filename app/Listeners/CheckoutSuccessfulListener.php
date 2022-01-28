@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\PaymentMadeEvent;
+use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Repository\OrderRepository;
@@ -27,7 +27,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
                     'payment_type' => $metadata['payment_type'],
                 ]);
                 $order->payments()->save($payment);
-                event(new PaymentMadeEvent($payment));
+                event(new PaymentCreatedEvent($payment));
             }
         }
     }
