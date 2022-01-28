@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BookingFlights extends Model
+class BookingTraveller extends Model
 {
     use HasFactory;
 
@@ -17,10 +17,5 @@ class BookingFlights extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer');
-    }
-
-    public function tourComponent()
-    {
-        return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
 }
