@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use Illuminate\Support\Facades\Log;
 use App\Models\Customer;
-use App\Models\TravellerBooking;
+use App\Models\BookingTraveller;
 
-interface TravellerBookingRepositoryInterface
+interface BookingTravellerRepositoryInterface
 {
     public function __construct();
     public function get($id);
@@ -15,14 +15,14 @@ interface TravellerBookingRepositoryInterface
     public function remove($booking_id, $customer_id);
 }
 
-class TravellerBookingRepository implements TravellerBookingRepositoryInterface
+class BookingTravellerRepository implements BookingTravellerRepositoryInterface
 {
     protected $model;
     private $current;
 
     public function __construct()
     {
-        $this->model = new TravellerBooking();
+        $this->model = new BookingTraveller();
         $this->current = null;
     }
 
@@ -78,7 +78,7 @@ class TravellerBookingRepository implements TravellerBookingRepositoryInterface
     public function create($booking_id, $customer_id)
     {
         if ($this->find($booking_id, $customer_id)) {
-            Log::debug('TravellerBookingRepo request to create a dup record', [$booking_id, $customer_id]);
+            Log::debug('BookingTravellerRepo request to create a dup record', [$booking_id, $customer_id]);
             return false;
         }
         $this->model->booking_id = $booking_id;

@@ -51,6 +51,12 @@ class Customer extends Authenticatable
         ];
     }
 
+    public function getFields()
+    {
+	    $fields = $this->fillable;
+	    return $fields;
+    }
+
     public function getFullName()
     {
         return $this->first_name . ' ' . $this->last_name;

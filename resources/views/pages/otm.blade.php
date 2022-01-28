@@ -53,7 +53,8 @@
                 </dd>
                 <dt class="definition__heading">Software Tests</dt>
                 <dd class="definition__body">
-                    <dt class="definition__subheading">Examples (open in test tab)<dt>
+		    <dt class="definition__subheading">Examples (open in test tab)<dt>
+ <dd class="definition__body"><a href="/booking/double-test-impala-pride">Booking Form</a> url for specific tour</dd>
                     <dd class="definition__body"><a href="/booking/world-cup">Booking Form</a> tour for specific 'world-cup' event</dd>
                     <dd class="definition__body"><a href="/booking/check/apitests">API tests</a></dd>
                     <dd class="definition__body"><a href="/booking/check/vuetest">Vue tests</a></dd>

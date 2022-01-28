@@ -88,8 +88,8 @@ Route::prefix('booking')->group(function () {
 
     // store travellers
     Route::post('/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
-    Route::post('/additional-traveller', [BookingCustomerController::class, 'travellerBooking']);
-    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeTravellerBooking']);
+    Route::post('/additional-traveller', [BookingCustomerController::class, 'bookingTraveller']);
+    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeBookingTraveller']);
     Route::post('/customer/email/check', [CustomerController::class, 'findCustomerByEmail']);
 
     // is email registered

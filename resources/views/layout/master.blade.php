@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- THIS LAYOUT IS FOR THE NEW FRONTEND -->
+<!-- MASTER layout -->
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">

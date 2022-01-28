@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TravellerBooking extends Model
+class BookingTraveller extends Model
 {
     use HasFactory;
 }
