@@ -72,7 +72,7 @@
             @endcan
         </div>
     </div>
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>    
+    <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Components</h2>        
     </div>
@@ -371,7 +371,7 @@
         </div>
     </div>
     {{-- Payment Installment Section --}}
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Payment Installments</h2>        
     </div>    
@@ -437,7 +437,7 @@
         </div>
     </div>
     {{-- Merchandise Section --}}
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Merchandise</h2>
     </div>
@@ -493,7 +493,7 @@
             </table>
         </div>
     </div>
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Orders</h2>
     </div>

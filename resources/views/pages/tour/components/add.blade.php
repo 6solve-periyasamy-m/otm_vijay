@@ -50,7 +50,7 @@
             </div>        
         </div>
     </div>
-    <hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+    <hr class="splitter"/>
     {{-- Tabs Definition --}}
     <div class="card">
         <div class="card-body">

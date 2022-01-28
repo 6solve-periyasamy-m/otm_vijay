@@ -5,14 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
     use SoftDeletes;
     use HasFactory;
+    use Notifiable;
     use Billable;
+
+    protected $guard = 'customer';
 
     public $additional_attributes = ['customer_full_name', 'full_name'];
 
@@ -84,5 +89,10 @@ class Customer extends Model
     public function orderCustomers()
     {
         return $this->hasMany(OrderCustomer::class, 'customer_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'id');
     }
 }

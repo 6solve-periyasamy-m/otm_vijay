@@ -49,4 +49,4 @@
         Back to Tour
     </a>
 </div>
-<hr style="border-bottom: 5px solid #cccccc; border-radius: 2px;"/>
+<hr class="splitter"/>
