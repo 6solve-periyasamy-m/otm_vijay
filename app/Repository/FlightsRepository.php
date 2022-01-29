@@ -69,6 +69,7 @@ class FlightsRepository implements FlightsRepositoryInterface
             $flights = $flights->whereIn('flight_inventory_tours.flight_type', ['Outbound', 'Inbound'])
                 ->orderBy('flight_inventory_tours.flight_type', 'desc');
         }
+        Log::debug('flights Query: '. $flights->toSql());
         $flightData = $flights
             ->orderBy('airlines.name', 'asc')
             ->get();
