@@ -163,7 +163,7 @@ export default {
     },
     data() {
         return {
-            debug: 9,
+            debug: false,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
