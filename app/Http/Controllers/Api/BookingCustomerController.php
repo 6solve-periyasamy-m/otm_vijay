@@ -450,7 +450,7 @@ class BookingCustomerController extends ApiController
     
             throw new \Exception('loadBookingTravellers: No booking found for token '.$token);
         }
-        $traveller = new BookingTravellers();
+        $traveller = new BookingTraveller();
         $travellers = $traveller->where('booking_id', $booking->id)->get();
         foreach($travellers as $n => $traveller) {
             $travellers[$n] = Customer::findOrFail($traveller->customer_id);
