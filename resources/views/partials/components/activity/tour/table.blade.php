@@ -33,6 +33,7 @@
             let row = activityTable.row(rowIdx);
             ids.push(row.data().id);
         });
+        if (ids.length <= 0) return alert('No components are selected');
         $.ajax({
             type: "POST",
             url: "{{ route('api.tour.activity.inventory.add', ['tour' => $tour,]) }}",

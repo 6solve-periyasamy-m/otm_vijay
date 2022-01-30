@@ -34,6 +34,7 @@
             let row = flightTable.row(rowIdx);
             ids.push(row.data().id);
         });
+        if (ids.length <= 0) return alert('No components are selected');
         $.ajax({
             type: "POST",
             url: "{{ route('api.tour.flight.inventory.add', ['tour' => $tour,]) }}",
