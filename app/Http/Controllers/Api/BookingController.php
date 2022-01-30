@@ -16,7 +16,7 @@ use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
 use App\Repository\ActivityRepository;
 use App\Repository\TransportBookingRepository;
-use App\Repository\TravellerBookingRepository;
+use App\Repository\BookingTravellerRepository;
 
 class BookingController extends ApiController
 {
@@ -62,8 +62,8 @@ class BookingController extends ApiController
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->create($customer_id, $tour_id, $token);
 
-        $travellerBookingRepo = new TravellerBookingRepository();
-        $traveller_id = $travellerBookingRepo->create($booking->id, $customer_id);
+        $bookingTravellerRepo = new BookingTravellerRepository();
+        $traveller_id = $bookingTravellerRepo->create($booking->id, $customer_id);
 
         // Log::debug('Booking:Create', [$tour_id, $token]);
         return response()->json(["success" => true, 'booking' => $booking]);
@@ -78,7 +78,7 @@ class BookingController extends ApiController
         }
         $tour = $booking->tour;
         $customerRepo = new CustomerRepository();
-        $travellerRepo = new TravellerBookingRepository();
+        $travellerRepo = new BookingTravellerRepository();
         $flightsBookingRepo = new FlightBookingRepository();
         $accommodationRepo = new AccommodationRepository();
 

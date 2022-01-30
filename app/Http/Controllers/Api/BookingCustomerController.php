@@ -9,7 +9,7 @@ use App\Models\Customer;
 
 use Illuminate\Http\Request;
 
-use App\Models\TravellerBooking;
+use App\Models\BookingTraveller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Repository\AddressRepository;
@@ -17,7 +17,7 @@ use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
 use App\Repository\OrdersCustomerRepository;
-use App\Repository\TravellerBookingRepository;
+use App\Repository\BookingTravellerRepository;
 
 class BookingCustomerController extends ApiController
 {
@@ -212,8 +212,8 @@ class BookingCustomerController extends ApiController
             $bookingRepo = new BookingRepository();
             $booking = $bookingRepo->findBookingByToken($token);
             if ($booking) {
-                $travellerBooking = new TravellerBookingRepository();
-                $newTraveller = $travellerBooking->create($booking->id, $customer->id);
+                $bookingTraveller = new BookingTravellerRepository();
+                $newTraveller = $bookingTraveller->create($booking->id, $customer->id);
                 $this->logging && Log::info('Additional Traveller created', [$newTraveller]);
             } else {
                 Log::error('Invalid token when creating additional traveller pivot record for customer', [$token, $customer]);
@@ -384,13 +384,13 @@ class BookingCustomerController extends ApiController
         return json_encode(['success' => true, 'customer' => $customer]);
     }
 
-    private function createUpdateTravellerBooking($token, $customer) 
+    private function createUpdateBookingTraveller($token, $customer) 
     {
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
         if (isset($booking)) {
-            $travellerBookingRepo = new TravellerBookingRepository();
-            $traveller_id = $travellerBookingRepo->create($booking->id, $customer->id);
+            $bookingTravellerRepo = new BookingTravellerRepository();
+            $traveller_id = $bookingTravellerRepo->create($booking->id, $customer->id);
             return $traveller_id;
         } else {
             return null;
@@ -408,10 +408,10 @@ class BookingCustomerController extends ApiController
     {
         // $this->logging == 'customers' && Log::info('leadTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
-        $this->createUpdateTravellerBooking($request->booking_token, $customer);
+        $this->createUpdateBookingTraveller($request->booking_token, $customer);
         // if (isset($request->booking_id)) {
-        //     $travellerBooking = new TravellerBookingRepository();
-        //     $travellerBooking->create($request->booking_id, $customer->id);
+        //     $bookingTraveller = new BookingTravellerRepository();
+        //     $bookingTraveller->create($request->booking_id, $customer->id);
         // } else {
         //     throw new Exception('bookingCustomerController has no booking_id in request');
         // }
@@ -428,18 +428,17 @@ class BookingCustomerController extends ApiController
     }
 
     /**
-     * TravellerBooking - save the TravellerBooking data
+     * bookingTraveller - save the BookingTraveller data
      *
      * @param Request $request
      * @return array of what was saved in customer and orderCustomer
      */
-    public function travellerBooking(Request $request)
+    public function bookingTraveller(Request $request)
     {
-        Log::debug('>>> TravellerBooking', $request->toArray());
+        Log::debug('>>> BookingTraveller', $request->toArray());
 
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
-        $this->createUpdateTravellerBooking($request->booking_token, $customer);
-
+        $this->createUpdateBookingTraveller($request->booking_token, $customer);
         return json_encode(['success' => true, 'customer' => $customer]); //, 'orderCustomer' => $orderCustomer]);
     }
 
@@ -449,9 +448,9 @@ class BookingCustomerController extends ApiController
         if (!$booking || !$booking->id) {
             return json_encode(["success" => false, "message" => "No booking yet"]);
     
-            throw new \Exception('loadTravellerBookings: No booking found for token '.$token);
+            throw new \Exception('loadBookingTravellers: No booking found for token '.$token);
         }
-        $traveller = new TravellerBooking();
+        $traveller = new BookingTraveller();
         $travellers = $traveller->where('booking_id', $booking->id)->get();
         foreach($travellers as $n => $traveller) {
             $travellers[$n] = Customer::findOrFail($traveller->customer_id);
@@ -459,7 +458,7 @@ class BookingCustomerController extends ApiController
         return json_encode(['success' => true, 'travellers' => $travellers]);
     }
 
-    public function removeTravellerBooking(Request $request)
+    public function removeBookingTravellers(Request $request)
     {
         $request->validate([
             'customer_id' => 'required | exists:customers,id',
@@ -472,9 +471,10 @@ class BookingCustomerController extends ApiController
         $booking = Booking::where('token', $booking_token)->first();
         $customer = Customer::find($booking->customer_id);
         if ($booking->id && $customer->id) {
-            TravellerBooking::where('booking_id', $booking->id)->where('customer_id', $customer_id)->delete();
+            BookingTravellers::where('booking_id', $booking->id)->where('customer_id', $customer_id)->delete();
         }
 
         return json_encode(['success' => true]);
     }
 }
+

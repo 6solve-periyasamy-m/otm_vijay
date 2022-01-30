@@ -9,12 +9,10 @@
                 </h5>
             </div>
             <div v-if="showwait">Loading...</div>
-            <div class="card-body compress" v-if="showFlights">
-                <div class="card-options">
-                    <div class="ept-form">
+            <div class="card-body" v-if="showFlights">
                         <div class="row">
                             <div class="col-sm-12">
-                                <h4> Group Flight </h4>
+                                <h4>Group Flights</h4>
                                 <p>Flights for each member, unless custom selections made</p>
                                 <booking-form-flight-selector 
                                     v-model="selected_outbound"
@@ -135,8 +133,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -163,7 +159,7 @@ export default {
     },
     data() {
         return {
-            debug: 9,
+            debug: false,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
@@ -496,17 +492,20 @@ export default {
                                 //  :selected_item="traveller.selected_outbound_addon">
                                 if (typeof inbound !== 'undefined' && inbound != null && inbound.flight_inventory_tour_id) {
                                     traveller['selected_inbound_addon'] = inbound.flight_inventory_tour_id
+
                                     // this should work, TODO: check it seting the inventory flight id into the component?
                                     that.$set(that.travellers, key, traveller)
+
+                                    bus.$emit('setCustomFlightsForTraveller', traveller, inbound.flight_inventory_tour_id)
+
                                     // TODO: may want to check if these worked, or if required
                                     // that.$set(that.travellers[key], 'selected_inbound_addon', inbound.flight_inventory_tour_id)
                                     // that.selected_inbound_addon = inbound.flight_inventory_tour_id
-                                    bus.$emit('setCustomFlightsForTraveller', traveller, inbound.flight_inventory_tour_id)
                                 }
                             })
                         }
                     })
-                    that.showwait = false
+                    //that.showwait = false
                 })
                 .catch(error => {
                     console.log('loadFlightsForBooking >>>> error loading flights', error)

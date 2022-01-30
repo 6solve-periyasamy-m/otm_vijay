@@ -1,7 +1,7 @@
 @extends ('layout.main')
 @section('content')
 @php
-$token = 'e5xlzpb2csi2z11h1n74u9';
+$token = 'tf9t1kg7it6enlr85va8o';
 @endphp
 @endphp
 <div class="container-fluid page-testing" id="app">
@@ -15,8 +15,8 @@ $token = 'e5xlzpb2csi2z11h1n74u9';
             <vue-test></vue-test>
             <booking-info></booking-info>
             <div class="panel">
-                <h3>Test output</h3>
-                <pre>
+                <h4>Test output</h4>
+                <pre style="margin-left: -1rem;border:1px black inset;">
                     <iframe height="200px" width="100%" name="test" style="font-size: 8px;">
                     </iframe>
                 </pre>
@@ -38,6 +38,9 @@ $token = 'e5xlzpb2csi2z11h1n74u9';
                 <h2>Flights</h2>
                 <li>
                     <a href="/api/booking/flights/tour/2" target="test">Get Flights for Tour 2</a>
+                </li>
+                <li>
+                    <a href="/api/booking/flight/bookings/{{$token}}" target="test">Get Flights for a booking</a>
                 </li>
 
                 <h2>Activities</h2>
