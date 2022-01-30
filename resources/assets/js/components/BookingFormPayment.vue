@@ -98,10 +98,11 @@ import axios from "axios"
 import { bus } from '../bus'
 import dates from '../utilities'
 export default {
-    props: ['tour'],
+    props: ['tour', 'systemCurrency'],
     data() {
         return {
             moduleName: 'Payments',
+            currency: this.systemCurrency || 'GBP',
             booking_token: null,
             debug: 3,
             paymentsActive: false,
@@ -139,7 +140,7 @@ export default {
     },
     methods: {
         priceFormat(a) {
-            const currency = 'GBP'
+            const currency = this.currency 
             // Create our number formatter.
             let formatter = new Intl.NumberFormat('en-GB', {
                 style: 'currency',

@@ -74,7 +74,7 @@ class FlightsRepository implements FlightsRepositoryInterface
             ->orderBy('airlines.name', 'asc')
             ->get();
 
-        if ($this->debug) {
+        if ($this->logging) {
                 Log::debug('...flights Query: '. $flights->toSql());
                 Log::debug("\n".'...flightsAvaiableForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : Recs : '. $flightData->count());
         }
