@@ -40,7 +40,11 @@ class FlightsRepository implements FlightsRepositoryInterface
 
     public function flightsAvailableForTour($tour_id, $flight_type, $tour_component_type = 'Included')
     {
-        $flights = Flight::select('flight_inventory_tours.id as flight_id', 
+        $flights = Flight::join('airlines', 'airline_id', 'airlines.id')
+           ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
+           ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
+           ->join('flight_inventory_tours', 'flight_inventory_tours.flight_inventory_id', 'flight_inventories.id')
+          ->select('flight_inventory_tours.id as flight_id', 
             'flight_inventory_tours.tour_component_type', 
             'airlines.name as airline_name', 
             'flight_inventories.*', 
@@ -50,31 +54,30 @@ class FlightsRepository implements FlightsRepositoryInterface
             'travel_classes.name as travel_class', 
             'flight_inventory_tours.tour_component_type',
             'flights.available_after')
-        ->join('airlines', 'airline_id', 'airlines.id')
-        ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
-        ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
-        ->join('flight_inventory_tours', 'flight_inventory_tours.flight_inventory_id', 'flight_inventories.id')
-        ->whereNull('flight_inventory_tours.deleted_at')
-        ->whereNull('flight_inventories.deleted_at')
-        ->whereNull('flights.deleted_at')
-        ->where('flight_inventory_tours.tour_id', $tour_id)
-        ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
-        ->where(function($q) {
-            $q->whereNull('flights.available_after')
-                ->orWhere('flights.available_after', '>', date('Y-m-d'));
-        });
+          ->whereNull('flight_inventory_tours.deleted_at')
+          ->whereNull('flight_inventories.deleted_at')
+          ->whereNull('flights.deleted_at')
+          ->where('flight_inventory_tours.tour_id', $tour_id)
+          ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
+          ->where(function($q) {
+              $q->whereNull('flights.available_after')
+                ->orWhere('flights.available_after', '>=', date('Y-m-d'));
+          });
+        ;
         if (isset($flight_type) && strlen($flight_type)) {
             $flights = $flights->where('flight_inventory_tours.flight_type', $flight_type);
         } else {
             $flights = $flights->whereIn('flight_inventory_tours.flight_type', ['Outbound', 'Inbound'])
                 ->orderBy('flight_inventory_tours.flight_type', 'desc');
         }
-        Log::debug('flights Query: '. $flights->toSql());
         $flightData = $flights
             ->orderBy('airlines.name', 'asc')
             ->get();
 
-        $this->logging && Log::info("\n".'flightsAvaiableForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : Recs : '. $flightData->count());
+        if ($this->debug) {
+                Log::debug('...flights Query: '. $flights->toSql());
+                Log::debug("\n".'...flightsAvaiableForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : Recs : '. $flightData->count());
+        }
         
         return $flightData;
     }
@@ -109,3 +112,4 @@ class FlightsRepository implements FlightsRepositoryInterface
             })->toArray();
     }
 }
+
