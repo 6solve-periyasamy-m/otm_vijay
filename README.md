@@ -66,6 +66,10 @@ Activity Name should be the same as on the activity import
 
 `airline_name,departure_airport_name,arrival_airport_name,is_domestic,currency,flight_notes,flight_number,travel_class,check_in,departs_at,arrives_at,FIT_selectable,stock,purchase_price,sales_price,inventory_notes`
 
+### Customer (`import:customer`)
+
+`email_address,title,first_name,middle_name,last_name,date_of_birth,mobile_number,other_number,gender,home_address_line_1,home_address_line_2,home_town,home_region,home_country,home_postcode,billing_address_line_1,billing_address_line_2,billing_town,billing_region,billing_country,billing_postcode,emergency_contact_name,emergency_contact_number,emergency_contact_relationship,passport_first_name,passport_middle_name,passport_last_name,passport_number,passport_expiry_date,passport_country_of_issue`
+
 <hr />
 
 ## Booking Form
