@@ -170,7 +170,7 @@ export default {
             let price = 0
             this.totals = {accommodations:0, flights:0, activities:0, transports:0}
             this.totalPrice = 0
-            console.log('calcPrice', this.booking)
+            console.log('accommodations ... calcPrice() booking', this.booking)
             if (this.booking.accommodations != undefined) {
                 this.booking.accommodations.map(a => {
                     if (a.tour_sales_price > 0) {
@@ -204,8 +204,10 @@ export default {
             this.totalPrice += price
 
             price = 0
+            console.log('>> calcPrice', this.booking.activities)
             if (this.booking.activities != undefined) {
                 this.booking.activities.map(a => {
+                    console.log('activities object', a)
                     if (a.tour_sales_price > 0) {
                         price += a.tour_sales_price
                     } else {
