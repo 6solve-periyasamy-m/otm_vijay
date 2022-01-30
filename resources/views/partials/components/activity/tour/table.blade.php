@@ -40,7 +40,8 @@
             dataType: "json",
             statusCode: {
                 200: function () { alert('Components added successfully'); activityTable.ajax.reload(); },
-                400: function () { alert('An incorrect component type has been provided'); }
+                400: function () { alert('An incorrect component type has been provided'); },
+                403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
             data: { "type": $(".activity-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });

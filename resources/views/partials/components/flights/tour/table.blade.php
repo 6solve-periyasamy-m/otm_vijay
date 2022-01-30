@@ -41,7 +41,8 @@
             dataType: "json",
             statusCode: {
                 200: function () { alert('Components added successfully'); flightTable.ajax.reload(); },
-                400: function () { alert('An incorrect component type has been provided'); }
+                400: function () { alert('An incorrect component type has been provided'); },
+                403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
             data: { "type": $(".flight-component-type-select").find(":selected").val(),
                 "direction": $(".flight-direction-select").find(":selected").val(),
