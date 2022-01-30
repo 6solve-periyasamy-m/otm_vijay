@@ -28,7 +28,7 @@
                 <th scope="col">Departure Airport</th>
                 <th scope="col">Arrival Airport</th>
                 <th scope="col">Is Domestic</th>
-                <th scope="col">Available After</th>
+                <th scope="col">Available From</th>
                 <th scope="col">Notes</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -38,7 +38,7 @@
                 'flight' => $flight,
                 'is_domestic' => $flight->is_domestic,
                 'notes' => $flight->notes,
-                'available_after' => $flight->available_after,
+                'available_from' => $flight->available_from,
                 ])
             @endforeach
         </table>

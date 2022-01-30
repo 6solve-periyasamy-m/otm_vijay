@@ -220,9 +220,9 @@ class ReportFieldRepository
                         'name' => 'Arrival Airport',
                         'method' => 'arrivalAirport',
                     ],
-                    'available_after' => [
-                        'name' => 'Available After',
-                        'method' => 'available_after',
+                    'available_from' => [
+                        'name' => 'Available From',
+                        'method' => 'available_from',
                     ],
                     'is_domestic' => [
                         'name' => 'Is Domestic',
