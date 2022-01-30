@@ -7,7 +7,7 @@ use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway
 {
-    public static function checkout(array $items, Order $order, string $paymentType)
+    public static function checkout(array $items, string $reference, string $paymentType)
     {
         $lineItems = [];
         foreach ($items as $item) {
@@ -27,7 +27,7 @@ class StripeGateway extends Gateway
             'mode' => 'payment',
             'metadata' => [
                 'payment_type' => $paymentType,
-                'booking_reference' => $order->booking_reference,
+                'booking_reference' => $reference,
             ],
             'success_url' => route('payment.gateway.stripe.success'),
             'cancel_url' => route('payment.gateway.stripe.cancelled'),
