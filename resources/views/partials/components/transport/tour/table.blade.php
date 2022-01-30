@@ -59,7 +59,7 @@
     </select>    
     <a href="javascript:getSelectedTransportInventory()" class="btn btn-primary ms-3 text-white">
         <i class="icon-plus"></i>
-        <span>Add Components</span>
+        <span>Add Selected Rows</span>
     </a>
 </div>
 @endcan
