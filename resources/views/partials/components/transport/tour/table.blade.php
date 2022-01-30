@@ -55,7 +55,6 @@
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select transport-component-type-select">
         <option value="Included" selected>Included</option>
-        <option value="Upgrade">Upgrade</option>
         <option value="Add-on">Add-on</option>
     </select>    
     <a href="javascript:getSelectedTransportInventory()" class="btn btn-primary ms-3 text-white">

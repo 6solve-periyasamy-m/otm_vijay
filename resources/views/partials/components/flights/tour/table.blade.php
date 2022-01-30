@@ -56,7 +56,6 @@
     <div class="d-inline-flex col-12 col-xl-10">
         <select class="form-select flight-component-type-select">
             <option value="Included" selected>Included</option>
-            <option value="Upgrade">Upgrade</option>
             <option value="Add-on">Add-on</option>
         </select>
         <select class="form-select flight-direction-select">
