@@ -72,4 +72,13 @@ class TransportInventoryTour extends Model
     {
         return $this->transportInventory();
     }
+
+    public function addToOrder(OrderCustomer $orderCustomer): OrderTransport
+    {
+        return OrderTransport::create([
+            'order_customer_id' => $orderCustomer->id,
+            'transport_inventory_tour_id' => $this->id,
+            'cost' => $this->tour_sales_price
+        ]);
+    }
 }

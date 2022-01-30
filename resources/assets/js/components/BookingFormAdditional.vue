@@ -11,6 +11,7 @@
             </div>
             <div class="card-body" v-show="showAdditional">
                 <div v-if="showInstruction">
+                    <h4>Additional Travellers</h4>
                     <p>Please input data for any additional travellers that are accompanying you.</p>
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
