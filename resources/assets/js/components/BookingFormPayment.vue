@@ -91,14 +91,14 @@
             <div class="row">
               <hr>
               <div class="deposit">
-                 <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.  
-                 <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.
-                 <p><input type="checkbox" v-model="agreement" name="agreement">
+                 <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.</p>
+                 <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.</p>
+                 <input type="checkbox" v-model="agreement" name="agreement">
                  <button :disabled="!agreement" @click="calcDeposit">Confirm</button> 
-                <div v-show="agreement && deposit>0" class="deposit-amount">
-                    The amount to pay now is {{priceFormat(deposit)}}.  
+                 <div v-show="agreement && deposit>0" class="deposit-amount">
+                    <p>The amount to pay now is {{priceFormat(deposit)}}.  
                     <br>A payment window should open to accept that amount.
-                    <br>You will receive an email confirming your payment schedule.
+                    <br>You will receive an email confirming your payment schedule.</p>
                 </div>
               </div>
             </div>
