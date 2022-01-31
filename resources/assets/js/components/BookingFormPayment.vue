@@ -17,7 +17,7 @@
                     </div>
                     <h3>Accommodations</h3>
                     <div class="block accommodations" v-for="accommodation in booking.accommodations" :key="accommodation.accmoodation_inventory_tour_id">
-               {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
+                      {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
                     </div>
                     <h3>Group Flights Booking</h3>
                     <div class="block flights" v-for="flight in booking.flights" :key="flight.id">
@@ -127,10 +127,8 @@ export default {
                 console.log('Payment ignored: ', token);
             }
         })
-        console.log('payment created')
     },
     mounted() {
-        console.log('payment mounted')
         this.loadBooking(this.booking_token)
     },
     computed: {
@@ -140,16 +138,14 @@ export default {
     },
     methods: {
         priceFormat(a) {
-            const currency = this.currency 
-            // Create our number formatter.
+            const currency = this.currency
             let formatter = new Intl.NumberFormat('en-GB', {
                 style: 'currency',
-                currency: currency
+                currency: currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
             })
             return formatter.format(a)
-  // These options are needed to round to whole numbers if that's what you want.
-  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
         },
         formatDate(s) {
             return dates.makeDateFromString(s)
@@ -171,15 +167,17 @@ export default {
             let price = 0
             this.totals = {accommodations:0, flights:0, activities:0, transports:0}
             this.totalPrice = 0
-            console.log('accommodations ... calcPrice() booking', this.booking)
             if (this.booking.accommodations != undefined) {
                 this.booking.accommodations.map(a => {
-                    if (a.tour_sales_price > 0) {
-                        price += a.tour_sales_price
+                    const tourSalesPrice = parseFloat(a.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += a.sales_price
+                        price += parseFloat(a.sales_price)
                     }
                 })
+            } else {
+                    console.log('check else...', this.booking.accommodations)
             }
             this.totals.accommodations = price
             this.totalPrice += price
@@ -187,17 +185,19 @@ export default {
             price = 0
             if (this.booking.flights != undefined) {
                 this.booking.flights.inbound.map(f => {
-                    if (f.tour_sales_price > 0) {
-                        price += f.tour_sales_price
+                    const tourSalesPrice = parseFloat(f.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += f.sales_price
+                        price += parseFloat(f.sales_price)
                     }
                 })
                 this.booking.flights.outbound.map(f => {
-                    if (f.tour_sales_price > 0) {
-                        price += f.tour_sales_price
+                    const tourSalesPrice = parseFloat(f.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += f.sales_price
+                        price += parseFloat(f.sales_price)
                     }
                 })
             }
@@ -205,26 +205,28 @@ export default {
             this.totalPrice += price
 
             price = 0
-            console.log('>> calcPrice', this.booking.activities)
             if (this.booking.activities != undefined) {
                 this.booking.activities.map(a => {
-                    console.log('activities object', a)
-                    if (a.tour_sales_price > 0) {
-                        price += a.tour_sales_price
+
+                    const tourSalesPrice = parseFloat(a.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += a.sales_price
+                        price += parseFloat(a.sales_price)
                     }
                 })
             }
             this.totals.activities = price
             this.totalPrice += price
+
             price = 0
             if (this.booking.transports != undefined) {
-                this.booking.accommodations.map(a => {
-                    if (a.tour_sales_price > 0) {
-                        price += a.tour_sales_price
+                this.booking.transports.map(t => {
+                    const tourSalesPrice = parseFloat(t.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += a.sales_price
+                        price += parseFloat(t.sales_price)
                     }
                 })
             }
@@ -235,16 +237,8 @@ export default {
             let that = this
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
-                    console.log('>>>> booking data ', response.data)
                     that.booking = response.data.booking
                     that.calcPrice()
-                    // that.booking.accommodation = response.data.accommodation
-                    // that.booking.customer = response.data.customer
-                    // that.booking.travellers = response.data.travellers
-                    // that.booking.flights = response.data.flights
-                    // that.booking.activities = response.data.activities
-                    // that.booking.transports = response.data.transports
-                    
                 })
                 .catch(error => {
                     console.log(error)
