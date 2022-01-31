@@ -233,6 +233,22 @@ export default {
             this.totals.transports += price
             this.totalPrice += price
         },
+        loadDeposit() {
+            let that = this
+            axios.post('/api/booking/deposit/calculate', {
+                tour: this.tour,
+                token: this.token
+            })
+            .then(response => {
+                console.log(response)
+                that.deposit = response.data.deposit
+                bus.$emit('loadDeposit', that.deposit)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            
+        },
         loadBooking(token) {
             let that = this
             axios.get(`/api/booking/summary/${token}/gather`)

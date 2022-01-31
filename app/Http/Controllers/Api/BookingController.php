@@ -108,4 +108,14 @@ class BookingController extends ApiController
             ]
         ]);
     }
+
+    public function calculateDeposit(Request $request)
+    {
+        $token = $request->token;
+        $tour = $request->tour;
+
+        Log::debug('calcDep: ', $tour, $token);
+
+        return response(['success' => true, 'deposit' => 100]);
+    }
 }
