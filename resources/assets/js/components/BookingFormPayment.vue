@@ -80,13 +80,27 @@
                 </div>
 
             </div>
-            <div class="row">
+            <div class="total row">
                 <div class="price">
                     Tour Price total
                 </div>
                 <div class="price_amount">
                     {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
                 </div>
+            </div>
+            <div class="row">
+              <hr>
+              <div class="deposit">
+                 <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.  
+                 <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.
+                 <p><input type="checkbox" v-model="agreement" name="agreement">
+                 <button :disabled="!agreement" @click="calcDeposit">Confirm</button> 
+                <div v-show="agreement && deposit>0" class="deposit-amount">
+                    The amount to pay now is {{priceFormat(deposit)}}.  
+                    <br>A payment window should open to accept that amount.
+                    <br>You will receive an email confirming your payment schedule.
+                </div>
+              </div>
             </div>
         </div>
     </div>
@@ -108,6 +122,8 @@ export default {
             paymentsActive: false,
             booking: {},
             totals: {},
+            deposit: 0,
+            agreement: false,
             totalPrice: 0
         }    
     },
@@ -122,7 +138,6 @@ export default {
             this.debug>2 && console.log(">>>> Payment: booking reloaded", token);
             if (this.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
                 this.loadBooking(this.booking_token)
-                this.calcPrice()
             } else {
                 console.log('Payment ignored: ', token);
             }
@@ -167,7 +182,11 @@ export default {
             let price = 0
             this.totals = {accommodations:0, flights:0, activities:0, transports:0}
             this.totalPrice = 0
-            if (this.booking.accommodations != undefined) {
+            // if the booking has not been received yet, do nothing yet
+            if (this.booking == undefined) {
+              return
+            }
+            if (typeof this.booking.accommodations !== 'undefined' && this.booking.accommodations !== null) {
                 this.booking.accommodations.map(a => {
                     const tourSalesPrice = parseFloat(a.tour_sales_price)
                     if (tourSalesPrice > 0) {
@@ -233,7 +252,7 @@ export default {
             this.totals.transports += price
             this.totalPrice += price
         },
-        loadDeposit() {
+        calcDeposit() {
             let that = this
             axios.post('/api/booking/deposit/calculate', {
                 tour: this.tour,
@@ -241,8 +260,13 @@ export default {
             })
             .then(response => {
                 console.log(response)
-                that.deposit = response.data.deposit
-                bus.$emit('loadDeposit', that.deposit)
+                const success = response.data.success
+                if (success) {
+                  const data = response.data
+                  that.deposit = data.deposit
+                } else {
+                  that.deposit = 'please retry'
+                }
             })
             .catch(error => {
                 console.log(error)
@@ -276,5 +300,10 @@ export default {
 .price_amount {
     width: 20rem;
     text-align: right;
+}
+.total {
+    font-size: large;
+    font-weight: bold;
+    margin-top: 2rem;
 }
 </style>

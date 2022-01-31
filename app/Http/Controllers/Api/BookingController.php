@@ -114,8 +114,9 @@ class BookingController extends ApiController
         $token = $request->token;
         $tour = $request->tour;
 
-        Log::debug('calcDep: ', $tour, $token);
+        Log::debug('calcDep: ', [$tour, $token]);
 
         return response(['success' => true, 'deposit' => 100]);
     }
+
 }

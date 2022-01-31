@@ -100,7 +100,7 @@ Route::prefix('booking')->group(function () {
     // create Booking Order
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
     Route::post('/create-booking', [BookingController::class, 'create']);
-    Route::post('/api/booking/deposit/calculate', [BookingController::class, 'calculateDeposit']);
+    Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
     // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
     // Route::post('/create-order', [BookingController::class, 'createOrder']);
 
