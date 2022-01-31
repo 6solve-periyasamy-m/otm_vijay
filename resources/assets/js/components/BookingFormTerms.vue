@@ -19,15 +19,12 @@
                             <br>
                             <br>
                             <p class="terms">
-                                By clicking confirm, you are accepting the terms and conditions as set
-                                out
+                                By clicking confirm, you are accepting the terms and conditions as set out
                                 by the travel provider which can be seen at the links below.
                                 Please check the box to confirm you have read the terms of service.
                             </p>
                             <br>
-                            <a href="https://octopus-computers.com/terms-and-conditions/">Octopus TM
-                                Terms
-                                of service</a>
+                            <a href="https://octopus-computers.com/terms-and-conditions/" target="_blank">Octopus TM Terms of service</a>
                             <br>
                             <br>
                             <div class="form-check form-check-inline">
