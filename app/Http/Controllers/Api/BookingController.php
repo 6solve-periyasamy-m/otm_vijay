@@ -7,16 +7,18 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Gateways\StripeGateway;
 use App\Repository\BookingRepository;
 use App\Repository\FlightsRepository;
+use App\Repository\ActivityRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
-use App\Repository\ActivityRepository;
-use App\Repository\TransportBookingRepository;
 use App\Repository\BookingTravellerRepository;
+use App\Repository\TransportBookingRepository;
+
 
 class BookingController extends ApiController
 {
@@ -119,4 +121,23 @@ class BookingController extends ApiController
         return response(['success' => true, 'deposit' => 100]);
     }
 
+    /***
+     * payDeposit
+     * generate a Stripe payment for the customer
+     * Request:
+     * $booking
+     * $amount
+     */
+    public function payDeposit(Request $request)
+    {
+        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required|numeric']);
+
+        $bookingRepository = new BookingRepository();
+        $booking = $bookingRepository->findBookingByToken($request->token);
+        $customerRepository = new CustomerRepository();
+        $customer = $customerRepository->get($booking->customer_id);
+        $amount = $request->amount;
+
+        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
+    }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Gateways\StripeGateway;
-use App\Models\Customer;
-use App\Repository\OrderRepository;
 use Auth;
+use App\Models\Booking;
+use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Repository\OrderRepository;
+use App\Http\Gateways\StripeGateway;
+use App\Repository\BookingRepository;
 
 class CustomerPortalController extends Controller
 {
