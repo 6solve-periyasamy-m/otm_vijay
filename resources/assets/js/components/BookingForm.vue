@@ -20,8 +20,8 @@
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity :tour="tour"></booking-form-activity>
                             <booking-form-transport :tour="tour"></booking-form-transport>
-                            <booking-form-terms></booking-form-terms>
-                            <booking-form-payment v-if="termsaccepted"></booking-form-payment>
+                            <booking-form-terms :tour="tour"></booking-form-terms>
+                            <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
                         </div>
                     </div>
                     <bookingform-footer></bookingform-footer>
