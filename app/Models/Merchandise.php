@@ -38,4 +38,13 @@ class Merchandise extends Model
     {
         return "{$this->name}";
     }
+
+    public function addToOrder(OrderCustomer $orderCustomer): OrderMerchandise
+    {
+        return OrderMerchandise::create([
+            'order_customer_id' => $orderCustomer->id,
+            'merchandise_id' => $this->id,
+            'cost' => $this->tour_sales_price
+        ]);
+    }
 }

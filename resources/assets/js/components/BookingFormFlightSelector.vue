@@ -1,5 +1,5 @@
 <template>
-    <div class="row compress">
+    <div class="row">
         <div v-if="tour_flight_types.length > 1" class="col-sm-2">
             <select 
                 v-model="tour_flight_type" 
@@ -13,7 +13,7 @@
         <div v-else class="col-sm-2">
             {{tour_flight_types[0]}} 
         </div>
-        <div class="col-sm-10" v-if="tour_flights_filtered">
+        <div class="col-sm-10 compress" v-if="tour_flights_filtered">
             <select 
                 :disabled="!enabled"
                 @change="changeFlight"

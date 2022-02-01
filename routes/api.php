@@ -88,8 +88,8 @@ Route::prefix('booking')->group(function () {
 
     // store travellers
     Route::post('/lead-traveller', [BookingCustomerController::class, 'leadTraveller']);
-    Route::post('/additional-traveller', [BookingCustomerController::class, 'travellerBooking']);
-    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeTravellerBooking']);
+    Route::post('/additional-traveller', [BookingCustomerController::class, 'bookingTraveller']);
+    Route::post('/additional-traveller/remove', [BookingCustomerController::class, 'removeBookingTraveller']);
     Route::post('/customer/email/check', [CustomerController::class, 'findCustomerByEmail']);
 
     // is email registered
@@ -100,6 +100,7 @@ Route::prefix('booking')->group(function () {
     // create Booking Order
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
     Route::post('/create-booking', [BookingController::class, 'create']);
+    Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
     // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
     // Route::post('/create-order', [BookingController::class, 'createOrder']);
 

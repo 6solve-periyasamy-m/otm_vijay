@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<!-- THIS LAYOUT IS FOR THE NEW FRONTEND -->
+<!-- MASTER layout -->
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title') - Octopus Travel Matrix</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> 
-    <!-- Styles -->
-    <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
-    <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
-    <link href="{{ asset('css/app.css?v=').time()}}" rel="stylesheet">
-    <script src="/js/appbootstrap.js"></script>
-    <!-- TODO: Remove IonIcons -->
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    @yield('header-script')
-    @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            @stack('header-ready')
-        });
-    </script>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>@yield('title') - Octopus Travel Matrix</title>
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> 
+        <!-- Styles -->
+        <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
+        <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
+        <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
+        <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
+        <!-- TODO: Remove IonIcons -->
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        @yield('header-script')
+        @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                @stack('header-ready')
+            });
+        </script>
+    </head>
 <body>
 @include('partials.navbar')
 <div class="container-fluid">

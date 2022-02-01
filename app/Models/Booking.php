@@ -20,4 +20,29 @@ class Booking extends Model
     {
         return $this->belongsTo(Tour::class);
     }
+
+    public function accommodation()
+    {
+        return $this->hasMany(BookingAccommodation::class, 'booking_id');
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(BookingActivities::class, 'booking_id');
+    }
+
+    public function flights()
+    {
+        return $this->hasMany(BookingFlight::class, 'booking_id');
+    }
+
+    public function transports()
+    {
+        return $this->hasMany(BookingTransport::class, 'booking_id');
+    }
+
+    public function travellers()
+    {
+        return $this->hasMany(BookingTraveller::class, 'booking_id');
+    }
 }

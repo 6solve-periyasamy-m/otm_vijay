@@ -20,8 +20,8 @@
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity :tour="tour"></booking-form-activity>
                             <booking-form-transport :tour="tour"></booking-form-transport>
-                            <booking-form-payment></booking-form-payment>
                             <booking-form-terms></booking-form-terms>
+                            <booking-form-payment></booking-form-payment>
                         </div>
                     </div>
                     <bookingform-footer></bookingform-footer>

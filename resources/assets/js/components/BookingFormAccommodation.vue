@@ -9,8 +9,7 @@
             </div>
             <div v-if="showAccommodation" class="card-body ept-form">
                 <div v-if="showRegistered">
-
-                    <h2>Accommodation Registered</h2>
+                    <h4>Accommodation Registered</h4>
                     <div v-for="accommodation in accommodations" class="row">
                         <div class="col">{{accommodation.first_name}} {{accommodation.last_name}}</div>
                         <div class="col">{{accommodation.room ? accommodation.room['room_type_name'] : ''}}</div>
@@ -22,13 +21,13 @@
                     <button class="btn btn-default" @click="resetButton">Reset</button>
                 </div>
                 <div v-else>
-                    <h2>Accommodation options</h2>
+                    <h4>Accommodation options</h4>
                     <div class="accommodation_travellers" v-for="(traveller, index) in group" v-bind:key="index">
                         <div class="accommodation_traveller">
                             <div class="accommodation_traveller__name">
                                 {{traveller.first_name}} {{traveller.last_name}}
                             </div>
-                            <div class="accommodation_traveller__options--labels">
+                            <div class="accommodation_traveller__options--labels compress">
                                 <accommodation-room-selection 
                                     :token="booking_token"
                                     :tour="tour" 
@@ -38,8 +37,8 @@
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-primary" @click="register">Register</button>
                     <button class="btn btn-default" @click="resetButton">Reset</button>
-                    <button class="btn btn-primary" @click="register">register</button>
                     <p>Set your preferred accommodation selections and register to save settings. Availability of your settings is confirmed when the booking is completed.</p>
                 </div>
             </div>
@@ -343,7 +342,7 @@ export default {
     flex-wrap: wrap;
     align-content: space-between;
     &__name {
-        width: 18rem;
+        width: 8rem;
         background: var(--light-grey);
     }
     &__options {
@@ -367,7 +366,7 @@ export default {
         }
     }
     @media screen and (min-width: 576px) {
-        margin-left: 2rem;
+        margin-left: 0rem;
         &__options {
             align-items: flex-end;
             &--single,
@@ -384,7 +383,7 @@ export default {
         }
     }
     @media screen and (min-width: 768px) {
-        margin-left: 4rem;
+        margin-left: 0rem;
         &__options {
             align-items: flex-end;
             &--single,

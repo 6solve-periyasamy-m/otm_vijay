@@ -17,7 +17,7 @@
                     </div>
                     <h3>Accommodations</h3>
                     <div class="block accommodations" v-for="accommodation in booking.accommodations" :key="accommodation.accmoodation_inventory_tour_id">
-               {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
+                      {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
                     </div>
                     <h3>Group Flights Booking</h3>
                     <div class="block flights" v-for="flight in booking.flights" :key="flight.id">
@@ -80,13 +80,27 @@
                 </div>
 
             </div>
-            <div class="row">
+            <div class="total row">
                 <div class="price">
                     Tour Price total
                 </div>
                 <div class="price_amount">
                     {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
                 </div>
+            </div>
+            <div class="row">
+              <hr>
+              <div class="deposit">
+                 <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.</p>
+                 <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.</p>
+                 <input type="checkbox" v-model="agreement" name="agreement">
+                 <button :disabled="!agreement" @click="calcDeposit">Confirm</button> 
+                 <div v-show="agreement && deposit>0" class="deposit-amount">
+                    <p>The amount to pay now is {{priceFormat(deposit)}}.  
+                    <br>A payment window should open to accept that amount.
+                    <br>You will receive an email confirming your payment schedule.</p>
+                </div>
+              </div>
             </div>
         </div>
     </div>
@@ -98,15 +112,18 @@ import axios from "axios"
 import { bus } from '../bus'
 import dates from '../utilities'
 export default {
-    props: ['tour'],
+    props: ['tour', 'systemCurrency'],
     data() {
         return {
             moduleName: 'Payments',
+            currency: this.systemCurrency || 'GBP',
             booking_token: null,
             debug: 3,
             paymentsActive: false,
             booking: {},
             totals: {},
+            deposit: 0,
+            agreement: false,
             totalPrice: 0
         }    
     },
@@ -121,15 +138,12 @@ export default {
             this.debug>2 && console.log(">>>> Payment: booking reloaded", token);
             if (this.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
                 this.loadBooking(this.booking_token)
-                this.calcPrice()
             } else {
                 console.log('Payment ignored: ', token);
             }
         })
-        console.log('payment created')
     },
     mounted() {
-        console.log('payment mounted')
         this.loadBooking(this.booking_token)
     },
     computed: {
@@ -139,16 +153,14 @@ export default {
     },
     methods: {
         priceFormat(a) {
-            const currency = 'GBP'
-            // Create our number formatter.
+            const currency = this.currency
             let formatter = new Intl.NumberFormat('en-GB', {
                 style: 'currency',
-                currency: currency
+                currency: currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
             })
             return formatter.format(a)
-  // These options are needed to round to whole numbers if that's what you want.
-  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
         },
         formatDate(s) {
             return dates.makeDateFromString(s)
@@ -170,15 +182,21 @@ export default {
             let price = 0
             this.totals = {accommodations:0, flights:0, activities:0, transports:0}
             this.totalPrice = 0
-            console.log('calcPrice', this.booking)
-            if (this.booking.accommodations != undefined) {
+            // if the booking has not been received yet, do nothing yet
+            if (this.booking == undefined) {
+              return
+            }
+            if (typeof this.booking.accommodations !== 'undefined' && this.booking.accommodations !== null) {
                 this.booking.accommodations.map(a => {
-                    if (a.tour_sales_price > 0) {
-                        price += a.tour_sales_price
+                    const tourSalesPrice = parseFloat(a.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += a.sales_price
+                        price += parseFloat(a.sales_price)
                     }
                 })
+            } else {
+                    console.log('check else...', this.booking.accommodations)
             }
             this.totals.accommodations = price
             this.totalPrice += price
@@ -186,17 +204,19 @@ export default {
             price = 0
             if (this.booking.flights != undefined) {
                 this.booking.flights.inbound.map(f => {
-                    if (f.tour_sales_price > 0) {
-                        price += f.tour_sales_price
+                    const tourSalesPrice = parseFloat(f.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += f.sales_price
+                        price += parseFloat(f.sales_price)
                     }
                 })
                 this.booking.flights.outbound.map(f => {
-                    if (f.tour_sales_price > 0) {
-                        price += f.tour_sales_price
+                    const tourSalesPrice = parseFloat(f.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += f.sales_price
+                        price += parseFloat(f.sales_price)
                     }
                 })
             }
@@ -206,42 +226,59 @@ export default {
             price = 0
             if (this.booking.activities != undefined) {
                 this.booking.activities.map(a => {
-                    if (a.tour_sales_price > 0) {
-                        price += a.tour_sales_price
+
+                    const tourSalesPrice = parseFloat(a.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += a.sales_price
+                        price += parseFloat(a.sales_price)
                     }
                 })
             }
             this.totals.activities = price
             this.totalPrice += price
+
             price = 0
             if (this.booking.transports != undefined) {
-                this.booking.accommodations.map(a => {
-                    if (a.tour_sales_price > 0) {
-                        price += a.tour_sales_price
+                this.booking.transports.map(t => {
+                    const tourSalesPrice = parseFloat(t.tour_sales_price)
+                    if (tourSalesPrice > 0) {
+                        price += tourSalesPrice
                     } else {
-                        price += a.sales_price
+                        price += parseFloat(t.sales_price)
                     }
                 })
             }
             this.totals.transports += price
             this.totalPrice += price
         },
+        calcDeposit() {
+            let that = this
+            axios.post('/api/booking/deposit/calculate', {
+                tour: this.tour,
+                token: this.token
+            })
+            .then(response => {
+                console.log(response)
+                const success = response.data.success
+                if (success) {
+                  const data = response.data
+                  that.deposit = data.deposit
+                } else {
+                  that.deposit = 'please retry'
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            
+        },
         loadBooking(token) {
             let that = this
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
-                    console.log('>>>> booking data ', response.data)
                     that.booking = response.data.booking
                     that.calcPrice()
-                    // that.booking.accommodation = response.data.accommodation
-                    // that.booking.customer = response.data.customer
-                    // that.booking.travellers = response.data.travellers
-                    // that.booking.flights = response.data.flights
-                    // that.booking.activities = response.data.activities
-                    // that.booking.transports = response.data.transports
-                    
                 })
                 .catch(error => {
                     console.log(error)
@@ -263,5 +300,10 @@ export default {
 .price_amount {
     width: 20rem;
     text-align: right;
+}
+.total {
+    font-size: large;
+    font-weight: bold;
+    margin-top: 2rem;
 }
 </style>

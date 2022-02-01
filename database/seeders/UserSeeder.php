@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
             'name' => 'Nicholas Alexander',
             'email' => 'work@sfsw.net',
             'email_verified_at' => now(),
-            'password' => '$2a$12$cZrltF34KgJtI0V0Ob8nm.osVJavm4lvo.4E2vjol2iC652B.f2Oy',
+            'password' => '$2y$10$NCq3PTzn.yxzLduk/J2GMevVw3qBj/K685xbtyQq7y.YTF5uvI3lO',
         ]);
 
         $celeste->assign($otmStaff);
