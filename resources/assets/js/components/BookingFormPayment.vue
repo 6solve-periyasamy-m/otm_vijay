@@ -115,11 +115,11 @@ export default {
     props: ['tour', 'systemCurrency'],
     data() {
         return {
+            debug: 3,
             moduleName: 'Payments',
             currency: this.systemCurrency || 'GBP',
             booking_token: null,
-            debug: 3,
-            paymentsActive: false,
+            paymentsActive: true,
             booking: {},
             totals: {},
             deposit: 0,
@@ -141,6 +141,9 @@ export default {
             } else {
                 console.log('Payment ignored: ', token);
             }
+        })
+        bus.$on("TermsAgreed", (agreed) => {
+          this.agreement = agreed
         })
     },
     mounted() {
@@ -275,6 +278,9 @@ export default {
         },
         loadBooking(token) {
             let that = this
+            if (token == undefined) {
+              return
+            }
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking

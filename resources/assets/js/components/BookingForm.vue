@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="booking-form">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default">
@@ -21,7 +21,7 @@
                             <booking-form-activity :tour="tour"></booking-form-activity>
                             <booking-form-transport :tour="tour"></booking-form-transport>
                             <booking-form-terms></booking-form-terms>
-                            <booking-form-payment></booking-form-payment>
+                            <booking-form-payment v-if="termsaccepted"></booking-form-payment>
                         </div>
                     </div>
                     <bookingform-footer></bookingform-footer>
@@ -93,7 +93,8 @@ export default {
             login: '',
             password: '',
             authenticated: false,
-            tokenName: 'OTM_booking_token'
+            tokenName: 'OTM_booking_token',
+            termsaccepted: false
         }
     },
     async created() {
@@ -102,6 +103,9 @@ export default {
         bus.$emit('debugOverride', this.debug)
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
+        })
+        bus.$on('TermsAgreed', function(state) {
+          that.termsaccepted = state
         })
 
         that.bookingToken = getCookie(that.tokenName); 
