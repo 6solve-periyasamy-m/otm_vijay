@@ -8,5 +8,5 @@
     Arrival Airport Id: {{ $flight->arrival_airport_id }}<br/>
     Is Domestic: {{ $flight->is_domestic }}<br/>
     Notes: {{ $flight->notes }}<br/>
-    Available After: {{ $flight->available_after }}<br/>
+    Available From: {{ $flight->available_from }}<br/>
 @endsection

@@ -22,7 +22,7 @@ class CreateFlightsTable extends Migration
             $table->string('image_url')->nullable();
             $table->text('notes')->nullable();
             $table->foreignId('currency_id')->nullable()->constrained()->onDelete('SET NULL');
-            $table->date('available_after')->nullable();
+            $table->date('available_from')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
