@@ -8,13 +8,41 @@
     --dark-grey: #888;
 }
 
-form-control:focus {outline: 3px dashed;}
+.booking-form.container-fluid {
+  padding: 0;
+}
+form-control:focus {
+  outline: 3px dashed;
+  }
+
+.booking-page {
+  padding: 0;
+}
+@media screen and (min-width: 600px) {
+ .booking-page {
+  padding: 0 0.25rem;
+ }
+}
+@media screen and (min-width: 768px) {
+  .booking-page {
+    padding: 0 1rem;
+  }
+}
+@media screen and (min-width: 992px) {
+  .booking-page {
+    padding: 0.5rem 1.5rem;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .booking-page {
+    padding: 1rem 2rem;
+  }
+}
 
 .booking-page {
     .form-control:focus {
         outline: 3px dashed;
     }
-    padding: 2rem 1rem 1rem;
     min-width: calc(100vw - 2rem); 
     min-height: calc(100vh - 2rem);
     background: #A5C4CE;
