@@ -24,6 +24,16 @@
         <!-- Topbar header -->
         @include('pages.customer.layout.navbar')
 
+        @if ($errors->any())
+            <div class="container">
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ $error }}
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
         <!-- Main Body -->
         <div class="container h-100">
             <div class="page-breadcrumb">
