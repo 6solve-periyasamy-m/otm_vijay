@@ -159,7 +159,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: 10,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
@@ -457,6 +457,7 @@ export default {
                     }
                     that.debug>2 && console.log('loadFlightsForBooking SELECTED GROUP FLIGHTS', that.selected_outbound_flight, that.selected_inbound_flight)
 
+                        that.showwait = false
                     that.unselected_outbound = that.flights.filter(flight => {
                         return flight.flight_inventory_tour_id != that.selected_outbound_flight &&
                             flight.flight_type == 'Outbound'
