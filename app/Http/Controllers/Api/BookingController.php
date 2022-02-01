@@ -18,7 +18,8 @@ use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
 use App\Repository\BookingTravellerRepository;
 use App\Repository\TransportBookingRepository;
-
+use App\Models\BookingTraveller;
+use App\Models\Tour;
 
 class BookingController extends ApiController
 {
@@ -111,14 +112,42 @@ class BookingController extends ApiController
         ]);
     }
 
+    private function getCustomerAndBooking($token)
+    {
+        $bookingRepository = new BookingRepository();
+        $booking = $bookingRepository->findBookingByToken($token);
+Log::debug('booking...', [$booking, $token]);
+        $customerRepository = new CustomerRepository();
+        $customer = $customerRepository->get($booking->customer_id);
+
+        $travellers = BookingTraveller::where('booking_id', $booking->id)->count();
+
+        return ['customer' => $customer, 'travellers' => $travellers, 'booking' => $booking];
+    }
+
     public function calculateDeposit(Request $request)
     {
+        // can not use this: it is not input
+        // Log::debug('**** calcDep: ', [$request->tour, $request->token]);
+        // $request->validate(['token' => 'required|exists:bookings', 'tour' => 'required|exists:tours']);
+
+        // validate the data is useful
+        if (empty($request->tour) || empty($request->tour['id']) || strlen($request->token) < 6) {
+          return response(['success' => false, 'error' => 'invalid data in deposit request']);
+        }
+
         $token = $request->token;
         $tour = $request->tour;
+        $tour = Tour::findOrFail($tour['id']);
+        if (!$tour) {
+          return response(['success' => false, 'error' => 'Non-existant tour']);
+        }
+        $data = $this->getCustomerAndBooking($token);
 
-        Log::debug('calcDep: ', [$tour, $token]);
+        $deposit = $tour->deposit * $data['travellers'];
+        //$this->payDeposit($token, $deposit);
 
-        return response(['success' => true, 'deposit' => 100]);
+        return response(['success' => true, 'deposit' => $deposit]);
     }
 
     /***
@@ -131,13 +160,15 @@ class BookingController extends ApiController
     public function payDeposit(Request $request)
     {
         $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required|numeric']);
-
+        $amount = $request->amount;
         $bookingRepository = new BookingRepository();
         $booking = $bookingRepository->findBookingByToken($request->token);
+        if (!$booking) {
+          return response(['success' => false, 'error' => 'Non-existant booking']);
+        }
         $customerRepository = new CustomerRepository();
         $customer = $customerRepository->get($booking->customer_id);
-        $amount = $request->amount;
-
+        // Log::debug('sending to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
         return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
     }
 }

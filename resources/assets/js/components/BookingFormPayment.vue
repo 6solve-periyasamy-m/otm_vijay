@@ -91,14 +91,16 @@
             <div class="row">
               <hr>
               <div class="deposit">
-                 <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.</p>
-                 <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.</p>
-                 <input type="checkbox" v-model="agreement" name="agreement">
-                 <button :disabled="!agreement" @click="calcDeposit">Confirm</button> 
-                 <div v-show="agreement && deposit>0" class="deposit-amount">
-                    <p>The amount to pay now is {{priceFormat(deposit)}}.  
-                    <br>A payment window should open to accept that amount.
-                    <br>You will receive an email confirming your payment schedule.</p>
+                 <div v-if="deposit == 0" class="deposit-amount">
+                     <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.</p>
+                     <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.</p>
+                     <input type="checkbox" v-model="agreement" name="agreement">
+                     <button :disabled="!agreement" @click="calcDeposit" class="btn btn-primary">Confirm</button> 
+                 </div>
+                 <div v-if="agreement && deposit>0" class="deposit-amount">
+                    <p>You have agreed to our Terms and Conditions.</p>
+                    <p>To book your tour, a deposit of {{priceFormat(deposit)}} is now payable.</p>
+                    <button @click="payDeposit" class="btn btn-primary">Pay {{priceFormat(deposit)}}</button>
                 </div>
               </div>
             </div>
@@ -115,7 +117,7 @@ export default {
     props: ['tour', 'systemCurrency'],
     data() {
         return {
-            debug: 3,
+            debug: true,
             moduleName: 'Payments',
             currency: this.systemCurrency || 'GBP',
             booking_token: null,
@@ -131,7 +133,7 @@ export default {
         let that = this
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
-            that.debug && console.log(`>>>> ${that.moduleName} module, booking ${that.booking_token}`)
+            that.debug && console.log(`>>>><<<<>>>>> ${that.moduleName} module, booking ${that.booking_token}`)
             that.loadBooking(that.booking_token)
         })
         bus.$on("ReloadBooking", (token) => {
@@ -151,7 +153,12 @@ export default {
     },
     computed: {
         travellers: function() {
-            return this.booking.travellers.length
+            if (typeof this.booking.travellers !== 'undefined') {
+              return this.booking.travellers.length
+            } else {
+              console.log('check travellers: ',this.booking)
+              return 1
+            }
         }
     },
     methods: {
@@ -257,12 +264,12 @@ export default {
         },
         calcDeposit() {
             let that = this
+            console.log(this.tour, this.booking_token);
             axios.post('/api/booking/deposit/calculate', {
                 tour: this.tour,
-                token: this.token
+                token: this.booking_token
             })
             .then(response => {
-                console.log(response)
                 const success = response.data.success
                 if (success) {
                   const data = response.data
@@ -274,16 +281,30 @@ export default {
             .catch(error => {
                 console.log(error)
             })
-            
+        },
+        payDeposit() {
+          let that = this
+          axios.post('/api/booking/deposit/payment', {
+            token: this.booking_token,
+            amount: this.deposit
+          })
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
         },
         loadBooking(token) {
             let that = this
             if (token == undefined) {
+              console.log('payment stage', token);
               return
             }
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking
+                    console.log('***** booking loaded: ', that.booking)
                     that.calcPrice()
                 })
                 .catch(error => {

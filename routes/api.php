@@ -102,7 +102,7 @@ Route::prefix('booking')->group(function () {
     Route::post('/create-booking', [BookingController::class, 'create']);
     Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
     
-    Route::post('/deposit/pay', [BookingController::class, 'payDeposit']);
+    Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
 
     // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
     // Route::post('/create-order', [BookingController::class, 'createOrder']);
