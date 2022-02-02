@@ -137,15 +137,12 @@ Log::debug('booking...', [$booking, $token]);
         }
 
         $token = $request->token;
-        $tour = $request->tour;
-        $tour = Tour::findOrFail($tour['id']);
+        $tour = Tour::find($request->tour['id']);
         if (!$tour) {
           return response(['success' => false, 'error' => 'Non-existant tour']);
         }
         $data = $this->getCustomerAndBooking($token);
-
         $deposit = $tour->deposit * $data['travellers'];
-        //$this->payDeposit($token, $deposit);
 
         return response(['success' => true, 'deposit' => $deposit]);
     }
@@ -166,9 +163,9 @@ Log::debug('booking...', [$booking, $token]);
         if (!$booking) {
           return response(['success' => false, 'error' => 'Non-existant booking']);
         }
-        $customerRepository = new CustomerRepository();
-        $customer = $customerRepository->get($booking->customer_id);
+        $customer = CustomerRepository::lookup($booking->customer_id);
         // Log::debug('sending to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
+
         return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
     }
 }
