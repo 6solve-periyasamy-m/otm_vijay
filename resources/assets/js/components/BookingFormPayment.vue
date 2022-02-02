@@ -156,7 +156,8 @@ export default {
             if (typeof this.booking.travellers !== 'undefined') {
               return this.booking.travellers.length
             } else {
-              console.log('check travellers: ',this.booking)
+              // this should not happen but to detect if there is a problem with this function
+              console.log('ERROR: computed travellers counter does not have travellers in this booking: ',this.booking)
               return 1
             }
         }
@@ -298,13 +299,13 @@ export default {
         loadBooking(token) {
             let that = this
             if (token == undefined) {
-              console.log('payment stage', token);
+              console.log('ERROR: payment stage has no token');
               return
             }
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking
-                    console.log('***** booking loaded: ', that.booking)
+                    console.log('INFO: booking loaded: ', that.booking)
                     that.calcPrice()
                 })
                 .catch(error => {
