@@ -81,7 +81,7 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public static function lookup($customer_id)
     {
-        return self::get($customer_id);
+        return Customer::find($customer_id);
     }
 
     public function get($customer_id)
