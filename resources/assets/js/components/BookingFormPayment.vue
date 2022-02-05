@@ -100,7 +100,14 @@
                  <div v-if="agreement && deposit>0" class="deposit-amount">
                     <p>You have agreed to our Terms and Conditions.</p>
                     <p>To book your tour, a deposit of {{priceFormat(deposit)}} is now payable.</p>
-                    <button @click="payDeposit" class="btn btn-primary">Pay {{priceFormat(deposit)}}</button>
+                    {{csrf_token}}
+                    <form method="post" action="/booking/deposit/payment">
+                      <input type="hidden" name="_token" :value="csrf_token" />
+                      <input type="text" name="token" :value="booking_token" />
+                      <input type="text" name="amount" readonly :value="priceFormat(deposit)" />
+                      <input type="submit" class="btn btn-primary" value="Pay Deposit now!" />
+                    </form>
+                    <!-- button @click="payDeposit" class="btn btn-primary">Pay {{priceFormat(deposit)}}</button -->
                 </div>
               </div>
             </div>
@@ -113,6 +120,7 @@
 import axios from "axios"
 import { bus } from '../bus'
 import dates from '../utilities'
+let csrf = document.querySelector('meta[name="csrf-token"]').content;
 export default {
     props: ['tour', 'systemCurrency'],
     data() {
@@ -126,11 +134,14 @@ export default {
             totals: {},
             deposit: 0,
             agreement: false,
-            totalPrice: 0
+            totalPrice: 0,
+            csrf_token: '' 
         }    
     },
     created() {
         let that = this
+        this.csrf_token = csrf
+        console.log('csrf=', this.csrf_token)
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>><<<<>>>>> ${that.moduleName} module, booking ${that.booking_token}`)
@@ -145,6 +156,7 @@ export default {
             }
         })
         bus.$on("TermsAgreed", (agreed) => {
+  console.log('terms agreed listener', agreed);
           this.agreement = agreed
         })
     },
@@ -265,13 +277,14 @@ export default {
         },
         calcDeposit() {
             let that = this
-            console.log(this.tour, this.booking_token);
+console.log('calcDeposit', this.tour, this.booking_token);
             axios.post('/api/booking/deposit/calculate', {
                 tour: this.tour,
                 token: this.booking_token
             })
             .then(response => {
                 const success = response.data.success
+console.log(response)
                 if (success) {
                   const data = response.data
                   that.deposit = data.deposit

@@ -1,4 +1,4 @@
-@extends ('layout.main')
+@extends ('layout.booking')
 @section('content')
 <div class="container-fluid">
     <form action="/booking/deposit/payment" method="post">

@@ -135,9 +135,9 @@ class BookingController extends ApiController
         }
         $data = $this->getCustomerAndBooking($token);
         $deposit = $tour->deposit * $data['travellers'];
-
-        return view('pages.booking.deposit.payment', ['booking' => $booking, 'customer' => $customer, 'deposit' => $deposit]);
-        //return response(['success' => true, 'deposit' => $deposit]);
+Log::debug('deposit', [$deposit]);
+        //return view('pages.booking.deposit.payment', ['errors' => [], 'booking' => $booking, 'customer' => $customer, 'deposit' => $deposit]);
+        return response(['success' => true, 'deposit' => $deposit]);
     }
 
     private function getCustomerAndBooking($token)

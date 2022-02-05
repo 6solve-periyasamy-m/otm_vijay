@@ -86,7 +86,7 @@ Route::get('/pdfmake', function () {
 Route::prefix("/booking")->group(function () {
 
     // laravel route (not booking form)
-    Route::post('/deposit/payment', [BookingController::payDeposit]);
+    Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
 
     // debugging routes
     Route::get('/check/events', [TourController::class, 'getEvents']);
