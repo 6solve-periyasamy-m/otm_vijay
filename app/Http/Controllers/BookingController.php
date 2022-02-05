@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Tour;
+use Exception;
 
+use App\Models\Tour;
 use App\Models\Event;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -93,25 +94,21 @@ class BookingController extends Controller
     {
         $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^(.*)\d*(\.\d{2})?$/']);
         $amountCurrency = $request->amount;
+        // £ uses two bytes
         $currency = substr($amountCurrency, 0, 2);
-
-        // convert $amount to pennies - allow $600.00 or 600.00 as valid amounts
-        Log::debug('1. deposit amount: '.$request->amount. '  currency '.$currency);
-
+        // accept £999.99 or 999.99
         if ($currency === '£') {
-          $amount = intval(substr($request->amount, 2, strlen($request->amount) - 2 ));
-          Log::debug('£££ amount: '.$amount. substr($request->amount,1, strlen($request->amount)-1));
+          $amount = floatval(substr($request->amount, 2, strlen($request->amount) - 2 ));
         } else if (($currency !== '£') && fmod(floatval($request->amount), 1) === 0.00) {
-          $amount = intval($request->amount);
+          $amount = floatval($request->amount);
         } else if (($currency !== '£') && fmod(floatval($request->amount), 1) !== 0.00) {
           Log::error('deposit received but not in £', [$request->amount]);
           throw new Exception('Deposit received but value is not £');
         } else {
+            Log::error('Deposit format incorrect, expect decimal value', [$request->amount]);
           throw new Exception('Deposit received appears not valid');
         }
-        Log::debug('2. amount: '.$amount. '  currency '.$currency);
-        
-        // using the Repository as a class instance is used elsewhere
+
         $bookingRepository = new BookingRepository();
         $booking = $bookingRepository->findBookingByToken($request->token);
         if (!$booking) {
