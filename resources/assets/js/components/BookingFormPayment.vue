@@ -283,19 +283,22 @@ export default {
                 console.log(error)
             })
         },
-        payDeposit() {
-          let that = this
-          axios.post('/api/booking/deposit/payment', {
-            token: this.booking_token,
-            amount: this.deposit
-          })
-          .then(response => {
-            console.log(response)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-        },
+        // payDeposit() {
+        //   let that = this
+        //   document.location.href="/booking/deposit/payment"
+        //   return
+        //   // no longer using an api call for this as stripe is being difficult
+        //   axios.post('/api/booking/deposit/payment', {
+        //     token: this.booking_token,
+        //     amount: this.deposit
+        //   })
+        //   .then(response => {
+        //     console.log(response)
+        //   })
+        //   .catch(error => {
+        //     console.log(error)
+        //   })
+        // },
         loadBooking(token) {
             let that = this
             if (token == undefined) {

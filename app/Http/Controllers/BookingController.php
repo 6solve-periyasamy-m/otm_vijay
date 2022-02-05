@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Log;
-
-use Illuminate\Http\Request;
-use App\Models\Order;
 use App\Models\Tour;
+
 use App\Models\Event;
+use App\Models\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Gateways\StripeGateway;
+use App\Repository\BookingRepository;
+use App\Repository\CustomerRepository;
 
 class BookingController extends Controller
 {
@@ -77,6 +80,30 @@ class BookingController extends Controller
         }
 
         abort(404);
+    }
+
+    /***
+     * payDeposit
+     * Although this comes from the Booking form, it is not an API call but a form
+     * Request:
+     * $booking
+     * $amount
+     */
+    public function payDeposit(Request $request)
+    {
+        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required|numeric']);
+        $amount = $request->amount;
+        
+        // using the Repository as a class instance is used elsewhere
+        $bookingRepository = new BookingRepository();
+        $booking = $bookingRepository->findBookingByToken($request->token);
+        if (!$booking) {
+          return response(['success' => false, 'error' => 'Non-existant booking']);
+        }
+        $customer = CustomerRepository::lookup($booking->customer_id);
+        // Log::debug('sending to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
+
+        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
     }
 
     /**

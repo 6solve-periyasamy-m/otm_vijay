@@ -5,7 +5,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Tour;
+use App\Models\Booking;
+use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Models\BookingTraveller;
 use Illuminate\Support\Facades\Log;
 use App\Http\Gateways\StripeGateway;
 use App\Repository\BookingRepository;
@@ -18,8 +22,6 @@ use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
 use App\Repository\BookingTravellerRepository;
 use App\Repository\TransportBookingRepository;
-use App\Models\BookingTraveller;
-use App\Models\Tour;
 
 class BookingController extends ApiController
 {
@@ -112,6 +114,32 @@ class BookingController extends ApiController
         ]);
     }
 
+    /**
+     * calculateDeposit
+     * determine deposit and display payment form
+     */
+    public function calculateDeposit(Request $request)
+    {
+        // API call (not input), validate it anyway
+        if (empty($request->tour) || empty($request->tour['id']) || strlen($request->token) < 6) {
+          return response(['success' => false, 'error' => 'invalid data in deposit request']);
+        }
+
+        $token = $request->token;
+        $booking = Booking::where('token', $token)->first();
+        $customer = Customer::find($booking->customer_id);
+
+        $tour = Tour::find($request->tour['id']);
+        if (!$tour) {
+          return response(['success' => false, 'error' => 'Non-existant tour']);
+        }
+        $data = $this->getCustomerAndBooking($token);
+        $deposit = $tour->deposit * $data['travellers'];
+
+        return view('pages.booking.deposit.payment', ['booking' => $booking, 'customer' => $customer, 'deposit' => $deposit]);
+        //return response(['success' => true, 'deposit' => $deposit]);
+    }
+
     private function getCustomerAndBooking($token)
     {
         $bookingRepository = new BookingRepository();
@@ -123,49 +151,5 @@ Log::debug('booking...', [$booking, $token]);
         $travellers = BookingTraveller::where('booking_id', $booking->id)->count();
 
         return ['customer' => $customer, 'travellers' => $travellers, 'booking' => $booking];
-    }
-
-    public function calculateDeposit(Request $request)
-    {
-        // can not use this: it is not input
-        // Log::debug('**** calcDep: ', [$request->tour, $request->token]);
-        // $request->validate(['token' => 'required|exists:bookings', 'tour' => 'required|exists:tours']);
-
-        // validate the data is useful
-        if (empty($request->tour) || empty($request->tour['id']) || strlen($request->token) < 6) {
-          return response(['success' => false, 'error' => 'invalid data in deposit request']);
-        }
-
-        $token = $request->token;
-        $tour = Tour::find($request->tour['id']);
-        if (!$tour) {
-          return response(['success' => false, 'error' => 'Non-existant tour']);
-        }
-        $data = $this->getCustomerAndBooking($token);
-        $deposit = $tour->deposit * $data['travellers'];
-
-        return response(['success' => true, 'deposit' => $deposit]);
-    }
-
-    /***
-     * payDeposit
-     * generate a Stripe payment for the customer
-     * Request:
-     * $booking
-     * $amount
-     */
-    public function payDeposit(Request $request)
-    {
-        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required|numeric']);
-        $amount = $request->amount;
-        $bookingRepository = new BookingRepository();
-        $booking = $bookingRepository->findBookingByToken($request->token);
-        if (!$booking) {
-          return response(['success' => false, 'error' => 'Non-existant booking']);
-        }
-        $customer = CustomerRepository::lookup($booking->customer_id);
-        // Log::debug('sending to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
-
-        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
     }
 }
