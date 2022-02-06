@@ -24,10 +24,6 @@
                         <div v-for="f in flight">
                             <div>{{f.flight_type}} {{f.travel_class}}</div>
                         </div>
-                        <!-- <div v-for="(flight,name) in flight_type" key="flight.id">
-                            <h4>{{name}}</h4>
-                            {{flight.travel_class}} {{flight.flight_type}} {{flight.sales_price}}
-                        </div> -->
                     </div>
                     <h3>Activities</h3>
                     <div class="block activities" v-for="activity in booking.activities" :key="activity.id">
@@ -100,14 +96,12 @@
                  <div v-if="agreement && deposit>0" class="deposit-amount">
                     <p>You have agreed to our Terms and Conditions.</p>
                     <p>To book your tour, a deposit of {{priceFormat(deposit)}} is now payable.</p>
-                    {{csrf_token}}
                     <form method="post" action="/booking/deposit/payment">
                       <input type="hidden" name="_token" :value="csrf_token" />
-                      <input type="text" name="token" :value="booking_token" />
+                      <input type="hidden" name="token" :value="booking_token" />
                       <input type="text" name="amount" readonly :value="priceFormat(deposit)" />
-                      <input type="submit" class="btn btn-primary" value="Pay Deposit now!" />
+                      <input type="submit" class="btn btn-primary" value="Pay Deposit" />
                     </form>
-                    <!-- button @click="payDeposit" class="btn btn-primary">Pay {{priceFormat(deposit)}}</button -->
                 </div>
               </div>
             </div>
@@ -141,7 +135,6 @@ export default {
     created() {
         let that = this
         this.csrf_token = csrf
-        console.log('csrf=', this.csrf_token)
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>><<<<>>>>> ${that.moduleName} module, booking ${that.booking_token}`)
@@ -156,7 +149,6 @@ export default {
             }
         })
         bus.$on("TermsAgreed", (agreed) => {
-  console.log('terms agreed listener', agreed);
           this.agreement = agreed
         })
     },
@@ -219,7 +211,7 @@ export default {
                     }
                 })
             } else {
-                    console.log('check else...', this.booking.accommodations)
+                console.log('BookingFormPrice: calcPrice() unexpected condition', this.booking.accommodations)
             }
             this.totals.accommodations = price
             this.totalPrice += price
@@ -277,14 +269,12 @@ export default {
         },
         calcDeposit() {
             let that = this
-console.log('calcDeposit', this.tour, this.booking_token);
             axios.post('/api/booking/deposit/calculate', {
                 tour: this.tour,
                 token: this.booking_token
             })
             .then(response => {
                 const success = response.data.success
-console.log(response)
                 if (success) {
                   const data = response.data
                   that.deposit = data.deposit
@@ -296,22 +286,6 @@ console.log(response)
                 console.log(error)
             })
         },
-        // payDeposit() {
-        //   let that = this
-        //   document.location.href="/booking/deposit/payment"
-        //   return
-        //   // no longer using an api call for this as stripe is being difficult
-        //   axios.post('/api/booking/deposit/payment', {
-        //     token: this.booking_token,
-        //     amount: this.deposit
-        //   })
-        //   .then(response => {
-        //     console.log(response)
-        //   })
-        //   .catch(error => {
-        //     console.log(error)
-        //   })
-        // },
         loadBooking(token) {
             let that = this
             if (token == undefined) {
@@ -321,7 +295,6 @@ console.log(response)
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking
-                    console.log('INFO: booking loaded: ', that.booking)
                     that.calcPrice()
                 })
                 .catch(error => {
@@ -329,7 +302,6 @@ console.log(response)
                 })
         }
     }
-
 }
 </script>
 

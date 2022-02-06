@@ -39,6 +39,11 @@ class BookingRepository implements BookingRepositoryInterface
         return null;
     }
 
+    public static function findBooking($token)
+    {
+        return static::findBookingByToken($token);
+    }
+
     public function create($customer_id, $tour_id, $token)
     {
         Log::debug('============== create a booking with ', [$customer_id, $tour_id, $token]);

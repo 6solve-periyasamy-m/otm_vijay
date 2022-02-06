@@ -85,22 +85,25 @@ class BookingController extends Controller
 
     /***
      * payDeposit
-     * Although this comes from the Booking form, it is not an API call but a form
+     * Booking Form contains a form for accepting deposit
+    *
      * Request:
-     * $booking
-     * $amount
+     * $token    the booking token
+     * $amount   expected format contains currency character (mayu be two bytes) e.g. £600.00
      */
     public function payDeposit(Request $request)
     {
         $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^(.*)\d*(\.\d{2})?$/']);
         $amountCurrency = $request->amount;
-        // £ uses two bytes
-        $currency = substr($amountCurrency, 0, 2);
+        $currencyLength = strlen($amountCurrency);
+        // NB: £ uses two bytes
+        $currency = substr($amountCurrency, 0, $currencyLength);
         // accept £999.99 or 999.99
         if ($currency === '£') {
-          $amount = floatval(substr($request->amount, 2, strlen($request->amount) - 2 ));
+          $amount = floatval(substr($request->amount, $currencyLength, strlen($request->amount) - $currencyLength ));
         } else if (($currency !== '£') && fmod(floatval($request->amount), 1) === 0.00) {
           $amount = floatval($request->amount);
+        // log incorrect amount formatting due to unexpected changed
         } else if (($currency !== '£') && fmod(floatval($request->amount), 1) !== 0.00) {
           Log::error('deposit received but not in £', [$request->amount]);
           throw new Exception('Deposit received but value is not £');

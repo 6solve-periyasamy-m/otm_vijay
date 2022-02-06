@@ -28,17 +28,23 @@ class BookingController extends ApiController
     protected $logging = 'customer';
 
     /**
-     * get
+     * get retrieve a booking 
      *
      * @param $token
      * @return void
      */
     public function get($token)
     {
+        // TODO: Test Static accessor
         $bookingRepo = new BookingRepository();
-        $booking = $bookingRepo->findBookingByToken($token);
+        $bookingObj = $bookingRepo->findBookingByToken($token);
+        $booking = BookingRepository::findBooking($token);
+        if ($bookingObj !== $booking) {
+            Log::debug('STATIC Accessor did not return same object');
+        }
+        Log::debug('STATIC Accessor worked as expected');
+        
         if (isset($booking)) {
-            // Log::debug('===>>> booking->customer', [$booking, $booking->customer]);
             return response()->json(['success' => true, 'booking' => $booking, 'tour' => $booking->tour]);
         }
         return response()->json(['success' => false]);
@@ -51,7 +57,7 @@ class BookingController extends ApiController
      * @param string $customer_id
      * @param string $tour_id
      * @param string $token
-     * @return void
+     * @return JSON response
      */
     public function create(Request $request)
     {
@@ -70,10 +76,15 @@ class BookingController extends ApiController
         $bookingTravellerRepo = new BookingTravellerRepository();
         $traveller_id = $bookingTravellerRepo->create($booking->id, $customer_id);
 
-        // Log::debug('Booking:Create', [$tour_id, $token]);
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
+    /**
+     * gatherDetails: GET json data for a token for the booking summary
+     *
+     * @param STRING $token
+     * @return JSON response
+     */
     public function gatherDetails($token)
     {
         $bookingRepo = new BookingRepository();
@@ -116,7 +127,10 @@ class BookingController extends ApiController
 
     /**
      * calculateDeposit
-     * determine deposit and display payment form
+     * @Param Request OBJECT 
+     *    $tour INT the ID of the tour being booked
+     *    $token STRING Booking unique token (browser cookie) for validation
+     * @return JSON response
      */
     public function calculateDeposit(Request $request)
     {
@@ -127,24 +141,33 @@ class BookingController extends ApiController
 
         $token = $request->token;
         $booking = Booking::where('token', $token)->first();
-        $customer = Customer::find($booking->customer_id);
 
         $tour = Tour::find($request->tour['id']);
         if (!$tour) {
-          return response(['success' => false, 'error' => 'Non-existant tour']);
+            return response()->json(['success' => false, 'error' => 'Non-existant tour']);
         }
+        if ($booking->tour_id !== $tour->id) {
+            return response()->json(['success' => false, 'error' => 'Tour and Booking do not match']);
+        }
+
         $data = $this->getCustomerAndBooking($token);
         $deposit = $tour->deposit * $data['travellers'];
-Log::debug('deposit', [$deposit]);
-        //return view('pages.booking.deposit.payment', ['errors' => [], 'booking' => $booking, 'customer' => $customer, 'deposit' => $deposit]);
-        return response(['success' => true, 'deposit' => $deposit]);
+
+        return response()->json(['success' => true, 'deposit' => $deposit]);
     }
 
+    /**
+     * getCustomerAndBooking
+     *
+     * @param STRING $token
+     * @return void
+     */
     private function getCustomerAndBooking($token)
     {
+        // TODO: static accessors 
         $bookingRepository = new BookingRepository();
         $booking = $bookingRepository->findBookingByToken($token);
-Log::debug('booking...', [$booking, $token]);
+
         $customerRepository = new CustomerRepository();
         $customer = $customerRepository->get($booking->customer_id);
 
