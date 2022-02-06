@@ -139,8 +139,12 @@ class BookingController extends ApiController
 
         $data = $this->getCustomerAndBooking($token);
         $deposit = $tour->deposit * $data['travellers'];
-
-        return response()->json(['success' => true, 'deposit' => $deposit]);
+        if ($deposit) {
+                return response()->json(['success' => true, 'deposit' => $deposit]);
+        } else {
+                \Log::debug('Deposit is ' . $deposit);
+                throw new Exception('Deposit must be a positive value!');
+        }
     }
 
     /**

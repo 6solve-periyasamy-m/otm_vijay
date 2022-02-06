@@ -89,13 +89,27 @@ class BookingController extends Controller
     *
      * Request:
      * $token    the booking token
-     * $amount   expected format contains currency character (mayu be two bytes) e.g. £600.00
+     * $amount   expected format should contain currency character e.g. £600.00 (NB: £ uses 2 bytes) 
+     *           but 600.00 should also work, as should $600.00 or EURO600 but log anything not £
      */
     public function payDeposit(Request $request)
     {
-        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^(.*)\d*(\.\d{2})?$/']);
+
+        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^([^\d]*)\d*(\.\d{2})?$/']);
         $amountCurrency = $request->amount;
-        $currencyLength = strlen($amountCurrency);
+
+        // extract the currency symbol, everything before the first digit as the currency symbol
+        $currencyRegex = '/^([^\d]*)\d*(\.\d{2})?$/';
+        preg_match($currencyRegex, $amountCurrency, $matched);
+        $currency = $matched[1];
+        if ($currency !== '£') {
+          Log::warning('BookingController::payDeposit() WARNING: unsupported currency detected:'.$currency); 
+        }
+        $currencyLength = strlen($currency);
+
+        // If testing a new currency, ensure the length of the currency string is resolving correctly
+        // Log::debug('Check currency: '.$amountCurrency.' '.$currency. ' length='.$currencyLength);
+
         // NB: £ uses two bytes
         $currency = substr($amountCurrency, 0, $currencyLength);
         // accept £999.99 or 999.99
@@ -111,14 +125,19 @@ class BookingController extends Controller
             Log::error('Deposit format incorrect, expect decimal value', [$request->amount]);
           throw new Exception('Deposit received appears not valid');
         }
-
         $bookingRepository = new BookingRepository();
         $booking = $bookingRepository->findBookingByToken($request->token);
         if (!$booking) {
           return response(['success' => false, 'error' => 'Non-existant booking']);
         }
         $customer = CustomerRepository::lookup($booking->customer_id);
-        // Log::debug('sending to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
+
+        if ($amount < 0.01) {
+            Log::debug('BookingController::payDeposit() currency values',[$currency, $amountCurrency, $currencyLength, $amount, $booking, $customer]); 
+            throw new Exception('BookingController::payDeposit did not resolve to a deposit amount'); 
+        }
+
+        Log::info('Booking: sending deposit request to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
 
         return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
     }
