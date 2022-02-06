@@ -34,15 +34,8 @@ class BookingController extends ApiController
      */
     public function get($token)
     {
-        // TODO: Test Static accessor
-        $bookingRepo = new BookingRepository();
-        $bookingObj = $bookingRepo->findBookingByToken($token);
         $booking = BookingRepository::findBooking($token);
-        if ($bookingObj !== $booking) {
-            Log::debug('STATIC Accessor did not return same object');
-        }
-        Log::debug('STATIC Accessor worked as expected');
-        
+
         if (isset($booking)) {
             return response()->json(['success' => true, 'booking' => $booking, 'tour' => $booking->tour]);
         }
@@ -159,17 +152,12 @@ class BookingController extends ApiController
      * getCustomerAndBooking
      *
      * @param STRING $token
-     * @return void
+     * @return ARRAY Booking, Customer and number of travellers in party
      */
     private function getCustomerAndBooking($token)
     {
-        // TODO: static accessors 
-        $bookingRepository = new BookingRepository();
-        $booking = $bookingRepository->findBookingByToken($token);
-
-        $customerRepository = new CustomerRepository();
-        $customer = $customerRepository->get($booking->customer_id);
-
+        $booking = BookingRepository::findBooking($token);
+        $customer = CustomerRepository::lookup($booking->customer_id);
         $travellers = BookingTraveller::where('booking_id', $booking->id)->count();
 
         return ['customer' => $customer, 'travellers' => $travellers, 'booking' => $booking];

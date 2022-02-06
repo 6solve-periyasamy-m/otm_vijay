@@ -79,11 +79,12 @@ class CustomerRepository implements CustomerRepositoryInterface
         return null;
     }
 
-    public static function lookup($customer_id)
-    {
-        return Customer::find($customer_id);
-    }
-
+    /**
+     * get: return customer object for ID
+     *
+     * @param INT $customer_id
+     * @return Customer
+     */
     public function get($customer_id)
     {
         $customer = $this->model->find($customer_id);
@@ -91,4 +92,14 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $customer;
     }
 
+    /**
+     * lookup: static version of get
+     *
+     * @param INT $customer_id
+     * @return Customer
+     */
+    public static function lookup($customer_id)
+    {
+        return Customer::find($customer_id);
+    }
 }

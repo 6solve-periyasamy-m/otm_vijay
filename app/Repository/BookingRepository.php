@@ -39,6 +39,12 @@ class BookingRepository implements BookingRepositoryInterface
         return null;
     }
 
+    /**
+     * findBooking (static accessor)
+     *
+     * @param [type] $token
+     * @return Booking
+     */
     public static function findBooking($token)
     {
         return (new BookingRepository)->findBookingByToken($token);
