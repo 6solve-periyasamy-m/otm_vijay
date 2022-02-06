@@ -1,8 +1,7 @@
 <?php
-
-// Booking Controller: BOOKING FORM Updating API
-// TODO: REFACTOR
-
+/**
+ * BookingController:: API
+ */
 namespace App\Http\Controllers\Api;
 
 use App\Models\Tour;
