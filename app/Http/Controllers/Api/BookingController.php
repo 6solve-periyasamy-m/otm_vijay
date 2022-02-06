@@ -4,13 +4,16 @@
  */
 namespace App\Http\Controllers\Api;
 
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\ApiController;
+
 use App\Models\Tour;
 use App\Models\Booking;
-use Illuminate\Http\Request;
 use App\Models\BookingTraveller;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
-use App\Http\Controllers\ApiController;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
@@ -142,7 +145,7 @@ class BookingController extends ApiController
         if ($deposit) {
                 return response()->json(['success' => true, 'deposit' => $deposit]);
         } else {
-                \Log::debug('Deposit is ' . $deposit);
+                Log::debug('Deposit is ' . $deposit);
                 throw new Exception('Deposit must be a positive value!');
         }
     }
