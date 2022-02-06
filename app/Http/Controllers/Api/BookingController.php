@@ -6,14 +6,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Tour;
 use App\Models\Booking;
-use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\BookingTraveller;
-use Illuminate\Support\Facades\Log;
-use App\Http\Gateways\StripeGateway;
 use App\Repository\BookingRepository;
-use App\Repository\FlightsRepository;
-use App\Repository\ActivityRepository;
 use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
 use App\Repository\AccommodationRepository;
