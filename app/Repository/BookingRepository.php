@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Log;
 interface BookingRepositoryInterface {
     public function __construct();
     public function findBookingByToken($token);
+    public static function findBooking($token);
     public function create($customer_id, $tour_id, $token);
+    public function setStatusDepositCheckout();
+    public static function convertBookingToOrder(Booking $booking): Order;
 }
 
 class BookingRepository implements BookingRepositoryInterface
@@ -50,21 +53,39 @@ class BookingRepository implements BookingRepositoryInterface
         return (new BookingRepository)->findBookingByToken($token);
     }
 
+    /**
+     * create a new booking
+     *
+     * @param INTEGER $customer_id
+     * @param INTEGER $tour_id
+     * @param STRING $token
+     * @return Booking
+     */
     public function create($customer_id, $tour_id, $token)
     {
-        Log::debug('============== create a booking with ', [$customer_id, $tour_id, $token]);
         $this->model->customer_id = $customer_id;
         $this->model->tour_id = $tour_id;
         $this->model->token = $token;
+        $this->model->status = 'New';
 
         $booking = $this->model->save();
         if ($booking) {
-            Log::debug('_______________ saving booking', [$booking]);
             return $this->model;
         }
         throw new Exception('Can not create booking record');
     }
 
+    public function setStatusDepositCheckout()
+    {
+        $this->model->status = 'Deposit Processing';
+        $this->model->save();
+    }
+    /**
+     * convertBookingToOrder
+     *
+     * @param Booking $booking
+     * @return Order
+     */
     public static function convertBookingToOrder(Booking $booking): Order
     {
         $tour = $booking->tour;
@@ -100,7 +121,15 @@ class BookingRepository implements BookingRepositoryInterface
         self::processComponent($customers, 'activities', $booking);
         self::processComponent($customers, 'flights', $booking);
         self::processComponent($customers, 'transports', $booking);
+        self::setStatus($booking, 'Deposit Accepted');
         return $order;
+    }
+
+    private static function setStatus($booking, String $str)
+    {
+        $bookingObject = (new BookingRepository)->findBookingByToken($booking->token);
+        $bookingObject->status = $str;
+        $bookingObject->save();
     }
 
     private static function processComponent(array $customers, string $component, Booking $booking)
