@@ -8,40 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use Silber\Bouncer\Database\Role;
 
-interface PermissionsRepositoryInterface
-{
-    public static function getAvailablePermissionSets();
-
-    public static function getAvailablePermissionClasses();
-
-    public static function getGroupedPermissions(Role $role = null);
-
-    public static function getPermissionStatus(Role $role, string $ability, string $class);
-
-    public static function canCurrentUser(string $action, string $class);
-
-    public static function grantPermission(Role $role, string $ability, string $class);
-
-    public static function revokePermission(Role $role, string $ability, string $class);
-
-    public static function createRole(string $name, string $title, int $level);
-
-    public static function createPresetRole(string $title, int $level);
-
-    public static function updateRole(Role $role, string $title, int $level);
-
-    public static function getCurrentLevel();
-
-    public static function getAvailableRoles();
-
-    public static function getDefaultRole();
-
-    public static function assignRole(User $user, string $newRole);
-
-    public static function getRoleFromName(string $role);
-}
-
-class PermissionsRepository implements PermissionsRepositoryInterface
+class PermissionsRepository
 {
     public static function getAvailablePermissionClasses()
     {
