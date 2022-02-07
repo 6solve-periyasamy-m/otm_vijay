@@ -24,10 +24,6 @@
                         <div v-for="f in flight">
                             <div>{{f.flight_type}} {{f.travel_class}}</div>
                         </div>
-                        <!-- <div v-for="(flight,name) in flight_type" key="flight.id">
-                            <h4>{{name}}</h4>
-                            {{flight.travel_class}} {{flight.flight_type}} {{flight.sales_price}}
-                        </div> -->
                     </div>
                     <h3>Activities</h3>
                     <div class="block activities" v-for="activity in booking.activities" :key="activity.id">
@@ -91,14 +87,21 @@
             <div class="row">
               <hr>
               <div class="deposit">
-                 <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.</p>
-                 <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.</p>
-                 <input type="checkbox" v-model="agreement" name="agreement">
-                 <button :disabled="!agreement" @click="calcDeposit">Confirm</button> 
-                 <div v-show="agreement && deposit>0" class="deposit-amount">
-                    <p>The amount to pay now is {{priceFormat(deposit)}}.  
-                    <br>A payment window should open to accept that amount.
-                    <br>You will receive an email confirming your payment schedule.</p>
+                 <div v-if="deposit == 0" class="deposit-amount">
+                     <p>To place your order you must agree to our <a href="/termsandconditions" target="_blank">Terms and Conditions</a>.</p>
+                     <p>I have read and agree to the full terms and conditions and wish to make a deposit to confirm my order.</p>
+                     <input type="checkbox" v-model="agreement" name="agreement">
+                     <button :disabled="!agreement" @click="calcDeposit" class="btn btn-primary">Confirm</button> 
+                 </div>
+                 <div v-if="agreement && deposit>0" class="deposit-amount">
+                    <p>You have agreed to our Terms and Conditions.</p>
+                    <p>To book your tour, a deposit of {{priceFormat(deposit)}} is now payable.</p>
+                    <form method="post" action="/booking/deposit/payment">
+                      <input type="hidden" name="_token" :value="csrf_token" />
+                      <input type="hidden" name="token" :value="booking_token" />
+                      <input type="text" name="amount" readonly :value="priceFormat(deposit)" />
+                      <input type="submit" class="btn btn-primary" value="Pay Deposit" />
+                    </form>
                 </div>
               </div>
             </div>
@@ -111,11 +114,12 @@
 import axios from "axios"
 import { bus } from '../bus'
 import dates from '../utilities'
+let csrf = document.querySelector('meta[name="csrf-token"]').content;
 export default {
     props: ['tour', 'systemCurrency'],
     data() {
         return {
-            debug: 3,
+            debug: true,
             moduleName: 'Payments',
             currency: this.systemCurrency || 'GBP',
             booking_token: null,
@@ -124,14 +128,16 @@ export default {
             totals: {},
             deposit: 0,
             agreement: false,
-            totalPrice: 0
+            totalPrice: 0,
+            csrf_token: '' 
         }    
     },
     created() {
         let that = this
+        this.csrf_token = csrf
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
-            that.debug && console.log(`>>>> ${that.moduleName} module, booking ${that.booking_token}`)
+            that.debug && console.log(`>>>><<<<>>>>> ${that.moduleName} module, booking ${that.booking_token}`)
             that.loadBooking(that.booking_token)
         })
         bus.$on("ReloadBooking", (token) => {
@@ -151,7 +157,13 @@ export default {
     },
     computed: {
         travellers: function() {
-            return this.booking.travellers.length
+            if (typeof this.booking.travellers !== 'undefined') {
+              return this.booking.travellers.length
+            } else {
+              // this should not happen but to detect if there is a problem with this function
+              console.log('ERROR: computed travellers counter does not have travellers in this booking: ',this.booking)
+              return 1
+            }
         }
     },
     methods: {
@@ -199,7 +211,7 @@ export default {
                     }
                 })
             } else {
-                    console.log('check else...', this.booking.accommodations)
+                console.log('BookingFormPrice: calcPrice() unexpected condition', this.booking.accommodations)
             }
             this.totals.accommodations = price
             this.totalPrice += price
@@ -259,10 +271,9 @@ export default {
             let that = this
             axios.post('/api/booking/deposit/calculate', {
                 tour: this.tour,
-                token: this.token
+                token: this.booking_token
             })
             .then(response => {
-                console.log(response)
                 const success = response.data.success
                 if (success) {
                   const data = response.data
@@ -274,11 +285,11 @@ export default {
             .catch(error => {
                 console.log(error)
             })
-            
         },
         loadBooking(token) {
             let that = this
             if (token == undefined) {
+              console.log('ERROR: payment stage has no token');
               return
             }
             axios.get(`/api/booking/summary/${token}/gather`)
@@ -291,7 +302,6 @@ export default {
                 })
         }
     }
-
 }
 </script>
 

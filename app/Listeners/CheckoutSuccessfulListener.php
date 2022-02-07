@@ -45,6 +45,8 @@ class CheckoutSuccessfulListener implements ShouldQueue
                 ]);
                 $order->payments()->save($payment);
                 event(new PaymentCreatedEvent($payment));
+                // let booking form know the payment has been accepted
+                return response()->json(['success' => true, 'booking' => $booking, 'order' => $order, 'payment' => $payment]);
             }
         }
     }

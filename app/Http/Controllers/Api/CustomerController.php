@@ -36,14 +36,10 @@ class CustomerController extends ApiController
         $customers = new Customer();
         $customer = $customers->where('login_token', $token)->first();
         if (empty($customer)) {
-            Log::info('getCustomerByToken: no customer for token '.$token);
+            Log::warning('CustomerController::getCustomerByToken: WARNING: no customer for token '.$token);
             return null;
         }
-        if (isset($customer)) {
-            Log::info('getCustomerByToken', $customer->toArray());
-        } else {
-            Log::info('no data retrieved for token: '. $token);
-        }
+
         $addressRepo = new AddressRepository();
         if (isset($customer->home_address_id)) {
             $home_address = $addressRepo->get($customer->home_address_id);
@@ -51,9 +47,7 @@ class CustomerController extends ApiController
         if (isset($customer->billing_address_id)) {
             $billing_address = $addressRepo->get($customer->billing_address_id);
         }
-Log::info('ADDRESS present?', $customer->toArray());
-isset($home_address) && Log::info('check home_address', $home_address);
-isset($billing_address) && Log::info('business', $billing_address);
+
         return response()->json(['success' => true, 'customer' => $customer, 'home_address' => $home_address, 'billing_address' => $billing_address]);
     }
 
@@ -79,26 +73,26 @@ isset($billing_address) && Log::info('business', $billing_address);
         return response()->json(["success" => true])->cookie("login_token", $customer->login_token, 60);
     }
 
-    /**
-     * getTravellers for this order: could be adapted to use the bookings
-     *
-     * @param Request $request
-     * @return JSON
-     */
-    public function getTravellers(Request $request) {
-        if (empty($request->order_id)) {
-            Log::debug('ERROR: getTravellers requires an order_id');
-            return null;
-        }
-        $customer = new Customer();
-        $customers = $customer
-            ->select('orders.id as order_id', 'order_customers.id as order_customer_id', 'order_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
-            ->join('order_customers', 'order_customers.customer_id', 'customers.id')
-            ->join('orders', 'orders.id', 'order_customers.order_id')
-            ->where('orders.id', $request->order_id)->get();
+    // /**
+    //  * getTravellers for this order: could be adapted to use the bookings
+    //  * Route: /api/booking/tourparty
+    //  * @param Request $request
+    //  * @return JSON
+    //  */
+    // public function getTravellers(Request $request) {
+    //     if (empty($request->order_id)) {
+    //         Log::error('CustomerController::getTravellers: ERROR: requires an order_id');
+    //         return null;
+    //     }
+    //     $customer = new Customer();
+    //     $customers = $customer
+    //         ->select('orders.id as order_id', 'order_customers.id as order_customer_id', 'order_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
+    //         ->join('order_customers', 'order_customers.customer_id', 'customers.id')
+    //         ->join('orders', 'orders.id', 'order_customers.order_id')
+    //         ->where('orders.id', $request->order_id)->get();
         
-            return $customers->toJson();
-    }
+    //         return $customers->toJson();
+    // }
 
     public function findCustomerByEmail(Request $request) {
         $email_address = $request->email_address;

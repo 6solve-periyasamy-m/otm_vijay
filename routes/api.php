@@ -68,7 +68,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/airports', [AirlinesController::class, 'getAirports']);
 
     // Travellers
-    Route::get('/tourparty', [CustomerController::class, 'getTravellers']);
+    // DEPRECATE Route::get('/tourparty', [CustomerController::class, 'getTravellers']);
     Route::get('/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
     Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadTravellers']);
 
@@ -101,6 +101,9 @@ Route::prefix('booking')->group(function () {
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
     Route::post('/create-booking', [BookingController::class, 'create']);
     Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
+    
+    Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
+
     // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
     // Route::post('/create-order', [BookingController::class, 'createOrder']);
 

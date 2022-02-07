@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\BookingFormLoginController;
 use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
@@ -54,9 +53,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
-use App\Models\Order;
 use App\Models\Tour;
-use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -85,6 +82,9 @@ Route::get('/pdfmake', function () {
 
 Route::prefix("/booking")->group(function () {
 
+    // laravel route (not booking form)
+    Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
+
     // debugging routes
     Route::get('/check/events', [TourController::class, 'getEvents']);
     Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
@@ -103,6 +103,7 @@ Route::prefix("/booking")->group(function () {
         return view('pages.booking.store');
     });
 
+    // booking form recovery and accessors not used
     // Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
     // Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
     // Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);
