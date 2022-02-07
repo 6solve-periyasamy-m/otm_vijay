@@ -2,20 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\Address;
-use App\Models\Country;
-use App\Models\Currency;
-use App\Models\EmailTemplate;
-use App\Models\Order;
-use Illuminate\Http\Request;
-
-interface MailRepositoryInterface
-{
-    public static function getBookingConfirmationBody($order);
-    public static function getEmailTemplate(string $name);
-}
-
-class MailRepository implements MailRepositoryInterface
+class MailRepository
 {
     public static function getBookingConfirmationBody($order)
     {
