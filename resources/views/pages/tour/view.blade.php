@@ -525,4 +525,13 @@
             </table>
         </div>
     </div>
+    <hr class="splitter"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Terms and Conditions</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            {!! $tour->terms !!}
+        </div>
+    </div>
 @endsection

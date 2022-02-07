@@ -40,5 +40,7 @@
 <hr class="splitter"/>
 @include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => isset($tour) ? $tour->invoice_footer : null, ])
 <hr class="splitter"/>
+@include('partials.fields.ckeditor', ['name' => 'Terms and Conditions', 'field' => 'terms', 'value' => isset($tour) ? $tour->terms : null, ])
+<hr class="splitter"/>
 @include('partials.fields.prefab.notes')
 @include('partials.fields.submit')
