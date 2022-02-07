@@ -7,7 +7,6 @@ import { faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg
 import { faUserSecret, faFutbol, faTrain, faListAlt, faPlane, faHome} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faFacebookSquare, faInstagramSquare, faTwitterSquare } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import axios from 'axios';
 
 library.add(faArrowRight, faBookReader, faCheck)
 library.add(faUserSecret)
@@ -32,55 +31,54 @@ window.axios.defaults.headers.common = {
     'Access-Control-Allow-Methods' : 'HEAD, GET, POST, PUT, PATCH, DELETE'
 };
 
-// operational 
 const busEventLogging = true
-
-bus.$on('getLoginToken', () => {
-    console.log('>>> getLoginToken cookie')
-    
-})
-bus.$on('setBookingToken', token => {
-    console.log('>>>> setBookingToken event monitor ', token);
-})
-
-bus.$on('click', function(id) {
-    busEventLogging && console.log('added traveller', id)
-})
-
 bus.$on('saveLeadCustomer', function(name) {
     bus.booking.name = name
 })
 
-bus.$on('leadTravellerLoaded', function(customer) {
-    busEventLogging && console.log('Event Bus: leadTravellerLoaded', customer)
-})
+if (busEventLogging) {
+    bus.$on('getLoginToken', () => {
+        console.log('>>> getLoginToken cookie')
+    })
+    bus.$on('setBookingToken', token => {
+        console.log('>>>> setBookingToken event monitor ', token);
+    })
+    bus.$on('bookingCreated', booking => {
+        console.log('>>> booking created by lead traveller', booking)
+    })
+    bus.$on('click', function(id) {
+        console.log('added traveller', id)
+    })
+    bus.$on('leadTravellerLoaded', function(customer) {
+        console.log('Event Bus: leadTravellerLoaded', customer)
+    })
+    bus.$on('removeTraveller', function(id) {
+        console.log('Event Bus: removed traveller ',id)
+    })
+    bus.$on('accommodationBookingsLoaded', function() {
+        console.log('accommodationBookingsLoaded')
+    })
+}
 
-bus.$on('removeTraveller', function(id) {
-    busEventLogging && console.log('Event Bus: removed traveller ',id)
-})
-
-bus.$on('accommodationBookingsLoaded', function() {
-    busEventLogging && console.log('accommodationBookingsLoaded')
-})
-
+// global array is needed for intermodule setting
 let othertravellers = []
 // initialises the external array
 bus.$on('loadOthers', function(others) {
-    othertravellers = others //.map(t => t.id)
-    //console.log('init others', others)
+    othertravellers = others
 })
 
+const logRoomShare = false
 bus.$on('setRoomShare', function(t, share, room) {
     let others = othertravellers
-    console.log('setRoomShare (global) ', t.id, share.id, room)
+    logRoomShare && console.log('setRoomShare (global) ', t.id, share.id, room)
     others = others.filter(o => {
         return share.id != o.id
     })
     others = others.filter(o => {
-        console.log('filtering out traveller', t.first_name)
+        logRoomShare && console.log('filtering out traveller', t.first_name)
         return t.id != o.id
     })
-    console.log('global filter from from', othertravellers, ' to ', others)
+    logRoomShare && console.log('global filter from from', othertravellers, ' to ', others)
     othertravellers = others
     bus.$emit('setOthers', others, t)
 })
@@ -100,36 +98,21 @@ Vue.component('booking-form-transport', require('./components/BookingFormTranspo
 Vue.component('booking-form-payment', require('./components/BookingFormPayment.vue').default);
 Vue.component('booking-form-terms', require('./components/BookingFormTerms.vue').default);
 Vue.component('validation-errors', require('./components/ValidationErrors.vue').default);
-// Vue.component('booking-store', require('./components/BookingStore.vue').default);
-
-// Vue.component('payment-schedule', require('./components/PaymentSchedule.vue').default);
 Vue.component('payment-installments', require('./components/PaymentInstallments.vue').default);
 Vue.component('booking-info', require('./components/BookingInfo.vue').default);
 Vue.component('vue-test', require('./components/VueTest.vue').default);
-
-//  Vue.component('phonenumber-validation', require('./components/PhonenumberValidation.vue').default);
-//  Vue.component('donut-menu', require('./components/donut-menu.vue').default);
-//  Vue.component('tour-menu', require('./components/tour-menu.vue').default);
-//  Vue.component('details-menu', require('./components/details-menu.vue').default);
-//  Vue.component('extras-menu', require('./components/extras-menu.vue').default);
 Vue.component('finance-menu', require('./components/finance-menu.vue').default);
 Vue.component('bookingform-header', require('./components/BookingFormHeader.vue').default);
 Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
-//  Vue.component('example-cdomponent', require('./components/ExampleComponent.vue').default);
-
 Vue.component('AtolCertificate', require('./components/AtolCertificate.vue').default);
- // deprecated
- // Vue.component('booking-form-details', require('./components/BookingFormDetails.vue').default);
- // Vue.component('x-accommodation-details', require('./components/x-accommodation-details.vue').default);
-console.log('app.js marker 1')
 const app = new Vue({
     el: '#app'
 });
-console.log('app.js marker 2')
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+// not used...? - NB it is in BookingForm.vue TODO: remove
+// function setCookie(cname, cvalue, exdays) {
+//     var d = new Date();
+//     d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//     var expires = "expires="+ d.toUTCString();
+//     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// }

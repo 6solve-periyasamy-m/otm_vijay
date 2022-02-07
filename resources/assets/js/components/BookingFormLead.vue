@@ -470,7 +470,7 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
-            // are there bookings associated to this user?
+            // TODO: Booking recovery by email
             /*
             axios.get(`/api/booking/findOrderByEmail/${this.email}`)
             .then(response => {
@@ -552,33 +552,16 @@ export default {
                 this.email_address = this.email
             }
         },
-
-        // // TODO: is login token to retrieve the customer or booking?
-        // setLoginToken(email_address, login_token) {
-        //     let that = this
-        //     axios.post('/api/booking/set-login-token', {
-        //         email: email_address,
-        //         login_token: login_token
-        //     })
-        //     .then(response => {
-        //         that.customer = response.data.customer
-        //     })
-        // },
-        // createBooking() {
-        //     alert('create Booking : you must be logged in');
-        //     // NB: a new booking user can create a booking, or a user can login and create a booking
-        //     // axios.post('/api/booking/createBooking');
-        // },
         createBooking(customer_id, token, tour_id) {
-            console.log('BFL: >>> creating booking for ', customer_id, token, tour_id)
             axios.post('/api/booking/create-booking', {
                     token: token,
                     customer_id: customer_id,
                     tour_id: tour_id
                 })
                 .then(response => {
-                    console.log('createBooking response', response)
-                    bus.$emit('bookingCreated', response.data.booking)
+                    const booking = response.data.booking
+                    // set the booking in each module
+                    bus.$emit('bookingCreated', booking)
                 })
                 .catch(error => {
                     console.log('error createBooking', eachQuarterOfInterval)

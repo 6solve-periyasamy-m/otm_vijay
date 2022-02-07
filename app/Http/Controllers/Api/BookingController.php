@@ -62,10 +62,8 @@ class BookingController extends ApiController
 
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->create($customer_id, $tour_id, $token);
-
-        $bookingTravellerRepo = new BookingTravellerRepository();
-        $traveller_id = $bookingTravellerRepo->create($booking->id, $customer_id);
-
+        $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
+        
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
@@ -87,6 +85,8 @@ class BookingController extends ApiController
         $travellerRepo = new BookingTravellerRepository();
         $flightsBookingRepo = new FlightBookingRepository();
         $accommodationRepo = new AccommodationRepository();
+        $activityBookingRepo = new ActivityBookingRepository();
+        $transportBookingRepo = new TransportBookingRepository();
 
         $customer = $customerRepo->get($booking->customer_id);
         $travellers = $travellerRepo->getGroup($booking->id);
@@ -96,9 +96,6 @@ class BookingController extends ApiController
         $flightsOutbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Outbound', 'Included');
         $flightsInbound = $flightsBookingRepo->getFlightBookings($booking->id, 'Inbound', 'Included');
         $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
-
-        $activityBookingRepo = new ActivityBookingRepository();
-        $transportBookingRepo = new TransportBookingRepository();
         $activities = $activityBookingRepo->getBookingsForTour($booking);
         $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
 
