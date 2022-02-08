@@ -20,9 +20,10 @@ class TemplatedMailable extends Mailable
      *
      * @return void
      */
-    public function __construct(string $body)
+    public function __construct(string $subject, string $body)
     {
         $this->body = $body;
+        $this->subject = $subject;
     }
 
     /**
@@ -32,6 +33,6 @@ class TemplatedMailable extends Mailable
      */
     public function build(): TemplatedMailable
     {
-        return $this->view('mail.templated', ['content' => $this->body,]);
+        return $this->subject($this->subject)->view('mail.templated', ['content' => $this->body,]);
     }
 }

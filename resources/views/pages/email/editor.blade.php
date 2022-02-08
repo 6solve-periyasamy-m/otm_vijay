@@ -5,5 +5,6 @@
 @section('form-body')
     @include('partials.email.form', [
                 'codes' => $codes,
-                'body' => $body,])
+                'body' => $body,
+                'subject' => $subject])
 @endsection

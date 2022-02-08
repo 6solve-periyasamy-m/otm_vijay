@@ -10,10 +10,12 @@ class MailController extends Controller
 {
     public function edit(string $mail)
     {
+        if (!MailRepository::doesTemplateExist($mail)) abort(404);
         $details = MailRepository::getMailTemplate($mail);
-        if (!isset($details)) abort(404);
         return view('pages.email.editor', [
+            'templateName' => ucwords(str_replace('-', ' ', $mail)),
             'body' => $details['template'],
+            'subject' => $details['subject'],
             'codes' => $details['shortcodes'],
             'action' => route('email.update', ['mail' => $mail,]),
             'demo' => route('email.demo', ['mail' => $mail,]),
@@ -23,6 +25,7 @@ class MailController extends Controller
     public function update(Request $request, string $mail): RedirectResponse
     {
         $update = MailRepository::updateMailTemplate($mail, $request->input('body'));
+        $update = $update && MailRepository::updateMailSubject($mail, $request->input('subject'));
         if (!$update) abort(404);
         return redirect()->route('email.edit', ['mail' => $mail,]);
     }
