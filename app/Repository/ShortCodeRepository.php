@@ -24,6 +24,7 @@ class ShortCodeRepository
             'PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
             'BOOKING_REFERENCE' => !isset($order) ? $faker->regexify('OTM[0-9]{12}[A-Z]{4}') : $order->booking_reference,
             'ORDERED_ON' => Formatter::formatDate(!isset($order) ? $faker->date : $order->ordered_on),
+            'DEPOSIT' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $order->deposit),
             'TOTAL_PAID' => Formatter::formatCurrency(!isset($order) ? $faker->numberBetween(100, 1000) : OrderRepository::getTotalPaid($order)),
             'DUE_PAYMENT_AMOUNT' => Formatter::formatCurrency(!isset($order) ? $faker->numberBetween(100, 1000) : $nextPayment['amount']),
             'DUE_PAYMENT_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $nextPayment['due']),
@@ -32,7 +33,6 @@ class ShortCodeRepository
             'TOUR_START' => Formatter::formatDate(!isset($order) ? $faker->date : $tour->date_from),
             'TOUR_END' => Formatter::formatDate(!isset($order) ? $faker->date : $tour->date_to),
             'TOUR_BASE_PER_PERSON' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $tour->base_price_per_person),
-            'TOUR_DEPOSIT' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $tour->deposit),
             'TOUR_SURCHARGE' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $tour->single_occupancy_surcharge),
             'LATEST_INVOICE' => !isset($order) ? $faker->url : route('orders.invoice.latest', ['order' => $order,]), // TODO: Link to customers invoices
             'PORTAL_LINK' => !isset($order) ? $faker->url : route('customer.portal', ['customer' => $customer,]),
