@@ -28,7 +28,7 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>Booking URL</p>
-                <h6 class="fw-bold"><a href="{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}">{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}</a></h6>
+                <h6 class="fw-bold"><a target="_blank" href="{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}">{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}</a></h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
@@ -523,6 +523,15 @@
                     </tr>
                 @endforeach
             </table>
+        </div>
+    </div>
+    <hr class="splitter"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Terms and Conditions</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            {!! $tour->terms !!}
         </div>
     </div>
 @endsection
