@@ -6,15 +6,10 @@ use App\Models\Order;
 use App\Models\Payment;
 use Faker\Factory as Faker;
 
-interface ShortCodeRepositoryInterface {
-    public static function getOrderShortCodes(Order $order = null);
-    public static function getPaymentShortCodes(Payment $payment = null);
-}
-
-class ShortCodeRepository implements ShortCodeRepositoryInterface
+class ShortCodeRepository
 {
 
-    public static function getOrderShortCodes(Order $order = null)
+    public static function getOrderShortCodes(Order $order = null): array
     {
         $faker = Faker::create();
         $customer = isset($order) ? $order->leadBooker->customer : null;
@@ -47,7 +42,8 @@ class ShortCodeRepository implements ShortCodeRepositoryInterface
         return array_merge($data, self::getSettingShortCodes());
     }
 
-    public static function getPaymentShortCodes(Payment $payment = null) {
+    public static function getPaymentShortCodes(Payment $payment = null): array
+    {
         $faker = Faker::create();
         return array_merge([
             'PAYMENT_AMOUNT' => !isset($payment) ? $faker->numberBetween(100, 1000) : $payment->amount,
@@ -57,7 +53,8 @@ class ShortCodeRepository implements ShortCodeRepositoryInterface
         ], self::getOrderShortCodes(isset($payment) ? $payment->order : null));
     }
 
-    public static function getSettingShortCodes() {
+    public static function getSettingShortCodes(): array
+    {
         return [
             'SETTING_COMPANY_NAME' => SettingsRepository::get('company.name'),
             'SETTING_COMPANY_LOGO' => asset(SettingsRepository::get('company.logo')),
