@@ -91,7 +91,7 @@ class SettingsTableSeeder extends Seeder
             ),
             14 => 
             array (
-                'key' => 'email.payment.due',
+                'key' => 'email.payment-due.template',
                 'value' => '<p>Dear [TITLE] [FIRST_NAME] [LAST_NAME],</p>
 
 <p>You have a payment due on [DUE_PAYMENT_DATE], for [DUE_PAYMENT_AMOUNT]. This payment will need to be paid before this date, or your reservation may be at stake.</p>
@@ -104,7 +104,7 @@ class SettingsTableSeeder extends Seeder
             ),
             15 => 
             array (
-                'key' => 'email.payment.made',
+                'key' => 'email.payment-made.template',
                 'value' => '<p>Dear [TITLE] [FIRST_NAME] [LAST_NAME],</p>
 
 <p>This is an email to inform you that we have recieved a payment of [PAYMENT_AMOUNT], as of [PAYMENT_DATE]. This payment has been made using [PAYMENT_METHOD], and should be shown in your account within 7 working days.</p>
@@ -117,7 +117,7 @@ class SettingsTableSeeder extends Seeder
             ),
             16 => 
             array (
-                'key' => 'email.refund.given',
+                'key' => 'email.refund-given.template',
                 'value' => '<p>Dear [TITLE] [FIRST_NAME] [LAST_NAME],</p>
 
 <p>This is an email to inform you that you have recieved a refund of [PAYMENT_AMOUNT], as of [PAYMENT_DATE]. This will be paid back to you using [PAYMENT_METHOD], and should be with you within 7 working days.</p>

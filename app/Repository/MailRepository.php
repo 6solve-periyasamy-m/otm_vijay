@@ -20,11 +20,11 @@ class MailRepository
     public static function getAvailableMail(): array
     {
         return [
-            'booking-confirmation' => ['template' => 'email.booking.confirmation','shortcodes' => 'order', 'subject' => 'email.booking.confirmation.subject',],
-            'payment-due' => ['template' => 'email.payment.due', 'shortcodes' => 'order', 'subject' => 'email.payment.due.subject',],
-            'payment-overdue' => ['template' => 'email.payment.overdue', 'shortcodes' => 'order', 'subject' => 'email.payment.overdue.subject',],
-            'payment-made' => ['template' => 'email.payment.made', 'shortcodes' => 'payment', 'subject' => 'email.payment.made.subject',],
-            'refund-given' => ['template' => 'email.refund.given', 'shortcodes' => 'payment', 'subject' => 'email.refund.given.subject',],
+            'booking-confirmation' => 'order',
+            'payment-due' => 'order',
+            'payment-overdue' => 'order',
+            'payment-made' => 'payment',
+            'refund-given' => 'payment',
         ];
     }
 
@@ -46,7 +46,7 @@ class MailRepository
     public static function getMailInformation(string $mail): ?array
     {
         if (!self::doesTemplateExist($mail)) return null;
-        return self::getAvailableMail()[$mail];
+        return ['template' => "email.{$mail}.template", 'shortcodes' => self::getAvailableMail()[$mail], 'subject' => "email.{$mail}.subject"];
     }
 
     /**
