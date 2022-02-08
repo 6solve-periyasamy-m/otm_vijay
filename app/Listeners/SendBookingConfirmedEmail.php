@@ -27,11 +27,6 @@ class SendBookingConfirmedEmail
      */
     public function handle(OrderCreatedEvent $event)
     {
-        try {
-            MailRepository::sendMailable('booking-confirmed', $event->order->leadBooker->email, $event->order);
-        } catch (Exception $e) {
-            Log::error($e);
-        }
-
+        MailRepository::sendMailable('booking-confirmed', $event->order->leadBooker->email, $event->order);
     }
 }

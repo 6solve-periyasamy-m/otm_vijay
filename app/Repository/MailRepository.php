@@ -8,6 +8,8 @@ use App\Models\Payment;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Exception;
+use Log;
 
 class MailRepository
 {
@@ -82,8 +84,13 @@ class MailRepository
         if (!self::doesTemplateExist($mail)) return false;
         $mailable = self::generateEmail($mail, $model);
         if (!isset($mailable)) return false;
-        Mail::to($email)->send($mailable);
-        return true;
+        try {
+            Mail::to($email)->send($mailable);
+            return true;
+        } catch (Exception $e) {
+            Log::error($e);
+            return false;
+        }
     }
 
     /**
