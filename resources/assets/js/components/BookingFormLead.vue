@@ -81,8 +81,6 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation">
-                                    <!-- label class="form-label" for="email_address" v-show="email_address">E-mail <span v-if="email" class="small">(You can not change your email address in this form)</span></labe -->
-                                    <!-- input v-if="email_address" readonly type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" / -->
                                     <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
                                     <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
                                     <label v-else class="valid">Email address</label>
@@ -332,19 +330,17 @@ export default {
     },
     created() {
         let that = this
-        console.log(`${this.moduleName} created`)
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
         })
         bus.$on('leadTravellerLoaded', (customer) => {
-            console.log('BFL: EH leadTravellerLoaded', customer)
             that.setCustomer(customer)
             that.email = that.email_address
             that.date_of_birth = dates.isoString(customer.date_of_birth)
+            bus.$emit('setLeadTraveller', customer)
         })
         bus.$on('homeAddressLoaded', home_address => {
-            // that.name = home_address.name
             that.address_line_1 = home_address.address_line_1
             that.address_line_2 = home_address.address_line_2
             that.address_line_3 = home_address.address_line_3
@@ -362,10 +358,10 @@ export default {
             that.billing_postcode = billing_address.postcode
             that.billing_country_id = billing_address.country_id
         })
+        console.log(`${this.moduleName} created`)
     },
     mounted() {
         let that = this
-        console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`)
         this.validationErrors = ''
         bus.$on('debugOverride', (debug) => that.debug = debug)
         if (that.tour != null) {
@@ -373,6 +369,7 @@ export default {
         }
         this.activeBookings = ''
         this.loadCountries()
+        console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`)
     },
     computed: {
         otherNumberType: function() {
@@ -434,7 +431,7 @@ export default {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
             let that = this
-            alert('retriveUser');
+            // alert('retriveUser');
             // is it a registered user?
             if (!this.auth) {
                 console.log('checking for auth user');
@@ -491,7 +488,6 @@ export default {
             */
         },
         setCustomer(customer) {
-            this.debug && console.log('Lead Traveller customer', customer)
             let that = this
             this.fields.forEach(function(key, value) {
                 if (customer[key]) {
@@ -586,27 +582,16 @@ export default {
 
         async storeTraveller() {
             let that = this
+
             that.debug && console.log('BOOKING: storeTraveller', this.email_address)
             /*
-
             TODO: do we create a booking and attach the customer to it when we have created it?
-
             if (typeof this.order_id == 'undefined' || this.order_id == null || this.order_id == 0) {
                 alert('About to store new Lead Traveller, check order code')
                 await bus.$emit('createOrder')
                 alert('Check one order code created')
             }
             */
-            // if (this.same_address) {
-            //     this.billingAddressFields.map(field => {
-            //         const billing_field = `billing_${field}`
-            //         this.$billing_field = this.$field
-            //     })
-            //     this.billingAddressFields.map(field => {
-            //         console.log(field, this.$billing_field)
-            //     })
-            // }
-            // console.log('saving booking with booking_token', this.booking_token)
             axios.post('/api/booking/lead-traveller', {
                     title: this.title,
                     first_name: this.first_name,
@@ -667,3 +652,4 @@ export default {
     top: 1em;
 }
 </style>
+

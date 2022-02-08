@@ -4,16 +4,13 @@
             <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
-                        OTM Booking Form version 0.5 PRERELEASE - Lead/Additionals/Flights/Accommodation
+                        OTM Booking Form version 0.8
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
-                        <div v-if="debug">
-                            Token {{bookingToken}}, Tour {{tour}},Lead {{leadTraveller}}
-                        </div>
                         <div v-if="tour && bookingToken">
                             <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
                             <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
@@ -158,14 +155,14 @@ export default {
                 console.log('get current customer', error)
             })
         } else {
-            console.log('BookingForm: no booking token (create it?) ', that.bookingToken)
+            console.log('BookingForm: booking token not present')
             that.resetToken()
             //that.createBooking(that.bookingToken)
         }
     },
     mounted() {
         let that = this
-        console.log("bookingForm module mounted")
+        this.debug && console.log("bookingForm module mounted")
     },
     methods: {
         isset(obj) {
@@ -178,7 +175,7 @@ export default {
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
-            console.log('bookingToken reset and CREATED ', that.bookingToken)
+            that.debug && console.log('bookingToken reset and CREATED ', that.bookingToken)
             bus.$emit('setBookingToken', that.bookingToken)
         },
         changeTheme(theme) {

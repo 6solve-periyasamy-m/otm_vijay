@@ -56,7 +56,7 @@ import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
  */
 function initialState() {
     return {
-        debug: false,
+        debug: 9,
         moduleName: 'Accommodation',
         booking_token: null,
         showAccommodation: false,
@@ -90,7 +90,7 @@ export default {
         let that = this
         this.rootCSS = document.querySelector(':root')
         this.debug > 3 && console.log('Accommodation: this.tour=', this.tour, this.travellers)
-        this.group = this.others = this.travellers
+        this.group = this.travellers
         this.setup()
         this.eventInit()
 
@@ -98,7 +98,7 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on("TravellerBookingsLoaded", (travellers) => {
+        bus.$on("TravellersLoaded", (travellers) => {
             this.debug>2 && console.log("Accommodation: travellers loaded", travellers);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadAccommodationBooking(this.travellers)
@@ -112,13 +112,14 @@ export default {
                     t.shared = false
                 })
             } else {
-                console.log('ACCOMODATION MODULE GROUP IS NOT DEFINED')
+                console.log('Accommodation group has not been loaded')
             }
-            console.log('setup', this.group)
+            console.log('Accommodation setup group', this.group)
         },
         eventInit() {
             let that = this
             bus.$on('setRoomSelection', function(traveller, room) {
+console.log('setRoomSelection: traveller, room', traveller, room)
                 that.travellers.filter(t => t.id == traveller.id).map(t => t.room_selected = room)
                 const others = that.others.filter(t => t.id != traveller.id)
                 bus.$emit('setOthers', others, traveller)
@@ -126,7 +127,7 @@ export default {
                 that.others = others
             })
             bus.$on('setRoomShare', function(traveller, sharer, room) {
-                that.debug > 2 && console.log('setRoomShare for traveller', traveller.first_name, sharer.first_name)
+                that.debug > 2 && console.log('^^^^^ setRoomShare for traveller', traveller.first_name, sharer.first_name)
                 if (typeof traveller.shares == 'undefined') {
                     traveller.shares = []
                 }
@@ -142,12 +143,13 @@ export default {
                     traveller.sharename[traveller.id] = []
                 }
                 traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
-                that.debug > 2 && console.log('BFA: setRoomShare for ', room, traveller.id, traveller.first_name, sharer.first_name)
+                that.debug > 2 && console.log('^^^^^ BFA: setRoomShare for ', room, traveller.id, traveller.first_name, sharer.first_name)
                 that.room_selection[traveller.id] = room
                 that.others = that.othertravellers(sharer.id)
                 const reducedGroup = that.group.filter(t => {
                     return t.id != sharer.id
                 })
+
                 that.group = reducedGroup
                 bus.$emit('BookingReload', that.booking_token)
                 that.$forceUpdate()
