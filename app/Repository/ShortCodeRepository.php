@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Order;
+use App\Models\OrderCustomer;
 use App\Models\Payment;
 use Faker\Factory as Faker;
 use StringFormatter as Formatter;
@@ -17,11 +18,11 @@ class ShortCodeRepository
         $tour = isset($order) ? $order->tour : null;
         $nextPayment = isset($order) ? OrderRepository::getNextPaymentDetails($order) : null;
         $data = [
-            'TITLE' => !isset($order) ? $faker->title : $customer->title,
-            'FIRST_NAME' => !isset($order) ? $faker->firstName : $customer->first_name,
-            'MIDDLE_NAMES' => !isset($order) ? $faker->firstName : $customer->middle_names,
-            'LAST_NAME' => !isset($order) ? $faker->lastName : $customer->last_name,
-            'PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
+            'LEAD_TITLE' => !isset($order) ? $faker->title : $customer->title,
+            'LEAD_FIRST_NAME' => !isset($order) ? $faker->firstName : $customer->first_name,
+            'LEAD_MIDDLE_NAMES' => !isset($order) ? $faker->firstName : $customer->middle_names,
+            'LEAD_LAST_NAME' => !isset($order) ? $faker->lastName : $customer->last_name,
+            'LEAD_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
             'BOOKING_REFERENCE' => !isset($order) ? $faker->regexify('OTM[0-9]{12}[A-Z]{4}') : $order->booking_reference,
             'ORDERED_ON' => Formatter::formatDate(!isset($order) ? $faker->date : $order->ordered_on),
             'DEPOSIT' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $order->deposit),
@@ -41,6 +42,19 @@ class ShortCodeRepository
         ];
 
         return array_merge($data, self::getSettingShortCodes());
+    }
+
+    public static function getOrderCustomerShortCodes(OrderCustomer $orderCustomer = null): array
+    {
+        $faker = Faker::create();
+        $customer = isset($orderCustomer) ? $orderCustomer->customer : null;
+        return array_merge([
+            'CUSTOMER_TITLE' => !isset($customer) ? $faker->title : $customer->title,
+            'CUSTOMER_FIRST_NAME' => !isset($customer) ? $faker->firstName : $customer->first_name,
+            'CUSTOMER_MIDDLE_NAMES' => !isset($customer) ? $faker->firstName : $customer->middle_names,
+            'CUSTOMER_LAST_NAME' => !isset($customer) ? $faker->lastName : $customer->last_name,
+            'CUSTOMER_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
+        ], self::getOrderShortCodes(isset($orderCustomer) ? $orderCustomer->order : null));
     }
 
     public static function getPaymentShortCodes(Payment $payment = null): array
@@ -83,6 +97,8 @@ class ShortCodeRepository
                 return self::getPaymentShortCodes();
             case 'settings':
                 return self::getSettingShortCodes();
+            case 'order-customer':
+                return self::getOrderCustomerShortCodes();
             default:
                 return null;
         }

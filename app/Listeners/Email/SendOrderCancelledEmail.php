@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Email;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Repository\MailRepository;
-use Exception;
-use Log;
 
-class SendBookingConfirmedEmail
+class SendOrderCancelledEmail
 {
     /**
      * Create the event listener.
@@ -27,6 +25,6 @@ class SendBookingConfirmedEmail
      */
     public function handle(OrderCreatedEvent $event)
     {
-        MailRepository::sendMailable('booking-confirmed', $event->order->leadBooker->email, $event->order);
+        MailRepository::sendMailable('order-cancelled', $event->order->leadBooker->email, $event->order);
     }
 }

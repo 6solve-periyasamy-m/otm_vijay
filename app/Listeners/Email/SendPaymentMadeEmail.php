@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Email;
 
 use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Repository\MailRepository;
-use Exception;
-use Log;
 
 class SendPaymentMadeEmail
 {
