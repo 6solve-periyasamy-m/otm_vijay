@@ -22,6 +22,7 @@ use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Events\Order\Payment\PaymentEditedEvent;
 use App\Events\Order\Payment\PaymentRemovedEvent;
 use App\Listeners\Email\SendAdditionalTravellerAddedEmail;
+use App\Listeners\Email\SendAdditionalTravellerRemovedEmail;
 use App\Listeners\Email\SendOrderCancelledEmail;
 use App\Listeners\Email\SendOrderChangedEmail;
 use App\Listeners\InvoiceUpdateListener;
@@ -94,6 +95,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderCustomerRemovedEvent::class => [
             InvoiceUpdateListener::class,
+            SendAdditionalTravellerRemovedEmail::class,
             SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentAddedEvent::class => [
