@@ -3,12 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\Order\Payment\PaymentCreatedEvent;
-use App\Mail\PaymentMadeMailable;
-use App\Mail\RefundGivenMailable;
+use App\Repository\MailRepository;
 use Exception;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Mail;
 use Log;
 
 class SendPaymentMadeEmail
@@ -33,9 +29,9 @@ class SendPaymentMadeEmail
     {
         try {
             if ($event->payment->payment_type === 'Refund') {
-                Mail::to($event->payment->order->leadBooker->customer->email_address)->send(new RefundGivenMailable($event->payment));
+                MailRepository::sendMailable('refund-given', $event->order->leadBooker->email, $event->payment);
             } else {
-                Mail::to($event->payment->order->leadBooker->customer->email_address)->send(new PaymentMadeMailable($event->payment));
+                MailRepository::sendMailable('payment-made', $event->order->leadBooker->email, $event->payment);
             }
         } catch (Exception $e) {
             Log::error($e);

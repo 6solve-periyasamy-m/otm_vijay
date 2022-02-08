@@ -2,25 +2,27 @@
 
 namespace App\Mail;
 
-use App\Repository\MailRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PaymentOverdueMailable extends Mailable
+class TemplatedMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $order;
+    /**
+     * @var string
+     */
+    private $body;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct(string $body)
     {
-        $this->order = $order;
+        $this->body = $body;
     }
 
     /**
@@ -28,9 +30,8 @@ class PaymentOverdueMailable extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): TemplatedMailable
     {
-        $body = MailRepository::getPaymentOverdueBody($this->order);
-        return $this->view('mail.templated', ['content' => $body,]);
+        return $this->view('mail.templated', ['content' => $this->body,]);
     }
 }

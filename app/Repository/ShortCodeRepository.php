@@ -73,4 +73,18 @@ class ShortCodeRepository
             'SETTING_ATOL_STAMP' => asset(SettingsRepository::get('atol.stamp')),
         ];
     }
+
+    public static function getFromString(string $key): ?array
+    {
+        switch ($key) {
+            case 'order':
+                return self::getOrderShortCodes();
+            case 'payment':
+                return self::getPaymentShortCodes();
+            case 'settings':
+                return self::getSettingShortCodes();
+            default:
+                return null;
+        }
+    }
 }

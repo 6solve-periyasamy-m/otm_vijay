@@ -3,11 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Mail\BookingConfirmationMailable;
+use App\Repository\MailRepository;
 use Exception;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Mail;
 use Log;
 
 class SendBookingConfirmedEmail
@@ -31,7 +28,7 @@ class SendBookingConfirmedEmail
     public function handle(OrderCreatedEvent $event)
     {
         try {
-            Mail::to($event->order->leadBooker->customer->email_address)->send(new BookingConfirmationMailable($event->order));
+            MailRepository::sendMailable('booking-confirmed', $event->order->leadBooker->email, $event->order);
         } catch (Exception $e) {
             Log::error($e);
         }
