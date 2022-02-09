@@ -56,7 +56,7 @@ import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
  */
 function initialState() {
     return {
-        debug: 9,
+        debug: false,
         moduleName: 'Accommodation',
         booking_token: null,
         showAccommodation: false,

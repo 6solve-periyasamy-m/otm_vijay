@@ -114,7 +114,7 @@ export default {
     props: ['traveller', 'tour', 'form_id', 'booking_token'],
     data() {
         return {
-            debug: 6,
+            debug: false,
             developer: false,
             moduleName: 'addTraveller',
             fields: [
