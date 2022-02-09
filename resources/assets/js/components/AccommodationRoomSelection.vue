@@ -76,9 +76,10 @@ export default {
             this.init()
         })
         bus.$on('setOthers', (others, traveller) => {
+            this.others = this.group
             this.debug>4 && console.log('>>>setOthers', others.map(o => o.first_name))
-            this.others = others
-            this.evalOthers(traveller)
+            this.debug>4 && console.log('>>>setOthers traveller', traveller)
+            //this.others = this.evalOthers(traveller)
         })
         this.others = this.group
         this.control = this.group.length
@@ -91,7 +92,10 @@ export default {
             this.rooms = []
             this.room_selected = {}
             this.loadRoomsForTour();
-            this.others = this.evalOthers(this.traveller)
+
+            //this.others = this.evalOthers(this.traveller)
+            this.others = this.group
+
             this.control = this.others.length
             this.sharer = []
         },
@@ -104,20 +108,23 @@ export default {
             return traveller_id * max + index
         },
         evalOthers(traveller) {
-            let others = this.others
+            this.debug>4 && console.log('evalOthers', this.control, this.others); //, Object.values(this.others))
+            let others = this.others.filter(t => t.id !== traveller.id);
             this.debug>3 && console.log('evalOthers: prefilter others: ', this.control, traveller, traveller.first_name, others.map(o=>o.first_name))
-            this.debug>2 && console.log('evalOthers: others: ', this.control, others.map(o=>o.first_name))
             return others
         },
+        /*
         getOthers(traveller) {
             this.debug>4 && console.log('getOthers', this.control, this.others); //, Object.values(this.others))
             if (this.control > 0) {
                 const others = this.evalOthers(traveller)
+console.log('getOthers filter traveller', this.control, others); //, Object.values(this.others))
                 return others //storeOthers
             } else {
                 console.log('no others left')
             }
         },
+        */
         selectSharer(traveller) {
             const that = this
             const sharer =  Object.values(this.sharer)[0]

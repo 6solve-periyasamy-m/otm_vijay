@@ -205,7 +205,7 @@ export default {
   props: ["tour"],
   data() {
     return {
-      debug: 9,
+      debug: false,
       token: null,
       order_id: 0,
       showAccommodation: false,

@@ -160,7 +160,7 @@ export default {
         if (!this.traveller.id) {
             this.edit_fields = true
         }
-        this.debug && console.log(`${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
+        this.debug && console.log(`&^&^&^&^&^& ${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
     },
     created() {
         let that = this
@@ -191,12 +191,14 @@ export default {
         setCustomerFields() {
             let that = this
             this['id'] = this.customer['id']
+            console.log('customer fields: ', that.customer)
             this.fields.forEach(function(key,value) {
                 if (typeof that.customer[key] !== 'undefined') {
                     that[key] = that.customer[key]
                 }
             })
-            that.date_of_birth = dates.isoString(that.customer.date_of_birth)
+            console.log('dob fields: ', that.date_of_birth)
+            that.date_of_birth = dates.isoString(that.date_of_birth)
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate

@@ -432,8 +432,7 @@ class BookingCustomerController extends ApiController
         foreach($travellers as $n => $traveller) {
             $travellers[$n] = Customer::findOrFail($traveller->customer_id);
         }
-        // TODO: this should be a response!  test
-        // return json_encode(['success' => true, 'travellers' => $travellers]);
+
         return response()->json(['success' => true, 'travellers' => $travellers]);
     }
 
