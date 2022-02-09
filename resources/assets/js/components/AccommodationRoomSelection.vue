@@ -79,7 +79,7 @@ export default {
             this.others = this.group
             this.debug>4 && console.log('>>>setOthers', others.map(o => o.first_name))
             this.debug>4 && console.log('>>>setOthers traveller', traveller)
-            //this.evalOthers(traveller)
+            //this.others = this.evalOthers(traveller)
         })
         this.others = this.group
         this.control = this.group.length
