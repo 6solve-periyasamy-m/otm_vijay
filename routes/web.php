@@ -745,3 +745,5 @@ Route::prefix('payment')->name('payment.')->group(function () {
         });
     });
 });
+
+Route::get('/occupancy', function () { return view('pages.occupancy.manager'); });
