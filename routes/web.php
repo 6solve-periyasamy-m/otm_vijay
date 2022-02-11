@@ -674,36 +674,12 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/delete', [PermissionsController::class, 'destroy'])->name('roles.delete')->middleware('bouncer:User,delete');
         });
     });
+
     Route::prefix('email/')->name('email.')->group(function () {
-        Route::prefix('booking')->name('booking.')->group(function () {
-            Route::get('/edit', [MailController::class, 'editBooking'])->name('edit');
-            Route::post('/edit', [MailController::class, 'storeBooking'])->name('update');
-            Route::get('/demo', [MailController::class, 'demoBooking'])->name('demo');
-            Route::get('/demo/{order}', [MailController::class, 'demoOrderBooking'])->name('order_demo');
-        });
-        Route::prefix('due-payment')->name('payment-due.')->group(function () {
-            Route::get('/edit', [MailController::class, 'editPaymentDue'])->name('edit');
-            Route::post('/edit', [MailController::class, 'storePaymentDue'])->name('update');
-            Route::get('/demo', [MailController::class, 'demoPaymentDue'])->name('demo');
-            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentDue'])->name('order_demo');
-        });
-        Route::prefix('overdue-payment')->name('payment-overdue.')->group(function () {
-            Route::get('/edit', [MailController::class, 'editPaymentOverdue'])->name('edit');
-            Route::post('/edit', [MailController::class, 'storePaymentOverdue'])->name('update');
-            Route::get('/demo', [MailController::class, 'demoPaymentOverdue'])->name('demo');
-            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentOverdue'])->name('order_demo');
-        });
-        Route::prefix('payment-made')->name('payment-made.')->group(function () {
-            Route::get('/edit', [MailController::class, 'editPaymentMade'])->name('edit');
-            Route::post('/edit', [MailController::class, 'storePaymentMade'])->name('update');
-            Route::get('/demo', [MailController::class, 'demoPaymentMade'])->name('demo');
-            Route::get('/demo/{order}', [MailController::class, 'demoOrderPaymentMade'])->name('order_demo');
-        });
-        Route::prefix('refund-given')->name('refund-given.')->group(function () {
-            Route::get('/edit', [MailController::class, 'editRefundGiven'])->name('edit');
-            Route::post('/edit', [MailController::class, 'storeRefundGiven'])->name('update');
-            Route::get('/demo', [MailController::class, 'demoRefundGiven'])->name('demo');
-            Route::get('/demo/{order}', [MailController::class, 'demoOrderRefundGiven'])->name('order_demo');
+        Route::prefix('{mail}')->group(function () {
+            Route::get('/edit', [MailController::class, 'edit'])->name('edit');
+            Route::post('/edit', [MailController::class, 'update'])->name('update');
+            Route::get('/demo', [MailController::class, 'demo'])->name('demo');
         });
     });
 

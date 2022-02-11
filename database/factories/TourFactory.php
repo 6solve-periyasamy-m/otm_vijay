@@ -37,7 +37,8 @@ class TourFactory extends Factory
             'tour_merchandise_id' => null,
             'is_active' => true,
             'date_from' => '2022-05-01',
-            'date_to' => '2022-05-31'
+            'date_to' => '2022-05-31',
+            'terms' => 'Default Terms'
         ];
     }
 }

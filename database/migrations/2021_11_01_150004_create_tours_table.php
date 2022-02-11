@@ -32,6 +32,7 @@ class CreateToursTable extends Migration
             $table->date('date_from');
             $table->date('date_to');
             $table->text('invoice_footer')->nullable();
+            $table->text('terms');
             $table->date('final_payment');
             $table->timestamps();
             $table->softDeletes();
