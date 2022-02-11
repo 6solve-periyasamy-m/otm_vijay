@@ -95,4 +95,9 @@ class OrderCustomer extends Model
     {
         return OrderRepository::isLeadBooker($this->order, $this->customer);
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'order_customer_groups', 'group_id', 'order_customer_id');
+    }
 }
