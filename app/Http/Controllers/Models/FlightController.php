@@ -30,7 +30,7 @@ class FlightController extends Controller
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
-            'available_after' => $request->input('available_after'),
+            'available_from' => $request->input('available_from'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {
             $flight->image_url = $request->file('image')->storePublicly('uploads/images');
@@ -58,7 +58,7 @@ class FlightController extends Controller
             'is_domestic' => $request->input('is_domestic') === 'on' ? 1 : 0,
             'currency_id' => $request->input('currency_id'),
             'notes' => $request->input('notes'),
-            'available_after' => $request->input('available_after'),
+            'available_from' => $request->input('available_from'),
         ]);
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($flight->image_url)) {

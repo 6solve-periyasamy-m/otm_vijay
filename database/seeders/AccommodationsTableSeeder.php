@@ -45,6 +45,19 @@ class AccommodationsTableSeeder extends Seeder
                 'updated_at' => '2022-01-20 12:44:50',
                 'deleted_at' => NULL,
             ),
+            2 => 
+            array (
+                'id' => 3,
+                'name' => 'Long Street Backpackers',
+                'description' => 'Set on iconic and lively Long Street, this simple hostel with a colourful facade is 7 minutes\' walk from the Iziko South African Museum and 4 km from the Table Mountain Aerial Cableway. Pared-down private rooms and dorms have personal lockers and shared bathrooms. Amenities include a lively bar, a communal kitchen and a TV room, plus 3 communal balconies overlooking the street. There\'s also a pool table, and a garden courtyard with barbecue facilities and seating.',
+                'audit_date' => '2022-02-09',
+                'image_url' => NULL,
+                'currency_id' => 32,
+                'address_id' => 76,
+                'created_at' => '2022-02-09 09:30:21',
+                'updated_at' => '2022-02-09 09:30:21',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

@@ -27,7 +27,7 @@
 @endcan
 @include('partials.fields.file', ['name' => 'Image', 'field' => 'image',])
 @include('partials.fields.checkbox', ['name' => 'Is Domestic', 'field' => 'is_domestic', 'value' => $is_domestic ?? null,])
-@include('partials.fields.date', ['name' => 'Available After', 'field' => 'available_after', 'value' => $available_after ?? null,])
+@include('partials.fields.date', ['name' => 'Available From', 'field' => 'available_from', 'value' => $available_from ?? null,])
 @include('partials.fields.selector.default',
     ['name' => 'Currency', 'field' => 'currency_id', 'value' => $currency ?? null, 'route' => 'currencies',])
 @include('partials.fields.prefab.notes')

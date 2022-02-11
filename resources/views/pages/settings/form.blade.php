@@ -62,9 +62,29 @@
 <hr class="splitter"/>
 @include('partials.fields.submit')
 <hr class="splitter"/>
-@include('partials.fields.button', ['name' => 'Edit Booking Email', 'route' => route('email.booking.edit'), 'width' => 2, 'color' => 'amber'])
-@include('partials.fields.button', ['name' => 'Edit Payment Due Email', 'route' => route('email.payment-due.edit'), 'width' => 2, 'color' => 'amber'])
-@include('partials.fields.button', ['name' => 'Edit Payment Overdue Email', 'route' => route('email.payment-overdue.edit'), 'width' => 2, 'color' => 'amber'])
-@include('partials.fields.button', ['name' => 'Edit Payment Received Email', 'route' => route('email.payment-made.edit'), 'width' => 2, 'color' => 'amber'])
-@include('partials.fields.button', ['name' => 'Edit Refund Given Email', 'route' => route('email.refund-given.edit'), 'width' => 2, 'color' => 'amber'])
+<div class="col-sm-12">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" class="col-10">Mail</th>
+            <th scope="col" class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach(\App\Repository\MailRepository::getAvailableMail() as $mail => $info)
+            <tr>
+                <td>{{ ucwords(str_replace('-', ' ', $mail)) }}</td>
+                <td>
+                    <a href="{{route('email.edit', ['mail' => $mail,])}}" class="btn btn-outline-success btn-sm mb-1">
+                        <i class="icon-note">&nbsp;Edit</i>
+                    </a>
+                    <a href="{{route('email.demo', ['mail' => $mail,])}}" class="btn btn-outline-info btn-sm mb-1">
+                        <i class="icon-envelope-letter">&nbsp;Demo</i>
+                    </a>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+</div>
 @endsection
