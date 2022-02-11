@@ -65,34 +65,6 @@ class FlightController extends ApiController
 
         if ($this->logging > 3) {
             Log::info('flightsAvailableForTour:: DATA found'. print_r($flights->toArray(), 1));
-        /*
-        $flights = Flight::select('flight_inventories.*', 'flight_inventory_tour.id as flight_inventory_tour_id', 'flight_inventory_tour.flight_type', 'flights.departure_airport_id', 'flights.arrival_airport_id', 'airlines.name', 'travel_classes.name as travel_class', 'flights.available_from')
-        ->join('airlines', 'airline_id', 'airlines.id')
-        ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
-        ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
-        ->join('flight_inventory_tour', 'flight_inventory_tour.flight_inventory_id', 'flight_inventories.id')
-        ->where('flight_inventory_tour.tour_id', $tour_id)
-        ->where(function($q) {
-            $q->whereNull('flights.available_from')
-                ->orWhere('flights.available_from', '<', date('Y-m-d'));
-        });
-
-        if (isset($flight_type) && strlen($flight_type)) {
-            $flights = $flights->where('flight_inventory_tour.flight_type', $flight_type);
-        } else {
-            $flights = $flights->whereIn('flight_inventory_tour.flight_type', ['Outbound', 'Inbound'])
-            ->orderBy('flight_inventory_tour.flight_type', 'desc');
-        }
-        
-        $flightData = $flights
-            ->orderBy('airlines.name', 'asc')
-            ->get();
-        
-        if ($this->logging > 5) {
-            Log::info("\n".'getFlightInventoriesForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : '. $flights->toSql());
-        } else if ($this->logging > 3) {
-            Log::info('getFlightInventoriesForTour:: DATA found'. print_r($flightData->toArray(), 1));
-        */
         } else if ($this->logging > 0) {
             Log::info('flightsAvailableForTour:: found ' . count($flights) . ' flights available');
         }
