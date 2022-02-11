@@ -3,8 +3,6 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Mail\PaymentDueMailable;
-use App\Mail\PaymentOverdueMailable;
 use App\Models\Customer;
 use App\Models\Merchandise;
 use App\Models\Order;
@@ -15,13 +13,11 @@ use App\Models\OrderFlight;
 use App\Models\OrderInstallment;
 use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
-use App\Models\PaymentInstallment;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class OrderRepository
 {
@@ -637,7 +633,7 @@ class OrderRepository
         }
         $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId, 'cost' => $merchandise->tour_sales_price,]);
         $oCustomer->orderMerchandise()->save($oMerch);
-        event(new OrderCustomerComponentAddedEvent($omerch));
+        event(new OrderCustomerComponentAddedEvent($oMerch));
         return $oMerch;
     }
 
@@ -658,9 +654,10 @@ class OrderRepository
     /**
      * Sends an email reminder of a due installment
      * @param Order $order
-     * @param PaymentInstallment $installment
+     * @param OrderInstallment $installment
+     * @param int $days
      */
-    public static function sendReminderEmail(Order $order, OrderInstallment $installment)
+    public static function sendReminderEmail(Order $order, OrderInstallment $installment, int $days)
     {
         PaymentReminder::create([
             'order_id' => $order->id,
@@ -668,9 +665,9 @@ class OrderRepository
             'period' => $days
         ]);
         if ($days < 0) {
-            Mail::to($order->leadBooker->email_address)->send(new PaymentOverdueMailable($order));
+            MailRepository::sendMailable('payment-overdue', $order->leadBooker->email, $order);
         } else {
-            Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+            MailRepository::sendMailable('payment-due', $order->leadBooker->email, $order);
         }
     }
 

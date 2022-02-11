@@ -1,4 +1,9 @@
 <div class="col-12 col-xl-8">
+    @include('partials.fields.text', [
+        'field' => 'subject',
+        'name' => 'Email Subject',
+        'value' => $subject
+    ])
     @include('partials.fields.ckeditor', [
         'field' => 'body',
         'name' => 'Email Body',
