@@ -17,4 +17,19 @@ class Group extends Model
     {
         return $this->belongsToMany(OrderCustomer::class, 'order_customer_groups', 'order_customer_id', 'group_id');
     }
+
+    public function pivot()
+    {
+        return $this->hasMany(OrderCustomerGroup::class, 'group_id');
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(OrderAccommodation::class, 'group_id');
+    }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class, 'room_type_id');
+    }
 }
