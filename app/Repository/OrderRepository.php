@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Exceptions\RoomingFailedException;
+use App\Models\AccommodationInventoryTour;
 use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Merchandise;
@@ -16,9 +18,12 @@ use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
+use App\Models\RoomType;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Log;
+use Throwable;
 
 class OrderRepository
 {
@@ -737,5 +742,75 @@ class OrderRepository
             $groups[] = Group::find($groupId);
         }
         return $groups;
+    }
+
+    /**
+     *
+     * @param Order $order
+     * @throws RoomingFailedException
+     * @throws Throwable
+     * @var Group $group
+     */
+    public static function buildGroupRooming(Order $order, $data) {
+        try {
+            DB::beginTransaction();
+            $inflated = self::inflateRoomingData($data);
+            foreach ($order->groups as $group) { $group->delete(); }
+            foreach ($inflated as $groupData) {
+                $group = Group::create([
+                    'room_type_id' => $groupData->room_type->id,
+                ]);
+                foreach ($groupData->customers as $customer) {
+                    $group->customers()->save($customer);
+                }
+                self::addRoomsToGroup($order, $group);
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            Log::error($e);
+            DB::rollBack();
+            throw new RoomingFailedException($e);
+        }
+    }
+
+    /**
+     * @throws RoomingFailedException
+     */
+    private static function inflateRoomingData($data): array
+    {
+        $inflated = [];
+        foreach ($data as $object) {
+            $decoded = json_decode($object);
+            $collection = new Collection();
+            $roomType = RoomType::find($decoded->room_type_id);
+            if (!isset($roomType)) throw new RoomingFailedException('An invalid room type was provided');
+            $decoded->room_type = $roomType;
+            $members = [];
+            foreach ($decoded->customers as $customerId) {
+                $customer = Customer::find($customerId);
+                if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
+                $members[] = $customer;
+            }
+            $collection->customers = $members;
+            $inflated[] = $collection;
+        }
+        return $inflated;
+    }
+
+    /**
+     * @throws RoomingFailedException
+     */
+    private static function addRoomsToGroup(Order $order, Group $group)
+    {
+        $templates = AccommodationComponentRepository::getTemplateTourInventory($order->tour);
+        $roomType = $group->roomType;
+        foreach ($templates as $template) {
+            $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $roomType);
+            if (!isset($found)) throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name}");
+            OrderAccommodation::create([
+                'accommodation_inventory_tour_id' => $found->id,
+                'group_id' => $group->id,
+            ]);
+        }
     }
 }
