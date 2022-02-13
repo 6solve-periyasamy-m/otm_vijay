@@ -7,8 +7,10 @@ use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\OrderAccommodation;
 use App\Models\OrderCustomer;
+use App\Models\RoomType;
 use App\Models\Tour;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 interface AccommodationComponentRepositoryInterface
@@ -120,5 +122,32 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         return $upgrade->base;
+    }
+
+    public static function getInventoryWithRoomType(AccommodationInventoryTour $inventoryTour, RoomType $roomType): AccommodationInventoryTour
+    {
+        $inventory = $inventoryTour->inventory;
+        $accommodation = $inventory->component;
+
+        $query = DB::table('accommodation_inventory_tours');
+        $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
+        $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
+        $query->where('accommodation_inventories.check_in', '=', $inventory->check_in);
+        $query->where('accommodation_inventories.check_out', '=', $inventory->check_out);
+        $query->where('accommodation_inventories.room_type_id', '=', $roomType->id);
+        $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
+        $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');
+        $query->select('accommodation_inventory_tours.id');
+
+        return AccommodationInventoryTour::find($query->first()->id);
+    }
+
+    /**
+     * @param Tour $tour
+     * @return Collection
+     */
+    public static function getTemplateTourInventory(Tour $tour): Collection
+    {
+        return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
     }
 }
