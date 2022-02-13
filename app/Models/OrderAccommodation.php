@@ -72,4 +72,9 @@ class OrderAccommodation extends Model
     {
         return $this->orderCustomers();
     }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id');
+    }
 }
