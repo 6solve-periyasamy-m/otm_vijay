@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Customer;
+use App\Models\Group;
 use App\Models\Merchandise;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
@@ -720,5 +721,21 @@ class OrderRepository
             if ($orderInstallment->id == $installment->id) return true;
         }
         return $paid >= 0;
+    }
+
+    public static function getOrderGroups(Order $order)
+    {
+        $customers = $order->orderCustomers;
+        $groupIds = [];
+        foreach ($customers as $customer) {
+            foreach ($customer->groups as $group) {
+                $groupIds[] = $group->id;
+            }
+        }
+        $groups = [];
+        foreach (array_unique($groupIds) as $groupId) {
+            $groups[] = Group::find($groupId);
+        }
+        return $groups;
     }
 }
