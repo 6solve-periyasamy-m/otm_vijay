@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController;
 
 use App\Models\Tour;
+use App\Models\RoomType;
 use App\Models\OrderCustomer;
 use App\Models\CustomerOrderDetail;
 use App\Models\AccommodationInventory;
@@ -24,13 +25,19 @@ class AccommodationController extends ApiController
     private $debug = 4;
 
     /***
-     * this tour has a range of accommodation options: ??? deprecated
-     * 
+     * this tour has a range of accommodation options: 
+     * @Param: Tour $tour
+     * returns: data: room_types
      */
     public function getAccommodationOptions(Tour $tour)
     {
-        Log::info('getAccommodationOptions');
-        return response()->json(["success" => true, 'options' => $tour]);
+        $room_types = RoomType::select('id', 'name', 'maximum_occupancy') 
+          ->whereNull('deleted_at')
+          ->get();
+
+        Log::info('getAccommodationOptions', [$room_types]);
+
+        return response()->json(['success' => true, 'options' => [ 'room_types' => $room_types ]]);
     }
 
 

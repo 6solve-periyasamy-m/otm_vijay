@@ -56,7 +56,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
     public function getAccommodationInventoryForTour(Tour $tour)
     {
         $inventoryTour = new AccommodationInventoryTour();
-        $result = $inventoryTour->select(
+        $query = $inventoryTour->select(
             'accommodations.name as accommodation_name',
             'accommodation_inventory_tours.id as accommodation_inventory_tour_id',
             'accommodation_inventories.check_in',
@@ -68,10 +68,13 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->join('accommodations', 'accommodation_inventories.accommodation_id', 'accommodations.id')
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
-            ->where('accommodation_inventory_tours.tour_id', $tour->id)
-            ->get();
+            ->where('accommodation_inventory_tours.tour_id', $tour->id);
 
-        Log::debug('getAccommodationInventoryForTour', [$result]);
+Log::debug('AIT', ['query' => $query->toSql()]);
+
+        $result = $query->get();
+
+        $this->debug && Log::debug('getAccommodationInventoryForTour', [$result]);
         return $result;
     }
 
@@ -99,7 +102,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->whereIn('booking_accommodations.customer_id', $travellerIds);
         try {
             $bookings = $bookingObj->get();
-            Log::debug('getAccommodationBooking', [$booking, $travellerIds, $bookings]);
+            $this->debug && Log::debug('getAccommodationBooking', [$booking, $travellerIds, $bookings]);
         } catch (Exception $e) {
             Log::error('Retrieving booking data error: ' . $e->getMessage());
         }
@@ -136,7 +139,6 @@ class AccommodationRepository implements AccommodationRepositoryInterface
 
     private function update($booking) 
     {
-        Log::debug('Accommodation update:', [$booking]);
 
         $bookingAccommodation = new BookingAccommodation();
         $current = $bookingAccommodation
@@ -149,7 +151,6 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             var_dump($current);
             throw new Exception('more than one accommodation booking record found');
         }
-Log::debug('accommodation update loaded', [$current]);
         if ($current->count() === 1) {
             $updateBooking = $current[0];
             $updateBooking->accommodation_inventory_tour_id = $booking['accommodation_inventory_tour_id'];
@@ -170,9 +171,7 @@ Log::debug('accommodation update loaded', [$current]);
          * customer_id books room
          * if shares, then shares is an array of customer_id
          */
-// inspect room: does accommodation_inventory_id exist here?
-// inspect $accommodation_inventory_tour_id passed in
-Log::debug('UpdateAccommodationBooking (id, room, booking) ', [$accommodation_inventory_tour_id, $room, $booking]);
+        $this->debug && Log::debug('UpdateAccommodationBooking (id, room, booking) ', [$accommodation_inventory_tour_id, $room, $booking]);
         $booking_id = $booking->id;
         $customer_id = $customer_id;
         $room_share_ids = null;

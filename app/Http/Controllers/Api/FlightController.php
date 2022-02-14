@@ -18,7 +18,7 @@ use App\Repository\FlightBookingRepository;
 
 class FlightController extends ApiController
 {
-    protected $logging = 5;
+    protected $debug = 0;
 
     public function getFlightInventories()
     {
@@ -63,11 +63,8 @@ class FlightController extends ApiController
         $flightsRepository = new FlightsRepository();
         $flights = $flightsRepository->flightsAvailableForTour($tour_id, $flight_type);
 
-        if ($this->logging > 3) {
-            Log::info('flightsAvailableForTour:: DATA found'. print_r($flights->toArray(), 1));
-        } else if ($this->logging > 0) {
-            Log::info('flightsAvailableForTour:: found ' . count($flights) . ' flights available');
-        }
+        $this->debug > 3 && Log::info('flightsAvailableForTour:: DATA found'. print_r($flights->toArray(), 1));
+        $this->debug && Log::info('flightsAvailableForTour:: found ' . count($flights) . ' flights available');
 
         return response()->json(["success" => true, "data" => $flights]);
     }
@@ -128,7 +125,7 @@ class FlightController extends ApiController
         if (isset($booking->id)) {
             $flightBookingRepository = new FlightBookingRepository();
             $flightBookings = $flightBookingRepository->getFlightBookings($booking->id, $type);
-Log::debug('loadFlightsForBooking: flight bookings', [$booking->id, $flightBookings]);
+            $this->debug && Log::debug('loadFlightsForBooking: flight bookings', [$booking->id, $flightBookings]);
             return response()->json(["success" => true, "flightBookings" => $flightBookings]);
         } else {
             return response()->json(["success" => false, "message" => "no flight bookings"]);
@@ -145,34 +142,32 @@ class OLD_FLIGHT_CONTROLLER {
      * @return array
      */
     public function loadFlightsForOrder($order_id, $type = 'Both') {
-        Log::debug('loadFlightsForOrder::deprecated function call');
-                $order = new Order();
-                $orders = $order
-                    ->select('customer_order_details.*','customer_order_details.id as cod_id', 'flight_inventory_tours.*', 'flights.*')
-                    ->join('order_customers', 'order_customers.order_id', 'order_id')
-                    ->join('customer_order_details', 'customer_order_details.order_customer_id', 'order_customers.id')
-                    ->join('flight_inventory_tours', 'flight_inventory_tours.id', 'customer_order_details.inventory_tour_id')
-                    ->join('flight_inventories','flight_inventories.id', 'flight_inventory_tours.flight_inventory_id')
-                    ->join('flights', 'flights.id', 'flight_inventories.flight_id')
-                    ->leftJoin('airlines', 'airlines.id', 'flights.airline_id')
-                    ->where('orders.id', $order_id)
-                    ->whereNull('customer_order_details.deleted_at');
-                    if ($type == 'Both') {
-                        $orders = $orders->whereIn('customer_order_details.type', ['Outbound', 'Inbound']);
-                    } else {
-                        $orders = $orders->where('customer_order_details.type', $type);
-                    }
-                    $orders = $orders->get();
-        
-                // left joins for airports requires queries as they are a pair
-                foreach($orders as &$ord) {
-                    $ord['departure_airport'] = Airport::find($ord->departure_airport_id)->name;
-                    $ord['arrival_airport'] = Airport::find($ord->arrival_airport_id)->name;
-                }
-                if ($this->logging) {
-                    Log::info('loadFlightsForOrder order '. $order_id . ' found '. count($orders). ' orders');
-                }
-        
-                return response()->json(["success" => true, "orders" => $orders]);
+        $this->debug && Log::debug('loadFlightsForOrder::deprecated function call');
+        $order = new Order();
+        $orders = $order
+            ->select('customer_order_details.*','customer_order_details.id as cod_id', 'flight_inventory_tours.*', 'flights.*')
+            ->join('order_customers', 'order_customers.order_id', 'order_id')
+            ->join('customer_order_details', 'customer_order_details.order_customer_id', 'order_customers.id')
+            ->join('flight_inventory_tours', 'flight_inventory_tours.id', 'customer_order_details.inventory_tour_id')
+            ->join('flight_inventories','flight_inventories.id', 'flight_inventory_tours.flight_inventory_id')
+            ->join('flights', 'flights.id', 'flight_inventories.flight_id')
+            ->leftJoin('airlines', 'airlines.id', 'flights.airline_id')
+            ->where('orders.id', $order_id)
+            ->whereNull('customer_order_details.deleted_at');
+            if ($type == 'Both') {
+                $orders = $orders->whereIn('customer_order_details.type', ['Outbound', 'Inbound']);
+            } else {
+                $orders = $orders->where('customer_order_details.type', $type);
             }
+            $orders = $orders->get();
+
+        // left joins for airports requires queries as they are a pair
+        foreach($orders as &$ord) {
+            $ord['departure_airport'] = Airport::find($ord->departure_airport_id)->name;
+            $ord['arrival_airport'] = Airport::find($ord->arrival_airport_id)->name;
+        }
+        $this->debug && Log::info('loadFlightsForOrder order '. $order_id . ' found '. count($orders). ' orders');
+
+        return response()->json(["success" => true, "orders" => $orders]);
+    }
 }

@@ -4,33 +4,41 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
                     <button class="btn btn-link collapsed cardhead" @click="toggleAccommodation">Accommodation</button>
-                    <p>Accommodation options for your tour group including indication of single or shared rooms requirements.</p>
+                    <p>Accommodation options for your tour group including indication of single or shared rooms requirements. Sharing is indicated by assignment of a group number.</p>
                 </h5>
             </div>
             <div v-if="showAccommodation" class="card-body ept-form">
                 <div v-if="showRegistered">
                     <h4>Accommodation Registered</h4>
-                        <div>traveller name</div>
-                        <div>room type</div>
-                        <div>share group</div>
-                    {{accommodations}}
-                    <div v-for="accommodation in accommodations" class="row">
-                        <div><input type="text" readonly :value="accommodations.traveller"></div>
-                        <div>
-                            <select v-model="room_type">
+                    <div class="row">
+                       <div class="col">traveller name</div>
+                       <div class="col">room type</div>
+                       <div class="col">share group</div>
+                    </div>
+                    <div v-for="traveller in travellers" class="row">
+                        <input type="hidden" readonly :value="traveller.id">
+                        <div class="col">
+                            <input type="text" readonly :value="`${traveller.first_name} ${traveller.last_name}`">
+                        </div>
+                        <div class="col">
+                            <select v-model="traveller.room_type">
                                 <option>Select a room type</option>
-                                <option v-for="room_type in room_types" :value="room_type.name"></option>
+                                <option v-for="room in room_types" :value="room.name">{{room.name}}</option>
                             </select>
                         </div>
-                        <div>
-                            <select v-model="group_id">
-                                <option>Share group selection</option>
-                                <option v-for="group in assignGroups"></option>
-                            </select>
+                        <div class="col">
+                            <span v-if="occupancy(traveller.room_type) > 1">
+                                <select v-model="group_id">
+                                    <option>Share group selection</option>
+                                    <option v-for="group in groups">{{group}}</option>
+                                </select>
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
+            <button @click="setAccommodation" class="btn btn-primary">Set Accommodation Options</button>
+            <button @click="resetAccommodation" class="btn btn-default">Reset Accommodation</button>
         </div>
     </div>
 </template>
@@ -48,7 +56,8 @@ export default {
             accommodations: [],
             travellers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
-            groups: []
+            room_type: {},
+            groups: [1,2,3,4,5,6,7,8,9]
         }
     },
     created() {
@@ -67,30 +76,36 @@ export default {
       this.getAccommodationOptions()
     },
     methods: {
+        setAccommodation() {
+          // booking the accommodation options in the booking_accommodations table
+          
+        },
+        occupancy(name) {
+          const item = this.room_types.filter(type => type.name == name);
+          console.log('max=', item)
+          const record = item.find(i => i.name === name)
+          if (record) {
+             return record.maximum_occupancy
+          } else {
+             return 1
+          }
+        },
         assignGroups() {
             return [1,2,3,4,5]
         },
         toggleAccommodation() {
             this.showAccommodation = !this.showAccommodation
         },
-        async getAccommodationOptions() {
+        getAccommodationOptions() {
             const that = this;
             const url = `/api/booking/accommodation/options/${this.tour.id}`
-            await axios.get(url)
-                .then((response) => {
-                    this.debug>3 && console.log('getAccommodationOptions', response.data)
-                    that.accommodations = response.data.accommodations
-                    if (that.accommodations !== undefined && that.accommodations !== null) {
-                        that.accommodations.map(
-                            (accommodation) => {
-                                that.occupancy[accommodation.accommodation_id] =
-                                accommodation.maximum_occupancy
-                        })
-                    } else {
-                        console.log('null data?', response)
-                    }
+            axios.get(url)
+                .then(response => {
+                    that.debug>3 && console.log('getAccommodationOptions', response.data)
+                    that.room_types = response.data.options.room_types
+                    console.log('accommodation: roomtypes: ', that.room_types)
                 })
-                .catch((error) => console.log(error))
+                .catch(error => console.log(error))
         },
         loadAccommodationBooking(travellers) {
             const that = this;

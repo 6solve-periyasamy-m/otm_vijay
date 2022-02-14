@@ -53,15 +53,15 @@ class FlightsRepository implements FlightsRepositoryInterface
             'airlines.name', 
             'travel_classes.name as travel_class', 
             'flight_inventory_tours.tour_component_type',
-            'flights.available_after')
+            'flights.available_from')
           ->whereNull('flight_inventory_tours.deleted_at')
           ->whereNull('flight_inventories.deleted_at')
           ->whereNull('flights.deleted_at')
           ->where('flight_inventory_tours.tour_id', $tour_id)
           ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
           ->where(function($q) {
-              $q->whereNull('flights.available_after')
-                ->orWhere('flights.available_after', '>=', date('Y-m-d'));
+              $q->whereNull('flights.available_from')
+                ->orWhere('flights.available_from', '>=', date('Y-m-d'));
           });
         ;
         if (isset($flight_type) && strlen($flight_type)) {
