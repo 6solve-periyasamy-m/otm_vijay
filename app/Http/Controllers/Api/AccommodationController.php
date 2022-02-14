@@ -59,20 +59,19 @@ class AccommodationController extends ApiController
         return response()->json(["success" => true, 'accommodations' => $result]);
     }
 
-
-    private function getAccommodationBookingForCustomer(Tour $tour, OrderCustomer $orderCustomer, $token)
-    {
-        // Log::info('getAccommodationBookingForCustomer Order: ', $orderCustomer->toArray());
-        $customer_order_detail = new CustomerOrderDetail();
-        $result = $customer_order_detail
-            ->where('type', $this->component_type)
-            ->where('order_customer_id', $orderCustomer->id)
-            ->where('reference', $token)
-            ->whereNull('customer_order_details.deleted_at')
-            ->first();
+    // private function getAccommodationBookingForCustomer(Tour $tour, OrderCustomer $orderCustomer, $token)
+    // {
+    //     // Log::info('getAccommodationBookingForCustomer Order: ', $orderCustomer->toArray());
+    //     $customer_order_detail = new CustomerOrderDetail();
+    //     $result = $customer_order_detail
+    //         ->where('type', $this->component_type)
+    //         ->where('order_customer_id', $orderCustomer->id)
+    //         ->where('reference', $token)
+    //         ->whereNull('customer_order_details.deleted_at')
+    //         ->first();
         
-        return $result;
-    }
+    //     return $result;
+    // }
 
     public function getAccommodationBooking(String $token, Tour $tour)
     {
@@ -122,6 +121,7 @@ Log::debug('accommodation booked', [$booked]);
         $booking_token = $request->token;
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($booking_token);
+
 Log::debug('postAccommodationReservation id, traveller contains: ', [$accommodation_inventory_tour_id, $traveller]);
         $customer_id = $traveller['customer_id'];
         $room = isset($traveller['room']) ? $traveller['room'] : null;

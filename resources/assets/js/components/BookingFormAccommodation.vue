@@ -49,7 +49,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 9,
+            debug: 1,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
@@ -59,7 +59,7 @@ export default {
             initTravellers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
             room_type: {},
-            groups: [1,2,3,4,5,6,7,8,9]
+            groups: Array.from(Array(100).keys()),
         }
     },
     created() {
