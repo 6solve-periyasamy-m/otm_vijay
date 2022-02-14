@@ -78,7 +78,11 @@ export default {
     methods: {
         setAccommodation() {
           // booking the accommodation options in the booking_accommodations table
-          
+            console.log('setAccommodation', this.travellers)
+        },
+        resetAccommodation() {
+            console.log('resetAccommodation',this.travellers)
+            this.travellers = []
         },
         occupancy(name) {
           const item = this.room_types.filter(type => type.name == name);
