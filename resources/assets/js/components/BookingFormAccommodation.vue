@@ -22,39 +22,41 @@
                         </div>
                         <div class="col">
                             <select v-model="traveller.room_type">
-                                <option>Select a room type</option>
+                                <option default value="0">Select a room type</option>
                                 <option v-for="room in room_types" :value="room.name">{{room.name}}</option>
                             </select>
                         </div>
                         <div class="col">
                             <span v-if="occupancy(traveller.room_type) > 1">
-                                <select v-model="group_id">
-                                    <option>Share group selection</option>
-                                    <option v-for="group in groups">{{group}}</option>
+                                <select v-model="traveller.group_id">
+                                    <option default value="0">Share group selection</option>
+                                    <option v-for="group in groups" :key="group">{{group}}</option>
                                 </select>
                             </span>
                         </div>
                     </div>
                 </div>
+                <button @click="setAccommodation" class="btn btn-primary">Set Accommodation Options</button>
+                <button @click="resetAccommodation" class="btn btn-default">Reset Accommodation</button>
             </div>
-            <button @click="setAccommodation" class="btn btn-primary">Set Accommodation Options</button>
-            <button @click="resetAccommodation" class="btn btn-default">Reset Accommodation</button>
         </div>
     </div>
 </template>
 <script>
 import { bus } from '../bus'
+import Vue from 'vue'
 export default {
     props: ['tour'],
     data() {
         return {
             debug: 9,
             moduleName: 'Accommodation',
-            booking_token: null,
             showAccommodation: false,
+            booking_token: null,
             showRegistered: true,
             accommodations: [],
             travellers: [],
+            initTravellers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
             room_type: {},
             groups: [1,2,3,4,5,6,7,8,9]
@@ -70,6 +72,7 @@ export default {
             this.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadAccommodationBooking(this.travellers)
+            this.initTravellers = this.travellers
         })
     },
     mounted() {
@@ -77,12 +80,21 @@ export default {
     },
     methods: {
         setAccommodation() {
+          let that = this
           // booking the accommodation options in the booking_accommodations table
             console.log('setAccommodation', this.travellers)
+            axios.post(`/accommodation/${tour}/booking/${token}`, this.travellers)
+              .then(response => {
+                that.showAccommodation = false
+                console.log(response)
+              })
+              .catch(error => console.log(error))
         },
         resetAccommodation() {
-            console.log('resetAccommodation',this.travellers)
-            this.travellers = []
+            this.travellers = this.initTravellers
+            this.travellers.map(t => Vue.set(t, 'group_id', '0'))
+            this.travellers.map(t => Vue.set(t, 'room_type', '0'))
+            // console.log('resetAccommodation',this.travellers)
         },
         occupancy(name) {
           const item = this.room_types.filter(type => type.name == name);
