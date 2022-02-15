@@ -98,6 +98,6 @@ class OrderCustomer extends Model
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class, 'order_customer_groups', 'group_id', 'order_customer_id');
+        return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 }

@@ -12,10 +12,11 @@ class Group extends Model
     use CascadeSoftDeletes;
 
     protected $cascadeDeletes = ['pivot', 'rooms'];
+    protected $fillable = ['room_type_id',];
 
     public function orderCustomers()
     {
-        return $this->belongsToMany(OrderCustomer::class, 'order_customer_groups', 'order_customer_id', 'group_id');
+        return $this->belongsToMany(OrderCustomer::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 
     public function pivot()

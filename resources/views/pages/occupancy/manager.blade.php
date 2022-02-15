@@ -15,6 +15,7 @@
             border: 1px solid black;
             width: 100%;
             padding: 5px;
+            min-height: 120px;
         }
         .customer {
             display: inline-block;
@@ -70,20 +71,9 @@
 {{-- Initialize JavaScript Variables --}}
 @push('footer-stack')
     <script type="text/javascript">
-        let customerBox = $('.customers');
-        let manager = $('.manager');
-        let customers = {
-            @foreach($unused as $data)
-                    {{ $data['id'] }}: {'name': '{{ $data['name'] }}', 'avatar': '{{ $data['avatar'] }}'},
-            @endforeach
-            @foreach($groups as $group)
-                @if(key_exists('customers', $group))
-                    @foreach($group['customers'] as $data)
-                        {{ $data['id'] }}: {'name': '{{ $data['name'] }}', 'avatar': '{{ $data['avatar'] }}'},
-                    @endforeach
-                @endif
-            @endforeach
-        };
+        customerBox = $('.customers');
+        manager = $('.manager');
+        customers = {!! json_encode($customers) !!};
     </script>
 @endpush
 
@@ -91,13 +81,13 @@
 @push('footer-stack')
     <script type="text/javascript">
         function createCustomerBox(id, name, avatar) {
-            return '<div class="customer customer-' + id + '" customer="' + name + '"><img src="' + avatar + '" class="image"/><br />' + name + '</div>';
+            return '<div class="customer customer-' + id + '" customer="' + id + '"><img src="' + avatar + '" class="image"/><br />' + name + '</div>';
         }
         function createRoomBox(id, name, size, customers = null) {
             let bedString = '';
             if (customers != null) {
                 for (let customer in customers) {
-                    bedString += '<div class="bed">' + createCustomerBox(customer, customers[customer]['name'], customers[customer]['avatar']) + '</div>'
+                    bedString += '<div class="bed">' + createCustomerBox(customers[customer]['id'], customers[customer]['name'], customers[customer]['avatar']) + '</div>'
                 }
             } else {
                 for (let i = 0; i < size; i++) {
@@ -113,26 +103,26 @@
 @push('footer-stack')
 <script type="text/javascript">
     function initialize() {
-        let groups = {
-                @foreach($groups as $group)
-                    [
-                    @if(key_exists('customers', $group))
-                        @foreach($group['customers'] as $data)
-                            { {{ $data['id'] }}: {'name': '{{ $data['name'] }}', 'avatar': '{{ $data['avatar'] }}'} },
-                        @endforeach
-                    @endif
-                    ]
-                @endforeach
+        let groups = [
+            {roomType: {name: "Double Room", id: 2, size:2}, customers: [{name: "Jackie Chan", id: 1, avatar: ""},{name: "Mrs Chan", id: 2, avatar: ""},],},
+            {roomType: {name: "Double Room", id: 2, size:2}, customers: [{name: "John Lennon", id: 3, avatar: ""},{name: "Yoko Ono", id: 4, avatar: ""},],},
+            {roomType: {name: "Single Room", id: 1, size:1}, customers: [{name: "Mrs Doubtfire", id: 5, avatar: ""},],},
+        ];
+        for (let groupid in groups) {
+            //addRoomToManager(createRoomBox(groups[groupid]['roomType']['id'], groups[groupid]['roomType']['name'],groups[groupid]['roomType']['size'], groups[groupid]['customers'],));
+        }
+        for (let key in {!! json_encode($unused) !!}) {
+            customerBox.append(createCustomerBox(customers[key]['id'], customers[key]['name'], customers[key]['avatar']));
         }
     }
     function reset() {
         customerBox.empty();
-        manager.empty();
+        $('.manager').empty();
         build();
     }
     function build() {
-        for (let customer in customers) {
-            customerBox.append(createCustomerBox(customer, customers[customer]['name'], customers[customer]['avatar']));
+        for (let key in customers) {
+            customerBox.append(createCustomerBox(customers[key]['id'], customers[key]['name'], customers[key]['avatar']));
         }
         $('.customer').draggable({ revert: 'invalid', });
     }
@@ -140,7 +130,12 @@
     function addRoom() {
         let selected = $('.room-types').find(':selected')
         if ($('.bed').length + parseInt(selected.val()) > Object.keys(customers).length) return alert('Cannot add more rooms!');
-        manager.append(createRoomBox(selected.val(), selected.attr('name'), selected.attr('occupancy')))
+        addRoomToManager(createRoomBox(selected.val(), selected.attr('name'), selected.attr('occupancy')))
+
+    }
+
+    function addRoomToManager(roomBox) {
+        $('.manager').append(roomBox);
         $('.bed').droppable({
             accept: function (element) {
                 return !$(this).is(':parent');
@@ -152,20 +147,31 @@
     }
 
     function submit() {
-        let alrt = '';
+        let roomingData = [];
         $('.room').each(function (index) {
                 let data = $(this).attr('typeid') + ': ';
+                let roomedCustomers = [];
                 $(this).children('.bed').each(function (index) {
-                    data += $(this).children().first().attr('customer') + ', ';
-                })
-                alrt += data + "\n";
+                    roomedCustomers.push($(this).children().first().attr('customer'));
+                });
+                roomingData.push({roomType: $(this).attr('typeid'), customers: roomedCustomers})
             }
         )
-        alert(alrt);
+        let request = $.post({
+            url: "{{ route('api.roomings.save', ['order' => $order,]) }}",
+            dataType: "json",
+            data: { "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', "data": roomingData, },
+            statusCode: {
+                200: function(xhr) { alert('Success'); console.log(xhr); },
+                500: function(xhr) { alert('Failed'); console.log(xhr); }
+            }
+        });
+        console.log(roomingData);
     }
     $(document).ready(function () {
-        build();
-        customerBox.droppable({
+        initialize();
+        $('.customer').draggable({ revert: 'invalid', });
+        $('.customers').droppable({
             drop: function(e, ui) {
                 $(e.target).append($(ui.draggable).detach().css({'top':'','left':''}));
             }

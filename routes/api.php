@@ -92,6 +92,7 @@ Route::middleware('auth:api')->group(function() {
 });
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
+    Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
         Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');

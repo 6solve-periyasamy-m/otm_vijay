@@ -757,12 +757,12 @@ class OrderRepository
             $inflated = self::inflateRoomingData($data);
             foreach ($order->groups() as $group) { $group->delete(); }
             foreach ($inflated as $groupData) {
-                $group = Group::create([
-                    'room_type_id' => $groupData->room_type->id,
-                ]);
-                foreach ($groupData->customers as $customer) {
-                    $group->customers()->save($customer);
-                }
+            $group = Group::create([
+                'room_type_id' => $groupData->room_type->id,
+            ]);
+            foreach ($groupData->customers as $customer) {
+                $group->orderCustomers()->save($customer);
+            }
                 self::addRoomsToGroup($order, $group);
             }
             DB::commit();
@@ -780,14 +780,13 @@ class OrderRepository
     {
         $inflated = [];
         foreach ($data as $object) {
-            $decoded = json_decode($object);
             $collection = new Collection();
-            $roomType = RoomType::find($decoded->room_type_id);
+            $roomType = RoomType::find($object['roomType']);
             if (!isset($roomType)) throw new RoomingFailedException('An invalid room type was provided');
-            $decoded->room_type = $roomType;
+            $collection->room_type = $roomType;
             $members = [];
-            foreach ($decoded->customers as $customerId) {
-                $customer = Customer::find($customerId);
+            foreach ($object['customers'] as $customerId) {
+                $customer = OrderCustomer::find($customerId);
                 if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
                 $members[] = $customer;
             }
@@ -819,7 +818,7 @@ class OrderRepository
         $groups = [];
         $usedIds = [];
         foreach ($order->groups() as $group) {
-            $grouping = ['room_type' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
+            $grouping = ['roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
             $customers = [];
             foreach ($group->orderCustomers as $orderCustomer) {
                 $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
@@ -833,10 +832,15 @@ class OrderRepository
             $data['rooms'][] = ['id' => $roomType->id, 'name' => $roomType->name, 'size' => $roomType->maximum_occupancy, ];
         }
         $data['groups'] = $groups;
+        $data['customers'] = [];
         $data['unused'] = [];
-        foreach (array_diff(self::getOrderCustomerIds($order), $usedIds) as $customerId) {
-            $orderCustomer = OrderCustomer::find($customerId);
-            $data['unused'][] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+        $unused = array_diff(self::getOrderCustomerIds($order), $usedIds);
+        foreach ($order->orderCustomers as $orderCustomer) {
+            $customerData = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+            $data['customers'][] = $customerData;
+            if (in_array($orderCustomer->id, $unused)) {
+                $data['unused'][] = $customerData;
+            }
         }
         return $data;
     }

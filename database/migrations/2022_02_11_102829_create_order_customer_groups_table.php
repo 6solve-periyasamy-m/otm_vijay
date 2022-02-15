@@ -13,12 +13,9 @@ class CreateOrderCustomerGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_customer_groups', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_customer_id')->constrained()->onDelete('CASCADE');
-            $table->foreignId('group_id')->constrained()->onDelete('CASCADE');
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('order_customer_group', function (Blueprint $table) {
+            $table->foreignId('order_customer_id')->nullable();
+            $table->foreignId('group_id')->nullable();
         });
     }
 
