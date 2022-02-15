@@ -70,7 +70,6 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->where('accommodation_inventory_tours.tour_id', $tour->id);
 
-Log::debug('AIT', ['query' => $query->toSql()]);
 
         $result = $query->get();
 
@@ -169,7 +168,6 @@ Log::debug('AIT', ['query' => $query->toSql()]);
         $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)
             ->where('customer_id', $customer_id)
             ->first();
-Log::debug('bookingAccommodation', [$data, $bookingAccommodation]);
         if ($bookingAccommodation) {
             $this->updateGroup($bookingAccommodation, $room_type, $group_id);
         } else {
@@ -180,7 +178,6 @@ Log::debug('bookingAccommodation', [$data, $bookingAccommodation]);
     public function updateAccommodationBooking(Booking $booking, $customer_id, $room_type, $group_id)
     {
       $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)->where('customer_id', $customer_id)->first();
-      Log::debug('BookingAccommodationUpdate:', [$bookingAccommodation]);
       $bookingAccommodation->room_type_id = $room_type;
       $bookingAccommodation->group_id = isset($group_id) ? $group_id : 0;
       try {
