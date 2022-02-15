@@ -3,6 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\OrderCustomer;
 use App\Models\PaymentMethod;
 use App\Models\Quote;
@@ -51,13 +52,20 @@ class OrderTransforms implements OrderTransformsInterface
         return $data;
     }
 
-    public static function getSelectCustomers($filter)
+    public static function getSelectCustomers($filter, Order $order = null)
     {
         $data = [];
+        $used = [];
+        if (isset($order)) {
+            foreach ($order->orderCustomers as $oCustomer) {
+                $used[] = $oCustomer->customer->id;
+            }
+        }
         foreach (Customer::all() as $customer) {
             $subData = [];
             $subData['id'] = $customer->id;
             $subData['text'] = $customer->first_name . ' ' . $customer->last_name . ' - ' . $customer->email_address;
+            if (in_array($customer->id, $used)) continue;
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;

@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Models\AccommodationInventoryTour;
 use App\Models\ActivityInventoryTour;
 use App\Models\FlightInventoryTour;
+use App\Models\Order;
 use App\Models\OrderCustomer;
 use App\Models\TransportInventoryTour;
 use App\Transforms\ActivityTransforms;
@@ -203,6 +204,11 @@ class SelectController extends ApiController
     public function getCustomers(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return OrderTransforms::getSelectCustomers($filter);
+    }
+
+    public function getAvailableCustomers(Request $request, Order $order) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return OrderTransforms::getSelectCustomers($filter, $order);
     }
 
     public function getSelectedCustomer($id) {

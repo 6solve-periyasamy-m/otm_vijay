@@ -114,6 +114,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('airlines', [SelectController::class, 'getAirlines'])->name('airlines.select');
         Route::post('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
         Route::post('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
+        Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
         Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');

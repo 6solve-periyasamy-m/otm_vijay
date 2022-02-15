@@ -1,5 +1,6 @@
 let {{ $field }}Select = $('.{{ $field }}-input');
 {{ $field }}Select.select2({
+    placeholder: "Please Select a Value",
     ajax: {
         url: '{{ $fullRoute ?? route('api.' . $route . '.select') }}',
         data: function (params) {

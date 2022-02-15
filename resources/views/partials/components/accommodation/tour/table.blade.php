@@ -35,13 +35,15 @@
             let row = accommodationTable.row(rowIdx);
             ids.push(row.data().id);
         });
+        if (ids.length <= 0) return alert('No components are selected');
         $.ajax({
             type: "POST",
             url: "{{ route('api.tour.accommodation.inventory.add', ['tour' => $tour,]) }}",
             dataType: "json",
             statusCode: {
                 200: function () { alert('Components added successfully'); accommodationTable.ajax.reload(); },
-                400: function () { alert('An incorrect component type has been provided'); }
+                400: function () { alert('An incorrect component type has been provided'); },
+                403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
             data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
@@ -52,12 +54,11 @@
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select accommodation-component-type-select">
         <option value="Included" selected>Included</option>
-        <option value="Upgrade">Upgrade</option>
         <option value="Add-on">Add-on</option>
     </select>
     <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
         <i class="icon-plus"></i>
-        <span>Add Components</span>
+        <span>Add Selected Rows</span>
     </a>
 </div>
 @endcan

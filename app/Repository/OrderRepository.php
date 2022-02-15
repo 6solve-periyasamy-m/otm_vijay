@@ -3,8 +3,6 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Mail\PaymentDueMailable;
-use App\Mail\PaymentOverdueMailable;
 use App\Models\Customer;
 use App\Models\Merchandise;
 use App\Models\Order;
@@ -15,13 +13,11 @@ use App\Models\OrderFlight;
 use App\Models\OrderInstallment;
 use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
-use App\Models\PaymentInstallment;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class OrderRepository
 {
@@ -250,7 +246,7 @@ class OrderRepository
     }
 
     public static function snapshotInstallments(Order $order) {
-        $data = [['due' => 'With Order', 'amount' => $order->deposit, 'paid' => $order->paid >= $order->deposit, ]];
+        $data = [['due' => 'With Order', 'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit, ]];
         foreach ($order->installments as $installment) {
             $data[] = ['due' => $installment->due_on, 'amount' => $installment->amount, 'paid' => $installment->paid,];
         }
@@ -449,7 +445,7 @@ class OrderRepository
         if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
                 return -3;
-            } else if ($paidAmount <= $order->deposit) {
+            } else if ($paidAmount <= $order->calculated_deposit) {
                 return -2;
             } else {
                 return -1;
@@ -490,7 +486,7 @@ class OrderRepository
             $total += $customerValue;
             $breakdown['customers'][] = $customerData;
         }
-        $breakdown['deposit'] = $order->deposit;
+        $breakdown['deposit'] = $order->calculated_deposit;
         $breakdown['total'] = $total;
         return $breakdown;
     }
@@ -556,12 +552,12 @@ class OrderRepository
         $paid = self::getTotalPaid($order);
         $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $paid -= self::getTotalAdjustedValue($order);
-        $paid -= $order->deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
+        $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         foreach ($order->installments as $installment) {
-            $paid -= ($installment->amount * $order->getCustomerCount());
+            $paid -= $installment->calculated_amount;
             if ($paid < 0) {
                 return [
-                    'amount' => $installment->amount < $paid * -1 ? $installment->amount : $paid * -1,
+                    'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
@@ -637,7 +633,7 @@ class OrderRepository
         }
         $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId, 'cost' => $merchandise->tour_sales_price,]);
         $oCustomer->orderMerchandise()->save($oMerch);
-        event(new OrderCustomerComponentAddedEvent($omerch));
+        event(new OrderCustomerComponentAddedEvent($oMerch));
         return $oMerch;
     }
 
@@ -658,9 +654,10 @@ class OrderRepository
     /**
      * Sends an email reminder of a due installment
      * @param Order $order
-     * @param PaymentInstallment $installment
+     * @param OrderInstallment $installment
+     * @param int $days
      */
-    public static function sendReminderEmail(Order $order, OrderInstallment $installment)
+    public static function sendReminderEmail(Order $order, OrderInstallment $installment, int $days)
     {
         PaymentReminder::create([
             'order_id' => $order->id,
@@ -668,9 +665,9 @@ class OrderRepository
             'period' => $days
         ]);
         if ($days < 0) {
-            Mail::to($order->leadBooker->email_address)->send(new PaymentOverdueMailable($order));
+            MailRepository::sendMailable('payment-overdue', $order->leadBooker->email, $order);
         } else {
-            Mail::to($order->leadBooker->email_address)->send(new PaymentDueMailable($order));
+            MailRepository::sendMailable('payment-due', $order->leadBooker->email, $order);
         }
     }
 
@@ -716,9 +713,9 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->deposit;
+        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->calculated_deposit;
         foreach ($order->installments as $orderInstallment) {
-            $paid -= $orderInstallment->amount;
+            $paid -= $orderInstallment->calculated_amount;
             if ($paid < 0) return false;
             if ($orderInstallment->id == $installment->id) return true;
         }

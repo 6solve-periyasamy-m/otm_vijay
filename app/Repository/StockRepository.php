@@ -10,7 +10,7 @@ use App\Models\TransportInventory;
 
 class StockRepository
 {
-    // TODO: Implement checking for order cancellation
+    // Possible Optimization: SQL count query rather than O(n^2) nested for loops
 
     /**
      * Get the amount of used stock for an AccommodationInventory
@@ -21,7 +21,9 @@ class StockRepository
     {
         $used = 0;
         foreach ($inventory->tourComponents as $component) {
-            $used += $component->orders()->count();
+            foreach ($component->orders as $orderComponent) {
+                if (!$orderComponent->isCancelled()) $used++;
+            }
         }
         return $used;
     }
@@ -35,7 +37,9 @@ class StockRepository
     {
         $used = 0;
         foreach ($inventory->tourComponents as $component) {
-            $used += $component->orders()->count();
+            foreach ($component->orders as $orderComponent) {
+                if (!$orderComponent->isCancelled()) $used++;
+            }
         }
         return $used;
     }
@@ -49,7 +53,9 @@ class StockRepository
     {
         $used = 0;
         foreach ($inventory->flightInventoryTour as $component) {
-            $used += $component->orders()->count();
+            foreach ($component->orders as $orderComponent) {
+                if (!$orderComponent->isCancelled()) $used++;
+            }
         }
         return $used;
     }
@@ -63,7 +69,9 @@ class StockRepository
     {
         $used = 0;
         foreach ($inventory->tourComponents as $component) {
-            $used += $component->orders()->count();
+            foreach ($component->orders as $orderComponent) {
+                if (!$orderComponent->isCancelled()) $used++;
+            }
         }
         return $used;
     }
@@ -77,7 +85,7 @@ class StockRepository
     {
         $used = 0;
         foreach ($tour->orders as $order) {
-            $used += $order->orderCustomers()->count();
+            if (!$order->cancelled) $used++;
         }
         return $used;
     }

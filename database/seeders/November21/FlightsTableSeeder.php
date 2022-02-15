@@ -31,7 +31,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-02-04 23:24:30',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             1 => 
             array (
@@ -45,7 +45,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-02-21 14:25:59',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             2 => 
             array (
@@ -59,7 +59,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-02-22 07:41:52',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             3 => 
             array (
@@ -73,7 +73,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-02-26 08:04:14',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             4 => 
             array (
@@ -87,7 +87,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-02-26 08:04:42',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             5 => 
             array (
@@ -101,7 +101,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-02-26 08:06:09',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             6 => 
             array (
@@ -115,7 +115,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 07:51:24',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             7 => 
             array (
@@ -129,7 +129,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 07:57:25',
                 'deleted_at' => NULL,
                 'currency' => 'UKP',
-                'available_after' => NULL,
+                'available_from' => NULL,
             ),
             8 => 
             array (
@@ -143,7 +143,7 @@ class FlightsTableSeeder extends Seeder
                 'updated_at' => '2021-03-08 07:58:01',
                 'deleted_at' => NULL,
                 'currency' => '£',
-                'available_after' => '2021-03-31',
+                'available_from' => '2021-03-31',
             ),
         ));
         

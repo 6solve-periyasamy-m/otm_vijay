@@ -94,10 +94,10 @@
                             With Order
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatCurrency($order->deposit) }}
+                            {{ StringFormatter::formatCurrency($order->calculated_deposit) }}
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatBoolean($order->deposit <= $order->paid) }}
+                            {{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}
                         </div>
                     </div>
                     @foreach($order->installments as $installment)
@@ -109,7 +109,7 @@
                                 {{ StringFormatter::formatDate($installment->due_on) }}
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatCurrency($installment->amount) }}
+                                {{ StringFormatter::formatCurrency($installment->calculated_amount) }}
                             </div>
                             <div class="col-3">
                                 {{ StringFormatter::formatBoolean($installment->paid) }}
