@@ -47,6 +47,7 @@ Route::prefix('booking')->group(function () {
     Route::post('/transports/booking', [TransportController::class, 'updateTransports']);
 
     // Accommodation
+    Route::get('/accommodation/groups', [AccommodationController::class, 'getAccommodationGroups']);
     Route::get('/accommodation/inventory/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
     Route::get('/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
     Route::get('/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);

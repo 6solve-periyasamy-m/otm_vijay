@@ -12,6 +12,7 @@ use App\Models\Tour;
 use App\Models\RoomType;
 use App\Models\OrderCustomer;
 use App\Models\CustomerOrderDetail;
+use App\Models\AccommodationGroup;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 
@@ -40,6 +41,12 @@ class AccommodationController extends ApiController
         return response()->json(['success' => true, 'options' => [ 'room_types' => $room_types ]]);
     }
 
+    public function getAccommodationGroups()
+    {
+        $groups = AccommodationGroup::get();
+
+        return response()->json(['success' => true, 'groups' => $groups]);
+    }
 
     /**
      * getAccommodationForTour
@@ -127,7 +134,8 @@ Log::debug('postAccommodationReservation', [$token, $travellers]);
         foreach($travellers as $traveller) {
           $customer_id = isset($traveller['id']) ? $traveller['id'] : null;
           $room_type = isset($traveller['room_type']) ? $traveller['room_type'] : null;
-          $group = isset($traveller['group']) ? $group : null;
+          $group = isset($traveller['group']) ? $traveller['group'] : null;
+
           if (isset($customer_id) && isset($traveller['room_type'])) {
             $status[] = $accommodationRepository->makeAccommodationBooking([$token, $customer_id, $room_type, $group]);
           }

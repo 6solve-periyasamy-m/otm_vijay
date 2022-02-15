@@ -120,7 +120,7 @@ Log::debug('AIT', ['query' => $query->toSql()]);
         if ($current->count() === 1) {
             $updateBooking = $current[0];
             $updateBooking->room_type = $booking->room_type;
-            $updateBooking->group = $booking->group;
+            $updateBooking->group_id = $booking->group_id;
             $updateBooking->save();
             return true;
         }
@@ -128,23 +128,25 @@ Log::debug('AIT', ['query' => $query->toSql()]);
         return true;
     }
 
-    private function updateGroup($bookingAccommodation, $group) 
+    private function updateGroup($bookingAccommodation, $room_type, $group_id) 
     {
-      $bookingAccommodation->group = $group;
+      $bookingAccommodation->room_type_id = $room_type;
+      $bookingAccommodation->group_id = $group_id;
       try {
         $bookingAccommodation->save();
         return true;
       } catch (Exception $e) {
-        Log::error('DB Error updating BookingAccommodation record', $e->getMessage());
+        Log::error('DB Error updating BookingAccommodation '. $e->getMessage());
         return false;
       }
     }
 
-    private function create($booking, $customer_id, $room_type, $group) {
+    private function create($booking, $customer_id, $room_type, $group_id) {
       $bookingAccommodation = new BookingAccommodation();
       $bookingAccommodation->booking_id = $booking->id;
+      $bookingAccommodation->customer_id = $customer_id;
       $bookingAccommodation->room_type_id = $room_type;
-      $bookingAccommodation->group = $group;
+      $bookingAccommodation->group_id = isset($group_id) ? $group_id : 0;
 
       try {
         $bookingAccommodation->save();
@@ -157,7 +159,7 @@ Log::debug('AIT', ['query' => $query->toSql()]);
 
     public function makeAccommodationBooking(Array $data) 
     {
-        list($token, $customer_id, $room_type, $group) = $data;
+        list($token, $customer_id, $room_type, $group_id) = $data;
         
         $booking = BookingRepository::findBooking($token);
         if (empty($booking)) {
@@ -166,22 +168,21 @@ Log::debug('AIT', ['query' => $query->toSql()]);
         }
         $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)
             ->where('customer_id', $customer_id)
-            ->where('room_type_id', $room_type)
             ->first();
-
+Log::debug('bookingAccommodation', [$data, $bookingAccommodation]);
         if ($bookingAccommodation) {
-            $this->updateGroup($bookingAccommodation, $group);
+            $this->updateGroup($bookingAccommodation, $room_type, $group_id);
         } else {
-            $this->create($booking, $customer_id, $room_type, $group);
+            $this->create($booking, $customer_id, $room_type, $group_id);
         }
     }
 
-    public function updateAccommodationBooking(Booking $booking, $customer_id, $room_type, $group)
+    public function updateAccommodationBooking(Booking $booking, $customer_id, $room_type, $group_id)
     {
       $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)->where('customer_id', $customer_id)->first();
       Log::debug('BookingAccommodationUpdate:', [$bookingAccommodation]);
       $bookingAccommodation->room_type_id = $room_type;
-      $bookingAccommodation->group = $group;
+      $bookingAccommodation->group_id = isset($group_id) ? $group_id : 0;
       try {
           $booking->save();
       } catch (Exception $e) {

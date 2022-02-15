@@ -30,7 +30,7 @@
                             <span v-if="occupancy(traveller.room_type) > 1">
                                 <select v-model="traveller.group">
                                     <option default value="0">Share group selection</option>
-                                    <option v-for="group in groups" :key="group">{{group}}</option>
+                                    <option v-for="group in groups" :value="group.id" :key="group.id">{{group.name}}</option>
                                 </select>
                             </span>
                         </div>
@@ -59,9 +59,7 @@ export default {
             initTravellers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
             room_type: {},
-            groups: ['Primary', 
-            'Couple 1', 'Couple 2', 'Couple 3', 'Couple 4', 'Couple 5', 'Couple 6', 
-            'Secondary', 'Family', 'Friends'] //Array.from(Array(20).keys()),
+            groups: []
         }
     },
     created() {
@@ -79,11 +77,17 @@ export default {
     },
     mounted() {
       this.getAccommodationOptions()
+      this.getAccommodationGroups()
     },
     methods: {
         setAccommodation() {
           let that = this
           // booking the accommodation options in the booking_accommodations table
+            this.travellers.map(t => {
+              if (t.room_type === 1) {
+                t.group = 0;
+              }
+            })
             console.log('setAccommodation', this.booking_token, this.travellers)
             axios.post(`/api/booking/accommodation/reserve`, {
                 token : this.booking_token,
@@ -97,7 +101,7 @@ export default {
         },
         resetAccommodation() {
             this.travellers = this.initTravellers
-            this.travellers.map(t => Vue.set(t, 'group', '0'))
+            this.travellers.map(t => Vue.set(t, 'group_id', '0'))
             this.travellers.map(t => Vue.set(t, 'room_type', '0'))
             // console.log('resetAccommodation',this.travellers)
         },
@@ -113,8 +117,14 @@ export default {
         toggleAccommodation() {
             this.showAccommodation = !this.showAccommodation
         },
+        getAccommodationGroups() {
+          const that = this
+          axios.get('/api/booking/accommodation/groups')
+              .then(response => that.groups = response.data.groups)
+              .catch(error => console.log('error getting groups', error))
+        },
         getAccommodationOptions() {
-            const that = this;
+            const that = this
             const url = `/api/booking/accommodation/options/${this.tour.id}`
             axios.get(url)
                 .then(response => {
