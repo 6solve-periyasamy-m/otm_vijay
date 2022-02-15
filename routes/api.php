@@ -53,6 +53,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
     Route::post('/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
     //Route::post('/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
+    Route::post('/accommodation/reset', [AccommodationController::class, 'deleteAccommodationReservation']);
     Route::post('/accommodation/delete', [AccommodationController::class, 'deleteAccommodationReservation']);
     // accommodation rooms
     Route::get('/accommodation/booking/{token}/tour/{tour}', [AccommodationController::class, 'getAccommodationBooking']);

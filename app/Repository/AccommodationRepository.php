@@ -191,15 +191,13 @@ Log::debug('bookingAccommodation', [$data, $bookingAccommodation]);
 
       return $booking;
     }
+
     public function remove(Booking $booking)
     {
       try {
-          $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)->where('customer_id', $customer_id)->first();
-          if ($bookingAccommodation) {
-             $bookingAccommodation->delete();
-          }
+          $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)->delete();
       } catch (Exception $e) {
-          Log::error('Error updating AccommodationBooking '.$booking->id, $e->getMessage());
+          Log::error('Error updating AccommodationBooking '.$booking->id. $e->getMessage());
           return false;
       }
 

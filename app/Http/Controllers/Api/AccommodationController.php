@@ -147,15 +147,15 @@ Log::debug('postAccommodationReservation', [$token, $travellers]);
 
     public function deleteAccommodationReservation(Request $request)
     {
-        $groupIds = $request->groupIds;
-        $inventoryTourIds = $request->inventoryTourIds;
-        $tour_id = $request->tour_id;
-        Log::info('deleting Accommodation Reservation for group', $groupIds);
-        Log::info('inventory Tour IDs', $inventoryTourIds);
-        Log::info('delete for tour '. $tour_id);
-        $accommodationRepository = new AccommodationRepository();
-        $accommodationRepository->remove($inventoryTourIds, $groupIds);
-        Log::info('deleteAccommodationReservation'); //, $group);
+      $token = $request->token;
+      $travellers = $request->travellers;
+      $bookings = new BookingRepository();
+      $booking = $bookings->findBookingByToken($token);
+      Log::debug('removing '.$token, [$booking]);
+      $accommodationRepository = new AccommodationRepository();
+      $accommodationRepository->remove($booking);
+
+      return response()->json(['success' => true]);
     }
 
     public function addAccommodationInventoryToTour(Request $request, Tour $tour) {

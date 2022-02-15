@@ -103,7 +103,12 @@ export default {
             this.travellers = this.initTravellers
             this.travellers.map(t => Vue.set(t, 'group_id', '0'))
             this.travellers.map(t => Vue.set(t, 'room_type', '0'))
-            // console.log('resetAccommodation',this.travellers)
+            axios.post('/api/booking/accommodation/reset', {
+                token: this.booking_token,
+                travellers: this.travellers
+              })
+              .then(response => this.travellers = this.initTravellers)
+              .catch(error => console.log(error))
         },
         occupancy(id) {
           const item = this.room_types.filter(type => type.id === id);
