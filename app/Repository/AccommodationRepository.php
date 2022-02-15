@@ -165,7 +165,55 @@ Log::debug('AIT', ['query' => $query->toSql()]);
         return true;
     }
 
-    public function updateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id)
+    private function updateGroup($bookingAccommodation, $group) 
+    {
+      $bookingAccommodation->group = $group;
+      try {
+        $bookingAccommodation->save();
+        return true;
+      } catch (Exception $e) {
+        Log::error('DB Error updating BookingAccommodation record', $e->getMessage());
+        return false;
+      }
+    }
+    private function create($booking, $customer_id, $room_type, $group) {
+      $bookingAccommodation = new BookingAccommodation();
+      $bookingAccommodation->booking_id = $booking->id;
+      $bookingAccommodation->room_type_id = $room_type;
+      $bookingAccommodation->group = $group;
+      try {
+        $bookingAccommodation->save();
+        return true;
+      } catch (Exception $e) {
+        Log::error('DB Error creating BookingAccommodation record', $e->getMessage());
+        return false;
+      }
+    }
+
+    public function makeAccommodationBooking(Array $data) 
+    {
+        list($token, $customer_id, $room_type, $group) = $data;
+        
+        $booking = BookingRepository::findBooking($token);
+        $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)
+            ->where('customer_id', $customer_id)
+            ->where('room_type_id', $room_type)
+            ->first();
+        if ($bookingAccommodation) {
+            $bookingAccommodation->updateGroup($bookingAccommodation, $group);
+        } else {
+            $bookingAccommodation->create($booking, $customer_id, $room_type, $group);
+        }
+    }
+
+    public function updateAccommodationBooking(Booking $booking, $customer_id, $room_type)
+    {
+      $bookingAccommodation = BookingAccommodation::where('booking_id', $booking->id)->where('customer_id', $customer_id)->first();
+      Log::debug('BookingAccommodationUpdate:', [$bookingAccommodation]);
+
+    }
+
+    public function OLDupdateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id)
     {
         /**
          * customer_id books room

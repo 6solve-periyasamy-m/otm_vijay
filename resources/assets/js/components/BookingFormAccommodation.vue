@@ -23,12 +23,12 @@
                         <div class="col">
                             <select v-model="traveller.room_type">
                                 <option default value="0">Select a room type</option>
-                                <option v-for="room in room_types" :value="room.name">{{room.name}}</option>
+                                <option v-for="room in room_types" :value="room.id" :key="room.id">{{room.name}}</option>
                             </select>
                         </div>
                         <div class="col">
                             <span v-if="occupancy(traveller.room_type) > 1">
-                                <select v-model="traveller.group_id">
+                                <select v-model="traveller.group">
                                     <option default value="0">Share group selection</option>
                                     <option v-for="group in groups" :key="group">{{group}}</option>
                                 </select>
@@ -59,7 +59,9 @@ export default {
             initTravellers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
             room_type: {},
-            groups: Array.from(Array(100).keys()),
+            groups: ['Primary', 
+            'Couple 1', 'Couple 2', 'Couple 3', 'Couple 4', 'Couple 5', 'Couple 6', 
+            'Secondary', 'Family', 'Friends'] //Array.from(Array(20).keys()),
         }
     },
     created() {
@@ -83,7 +85,10 @@ export default {
           let that = this
           // booking the accommodation options in the booking_accommodations table
             console.log('setAccommodation', this.travellers)
-            axios.post(`/accommodation/${tour}/booking/${token}`, this.travellers)
+            axios.post(`/api/booking/accommodation/reserve`, {
+                travellers :  this.travellers, 
+                token : this.token
+              })
               .then(response => {
                 that.showAccommodation = false
                 console.log(response)
@@ -92,22 +97,18 @@ export default {
         },
         resetAccommodation() {
             this.travellers = this.initTravellers
-            this.travellers.map(t => Vue.set(t, 'group_id', '0'))
+            this.travellers.map(t => Vue.set(t, 'group', '0'))
             this.travellers.map(t => Vue.set(t, 'room_type', '0'))
             // console.log('resetAccommodation',this.travellers)
         },
-        occupancy(name) {
-          const item = this.room_types.filter(type => type.name == name);
-          console.log('max=', item)
-          const record = item.find(i => i.name === name)
+        occupancy(id) {
+          const item = this.room_types.filter(type => type.id === id);
+          const record = item.find(i => i.id === id)
           if (record) {
              return record.maximum_occupancy
           } else {
              return 1
           }
-        },
-        assignGroups() {
-            return [1,2,3,4,5]
         },
         toggleAccommodation() {
             this.showAccommodation = !this.showAccommodation

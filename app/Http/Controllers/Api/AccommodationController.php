@@ -106,9 +106,8 @@ Log::debug('accommodation booked', [$booked]);
      * tour: id, event_id
      * traveller: customer_id, order_id, room, shared, shares
      * customer_id is the key for order_customer
-     * room: accommodation_inventory_id, board_type_id/_name, check_in, maximum_occupancy, 
-     * shared: { traveller_id: shares[names]}
-     * shares: [[IDs (match with names)]]
+     * room_type: the ID of the room type desired
+     * group: the label of the selected share group
      * Create a COD record but associate a secondary record for accommodation intent
      * customer_order_details_id
      * @param Request $request
@@ -116,25 +115,25 @@ Log::debug('accommodation booked', [$booked]);
      */
     public function postAccommodationReservation(Request $request)
     {
-        $traveller = $request->traveller;
-        $accommodation_inventory_tour_id = $request->accommodation_inventory_tour_id;
-        $booking_token = $request->token;
-        $bookings = new BookingRepository();
-        $booking = $bookings->findBookingByToken($booking_token);
+        $travellers = $request->travellers;
+        $token = $request->token;
 
-Log::debug('postAccommodationReservation id, traveller contains: ', [$accommodation_inventory_tour_id, $traveller]);
-        $customer_id = $traveller['customer_id'];
-        $room = isset($traveller['room']) ? $traveller['room'] : null;
-        // $shares = [$traveller['shares']];
-        // foreach ($shares as $key => $value) {
-        //     $shared[$key] = $shares[$key];
-        // }
+        $bookings = new BookingRepository();
+        $booking = $bookings->findBookingByToken($token);
 
         $accommodationRepository = new AccommodationRepository();
-        $results = $accommodationRepository->updateAccommodationBooking($booking, $room, $traveller, $customer_id, $accommodation_inventory_tour_id);
- Log::debug('updateAccommodationBooking Results', [$results]);
+        $status = [];
+        foreach($travellers as $traveller) {
+          $customer_id = isset($traveller['id']) ? $traveller['id'] : null;
+          $room_type = isset($traveller['room_type']) ? $traveller['room_type'] : null;
+          $group = isset($traveller['group') ? $group : null;
+          if (isset($customer_id) && isset('room_type') {
+            $status[] = $accommodationRepository->makeAccommodationBooking([$token, $customer_id, $room_type, $group]);
+          }
+        }
+        $status = in_array(false, $status);
 
-        return response()->json(['success' => true, 'accommodation' => $results]);
+        return response()->json(['success' => $status);
     }
 
     public function deleteAccommodationReservation(Request $request)
