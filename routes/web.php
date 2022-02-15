@@ -722,4 +722,4 @@ Route::prefix('payment')->name('payment.')->group(function () {
     });
 });
 
-Route::get('/occupancy', function () { return view('pages.occupancy.manager'); });
+Route::get('/occupancy/{order}', function (Order $order) { return view('pages.occupancy.manager', OrderRepository::exportRoomingData($order)); });

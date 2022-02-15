@@ -755,7 +755,7 @@ class OrderRepository
         try {
             DB::beginTransaction();
             $inflated = self::inflateRoomingData($data);
-            foreach ($order->groups as $group) { $group->delete(); }
+            foreach ($order->groups() as $group) { $group->delete(); }
             foreach ($inflated as $groupData) {
                 $group = Group::create([
                     'room_type_id' => $groupData->room_type->id,
@@ -813,4 +813,43 @@ class OrderRepository
             ]);
         }
     }
+
+    public static function exportRoomingData(Order $order): array
+    {
+        $groups = [];
+        $usedIds = [];
+        foreach ($order->groups() as $group) {
+            $grouping = ['room_type' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
+            $customers = [];
+            foreach ($group->orderCustomers as $orderCustomer) {
+                $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+                $usedIds[] = $orderCustomer->id;
+            }
+            $grouping['customers'] = $customers;
+            $groups[] = $grouping;
+        }
+        $data['rooms'] = [];
+        foreach (AccommodationComponentRepository::getAvailableRoomTypes($order->tour) as $roomType) {
+            $data['rooms'][] = ['id' => $roomType->id, 'name' => $roomType->name, 'size' => $roomType->maximum_occupancy, ];
+        }
+        $data['groups'] = $groups;
+        $data['unused'] = [];
+        foreach (array_diff(self::getOrderCustomerIds($order), $usedIds) as $customerId) {
+            $orderCustomer = OrderCustomer::find($customerId);
+            $data['unused'][] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+        }
+        return $data;
+    }
+
+    private static function getOrderCustomerIds(Order $order): array
+    {
+        $query = DB::table('order_customers')->where('order_id', '=', $order->id)->select('id');
+        $ids = [];
+        foreach ($query->get() as $result) {
+            $ids[] = $result->id;
+        }
+        return $ids;
+    }
+
+
 }

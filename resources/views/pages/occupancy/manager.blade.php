@@ -1,10 +1,5 @@
 @extends('layout.master')
 
-@php
-    $customers = [1 => 'John', 2 => 'Paul', 3 => 'George', 4 => 'Ringo', 5 => 'Yoko'];
-    $roomTypes = ['Double' => 2, 'Single' => 1, 'Triple' => 3];
-@endphp
-
 @section('title', 'Occupancy Manager')
 
 @push('header-stack')
@@ -26,9 +21,10 @@
             padding: 2px;
             border: 1px solid black;
             width: fit-content;
-            min-width: 75px;
-            height: 75px;
+            max-width: 100px;
+            height: 100px;
             margin: 2px;
+            text-wrap: normal;
         }
         .room {
             border: 1px solid black;
@@ -40,8 +36,8 @@
             border: 1px solid black;
             padding: 2px;
             margin: 2px;
-            width: 100px;
-            height: 100px;
+            width: 125px;
+            height: 125px;
             display: inline-block;
         }
         .image {
@@ -58,8 +54,8 @@
             <div class="customers col-12 col-xl-9"></div>
             <div class="col-12 col-xl-3">
                 <select class="room-types">
-                    @foreach($roomTypes as $name => $size)
-                        <option value="{{ $size }}">{{ $name }}</option>
+                    @foreach($rooms as $data)
+                        <option value="{{ $data['id'] }}" name="{{ $data['name'] }}" occupancy="{{ $data['size'] }}">{{ $data['name'] }} - Space: {{ $data['size'] }}</option>
                     @endforeach
                 </select>
                 <a href="#" class="btn btn-danger" onclick="reset()">Reset</a>
@@ -71,11 +67,64 @@
     </div>
 @endsection
 
+{{-- Initialize JavaScript Variables --}}
+@push('footer-stack')
+    <script type="text/javascript">
+        let customerBox = $('.customers');
+        let manager = $('.manager');
+        let customers = {
+            @foreach($unused as $data)
+                    {{ $data['id'] }}: {'name': '{{ $data['name'] }}', 'avatar': '{{ $data['avatar'] }}'},
+            @endforeach
+            @foreach($groups as $group)
+                @if(key_exists('customers', $group))
+                    @foreach($group['customers'] as $data)
+                        {{ $data['id'] }}: {'name': '{{ $data['name'] }}', 'avatar': '{{ $data['avatar'] }}'},
+                    @endforeach
+                @endif
+            @endforeach
+        };
+    </script>
+@endpush
+
+{{-- Builder Functions --}}
+@push('footer-stack')
+    <script type="text/javascript">
+        function createCustomerBox(id, name, avatar) {
+            return '<div class="customer customer-' + id + '" customer="' + name + '"><img src="' + avatar + '" class="image"/><br />' + name + '</div>';
+        }
+        function createRoomBox(id, name, size, customers = null) {
+            let bedString = '';
+            if (customers != null) {
+                for (let customer in customers) {
+                    bedString += '<div class="bed">' + createCustomerBox(customer, customers[customer]['name'], customers[customer]['avatar']) + '</div>'
+                }
+            } else {
+                for (let i = 0; i < size; i++) {
+                    bedString += '<div class="bed"></div>'
+                }
+            }
+            return '<div class="room" typeid="' + id + '">' + name + bedString + '</div>';
+        }
+    </script>
+@endpush
+
+{{-- Functionality --}}
 @push('footer-stack')
 <script type="text/javascript">
-    let customerBox = $('.customers');
-    let manager = $('.manager');
-    let customers = {@foreach($customers as $id => $name) {{ $id }}: '{{ $name }}', @endforeach}
+    function initialize() {
+        let groups = {
+                @foreach($groups as $group)
+                    [
+                    @if(key_exists('customers', $group))
+                        @foreach($group['customers'] as $data)
+                            { {{ $data['id'] }}: {'name': '{{ $data['name'] }}', 'avatar': '{{ $data['avatar'] }}'} },
+                        @endforeach
+                    @endif
+                    ]
+                @endforeach
+        }
+    }
     function reset() {
         customerBox.empty();
         manager.empty();
@@ -83,18 +132,15 @@
     }
     function build() {
         for (let customer in customers) {
-            customerBox.append('<div class="customer customer-' + customer + '" customer="' + customers[customer] + '"><img src="{{ asset('images/exampleavatar.jpg') }}" class="image"></img><br />' + customers[customer] + '</div>');
+            customerBox.append(createCustomerBox(customer, customers[customer]['name'], customers[customer]['avatar']));
         }
         $('.customer').draggable({ revert: 'invalid', });
     }
+
     function addRoom() {
         let selected = $('.room-types').find(':selected')
         if ($('.bed').length + parseInt(selected.val()) > Object.keys(customers).length) return alert('Cannot add more rooms!');
-        let bedString = '';
-        for (let i = 0; i < selected.val(); i++) {
-            bedString += '<div class="bed"></div>'
-        }
-        manager.append('<div class="room" typeid="' + selected.val() + '">' + selected.text() + bedString + '</div>')
+        manager.append(createRoomBox(selected.val(), selected.attr('name'), selected.attr('occupancy')))
         $('.bed').droppable({
             accept: function (element) {
                 return !$(this).is(':parent');
@@ -104,6 +150,7 @@
             }
         })
     }
+
     function submit() {
         let alrt = '';
         $('.room').each(function (index) {
