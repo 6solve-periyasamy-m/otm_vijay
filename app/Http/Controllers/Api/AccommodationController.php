@@ -54,7 +54,7 @@ class AccommodationController extends ApiController
         $accommodationRepository = new AccommodationRepository();
         $result = $accommodationRepository->getAccommodationInventoryForTour($tour);
 
-        Log::info('getAccommodationInventoryForTour', $result->toArray());
+        Log::debug('getAccommodationInventoryForTour', $result->toArray());
 
         return response()->json(["success" => true, 'accommodations' => $result]);
     }
@@ -86,7 +86,8 @@ class AccommodationController extends ApiController
 
         $accommodationRepository = new AccommodationRepository();
         $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
-Log::debug('accommodation booked', [$booked]);
+
+Log::debug('accommodation booking: ', [$booking, $ids]);
         return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
@@ -117,7 +118,7 @@ Log::debug('accommodation booked', [$booked]);
     {
         $travellers = $request->travellers;
         $token = $request->token;
-
+Log::debug('postAccommodationReservation', [$token, $travellers]);
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($token);
 
@@ -126,14 +127,14 @@ Log::debug('accommodation booked', [$booked]);
         foreach($travellers as $traveller) {
           $customer_id = isset($traveller['id']) ? $traveller['id'] : null;
           $room_type = isset($traveller['room_type']) ? $traveller['room_type'] : null;
-          $group = isset($traveller['group') ? $group : null;
-          if (isset($customer_id) && isset('room_type') {
+          $group = isset($traveller['group']) ? $group : null;
+          if (isset($customer_id) && isset($traveller['room_type'])) {
             $status[] = $accommodationRepository->makeAccommodationBooking([$token, $customer_id, $room_type, $group]);
           }
         }
         $status = in_array(false, $status);
 
-        return response()->json(['success' => $status);
+        return response()->json(['success' => $status]);
     }
 
     public function deleteAccommodationReservation(Request $request)

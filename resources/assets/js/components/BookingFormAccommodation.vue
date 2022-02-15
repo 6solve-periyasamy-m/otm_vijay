@@ -84,10 +84,10 @@ export default {
         setAccommodation() {
           let that = this
           // booking the accommodation options in the booking_accommodations table
-            console.log('setAccommodation', this.travellers)
+            console.log('setAccommodation', this.booking_token, this.travellers)
             axios.post(`/api/booking/accommodation/reserve`, {
-                travellers :  this.travellers, 
-                token : this.token
+                token : this.booking_token,
+                travellers :  this.travellers 
               })
               .then(response => {
                 that.showAccommodation = false
