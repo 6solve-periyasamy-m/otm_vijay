@@ -23,7 +23,7 @@ use App\Repository\BookingRepository;
 class AccommodationController extends ApiController
 {
     protected $component_type = 'accommodation';
-    private $debug = 4;
+    private $debug = 0;
 
     /***
      * this tour has a range of accommodation options: 
@@ -61,7 +61,7 @@ class AccommodationController extends ApiController
         $accommodationRepository = new AccommodationRepository();
         $result = $accommodationRepository->getAccommodationInventoryForTour($tour);
 
-        Log::debug('getAccommodationInventoryForTour', $result->toArray());
+        $this->debug && Log::debug('getAccommodationInventoryForTour', $result->toArray());
 
         return response()->json(["success" => true, 'accommodations' => $result]);
     }
@@ -94,7 +94,7 @@ class AccommodationController extends ApiController
         $accommodationRepository = new AccommodationRepository();
         $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
 
-Log::debug('accommodation booking: ', [$booking, $ids]);
+        $this->debug && Log::debug('accommodation booking: ', [$booking, $ids]);
         return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
@@ -125,7 +125,7 @@ Log::debug('accommodation booking: ', [$booking, $ids]);
     {
         $travellers = $request->travellers;
         $token = $request->token;
-Log::debug('postAccommodationReservation', [$token, $travellers]);
+        $this->debug && Log::debug('postAccommodationReservation', [$token, $travellers]);
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($token);
 
@@ -151,7 +151,7 @@ Log::debug('postAccommodationReservation', [$token, $travellers]);
       $travellers = $request->travellers;
       $bookings = new BookingRepository();
       $booking = $bookings->findBookingByToken($token);
-      Log::debug('removing '.$token, [$booking]);
+      $this->debug && Log::debug('removing '.$token, [$booking]);
       $accommodationRepository = new AccommodationRepository();
       $accommodationRepository->remove($booking);
 
