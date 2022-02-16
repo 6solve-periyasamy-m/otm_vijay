@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Tour;
 use App\Models\Booking;
 use App\Models\Accommodation;
-use App\Models\CustomerOrderDetail;
 use App\Models\BookingAccommodation;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
@@ -106,29 +105,30 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         return $bookings;
     }
 
-    private function update($booking) 
-    {
+    // NOT BEING USED: probably not needed
+    // private function update($booking) 
+    // {
 
-        $bookingAccommodation = new BookingAccommodation();
-        $current = $bookingAccommodation
-            ->where('customer_id', $booking['customer_id'])
-            ->where('booking_id', $booking['booking_id'])
-            ->get();
+    //     $bookingAccommodation = new BookingAccommodation();
+    //     $current = $bookingAccommodation
+    //         ->where('customer_id', $booking['customer_id'])
+    //         ->where('booking_id', $booking['booking_id'])
+    //         ->get();
 
-        if ($current->count() > 1) {
-            Log::error('BookingAccommodation table has a duplicate record for customer booking', $booking);
-            throw new Exception('more than one accommodation booking record found');
-        }
-        if ($current->count() === 1) {
-            $updateBooking = $current[0];
-            $updateBooking->room_type = $booking->room_type;
-            $updateBooking->group_id = $booking->group_id;
-            $updateBooking->save();
-            return true;
-        }
+    //     if ($current->count() > 1) {
+    //         Log::error('BookingAccommodation table has a duplicate record for customer booking', $booking);
+    //         throw new Exception('more than one accommodation booking record found');
+    //     }
+    //     if ($current->count() === 1) {
+    //         $updateBooking = $current[0];
+    //         $updateBooking->room_type = $booking->room_type;
+    //         $updateBooking->group_id = $booking->group_id;
+    //         $updateBooking->save();
+    //         return true;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     private function updateGroup($bookingAccommodation, $room_type, $group_id) 
     {

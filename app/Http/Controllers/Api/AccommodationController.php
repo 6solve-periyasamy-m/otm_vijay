@@ -109,8 +109,8 @@ class AccommodationController extends ApiController
         $travellers = $request->travellers;
         $token = $request->token;
         $this->debug && Log::debug('postAccommodationReservation', [$token, $travellers]);
-        $bookings = new BookingRepository();
-        $booking = $bookings->findBookingByToken($token);
+        // $bookings = new BookingRepository();
+        // $booking = $bookings->findBookingByToken($token);
 
         $accommodationRepository = new AccommodationRepository();
         $status = [];
