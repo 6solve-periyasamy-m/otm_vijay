@@ -23,7 +23,7 @@ use App\Repository\BookingRepository;
 class AccommodationController extends ApiController
 {
     protected $component_type = 'accommodation';
-    private $debug = 5;
+    private $debug = 0;
 
     /***
      * this tour has a range of accommodation options: 
@@ -35,8 +35,6 @@ class AccommodationController extends ApiController
         $room_types = RoomType::select('id', 'name', 'maximum_occupancy') 
           ->whereNull('deleted_at')
           ->get();
-
-        Log::info('getAccommodationOptions', [$room_types]);
 
         return response()->json(['success' => true, 'options' => [ 'room_types' => $room_types ]]);
     }
