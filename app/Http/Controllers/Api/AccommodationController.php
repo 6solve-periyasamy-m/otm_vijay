@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -10,8 +9,6 @@ use App\Http\Controllers\ApiController;
 
 use App\Models\Tour;
 use App\Models\RoomType;
-use App\Models\OrderCustomer;
-use App\Models\CustomerOrderDetail;
 use App\Models\AccommodationGroup;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
@@ -131,10 +128,15 @@ class AccommodationController extends ApiController
         return response()->json(['success' => $status]);
     }
 
+    /**
+     * deleteAccommodationReservation - clears accommodation booking on reset
+     *
+     * @param Request $request
+     * @return void
+     */
     public function deleteAccommodationReservation(Request $request)
     {
       $token = $request->token;
-      $travellers = $request->travellers;
       $bookings = new BookingRepository();
       $booking = $bookings->findBookingByToken($token);
       $this->debug && Log::debug('removing '.$token, [$booking]);
@@ -144,6 +146,13 @@ class AccommodationController extends ApiController
       return response()->json(['success' => true]);
     }
 
+    /**
+     * addAccommodationInventoryToTour (not booking-form API)
+     *
+     * @param Request $request
+     * @param Tour $tour
+     * @return void
+     */
     public function addAccommodationInventoryToTour(Request $request, Tour $tour) {
         // TODO: Get actual enum values
         if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
