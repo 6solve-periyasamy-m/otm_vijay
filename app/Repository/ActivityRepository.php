@@ -13,6 +13,8 @@ interface ActivityRepositoryInterface
 
 class ActivityRepository implements ActivityRepositoryInterface 
 {
+    private $debug = false;
+
     public function __construct()
     {
         $this->model = new Activity();

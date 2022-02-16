@@ -27,7 +27,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
 
     public function getBookings(Tour $tour = null)
     {
-        Log::debug('get', [$tour]);
         if (isset($tour)) {
             $activities = $this->model
                 ->select(
@@ -48,7 +47,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 ->whereNull('activity_inventories.deleted_at')
                 ->whereNull('activity_inventory_tours.deleted_at')
                 ->get();
-            Log::debug('activities query', [$activities]);
         } else {
             $activities = $this->model->get();
         }
@@ -58,7 +56,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
 
     public function getActivities(Tour $tour = null)
     {
-        Log::debug('get', [$tour]);
         if (isset($tour)) {
             $activity = new Activity();
             $activitiesQuery = $activity
@@ -80,8 +77,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 ->whereNull('activity_inventories.deleted_at')
                 ->whereNull('activity_inventory_tours.deleted_at');
             $activities = $activitiesQuery->get();
-
-            Log::debug('<<<<<<<>>>>>>> activities query', [$activitiesQuery->toSql(), $activities]);
         } else {
             $activities = $this->model->get();
         }

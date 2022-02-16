@@ -16,6 +16,7 @@ class AddressRepository implements AddressRepositoryInterface
 {
     private $model;
     private $fields;
+    private $logging = false;
 
     public function __construct()
     {
@@ -38,14 +39,12 @@ class AddressRepository implements AddressRepositoryInterface
         $address['address_parent_id'] = 1;
         $address['location_type_id'] = 1;
         $address['name'] = ucfirst($type . ' address');
-        Log::info('Create ['.$type.'] address', $address);
         foreach($this->fields as $field) {
             $typedField = $type . '_' . $field;
             $this->model->$field = $address[$field];
         }
         try {
             $this->model->save();
-            Log::info('** saved address', [$this->model]);
             return $this->model;
         } catch (\Exception $e) {
             Log::error("!!! Can not save an address, data: ", [$address]);
@@ -60,7 +59,7 @@ class AddressRepository implements AddressRepositoryInterface
      * @return Object
      */
     public function update(array $address) {
-        Log::debug('AddressRepo: address update with ', [$address]);
+        //Log::debug('AddressRepo: address update with ', [$address]);
         if (empty($address['id'])) {
             throw new \Exception('ERROR: address update does not have an address_id');
         }
@@ -68,20 +67,18 @@ class AddressRepository implements AddressRepositoryInterface
         if (empty($currentAddress)) {
             throw new \Exception('address update can not load the current address');
         }
-        Log::debug('AddressRepo: checking address fields');
         foreach ($this->fields as $field) {
             if (isset($address[$field]) && $address[$field] !== $currentAddress->$field) {
                 $currentAddress->$field = $address[$field];
-                Log::info('check address model', [$field, $address[$field], $this->model->$field]);
             } else {
-                Log::debug('&&& field not set or not changed', [$field, $address]);
+                if ($this->logging) Log::debug('&&& field not set or not changed', [$field, $address]);
             }
         }
         try {
             $currentAddress->save();
             
         } catch (\Exception $e) {
-            Log::debug('error updating customer' . $e->getMessage());
+            Log::error('error updating customer' . $e->getMessage());
         }
         return $currentAddress;
     }

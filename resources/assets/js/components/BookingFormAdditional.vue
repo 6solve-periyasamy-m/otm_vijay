@@ -108,7 +108,6 @@
                         if (response.data.success) {
                             const travellers = response.data.travellers
                             bus.$emit('TravellersLoaded', travellers)
-
                             that.travellerBookings = travellers.filter(traveller => traveller.id !== that.leadTraveller.id)
                             bus.$emit('TravellerBookingsLoaded', that.travellerBookings)
                         }
