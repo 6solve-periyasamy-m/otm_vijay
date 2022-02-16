@@ -757,12 +757,12 @@ class OrderRepository
             $inflated = self::inflateRoomingData($data);
             foreach ($order->groups() as $group) { $group->delete(); }
             foreach ($inflated as $groupData) {
-            $group = Group::create([
-                'room_type_id' => $groupData->room_type->id,
-            ]);
-            foreach ($groupData->customers as $customer) {
-                $group->orderCustomers()->save($customer);
-            }
+                $group = Group::create([
+                    'room_type_id' => $groupData->room_type->id,
+                ]);
+                foreach ($groupData->customers as $customer) {
+                    $group->orderCustomers()->save($customer);
+                }
                 self::addRoomsToGroup($order, $group);
             }
             DB::commit();
@@ -809,6 +809,7 @@ class OrderRepository
             OrderAccommodation::create([
                 'accommodation_inventory_tour_id' => $found->id,
                 'group_id' => $group->id,
+                'cost' => $found->tour_sales_price,
             ]);
         }
     }

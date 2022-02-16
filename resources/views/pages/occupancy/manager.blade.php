@@ -104,12 +104,17 @@
 <script type="text/javascript">
     function initialize() {
         let groups = [
-            {roomType: {name: "Double Room", id: 2, size:2}, customers: [{name: "Jackie Chan", id: 1, avatar: ""},{name: "Mrs Chan", id: 2, avatar: ""},],},
-            {roomType: {name: "Double Room", id: 2, size:2}, customers: [{name: "John Lennon", id: 3, avatar: ""},{name: "Yoko Ono", id: 4, avatar: ""},],},
-            {roomType: {name: "Single Room", id: 1, size:1}, customers: [{name: "Mrs Doubtfire", id: 5, avatar: ""},],},
+            @foreach ($groups as $group)
+            {roomType: {name: "{{ $group['roomType']['name'] }}", id: {{ $group['roomType']['id'] }}, size: {{ $group['roomType']['size'] }}},
+             customers: [
+                 @foreach ($group['customers'] as $customer)
+                 {name: "{{$customer['name']}}", id: {{$customer['id']}}, avatar: "{{$customer['avatar']}}",},
+                 @endforeach
+             ]},
+            @endforeach
         ];
         for (let groupid in groups) {
-            //addRoomToManager(createRoomBox(groups[groupid]['roomType']['id'], groups[groupid]['roomType']['name'],groups[groupid]['roomType']['size'], groups[groupid]['customers'],));
+            addRoomToManager(createRoomBox(groups[groupid]['roomType']['id'], groups[groupid]['roomType']['name'],groups[groupid]['roomType']['size'], groups[groupid]['customers'],));
         }
         for (let key in {!! json_encode($unused) !!}) {
             customerBox.append(createCustomerBox(customers[key]['id'], customers[key]['name'], customers[key]['avatar']));
@@ -147,6 +152,7 @@
     }
 
     function submit() {
+        if ($('.customers').is(':parent')) return alert("Not all customers are assigned!");
         let roomingData = [];
         $('.room').each(function (index) {
                 let data = $(this).attr('typeid') + ': ';
