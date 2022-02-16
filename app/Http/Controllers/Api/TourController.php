@@ -28,6 +28,14 @@ class TourController extends ApiController
         return response()->json(['success' => true, 'data' => $tours->toArray()]);
     }
 
+    public function getTourPrice($tour_id)
+    {
+        $tour = Tour::find($tour_id);
+        if ($tour) {
+            return response()->json(['success' => true, 'tour_price' => $tour->base_price_per_person]);
+        }
+    }
+
     // Autheticated API - return data for logged in user sessions
     public function getBasicTourInformation(Tour $tour)
     {

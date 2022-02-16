@@ -10,8 +10,7 @@
         </div>
         <div class="card-body" v-if="paymentsActive">
             <div class="row">
-                <div class="summary">
-                    
+                <div v-if="showSummary" class="summary">
                     <div class="travellers" v-for="traveller in booking.travellers" :key="traveller.customer_id">
                         {{traveller.customer.first_name}} {{traveller.customer.last_name}}
                     </div>
@@ -43,46 +42,66 @@
 
                 </div>
             </div>
-            <div class="row">
-                <div class="price">
-                    Accommodation
+            <div v-if="priceBreakdown">
+                <div class="row">
+                    <div class="price">
+                        Accommodation
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(totals.accommodations)}} x {{travellers}} = {{priceFormat(travellers * totals.accommodations)}}
+                    </div>
                 </div>
-                <div class="price_amount">
-                    {{priceFormat(totals.accommodations)}} x {{travellers}} = {{priceFormat(travellers * totals.accommodations)}}
+                <div class="row">
+                    <div class="price">
+                        Flights
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(totals.flights)}} x {{travellers}} = {{priceFormat(travellers * totals.flights)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="price">
+                        Activities
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(totals.activities)}} x {{travellers}} = {{priceFormat(travellers * totals.activities)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="price">
+                        Transport
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(totals.transports)}} x {{travellers}} = {{priceFormat(travellers * totals.transports)}}
+                    </div>
+                </div>
+                <div class="total row">
+                    <div class="price">
+                        Tour Price total
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="price">
-                    Flights
+            <div v-else>
+                <div class="summary row">
+                    <div class="price">
+                        Total fee
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(tourPrice)}} x {{travellers}} = {{priceFormat(travellers * tourPrice)}}
+                    </div>
                 </div>
-                <div class="price_amount">
-                    {{priceFormat(totals.flights)}} x {{travellers}} = {{priceFormat(travellers * totals.flights)}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="price">
-                    Activities
-                </div>
-                <div class="price_amount">
-                    {{priceFormat(totals.activities)}} x {{travellers}} = {{priceFormat(travellers * totals.activities)}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="price">
-                    Transport
-                </div>
-                <div class="price_amount">
-                    {{priceFormat(totals.transports)}} x {{travellers}} = {{priceFormat(travellers * totals.transports)}}
+                <div class="summary row">
+                    <div class="price">
+                        Single Room Surcharge
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(singleRoomSurcharge)}} x {{singleRooms}} = {{priceFormat(singleRooms * singleRoomSurcharge)}}
+                    </div>
                 </div>
 
-            </div>
-            <div class="total row">
-                <div class="price">
-                    Tour Price total
-                </div>
-                <div class="price_amount">
-                    {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
-                </div>
             </div>
             <div class="row">
               <hr>
@@ -129,7 +148,11 @@ export default {
             deposit: 0,
             agreement: false,
             totalPrice: 0,
-            csrf_token: '' 
+            csrf_token: '',
+            showSummary: true,
+            priceBreakdown: false,
+            tourPrice: 10000,
+            singleRoomSurcharge: 100
         }    
     },
     created() {
@@ -266,6 +289,11 @@ export default {
             }
             this.totals.transports += price
             this.totalPrice += price
+        },
+        tourPrice() {
+            axios.get('/api/booking/tour/price', this.tour.id)
+                .then(response => that.tourPrice = response.data.tour_price)
+                .catch(error => console.log('error getting tour price', error))
         },
         calcDeposit() {
             let that = this

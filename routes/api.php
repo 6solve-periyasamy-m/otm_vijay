@@ -59,7 +59,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/accommodation/booking/{token}/tour/{tour}', [AccommodationController::class, 'getAccommodationBooking']);
     Route::get('/accommodation/rooms/tour/{tour}', [AccommodationController::class, 'loadRoomsForTour']);
     // Route::post('/booking/get/accommodation', [AccommodationController::class, 'getAccommodationBooking']);
-
+    Route::get('/tour/price/{tour_id}', [TourController::class, 'getTourPrice']);
     // Events
     Route::get('/events', [TourController::class, 'getEvents']);
     Route::get('/tours/{event_id}', [TourController::class, 'getTours']);
