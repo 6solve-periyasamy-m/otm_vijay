@@ -29,7 +29,7 @@ class FlightFactory extends Factory
             'notes' => $this->faker->sentence(),
             'is_archived' => false,
             'currency' => 'UKP',
-            'available_after' => null
+            'available_from' => null
         ];
     }
 }

@@ -10,6 +10,6 @@
       'is_domestic' => $flight->is_domestic,
       'notes' => $flight->notes,
       'currency' => $flight->currency_id,
-      'available_after' => $flight->available_after,
+      'available_from' => $flight->available_from,
     ])
 @endsection
