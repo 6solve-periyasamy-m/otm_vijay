@@ -26,7 +26,7 @@ interface AccommodationRepositoryInterface {
 class AccommodationRepository implements AccommodationRepositoryInterface
 {
     protected $model;
-    private $debug = 0;
+    private $debug = 5;
 
     public function __construct()
     {
@@ -84,22 +84,25 @@ class AccommodationRepository implements AccommodationRepositoryInterface
     {
         $bookingAccommodation = new BookingAccommodation();
         $bookingObj = $bookingAccommodation
-            ->select('booking_accommodations.*',
+            ->select('booking_accommodations.group_id',
+                'booking_accommodations.customer_id',
+                'booking_accommodations.room_type_id',
+               // 'accommodation_groups.name as group_name',
                 'room_types.maximum_occupancy',
-                'room_types.name as room_type_name',
-                //'board_types.name as board_type_name'
+                'room_types.name as room_type_name'
             ) 
             ->join('room_types', 'booking_accommodations.room_type_id', 'room_types.id')
-            //->join('board_types', 'booking_accommodations.board_type_id', 'board_types.id')
-            ->where('booking_accommodations.id', $booking->id)
+            // ->join('accommodation_groups', 'booking_accommodations.group_id', 'accommodation_groups.id')
+            ->where('booking_accommodations.booking_id', $booking->id)
             ->whereIn('booking_accommodations.customer_id', $travellerIds);
         try {
             $bookings = $bookingObj->get();
-            $this->debug && Log::debug('getAccommodationBooking', [$booking, $travellerIds, $bookings]);
+            $this->debug === 5 && Log::debug('>>> getAccommodationBooking', [$bookingObj->toSql(), $bookings]);
         } catch (Exception $e) {
             Log::error('Retrieving booking data error: ' . $e->getMessage());
-            throw new Exception('error with bookingAccommodation query', $e->getMessage());
+            throw new Exception('error with bookingAccommodation query'. $e->getMessage());
         }
+
         return $bookings;
     }
 

@@ -49,7 +49,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 1,
+            debug: 8,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
@@ -99,15 +99,21 @@ export default {
               })
               .catch(error => console.log(error))
         },
-        resetAccommodation() {
+        resetTravellers() {
             this.travellers = this.initTravellers
-            this.travellers.map(t => Vue.set(t, 'group_id', '0'))
+            this.travellers.map(t => Vue.set(t, 'group', '0'))
             this.travellers.map(t => Vue.set(t, 'room_type', '0'))
+        },
+        resetAccommodation() {
+            this.resetTravellers()
             axios.post('/api/booking/accommodation/reset', {
                 token: this.booking_token,
                 travellers: this.travellers
               })
-              .then(response => this.travellers = this.initTravellers)
+              .then(response => {
+                  this.travellers = this.initTravellers
+                  this.loadAccommodationBooking(this.travellers)
+              })
               .catch(error => console.log(error))
         },
         occupancy(id) {
@@ -148,35 +154,26 @@ export default {
             this.debug > 3 && console.log('***** loadAccommodationBooking started... travellers ', travellers)
 
             let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
-            console.log('url', url)
             axios.get(url)
                 .then((response) => {
                     const bookings = response.data.bookings
-                    that.debug > 7 && console.log('Accommodation: loadBooking response ', response)
                     if (bookings == undefined || !bookings.length) {
                       return
                     }
-                    that.debug > 3 && console.log('Accommodation: loadBookings ', bookings)
+                    that.travellers = []
 
-                    // TODO: marking of shared rooms is not quite right
-                    let used = new Array(bookings.length).fill(0);
-                    that.accomodations = bookings.map((b, i) => {
-                        that.accommodations[i] = b
-                        that.accommodations[i].shared = used.filter(m => m == b.accommodation_inventory_id).length > 0
-                        if (that.accommodations[i].shared) {
+                    that.resetTravellers()
+                    that.debug > 7 && console.log('Accommodation: loadBooking response ', bookings)
 
-                        }
-                        used.push(b.accommodation_inventory_id)
+                    console.log('travellers', that.travellers, bookings)
+                    bookings.map((booking, index) => {
+                       console.log('BOOKING', index, booking.room_type_id, booking.group_id)
+                       if (booking.room_type_id) {
+                           Vue.set(that.travellers[index], 'room_type', booking.room_type_id)
+                       }
+                       Vue.set(that.travellers[index], 'group', booking.group_id)
                     })
-                    that.accommodations.map((a,i) => {
-                        const t = that.travellers.filter(t => t.id === a.customer_id)[0]
-                        console.log('selected', t)
-                        a.first_name = t.first_name
-                        a.last_name = t.last_name
-                    })
-                    let noBooking = that.accommodations == null || typeof that.accommodations == 'undefined' || that.accommodations.length == 0
-                    that.showRegistered = !noBooking
-                    that.$forceUpdate()
+                    console.log('travellers', that.travellers, bookings)
                 })
                 .catch((error) => console.log(error));
         },
@@ -185,3 +182,4 @@ export default {
 </script>
 <style scoped lang="scss">
 </style>
+

@@ -23,7 +23,7 @@ use App\Repository\BookingRepository;
 class AccommodationController extends ApiController
 {
     protected $component_type = 'accommodation';
-    private $debug = 0;
+    private $debug = 5;
 
     /***
      * this tour has a range of accommodation options: 
@@ -84,8 +84,8 @@ class AccommodationController extends ApiController
     {
         $bookings = new BookingRepository();
         $booking = $bookings->findBookingByToken($token);
-        $traveller = new BookingTravellerRepository();
 
+        $traveller = new BookingTravellerRepository();
         $travellers = $traveller->getGroup($booking->id);
         $ids = $travellers->map(function($item, $key) {
             return $item->customer_id;
@@ -94,7 +94,7 @@ class AccommodationController extends ApiController
         $accommodationRepository = new AccommodationRepository();
         $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
 
-        $this->debug && Log::debug('accommodation booking: ', [$booking, $ids]);
+        $this->debug === 5 && Log::debug('**** accommodation booking: ', [$booked, $ids]);
         return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
