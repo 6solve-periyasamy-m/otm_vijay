@@ -32,6 +32,17 @@ class AccommodationRepository implements AccommodationRepositoryInterface
         $this->model = new Accommodation();
     }
 
+    public static function loadRoomsForTour($tour_id)
+    {
+        $rooms = AccommodationInventoryTour::where('tour_id', $tour_id)
+            ->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', 'accommodation_inventories.id')
+            ->join('room_types', 'accommodation_inventories.room_id', 'room_types.id')
+            ->select('room_types.name')
+            ->get();
+
+        return $rooms;
+    }
+
     public function getAccommodationInventoryData($tour)
     {
         $inventory = new AccommodationInventory();

@@ -89,8 +89,7 @@ class AccommodationController extends ApiController
      */
     public function loadRoomsForTour(Tour $tour) 
     {
-        $repo = new AccommodationRepository();
-        $rooms = $repo->loadRoomsForTour($tour);
+        $rooms = AccommodationRepository::loadRoomsForTour($tour);
 
         return response()->json(["success" => true, 'rooms' => $rooms]);
     }
