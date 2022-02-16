@@ -61,25 +61,15 @@ class AccommodationController extends ApiController
         $accommodationRepository = new AccommodationRepository();
         $result = $accommodationRepository->getAccommodationInventoryForTour($tour);
 
-        $this->debug && Log::debug('getAccommodationInventoryForTour', $result->toArray());
-
         return response()->json(["success" => true, 'accommodations' => $result]);
     }
 
-    // private function getAccommodationBookingForCustomer(Tour $tour, OrderCustomer $orderCustomer, $token)
-    // {
-    //     // Log::info('getAccommodationBookingForCustomer Order: ', $orderCustomer->toArray());
-    //     $customer_order_detail = new CustomerOrderDetail();
-    //     $result = $customer_order_detail
-    //         ->where('type', $this->component_type)
-    //         ->where('order_customer_id', $orderCustomer->id)
-    //         ->where('reference', $token)
-    //         ->whereNull('customer_order_details.deleted_at')
-    //         ->first();
-        
-    //     return $result;
-    // }
-
+    /**
+     * getAccommodationBooking
+     * @param String $token
+     * @param Tour $tour
+     * returns JSON set of accommodation booking records for a tour
+     */
     public function getAccommodationBooking(String $token, Tour $tour)
     {
         $bookings = new BookingRepository();
@@ -94,12 +84,16 @@ class AccommodationController extends ApiController
         $accommodationRepository = new AccommodationRepository();
         $booked = $accommodationRepository->getAccommodationBooking($booking, $ids);
 
-        $this->debug === 5 && Log::debug('**** accommodation booking: ', [$booked, $ids]);
         return response()->json(["success" => true, 'bookings' => $booked]);
     }
 
-    public function loadRoomsForTour(Tour $tour) {
-
+    /**
+     * loadRoomsForTour
+     * @param Tour $tour
+     * returns JSON rooms availble for a tour
+     */
+    public function loadRoomsForTour(Tour $tour) 
+    {
         $repo = new AccommodationRepository();
         $rooms = $repo->loadRoomsForTour($tour);
 
@@ -108,18 +102,12 @@ class AccommodationController extends ApiController
 
     /**
      * postAccommodationReservation
-     * accommodation is reserved loosely: it is more of a booking plan than actual reservation
-     * each member of the tour party can declare who they share with (or are included as one of the sharers)
-     * with an intended room type
      * tour: id, event_id
-     * traveller: customer_id, order_id, room, shared, shares
      * customer_id is the key for order_customer
      * room_type: the ID of the room type desired
      * group: the label of the selected share group
-     * Create a COD record but associate a secondary record for accommodation intent
-     * customer_order_details_id
      * @param Request $request
-     * @return void
+     * @return JSON: success on all records saved
      */
     public function postAccommodationReservation(Request $request)
     {
