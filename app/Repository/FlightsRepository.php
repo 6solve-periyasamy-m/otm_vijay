@@ -18,7 +18,7 @@ interface FlightsRepositoryInterface {
 class FlightsRepository implements FlightsRepositoryInterface
 {
     protected $model;
-    private $logging = false;
+    private $logging = true;
 
     public function __construct()
     {

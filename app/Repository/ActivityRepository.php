@@ -35,7 +35,7 @@ class ActivityRepository implements ActivityRepositoryInterface
             ->whereNull('activity_inventories.deleted_at')
             ->whereNull('activity_inventory_tours.deleted_at')
             ->where('activity_inventory_tours.tour_id', $tour->id)
-    		->where('activity_inventory_tours.tour_component_type', 'Included')
+            ->where('activity_inventory_tours.tour_component_type', 'Included')
             ->get();
 
         return $activities;
