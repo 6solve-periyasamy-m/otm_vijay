@@ -26,6 +26,7 @@ class SendAdditionalTravellerRemovedEmail
      */
     public function handle(OrderCustomerRemovedEvent $event)
     {
+        if (!$event->shouldInvoice) return;
         MailRepository::sendMailable('additional-traveller-removed', $event->orderCustomer->customer->email_address, $event->orderCustomer);
     }
 }
