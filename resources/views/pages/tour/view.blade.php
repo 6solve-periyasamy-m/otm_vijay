@@ -121,6 +121,7 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Room Type</th>
                                 <th scope="col">Board Type</th>
+                                <th scope="col">Template?</th>
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -137,6 +138,7 @@
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->boardType->name }}</td>
+                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_template) }}</td>
                                     <td>
                                         @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
                                             <abbr title="{{ $accommodationEntry["tour"]->parent() }}">
@@ -336,7 +338,7 @@
                                     <td class="actions">
                                         @can('update', \App\Models\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')
-                                                <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                                <a href="{{ route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
                                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                                     <i class="icon-arrow-up"></i>

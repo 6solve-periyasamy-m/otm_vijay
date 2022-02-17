@@ -58,7 +58,7 @@ class UpgradeController extends Controller
     
     public function editAccommodationUpgrade(Tour $tour, AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade) {
         return view('pages.upgrades.update', ['action' => route('accommodation-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
-            'name' => 'Accommodation Inventory']);
+            'name' => 'Accommodation Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
     
     public function updateAccommodationUpgrade(Request $request, Tour $tour, AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade) {
@@ -107,7 +107,7 @@ class UpgradeController extends Controller
 
     public function editActivityUpgrade(Tour $tour, ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade) {
         return view('pages.upgrades.update', ['action' => route('activity-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
-            'name' => 'Activity Inventory']);
+            'name' => 'Activity Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
 
     public function updateActivityUpgrade(Request $request, Tour $tour, ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade) {
@@ -157,7 +157,7 @@ class UpgradeController extends Controller
 
     public function editFlightUpgrade(Tour $tour, FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade) {
         return view('pages.upgrades.update', ['action' => route('flight-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
-            'name' => 'Flight Inventory']);
+            'name' => 'Flight Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
 
     public function updateFlightUpgrade(Request $request, Tour $tour, FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade) {
@@ -205,8 +205,8 @@ class UpgradeController extends Controller
     }
 
     public function editTransportUpgrade(Tour $tour, TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade) {
-        return view('pages.upgrades.update', ['action' => route('transport-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade,]),
-            'name' => 'Transport Inventory']);
+        return view('pages.upgrades.update', ['action' => route('transport-upgrade.update', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]),
+            'name' => 'Transport Inventory', 'tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade'=>$upgrade,]);
     }
 
     public function updateTransportUpgrade(Request $request, Tour $tour, TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade) {

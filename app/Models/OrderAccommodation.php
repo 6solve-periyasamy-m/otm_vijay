@@ -12,7 +12,7 @@ class OrderAccommodation extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id','cost'];
+    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id','cost','group_id'];
     public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
     public static function findByOrderCustomer($orderCustomerId)
@@ -71,5 +71,10 @@ class OrderAccommodation extends Model
     public function orderCustomer()
     {
         return $this->orderCustomers();
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id');
     }
 }

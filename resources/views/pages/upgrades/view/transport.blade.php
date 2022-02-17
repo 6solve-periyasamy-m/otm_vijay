@@ -77,14 +77,14 @@
                                     <td>{{ $upgrade->upgrade->transportInventory->travelClass->name }}</td>
                                     <td>
                                         {{ StringFormatter::formatDateTime($upgrade->upgrade->transportInventory->departs_at) }}
-                                        <input type="checkbox" disabled @if($transportInventory->departure_time_confirmed == 1) checked @endif>
+                                        <input type="checkbox" disabled @if($inventoryTour->departure_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>
                                         {{ StringFormatter::formatDateTime($upgrade->upgrade->transportInventory->arrives_at) }}
-                                        <input type="checkbox" disabled @if($transportInventory->arrival_time_confirmed == 1) checked @endif>
+                                        <input type="checkbox" disabled @if($inventoryTour->arrival_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>{{ $upgrade->upgrade->transportInventory->stock }}</td>
-                                    <td>{{ $upgrade->upgrade->description }}</td>
+                                    <td>{{ $upgrade->description }}</td>
                                     <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\TransportInventoryTour::class)

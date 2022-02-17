@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\RoomingFailedException;
+use App\Repository\OrderRepository;
+use Exception;
+use App\Models\Tour;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -170,5 +175,14 @@ class AccommodationController extends ApiController
         }
         abort(400, 'Invalid component type has been provided');
         return null;
+    }
+
+    public function saveRoomingData(Request $request, Order $order) {
+        try {
+            OrderRepository::buildGroupRooming($order, $request->data);
+            return response('Building Saved', 200);
+        } catch (RoomingFailedException $e) {
+            abort(500, $e->getMessage());
+        }
     }
 }
