@@ -27,6 +27,7 @@ class SendOrderCancelledEmail
      */
     public function handle(OrderCancelledEvent $event)
     {
+        if (!$event->shouldInvoice) return;
         MailRepository::sendMailable('order-cancelled', $event->order->leadBooker->customer->email_address, $event->order);
     }
 }
