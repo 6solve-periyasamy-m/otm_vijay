@@ -18,7 +18,7 @@ interface FlightsRepositoryInterface {
 class FlightsRepository implements FlightsRepositoryInterface
 {
     protected $model;
-    private $logging = true;
+    private $logging = false;
 
     public function __construct()
     {
@@ -59,10 +59,13 @@ class FlightsRepository implements FlightsRepositoryInterface
           ->whereNull('flights.deleted_at')
           ->where('flight_inventory_tours.tour_id', $tour_id)
           ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
+          /* deprecate : show all flights
           ->where(function($q) {
               $q->whereNull('flights.available_from')
                 ->orWhere('flights.available_from', '<=', date('Y-m-d'));
+
           });
+          */
         ;
         if (isset($flight_type) && strlen($flight_type)) {
             $flights = $flights->where('flight_inventory_tours.flight_type', $flight_type);

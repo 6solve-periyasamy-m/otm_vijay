@@ -11,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\ApiController;
-
-use App\Models\Tour;
 use App\Models\RoomType;
 use App\Models\AccommodationGroup;
 use App\Models\AccommodationInventory;
