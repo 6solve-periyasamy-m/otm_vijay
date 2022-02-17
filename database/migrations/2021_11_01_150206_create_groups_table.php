@@ -15,6 +15,7 @@ class CreateGroupsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->foreignId('room_type_id')->nullable()->constrained()->onDelete('SET NULL');
             $table->softDeletes();
             $table->timestamps();

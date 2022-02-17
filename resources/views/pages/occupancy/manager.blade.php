@@ -46,6 +46,12 @@
             height: 50px;
             border-radius: 25px;
         }
+        .details {
+            display: inline-block;
+        }
+        .group-input {
+            display:block;
+        }
     </style>
 @endpush
 
@@ -83,7 +89,7 @@
         function createCustomerBox(id, name, avatar) {
             return '<div class="customer customer-' + id + '" customer="' + id + '"><img src="' + avatar + '" class="image"/><br />' + name + '</div>';
         }
-        function createRoomBox(id, name, size, customers = null) {
+        function createRoomBox(id, name, roomName, size, customers = null) {
             let bedString = '';
             if (customers != null) {
                 for (let customer in customers) {
@@ -94,7 +100,7 @@
                     bedString += '<div class="bed"></div>'
                 }
             }
-            return '<div class="room" typeid="' + id + '">' + name + bedString + '</div>';
+            return '<div class="room" typeid="' + id + '"><div class="details"><div class="group-input"><input name="name" class="name-input" type="text" value="' + name + '"/></div>' + roomName + "</div>" + bedString + '</div>';
         }
     </script>
 @endpush
@@ -105,7 +111,7 @@
     function initialize() {
         let groups = [
             @foreach ($groups as $group)
-            {roomType: {name: "{{ $group['roomType']['name'] }}", id: {{ $group['roomType']['id'] }}, size: {{ $group['roomType']['size'] }}},
+            {name: "{{ $group['name'] }}", roomType: {name: "{{ $group['roomType']['name'] }}", id: {{ $group['roomType']['id'] }}, size: {{ $group['roomType']['size'] }}},
              customers: [
                  @foreach ($group['customers'] as $customer)
                  {name: "{{$customer['name']}}", id: {{$customer['id']}}, avatar: "{{$customer['avatar']}}",},
@@ -114,10 +120,11 @@
             @endforeach
         ];
         for (let groupid in groups) {
-            addRoomToManager(createRoomBox(groups[groupid]['roomType']['id'], groups[groupid]['roomType']['name'],groups[groupid]['roomType']['size'], groups[groupid]['customers'],));
+            addRoomToManager(createRoomBox(groups[groupid]['roomType']['id'], groups[groupid]['name'], groups[groupid]['roomType']['name'],groups[groupid]['roomType']['size'], groups[groupid]['customers'],));
         }
+        let unused = {!! json_encode($unused) !!};
         for (let key in {!! json_encode($unused) !!}) {
-            customerBox.append(createCustomerBox(customers[key]['id'], customers[key]['name'], customers[key]['avatar']));
+            customerBox.append(createCustomerBox(unused[key]['id'], unused[key]['name'], unused[key]['avatar']));
         }
     }
     function reset() {
@@ -135,10 +142,8 @@
     function addRoom() {
         let selected = $('.room-types').find(':selected')
         if ($('.bed').length + parseInt(selected.val()) > Object.keys(customers).length) return alert('Cannot add more rooms!');
-        addRoomToManager(createRoomBox(selected.val(), selected.attr('name'), selected.attr('occupancy')))
-
+        addRoomToManager(createRoomBox(selected.val(), "Group " + $('.room').length, selected.attr('name'), selected.attr('occupancy')))
     }
-
     function addRoomToManager(roomBox) {
         $('.manager').append(roomBox);
         $('.bed').droppable({
@@ -155,21 +160,23 @@
         if ($('.customers').is(':parent')) return alert("Not all customers are assigned!");
         let roomingData = [];
         $('.room').each(function (index) {
-                let data = $(this).attr('typeid') + ': ';
                 let roomedCustomers = [];
+                let name = $(this).find('.name-input').val();
+                console.log(name);
                 $(this).children('.bed').each(function (index) {
                     roomedCustomers.push($(this).children().first().attr('customer'));
                 });
-                roomingData.push({roomType: $(this).attr('typeid'), customers: roomedCustomers})
+                roomingData.push({name: name, roomType: $(this).attr('typeid'), customers: roomedCustomers})
             }
-        )
+        );
+        console.log(roomingData);
         let request = $.post({
             url: "{{ route('api.roomings.save', ['order' => $order,]) }}",
             dataType: "json",
             data: { "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', "data": roomingData, },
             statusCode: {
-                200: function(xhr) { alert('Success'); console.log(xhr); },
-                500: function(xhr) { alert('Failed'); console.log(xhr); }
+                200: function(xhr) { alert('Success'); },
+                500: function(xhr) { alert('Failed'); }
             }
         });
         console.log(roomingData);

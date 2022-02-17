@@ -14,7 +14,7 @@ class Group extends Model
     use CascadeSoftDeletes;
 
     protected $cascadeDeletes = ['pivot', 'rooms'];
-    protected $fillable = ['room_type_id',];
+    protected $fillable = ['room_type_id','name'];
 
     public function orderCustomers()
     {

@@ -605,6 +605,7 @@ class OrderRepository
             foreach ($inflated as $groupData) {
                 $group = Group::create([
                     'room_type_id' => $groupData->room_type->id,
+                    'name' => $groupData->name,
                 ]);
                 foreach ($groupData->customers as $customer) {
                     $group->orderCustomers()->save($customer);
@@ -626,11 +627,13 @@ class OrderRepository
     {
         $inflated = [];
         foreach ($data as $object) {
+            Log::error($data);
             $collection = new Collection();
             $roomType = RoomType::find($object['roomType']);
             if (!isset($roomType)) throw new RoomingFailedException('An invalid room type was provided');
             $collection->room_type = $roomType;
             $members = [];
+            $collection->name = $object['name'];
             foreach ($object['customers'] as $customerId) {
                 $customer = OrderCustomer::find($customerId);
                 if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
@@ -665,7 +668,7 @@ class OrderRepository
         $groups = [];
         $usedIds = [];
         foreach ($order->groups() as $group) {
-            $grouping = ['roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
+            $grouping = ['name' => $group->name, 'roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
             $customers = [];
             foreach ($group->orderCustomers as $orderCustomer) {
                 $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
