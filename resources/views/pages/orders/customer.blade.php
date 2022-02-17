@@ -282,7 +282,7 @@ $(document).ready( function () {
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_out) }}</td>
                                     <td>{{ $orderAccommodation->accommodation->name }}</td>
                                     <td>{{ $orderAccommodation->accommodationInventory->roomType->name }}</td>
-                                    <td>TBI</td> {{-- TODO: Discuss and Implement--}}
+                                    <td>{{ $orderAccommodation->group->getMembers($orderCustomer) }}</td>
                                     <td>{{ $orderAccommodation->accommodationInventoryTour->tour_component_type }}</td>
                                     <td>
                                         <form action="{{ route('orderAccommodationDelete', ['id' => $orderAccommodation->id,]) }}" method="post">

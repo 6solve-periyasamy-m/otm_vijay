@@ -35,4 +35,15 @@ class Group extends Model
     {
         return $this->belongsTo(RoomType::class, 'room_type_id');
     }
+
+    public function getMembers(OrderCustomer $exclude = null): string
+    {
+        $members = "";
+        foreach ($this->orderCustomers as $orderCustomer) {
+            if ($orderCustomer->id == $exclude->id) continue;
+            $members .= $orderCustomer->customer_name . ', ';
+        }
+        if (empty($members)) return $members;
+        return substr($members, 0, -2);
+    }
 }
