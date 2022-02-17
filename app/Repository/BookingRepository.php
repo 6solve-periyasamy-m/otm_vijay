@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\OrderCustomerCreatedEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Models\Order;
 use App\Models\OrderCustomer;
 use Exception;
@@ -106,6 +108,7 @@ class BookingRepository implements BookingRepositoryInterface
         $order->lead_booker_id = $leadBooker->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
+        event(new OrderCreatedEvent($order));
 
         foreach ($booking->travellers as $traveller) {
             if (array_key_exists($traveller->customer_id, $customers)) continue;
@@ -116,6 +119,7 @@ class BookingRepository implements BookingRepositoryInterface
             ]);
             $order->orderCustomers()->save($customer);
             $customers[$traveller->customer_id] = $customer;
+            event(new OrderCustomerCreatedEvent($customer));
         }
         self::processComponent($customers, 'accommodation', $booking);
         self::processComponent($customers, 'activities', $booking);
