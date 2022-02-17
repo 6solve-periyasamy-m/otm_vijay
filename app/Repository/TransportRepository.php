@@ -33,6 +33,7 @@ class TransportRepository implements TransportRepositoryInterface
             ->whereNull('transport_inventories.deleted_at')
             ->whereNull('transport_inventory_tours.deleted_at')
             ->where('transport_inventory_tours.tour_id', $tour->id)
+    ->where('transport_inventory_tours.tour_component_type', 'Included')
             ->get();
 
         return $transports;

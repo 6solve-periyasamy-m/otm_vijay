@@ -61,7 +61,7 @@ class FlightsRepository implements FlightsRepositoryInterface
           ->where('flight_inventory_tours.tour_component_type', $tour_component_type)
           ->where(function($q) {
               $q->whereNull('flights.available_from')
-                ->orWhere('flights.available_from', '>=', date('Y-m-d'));
+                ->orWhere('flights.available_from', '<=', date('Y-m-d'));
           });
         ;
         if (isset($flight_type) && strlen($flight_type)) {
