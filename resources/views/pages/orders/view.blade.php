@@ -69,6 +69,10 @@
                 <i class="icon-note"></i>
                 Edit Order
             </a>
+            <a href="{{ route('orders.occupancy', ['order' => $order,]) }}" class="btn btn-info">
+                <i class="icon-note"></i>
+                Edit Room Sharing Data
+            </a>
             <a href="{{ route('tours.view', ['tour' => $order->tour,]) }}" class="btn btn-warning">
                 <i class="icon-globe"></i>
                 View Tour

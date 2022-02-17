@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\BookingFormLoginController;
 use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
@@ -85,21 +84,33 @@ Route::get('/pdfmake', function () {
 
 Route::prefix("/booking")->group(function () {
 
+    // laravel route (not booking form)
+    Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
+
     // debugging routes
     Route::get('/check/events', [TourController::class, 'getEvents']);
     Route::get('/check/tour/{event_id}', [TourController::class, 'getTours']);
-    Route::get('/vuetest', function () {
-        return view('tests.vue');
+
+    Route::get('/check/apitests', function() {
+        return view('frontend-tests/apitests');
+    });
+    Route::get('/check/vuetest', function () {
+        return view('frontend-tests/vuetest');
+    });
+    Route::get('/check/atoltest', function () {
+        return view('frontend-tests/atoltest');
     });
 
     Route::get('/store', function () {
         return view('pages.booking.store');
     });
-    Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
-    Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
-    Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);
-    Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
-    Route::get('/', [BookingController::class, 'bookingForm']);
+
+    // booking form recovery and accessors not used
+    // Route::get('/login/{token}', [BookingFormLoginController::class, 'loginWithToken']); // Demo for now
+    // Route::get('/edit/{id}', [BookingController::class, 'bookingForm']);
+    // Route::get('/tour/{url}', [BookingController::class, 'bookingForm']);
+    // Route::get('/event/{url}', [BookingController::class, 'eventBookingForm']);
+    // Route::get('/', [BookingController::class, 'bookingForm']);
 
     Route::get('/{url}', [BookingController::class, 'tourBookingForm'])->name('booking.url');
 
@@ -135,7 +146,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
             Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
             Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order,read');
-
+            Route::get('/occupancy', function (Order $order) { return view('pages.occupancy.manager', array_merge(OrderRepository::exportRoomingData($order), ['order' => $order,])); })->name('orders.occupancy')->middleware('bouncer:Order,update');
             Route::prefix('installments')->group(function () {
                 Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order,update');
                 Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order,update');
@@ -721,5 +732,3 @@ Route::prefix('payment')->name('payment.')->group(function () {
         });
     });
 });
-
-Route::get('/occupancy/{order}', function (Order $order) { return view('pages.occupancy.manager', array_merge(OrderRepository::exportRoomingData($order), ['order' => $order,])); });
