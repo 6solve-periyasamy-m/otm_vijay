@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Exceptions\RoomingFailedException;
 use App\Models\AccommodationGroup;
 use App\Models\Group;
 use App\Models\Order;
@@ -102,13 +103,17 @@ class BookingRepository implements BookingRepositoryInterface
             'tour_cost' => $tour->base_price_per_person,
             'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
         ]);
+
+        OrderRepository::cloneInstallments($order);
+
         $customers = [];
         $order->orderCustomers()->save($leadBooker);
+
         $customers[$booking->customer_id] = $leadBooker;
         $order->lead_booker_id = $leadBooker->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-
+        OrderRepository::addIncludedToCustomer($leadBooker);
         foreach ($booking->travellers as $traveller) {
             if (array_key_exists($traveller->customer_id, $customers)) continue;
             $customer = OrderCustomer::make([
@@ -118,11 +123,13 @@ class BookingRepository implements BookingRepositoryInterface
             ]);
             $order->orderCustomers()->save($customer);
             $customers[$traveller->customer_id] = $customer;
+            OrderRepository::addIncludedToCustomer($customer);
         }
-        self::processComponent($customers, 'activities', $booking);
-        self::processComponent($customers, 'flights', $booking);
-        self::processComponent($customers, 'transports', $booking);
-        self::processAccommodation($customers, $booking);
+
+        //self::processComponent($customers, 'activities', $booking);
+        //self::processComponent($customers, 'flights', $booking);
+        //self::processComponent($customers, 'transports', $booking);
+        self::processAccommodation($customers, $booking, $order);
         self::setStatus($booking, 'Deposit Accepted');
         return $order;
     }
@@ -141,15 +148,21 @@ class BookingRepository implements BookingRepositoryInterface
         }
     }
 
-    private static function processAccommodation(array $customers, Booking $booking)
+    private static function processAccommodation(array $customers, Booking $booking, Order $order)
     {
         $groups = [];
         foreach ($booking->accommodation as $bookingAccommodation) {
             $customer = $customers[$bookingAccommodation->customer_id];
+            $groupName = $bookingAccommodation->group_id > 0 ? AccommodationGroup::find($bookingAccommodation->group_id)->name : $customer->customer_name;
             $group = key_exists($bookingAccommodation->group_id, $groups) ? $groups[$bookingAccommodation->group_id]
-                : new Group(['name' => AccommodationGroup::find($bookingAccommodation->group_id)->name, 'room_type_id' => $bookingAccommodation->room_type_id,]);
+                : Group::create(['name' => $groupName, 'room_type_id' => $bookingAccommodation->room_type_id,]);
             $group->orderCustomers()->save($customer);
-            $bookingAccommodation->tourComponent->addToOrder($group);
+            $groups[$bookingAccommodation->group_id] = $group;
+        }
+        foreach ($groups as $group) {
+            try {
+                OrderRepository::addRoomsToGroup($order, $group);
+            } catch (RoomingFailedException $e) { Log::error($e); }
         }
     }
 }
