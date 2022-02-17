@@ -371,6 +371,15 @@ class OrderRepository
             $total += $customerValue;
             $breakdown['customers'][] = $customerData;
         }
+        foreach ($order->groups() as $group) {
+            $groupData = [];
+            $data = self::getGroupAdditionals($group);
+            $groupData['upgrades'] = $data['upgrades'];
+            $groupData['addons'] = $data['addons'];
+            $groupData['additionalValue'] = $data['additionalValue'];
+            $total += $data['additionalValue'];
+            $breakdown['groups'][] = $groupData;
+        }
         $breakdown['deposit'] = $order->calculated_deposit;
         $breakdown['total'] = $total;
         return $breakdown;
