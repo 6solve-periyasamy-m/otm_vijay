@@ -105,6 +105,24 @@ $order = $invoice->order;
                 <td colspan="2" class="t-align-right"><strong>Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</strong></td>
             </tr>
         @endforeach
+        @foreach($invoice->groups as $name => $data)
+            <tr>
+                <td colspan="3" class="t-align-center">
+                    <strong>{{ $data['name'] }}</strong>
+                </td>
+            </tr>
+            @foreach($data['billables'] as $billable)
+                @include('partials.pdf.invoices.row',
+                        ['quantity' => "",
+                        'description' => $billable['description'],
+                        'cost' => \StringFormatter::formatCurrency($billable['cost']),
+                        'class' => $billable['cost'] > 0  ? "amount-negative" : "amount-positive"])
+            @endforeach
+            <tr>
+                <td></td>
+                <td colspan="2" class="t-align-right"><strong>Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</strong></td>
+            </tr>
+        @endforeach
         <tr>
             <td colspan="3" class="t-align-center">
                 <strong>Order Adjustments</strong>

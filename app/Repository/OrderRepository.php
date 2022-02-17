@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Exceptions\RoomingFailedException;
-use App\Models\AccommodationInventoryTour;
 use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Merchandise;
@@ -64,6 +63,7 @@ class OrderRepository
     public static function generateInvoice(Order $order): Invoice
     {
         $customers = [];
+        $groups = [];
         $adjustments = [];
         $payments = [];
         foreach ($order->orderCustomers as $customer) {
@@ -71,6 +71,9 @@ class OrderRepository
             foreach ($customer->adjustments as $adjustment) {
                 $adjustments[] = ['description' => "Customer Adjustment ({$customer->customer_name}): {$adjustment->reason}", 'cost' => $adjustment->amount,];
             }
+        }
+        foreach ($order->groups() as $group) {
+            $groups[$group->name] = self::processGroupComponentsForInvoice($group);
         }
         foreach ($order->adjustments as $adjustment) {
             $adjustments[] = ['description' => "Manual Adjustment: {$adjustment->reason}", 'cost' => $adjustment->amount,];
@@ -85,6 +88,7 @@ class OrderRepository
             'customers' => $customers,
             'adjustments' => ['total_cost' => $order->getAdjustmentValue(), 'billables' => $adjustments,],
             'payments' => ['total_cost' => $order->paid, 'billables' => $payments,],
+            'groups' => $groups,
             'installments' => self::snapshotInstallments($order),
             'footer' => $order->invoice_footer,
             'total_cost' => $order->getCost() + $order->getAdjustmentValue(),
@@ -110,15 +114,6 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $included = "Base Components Include:\n";
-        foreach ($orderCustomer->orderAccommodation as $orderInventory) {
-            $tourInventory = $orderInventory->tourComponent;
-            if ($tourInventory->tour_component_type == 'Included') {
-                $included .= $tourInventory . "\n";
-            } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
-                $totalCost += $orderInventory->cost;
-            }
-        }
         foreach ($orderCustomer->orderActivities as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type == 'Included') {
@@ -159,6 +154,29 @@ class OrderRepository
         return ['total_cost' => $totalCost, 'billables' => array_merge([['description' => $included, 'cost' => $orderCustomer->tour_cost,]], $data),];
     }
 
+    /**
+     * @param Group $group
+     * @return array
+     */
+    private static function processGroupComponentsForInvoice(Group $group): array
+    {
+        $data = [];
+        $totalCost = 0;
+        $included = "Base Components Include:\n";
+        $name = $group->name . ': ';
+        foreach ($group->orderCustomers as $orderCustomer) { $name .= $orderCustomer->customer_name . ', '; }
+        foreach ($group->rooms as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            } else {
+                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        return ['total_cost' => $totalCost, 'name' => substr($name, 0, -2), 'billables' => array_merge([['description' => $included, 'cost' => 0,]], $data),];
+    }
+
     // Order Addons/Upgrades
 
     /**
@@ -190,16 +208,7 @@ class OrderRepository
         $upgrades = [];
         $addons = [];
         $additionalValue = 0;
-/*        foreach ($customer->orderAccommodation as $orderAccommodation) {
-            if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
-                $upgrades[] = ['upgrade' => $orderAccommodation, 'customer' => $customer,];
-                $additionalValue += $orderAccommodation->cost;
-            }
-            if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                $addons[] = ['addon' => $orderAccommodation, 'customer' => $customer,];
-                $additionalValue += $orderAccommodation->cost;
-            }
-        }*/
+        // Accommodation Additionals are going to be calculated per group (A:Celeste Gateley)
         foreach ($customer->orderActivities as $orderActivity) {
             if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
                 $upgrades[] = ['upgrade' => $orderActivity, 'customer' => $customer,];
@@ -433,13 +442,7 @@ class OrderRepository
     public static function addIncludedToCustomer(OrderCustomer $orderCustomer)
     {
         $order = $orderCustomer->order;
-/*        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
-                $orderCustomer->orderAccommodation()->save($orderInventory);
-                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
-            }
-        }*/
+        // Accommodation are added to groups not customers (A:Celeste Gateley)
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
