@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Models\AccommodationGroup;
+use App\Models\Group;
 use App\Models\Order;
 use App\Models\OrderCustomer;
 use Exception;
@@ -117,10 +119,10 @@ class BookingRepository implements BookingRepositoryInterface
             $order->orderCustomers()->save($customer);
             $customers[$traveller->customer_id] = $customer;
         }
-        self::processComponent($customers, 'accommodation', $booking);
         self::processComponent($customers, 'activities', $booking);
         self::processComponent($customers, 'flights', $booking);
         self::processComponent($customers, 'transports', $booking);
+        self::processAccommodation($customers, $booking);
         self::setStatus($booking, 'Deposit Accepted');
         return $order;
     }
@@ -136,6 +138,18 @@ class BookingRepository implements BookingRepositoryInterface
     {
         foreach ($booking->{$component} as $bookingComponent) {
             $bookingComponent->tourComponent->addToOrder($customers[$bookingComponent->customer_id]);
+        }
+    }
+
+    private static function processAccommodation(array $customers, Booking $booking)
+    {
+        $groups = [];
+        foreach ($booking->accommodation as $bookingAccommodation) {
+            $customer = $customers[$bookingAccommodation->customer_id];
+            $group = key_exists($bookingAccommodation->group_id, $groups) ? $groups[$bookingAccommodation->group_id]
+                : new Group(['name' => AccommodationGroup::find($bookingAccommodation->group_id)->name, 'room_type_id' => $bookingAccommodation->room_type_id,]);
+            $group->orderCustomers()->save($customer);
+            $bookingAccommodation->tourComponent->addToOrder($group);
         }
     }
 }
