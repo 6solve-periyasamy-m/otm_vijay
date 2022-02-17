@@ -32,7 +32,7 @@ class TourController extends ApiController
     {
         $tour = Tour::find($tour_id);
         if ($tour) {
-            return response()->json(['success' => true, 'tour_price' => $tour->base_price_per_person]);
+            return response()->json(['success' => true, 'tour_price' => $tour->base_price_per_person, 'single_occupancy_surcharge' => $tour->single_occupancy_surcharge, 'deposit' => $tour->deposit]);
         }
     }
 

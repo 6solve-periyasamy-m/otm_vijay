@@ -16,7 +16,7 @@ interface BookingRepositoryInterface {
     public function findBookingByToken($token);
     public static function findBooking($token);
     public function create($customer_id, $tour_id, $token);
-    public function setStatusDepositCheckout();
+    public function setStatusDepositCheckout(Booking $booking);
     public static function convertBookingToOrder(Booking $booking): Order;
 }
 
@@ -75,10 +75,10 @@ class BookingRepository implements BookingRepositoryInterface
         throw new Exception('Can not create booking record');
     }
 
-    public function setStatusDepositCheckout()
+    public function setStatusDepositCheckout($booking)
     {
-        $this->model->status = 'Deposit Processing';
-        $this->model->save();
+        $booking->status = 'Deposit Processing';
+        $booking->save();
     }
     /**
      * convertBookingToOrder

@@ -49,7 +49,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 8,
+            debug: 0,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,

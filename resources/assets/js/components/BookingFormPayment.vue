@@ -87,10 +87,10 @@
             <div v-else>
                 <div class="summary row">
                     <div class="price">
-                        Total fee
+                        Tour Price
                     </div>
                     <div class="price_amount">
-                        {{priceFormat(tourPrice)}} x {{travellers}} = {{priceFormat(travellers * tourPrice)}}
+                        {{priceFormat(tourPrice)}} x {{countTravellers}} = {{priceFormat(calculateTourPrice)}}
                     </div>
                 </div>
                 <div class="summary row">
@@ -98,7 +98,23 @@
                         Single Room Surcharge
                     </div>
                     <div class="price_amount">
-                        {{priceFormat(singleRoomSurcharge)}} x {{singleRooms}} = {{priceFormat(singleRooms * singleRoomSurcharge)}}
+                        {{priceFormat(singleOccupancySurcharge)}} x {{calculateSingleRooms}} = {{priceFormat(calculateSingleRooms * singleOccupancySurcharge)}}
+                    </div>
+                </div>
+                <div class="summary row">
+                    <div class="price">
+                        Total 
+                    </div>
+                    <div class="price_amount">
+                       {{priceFormat(totalCharge)}} 
+                    </div>
+                </div>
+                <div class="summary row">
+                    <div class="price">
+                        Deposit 
+                    </div>
+                    <div class="price_amount">
+                       {{priceFormat(deposit * countTravellers)}} 
                     </div>
                 </div>
 
@@ -114,11 +130,11 @@
                  </div>
                  <div v-if="agreement && deposit>0" class="deposit-amount">
                     <p>You have agreed to our Terms and Conditions.</p>
-                    <p>To book your tour, a deposit of {{priceFormat(deposit)}} is now payable.</p>
+                    <p>To book your tour, a deposit of {{priceFormat(deposit * countTravellers)}} is now payable.</p>
                     <form method="post" action="/booking/deposit/payment">
                       <input type="hidden" name="_token" :value="csrf_token" />
                       <input type="hidden" name="token" :value="booking_token" />
-                      <input type="text" name="amount" readonly :value="priceFormat(deposit)" />
+                      <input type="text" name="amount" readonly :value="priceFormat(deposit * countTravellers)" />
                       <input type="submit" class="btn btn-primary" value="Pay Deposit" />
                     </form>
                 </div>
@@ -152,7 +168,10 @@ export default {
             showSummary: true,
             priceBreakdown: false,
             tourPrice: 10000,
-            singleRoomSurcharge: 100
+            travellers: [],
+            singleOccupancySurcharge: 100,
+            singleRooms: 0,
+            deposit: 0
         }    
     },
     created() {
@@ -171,15 +190,39 @@ export default {
                 console.log('Payment ignored: ', token);
             }
         })
+        bus.$on("TravellersLoaded", (travellers) => {
+            this.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
+            travellers.map(traveller => this.travellers.push(traveller));
+        })
         bus.$on("TermsAgreed", (agreed) => {
           this.agreement = agreed
         })
     },
     mounted() {
         this.loadBooking(this.booking_token)
+        this.calcTourPrice()
     },
     computed: {
-        travellers: function() {
+        calculateTourPrice: function() {
+          return this.tourPrice * this.countTravellers 
+        },
+        totalCharge: function() {
+          return this.calculateTourPrice + this.calculateSingleRooms * this.singleOccupancySurcharge;
+        }, 
+        countTravellers: function() {
+            return this.travellers.length
+        },
+        calculateSingleRooms: function() {
+            let rooms = 0
+            this.travellers.map(t => {
+              console.log(t)
+              if (t.room_type === 1) {
+                rooms++;
+              }
+            })
+            return rooms
+        },
+        countBookingTravellers: function() {
             if (typeof this.booking.travellers !== 'undefined') {
               return this.booking.travellers.length
             } else {
@@ -290,9 +333,16 @@ export default {
             this.totals.transports += price
             this.totalPrice += price
         },
-        tourPrice() {
-            axios.get('/api/booking/tour/price', this.tour.id)
-                .then(response => that.tourPrice = response.data.tour_price)
+        calcTourPrice() {
+            let that = this
+            console.log('tour', this.tour);
+            axios.get(`/api/booking/tour/price/${this.tour.id}`)
+                .then(response => {
+                  console.log('tour price data', response)
+                  that.tourPrice = parseFloat(response.data.tour_price)
+                  that.singleOccupancySurcharge = parseFloat(response.data.single_occupancy_surcharge)
+                  that.deposit = parseFloat(response.data.deposit)
+                })
                 .catch(error => console.log('error getting tour price', error))
         },
         calcDeposit() {

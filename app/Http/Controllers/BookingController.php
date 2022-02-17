@@ -137,7 +137,7 @@ class BookingController extends Controller
             throw new Exception('BookingController::payDeposit did not resolve to a deposit amount'); 
         }
 
-        $booking->setStatusDepositCheckout();
+        $bookingRepository->setStatusDepositCheckout($booking);
         Log::info('Booking: sending deposit request to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
 
         return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit');
