@@ -19,6 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->string('number');
             $table->dateTime('generated');
             $table->longText('customers');
+            $table->longText('groups');
             $table->longText('adjustments');
             $table->longText('payments');
             $table->longText('installments');

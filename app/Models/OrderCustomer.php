@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +39,7 @@ class OrderCustomer extends Model
 
     public function orderAccommodation()
     {
-        return $this->hasMany(OrderAccommodation::class, 'order_customer_id');
+        return GroupRepository::getOrderCustomerAccommodation($this);
     }
 
     public function orderActivities()
@@ -94,5 +95,10 @@ class OrderCustomer extends Model
     public function getIsLeadBookerAttribute()
     {
         return OrderRepository::isLeadBooker($this->order, $this->customer);
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 }
