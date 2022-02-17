@@ -26,6 +26,6 @@ class SendOrderChangedEmail
      */
     public function handle(OrderEvent $event)
     {
-        MailRepository::sendMailable('order-changed', $event->order->leadBooker->email, $event->order);
+        MailRepository::sendMailable('order-changed', $event->order->leadBooker->customer->email_address, $event->order);
     }
 }
