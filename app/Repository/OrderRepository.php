@@ -114,12 +114,18 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $included = "Base Components Include:\n";
+        foreach ($orderCustomer->orderAccommodation() as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type == 'Included') {
+                $included .= $tourInventory . "\n";
+            }
+        }
         foreach ($orderCustomer->orderActivities as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -128,7 +134,7 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -137,7 +143,7 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -146,7 +152,7 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -162,19 +168,16 @@ class OrderRepository
     {
         $data = [];
         $totalCost = 0;
-        $included = "Base Components Include:\n";
         $name = $group->name . ': ';
         foreach ($group->orderCustomers as $orderCustomer) { $name .= $orderCustomer->customer_name . ', '; }
         foreach ($group->rooms as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
-            if ($tourInventory->tour_component_type == 'Included') {
-                $included .= $tourInventory . "\n";
-            } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+            if ($tourInventory->tour_component_type != 'Included') {
+                $data[] = ['description' => "" . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
-        return ['total_cost' => $totalCost, 'name' => substr($name, 0, -2), 'billables' => array_merge([['description' => $included, 'cost' => 0,]], $data),];
+        return ['total_cost' => $totalCost, 'name' => substr($name, 0, -2), 'billables' => $data,];
     }
 
     // Order Addons/Upgrades

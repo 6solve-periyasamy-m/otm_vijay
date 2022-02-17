@@ -88,6 +88,7 @@ $order = $invoice->order;
         </tr>
         </thead>
         @foreach($invoice->customers as $name => $data)
+            @if (empty($data['billables'])) @continue @endif
             <tr>
                 <td colspan="3" class="t-align-center">
                     <strong>{{ $name }}</strong>
@@ -106,6 +107,7 @@ $order = $invoice->order;
             </tr>
         @endforeach
         @foreach($invoice->groups as $name => $data)
+            @if (empty($data['billables'])) @continue @endif
             <tr>
                 <td colspan="3" class="t-align-center">
                     <strong>{{ $data['name'] }}</strong>
