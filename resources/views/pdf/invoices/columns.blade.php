@@ -110,7 +110,7 @@ $order = $invoice->order;
             @if (empty($data['billables'])) @continue @endif
             <tr>
                 <td colspan="3" class="t-align-center">
-                    <strong>{{ $data['name'] }}</strong>
+                    <strong>(Rooming Group) {{ $data['name'] }}</strong>
                 </td>
             </tr>
             @foreach($data['billables'] as $billable)
