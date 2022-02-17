@@ -190,7 +190,7 @@ class OrderRepository
         $upgrades = [];
         $addons = [];
         $additionalValue = 0;
-        foreach ($customer->orderAccommodation as $orderAccommodation) {
+/*        foreach ($customer->orderAccommodation as $orderAccommodation) {
             if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
                 $upgrades[] = ['upgrade' => $orderAccommodation, 'customer' => $customer,];
                 $additionalValue += $orderAccommodation->cost;
@@ -199,7 +199,7 @@ class OrderRepository
                 $addons[] = ['addon' => $orderAccommodation, 'customer' => $customer,];
                 $additionalValue += $orderAccommodation->cost;
             }
-        }
+        }*/
         foreach ($customer->orderActivities as $orderActivity) {
             if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
                 $upgrades[] = ['upgrade' => $orderActivity, 'customer' => $customer,];
@@ -433,13 +433,13 @@ class OrderRepository
     public static function addIncludedToCustomer(OrderCustomer $orderCustomer)
     {
         $order = $orderCustomer->order;
-        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
+/*        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderAccommodation()->save($orderInventory);
                 event(new OrderCustomerComponentAddedEvent($orderInventory, false));
             }
-        }
+        }*/
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);

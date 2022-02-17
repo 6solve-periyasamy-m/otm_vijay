@@ -3,6 +3,7 @@
 namespace App\Listeners\Email;
 
 use App\Events\Order\OrderCreatedEvent;
+use App\Events\Parent\OrderEvent;
 use App\Repository\MailRepository;
 
 class SendOrderChangedEmail
@@ -20,10 +21,10 @@ class SendOrderChangedEmail
     /**
      * Handle the event.
      *
-     * @param  OrderCreatedEvent  $event
+     * @param  OrderEvent  $event
      * @return void
      */
-    public function handle(OrderCreatedEvent $event)
+    public function handle(OrderEvent $event)
     {
         MailRepository::sendMailable('order-changed', $event->order->leadBooker->email, $event->order);
     }
