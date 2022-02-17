@@ -98,6 +98,10 @@ export default {
         let that = this
         this.debug && console.log('1) BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
+        bus.$on('removeBookingCookie', token => {
+            deleteCookie(that.tokenName)
+            alert('Booking form clearance')
+        })
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
         })
@@ -105,7 +109,7 @@ export default {
           that.termsaccepted = state
         })
 
-        that.bookingToken = getCookie(that.tokenName); 
+        that.bookingToken = getCookie(that.tokenName)
         this.debug && console.log('Cookie read:', that.bookingToken)
 
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
