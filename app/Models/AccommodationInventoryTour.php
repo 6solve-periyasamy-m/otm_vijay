@@ -70,10 +70,10 @@ class AccommodationInventoryTour extends Model
         return $this->accommodationInventory();
     }
 
-    public function addToOrder(OrderCustomer $orderCustomer): OrderAccommodation
+    public function addToOrder(Group $group): OrderAccommodation
     {
         return OrderAccommodation::create([
-            'order_customer_id' => $orderCustomer->id,
+            'group_id' => $group->id,
             'accommodation_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price
         ]);
