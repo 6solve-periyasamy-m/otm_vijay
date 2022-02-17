@@ -277,7 +277,7 @@ $(document).ready( function () {
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
-                            @foreach([] as $orderAccommodation)
+                            @foreach($orderCustomer->orderAccommodation() as $orderAccommodation)
                                 <tr>
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_out) }}</td>
                                     <td>{{ $orderAccommodation->accommodation->name }}</td>

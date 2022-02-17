@@ -264,7 +264,7 @@ class OrderRepository
                 $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$group->name})"];
                 $additionalValue += $orderAccommodation->cost;
             }
-            if ($orderAccommodation->activityInventoryTour->tour_component_type == OrderRepository::$addonId) {
+            if ($orderAccommodation->tourComponent->tour_component_type == OrderRepository::$addonId) {
                 $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$group->name})",];
                 $additionalValue += $orderAccommodation->cost;
             }

@@ -7,6 +7,7 @@ use App\Models\OrderCustomer;
 use App\Models\OrderCustomerGroup;
 use DB;
 use Illuminate\Support\Collection;
+use Log;
 
 class GroupRepository
 {
@@ -59,7 +60,7 @@ class GroupRepository
     {
         $accommodation = new Collection();
         foreach (self::getGroups($orderCustomer) as $group) {
-            $accommodation->merge($group->rooms());
+            $accommodation = $accommodation->merge($group->rooms);
         }
         return $accommodation;
     }
