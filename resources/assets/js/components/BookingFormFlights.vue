@@ -63,7 +63,7 @@
     
                         <div class="row">
                             <div class="col-sm-12">
-                                <button class="btn btn-primary" @click="customFlights()">
+                                <button style="display: none;" class="btn btn-primary" @click="customFlights()">
                                                 Customise
                                             </button>
                                 <button class="btn btn-primary" @click="toggleFlights">

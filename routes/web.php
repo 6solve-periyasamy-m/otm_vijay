@@ -56,6 +56,8 @@ use App\Http\Controllers\UpgradeController;
 use App\Models\Tour;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Models\Order;
+use App\Repository\OrderRepository;
 
 /*
 |--------------------------------------------------------------------------
