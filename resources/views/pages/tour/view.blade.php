@@ -336,7 +336,7 @@
                                     <td class="actions">
                                         @can('update', \App\Models\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')
-                                                <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
+                                                <a href="{{ route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
                                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                                     <i class="icon-arrow-up"></i>
