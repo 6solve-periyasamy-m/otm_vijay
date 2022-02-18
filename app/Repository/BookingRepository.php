@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\OrderCustomerCreatedEvent;
+use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\RoomingFailedException;
 use App\Models\AccommodationGroup;
 use App\Models\Group;
@@ -113,6 +115,8 @@ class BookingRepository implements BookingRepositoryInterface
         $order->lead_booker_id = $leadBooker->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
+        event(new OrderCreatedEvent($order));
+
         OrderRepository::addIncludedToCustomer($leadBooker);
         foreach ($booking->travellers as $traveller) {
             if (array_key_exists($traveller->customer_id, $customers)) continue;
@@ -123,6 +127,7 @@ class BookingRepository implements BookingRepositoryInterface
             ]);
             $order->orderCustomers()->save($customer);
             $customers[$traveller->customer_id] = $customer;
+            event(new OrderCustomerCreatedEvent($customer));
             OrderRepository::addIncludedToCustomer($customer);
         }
 
