@@ -309,4 +309,24 @@ class SelectController extends ApiController
     public function getSelectedTransportInventoryForUpgrade($id) {
         return TransportTransforms::getSelectedInventoryForTransport($id);
     }
+
+    public function getAvailableAccommodation(Request $request, OrderCustomer $orderCustomer) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return AccommodationTransforms::getAvailableAddons($orderCustomer, $filter);
+    }
+
+    public function getAvailableActivities(Request $request, OrderCustomer $orderCustomer) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return ActivityTransforms::getAvailableAddons($orderCustomer, $filter);
+    }
+
+    public function getAvailableFlights(Request $request, OrderCustomer $orderCustomer) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return FlightTransforms::getAvailableAddons($orderCustomer, $filter);
+    }
+
+    public function getAvailableTransport(Request $request, OrderCustomer $orderCustomer) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return TransportTransforms::getAvailableAddons($orderCustomer, $filter);
+    }
 }

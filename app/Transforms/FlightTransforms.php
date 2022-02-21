@@ -6,6 +6,7 @@ use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
+use App\Models\OrderCustomer;
 use App\Repository\TourRepository;
 
 interface FlightTransformsInterface {
@@ -105,5 +106,23 @@ class FlightTransforms implements FlightTransformsInterface
         $subData['id'] = $inventory->id;
         $subData['text'] = $inventory->flight_number . ' - ' . $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;
         return $subData;
+    }
+
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string $filter)
+    {
+        $tour = $orderCustomer->order->tour;
+        $data = [];
+        $owned = [];
+        foreach ($orderCustomer->orderFlights as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
+        foreach ($tour->flightInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Add-on") {
+                if (in_array($inventoryTour->id, $owned)) continue;
+                $subData = [];
+                $subData['id'] = $inventoryTour->id;
+                $subData['text'] = $inventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            }
+        }
+        return $data;
     }
 }

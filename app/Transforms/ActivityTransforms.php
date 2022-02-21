@@ -5,6 +5,7 @@ namespace App\Transforms;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityType;
+use App\Models\OrderCustomer;
 use App\Models\TicketType;
 use App\Repository\TourRepository;
 
@@ -105,5 +106,23 @@ class ActivityTransforms implements ActivityTransformsInterface
         $subData['id'] = $inventory->id;
         $subData['text'] = $inventory->ticketType->name . ' - ' . $inventory->starts_at . ' to ' . $inventory->ends_at;
         return $subData;
+    }
+
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string $filter)
+    {
+        $tour = $orderCustomer->order->tour;
+        $data = [];
+        $owned = [];
+        foreach ($orderCustomer->orderActivities as $orderActivity) $owned[] = $orderActivity->tourComponent->id;
+        foreach ($tour->activityInventoryTours as $activityInventoryTour) {
+            if ($activityInventoryTour->tour_component_type === "Add-on") {
+                if (in_array($activityInventoryTour->id, $owned)) continue;
+                $subData = [];
+                $subData['id'] = $activityInventoryTour->id;
+                $subData['text'] = $activityInventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($activityInventoryTour->tour_sales_price);
+                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            }
+        }
+        return $data;
     }
 }

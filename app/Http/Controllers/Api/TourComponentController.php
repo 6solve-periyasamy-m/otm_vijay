@@ -37,7 +37,9 @@ class TourComponentController extends Controller
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'accommodation_id' => 'required|exists:accommodation_inventory_tours,id']);
         $oCustomerId = $request->input('customer_id');
         $accommodationInventoryTourId = $request->input('accommodation_id');
-        return AccommodationComponentRepository::grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
+        $orderInventory = AccommodationComponentRepository::grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
+        if (!isset($orderInventory)) return response()->json(['success' => false, 'message' => 'Customer does not have a group assigned',]);
+        return $orderInventory;
     }
 
     public function addActivityAddon(Request $request) {
