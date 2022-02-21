@@ -78,7 +78,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $group = $orderCustomer->primary_group;
         if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
-            'group_id' => $oCustomerId,
+            'group_id' => $group->id,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
             'share_with_user_id' => null,
             'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
