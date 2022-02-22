@@ -4,49 +4,20 @@
 
 @section('header-script')
 <script type="text/javascript">
-    {{-- TODO: Upgrade to Select2 --}}
-function updateAccommodationSelectFields() {
-    $('#accommodation-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('api.order.addon.get.accommodation', ['oCustomerId' => $orderCustomer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
-        $.each(data, function (index, element) {
-            $('#accommodation-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.room_type + '</option>');
-        });
-    });
-}
-function updateActivitySelectFields() {
-    $('#activities-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('api.order.addon.get.activity', ['oCustomerId' => $orderCustomer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
-        $.each(data, function (index, element) {
-            $('#activities-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.activity_type + '</option>');
-        });
-    });
-}
-function updateFlightSelectFields() {
-    $('#flights-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('api.order.addon.get.flight', ['oCustomerId' => $orderCustomer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
-        $.each(data, function (index, element) {
-            $('#flights-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.travel_class + '</option>');
-        });
-    });
-}
-function updateTransportSelectFields() {
-    $('#transports-select').find('option').remove().end().append('<option selected>Please choose an option</option>');
-    $.get('{{ route('api.order.addon.get.transport', ['oCustomerId' => $orderCustomer->id,]) }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}'}, function (data) {
-        $.each(data, function(index, element) {
-            $('#transports-select').append('<option value=' + element.id + '>' + element.name + ' | ' + element.transport_type + '</option>');
-        });
-    });
-}
 function addAccommodationAddon() {
-    let id = $('#accommodation-select').find(':selected').val()
+    let id = $('#accommodation_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'accommodation_id': id})
-            .done(function () { location.reload();})
+            .done(function (xhr, textStatus, errorThrown) {
+                if (xhr.success) location.reload();
+                else alert(xhr.message);
+            })
             .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
+
 function addActivityAddon() {
-    let id = $('#activities-select').find(':selected').val()
+    let id = $('#activity_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.activity') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'activity_id': id})
             .done(function () { location.reload();})
@@ -54,7 +25,7 @@ function addActivityAddon() {
     }
 }
 function addFlightAddon() {
-    let id = $('#flights-select').find(':selected').val()
+    let id = $('#flight_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.flight') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'flight_id': id})
             .done(function () { location.reload();})
@@ -62,7 +33,7 @@ function addFlightAddon() {
     }
 }
 function addTransportAddon() {
-    let id = $('#transports-select').find(':selected').val()
+    let id = $('#transport_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.transport') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'transport_id': id})
             .done(function () { location.reload();})
@@ -87,10 +58,6 @@ $(document).ready( function () {
     $('#transports-table').DataTable({fixedHeader: true});
     $('#merchandise-table').DataTable({fixedHeader: true});
     $('#customer-adjustment-table').DataTable({fixedHeader: true});
-    updateAccommodationSelectFields();
-    updateActivitySelectFields();
-    updateFlightSelectFields();
-    updateTransportSelectFields();
 });
 </script>
 @endsection
@@ -264,12 +231,10 @@ $(document).ready( function () {
             {{-- Accommodation Table --}}
             <div id="accommodation" role="tabpanel" class="tab-pane fade show active">
                 <div id="accommodation-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    <select id="accommodation-select" class="form-select select mb-1">
-                    </select>
-                    <button class="btn btn-primary text-white" onclick="addAccommodationAddon()">
-                        <i class="icon-plus"></i>
-                        Add Component
-                    </button>
+                    @include('partials.fields.selector.adder',
+                        ['field' => 'accommodation_id', 'preselect' => false,
+                        'fullRoute' => route('api.available-accommodation.select', ['orderCustomer' => $orderCustomer,]),
+                        'createRoute' => '#', 'onclick' => 'addAccommodationAddon()', 'target' => ''])
                 </div>
                 <div id="accommodation-details">
                     <table id="accommodation-table" class="table table-striped table-responsive-sm">
@@ -305,12 +270,10 @@ $(document).ready( function () {
             {{-- Activities Table --}}
             <div id="activities" role="tabpanel" class="tab-pane fade">
                 <div id="activities-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    <select id="activities-select" class="form-select select mb-1">
-                    </select>
-                    <button class="btn btn-primary text-white" onclick="addActivityAddon()">
-                        <i class="icon-plus"></i>
-                        Add Component
-                    </button>
+                    @include('partials.fields.selector.adder',
+                        ['field' => 'activity_id', 'preselect' => false,
+                        'fullRoute' => route('api.available-activities.select', ['orderCustomer' => $orderCustomer,]),
+                        'createRoute' => '#', 'onclick' => 'addActivityAddon()', 'target' => ''])
                 </div>
                 <div id="activities-details">
                     <table id="activities-table" class="table table-striped table-responsive-sm">
@@ -344,12 +307,10 @@ $(document).ready( function () {
             {{-- Flights Table --}}
             <div id="flights" role="tabpanel" class="tab-pane fade">
                 <div id="flights-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    <select id="flights-select" class="form-select select mb-1">
-                    </select>
-                    <button class="btn btn-primary text-white" onclick="addFlightAddon()">
-                        <i class="icon-plus"></i>
-                        Add Component
-                    </button>
+                    @include('partials.fields.selector.adder',
+                        ['field' => 'flight_id', 'preselect' => false,
+                        'fullRoute' => route('api.available-flights.select', ['orderCustomer' => $orderCustomer,]),
+                        'createRoute' => '#', 'onclick' => 'addFlightAddon()', 'target' => ''])
                 </div>
                 <div id="flights-details">
                     <table id="flights-table" class="table table-striped table-responsive-sm">
@@ -383,12 +344,10 @@ $(document).ready( function () {
             {{-- Transports Table --}}
             <div id="transports" role="tabpanel" class="tab-pane fade">
                 <div id="transports-new" class="d-flex justify-content-between mb-3 flex-wrap">
-                    <select id="transports-select" class="form-select select mb-1">
-                    </select>
-                    <button class="btn btn-primary text-white" onclick="addTransportAddon()">
-                        <i class="icon-plus"></i>
-                        Add Component
-                    </button>
+                    @include('partials.fields.selector.adder',
+                        ['field' => 'transport_id', 'preselect' => false,
+                        'fullRoute' => route('api.available-transports.select', ['orderCustomer' => $orderCustomer,]),
+                        'createRoute' => '#', 'onclick' => 'addTransportAddon()', 'target' => ''])
                 </div>
                 <div id="transports-details">
                     <table id="transports-table" class="table table-striped table-responsive-sm">
