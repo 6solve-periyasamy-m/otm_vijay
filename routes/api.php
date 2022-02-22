@@ -187,15 +187,19 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::prefix('tour/{tour}')->group(function() {
             Route::prefix('accommodation/inventory')->group(function() {
                 Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('tour.accommodation.inventory.add');
+                Route::post('/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('tour.accommodation.inventory.upgrade');
             });
             Route::prefix('activity/inventory')->group(function() {
                 Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('tour.activity.inventory.add');
+                Route::post('/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('tour.activity.inventory.upgrade');
             });
             Route::prefix('flight/inventory')->group(function() {
                 Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('tour.flight.inventory.add');
+                Route::post('/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('tour.flight.inventory.upgrade');
             });
             Route::prefix('transport/inventory')->group(function() {
                 Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('tour.transport.inventory.add');
+                Route::post('/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('tour.transport.inventory.upgrade');
             });
         });
     });

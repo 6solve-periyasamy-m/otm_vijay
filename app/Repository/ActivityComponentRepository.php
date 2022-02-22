@@ -114,4 +114,13 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         return $upgrade->base;
     }
+
+    public static function isOnUpgradeTree(ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
+    }
 }

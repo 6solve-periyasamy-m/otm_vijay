@@ -77,4 +77,10 @@ class OrderAccommodation extends Model
     {
         return $this->belongsTo(Group::class, 'group_id');
     }
+
+    public function applyUpgrade(AccommodationInventoryTourUpgrade $upgrade) {
+        $this->accommodation_inventory_tour_id = $upgrade->upgrade_id;
+        $this->cost = $upgrade->upgrade->tour_sales_price;
+        $this->save();
+    }
 }

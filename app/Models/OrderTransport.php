@@ -72,4 +72,10 @@ class OrderTransport extends Model
     {
         return $this->orderCustomers();
     }
+
+    public function applyUpgrade(AccommodationInventoryTourUpgrade $upgrade) {
+        $this->transport_inventory_tour_id = $upgrade->upgrade_id;
+        $this->cost = $upgrade->upgrade->tour_sales_price;
+        $this->save();
+    }
 }

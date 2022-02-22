@@ -2,7 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\AccommodationInventoryTourUpgrade;
+use App\Models\ActivityInventoryTourUpgrade;
+use App\Models\FlightInventoryTourUpgrade;
+use App\Models\OrderAccommodation;
+use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
+use App\Models\OrderFlight;
+use App\Models\OrderTransport;
+use App\Models\TransportInventoryTourUpgrade;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
@@ -70,5 +78,49 @@ class TourComponentController extends Controller
         $oMerch = OrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
         if (!isset($oMerch)) return response()->json(['success' => false, 'message' => 'Customer already has selected merchandise']);
         return $oMerch;
+    }
+
+    public function applyAccommodationUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $orderComponent = OrderAccommodation::find($request->input('component_id'));
+        $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
+        if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
+        if (!AccommodationComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        $orderComponent->applyUpgrade($upgrade);
+        return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
+    }
+
+    public function applyActivityUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $orderComponent = OrderActivity::find($request->input('component_id'));
+        $upgrade = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
+        if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
+        if (!ActivityComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        $orderComponent->applyUpgrade($upgrade);
+        return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
+    }
+
+    public function applyFlightUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $orderComponent = OrderFlight::find($request->input('component_id'));
+        $upgrade = FlightInventoryTourUpgrade::find($request->input('upgrade_id'));
+        if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
+        if (!FlightComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        $orderComponent->applyUpgrade($upgrade);
+        return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
+    }
+
+    public function applyTransportUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $orderComponent = OrderTransport::find($request->input('component_id'));
+        $upgrade = TransportInventoryTourUpgrade::find($request->input('upgrade_id'));
+        if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
+        if (!TransportComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        $orderComponent->applyUpgrade($upgrade);
+        return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 }
