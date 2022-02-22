@@ -2,9 +2,10 @@
     <div class="booking-form">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-default">
+                <div class="card card-default card-container">
                     <div class="card-header">
-                        OTM Booking Form version 0.81
+                        <div> OTM Booking Form version 0.82 </div>
+                        <div> <bookingform-control></bookingform-control> </div>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -21,7 +22,6 @@
                             <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
                         </div>
                     </div>
-                    <bookingform-control></bookingform-control>
                     <bookingform-footer></bookingform-footer>
                 </div>
             </div>
@@ -147,33 +147,41 @@ export default {
     }
 }
 </script>
-<style scoped>
-    .cool-theme {
-        --payment-button-color: #007bff;
-        --card-background: #c2e2c5;
-        --card-body-background: #72a7c2;
-        --booking-form-background: #e1e7c9;
-    }
-    .warm-theme {
-        --payment-button-color: #007bff;
-        --card-background: #ff7d7d;
-        --card-body-background: #fdde88;
-        --booking-form-background: #ff9c2b;
-    }
-    .action-theme {
-        --payment-button-color: #007bff;
-        --card-background: #ffaf04;
-        --card-body-background: #4281ff;
-        --booking-form-background: #ffffff;
-    }
-    button.btn-themed.cool {
-        background: #7efafa;
-    }
-    button.btn-themed.warm {
-        background: #f38181;
-    }
-    button.btn-themed.action {
-        background: #2c89f3;
-    }
-
+<style scoped lang="scss">
+.cool-theme {
+    --payment-button-color: #007bff;
+    --card-background: #c2e2c5;
+    --card-body-background: #72a7c2;
+    --booking-form-background: #e1e7c9;
+}
+.warm-theme {
+    --payment-button-color: #007bff;
+    --card-background: #ff7d7d;
+    --card-body-background: #fdde88;
+    --booking-form-background: #ff9c2b;
+}
+.action-theme {
+    --payment-button-color: #007bff;
+    --card-background: #ffaf04;
+    --card-body-background: #4281ff;
+    --booking-form-background: #ffffff;
+}
+button.btn-themed.cool {
+    background: #7efafa;
+}
+button.btn-themed.warm {
+    background: #f38181;
+}
+button.btn-themed.action {
+   background: #2c89f3;
+}
+.card-header {
+  display: flex;
+  gap: 2rem;
+  flex-direction: row;
+  align-content: space-between;
+}
+.card-container {
+  width: 100%;
+}
 </style>

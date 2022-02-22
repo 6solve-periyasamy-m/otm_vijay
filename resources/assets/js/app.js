@@ -103,6 +103,7 @@ Vue.component('payment-installments', require('./components/PaymentInstallments.
 Vue.component('booking-info', require('./components/BookingInfo.vue').default);
 Vue.component('vue-test', require('./components/VueTest.vue').default);
 Vue.component('finance-menu', require('./components/finance-menu.vue').default);
+Vue.component('bookingform-control', require('./components/BookingFormControl.vue').default);
 Vue.component('bookingform-header', require('./components/BookingFormHeader.vue').default);
 Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
 Vue.component('AtolCertificate', require('./components/AtolCertificate.vue').default);
