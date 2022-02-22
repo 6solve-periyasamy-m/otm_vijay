@@ -112,6 +112,16 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
 
     public static function getParentComponent(ActivityInventoryTour $inventoryTour) {
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
+    }
+
+    public static function isOnUpgradeTree(ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
     }
 }

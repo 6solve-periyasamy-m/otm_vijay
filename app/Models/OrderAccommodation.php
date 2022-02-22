@@ -77,4 +77,10 @@ class OrderAccommodation extends Model
     {
         return $this->belongsTo(Group::class, 'group_id');
     }
+
+    public function swap(AccommodationInventoryTour $swap) {
+        $this->accommodation_inventory_tour_id = $swap->id;
+        $this->cost = $swap->tour_sales_price;
+        $this->save();
+    }
 }

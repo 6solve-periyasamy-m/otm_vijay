@@ -73,4 +73,10 @@ class OrderActivity extends Model
     {
         return $this->orderCustomers();
     }
+
+    public function swap(ActivityInventoryTour $swap) {
+        $this->activity_inventory_tour_id = $swap->id;
+        $this->cost = $swap->tour_sales_price;
+        $this->save();
+    }
 }

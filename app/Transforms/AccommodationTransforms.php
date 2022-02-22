@@ -118,7 +118,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $owned = [];
         if (!isset($group)) return $data;
         foreach ($group->rooms as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
-        foreach ($tour->accommodationInventoryTour as $inventoryTour) {
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Add-on") {
                 if (in_array($inventoryTour->id, $owned)) continue;
                 $subData = [];
