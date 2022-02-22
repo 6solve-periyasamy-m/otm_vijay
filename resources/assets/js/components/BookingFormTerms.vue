@@ -3,9 +3,9 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-1 dropdown-button">
-                    <button class="btn btn-link cardhead" @click="toggleTermsConditions">
-                            Terms and conditions
-                        </button>
+                  <button class="btn btn-link cardhead" @click="toggleTermsConditions">
+                     Terms and conditions
+                  </button>
                 </h5>
             </div>
             <div v-if="showTermsConditions">

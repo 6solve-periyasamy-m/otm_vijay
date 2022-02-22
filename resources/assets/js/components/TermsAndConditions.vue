@@ -1,6 +1,8 @@
 <template>
 <div class="terms">
-    <a href="#show" @click="show=!show">{{show?"Hide":"Show"}}</a> | <a href="#show" @click="scroll=!scroll">{{scroll?"No Scroll":"Scroll"}}</a> <span v-if="!show">(To view Terms and Conditions, click Show)</span>
+    <div v-if="choice">
+        <a href="#show" @click="show=!show">{{show?"Hide":"Show"}}</a> | <a href="#show" @click="scroll=!scroll">{{scroll?"No Scroll":"Scroll"}}</a> <span v-if="!show">(To view Terms and Conditions, click Show)</span>
+    </div>
     <div class="page" v-show="show" :class="{ scrolling:scroll }"> 
       <h2>Terms and Conditions of Tour</h2>
       <div v-html="terms"></div>
@@ -15,6 +17,7 @@
     },
     data() {
       return {
+        choice: false,
         show: true,
         scroll: true,
         terms: ''
