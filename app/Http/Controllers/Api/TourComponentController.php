@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\FlightInventoryTourUpgrade;
@@ -83,44 +84,64 @@ class TourComponentController extends Controller
     public function applyAccommodationUpgrade(Request $request): \Illuminate\Http\JsonResponse
     {
         $orderComponent = OrderAccommodation::find($request->input('component_id'));
-        $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if ($request->input('upgrade_id') == 0) {
+            $parent = $orderComponent->tourComponent->parent();
+            $upgrade = $parent->upgrades()->first();
+        } else {
+            $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
+        }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!AccommodationComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
-        $orderComponent->applyUpgrade($upgrade);
+        $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
     public function applyActivityUpgrade(Request $request): \Illuminate\Http\JsonResponse
     {
         $orderComponent = OrderActivity::find($request->input('component_id'));
-        $upgrade = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if ($request->input('upgrade_id') == 0) {
+            $parent = $orderComponent->tourComponent->parent();
+            $upgrade = $parent->upgrades()->first();
+        } else {
+            $upgrade = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
+        }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!ActivityComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
-        $orderComponent->applyUpgrade($upgrade);
+        $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
     public function applyFlightUpgrade(Request $request): \Illuminate\Http\JsonResponse
     {
         $orderComponent = OrderFlight::find($request->input('component_id'));
-        $upgrade = FlightInventoryTourUpgrade::find($request->input('upgrade_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if ($request->input('upgrade_id') == 0) {
+            $parent = $orderComponent->tourComponent->parent();
+            $upgrade = $parent->upgrades()->first();
+        } else {
+            $upgrade = FlightInventoryTourUpgrade::find($request->input('upgrade_id'));
+        }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!FlightComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
-        $orderComponent->applyUpgrade($upgrade);
+        $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
     public function applyTransportUpgrade(Request $request): \Illuminate\Http\JsonResponse
     {
         $orderComponent = OrderTransport::find($request->input('component_id'));
-        $upgrade = TransportInventoryTourUpgrade::find($request->input('upgrade_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+        if ($request->input('upgrade_id') == 0) {
+            $parent = $orderComponent->tourComponent->parent();
+            $upgrade = $parent->upgrades()->first();
+        } else {
+            $upgrade = TransportInventoryTourUpgrade::find($request->input('upgrade_id'));
+        }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!TransportComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
-        $orderComponent->applyUpgrade($upgrade);
+        $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 }

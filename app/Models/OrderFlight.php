@@ -83,9 +83,9 @@ class OrderFlight extends Model
         return $this->orderCustomers();
     }
 
-    public function applyUpgrade(AccommodationInventoryTourUpgrade $upgrade) {
-        $this->flight_inventory_tour_id = $upgrade->upgrade_id;
-        $this->cost = $upgrade->upgrade->tour_sales_price;
+    public function swap(FlightInventoryTour $swap) {
+        $this->flight_inventory_tour_id = $swap->id;
+        $this->cost = $swap->tour_sales_price;
         $this->save();
     }
 }

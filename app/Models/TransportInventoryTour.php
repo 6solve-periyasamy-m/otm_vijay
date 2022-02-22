@@ -72,4 +72,16 @@ class TransportInventoryTour extends Model
     {
         return $this->transportInventory();
     }
+
+    public function getUpgradeKeyMap(): array
+    {
+        $upgrades = $this->upgrades;
+        $keys = [];
+        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
+        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        foreach ($upgrades as $upgrade) {
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+        }
+        return $keys;
+    }
 }

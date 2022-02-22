@@ -114,13 +114,14 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
     public static function getParentComponent(FlightInventoryTour $inventoryTour)
     {
         $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
     }
 
     public static function isOnUpgradeTree(FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade): bool
     {
         if ($upgrade->base_id == $inventoryTour->id) return true;
-        foreach ($inventoryTour->upgrades as $inventoryTourUpgrade) {
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
         }
         return false;

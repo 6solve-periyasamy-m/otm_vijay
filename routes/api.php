@@ -187,19 +187,15 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::prefix('tour/{tour}')->group(function() {
             Route::prefix('accommodation/inventory')->group(function() {
                 Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('tour.accommodation.inventory.add');
-                Route::post('/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('tour.accommodation.inventory.upgrade');
             });
             Route::prefix('activity/inventory')->group(function() {
                 Route::post('/add', [ActivityController::class, 'addActivityInventoryToTour'])->name('tour.activity.inventory.add');
-                Route::post('/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('tour.activity.inventory.upgrade');
             });
             Route::prefix('flight/inventory')->group(function() {
                 Route::post('/add', [FlightController::class, 'addFlightInventoryToTour'])->name('tour.flight.inventory.add');
-                Route::post('/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('tour.flight.inventory.upgrade');
             });
             Route::prefix('transport/inventory')->group(function() {
                 Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('tour.transport.inventory.add');
-                Route::post('/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('tour.transport.inventory.upgrade');
             });
         });
     });
@@ -220,6 +216,10 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::get('/transports/{oCustomerId}', [TourComponentController::class, 'getAvailableTransportAddons'])->name('transport');
             });
         });
+        Route::post('accommodation/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('accommodation.upgrade');
+        Route::post('activity/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('activity.upgrade');
+        Route::post('flight/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('flight.upgrade');
+        Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
         Route::get('/status', function(){})->name('status.stub');

@@ -41,15 +41,18 @@ class AccommodationInventoryTour extends Model
         return $this->hasMany(OrderAccommodation::class, 'accommodation_inventory_tour_id');
     }
 
-    public function upgrades() {
+    public function upgrades()
+    {
         return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'base_id');
     }
 
-    public function parent() {
+    public function parent()
+    {
         return AccommodationComponentRepository::getParentComponent($this);
     }
 
-    public function tour() {
+    public function tour()
+    {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
@@ -68,5 +71,17 @@ class AccommodationInventoryTour extends Model
     public function inventory()
     {
         return $this->accommodationInventory();
+    }
+
+    public function getUpgradeKeyMap(): array
+    {
+        $upgrades = $this->upgrades;
+        $keys = [];
+        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
+        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        foreach ($upgrades as $upgrade) {
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+        }
+        return $keys;
     }
 }

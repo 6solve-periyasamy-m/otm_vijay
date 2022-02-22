@@ -124,6 +124,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
     }
 
@@ -205,7 +206,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     public static function isOnUpgradeTree(AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade): bool
     {
         if ($upgrade->base_id == $inventoryTour->id) return true;
-        foreach ($inventoryTour->upgrades as $inventoryTourUpgrade) {
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
         }
         return false;
