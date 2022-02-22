@@ -59,7 +59,7 @@
           <dd class="definition__body"><a href="/booking/check/vuetest">Vue tests</a></dd>
           <dd class="definition__body"><a href="/booking/check/atoltest">ATOL Certificate test</a></dd>
           <hr/>
-          <div class="ml-8 small">
+          <div style="display: none" class="ml-8 small">
             <h4>Alternative paths: deprecated</h4>
             <p>Booking forms are only to be retrieved for actual tours using /booking/tour-name, alternative paths
               to a booking form could involve selection dropdowns for the tour/event which have been disabled</p>
