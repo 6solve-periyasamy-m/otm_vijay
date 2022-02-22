@@ -54,7 +54,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
         return $activities;
     }
 
-    public function getActivities(Tour $tour = null)
+    public function getActivities(Tour $tour = null, String $tour_component_type = null)
     {
         if (isset($tour)) {
             $activity = new Activity();
@@ -76,6 +76,9 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 ->whereNull('activities.deleted_at')
                 ->whereNull('activity_inventories.deleted_at')
                 ->whereNull('activity_inventory_tours.deleted_at');
+            if ($tour_component_type) {
+                $activitiesQuery = $activitiesQuery->where('activity_inventory_tours.tour_component_type', $tour_component_type);
+            }
             $activities = $activitiesQuery->get();
         } else {
             $activities = $this->model->get();
@@ -94,10 +97,8 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
      */
     public function getBookingsForTour(Booking $booking)
     {
-        // return $this->get($booking->tour);
-
         // get the preset activities for this tour (fixed)
-        $activitiesBooking = $this->getActivities($booking->tour);
+        $activitiesBooking = $this->getActivities($booking->tour, 'Included');
 
         // when activity bookings are recorded, test this query
         // $activitiesBooking = $this->getBookings($booking->tour);

@@ -63,7 +63,7 @@ Route::prefix('booking')->group(function () {
     // Events
     Route::get('/events', [TourController::class, 'getEvents']);
     Route::get('/tours/{event_id}', [TourController::class, 'getTours']);
-    Route::get('/tour/{id}', [TourController::class, 'getBasicTourInformation']);
+    Route::get('/tour/{id}', [TourController::class, 'getTour']);
 
     // Airlines
     Route::get('/airlines', [AirlinesController::class, 'getAirlines']);
@@ -178,6 +178,10 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
+        Route::post('available-accommodation/{orderCustomer}', [SelectController::class, 'getAvailableAccommodation'])->name('available-accommodation.select');
+        Route::post('available-activities/{orderCustomer}', [SelectController::class, 'getAvailableActivities'])->name('available-activities.select');
+        Route::post('available-flights/{orderCustomer}', [SelectController::class, 'getAvailableFlights'])->name('available-flights.select');
+        Route::post('available-transports/{orderCustomer}', [SelectController::class, 'getAvailableTransport'])->name('available-transports.select');
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');

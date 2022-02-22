@@ -24,8 +24,10 @@ class TransportRepository implements TransportRepositoryInterface
             ->join('transport_inventories', 'transport_inventories.transport_id', 'transports.id')
             ->join('transport_inventory_tours', 'transport_inventory_tours.transport_inventory_id', 'transport_inventories.id')
             ->join('travel_classes', 'transport_inventories.travel_class_id', 'travel_classes.id')
+            ->join('addresses', 'transports.departure_address_id', 'addresses.id')
             ->select('transport_inventories.notes as transport_notes', 
             'transport_inventory_tours.id as transport_inventory_tour_id', 
+            'addresses.name as address', 'addresses.region as address_region',
             'transports.*', 
             'transport_inventories.departs_at', 'transport_inventories.arrives_at',
             'travel_classes.name as travel_class_name')

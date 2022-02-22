@@ -13,7 +13,7 @@
         <div v-else class="col-sm-2">
             {{tour_flight_types[0]}} 
         </div>
-        <div class="col-sm-10 compress" v-if="tour_flights_filtered">
+        <div class="col-sm-10" v-if="tour_flights_filtered">
             <select 
                 :disabled="!enabled"
                 @change="changeFlight"
@@ -47,7 +47,8 @@ export default {
             tour_flights_filtered: [],
             tour_flights: '',
             flight: {},
-            caption: 'Flight Select'
+            caption: 'Flight Select',
+            format: 'short'
         }
     },
     mounted() {
@@ -113,7 +114,11 @@ console.log('items in created: ',this.selected_item, this.identification, this.t
                 return ''
             }
             const showComponentType = true
-            return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} ${showComponentType ? flight.tour_component_type + ' ' : ''}From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
+            if (this.format == 'long') {
+                return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} ${showComponentType ? flight.tour_component_type + ' ' : ''}From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
+            } else {
+                return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.travel_class} (${this.airports[flight.departure_airport_id].name} to ${this.airports[flight.arrival_airport_id].name})`
+            }
         },
         dmy(s) {
             return dates.makeDateFromString(s)

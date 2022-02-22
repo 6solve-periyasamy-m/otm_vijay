@@ -9,49 +9,22 @@
                     <p>Form section for booking or confirming ground transport including options available to support activities</p>
                 </h5>
             </div>
-            <div  v-if="activated" class="card-body compress">
+            <div  v-if="activated" class="card-body">
                 <div class="transports">
                     <div class="transport">
                         <div class="listing headings">
-                            <div class="heading name">
-                                Name
-                            </div>
-                            <div class="heading description">
-                                Description
-                            </div>
-                            <div class="heading tour_component_type">
-                                Transport Type
-                            </div>
-                            <div class="heading is_domestic">
-                                Domestic/International
-                            </div>
-                            <div class="heading address_from">
-                                From
-                            </div>
-                            <div class="heading address_to">
-                                To
-                            </div>
+                            <div class="heading address_from"> When </div>
+                            <div class="heading name"> Name </div>
+                            <div class="heading address"> Address </div>
+                            <div class="heading tour_component_type"> Transport Type </div>
                         </div>
                         <div v-for="transport in transports">
                             <div class="listing">
-                                <div class="name">
-                                    {{transport.name}}
-                                </div>
-                                <div class="description">
-                                    {{transport.description}}
-                                </div>
-                                <div class="transport_type">
-                                    {{transport.transport_type_name}}
-                                </div>
-                                <div class="is_domestic">
-                                    {{transport.is_domestic ? 'Domestic' : 'International'}}
-                                </div>
-                                <div class="address_from">
-                                    {{transport.departure_address}}<br>Departure {{datetime(transport.departs_at)}}
-                                </div>
-                                <div class="address_to">
-                                    {{transport.arrival_address}}<br>Arrival {{datetime(transport.arrives_at)}}
-                                </div>
+                                <div class="address_from"> {{datetime(transport.departs_at)}} <br>{{transport.departure_address}} </div>
+                                <div class="name"> {{transport.name}} </div>
+                                <div class="address"> {{transport.address ? transport.address : ''}} 
+                                  <br>{{transport.address_region ? transport.address_region : '' }}</div>
+                                <div class="tour_component_type"> {{ transport.transport_type_name != undefined && transport.transport_type_name.length ? transport.transport_type_name : '-' }} </div>
                             </div>
                         </div>
                     </div>
@@ -124,12 +97,13 @@ export default {
         margin: 1rem;
     }
     .listing.headings div {
-        text-align: center;
+        text-align: left;
     } 
     .listing .name {
         width: 12rem;
     }
-    .listing .description {
+    .listing .description,
+    .listing .address {
         width: 24rem;
     }
     .listing .tour_component_type {
@@ -140,6 +114,6 @@ export default {
     }
     .listing .address_from, 
     .listing .address_to {
-        width: 20rem;
+        width: 10rem;
     }
 </style>

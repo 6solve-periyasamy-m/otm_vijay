@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
-                        OTM Booking Form version 0.8
+                        OTM Booking Form version 0.81
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -31,41 +31,9 @@
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
-import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
+import { setCookie, getCookie, deleteCookie } from '../cookies'
+// import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
 
-function setCookie(cname, cvalue, exdays = 7) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function deleteCookie(name) {
-  if (getCookie(name)) {
-    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    /*
-    document.cookie = name + "=" +
-      ((path) ? ";path="+path:"")+
-      ((domain)?";domain="+domain:"") +
-      ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    */
-  }
-}
 export default {
     props: {
         tour: Object,
@@ -114,8 +82,6 @@ export default {
         this.debug && console.log('Cookie read:', that.bookingToken)
 
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
-            this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingToken)
-            //axios.get(`/api/booking/customer/${that.bookingToken}`)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
                 if (response.data.success) {
@@ -134,27 +100,6 @@ export default {
                     that.resetToken()
                     //that.createBooking(that.bookingToken)
                 }
-//                 const customer = response.data.customer
-//                 console.log('customer retrieved', customer)
-//                 if (typeof customer === 'undefined' || customer == null || customer.length == 0) {
-//                     console.log('cookie found no customer. removing ', that.tokenName)
-//                     deleteCookie(that.tokenName)
-//                     that.authenticated = false
-//                     that.login = ''
-//                 } else {
-//                     that.leadTraveller = customer
-//                     const home_address = response.data.home_address
-//                     const billing_address = response.data.billing_address
-// console.log(response.data)
-//                     bus.$emit('setBookingToken', that.bookingToken)
-//                     bus.$emit('leadTravellerLoaded', that.leadTraveller)
-//                     bus.$emit('homeAddressLoaded', home_address)
-//                     if (customer.billing_address_id !== customer.home_address_id && customer.billing_address_id) {
-//                         console.log('BILLING loading...', customer, billing_address)
-//                         bus.$emit('billingAddressLoaded', billing_address)
-//                     }
-//                     that.login = that.leadTraveller.email_address
-//                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
@@ -165,22 +110,19 @@ export default {
             //that.createBooking(that.bookingToken)
         }
     },
-    mounted() {
-        let that = this
-        this.debug && console.log("bookingForm module mounted")
-    },
     methods: {
         isset(obj) {
             if (typeof obj !== 'undefined' && obj !== null) {
                 return Object.keys(obj).length > 0
             }
         },
+        // todo integrate with login - list and activate tokens
         resetToken() {
             let that = this
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
-            that.debug && console.log('bookingToken reset and CREATED ', that.bookingToken)
+            that.debug && console.log('bookingToken reset ', that.bookingToken)
             bus.$emit('setBookingToken', that.bookingToken)
         },
         changeTheme(theme) {

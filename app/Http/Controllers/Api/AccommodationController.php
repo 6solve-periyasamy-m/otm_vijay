@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\RoomingFailedException;
+use App\Models\Order;
 use App\Repository\OrderRepository;
 use Exception;
 use App\Models\Tour;
@@ -11,8 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\ApiController;
-
-use App\Models\Tour;
 use App\Models\RoomType;
 use App\Models\AccommodationGroup;
 use App\Models\AccommodationInventory;

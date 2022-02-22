@@ -74,8 +74,11 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
     {
+        $orderCustomer = OrderCustomer::find($oCustomerId);
+        $group = $orderCustomer->primary_group;
+        if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
-            'order_customer_id' => $oCustomerId,
+            'group_id' => $group->id,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
             'share_with_user_id' => null,
             'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,

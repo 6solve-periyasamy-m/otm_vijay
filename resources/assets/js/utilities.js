@@ -4,7 +4,7 @@
  * dates
  */
 
-var num = {
+let num = {
     pad(num, size) {
         var s = "000000000" + num;
 
@@ -12,7 +12,7 @@ var num = {
     },
 }
 
-var dates = {
+let dates = {
     isoString(ds) {
         return new Date(ds).toISOString().substring(0, 10)
     },
