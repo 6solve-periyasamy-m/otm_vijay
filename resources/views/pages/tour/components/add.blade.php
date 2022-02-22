@@ -80,7 +80,7 @@
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
                         <i class="icon-directions"></i>
-                        Transports
+                        Transport
                     </button>
                 </li>
             </ul>
