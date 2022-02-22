@@ -11,31 +11,27 @@
             </div>
             <div class="card-body" v-if="activated">
                 <div class="listing headings">
+                    <div class="column-starts-at">
+                        When
+                    </div>
                     <div class="column-name">
                         Name
-                    </div>
-                    <div class="column-description">
-                        Description 
                     </div>
                     <div class="column-ticket-type">
                         Ticket type
                     </div>
-                    <div class="column-starts-at">
-                        When
-                    </div>
                 </div>
                 <div class="listing" v-for="activity in activities" :key="activity.activity_inventory_tour_id">
+                    <div class="column-starts-at">
+                        {{startDate(activity)}}
+                    </div>
                     <div class="column-name">
                         {{ activity.name }}
-                    </div>
-                    <div class="column-description">
-                        {{ activity.description }} 
+                        <br>
+                        {{ activity.description !== activity.name ? activity.description }} 
                     </div>
                     <div class="column-ticket-type">
                         {{activity.ticket_type_name}}
-                    </div>
-                    <div class="column-starts-at">
-                        {{startDate(activity)}}
                     </div>
                 </div>
             </div>
