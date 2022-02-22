@@ -16,7 +16,7 @@ class TransportInventoryTour extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
-    protected $cascadeDeletes = ['orders', 'upgrades'];
+    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
@@ -43,6 +43,12 @@ class TransportInventoryTour extends Model
 
     public function upgrades() {
         return $this->hasMany(TransportInventoryTourUpgrade::class, 'base_id');
+    }
+
+    // Only used for Cascading Soft Deletes
+    public function upgradeParents()
+    {
+        return $this->hasMany(TransportInventoryTourUpgrade::class, 'upgrade_id');
     }
 
     public function parent() {

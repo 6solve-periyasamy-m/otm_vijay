@@ -16,7 +16,7 @@ class ActivityInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['orders', 'upgrades'];
+    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
     public $additional_attributes = ['tour_name',];
 
@@ -44,6 +44,12 @@ class ActivityInventoryTour extends Model
 
     public function upgrades() {
         return $this->hasMany(ActivityInventoryTourUpgrade::class, 'base_id');
+    }
+
+    // Only used for Cascading Soft Deletes
+    public function upgradeParents()
+    {
+        return $this->hasMany(ActivityInventoryTourUpgrade::class, 'upgrade_id');
     }
 
     public function parent() {
