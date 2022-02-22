@@ -9,47 +9,33 @@
                     <p>Activities planned as part of your package, plus available options for each traveller in your group.</p>
                 </h5>
             </div>
-            <div class="card-body compress" v-if="activated">
-                    {{debug?activities:''}}
-                    <div class="listing headings">
+            <div class="card-body" v-if="activated">
+                <div class="listing headings">
                     <div class="column-name">
                         Name
                     </div>
                     <div class="column-description">
                         Description 
                     </div>
-                    <div class="column-notes">
-                        Notes
-                    </div>
                     <div class="column-ticket-type">
                         Ticket type
                     </div>
                     <div class="column-starts-at">
-                        From
-                    </div>
-                    <div class="column-ends-at">
-                        To
+                        When
                     </div>
                 </div>
                 <div class="listing" v-for="activity in activities" :key="activity.activity_inventory_tour_id">
-
                     <div class="column-name">
                         {{ activity.name }}
                     </div>
                     <div class="column-description">
                         {{ activity.description }} 
                     </div>
-                    <div class="column-notes">
-                        {{ activity.activity_notes }}
-                    </div>
                     <div class="column-ticket-type">
                         {{activity.ticket_type_name}}
                     </div>
                     <div class="column-starts-at">
                         {{startDate(activity)}}
-                    </div>
-                    <div class="column-ends-at">
-                        {{endDate(activity)}}
                     </div>
                 </div>
             </div>
