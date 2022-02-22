@@ -313,8 +313,10 @@ $(document).ready( function () {
                                 <th scope="col">Date</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Room Type</th>
+                                <th scope="col">Board Type</th>
                                 <th scope="col">Shared With</th>
                                 <th scope="col">Component Type</th>
+                                <th scope="col">Cost</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -324,16 +326,28 @@ $(document).ready( function () {
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_out) }}</td>
                                     <td>{{ $orderAccommodation->accommodation->name }}</td>
                                     <td>{{ $orderAccommodation->accommodationInventory->roomType->name }}</td>
-                                    <td>{{ $orderAccommodation->group->getMembers($orderCustomer) }}</td>
+                                    <td>{{ $orderAccommodation->accommodationInventory->boardType->name }}</td>
+                                    <td>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</td>
                                     <td>{{ $orderAccommodation->accommodationInventoryTour->tour_component_type }}</td>
                                     <td>
+                                        @if($orderAccommodation->tourComponent->tour_component_type == 'Included')
+                                            {{ StringFormatter::formatCurrency(0) }}
+                                        @else
+                                            {{ StringFormatter::formatCurrency($orderAccommodation->cost) }}
+                                        @endif
+                                    </td>
+                                    <td style="width: 20%">
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
                                             Not Available
                                         @else
-                                            @include('partials.fields.selector.adder-preset',
-                                                ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
-                                                'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderAccommodation->tourComponent->id, 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
+                                            @if(count($orderAccommodation->tourComponent->getUpgradeKeyMap()) < 2)
+                                                No Upgrades Available
+                                            @else
+                                                @include('partials.fields.selector.adder-preset',
+                                                    ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
+                                                    'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
+                                                    'selected' => $orderAccommodation->tourComponent->id, 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
@@ -365,6 +379,7 @@ $(document).ready( function () {
                             <th scope="col">Activity Type</th>
                             <th scope="col">Ticket Type</th>
                             <th scope="col">Component Type</th>
+                            <th scope="col">Cost</th>
                             <th scope="col">Upgrades</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -377,13 +392,24 @@ $(document).ready( function () {
                                 <td>{{ $orderActivity->activityInventory->ticketType->name }}</td>
                                 <td>{{ $orderActivity->tourComponent->tour_component_type }}</td>
                                 <td>
+                                    @if($orderActivity->tourComponent->tour_component_type == 'Included')
+                                        {{ StringFormatter::formatCurrency(0) }}
+                                    @else
+                                        {{ StringFormatter::formatCurrency($orderActivity->cost) }}
+                                    @endif
+                                </td>
+                                <td style="width: 20%">
                                     @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @include('partials.fields.selector.adder-preset',
-                                            ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
-                                            'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
-                                            'selected' => $orderActivity->tourComponent->id, 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
+                                        @if(count($orderActivity->tourComponent->getUpgradeKeyMap()) < 2)
+                                            No Upgrades Available
+                                        @else
+                                            @include('partials.fields.selector.adder-preset',
+                                                ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
+                                                'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
+                                                'selected' => $orderActivity->tourComponent->id, 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
@@ -412,8 +438,10 @@ $(document).ready( function () {
                         <tr>
                             <th scope="col">Date</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Flight Details</th>
                             <th scope="col">Travel Class</th>
                             <th scope="col">Component Type</th>
+                            <th scope="col">Cost</th>
                             <th scope="col">Upgrades</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -422,16 +450,28 @@ $(document).ready( function () {
                             <tr component="{{ $orderFlight->id }}">
                                 <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderFlight->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderFlight->flightInventory->arrives_at) }}</td>
                                 <td>{{ $orderFlight->flightInventory->flight_number }}</td>
+                                <td>{{ $orderFlight->flight->departureAirport->name }} to {{ $orderFlight->flight->arrivalAirport->name }}</td>
                                 <td>{{ $orderFlight->flightInventory->travelClass->name }}</td>
                                 <td>{{ $orderFlight->flightInventoryTour->tour_component_type }}</td>
                                 <td>
+                                    @if($orderFlight->tourComponent->tour_component_type == 'Included')
+                                        {{ StringFormatter::formatCurrency(0) }}
+                                    @else
+                                        {{ StringFormatter::formatCurrency($orderFlight->cost) }}
+                                    @endif
+                                </td>
+                                <td style="width: 20%">
                                     @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @include('partials.fields.selector.adder-preset',
-                                            ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
-                                            'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
-                                            'selected' => $orderFlight->tourComponent->id, 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
+                                        @if(count($orderFlight->tourComponent->getUpgradeKeyMap()) < 2)
+                                            No Upgrades Available
+                                        @else
+                                            @include('partials.fields.selector.adder-preset',
+                                                ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
+                                                'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
+                                                'selected' => $orderFlight->tourComponent->id, 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
@@ -460,8 +500,11 @@ $(document).ready( function () {
                         <tr>
                             <th scope="col">Date</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Transport Type</th>
+                            <th scope="col">Transport Information</th>
                             <th scope="col">Travel Class</th>
                             <th scope="col">Component Type</th>
+                            <th scope="col">Cost</th>
                             <th scope="col">Upgrades</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -470,16 +513,29 @@ $(document).ready( function () {
                             <tr component="{{ $orderTransport->id }}">
                                 <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderTransport->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderTransport->transportInventory->arrives_at) }}</td>
                                 <td>{{ $orderTransport->transport->name }}</td>
+                                <td>{{ $orderTransport->transport->transportType->name }}</td>
+                                <td>{{ $orderTransport->transport->departureAddress->name }} to {{ $orderTransport->transport->arrivalAddress->name }}</td>
                                 <td>{{ $orderTransport->transportInventory->travelClass->name }}</td>
                                 <td>{{ $orderTransport->transportInventoryTour->tour_component_type }}</td>
                                 <td>
+                                    @if($orderTransport->tourComponent->tour_component_type == 'Included')
+                                        {{ StringFormatter::formatCurrency(0) }}
+                                    @else
+                                        {{ StringFormatter::formatCurrency($orderTransport->cost) }}
+                                    @endif
+                                </td>
+                                <td style="width: 20%">
                                     @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
                                         Not Available
                                     @else
-                                        @include('partials.fields.selector.adder-preset',
-                                            ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
-                                            'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
-                                            'selected' => $orderTransport->tourComponent->id, 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
+                                        @if(count($orderTransport->tourComponent->getUpgradeKeyMap()) < 2)
+                                            No Upgrades Available
+                                        @else
+                                            @include('partials.fields.selector.adder-preset',
+                                                ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
+                                                'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
+                                                'selected' => $orderTransport->tourComponent->id, 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
