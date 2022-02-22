@@ -101,4 +101,9 @@ class OrderCustomer extends Model
     {
         return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
+
+    public function getPrimaryGroupAttribute(): ?Group
+    {
+        return $this->groups()->first();
+    }
 }

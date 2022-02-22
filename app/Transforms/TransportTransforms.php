@@ -3,6 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Operator;
+use App\Models\OrderCustomer;
 use App\Models\TransportInventory;
 use App\Models\TransportInventoryTour;
 use App\Models\TransportType;
@@ -129,5 +130,23 @@ class TransportTransforms implements TransportTransformsInterface
         $subData['id'] = $inventory->id;
         $subData['text'] = $inventory->travelClass->name . ' - ' . $inventory->departs_at . ' to ' . $inventory->arrives_at;
         return $subData;
+    }
+
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string $filter)
+    {
+        $tour = $orderCustomer->order->tour;
+        $data = [];
+        $owned = [];
+        foreach ($orderCustomer->orderTransports() as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
+        foreach ($tour->transportInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Add-on") {
+                if (in_array($inventoryTour->id, $owned)) continue;
+                $subData = [];
+                $subData['id'] = $inventoryTour->id;
+                $subData['text'] = $inventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            }
+        }
+        return $data;
     }
 }
