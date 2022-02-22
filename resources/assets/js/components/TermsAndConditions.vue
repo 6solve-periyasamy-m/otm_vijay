@@ -1,19 +1,23 @@
 <template>
-<div id="show" class="terms">
-<a href="#show" @click="show=!show">{{show?"Hide":"Show"}}</a> | <a href="#show" @click="scroll=!scroll">{{scroll?"No Scroll":"Scroll"}}</a>
-<div class="page" v-show="show" :class="{ scrolling:scroll }"> 
-<pre>
-  {{tour.terms}}
-</pre>
-</div>
+<div class="terms">
+    <a href="#show" @click="show=!show">{{show?"Hide":"Show"}}</a> | <a href="#show" @click="scroll=!scroll">{{scroll?"No Scroll":"Scroll"}}</a> <span v-if="!show">(To view Terms and Conditions, click Show)</span>
+    <div class="page" v-show="show" :class="{ scrolling:scroll }"> 
+      <h2>Terms and Conditions of Tour</h2>
+      <div v-html="terms"></div>
+    </div>
 </div>
 </template>
 <script>
   export default {
+    props: ['tourdata'],
+    mounted() {
+      this.terms = this.tourdata.terms
+    },
     data() {
       return {
-        show: false,
-        scroll: false
+        show: true,
+        scroll: true,
+        terms: ''
       }
     }
   }

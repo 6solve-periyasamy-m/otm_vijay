@@ -9,18 +9,10 @@
                 </h5>
             </div>
             <div v-if="showTermsConditions">
+                <TermsAndConditions :tourdata="tourdata"></TermsAndConditions>
                 <div class="card-body">
-                  <TermsAndConditions :tour="tour"></TermsAndConditions>
-                  <br>
-                  <p class="terms">
-                  By clicking confirm, you are accepting the terms and conditions as set out
-                  by the travel provider which can be seen at the links below.
-                  Please check the box to confirm you have read the terms of service.
-                  </p>
-                  <br>
-                  <p class="terms">
-                  Link to terms: <a href="https://octopus-computers.com/terms-and-conditions/" target="_blank">Octopus TM Terms of service</a>
-                  </p>
+                  <p class="terms">By clicking confirm, you are accepting the terms and conditions as set out by the travel provider which can be seen at the links below.  Please check the box to confirm you have read the terms of service.</p>
+                  <p v-if="false" class="terms">Link to terms: <a href="https://octopus-computers.com/terms-and-conditions/" target="_blank">Octopus TM Terms of service</a></p>
               </div>
               <div class="card-body">
                   <div class="form-check form-check-inline">
@@ -42,14 +34,16 @@
   import TermsAndConditions from "./TermsAndConditions.vue"
   import { bus } from '../bus'
   export default {
-    props: [tour],
+    props: ['tour'],
     mounted() {
         console.log("Booking Form Terms and Conditions active.")
+        this.tourdata = this.tour
     },
     data() {
         return {
             showTermsConditions: false,
-            accepted: false
+            accepted: false,
+            tourData: {}
         };
     },
     methods: {

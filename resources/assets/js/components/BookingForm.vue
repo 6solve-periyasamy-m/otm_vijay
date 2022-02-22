@@ -30,7 +30,7 @@
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
-//import { setCookie, getCookie, deleteCookie } from '../utilities'
+import { setCookie, getCookie, deleteCookie } from '../cookies'
 // import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
 
 export default {

@@ -1,5 +1,4 @@
-// require in app.js
-function getCookie(cname) {
+export function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
@@ -13,16 +12,16 @@ function getCookie(cname) {
       }
     }
     return "";
-  }
+}
   
-  function setCookie(cname, cvalue, exdays = 7) {
+export function setCookie(cname, cvalue, exdays = 7) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     let expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
+}
   
-  function deleteCookie(name) {
+export function deleteCookie(name) {
     if (getCookie(name)) {
       document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       /*
@@ -32,4 +31,4 @@ function getCookie(cname) {
         ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
       */
     }
-  }
+}
