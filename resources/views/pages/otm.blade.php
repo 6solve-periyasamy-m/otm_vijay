@@ -53,20 +53,11 @@
         </dd>
         <dt class="definition__heading">Software Tests</dt>
         <dd class="definition__body">
-		  <dt class="definition__subheading">Examples (open in test tab)<dt>
+          <dt class="definition__subheading">Examples (open in test tab)<dt>
           <dd class="definition__body"><a href="/booking/double-test-impala-pride">Booking Form</a> url for specific tour</dd>
           <dd class="definition__body"><a href="/booking/check/apitests">API tests</a></dd>
           <dd class="definition__body"><a href="/booking/check/vuetest">Vue tests</a></dd>
           <dd class="definition__body"><a href="/booking/check/atoltest">ATOL Certificate test</a></dd>
-          <hr/>
-          <div style="display: none" class="ml-8 small">
-            <h4>Alternative paths: deprecated</h4>
-            <p>Booking forms are only to be retrieved for actual tours using /booking/tour-name, alternative paths
-              to a booking form could involve selection dropdowns for the tour/event which have been disabled</p>
-            <dd class="definition__body"><a target="newtab" href="/booking">Booking Form</a> - customer selects event/tour on the form.</dd>
-            <dd class="definition__body"><a target="newtab" href="/booking/tour/world-cup">Flexible Tour Bookings</a> - specific tour URL to list on your site, or email to customers for a specific tour.</dd>
-            <dd class="definition__body"><a target="newtab" href="/booking/order-number">Easy Tour Booking Form Secure Revisit</a> - a unique single-use URL that allows your customer to securely access their booking.</dd>
-            </div>
         </dd>
       </dl>
     </div>

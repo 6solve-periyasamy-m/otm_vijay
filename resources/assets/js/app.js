@@ -1,4 +1,6 @@
 require('./bootstrap');
+require('./cookies')
+
 import Vue from 'vue'
 import { bus } from './bus'
 
