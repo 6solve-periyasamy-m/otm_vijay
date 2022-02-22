@@ -17,6 +17,7 @@ use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
 use App\Repository\OrderRepository;
 use App\Repository\TransportComponentRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -81,7 +82,7 @@ class TourComponentController extends Controller
         return $oMerch;
     }
 
-    public function applyAccommodationUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    public function applyAccommodationUpgrade(Request $request): JsonResponse
     {
         $orderComponent = OrderAccommodation::find($request->input('component_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
@@ -97,7 +98,7 @@ class TourComponentController extends Controller
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
-    public function applyActivityUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    public function applyActivityUpgrade(Request $request): JsonResponse
     {
         $orderComponent = OrderActivity::find($request->input('component_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
@@ -113,7 +114,7 @@ class TourComponentController extends Controller
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
-    public function applyFlightUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    public function applyFlightUpgrade(Request $request): JsonResponse
     {
         $orderComponent = OrderFlight::find($request->input('component_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
@@ -129,7 +130,7 @@ class TourComponentController extends Controller
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
-    public function applyTransportUpgrade(Request $request): \Illuminate\Http\JsonResponse
+    public function applyTransportUpgrade(Request $request): JsonResponse
     {
         $orderComponent = OrderTransport::find($request->input('component_id'));
         if (!isset($orderComponent)) return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
