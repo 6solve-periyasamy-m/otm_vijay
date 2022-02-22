@@ -63,7 +63,7 @@ Route::prefix('booking')->group(function () {
     // Events
     Route::get('/events', [TourController::class, 'getEvents']);
     Route::get('/tours/{event_id}', [TourController::class, 'getTours']);
-    Route::get('/tour/{id}', [TourController::class, 'getBasicTourInformation']);
+    Route::get('/tour/{id}', [TourController::class, 'getTour']);
 
     // Airlines
     Route::get('/airlines', [AirlinesController::class, 'getAirlines']);

@@ -10,7 +10,7 @@
             </div>
             <div v-if="showTermsConditions">
                 <div class="card-body">
-                  <TermsAndConditions></TermsAndConditions>
+                  <TermsAndConditions :tour="tour"></TermsAndConditions>
                   <br>
                   <p class="terms">
                   By clicking confirm, you are accepting the terms and conditions as set out
@@ -42,6 +42,7 @@
   import TermsAndConditions from "./TermsAndConditions.vue"
   import { bus } from '../bus'
   export default {
+    props: [tour],
     mounted() {
         console.log("Booking Form Terms and Conditions active.")
     },

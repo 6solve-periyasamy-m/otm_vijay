@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
-                        OTM Booking Form version 0.8
+                        OTM Booking Form version 0.81
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -31,7 +31,7 @@
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
 //import { setCookie, getCookie, deleteCookie } from '../utilities'
-import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
+// import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
 
 export default {
     props: {

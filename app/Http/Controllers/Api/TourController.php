@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\Event;
 use App\Models\Tour;
-use App\Models\OrderCustomer;
 
+/**
+ * tour may belong to an event or not.
+ */
 class TourController extends ApiController
 {
     public function getEvents() {
@@ -36,21 +38,29 @@ class TourController extends ApiController
         }
     }
 
-    // Autheticated API - return data for logged in user sessions
-    public function getBasicTourInformation(Tour $tour)
+    public function getTour($tour_id)
     {
-        $tour = Tour::findOrFail($tour->id);
-
-        return response()->json([
-            "success" => true,
-            "title" => $tour->name,
-            "description" => $tour->description,
-            "base_price_per_person" => $tour->base_price_per_person,
-            // tour_colour - is an ID so i'm assuming there would be a relationship, doesn't exist yet
-            // tour_merchandise - is an ID so i'm assuming there would be a relationship, doesn't exist yet
-
-
-            // This is just a basic start with the models that I have access to and the relationships I currently have
-        ]);
+        $tour = Tour::find($tour_id);
+        if ($tour) {
+            return response()->json(['success' => true, 'tour' => $tour]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
+
+    // deprecated
+    // public function getBasicTourInformation(Tour $tour)
+    // {
+    //     $tour = Tour::findOrFail($tour->id);
+
+    //     return response()->json([
+    //         "success" => true,
+    //         "title" => $tour->name,
+    //         "description" => $tour->description,
+    //         "base_price_per_person" => $tour->base_price_per_person,
+    //         // tour_colour - is an ID so i'm assuming there would be a relationship, doesn't exist yet
+    //         // tour_merchandise - is an ID so i'm assuming there would be a relationship, doesn't exist yet
+    //         // This is just a basic start with the models that I have access to and the relationships I currently have
+    //     ]);
+    // }
 }
