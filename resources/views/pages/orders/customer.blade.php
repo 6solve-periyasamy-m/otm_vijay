@@ -180,7 +180,7 @@ $(document).ready( function () {
             <p>Passport Number</p>
             <h6 class="fw-bold">{{ $orderCustomer->customer->passport_number }}</h6>
             <p>Password Expire Date</p>
-            <h6 class="fw-bold">{{ $orderCustomer->customer->passport_expiry_date }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->passport_expiry_date) }}</h6>
         </div>
         <div class="col-xl-8">
             @if ($orderCustomer->customer->homeAddress->address_line_1 != '' || $orderCustomer->customer->billingAddress->address_line_1 != '')
