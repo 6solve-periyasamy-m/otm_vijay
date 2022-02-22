@@ -11,6 +11,7 @@ export default {
         that.booking_token = token
         that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
     })
+    
   },
   data() {
     return {
@@ -20,10 +21,14 @@ export default {
     }
   },
   methods: {
+    // remove cookie
     clearForm() {
-      
     },
+    // links to each form to activate one
     showForms() {
+    },
+    // checks the user is logged in to the backend
+    isLoggedIn() {
     }
   }
 }
