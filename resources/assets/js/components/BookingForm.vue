@@ -21,6 +21,7 @@
                             <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
                         </div>
                     </div>
+                    <bookingform-control></bookingform-control>
                     <bookingform-footer></bookingform-footer>
                 </div>
             </div>
