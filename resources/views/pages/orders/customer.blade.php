@@ -346,7 +346,7 @@ $(document).ready( function () {
                                                 @include('partials.fields.selector.adder-preset',
                                                     ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
                                                     'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
-                                                    'selected' => $orderAccommodation->tourComponent->id, 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
+                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderAccommodation->tourComponent), 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
                                             @endif
                                         @endif
                                     </td>
@@ -408,7 +408,7 @@ $(document).ready( function () {
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderActivity->tourComponent->id, 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderActivity->tourComponent), 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
                                         @endif
                                     @endif
                                 </td>
@@ -470,7 +470,7 @@ $(document).ready( function () {
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderFlight->tourComponent->id, 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderFlight->tourComponent), 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
                                         @endif
                                     @endif
                                 </td>
@@ -534,7 +534,7 @@ $(document).ready( function () {
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => $orderTransport->tourComponent->id, 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderTransport->tourComponent), 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
                                         @endif
                                     @endif
                                 </td>
