@@ -9,18 +9,24 @@
                     <p>Form section for booking or confirming ground transport including options available to support activities</p>
                 </h5>
             </div>
-            <div  v-if="activated" class="card-body">
+            <div  v-if="activated" class="card-body compress">
                 <div class="transports">
                     <div class="transport">
                         <div class="listing headings">
-                            <div class="heading address_from">
-                                When
-                            </div>
                             <div class="heading name">
                                 Name
                             </div>
+                            <div class="heading description">
+                                Description
+                            </div>
                             <div class="heading tour_component_type">
                                 Transport Type
+                            </div>
+                            <div class="heading is_domestic">
+                                Domestic/International
+                            </div>
+                            <div class="heading address_from">
+                                From
                             </div>
                             <div class="heading address_to">
                                 To
@@ -28,14 +34,23 @@
                         </div>
                         <div v-for="transport in transports">
                             <div class="listing">
-                                <div class="address_from">
-                                    {{transport.departure_address}}<br>{{datetime(transport.departs_at)}}
-                                </div>
                                 <div class="name">
                                     {{transport.name}}
                                 </div>
+                                <div class="description">
+                                    {{transport.description}}
+                                </div>
                                 <div class="transport_type">
                                     {{transport.transport_type_name}}
+                                </div>
+                                <div class="is_domestic">
+                                    {{transport.is_domestic ? 'Domestic' : 'International'}}
+                                </div>
+                                <div class="address_from">
+                                    {{transport.departure_address}}<br>Departure {{datetime(transport.departs_at)}}
+                                </div>
+                                <div class="address_to">
+                                    {{transport.arrival_address}}<br>Arrival {{datetime(transport.arrives_at)}}
                                 </div>
                             </div>
                         </div>
