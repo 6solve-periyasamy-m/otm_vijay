@@ -5,7 +5,7 @@
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
                         <div> OTM Booking Form version 0.82 </div>
-                        <bookingform-control :user="auth_user"></bookingform-control>
+                        <bookingform-control token="tokenName" :user="auth_user"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -36,7 +36,7 @@ import { setCookie, getCookie, deleteCookie } from '../cookies'
 
 export default {
     props: {
-        auth_user: String,
+        auth_user: Object,
         tour: Object,
         event: Object,
         name: String

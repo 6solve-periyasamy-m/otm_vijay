@@ -1,8 +1,9 @@
 <template>
-    <div class="controls">
-      {{user}}
+    <div v-if="auth" class="controls">
         <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
         <div v-if="showControl">
+            {{user.name}}
+            {{bookings}}
             <div class="booking-form--control">
                 <button class="btn btn-sm btn-primary" @click="clearForm">Clear form</button>
                 <button class="btn btn-sm btn-primary" @click="showForms">Show forms</button>
@@ -11,37 +12,54 @@
     </div>
 </template>
 <script>
-import { auth_user } from '../auth'
 import { bus } from '../bus'
+import { setCookie, getCookie, deleteCookie } from '../cookies'
 export default {
-  props: ['tour', 'user'],
+  props: ['tour', 'user', 'token'],
+  data() {
+    return {
+        showControl: false,
+        booking_token: null,
+        debug: false,
+        bookings: [],
+        auth: false
+    }
+  },
   created() {
     const that=this
     bus.$on('setBookingToken', (token) => {
         that.booking_token = token
         that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
     })
-    console.log('user - ',user)
+    if (this.user) {
+      this.auth = true
+    }
   },
-  data() {
-    return {
-        showControl: false,
-        booking_token: null,
-        debug: false
+  mounted() {
+    if (this.user.id) {
+      this.getBookings()
     }
   },
   methods: {
-    isLoggedIn() {
+    // get bookings for this customer
+    getBookings() {
+      axios.get(`/api/customer/bookings/${this.user.id}`)
+        .then(response => {
+          console.log('BOOKINGS',response)
+          this.bookings = response.data
+        })
+        .catch(error => console.log(error))
     },
     // remove cookie
     clearForm() {
+      deleteCookie(this.token)
+    },
+    storeActiveToken() {
+      localStorage.active_token[this.booking_token] = 'active'
     },
     // links to each form to activate one
     showForms() {
     },
-    // checks the user is logged in to the backend
-    isLoggedIn() {
-    }
   }
 }
 </script>

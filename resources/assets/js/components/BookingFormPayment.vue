@@ -154,7 +154,7 @@ export default {
     props: ['tour', 'systemCurrency'],
     data() {
         return {
-            debug: true,
+            debug: false,
             moduleName: 'Payments',
             currency: this.systemCurrency || 'GBP',
             booking_token: null,
