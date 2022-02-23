@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Password;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -44,6 +45,23 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $guard = 'web';
+
+    public static function getValidationRules(): array
+    {
+        return [
+            'email' => 'required|unique:users,email|email:rfc,dns',
+            'name' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ]
+        ];
+    }
 
     public function tokens()
     {

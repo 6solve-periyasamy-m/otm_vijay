@@ -31,6 +31,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if (UserRepository::getRemainingUserCount() <= 0) return back()->withErrors(['msg' => 'You have reached your user limit. Please contact your account manager to increase the user limit']);
+        $request->validate(User::getValidationRules());
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -78,6 +79,7 @@ class UserController extends Controller
         if ($user->email !== $request->input('email')) {
             $user->email_verified_at = null;
         }
+        $request->validate(User::getValidationRules());
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
