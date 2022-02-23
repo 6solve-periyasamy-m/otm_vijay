@@ -5,15 +5,16 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\ApiController;
-
 use App\Models\Tour;
 use App\Models\Booking;
+use Illuminate\Http\Request;
+
 use App\Models\BookingTraveller;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
+use App\Http\Controllers\ApiController;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
