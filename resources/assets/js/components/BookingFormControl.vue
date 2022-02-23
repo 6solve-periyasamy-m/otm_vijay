@@ -14,7 +14,7 @@
 import { auth_user } from '../auth'
 import { bus } from '../bus'
 export default {
-  props: ['tour'],
+  props: ['tour', 'user'],
   created() {
     const that=this
     bus.$on('setBookingToken', (token) => {
@@ -27,8 +27,7 @@ export default {
     return {
         showControl: false,
         booking_token: null,
-        debug: false,
-        user: window.auth_user
+        debug: false
     }
   },
   methods: {

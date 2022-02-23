@@ -6,6 +6,6 @@
 @endsection
 @section('content')
 <div class="booking-form container-fluid" id="app">
-    <booking-form :event="{{$event}}" :tour="{{$tour}}"></booking-form>
+    <booking-form :event="{{$event}}" :tour="{{$tour}}" :auth_user='@json($auth_user)'></booking-form>
 </div>
 @endsection
