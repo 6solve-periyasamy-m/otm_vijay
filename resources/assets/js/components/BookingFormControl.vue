@@ -1,13 +1,13 @@
 <template>
-    <span class="header">
-        <a class="control" @click="showControl=!showControl"> Controls </a>
+    <div class="controls">
+        <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
         <div v-if="showControl">
             <div class="booking-form--control">
                 <button class="btn btn-small btn-primary" @click="clearForm">Clear form</button>
                 <button class="btn btn-small btn-primary" @click="showForms">Show forms</button>
             </div>
         </div>
-    </span>
+    </div>
 </template>
 <script>
 import { bus } from '../bus'
