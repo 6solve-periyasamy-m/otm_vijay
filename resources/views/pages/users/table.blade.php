@@ -13,10 +13,17 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <a class="btn btn-primary float-end" href="{{ route('users.create') }}">
-                <i class="icon-plus"></i>
-                <span>Create New</span>
-            </a>
+            @if(\App\Repository\UserRepository::getRemainingUserCount() > 0)
+                <a class="btn btn-primary float-end" href="{{ route('users.create') }}">
+                    <i class="icon-plus"></i>
+                    <span>Create New</span>
+                </a>
+            @else
+                <span class="btn btn-dark float-end" href="{{ route('users.create') }}">
+                    <i class="icon-plus"></i>
+                    <span>User limit reached</span>
+                </span>
+            @endif
         </div>
     </div>
     <div class="card">

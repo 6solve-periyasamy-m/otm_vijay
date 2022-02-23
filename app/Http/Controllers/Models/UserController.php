@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Repository\PermissionsRepository;
+use App\Repository\UserRepository;
 use App\Transforms\PermissionTransforms;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Log;
 
 class UserController extends Controller
 {
@@ -21,18 +23,23 @@ class UserController extends Controller
 
     public function create()
     {
+        if (UserRepository::getRemainingUserCount() <= 0) return back()->withErrors(['msg' => 'You have reached your user limit. Please contact OTM to increase the user limit']);
         return view('pages.users.create', ['roles' => PermissionTransforms::getRolesForDropdown(PermissionsRepository::getAvailableRoles()),
             'current' => PermissionsRepository::getDefaultRole()->name,]);
     }
 
     public function store(Request $request)
     {
+        if (UserRepository::getRemainingUserCount() <= 0) return back()->withErrors(['msg' => 'You have reached your user limit. Please contact your account manager to increase the user limit']);
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
-        event(new Registered($user));
+        try {
+            event(new Registered($user));
+        } catch (\Exception $e) { Log::error($e); }
+
         $user->assign($request->input('role') ?? 'user');
         return redirect()->route('users.all');
     }
@@ -79,7 +86,9 @@ class UserController extends Controller
         if (Auth::user()->id !== $user->id) {
             PermissionsRepository::assignRole($user, $request->input('role'));
         }
-        event(new Registered($user));
+        try {
+            event(new Registered($user));
+        } catch (\Exception $e) { Log::error($e); }
         $user->save();
         return redirect()->route('users.all');
     }
