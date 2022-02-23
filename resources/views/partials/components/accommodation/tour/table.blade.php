@@ -1,39 +1,14 @@
 <script type="text/javascript">
     let accommodationTable;
     $(document).ready(function () {
-        accommodationTable = $('.accommodation-inventory-table').DataTable({
-            fixedHeader: true,
-            select: { style: "multi+shift" },
-            "ajax": {
-                "url": "{{ route('api.accommodation-inventory.datatables', ['tour' => $tour,]) }}",
-                "data": {
-                    "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
-                },
-                "type": "post",
-            },
-            "columns": [
-                { "data": "accommodation_name" },
-                { "data": "location" },
-                { "data": "room_type" },
-                { "data": "board_type" },
-                { "data": "check_in" },
-                { "data": "check_in_time_confirmed" },
-                { "data": "check_out_time" },
-                { "data": "check_out_confirmed" },
-                { "data": "fit_selectable" },
-                { "data": "stock" },
-                { "data": "purchase_price" },
-                { "data": "sales_price" },
-                { "data": "notes" },
-            ]
-        });
+        accommodationTable = $('.accommodation-inventory-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
     });
     @can('create', \App\Models\AccommodationInventoryTour::class)
     function getSelectedAccommodationInventory() {
         let ids = [];
         accommodationTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
             let row = accommodationTable.row(rowIdx);
-            ids.push(row.data().id);
+            ids.push($(row.node()).attr('inventory_id'));
         });
         if (ids.length <= 0) return alert('No components are selected');
         $.ajax({
@@ -41,7 +16,7 @@
             url: "{{ route('api.tour.accommodation.inventory.add', ['tour' => $tour,]) }}",
             dataType: "json",
             statusCode: {
-                200: function () { alert('Components added successfully'); accommodationTable.ajax.reload(); },
+                200: function () { alert('Components added successfully'); location.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); },
                 403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
@@ -70,9 +45,7 @@
         <th scope="col">Room Type</th>
         <th scope="col">Board Type</th>
         <th scope="col">Check In</th>
-        <th scope="col">Confirmed</th>
         <th scope="col">Check Out</th>
-        <th scope="col">Confirmed</th>
         <th scope="col">FIT Selectable</th>
         <th scope="col">Stock</th>
         <th scope="col">Purchase Price</th>
@@ -80,4 +53,32 @@
         <th scope="col">Notes</th>
     </tr>
     </thead>
+    <tbody>
+    @foreach(\App\Repository\AccommodationComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to) as $inventory)
+        <tr inventory_id="{{ $inventory->id }}">
+            <td>{{ $inventory->component->name }}</td>
+            <td>{{ $inventory->component->address }}</td>
+            <td>{{ $inventory->roomType }}</td>
+            <td>{{ $inventory->boardType }}</td>
+            <td>
+                {{ StringFormatter::formatDateTime($inventory->check_in) }}&nbsp
+                <input type="checkbox" disabled @if($inventory->check_in_time_confirmed == 1) checked @endif>
+            </td>
+            <td>
+                {{ StringFormatter::formatDateTime($inventory->check_out) }}&nbsp
+                <input type="checkbox" disabled @if($inventory->check_out_time_confirmed == 1) checked @endif>
+            </td>
+            <td>
+                <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
+            </td>
+            <td>
+                {{$inventory->stock - $inventory->getUsedStock()}}/{{ $inventory->stock }}<br/>
+                ({{$inventory->getUsedStock()}} Sold)
+            </td>
+            <td>{{ StringFormatter::formatCurrency($inventory->purchase_price) }}</td>
+            <td>{{ StringFormatter::formatCurrency($inventory->sales_price) }}</td>
+            <td>{{ $inventory->notes }}</td>
+        </tr>
+    @endforeach
+    </tbody>
 </table>

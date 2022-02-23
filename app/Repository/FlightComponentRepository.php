@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventoryTourUpgrade;
 use App\Models\OrderCustomer;
@@ -114,6 +115,25 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
     public static function getParentComponent(FlightInventoryTour $inventoryTour)
     {
         $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
+    }
+
+    public static function isOnUpgradeTree(FlightInventoryTour $inventoryTour, FlightInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
+    }
+
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    {
+        $inventories = [];
+        foreach ($tour->flightInventoryTours as $inventoryTour) {
+            $inventories[] = $inventoryTour->inventory->id;
+        }
+        return FlightInventory::whereBetween('check_in', [$dateFrom, $dateTo])->whereBetween('arrives_at', [$dateFrom, $dateTo])->whereNotIn('id', $inventories)->get();
     }
 }

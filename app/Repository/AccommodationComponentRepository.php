@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\OrderAccommodation;
@@ -87,7 +88,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $orderComponent;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDatesOld(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
         $alreadyAdded = [];
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
@@ -124,6 +125,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
     }
 
@@ -200,5 +202,23 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             $types[] = RoomType::find($id);
         }
         return $types;
+    }
+
+    public static function isOnUpgradeTree(AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
+    }
+
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    {
+        $inventories = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $inventories[] = $inventoryTour->inventory->id;
+        }
+        return AccommodationInventory::whereBetween('check_in', [$dateFrom, $dateTo])->whereBetween('check_out', [$dateFrom, $dateTo])->whereNotIn('id', $inventories)->get();
     }
 }

@@ -599,7 +599,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
-    Route::get('/dash', function () {
+    Route::get('/', function () {
         return view('pages.dash');
     })->name('dash');
 

@@ -72,4 +72,10 @@ class OrderTransport extends Model
     {
         return $this->orderCustomers();
     }
+
+    public function swap(TransportInventoryTour $swap) {
+        $this->transport_inventory_tour_id = $swap->id;
+        $this->cost = $swap->tour_sales_price;
+        $this->save();
+    }
 }

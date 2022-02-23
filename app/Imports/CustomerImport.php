@@ -60,8 +60,8 @@ class CustomerImport implements ToModel
             'passport_number' => trim($row[26] ?? ''),
             'passport_expiry_date' => isset($row[27]) ? Carbon::createFromFormat('d/m/Y', trim($row[27])) : null,
             'passport_country_of_issue' => trim($row[29] ?? ''),
+            'loyalty_number' => trim($row[30] ?? ''),
         ]);
-        $customer->sendPasswordResetNotification(Str::random(60));
         return $customer;
     }
 }

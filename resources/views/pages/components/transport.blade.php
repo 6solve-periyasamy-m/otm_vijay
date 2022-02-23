@@ -1,5 +1,5 @@
 @extends('layout.component')
-@section('title', 'View Transports')
+@section('title', 'View transport')
 @section('info')
     @include('partials.components.transport.info')
 @endsection

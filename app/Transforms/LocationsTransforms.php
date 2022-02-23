@@ -114,7 +114,7 @@ class LocationsTransforms implements LocationsTransformsInterface
     public static function getAddresses($filter, $includeCustomer = false) {
         $data = [];
         foreach (Address::all() as $address) {
-            if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses that have no location type set
+            if (!(isset($address->locationType) || $includeCustomer || !empty($filter))) continue; // Skip customer addresses unless filtered/included
             $subData = [];
             $subData['id'] = $address->id;
             $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->addressParent->name;
