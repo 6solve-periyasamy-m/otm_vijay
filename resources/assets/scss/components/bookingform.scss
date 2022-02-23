@@ -285,6 +285,7 @@ hr.light {
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
 .a-card {
     width: 100%;
     height: auto;
@@ -323,6 +324,9 @@ hr.light {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    .controls {
+      text-align: right;
+    }
 }
 
 .centered {

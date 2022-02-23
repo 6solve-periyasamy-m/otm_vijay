@@ -3,8 +3,8 @@
         <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
         <div v-if="showControl">
             <div class="booking-form--control">
-                <button class="btn btn-small btn-primary" @click="clearForm">Clear form</button>
-                <button class="btn btn-small btn-primary" @click="showForms">Show forms</button>
+                <button class="btn btn-sm btn-primary" @click="clearForm">Clear form</button>
+                <button class="btn btn-sm btn-primary" @click="showForms">Show forms</button>
             </div>
         </div>
     </div>
@@ -27,6 +27,8 @@ export default {
     }
   },
   methods: {
+    isLoggedIn() {
+    },
     // remove cookie
     clearForm() {
     },
