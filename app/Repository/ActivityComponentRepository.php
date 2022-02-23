@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\OrderActivity;
@@ -21,7 +22,7 @@ interface ActivityComponentRepositoryInterface
 
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
-    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
@@ -77,7 +78,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $orderComponent;
     }
 
-    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getBetweenDatesOld(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
     {
         $alreadyAdded = [];
         foreach ($tour->activityInventoryTours as $inventoryTour) {
@@ -123,5 +124,14 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
         }
         return false;
+    }
+
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    {
+        $inventories = [];
+        foreach ($tour->activityInventoryTours as $inventoryTour) {
+            $inventories[] = $inventoryTour->inventory->id;
+        }
+        return ActivityInventory::whereBetween('starts_at', [$dateFrom, $dateTo])->whereBetween('ends_at', [$dateFrom, $dateTo])->whereNotIn('id', $inventories)->get();
     }
 }

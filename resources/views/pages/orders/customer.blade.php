@@ -180,7 +180,7 @@ $(document).ready( function () {
             <p>Passport Number</p>
             <h6 class="fw-bold">{{ $orderCustomer->customer->passport_number }}</h6>
             <p>Password Expire Date</p>
-            <h6 class="fw-bold">{{ $orderCustomer->customer->passport_expiry_date }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->passport_expiry_date) }}</h6>
         </div>
         <div class="col-xl-8">
             @if ($orderCustomer->customer->homeAddress->address_line_1 != '' || $orderCustomer->customer->billingAddress->address_line_1 != '')
@@ -254,7 +254,7 @@ $(document).ready( function () {
                 @endcan
             @endcan
             @can('read', \App\Models\Customer::class)
-                <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}" class="btn btn-info mb-1">
+                <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}" class="btn btn-info mb-1" target="_blank">
                     <i class="icon-user"></i>
                     View Customer
                 </a>
@@ -291,7 +291,7 @@ $(document).ready( function () {
             <li class="nav-item col-6 col-md-3">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
                     <i class="icon-directions"></i>
-                    Transports
+                    Transport
                 </button>
             </li>
         </ul>

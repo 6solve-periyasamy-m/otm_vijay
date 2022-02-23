@@ -68,6 +68,7 @@
                 <a href="#" class="btn btn-danger" onclick="reset()">Reset</a>
                 <a href="#" class="btn btn-warning" onclick="addRoom()">Add Room</a>
                 <a href="#" class="btn btn-success" onclick="submit()">Save</a>
+                <a href="{{ route('orders.view', ['order' => $order,]) }}" class="btn btn-info">Return to Order</a>
             </div>
             <div class="manager droppable"></div>
         </div>

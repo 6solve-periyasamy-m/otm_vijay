@@ -6,6 +6,7 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\OrderCustomer;
 use App\Models\OrderTransport;
 use App\Models\Tour;
+use App\Models\TransportInventory;
 use App\Models\TransportInventoryTour;
 use App\Models\TransportInventoryTourUpgrade;
 use Carbon\Carbon;
@@ -129,5 +130,14 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
         }
         return false;
+    }
+
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    {
+        $inventories = [];
+        foreach ($tour->transportInventoryTours as $inventoryTour) {
+            $inventories[] = $inventoryTour->inventory->id;
+        }
+        return TransportInventory::whereBetween('departs_at', [$dateFrom, $dateTo])->whereBetween('arrives_at', [$dateFrom, $dateTo])->whereNotIn('id', $inventories)->get();
     }
 }

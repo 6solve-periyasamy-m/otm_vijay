@@ -5,11 +5,11 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Departure Airport</p>
-            <h6 class="fw-bold">{{ $flight->departureAirport->address }}</h6>
+            <h6 class="fw-bold">{{ $flight->departureAirport }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Arrival Airport</p>
-            <h6 class="fw-bold">{{ $flight->arrivalAirport->address }}</h6>
+            <h6 class="fw-bold">{{ $flight->arrivalAirport }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Is Domestic</p>

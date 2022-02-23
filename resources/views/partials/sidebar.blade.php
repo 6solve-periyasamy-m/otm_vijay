@@ -81,7 +81,7 @@
             <a href="{{ route('transports.all') }}" class="nav-link">
             @endif
                 <i class="icon-directions"></i>
-                <span>Transports</span>
+                <span>Transport</span>
                 @if(strpos(Request::url(), 'transports') !== false)
                 <span class="selected"></span>
                 @endif
