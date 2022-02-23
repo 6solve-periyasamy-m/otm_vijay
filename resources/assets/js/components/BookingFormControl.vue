@@ -1,5 +1,6 @@
 <template>
     <div class="controls">
+      {{auth_user}}
         <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
         <div v-if="showControl">
             <div class="booking-form--control">
@@ -10,6 +11,7 @@
     </div>
 </template>
 <script>
+import { auth_user } from '../auth'
 import { bus } from '../bus'
 export default {
   props: ['tour'],
