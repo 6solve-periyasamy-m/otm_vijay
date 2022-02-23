@@ -3,9 +3,9 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default card-container">
-                    <div class="card-header">
+                    <div class="card-header bookingform-header">
                         <div> OTM Booking Form version 0.82 </div>
-                        <div> <bookingform-control></bookingform-control> </div>
+                        <bookingform-control></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
