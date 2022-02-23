@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Exceptions\RoomingFailedException;
 use App\Models\Customer;
+use App\Models\Group;
 use App\Models\Merchandise;
 use App\Models\Order;
 use App\Models\OrderAccommodation;
@@ -15,9 +17,12 @@ use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
+use App\Models\RoomType;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Log;
+use Throwable;
 
 class OrderRepository
 {
@@ -48,170 +53,17 @@ class OrderRepository
         if (!$archived) $query->whereNull('orders.deleted_at');
         $query->select('orders.id AS order_id', 'tours.name AS tour_title', 'lead_booker.id AS lead_booker_id',
             'orders.booking_reference AS booking_reference', 'lead_booker_details.first_name AS lead_booker_first_name',
-            'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on')
+            'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on', DB::raw('COUNT(order_customers_details.id) AS passenger_count'))
             ->groupBy('orders.id', 'tours.name', 'lead_booker.id', 'booking_reference',
                 'lead_booker_details.first_name', 'lead_booker_details.last_name', 'orders.ordered_on')
             ->orderBy('ordered_on');
         return $query->get();
     }
 
-    /**
-     * Returns the details used by the Invoice view screen
-     * @param Order $order
-     * @return Order[] The invoice details
-     */
-    public static function getInvoiceDetails(Order $order): array
-    {
-        $data = ['order' => $order,];
-        $data['orderCustomers'] = [];
-        $data['payments'] = [];
-        $adjustments = [];
-        $payments = [];
-        $data['totals']['orderValue'] = 0;
-        $data['totals']['paid'] = 0;
-        $data['totals']['adjusted'] = 0;
-
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $data['orderCustomers'][$orderCustomer->id] = [];
-            $data['orderCustomers'][$orderCustomer->id]['customer'] = $orderCustomer;
-            $data['orderCustomers'][$orderCustomer->id]['items'] = [];
-            $data['orderCustomers'][$orderCustomer->id]['cost'] = $order->tour->base_price_per_person;
-            $included = "";
-            foreach ($orderCustomer->orderAccommodation as $orderInventory) {
-                $tourInventory = $orderInventory->accommodationInventoryTour;
-                if ($tourInventory->tour_component_type !== "Included") {
-                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id])) {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] + 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
-                    } else {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id] = [];
-                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['description'] =
-                            $tourInventory->accommodationInventory->accommodation->name . ' - ' .
-                            $tourInventory->accommodationInventory->roomType->name . ' - ' .
-                            $tourInventory->accommodationInventory->boardType->name;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['quantity'] = 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['accom' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
-                    }
-                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
-                } else {
-                    $included .= $tourInventory->accommodationInventory->accommodation->name . ' - ' .
-                        $tourInventory->accommodationInventory->roomType->name . ' - ' .
-                        $tourInventory->accommodationInventory->boardType->name . "\n";
-                }
-            }
-            foreach ($orderCustomer->orderActivities as $orderInventory) {
-                $tourInventory = $orderInventory->activityInventoryTour;
-                if ($tourInventory->tour_component_type !== "Included") {
-                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id])) {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] + 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
-                    } else {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id] = [];
-                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['description'] =
-                            $tourInventory->activityInventory->activity->name . ' - ' .
-                            $tourInventory->activityInventory->activity->activityType->name . ' - ' .
-                            $tourInventory->activityInventory->ticketType->name;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['quantity'] = 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['activ' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
-                    }
-                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
-                } else {
-                    $included .= $tourInventory->activityInventory->activity->name . ' - ' .
-                        $tourInventory->activityInventory->activity->activityType->name . ' - ' .
-                        $tourInventory->activityInventory->ticketType->name . "\n";
-                }
-            }
-            foreach ($orderCustomer->orderFlights as $orderInventory) {
-                $tourInventory = $orderInventory->flightInventoryTour;
-                if ($tourInventory->tour_component_type !== "Included") {
-                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id])) {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] + 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
-                    } else {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id] = [];
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['description'] =
-                            $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
-                            $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
-                            $tourInventory->flightInventory->travelClass->name;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['quantity'] = 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['flight' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
-                    }
-                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
-                } else {
-                    $included .= $tourInventory->flightInventory->flight->departureAirport->name . ' to ' .
-                        $tourInventory->flightInventory->flight->arrivalAirport->name . ' - ' .
-                        $tourInventory->flightInventory->travelClass->name . "\n";
-                }
-            }
-            foreach ($orderCustomer->orderTransports as $orderInventory) {
-                $tourInventory = $orderInventory->transportInventoryTour;
-                if ($tourInventory->tour_component_type !== "Included") {
-                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id])) {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['quantity'] + 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['cost'] + $tourInventory->tour_sales_price;
-                    } else {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id] = [];
-                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['description'] =
-                            $tourInventory->transportInventory->transport->departureAddress->name . ' to ' .
-                            $tourInventory->transportInventory->transport->arrivalAddress->name . ' - ' .
-                            $tourInventory->transportInventory->transport->transportType->name . ' - ' .
-                            $tourInventory->transportInventory->travelClass->name;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['quantity'] = 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['trans' . $tourInventory->id]['cost'] = $tourInventory->tour_sales_price;
-                    }
-                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $tourInventory->tour_sales_price;
-                } else {
-                    $included .= $tourInventory->transportInventory->transport->departureAddress->name . ' to ' .
-                        $tourInventory->transportInventory->transport->arrivalAddress->name . ' - ' .
-                        $tourInventory->transportInventory->transport->transportType->name . ' - ' .
-                        $tourInventory->transportInventory->travelClass->name . "\n";
-                }
-            }
-            foreach ($orderCustomer->orderMerchandise as $orderInventory) {
-                $merchandise = $orderInventory->merchandise;
-                if ($merchandise->tour_component_type !== "Included") {
-                    if (isset($data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id])) {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] = $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] + 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['cost'] + $merchandise->tour_sales_price;
-                    } else {
-                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id] = [];
-                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['description'] = $merchandise->name;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['quantity'] = 1;
-                        $data['orderCustomers'][$orderCustomer->id]['items']['merch' . $merchandise->id]['cost'] = $merchandise->tour_sales_price;
-                    }
-                    $data['orderCustomers'][$orderCustomer->id]['cost'] = $data['orderCustomers'][$orderCustomer->id]['cost'] + $merchandise->tour_sales_price;
-                } else {
-                    $included .= $merchandise->name . "\n";
-                }
-            }
-            $data['totals']['orderValue'] += $data['orderCustomers'][$orderCustomer->id]['cost'];
-            $data['orderCustomers'][$orderCustomer->id]['included'] = $included;
-            foreach ($orderCustomer->adjustments as $adjustment) {
-                $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount,
-                    'reason' => 'Customer Adjustment (' . $orderCustomer->customer->first_name . ' ' . $orderCustomer->customer->last_name . '): ' . $adjustment->reason,];
-                $data['totals']['adjusted'] += $adjustment->amount;
-            }
-        }
-
-        foreach ($order->payments as $payment) {
-            $payments[] = ['date' => $payment->paid_on, 'amount' => $payment->amount, 'method' => $payment->paymentMethod->name . ': ' . $payment->payment_type,];
-            $data['totals']['paid'] += $payment->amount;
-        }
-
-        foreach ($order->adjustments as $adjustment) {
-            $adjustments[] = ['date' => $adjustment->date, 'amount' => $adjustment->amount, 'reason' => 'Manual Adjustment: ' . $adjustment->reason,];
-            $data['totals']['adjusted'] += $adjustment->amount;
-        }
-
-        $data['adjustments'] = collect($adjustments)->sortBy('date')->toArray();
-        $data['payments'] = collect($payments)->sortBy('date')->toArray();
-        $data['totals']['combined'] = $data['totals']['orderValue'] - $data['totals']['paid'] + $data['totals']['adjusted'];
-        return $data;
-    }
-
     public static function generateInvoice(Order $order): Invoice
     {
         $customers = [];
+        $groups = [];
         $adjustments = [];
         $payments = [];
         foreach ($order->orderCustomers as $customer) {
@@ -219,6 +71,9 @@ class OrderRepository
             foreach ($customer->adjustments as $adjustment) {
                 $adjustments[] = ['description' => "Customer Adjustment ({$customer->customer_name}): {$adjustment->reason}", 'cost' => $adjustment->amount,];
             }
+        }
+        foreach ($order->groups() as $group) {
+            $groups[$group->name] = self::processGroupComponentsForInvoice($group);
         }
         foreach ($order->adjustments as $adjustment) {
             $adjustments[] = ['description' => "Manual Adjustment: {$adjustment->reason}", 'cost' => $adjustment->amount,];
@@ -233,6 +88,7 @@ class OrderRepository
             'customers' => $customers,
             'adjustments' => ['total_cost' => $order->getAdjustmentValue(), 'billables' => $adjustments,],
             'payments' => ['total_cost' => $order->paid, 'billables' => $payments,],
+            'groups' => $groups,
             'installments' => self::snapshotInstallments($order),
             'footer' => $order->invoice_footer,
             'total_cost' => $order->getCost() + $order->getAdjustmentValue(),
@@ -258,13 +114,10 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $included = "Base Components Include:\n";
-        foreach ($orderCustomer->orderAccommodation as $orderInventory) {
+        foreach ($orderCustomer->orderAccommodation() as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
-            } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
-                $totalCost += $orderInventory->cost;
             }
         }
         foreach ($orderCustomer->orderActivities as $orderInventory) {
@@ -272,7 +125,7 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -281,7 +134,7 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -290,7 +143,7 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
@@ -299,12 +152,32 @@ class OrderRepository
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";
             } else {
-                $data[] = ['description' => $tourInventory, 'cost' => $orderInventory->cost];
+                $data[] = ['description' => '' . $tourInventory, 'cost' => $orderInventory->cost];
                 $totalCost += $orderInventory->cost;
             }
         }
         $totalCost += $orderCustomer->tour_cost;
         return ['total_cost' => $totalCost, 'billables' => array_merge([['description' => $included, 'cost' => $orderCustomer->tour_cost,]], $data),];
+    }
+
+    /**
+     * @param Group $group
+     * @return array
+     */
+    private static function processGroupComponentsForInvoice(Group $group): array
+    {
+        $data = [];
+        $totalCost = 0;
+        $name = $group->name . ': ';
+        foreach ($group->orderCustomers as $orderCustomer) { $name .= $orderCustomer->customer_name . ', '; }
+        foreach ($group->rooms as $orderInventory) {
+            $tourInventory = $orderInventory->tourComponent;
+            if ($tourInventory->tour_component_type != 'Included') {
+                $data[] = ['description' => "" . $tourInventory, 'cost' => $orderInventory->cost];
+                $totalCost += $orderInventory->cost;
+            }
+        }
+        return ['total_cost' => $totalCost, 'name' => substr($name, 0, -2), 'billables' => $data,];
     }
 
     // Order Addons/Upgrades
@@ -325,6 +198,12 @@ class OrderRepository
             $upgrades = array_merge($upgrades, $data['upgrades']);
             $additionalValue += $data['additionalValue'];
         }
+        foreach ($order->groups() as $group) {
+            $data = self::getGroupAdditionals($group);
+            $addons = array_merge($addons, $data['addons']);
+            $upgrades = array_merge($upgrades, $data['upgrades']);
+            $additionalValue += $data['additionalValue'];
+        }
         return ['upgrades' => $upgrades, 'addons' => $addons, 'additionalValue' => $additionalValue,];
     }
 
@@ -338,50 +217,59 @@ class OrderRepository
         $upgrades = [];
         $addons = [];
         $additionalValue = 0;
-        foreach ($customer->orderAccommodation as $orderAccommodation) {
-            if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
-                $upgrades[] = ['upgrade' => $orderAccommodation, 'customer' => $customer,];
-                $additionalValue += $orderAccommodation->cost;
-            }
-            if ($orderAccommodation->accommodationInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                $addons[] = ['addon' => $orderAccommodation, 'customer' => $customer,];
-                $additionalValue += $orderAccommodation->cost;
-            }
-        }
+        // Accommodation Additionals are going to be calculated per group (A:Celeste Gateley)
         foreach ($customer->orderActivities as $orderActivity) {
             if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
-                $upgrades[] = ['upgrade' => $orderActivity, 'customer' => $customer,];
+                $upgrades[] = ['upgrade' => $orderActivity, 'description' => "{$orderActivity->activityInventoryTour}  ({$customer->customer_name})"];
                 $additionalValue += $orderActivity->cost;
             }
             if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                $addons[] = ['addon' => $orderActivity, 'customer' => $customer,];
+                $addons[] = ['addon' => $orderActivity, 'description' => "{$orderActivity->activityInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderActivity->cost;
             }
         }
         foreach ($customer->orderFlights as $orderFlight) {
             if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
-                $upgrades[] = ['upgrade' => $orderFlight, 'customer' => $customer,];
+                $upgrades[] = ['upgrade' => $orderFlight, 'description' => "{$orderFlight->flightInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderFlight->cost;
             }
             if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                $addons[] = ['addon' => $orderFlight, 'customer' => $customer,];
+                $addons[] = ['addon' => $orderFlight, 'description' => "{$orderFlight->flightInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderFlight->cost;
             }
         }
         foreach ($customer->orderTransports as $orderTransport) {
             if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
-                $upgrades[] = ['upgrade' => $orderTransport, 'customer' => $customer,];
+                $upgrades[] = ['upgrade' => $orderTransport, 'description' => "{$orderTransport->transportInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderTransport->cost;
             }
             if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$addonId) {
-                $addons[] = ['addon' => $orderTransport, 'customer' => $customer,];
+                $addons[] = ['addon' => $orderTransport, 'description' => "{$orderTransport->transportInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderTransport->cost;
             }
         }
         foreach ($customer->orderMerchandise as $orderMerchandise) {
             if ($orderMerchandise->merchandise->tour_component_type == OrderRepository::$addonId) {
-                $addons[] = ['addon' => $orderMerchandise, 'customer' => $customer,];
+                $addons[] = ['addon' => $orderMerchandise, 'description' => "{$orderMerchandise->merchandise}  ({$customer->customer_name})",];
                 $additionalValue += $orderMerchandise->cost;
+            }
+        }
+        return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
+    }
+
+    public static function getGroupAdditionals(Group $group): array
+    {
+        $upgrades = [];
+        $addons = [];
+        $additionalValue = 0;
+        foreach ($group->rooms as $orderAccommodation) {
+            if ($orderAccommodation->tourComponent->tour_component_type == OrderRepository::$upgradeId) {
+                $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$group->name})"];
+                $additionalValue += $orderAccommodation->cost;
+            }
+            if ($orderAccommodation->tourComponent->tour_component_type == OrderRepository::$addonId) {
+                $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$group->name})",];
+                $additionalValue += $orderAccommodation->cost;
             }
         }
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
@@ -486,6 +374,15 @@ class OrderRepository
             $total += $customerValue;
             $breakdown['customers'][] = $customerData;
         }
+        foreach ($order->groups() as $group) {
+            $groupData = [];
+            $data = self::getGroupAdditionals($group);
+            $groupData['upgrades'] = $data['upgrades'];
+            $groupData['addons'] = $data['addons'];
+            $groupData['additionalValue'] = $data['additionalValue'];
+            $total += $data['additionalValue'];
+            $breakdown['groups'][] = $groupData;
+        }
         $breakdown['deposit'] = $order->calculated_deposit;
         $breakdown['total'] = $total;
         return $breakdown;
@@ -581,13 +478,7 @@ class OrderRepository
     public static function addIncludedToCustomer(OrderCustomer $orderCustomer)
     {
         $order = $orderCustomer->order;
-        foreach ($order->tour->accommodationInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderAccommodation::make(['accommodation_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
-                $orderCustomer->orderAccommodation()->save($orderInventory);
-                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
-            }
-        }
+        // Accommodation are added to groups not customers (A:Celeste Gateley)
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
@@ -721,4 +612,137 @@ class OrderRepository
         }
         return $paid >= 0;
     }
+
+    public static function getOrderGroups(Order $order)
+    {
+        $customers = $order->orderCustomers;
+        $groupIds = [];
+        foreach ($customers as $customer) {
+            foreach ($customer->groups as $group) {
+                $groupIds[] = $group->id;
+            }
+        }
+        $groups = [];
+        foreach (array_unique($groupIds) as $groupId) {
+            $groups[] = Group::find($groupId);
+        }
+        return $groups;
+    }
+
+    /**
+     *
+     * @param Order $order
+     * @throws RoomingFailedException
+     * @throws Throwable
+     * @var Group $group
+     */
+    public static function buildGroupRooming(Order $order, $data) {
+        try {
+            DB::beginTransaction();
+            $inflated = self::inflateRoomingData($data);
+            foreach ($order->groups() as $group) { $group->delete(); }
+            foreach ($inflated as $groupData) {
+                $group = Group::create([
+                    'room_type_id' => $groupData->room_type->id,
+                    'name' => $groupData->name,
+                ]);
+                foreach ($groupData->customers as $customer) {
+                    $group->orderCustomers()->save($customer);
+                }
+                self::addRoomsToGroup($order, $group);
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            Log::error($e);
+            DB::rollBack();
+            throw new RoomingFailedException($e);
+        }
+    }
+
+    /**
+     * @throws RoomingFailedException
+     */
+    private static function inflateRoomingData($data): array
+    {
+        $inflated = [];
+        foreach ($data as $object) {
+            Log::error($data);
+            $collection = new Collection();
+            $roomType = RoomType::find($object['roomType']);
+            if (!isset($roomType)) throw new RoomingFailedException('An invalid room type was provided');
+            $collection->room_type = $roomType;
+            $members = [];
+            $collection->name = $object['name'];
+            foreach ($object['customers'] as $customerId) {
+                $customer = OrderCustomer::find($customerId);
+                if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
+                $members[] = $customer;
+            }
+            $collection->customers = $members;
+            $inflated[] = $collection;
+        }
+        return $inflated;
+    }
+
+    /**
+     * @throws RoomingFailedException
+     */
+    private static function addRoomsToGroup(Order $order, Group $group)
+    {
+        $templates = AccommodationComponentRepository::getTemplateTourInventory($order->tour);
+        $roomType = $group->roomType;
+        foreach ($templates as $template) {
+            $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $roomType);
+            if (!isset($found)) throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name}");
+            OrderAccommodation::create([
+                'accommodation_inventory_tour_id' => $found->id,
+                'group_id' => $group->id,
+                'cost' => $found->tour_sales_price,
+            ]);
+        }
+    }
+
+    public static function exportRoomingData(Order $order): array
+    {
+        $groups = [];
+        $usedIds = [];
+        foreach ($order->groups() as $group) {
+            $grouping = ['name' => $group->name, 'roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
+            $customers = [];
+            foreach ($group->orderCustomers as $orderCustomer) {
+                $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+                $usedIds[] = $orderCustomer->id;
+            }
+            $grouping['customers'] = $customers;
+            $groups[] = $grouping;
+        }
+        $data['rooms'] = [];
+        foreach (AccommodationComponentRepository::getAvailableRoomTypes($order->tour) as $roomType) {
+            $data['rooms'][] = ['id' => $roomType->id, 'name' => $roomType->name, 'size' => $roomType->maximum_occupancy, ];
+        }
+        $data['groups'] = $groups;
+        $data['customers'] = [];
+        $data['unused'] = [];
+        $unused = array_diff(self::getOrderCustomerIds($order), $usedIds);
+        foreach ($order->orderCustomers as $orderCustomer) {
+            $customerData = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+            $data['customers'][] = $customerData;
+            if (in_array($orderCustomer->id, $unused)) {
+                $data['unused'][] = $customerData;
+            }
+        }
+        return $data;
+    }
+
+    private static function getOrderCustomerIds(Order $order): array
+    {
+        $query = DB::table('order_customers')->where('order_id', '=', $order->id)->select('id');
+        $ids = [];
+        foreach ($query->get() as $result) {
+            $ids[] = $result->id;
+        }
+        return $ids;
+    }
+
+
 }

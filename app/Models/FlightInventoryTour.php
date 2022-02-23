@@ -17,7 +17,7 @@ class FlightInventoryTour extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['tour_id', 'flight_inventory_id', 'tour_component_type', 'flight_type', 'tour_sales_price',];
-    protected $cascadeDeletes = ['orders', 'upgrades'];
+    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
 
     public static function getValidationRules()
     {
@@ -54,6 +54,12 @@ class FlightInventoryTour extends Model
         return $this->hasMany(FlightInventoryTourUpgrade::class, 'base_id');
     }
 
+    // Only used for Cascading Soft Deletes
+    public function upgradeParents()
+    {
+        return $this->hasMany(FlightInventoryTourUpgrade::class, 'upgrade_id');
+    }
+
     public function parent() {
         return FlightComponentRepository::getParentComponent($this);
     }
@@ -79,5 +85,17 @@ class FlightInventoryTour extends Model
     public function inventory()
     {
         return $this->flightInventory();
+    }
+
+    public function getUpgradeKeyMap(): array
+    {
+        $upgrades = $this->upgrades;
+        $keys = [];
+        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
+        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        foreach ($upgrades as $upgrade) {
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+        }
+        return $keys;
     }
 }

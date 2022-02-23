@@ -6,6 +6,7 @@ use App\Models\Accommodation;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 use App\Models\BoardType;
+use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\TourRepository;
@@ -107,5 +108,26 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         $subData['id'] = $inventory->id;
         $subData['text'] = $inventory->roomType->name . ' - ' . $inventory->boardType->name . ' - ' . $inventory->check_in . ' to ' . $inventory->check_out;
         return $subData;
+    }
+
+    public static function getAvailableAddons(OrderCustomer $orderCustomer, string $filter)
+    {
+        $group = $orderCustomer->primary_group;
+        $tour = $orderCustomer->order->tour;
+        $data = [];
+        $owned = [];
+        if (!isset($group)) return $data;
+        foreach ($group->rooms as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type === "Add-on") {
+                if (in_array($inventoryTour->id, $owned)) continue;
+                $subData = [];
+                $subData['id'] = $inventoryTour->id;
+                $subData['text'] = $inventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+            }
+        }
+        return $data;
+
     }
 }

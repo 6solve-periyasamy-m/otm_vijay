@@ -3,6 +3,7 @@
 namespace App\Listeners\Email;
 
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
+use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Repository\MailRepository;
 
 class SendAdditionalTravellerRemovedEmail
@@ -20,11 +21,12 @@ class SendAdditionalTravellerRemovedEmail
     /**
      * Handle the event.
      *
-     * @param OrderCustomerCreatedEvent $event
+     * @param OrderCustomerRemovedEvent $event
      * @return void
      */
-    public function handle(OrderCustomerCreatedEvent $event)
+    public function handle(OrderCustomerRemovedEvent $event)
     {
+        if (!$event->shouldInvoice) return;
         MailRepository::sendMailable('additional-traveller-removed', $event->orderCustomer->customer->email_address, $event->orderCustomer);
     }
 }

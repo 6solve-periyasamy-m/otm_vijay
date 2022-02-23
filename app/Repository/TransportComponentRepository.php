@@ -118,6 +118,16 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
     public static function getParentComponent(TransportInventoryTour $inventoryTour)
     {
         $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
+    }
+
+    public static function isOnUpgradeTree(TransportInventoryTour $inventoryTour, TransportInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
     }
 }

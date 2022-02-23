@@ -3,4 +3,5 @@
              'route' => 'inventory.accommodation'])
 @include('partials.fields.prefab.component_type', ['classes' => 'accommodation-component-type-select'])
 @include('partials.fields.text', ['name' => 'Tour Sales Price', 'field' => 'tour_sales_price', 'value' => $tour_sales_price ?? null])
+@include('partials.fields.checkbox', ['name' => 'Should this be used as a template?', 'field' => 'is_template', 'value' => $accommodationInventoryTour->is_template,])
 @include('partials.fields.submit')

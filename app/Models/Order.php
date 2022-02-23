@@ -205,4 +205,9 @@ class Order extends Model
     {
         return $this->deposit * $this->getCustomerCount();
     }
+
+    public function groups()
+    {
+        return OrderRepository::getOrderGroups($this);
+    }
 }

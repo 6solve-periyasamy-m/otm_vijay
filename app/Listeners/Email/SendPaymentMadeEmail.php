@@ -25,10 +25,11 @@ class SendPaymentMadeEmail
      */
     public function handle(PaymentCreatedEvent $event)
     {
+        if (!$event->shouldInvoice) return;
         if ($event->payment->payment_type === 'Refund') {
-            MailRepository::sendMailable('refund-given', $event->order->leadBooker->email, $event->payment);
+            MailRepository::sendMailable('refund-given', $event->order->leadBooker->customer->email_address, $event->payment);
         } else {
-            MailRepository::sendMailable('payment-made', $event->order->leadBooker->email, $event->payment);
+            MailRepository::sendMailable('payment-made', $event->order->leadBooker->customer->email_address, $event->payment);
         }
     }
 }

@@ -15,8 +15,8 @@ class TransportInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price'];
-    protected $cascadeDeletes = ['orders', 'upgrades'];
+    protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
+    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     public $additional_attributes = ['tour_name',];
 
     public static function getValidationRules()
@@ -45,6 +45,12 @@ class TransportInventoryTour extends Model
         return $this->hasMany(TransportInventoryTourUpgrade::class, 'base_id');
     }
 
+    // Only used for Cascading Soft Deletes
+    public function upgradeParents()
+    {
+        return $this->hasMany(TransportInventoryTourUpgrade::class, 'upgrade_id');
+    }
+
     public function parent() {
         return TransportComponentRepository::getParentComponent($this);
     }
@@ -71,5 +77,17 @@ class TransportInventoryTour extends Model
     public function inventory()
     {
         return $this->transportInventory();
+    }
+
+    public function getUpgradeKeyMap(): array
+    {
+        $upgrades = $this->upgrades;
+        $keys = [];
+        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
+        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        foreach ($upgrades as $upgrade) {
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+        }
+        return $keys;
     }
 }

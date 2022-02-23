@@ -67,6 +67,14 @@ class LocationTypesTableSeeder extends Seeder
                 'updated_at' => '2022-01-21 11:15:52',
                 'deleted_at' => NULL,
             ),
+            6 =>
+            array (
+                'id' => 7,
+                'name' => 'Hiking Spot',
+                'created_at' => '2022-01-21 11:15:52',
+                'updated_at' => '2022-01-21 11:15:52',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

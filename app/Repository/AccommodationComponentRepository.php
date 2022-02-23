@@ -7,8 +7,10 @@ use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\OrderAccommodation;
 use App\Models\OrderCustomer;
+use App\Models\RoomType;
 use App\Models\Tour;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 interface AccommodationComponentRepositoryInterface
@@ -72,8 +74,11 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
     {
+        $orderCustomer = OrderCustomer::find($oCustomerId);
+        $group = $orderCustomer->primary_group;
+        if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
-            'order_customer_id' => $oCustomerId,
+            'group_id' => $group->id,
             'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
             'share_with_user_id' => null,
             'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
@@ -119,6 +124,91 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
     public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
+    }
+
+    public static function getInventoryWithRoomType(AccommodationInventoryTour $inventoryTour, RoomType $roomType): AccommodationInventoryTour
+    {
+        $inventory = $inventoryTour->inventory;
+        $accommodation = $inventory->component;
+
+        $query = DB::table('accommodation_inventory_tours');
+        $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
+        $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
+        $query->where('accommodation_inventories.check_in', '=', $inventory->check_in);
+        $query->where('accommodation_inventories.check_out', '=', $inventory->check_out);
+        $query->where('accommodation_inventories.room_type_id', '=', $roomType->id);
+        $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
+        $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');
+        $query->select('accommodation_inventory_tours.id');
+
+        return AccommodationInventoryTour::find($query->first()->id);
+    }
+
+    /**
+     * @param Tour $tour
+     * @return Collection
+     */
+    public static function getTemplateTourInventory(Tour $tour): Collection
+    {
+        return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
+    }
+
+    public static function getAvailableRoomTypes(Tour $tour): array
+    {
+        $templates = self::getTemplateTourInventory($tour);
+        $first = true;
+        $available = [];
+        foreach ($templates as $template) {
+            if ($first && empty($available)) {
+                $available = self::getRoomTypesForInventory($template);
+                continue;
+            }
+            $roomTypes = self::getRoomTypesForInventory($template);
+            $missing = array_diff($available, $roomTypes);
+            $available = array_diff($available, $missing);
+        }
+        return self::hydrateRoomTypes($available);
+    }
+
+    private static function getRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
+    {
+        $inventory = $inventoryTour->inventory;
+        $accommodation = $inventory->component;
+
+        $query = DB::table('accommodation_inventory_tours');
+        $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
+        $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
+        $query->where('accommodation_inventories.check_in', '=', $inventory->check_in);
+        $query->where('accommodation_inventories.check_out', '=', $inventory->check_out);
+        $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
+        $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');
+        $query->select('accommodation_inventories.room_type_id AS id');
+
+        $available = [];
+        foreach ($query->get('id') as $result) {
+            $available[] = $result->id;
+        }
+
+        return $available;
+    }
+
+    private static function hydrateRoomTypes(array $ids): array
+    {
+        $types = [];
+        foreach ($ids as $id) {
+            $types[] = RoomType::find($id);
+        }
+        return $types;
+    }
+
+    public static function isOnUpgradeTree(AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
     }
 }
