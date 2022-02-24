@@ -148,20 +148,8 @@
                                        class="form-control ps-0 form-control-line" autocomplete="address-level1">
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label class="col-md-12 mb-0">Country</label>
-                            <div class="col-md-12">
-                                <input type="text" name="home_country" id="home_country-input" value="{{ $customer->homeAddress->country ?? '' }}"
-                                    class="form-control ps-0 form-control-line" autocomplete="country">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label class="col-md-12 mb-0">Country</label>
-                            <div class="col-md-12">
-                                <input type="text" name="billing_country" id="billing_country-input" value="{{ $customer->billingAddress->country ?? '' }}"
-                                       class="form-control ps-0 form-control-line" autocomplete="country">
-                            </div>
-                        </div>
+                        @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'home_country', 'value' => $customer->homeAddress->country_id ?? null, 'width' => 6, 'route' => 'countries',])
+                        @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'billing_country', 'value' => $customer->billingAddress->country_id ?? null, 'width' => 6, 'route' => 'countries',])
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Postcode</label>
                             <div class="col-md-12">
