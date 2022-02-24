@@ -8,12 +8,31 @@ use App\Models\Order;
 use App\Repository\OrderRepository;
 use Auth;
 use Illuminate\Http\Request;
+use App\Repository\BookingRepository;
+use Illuminate\Validation\Rules\Password;
 
 class CustomerPortalController extends Controller
 {
     private function getCustomer(): ?Customer
     {
         return Customer::find(Auth::guard('customer')->id());
+    }
+
+    private function getRegistrationValidationRules(): array
+    {
+        return [
+            'email' => 'required|exists:customers,email_address|email:rfc,dns',
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ];
     }
 
     public function showMainPortal(Customer $customer) {
@@ -51,8 +70,16 @@ class CustomerPortalController extends Controller
         return back()->withErrors('Could not authenticate with those credentials')->withInput($request->only('email', 'remember'));
     }
 
+    // Customers can only register if they have a booking
     public function register(Request $request) {
-        // TODO: (Celeste) Implement
+        $customer = Customer::where('email_address', '=', $request->input('email'))->first();
+        if (!isset($customer)) return back()->withErrors(['msg' => 'No bookings found with that email address',]);
+        if (isset($customer->password)) return back()->withErrors(['msg' => 'That email address is already registered',]);
+        $request->validate($this->getRegistrationValidationRules());
+        $customer->update([
+            'password' => \Hash::make($request->input('password')),
+        ]);
+        $customer->save();
         return redirect()->route('customer.portal');
     }
 
