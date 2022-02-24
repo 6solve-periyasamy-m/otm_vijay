@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Events\Customer\CustomerEditedEvent;
 use App\Http\Controllers\Controller;
+use App\Repository\CustomerAuthenticationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 
@@ -40,12 +41,12 @@ class CustomerDetailsController extends Controller
 
     public function edit()
     {
-        return view('pages.customer.details', ['customer' => CustomerPortalController::getCustomer(),]);
+        return view('pages.customer.details', ['customer' => CustomerAuthenticationRepository::getCustomer(),]);
     }
 
     public function update(Request $request)
     {
-        $customer = CustomerPortalController::getCustomer();
+        $customer = CustomerAuthenticationRepository::getCustomer();
         $request->validate($this->getValidationRules());
         $customer->update([
             'title' => $request->input('title'),
