@@ -148,7 +148,7 @@ class BespokeReportRepository
         return $data;
     }
 
-    private static function format($data, string $format): string
+    private static function format($data, string $format): ?string
     {
         switch ($format) {
             case 'date':
