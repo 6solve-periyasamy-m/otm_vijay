@@ -11,7 +11,7 @@ class CustomerFinancesController extends Controller
 {
     public function show()
     {
-        return view('pages.customer.finances', ['orders' => $this->getCustomer()->orders]);
+        return view('pages.customer.finances', ['orders' => CustomerPortalController::getCustomer()->orders]);
     }
 
     public function makePayment(Request $request)
