@@ -249,6 +249,30 @@
                                     class="form-control ps-0 form-control-line">
                             </div>
                         </div>
+                        <hr class="splitter">
+                        <div class="form-group">
+                            <h4 class="col-md-12 mb-0">Change your password</h4>
+                        </div>
+                        <hr class="splitter">
+                        <div class="form-group col-md-4">
+                            <label class="col-md-12 mb-0">Current Password</label>
+                            <div class="col-md-12">
+                                <input type="password" name="current_password" id="current_password-input" class="form-control ps-0 form-control-line" autocomplete="current-password">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="col-md-12 mb-0">New Password</label>
+                            <div class="col-md-12">
+                                <input type="password" name="new_password" id="current_password-input" class="form-control ps-0 form-control-line" autocomplete="new-password">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="col-md-12 mb-0">Confirm your new password</label>
+                            <div class="col-md-12">
+                                <input type="password" name="new_password_confirmation" id="new_password_confirmation-input" class="form-control ps-0 form-control-line">
+                            </div>
+                        </div>
+                        <hr class="splitter">
                         <div class="form-group">
                             <div class="col-sm-12 d-flex">
                                 <button type="submit" class="btn btn-success mx-auto mx-md-0 text-white">

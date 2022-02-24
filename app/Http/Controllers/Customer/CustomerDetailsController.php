@@ -4,17 +4,29 @@ namespace App\Http\Controllers\Customer;
 
 use App\Events\Customer\CustomerEditedEvent;
 use App\Http\Controllers\Controller;
-use App\Models\AddressParent;
-use App\Models\Customer;
-use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class CustomerDetailsController extends Controller
 {
     private function getValidationRules(): array
     {
         return [
+            'current_password' => [
+                'nullable',
+                'required_with:new_password',
+                'current_password'
+            ],
+            'new_password' => [
+                'nullable',
+                'confirmed',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
             'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
