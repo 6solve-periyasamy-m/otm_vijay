@@ -731,13 +731,14 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
     });
+    Route::prefix('password')->name('password.')->group(function() {
+        Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
+        Route::post('/email', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
+        Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');
+        Route::post('/reset', [CustomerResetPasswordController::class, 'reset'])->name('update');
+    });
 });
-Route::prefix('password')->name('password.')->group(function() {
-    Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
-    Route::post('/email', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
-    Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');
-    Route::post('/reset', [CustomerResetPasswordController::class, 'reset'])->name('update');
-});
+
 Route::prefix('payment')->name('payment.')->group(function () {
     Route::prefix('gateway')->name('gateway.')->group(function () {
         Route::prefix('stripe')->name('stripe.')->group(function () {
