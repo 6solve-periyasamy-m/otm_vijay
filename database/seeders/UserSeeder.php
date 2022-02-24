@@ -49,21 +49,25 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => '$2a$10$1TEFiRVsIG3R9Aa9JiJ1cuDSVqLffb9J11HSmHO5oIDliHaunqd8C',
         ]);
-        $celeste = User::create([
-            'name' => 'Celeste Gateley',
-            'email' => 'celeste@octopustravelmatrix.com',
-            'email_verified_at' => now(),
-            'password' => '$2a$10$aqDFZNjT0To9Vsrs.edpK.i6K4JVrrjRGfKjj7TQMrDyCoEf5FSRO',
-        ]);
-        $nicholas = User::create([
-            'name' => 'Nicholas Alexander',
-            'email' => 'work@sfsw.net',
-            'email_verified_at' => now(),
-            'password' => '$2a$12$cZrltF34KgJtI0V0Ob8nm.osVJavm4lvo.4E2vjol2iC652B.f2Oy',
-        ]);
 
-        $celeste->assign($otmStaff);
         $charlotte->assign($otmStaff);
-        $nicholas->assign($otmStaff);
+
+        if (config('app.debug')) {
+            $celeste = User::create([
+                'name' => 'Celeste Gateley',
+                'email' => 'celeste@octopustravelmatrix.com',
+                'email_verified_at' => now(),
+                'password' => '$2a$10$aqDFZNjT0To9Vsrs.edpK.i6K4JVrrjRGfKjj7TQMrDyCoEf5FSRO',
+            ]);
+            $nicholas = User::create([
+                'name' => 'Nicholas Alexander',
+                'email' => 'work@sfsw.net',
+                'email_verified_at' => now(),
+                'password' => '$2a$12$cZrltF34KgJtI0V0Ob8nm.osVJavm4lvo.4E2vjol2iC652B.f2Oy',
+            ]);
+
+            $celeste->assign($otmStaff);
+            $nicholas->assign($otmStaff);
+        }
     }
 }

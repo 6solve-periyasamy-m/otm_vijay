@@ -165,6 +165,7 @@
                                 <tr>
                                     <th scope="col">Type</th>
                                     <th scope="col">Method</th>
+                                    <th scope="col">Customer</th>
                                     <th scope="col">Value</th>
                                     <th scope="col">Paid</th>
                                     <th scope="col">Actions</th>
@@ -174,6 +175,7 @@
                                 <tr>
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
+                                    <td>{{ $payment->customer->full_name }}</td>
                                     <td>{{ StringFormatter::formatCurrency($payment->amount) }}</td>
                                     <td>{{ StringFormatter::formatDateTime($payment->paid_on) }}</td>
                                     <td class="actions">
