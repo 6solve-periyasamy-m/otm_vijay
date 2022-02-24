@@ -39,42 +39,42 @@
                             <label class="col-md-12 mb-0">Title</label>
                             <div class="col-md-12">
                                 <input type="text" name="title" id="title-input" value="{{ $customer->title ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="honorific-prefix">
                             </div>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="col-md-12 mb-0">First Name</label>
                             <div class="col-md-12">
                                 <input type="text" name="first_name" id="first_name-input" value="{{ $customer->first_name ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="given-name">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Middle Names</label>
                             <div class="col-md-12">
                                 <input type="text" name="middle_names" id="middle_names-input" value="{{ $customer->middle_names ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="additional-name">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Last Name</label>
                             <div class="col-md-12">
                                 <input type="text" name="last_name" id="last_name-input" value="{{ $customer->last_name ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="family-name">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Date of Birth</label>
                             <div class="col-md-12">
                                 <input type="date" name="date_of_birth" id="date_of_birth-input" value="{{ $customer->date_of_birth->format('Y-m-d') ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="bday">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Mobile Number</label>
                             <div class="col-md-12">
                                 <input type="text" name="mobile_number" id="mobile_number-input" value="{{ $customer->mobile_number ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="tel">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
@@ -96,84 +96,84 @@
                             <label class="col-md-12 mb-0">Address Line 1</label>
                             <div class="col-md-12">
                                 <input type="text" name="home_address_line_1" id="home_address_line_1-input" value="{{ $customer->homeAddress->address_line_1 ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="address-line1">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Address Line 1</label>
                             <div class="col-md-12">
                                 <input type="text" name="billing_address_line_1" id="billing_address_line_1-input" value="{{ $customer->billingAddress->address_line_1 ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="address-line1">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Address Line 2</label>
                             <div class="col-md-12">
                                 <input type="text" name="home_address_line_2" id="home_address_line_2-input" value="{{ $customer->homeAddress->address_line_2 ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="address-line2">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Address Line 2</label>
                             <div class="col-md-12">
                                 <input type="text" name="billing_address_line_2" id="billing_address_line_2-input" value="{{ $customer->billingAddress->address_line_2 ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="address-line2">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Town</label>
                             <div class="col-md-12">
                                 <input type="text" name="home_town" id="home_town-input" value="{{ $customer->homeAddress->town ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="address-level2">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Town</label>
                             <div class="col-md-12">
                                 <input type="text" name="billing_town" id="billing_town-input" value="{{ $customer->billingAddress->town ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="address-level2">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Region</label>
                             <div class="col-md-12">
                                 <input type="text" name="region" id="region-input" value="{{ $customer->homeAddress->region ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="address-level1">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Region</label>
                             <div class="col-md-12">
                                 <input type="text" name="billing_region" id="billing_region-input" value="{{ $customer->billingAddress->region ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="address-level1">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Country</label>
                             <div class="col-md-12">
                                 <input type="text" name="home_country" id="home_country-input" value="{{ $customer->homeAddress->country ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="country">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Country</label>
                             <div class="col-md-12">
                                 <input type="text" name="billing_country" id="billing_country-input" value="{{ $customer->billingAddress->country ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="country">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Postcode</label>
                             <div class="col-md-12">
                                 <input type="text" name="home_postcode" id="home_postcode-input" value="{{ $customer->homeAddress->postcode ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="postcode">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Postcode</label>
                             <div class="col-md-12">
                                 <input type="text" name="billing_postcode" id="billing_postcode-input" value="{{ $customer->billingAddress->postcode ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="postcode">
                             </div>
                         </div>
                         <hr class="splitter">
@@ -211,28 +211,28 @@
                             <label class="col-md-12 mb-0">First Name</label>
                             <div class="col-md-12">
                                 <input type="text" name="passport_first_name" id="passport_first_name-input" value="{{ $customer->passport_first_name ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="given-name">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Middle Name</label>
                             <div class="col-md-12">
                                 <input type="text" name="passport_middle_name" id="passport_middle_name-input" value="{{ $customer->passport_middle_name ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="additional-name">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Last Name</label>
                             <div class="col-md-12">
                                 <input type="text" name="passport_last_name" id="passport_last_name-input" value="{{ $customer->passport_last_name ?? '' }}"
-                                    class="form-control ps-0 form-control-line">
+                                    class="form-control ps-0 form-control-line" autocomplete="family-name">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Gender</label>
                             <div class="col-md-12">
                                 <input type="text" name="gender" id="gender-input" value="{{ $customer->gender ?? '' }}"
-                                       class="form-control ps-0 form-control-line">
+                                       class="form-control ps-0 form-control-line" autocomplete="sex">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
@@ -263,13 +263,13 @@
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">New Password</label>
                             <div class="col-md-12">
-                                <input type="password" name="new_password" id="current_password-input" class="form-control ps-0 form-control-line" autocomplete="new-password">
+                                <input type="password" name="new_password" id="new_password-input" class="form-control ps-0 form-control-line" autocomplete="new-password">
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Confirm your new password</label>
                             <div class="col-md-12">
-                                <input type="password" name="new_password_confirmation" id="new_password_confirmation-input" class="form-control ps-0 form-control-line">
+                                <input type="password" name="new_password_confirmation" id="new_password_confirmation-input" class="form-control ps-0 form-control-line" autocomplete="new-password">
                             </div>
                         </div>
                         <hr class="splitter">
