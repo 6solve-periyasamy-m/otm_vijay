@@ -56,7 +56,7 @@ class OrderRepository
             'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on', DB::raw('COUNT(order_customers_details.id) AS passenger_count'))
             ->groupBy('orders.id', 'tours.name', 'lead_booker.id', 'booking_reference',
                 'lead_booker_details.first_name', 'lead_booker_details.last_name', 'orders.ordered_on')
-            ->orderBy('ordered_on');
+            ->orderBy('ordered_on', 'DESC');
         return $query->get();
     }
 

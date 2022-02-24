@@ -41,8 +41,8 @@
         'd-M-Y' => '31-Jan-2021 (Time)',
         'M-d-Y' => 'Jan-31-2021 (Time)',
         'Y-M-d' => '2021-Jan-31 (Time)',
-        'dS F Y -' => '31st January 2021 - (Time)',
-        'F dS Y -' => 'January 31st 2021 - (Time)'
+        'jS F Y' => '31st January 2021 (Time)',
+        'F jS Y' => 'January 31st 2021 (Time)'
     ],
     'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'd/m/Y'),
     'width' => 6,
