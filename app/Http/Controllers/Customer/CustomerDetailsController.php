@@ -65,6 +65,8 @@ class CustomerDetailsController extends Controller
             'passport_last_name' => $request->input('passport_last_name'),
             'passport_number' => $request->input('passport_number'),
             'passport_expiry_date' => $request->input('passport_expiry_date'),
+            't_shirt_size_id' => $request->input('t_shirt_size_id'),
+            'hat_size_id' => $request->input('hat_size_id'),
         ]);
         $customer->homeAddress->update([
             'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',

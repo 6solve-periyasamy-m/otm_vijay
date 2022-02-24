@@ -239,6 +239,15 @@
                         </div>
                         <hr class="splitter">
                         <div class="form-group">
+                            <h4 class="col-md-12 mb-0">Merchandise Clothing Sizes</h4>
+                        </div>
+                        <hr class="splitter">
+                        @include('partials.fields.selector.default',
+                            ['name' => 'T-Shirt Size', 'field' => 't_shirt_size_id', 'value' => $customer->t_shirt_size_id ?? 0, 'route' => 't-shirt-size', 'width' => 6])
+                        @include('partials.fields.selector.default',
+                            ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $customer->hat_size_id ?? 0, 'route' => 'hat-size', 'width' => 6])
+                        <hr class="splitter">
+                        <div class="form-group">
                             <h4 class="col-md-12 mb-0">Change your password</h4>
                         </div>
                         <hr class="splitter">
