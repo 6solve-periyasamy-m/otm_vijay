@@ -40,7 +40,7 @@ class CustomerDetailsController extends Controller
 
     public function edit()
     {
-        return view('pages.customer.edit', ['customer' => CustomerPortalController::getCustomer(),]);
+        return view('pages.customer.details', ['customer' => CustomerPortalController::getCustomer(),]);
     }
 
     public function update(Request $request)
