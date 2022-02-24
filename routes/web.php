@@ -724,9 +724,8 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::middleware('auth:customer')->group(function () {
         Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
         Route::get('/portal', [CustomerPortalController::class, 'show'])->name('portal');
-        Route::get('/details', [CustomerDetailsController::class, 'show'])->name('details');
-        Route::get('/details/edit', [CustomerDetailsController::class, 'edit'])->name('edit');
-        Route::post('/details/edit', [CustomerDetailsController::class, 'update'])->name('update');
+        Route::get('/details', [CustomerDetailsController::class, 'edit'])->name('edit');
+        Route::post('/details', [CustomerDetailsController::class, 'update'])->name('update');
         Route::get('/finances', [CustomerFinancesController::class, 'show'])->name('finances');
         Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');

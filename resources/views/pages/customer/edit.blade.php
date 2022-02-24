@@ -27,7 +27,8 @@
         <div class="col-lg-9 col-xxl-10 col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form class="form-horizontal form-material mx-2 row" action="{{ route('customer.update') }}">
+                    <form class="form-horizontal form-material mx-2 row" action="{{ route('customer.update') }}" method="post" enctype="multipart/form-data">
+                        @csrf
                         <input type="file" name="profile_picture" id="profile_picture" style="display: none;" onchange="form.submit()">
                         <hr class="splitter">
                         <div class="form-group col-md-6">
