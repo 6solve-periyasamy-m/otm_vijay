@@ -21,7 +21,7 @@ class CreateToursTable extends Migration
             $table->text('notes')->nullable();
             $table->decimal('base_price_per_person', 12)->nullable();
             $table->decimal('margin', 12)->nullable();
-            $table->decimal('single_occupancy_surcharge', 12, 0)->nullable();
+            $table->decimal('single_occupancy_surcharge', 12)->nullable();
             $table->decimal('deposit', 12)->nullable();
             $table->boolean('stock_control_active')->default(true);
             $table->integer('stock')->nullable();

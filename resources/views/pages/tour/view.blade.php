@@ -105,7 +105,7 @@
                 <li class="nav-item col-6 col-md-3">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
                         <i class="icon-directions"></i>
-                        Transports
+                        Transport
                     </button>
                 </li>
             </ul>
@@ -335,7 +335,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td class="actions">
+                                    <td class="actions-3">
                                         @can('update', \App\Models\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>

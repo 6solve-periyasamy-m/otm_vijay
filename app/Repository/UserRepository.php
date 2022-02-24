@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Models\ApiToken;
 use App\Models\User;
+use Bouncer;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 
@@ -69,5 +70,15 @@ class UserRepository implements UserRepositoryInterface
                 $token->invalidate();
             }
         }
+    }
+
+    public static function getRemainingUserCount(): int
+    {
+        $amount = config('app.user-limit');
+        foreach (User::all() as $user) {
+            if (Bouncer::is($user)->a('otm-staff')) continue;
+            $amount--;
+        }
+        return $amount;
     }
 }
