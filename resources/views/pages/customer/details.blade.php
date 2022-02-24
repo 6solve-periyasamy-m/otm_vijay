@@ -16,7 +16,7 @@
                                 <div class="image-overlay">Upload new picture</div>
                             </label>
                         </div>
-                        <h4 class="card-title mt-2">{{ $customer->title }} {{ $customer->first_name }} {{ $customer->middle_names }} {{ $customer->last_name }}</h4>
+                        <h4 class="card-title mt-2">{{ $customer->first_name }} {{ $customer->last_name }}</h4>
                         <h6 class="card-subtitle">{{ $customer->email_address }}</h6>                        
                     </center>
                 </div>
