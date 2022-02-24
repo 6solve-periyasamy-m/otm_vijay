@@ -148,7 +148,7 @@ class BespokeReportRepository
         return $data;
     }
 
-    private static function format($data, string $format): string
+    private static function format($data, string $format): ?string
     {
         switch ($format) {
             case 'date':
@@ -169,7 +169,7 @@ class BespokeReportRepository
             default:
                 break;
         }
-        return $data;
+        return $data ?? 'Not Set';
     }
 
     private static function processAccommodation(array $used, array $available, bool $format)
