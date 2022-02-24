@@ -169,7 +169,7 @@ class BespokeReportRepository
             default:
                 break;
         }
-        return $data;
+        return $data ?? 'Not Set';
     }
 
     private static function processAccommodation(array $used, array $available, bool $format)
