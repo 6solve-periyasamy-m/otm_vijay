@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Customer\CustomerDetailsController;
 use App\Http\Controllers\Customer\CustomerFinancesController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
+use App\Http\Controllers\Customer\CustomerResetPasswordController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
 use App\Http\Controllers\Models\ActivityController;
 use App\Http\Controllers\Models\ActivityInventoryController;
@@ -52,7 +54,6 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
-use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
@@ -730,7 +731,12 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
     });
 });
-
+Route::prefix('password')->name('password.')->group(function() {
+    Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
+    Route::post('/email', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
+    Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');
+    Route::post('/reset', [CustomerResetPasswordController::class, 'reset'])->name('update');
+});
 Route::prefix('payment')->name('payment.')->group(function () {
     Route::prefix('gateway')->name('gateway.')->group(function () {
         Route::prefix('stripe')->name('stripe.')->group(function () {
