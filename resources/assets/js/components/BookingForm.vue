@@ -4,8 +4,8 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div> OTM Booking Form version 0.82 </div>
-                        <bookingform-control token="tokenName" :user="auth_user"></bookingform-control>
+                        <div> OTM Booking Form pre-release version 0.84</div>
+                        <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -32,7 +32,6 @@
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
 import { setCookie, getCookie, deleteCookie } from '../cookies'
-// import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
 
 export default {
     props: {
@@ -68,6 +67,10 @@ export default {
         let that = this
         this.debug && console.log('1) BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
+        bus.$on('initialiseForm', () => {
+            this.resetToken()
+            window.location.reload(true)
+        })
         bus.$on('removeBookingCookie', token => {
             deleteCookie(that.tokenName)
             alert('Booking form clearance')
@@ -78,7 +81,6 @@ export default {
         bus.$on('TermsAgreed', function(state) {
           that.termsaccepted = state
         })
-
         that.bookingToken = getCookie(that.tokenName)
         this.debug && console.log('Cookie read:', that.bookingToken)
 
@@ -123,8 +125,12 @@ export default {
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
-            that.debug && console.log('bookingToken reset ', that.bookingToken)
-            bus.$emit('setBookingToken', that.bookingToken)
+            // that.debug && console.log('bookingToken reset ', that.bookingToken)
+            // bus.$emit('setBookingToken', that.bookingToken)
+        },
+        resetForm() {
+            this.resetToken()
+            window.history.go()
         },
         changeTheme(theme) {
             const bookingForm = document.querySelector('#booking-form')

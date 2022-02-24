@@ -17,7 +17,7 @@ class CustomerRepository implements CustomerRepositoryInterface
 {
     protected $model;
     private $fields;
-    private $logging = true;
+    private $logging = false;
 
     public function __construct()
     {
@@ -64,14 +64,14 @@ class CustomerRepository implements CustomerRepositoryInterface
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
                 // $this->model->$field = $customer[$field];
                 $customerRecord->$field = $customer[$field];
-                $this->logging && Log::info('check model', [$field, $customer[$field], $this->model->$field]);
+                $this->logging && Log::debug('check model', [$field, $customer[$field], $this->model->$field]);
             }
         }
         // force the billing_address_id (as it is not in the request) 
         $customerRecord->billing_address_id = $customer['billing_address_id'];
         try {
             $customerRecord->save();
-            $this->logging && Log::info('customer saved: ', $this->model->toArray());
+            $this->logging && Log::debug('customer saved: ', $this->model->toArray());
             return $customerRecord;
         } catch (\Exception $e) {
             Log::error('error updating customer' . $e->getMessage());

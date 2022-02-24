@@ -33,7 +33,7 @@ use App\Repository\OrderRepository;
 // Booking Repo
 Route::prefix('booking')->group(function () {
 
-    Route::get('/customer/bookings/{customer_id}', [BookingController::class, 'collect']);
+    Route::get('/customer/bookings/{token}', [BookingController::class, 'collect']);
     Route::get('/token/{token}', [BookingController::class, 'get']);
     Route::post('/create', [BookingController::class, 'create']);
 

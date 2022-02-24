@@ -26,8 +26,11 @@
                                </button>
                         </div>
                     </div>
-                    <div v-else>
+                    <div v-if="noUser">
                         <p v-if="!email_address">Please enter the Lead Traveller details</p>
+                    </div>
+                    <div v-if="!noUser">
+                        <p v-if="email_address">Welcome {{first_name}}</p>
                     </div>
     
                     <div v-if="!booking_token && activeUser">
@@ -41,7 +44,7 @@
                 </div>
                 <div v-if="booking_token && !show_traveller">
                     <div>
-                        <font-awesome-icon icon="arrow-right" /> You can continue with your booking, please fill in all sections
+                        <font-awesome-icon icon="arrow-right" /> Please fill in all sections
                     </div>
                     <div v-if="!booking_token">
                         You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
@@ -333,6 +336,15 @@ export default {
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
+            let tokens
+            if (localStorage.tokens == undefined) {
+                tokens = new Array()
+            } else {
+                tokens = localStorage.tokens
+            }
+            tokens.push(that.booking_token)
+            localStorage.tokens = JSON.stringify(tokens)
+            localStorage.active_token = that.booking_token
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             that.setCustomer(customer)
