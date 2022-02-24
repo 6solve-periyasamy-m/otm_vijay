@@ -51,7 +51,6 @@ class BookingController extends ApiController
    {
       //$booking = Booking::select('customer_id')->where('token', $token)->first();
       $booking = BookingRepository::findBooking($token);
-Log::debug('BOOKING', [$booking]);
       if (!$booking) {
         return null;
       }
@@ -61,7 +60,6 @@ Log::debug('BOOKING', [$booking]);
         ->orderBy('bookings.tour_id', 'desc')
         ->orderBy('bookings.created_at', 'desc')
         ->get();
-Log::debug('BOOKING', [$bookings]);
       return response()->json(['success' => true, 'bookings' => $bookings]);
    }
 
