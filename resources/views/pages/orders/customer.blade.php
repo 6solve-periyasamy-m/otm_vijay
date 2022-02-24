@@ -178,9 +178,11 @@ $(document).ready( function () {
             <p>Date of Birth</p>
             <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->date_of_birth) }}</h6>
             <p>Passport Number</p>
-            <h6 class="fw-bold">{{ $orderCustomer->customer->passport_number }}</h6>
-            <p>Password Expire Date</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->passport_expiry_date) }}</h6>
+            <h6 class="fw-bold">{{ $orderCustomer->customer->passport_number ?? 'Passport Number Not Set' }}</h6>
+            <p>Passport Expiry Date</p>
+            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->passport_expiry_date) ?? 'Expiry Date Not Set' }}</h6>
+            <p>Insurance Policy</p>
+            <h6 class="fw-bold">{{ $orderCustomer->policy_number ?? 'No Insurance Policy' }} ({{ $orderCustomer->travel_insurer ?? 'Insurer Not Set' }})</h6>
         </div>
         <div class="col-xl-8">
             @if ($orderCustomer->customer->homeAddress->address_line_1 != '' || $orderCustomer->customer->billingAddress->address_line_1 != '')

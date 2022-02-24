@@ -45,7 +45,7 @@ class OrderAccommodation extends Model
 
     public function isCancelled(): bool
     {
-        // TODO: Fix when room sharing implemented
+        // TODO: Fix when cross-order room sharing implemented
         foreach ($this->group->orderCustomers as $orderCustomer) {
             return $orderCustomer->order->cancelled;
         }

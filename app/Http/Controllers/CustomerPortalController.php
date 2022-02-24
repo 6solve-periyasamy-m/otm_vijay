@@ -72,7 +72,7 @@ class CustomerPortalController extends Controller
         if ($amount > $order->remaining) {
             return back()->withErrors('Cannot pay more than you owe');
         }
-        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order, 'Installment');
+        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order, 'Installment', $this->getCustomer()->id);
     }
 
     public function showInvoice(string $reference)

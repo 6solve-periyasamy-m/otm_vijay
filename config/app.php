@@ -246,5 +246,7 @@ return [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
         ]
-    ]
+    ],
+
+    'user-limit' => env('USER_LIMIT', 0),
 ];
