@@ -18,7 +18,7 @@ class CustomerDetailsController extends Controller
         return view('pages.customer.edit', ['customer' => CustomerPortalController::getCustomer(),]);
     }
 
-    public function store(Request $request, Customer $customer)
+    public function update(Request $request, Customer $customer)
     {
         // TODO: (Celeste) Implement
         return redirect()->route('customer.details', ['customer' => $customer,]);
