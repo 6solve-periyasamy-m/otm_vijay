@@ -41,6 +41,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
                 $payment = Payment::make([
                     'payment_method_id' => PaymentMethod::firstOrCreate('Stripe')->id,
                     'paid_on' => Carbon::parse($payload['created']),
+                    'customer_id' => $metadata['customer_id'],
                     'amount' => $data['amount_total'] / 100,
                     'payment_type' => $metadata['payment_type'],
                 ]);
