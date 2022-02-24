@@ -47,6 +47,7 @@ class CustomerDetailsController extends Controller
     public function update(Request $request)
     {
         $customer = CustomerAuthenticationRepository::getCustomer();
+        if (!isset($customer)) abort(404);
         $request->validate($this->getValidationRules());
         $customer->update([
             'title' => $request->input('title'),
