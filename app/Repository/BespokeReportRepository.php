@@ -28,7 +28,7 @@ class BespokeReportRepository
         $lowest = ReportFieldRepository::getLowestDepth($report->fields, $fields);
         $available = ReportFieldRepository::convertFieldsToOutput(ReportFieldRepository::getFieldsFromParent($report->parent), $lowest['depth']);
 
-        $output = [];
+        $output = ['report' => $report,];
         $output['header'] = [];
         $output['data'] = [];
         foreach ($fields as $key => $data) {
