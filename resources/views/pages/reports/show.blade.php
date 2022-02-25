@@ -11,11 +11,11 @@
                     <span>Edit Report</span>
                 </a>
             @endcan
-            <a class="btn btn-primary float-end" href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}" style="margin-right: 5px">
+            <a class="btn btn-primary float-end" target="_blank" href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}" style="margin-right: 5px">
                 <i class="icon-list"></i>
                 <span>Export to CSV</span>
             </a>
-            <a class="btn btn-info float-end" href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}" style="margin-right: 5px">
+            <a class="btn btn-info float-end" target="_blank"  href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}" style="margin-right: 5px">
                 <i class="icon-chart"></i>
                 <span>Export to XLSX</span>
             </a>

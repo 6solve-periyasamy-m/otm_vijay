@@ -13,13 +13,13 @@
         function exportXlsx() {
             $.post('{{ route('api.reports.bespoke.export') }}', {!! json_encode(array_merge($report->toArray(), ['__api_token' => Auth::user()->getCurrentToken()->token, 'filetype' => 'xslx',])) !!})
             .done(function (xhr, textStatus, errorThrown) {
-                window.location = xhr.message;
+                window.open(xhr.message);
             });
         }
         function exportCsv() {
             $.post('{{ route('api.reports.bespoke.export') }}', {!! json_encode(array_merge($report->toArray(), ['__api_token' => Auth::user()->getCurrentToken()->token, 'filetype' => 'csv',])) !!})
             .done(function (xhr, textStatus, errorThrown) {
-                window.location = xhr.message;
+                window.open(xhr.message);
             });
         }
     </script>
