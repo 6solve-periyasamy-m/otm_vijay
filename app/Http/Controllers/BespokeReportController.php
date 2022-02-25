@@ -39,7 +39,7 @@ class BespokeReportController extends Controller
             'parent' => $parent,
             'fields' => $usedFields,
         ]);
-        return view('pages.reports.output', array_merge(['report' => $report,], BespokeReportRepository::showReport($report, true)));
+        return view('pages.reports.output', BespokeReportRepository::showReport($report, true));
     }
 
     public function store(Request $request) {
@@ -50,6 +50,16 @@ class BespokeReportController extends Controller
             'fields' => $request->input('fields'),
         ]);
         return response(['success' => true, 'message' => route('reports.bespoke.show', ['report' => $report,])]);
+    }
+
+    public function apiExport(Request $request) {
+        $report = Report::make([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'parent' => $request->input('parent'),
+            'fields' => $request->input('fields'),
+        ]);
+        return Excel::download(new BespokeReportExport($report), $report->parent . '-report-' . now() . '.' . $request->input('filetype'));
     }
 
     public function show(Report $report) {

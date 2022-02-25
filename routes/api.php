@@ -227,5 +227,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
 
     Route::prefix('reports')->name('reports.')->group(function() {
        Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
+       Route::post('bespoke/export', [BespokeReportController::class, 'apiExport'])->name('bespoke.export');
     });
 });
