@@ -7,7 +7,6 @@
                 <button class="btn btn-sm btn-primary" @click="controlForms">Show forms</button>
             </div>
             <div v-if="showForms">
-                {{bookings}}
                 <select v-model="activateBooking" @change="activate">
                   <option default value="" placeholder="Load Tour">Select a booking to load form</option>
                   <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}}</option>
@@ -63,9 +62,7 @@ export default {
     // get bookings for this customer
     getBookings(token) {
       let that=this
-      alert('getBookings for '+ token)
       if (localStorage.active_token !== token) {
-        alert('token refresh override by get bookings')
         token = localStorage.active_token
       }
       axios.get(`/api/booking/customer/bookings/${token}`)
