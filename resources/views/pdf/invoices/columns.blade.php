@@ -76,6 +76,7 @@ $order = $invoice->order;
                     </div>
                 </div>
             </div>
+            <!-- Order Section -->
             <div class="section">
                 <table class="order-table center">
                     <thead>
@@ -150,6 +151,7 @@ $order = $invoice->order;
             </div>
             <div class="pagebreak"></div>
             <div class="pageborder"></div>
+            <!-- Payments Section -->
             <div class="section">
                 <h2 class="section-title header-title">Payments</h2>
                 <table class="order-table center">
@@ -182,6 +184,7 @@ $order = $invoice->order;
                     </div>
                 </div>
             </div>
+            <!-- Installments Section -->
             <div class="section">
                 <h2 class="section-title header-title">Installments</h2>
                 <table class="order-table center">
@@ -203,6 +206,7 @@ $order = $invoice->order;
                     </tbody>
                 </table>
             </div>
+            <!-- Notes Section -->
             <div class="section">
                 <h2 class="section-title header-title">Notes</h2>
                 <div class="notes">
