@@ -141,11 +141,14 @@ $order = $invoice->order;
                             <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
                         </tr>
                     @endforeach
+                        <tr>
+                            <td colspan="3" class="metadata right-text">Total: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ StringFormatter::formatCurrency($invoice->total_cost) }}</h1>
                     </div>
                 </div>
             </div>
