@@ -93,11 +93,11 @@ $order = $invoice->order;
                                 <td colspan="3" class="metadata center-text">{{ $name }}</td>
                             </tr>
                             @foreach($data['billables'] as $billable)
-                                @include('partials.pdf.invoices.row',
-                                        ['quantity' => "",
-                                        'description' => $billable['description'],
-                                        'cost' => \StringFormatter::formatCurrency($billable['cost']),
-                                        'class' => $billable['cost'] > 0  ? "color red" : "color green"])
+                                <tr>
+                                    <td class="description">{!! nl2br($billable['description']) !!} </td>
+                                    <td class="quantity">1</td>
+                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency($billable['cost']) }}</td>
+                                </tr>
                             @endforeach
                             <tr>
                                 <td colspan="3" class="metadata right-text">Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</td>
@@ -109,11 +109,11 @@ $order = $invoice->order;
                                 <td colspan="3" class="metadata center-text">(Rooming Group) {{ $data['name'] }}</td>
                             </tr>
                             @foreach($data['billables'] as $billable)
-                                @include('partials.pdf.invoices.row',
-                                        ['quantity' => "",
-                                        'description' => $billable['description'],
-                                        'cost' => \StringFormatter::formatCurrency($billable['cost']),
-                                        'class' => $billable['cost'] > 0  ? "color red" : "color green"])
+                                <tr>
+                                    <td class="description">{!! nl2br($billable['description']) !!} </td>
+                                    <td class="quantity">1</td>
+                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency($billable['cost']) }}</td>
+                                </tr>
                             @endforeach
                             <tr>
                                 <td colspan="3" class="metadata right-text">Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</td>
