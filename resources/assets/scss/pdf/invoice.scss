@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+
+:root {
+    --lightgrey: #8a8a8a;
+}
+
+* {
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+%title {
+    color: var(--lightgrey);
+    font-size: 24px;
+}
+%title-text {
+    color: var(--lightgrey);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+%flex-item {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
+
+.background {
+    border-radius: 5px;
+    height: auto;
+    width: 75vw;
+    position: absolute;
+    left: 12vw;
+}
+.pagebreak {
+    break-before: page;
+}
+.pageborder {
+    position:fixed;
+    left: 12vw;
+    right: 12vw;
+    top: 0;
+    bottom: 0;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    &:first-child {
+        padding-top: 1rem;
+    }
+
+    &:last-child {
+        padding-bottom: 1rem;
+    }
+
+    .metadata-wrapper {
+        text-align: center;
+    }
+
+    .metadata {
+        @extend %title-text;
+
+        &~.metadata {
+            padding-top: 1.2rem;
+        }
+
+        &.divider {
+            border-bottom: var(--lightgrey) solid 1px;
+        }
+
+        .metadata-title {
+            padding-left: 15px;
+        }
+    }
+
+    .center-text {
+        text-align: center;
+    }
+
+    .right-text {
+        text-align: right;
+    }
+
+    .header {
+        .titles {
+            min-height: 100px;
+        }
+
+        .header-logo {
+            width: 200px;
+            aspect-ratio: 15 / 7 !important;
+        }
+
+        .site-info {
+            font-size: medium;
+
+            .header-title {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+
+    .header-title {
+        @extend %title;
+        text-transform: uppercase;
+    }
+    .section-title {
+        @extend %title;
+        margin-bottom: 0;
+    }
+
+    .billing-info-wrapper {
+        width: 48%;
+        text-align: left;
+
+        .billing-info {
+            padding-left: 15px;
+        }
+    }
+
+    .flex-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: normal;
+        align-content: normal;
+
+        .flex-items {
+           @extend %flex-item;
+        }
+    }
+    .flex-container-reverse {
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: normal;
+        align-content: normal;
+
+        .flex-items {
+            @extend %flex-item;
+         }
+    }
+
+    tbody tr td {
+        border: var(--lightgrey) 1px solid;
+    }
+
+    th,
+    td {
+        padding-left: 15px;
+        padding-right: 15px;
+        line-height: 1.6;
+    }
+
+    .order-table {
+        width: 73vw;
+        border-collapse: collapse;
+
+        &.center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .order-table-title {
+            @extend %title-text;
+            padding-top: 1.2rem
+        }
+
+        .descrition {
+            width: 69.5289%;
+            padding-left: 15px;
+        }
+        .amount {
+            width: 69.5289%;
+            padding-left: 15px;
+        }
+        .quantity {
+            width: 10.4711%;
+            vertical-align: top;
+            padding-left: 15px;
+        }
+        .date {
+            width: 10.4711%;
+            vertical-align: top;
+            padding-left: 15px;
+        }
+        .total {
+            width: 17%;
+            vertical-align: top;
+            padding-left: 15px;
+        }
+        .paid {
+            width: 17%;
+            vertical-align: top;
+            padding-left: 15px;
+        }
+    }
+
+    .notes {
+        @extend %title; 
+        margin-left: auto;
+        margin-top: 0;
+        margin-right: auto;
+    }
+
+}
+
+@page {
+    size: A4 portrait;
+    border: black 1px solid;
+}
+@page:top {
+    
+}
+
+@media print {
+    div {
+        overflow:initial !important
+    }
+    body {
+        color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    .pagebreak {
+        clear: both;
+        page-break-after: always;
+        break-after: always;
+    }
+    .pageborder {
+        position:fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+    .background {
+        height: auto;
+        width: 94vw;
+        position: absolute;
+        left: 3vw;
+    }
+    .section {
+        .header {
+            .header-logo {
+                width: 120px;
+            }
+
+            .header-title {
+                color: var(--lightgrey);
+                text-transform: uppercase;
+                font-size: 24px;
+            }
+
+            .metadata {
+                text-align: center;
+                color: var(--lightgrey);
+                font-weight: bold;
+                text-transform: uppercase;
+                border-bottom: var(--lightgrey) solid 1px;
+
+                &~.metadata {
+                    padding-top: 1.2rem
+                }
+            }
+
+            .site-info {
+                font-size: medium;
+            }
+        }
+
+        tbody,
+        tbody tr td {
+            border: 1px solid var(--lightgrey);
+        }
+
+        .order-table {
+            width: 84vw;
+            border-collapse: collapse;
+
+            &.center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .order-table-title {
+                color: var(--lightgrey);
+                font-weight: bold;
+                text-transform: uppercase;
+                padding-top: 1.2rem
+            }
+
+            .descrition {
+                width: 69.5289%;
+            }
+
+            .quantity {
+                width: 10.4711%;
+                vertical-align: top;
+            }
+
+            .total {
+                width: 17%;
+                vertical-align: top;
+            }
+        }
+
+    }
+}
