@@ -161,8 +161,8 @@ class BookingCustomerController extends ApiController
 
         $customerRepo = new CustomerRepository();
         $customerData = [
-            'home_address_id' => isset($customer) ? $customer->home_address_id : 1,
-            'billing_address_id' => isset($customer) ? $customer->billing_address_id : 1,
+            'home_address_id' => isset($customer) ? $customer->home_address_id : null,
+            'billing_address_id' => isset($customer) ? $customer->billing_address_id : null,
             'email_address' => $request->email_address,
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
@@ -239,7 +239,7 @@ class BookingCustomerController extends ApiController
             $home_address = $addressRepo->update($newHomeAddress);
             $home_address_id = $home_address['id'];
         } else {
-            $home_address_id = 0;
+            $home_address_id = null;
         }
         if ($request->same_address) {
             $newBillingAddress = [
