@@ -6,30 +6,55 @@
 $order = $invoice->order;
 //dd($invoice->customers);
 @endphp
+
 <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice</title>
+        <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+    </head>
+    <body>
+        <div class="background center-screen">
+        <div class="section">
+            <div>
+                <div class="header">
+                    <div class="flex-container titles">
+                        <div class="flex-items site-info">
+                            <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
+                        </div>
+                        <div class="flex-items">
+                            <h2 class="header-title">{{ $order->tour->name }}</h2>
+                        </div>
+                        <div class="flex-items">
+                            <h1 class="header-title">Invoice</h1>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <div class="flex-items site-info">
+                            Website: <a href="{{ URL::to('/') }}">{{ URL::to('/') }}</a>
+                            <br />Email: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}
+                            <br />Telephone: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}
+                        </div>
+                        <div class="flex-items metadata-wrapper">
+                            <div class="metadata divider">Date<br /><span class="metadata-text">{{ StringFormatter::formatDateTime($invoice->generated) }}</span></div>
+                            <div class="metadata divider">Invoice No.<br /><span class="metadata-text">{{ $invoice->number }}</span></div>
+                            <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $order->booking_reference }}</span></div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
+        </div>
+    </body>
+</html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Invoice</title>
-    <style>
-        body { margin: 2px; border: 1px solid black; padding: 20px; border-radius: 5px; }
-        td, th { border: 1px solid black; }
-        table { width: 100%; }
-        .header { border: 1px solid black; padding: 2px; }
-        .section { margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid black; }
-        .date { width: 10%; text-align: left; }
-        .description { width: 80%; text-align: center; }
-        .amount, .amount-positive, .amount-negative { width: 10%; text-align: right; }
-        .amount-positive { color: green; }
-        .amount-negative { color: darkred; }
-        .header-cell { min-width: 33%; display: inline-block; margin-left: auto; margin-right: auto; }
-        .t-align-left { text-align: left; }
-        .t-align-center { text-align: center; }
-        .t-align-right { text-align: right; }
-        .header-logo { width: auto; height: 75px; float: right; }
-        .header-company-details { padding-left: 50%; display: block; width: 50%; clear: right; text-align: left; }
-        .header-title { display: block; width: 100%; float: top; }
-        .invoice-details { display: block; width: 40%; padding: 0 30% }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
 </head>
 <body>
 <div class="section header">
@@ -198,4 +223,4 @@ $order = $invoice->order;
     {!! $invoice->footer !!}
 </div>
 </body>
-</html>
+</html> -->
