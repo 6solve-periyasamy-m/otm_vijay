@@ -195,13 +195,19 @@ $order = $invoice->order;
                     <tbody>
                         @foreach($invoice->installments as $installment)
                             <tr>
-                                <td class="date">{{ StringFormatter::formatDateTime($installment['due']) }}</td>
+                                <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
                                 <td class="amount">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
                                 <td class="total">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="section">
+                <h2 class="section-title header-title">Notes</h2>
+                <div class="notes">
+                    <div style="margin-top: 0">{!! $invoice->footer !!}</div> 
+                </div>
             </div>
         </div>
     </body>
