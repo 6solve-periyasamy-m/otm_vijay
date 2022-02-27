@@ -23,7 +23,6 @@ class OrdersTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'quote_id' => NULL,
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100010001XGON',
@@ -41,7 +40,6 @@ class OrdersTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'quote_id' => NULL,
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100020002KQRV',
@@ -59,7 +57,6 @@ class OrdersTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'quote_id' => NULL,
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100030003PRSE',
@@ -77,7 +74,6 @@ class OrdersTableSeeder extends Seeder
             3 => 
             array (
                 'id' => 4,
-                'quote_id' => NULL,
                 'tour_id' => 1,
                 'lead_booker_id' => null,
                 'booking_reference' => 'OTM000100040005XTJD',

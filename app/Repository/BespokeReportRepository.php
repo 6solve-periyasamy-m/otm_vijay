@@ -28,7 +28,7 @@ class BespokeReportRepository
         $lowest = ReportFieldRepository::getLowestDepth($report->fields, $fields);
         $available = ReportFieldRepository::convertFieldsToOutput(ReportFieldRepository::getFieldsFromParent($report->parent), $lowest['depth']);
 
-        $output = [];
+        $output = ['report' => $report,];
         $output['header'] = [];
         $output['data'] = [];
         foreach ($fields as $key => $data) {
@@ -69,10 +69,7 @@ class BespokeReportRepository
 
     public static function processOrderComponents(array $used, array $available, bool $format = false): array
     {
-        $data = [];
-        foreach (OrderAccommodation::all() as $row) {
-            $data[] = self::processLowest($row, 'customer', 'orderCustomer', $used, $available, $format);
-        }
+        $data = self::processAccommodation($used, $available, $format);
         foreach (OrderActivity::all() as $row) {
             $data[] = self::processLowest($row, 'customer', 'orderCustomer', $used, $available, $format);
         }
@@ -151,7 +148,7 @@ class BespokeReportRepository
         return $data;
     }
 
-    private static function format($data, string $format): string
+    private static function format($data, string $format): ?string
     {
         switch ($format) {
             case 'date':
@@ -172,6 +169,38 @@ class BespokeReportRepository
             default:
                 break;
         }
-        return $data;
+        return $data ?? 'Not Set';
+    }
+
+    private static function processAccommodation(array $used, array $available, bool $format)
+    {
+        $rows = [];
+        foreach (OrderAccommodation::all() as $row) {
+            foreach ($row->group->orderCustomers as $objParent) {
+                $objGrandparent = $objParent->customer;
+                $data = [];
+                foreach ($available as $key => $info) {
+                    if (in_array($key, $used)) {
+                        $field = 'Not Set';
+                        if ($info->depth == 0) {
+                            $field = $objGrandparent->{$info->accessor};
+                        }
+                        if ($info->depth == 1) {
+                            $field = $objParent->{$info->accessor};
+                        }
+                        if ($info->depth == 2) {
+                            $field = $row->{$info->accessor};
+                        }
+                        if ($format) {
+                            $field = self::format($field, $info->format);
+                        }
+                        $data[] = $field;
+                    }
+                }
+                $rows[] = $data;
+            }
+        }
+
+        return $rows;
     }
 }

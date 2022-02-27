@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTelescopeMonitoringTable extends Migration
+class CreateCustomerPasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateTelescopeMonitoringTable extends Migration
      */
     public function up()
     {
-        Schema::create('telescope_monitoring', function (Blueprint $table) {
-            $table->string('tag', 255);
+        Schema::create('customer_password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -25,6 +27,6 @@ class CreateTelescopeMonitoringTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('telescope_monitoring');
+        Schema::dropIfExists('password_resets');
     }
 }
