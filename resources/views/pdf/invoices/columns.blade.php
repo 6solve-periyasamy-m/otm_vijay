@@ -18,35 +18,64 @@ $order = $invoice->order;
     </head>
     <body>
         <div class="background center-screen">
-        <div class="section">
-            <div>
-                <div class="header">
-                    <div class="flex-container titles">
-                        <div class="flex-items site-info">
-                            <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
+            <div class="section">
+                <div>
+                    <div class="header">
+                        <div class="flex-container titles">
+                            <div class="flex-items site-info">
+                                <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
+                            </div>
+                            <div class="flex-items">
+                                <h2 class="header-title">{{ $order->tour->name }}</h2>
+                            </div>
+                            <div class="flex-items">
+                                <h1 class="header-title">Invoice</h1>
+                            </div>
                         </div>
-                        <div class="flex-items">
-                            <h2 class="header-title">{{ $order->tour->name }}</h2>
+                        <div class="flex-container">
+                            <div class="flex-items site-info">
+                                Website: <a href="{{ URL::to('/') }}">{{ URL::to('/') }}</a>
+                                <br />Email: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}
+                                <br />Telephone: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}
+                            </div>
+                            <div class="flex-items metadata-wrapper">
+                                <div class="metadata divider">Date<br /><span class="metadata-text">{{ StringFormatter::formatDateTime($invoice->generated) }}</span></div>
+                                <div class="metadata divider">Invoice No.<br /><span class="metadata-text">{{ $invoice->number }}</span></div>
+                                <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $order->booking_reference }}</span></div>
+                            </div>
                         </div>
-                        <div class="flex-items">
-                            <h1 class="header-title">Invoice</h1>
-                        </div>
-                    </div>
-                    <div class="flex-container">
-                        <div class="flex-items site-info">
-                            Website: <a href="{{ URL::to('/') }}">{{ URL::to('/') }}</a>
-                            <br />Email: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}
-                            <br />Telephone: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}
-                        </div>
-                        <div class="flex-items metadata-wrapper">
-                            <div class="metadata divider">Date<br /><span class="metadata-text">{{ StringFormatter::formatDateTime($invoice->generated) }}</span></div>
-                            <div class="metadata divider">Invoice No.<br /><span class="metadata-text">{{ $invoice->number }}</span></div>
-                            <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $order->booking_reference }}</span></div>
-                        </div>
-                    </div>
-                </div>   
+                    </div>   
+                </div>
             </div>
-        </div>
+            <div class="section">
+                <div class="flex-container">
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="metadata divider"><span class="metadata-title">Billed from</span></div>
+                    </div>
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="metadata divider"><span class="metadata-title">Billed to</span></div>
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="billing-info">{{ $order->leadBooker->customer_name }}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->address_line_1 }}{!! isset($order->leadBooker->customer->billingAddress->address_line_1) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->address_line_2 }}{!! isset($order->leadBooker->customer->billingAddress->address_line_2) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->address_line_3 }}{!! isset($order->leadBooker->customer->billingAddress->address_line_3) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->town }}{!! isset($order->leadBooker->customer->billingAddress->town) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->region }}{!! isset($order->leadBooker->customer->billingAddress->region) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->country }}{!! isset($order->leadBooker->customer->billingAddress->country) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->postcode }}{!! isset($order->leadBooker->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
+                    </div>
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.city', 'Company City Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.region', 'Company Region Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', 'Company Postcode Not Set') }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
