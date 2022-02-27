@@ -182,6 +182,27 @@ $order = $invoice->order;
                     </div>
                 </div>
             </div>
+            <div class="section">
+                <h2 class="section-title header-title">Installments</h2>
+                <table class="order-table center">
+                    <thead>
+                        <tr>
+                            <td class="order-table-title date">Date</td>
+                            <td class="order-table-title amount">Amount</td>
+                            <td class="order-table-title paid">Paid</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($invoice->installments as $installment)
+                            <tr>
+                                <td class="date">{{ StringFormatter::formatDateTime($installment['due']) }}</td>
+                                <td class="date-description">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
+                                <td class="total">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </body>
 </html>
