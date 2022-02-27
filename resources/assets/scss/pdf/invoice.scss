@@ -7,8 +7,11 @@
     --inner-padding: 1rem;
 
     --table-description-column: 69.5289%;
-    --table-date-description-column: 64.5289%;
     --table-totals-column: 17%;
+    --table-date-description-column: 64.5289%;
+    --table-date-column: 15.4711%;
+    --table-quantity-column: 10.4711%;
+    --table-cell-padding: 15px;
 
     --text-global: 14px;
     --text-metadata: 12px;
@@ -209,41 +212,41 @@
 
         .descrition {
             width: var(--table-description-column);
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
 
         .date-description {
             width: var(--table-date-description-column);
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
 
         .amount {
             width: var(--table-date-description-column);
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
 
         .quantity {
-            width: 10.4711%;
+            width: var(--table-quantity-column);
             vertical-align: top;
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
 
         .date {
-            width: 15.4711%;
+            width: var(--table-date-column);
             vertical-align: top;
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
 
         .total {
             width: var(--table-totals-column);
             vertical-align: top;
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
 
         .paid {
             width: var(--table-totals-column);
             vertical-align: top;
-            padding-left: 15px;
+            padding-left: var(--table-cell-padding);
         }
     }
 
@@ -363,12 +366,12 @@
             }
 
             .quantity {
-                width: 10.4711%;
+                width: var(--table-quantity-column);
                 vertical-align: top;
             }
 
             .date {
-                width: 15.4711%;
+                width: var(--table-date-column);
                 vertical-align: top;
             }
 
