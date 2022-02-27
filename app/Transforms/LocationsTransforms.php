@@ -54,7 +54,7 @@ class LocationsTransforms implements LocationsTransformsInterface
     public static function getAvailableSelectCountries($filter)
     {
         $data = [];
-        foreach (Country::all() as $country) {
+        foreach (Country::orderBy('name')->get() as $country) {
             $subData = [];
             $subData['id'] = $country->id;
             $subData['text'] = $country->name . ' - ' . $country->alpha_code;
