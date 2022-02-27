@@ -26,9 +26,16 @@
     align-self: auto;
     order: 0;
 }
+.color {
+    &.green {
+        color: green !important;
+    }
+    &.red {
+        color: darkred !important;
+    }
+}
 
 .background {
-    border-radius: 5px;
     height: auto;
     width: 75vw;
     position: absolute;
@@ -182,6 +189,10 @@
             width: 69.5289%;
             padding-left: 15px;
         }
+        .date-description {
+            width: 64.5289%;
+            padding-left: 15px;
+        }
         .amount {
             width: 69.5289%;
             padding-left: 15px;
@@ -192,7 +203,7 @@
             padding-left: 15px;
         }
         .date {
-            width: 10.4711%;
+            width: 15.4711%;
             vertical-align: top;
             padding-left: 15px;
         }
@@ -246,6 +257,7 @@
         bottom: 0;
         border: 1px solid black;
         border-radius: 5px;
+        z-index: -1;
     }
     .background {
         height: auto;
@@ -308,15 +320,27 @@
             }
 
             .descrition {
+            width: 69.5289%;
+            }
+            .date-description {
+                width: 64.5289%;
+            }
+            .amount {
                 width: 69.5289%;
             }
-
             .quantity {
                 width: 10.4711%;
                 vertical-align: top;
             }
-
+            .date {
+                width: 15.4711%;
+                vertical-align: top;
+            }
             .total {
+                width: 17%;
+                vertical-align: top;
+            }
+            .paid {
                 width: 17%;
                 vertical-align: top;
             }

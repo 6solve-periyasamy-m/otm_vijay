@@ -1,5 +1,5 @@
 <tr>
-    <td class="date">{{ $quantity }}</td>
     <td class="description">{!! nl2br($description) !!} </td>
-    <td class="{{ $class }}">{{ $cost }}</td>
+    <td class="quantity">{{ $quantity }}</td>
+    <td class="total {{ $class }}">{{ $cost }}</td>
 </tr>
