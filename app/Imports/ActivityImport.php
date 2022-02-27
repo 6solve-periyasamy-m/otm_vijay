@@ -37,7 +37,7 @@ class ActivityImport implements ToModel
         return new Activity([
             'name' => trim($row[0]),
             'description' => trim($row[1]),
-            'activity_type_id' => ActivityType::firstOrCreate(trim($row[2])),
+            'activity_type_id' => ActivityType::firstOrCreate(trim($row[2]))->id,
             'address_id' => $address->id,
             'currency_id' => $currency->id,
             'notes' => trim($row[11] ?? ''),

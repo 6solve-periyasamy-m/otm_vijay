@@ -1,10 +1,17 @@
 <?php
 
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\CustomerPortalController;
+use App\Http\Controllers\Customer\CustomerDetailsController;
+use App\Http\Controllers\Customer\CustomerFinancesController;
+use App\Http\Controllers\Customer\CustomerForgotPasswordController;
+use App\Http\Controllers\Customer\CustomerLoginController;
+use App\Http\Controllers\Customer\CustomerPortalController;
+use App\Http\Controllers\Customer\CustomerRegisterController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
+use App\Http\Controllers\Customer\CustomerResetPasswordController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
 use App\Http\Controllers\Models\ActivityController;
 use App\Http\Controllers\Models\ActivityInventoryController;
@@ -47,7 +54,6 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
-use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
@@ -710,17 +716,25 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 });
 
 Route::prefix('customer')->name('customer.')->group(function () {
-    Route::get('/login', [CustomerPortalController::class, 'showCustomerLogin'])->name('login');
-    //Route::get('/register', [CustomerPortalController::class, 'showCustomerRegister'])->name('register');
-    Route::post('/login', [CustomerPortalController::class, 'login'])->name('confirm-login');
-    //Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
+    Route::get('/login', [CustomerLoginController::class, 'show'])->name('login');
+    Route::get('/register', [CustomerRegisterController::class, 'show'])->name('register');
+    Route::post('/login', [CustomerLoginController::class, 'login'])->name('confirm-login');
+    Route::post('/register', [CustomerRegisterController::class, 'register'])->name('confirm-register');
+
     Route::middleware('auth:customer')->group(function () {
         Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
-        Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
-        Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
-        Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
-        Route::get('/finances', [CustomerPortalController::class, 'showFinancesPage'])->name('finances');
-        Route::post('/payment/make', [CustomerPortalController::class, 'makePayment'])->name('payment.make');
+        Route::get('/portal', [CustomerPortalController::class, 'show'])->name('portal');
+        Route::get('/details', [CustomerDetailsController::class, 'edit'])->name('edit');
+        Route::post('/details', [CustomerDetailsController::class, 'update'])->name('update');
+        Route::get('/finances', [CustomerFinancesController::class, 'show'])->name('finances');
+        Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
+        Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
+    });
+    Route::prefix('password')->name('password.')->group(function() {
+        Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
+        Route::post('/email', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
+        Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');
+        Route::post('/reset', [CustomerResetPasswordController::class, 'reset'])->name('update');
     });
 });
 
