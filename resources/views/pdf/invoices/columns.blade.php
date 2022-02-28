@@ -26,7 +26,7 @@ $order = $invoice->order;
                             <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
                         </div>
                         <div class="flex-items">
-                            <h2 class="header-title">{{ $order->tour->name }}</h2>
+                            <h2 class="header-title tour-name">{{ $order->tour->name }}</h2>
                         </div>
                         <div class="flex-items">
                             <h1 class="header-title">Invoice</h1>
@@ -57,6 +57,13 @@ $order = $invoice->order;
                     </div>
                 </div>
                 <div class="flex-container">
+                <div class="flex-items billing-info-wrapper">
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.city', 'Company City Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.region', 'Company Region Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', 'Company Postcode Not Set') }}</div>
+                    </div>
                     <div class="flex-items billing-info-wrapper">
                         <div class="billing-info">{{ $order->leadBooker->customer_name }}</div>
                         <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->address_line_1 }}{!! isset($order->leadBooker->customer->billingAddress->address_line_1) ? "<br />" : "" !!}</div>
@@ -66,13 +73,6 @@ $order = $invoice->order;
                         <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->region }}{!! isset($order->leadBooker->customer->billingAddress->region) ? "<br />" : "" !!}</div>
                         <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->country }}{!! isset($order->leadBooker->customer->billingAddress->country) ? "<br />" : "" !!}</div>
                         <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->postcode }}{!! isset($order->leadBooker->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
-                    </div>
-                    <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.city', 'Company City Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.region', 'Company Region Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', 'Company Postcode Not Set') }}</div>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@ $order = $invoice->order;
                             </tr>
                             @foreach($data['billables'] as $billable)
                                 <tr>
-                                    <td class="description">{!! nl2br($billable['description']) !!} </td>
+                                    <td class="description"><div class="order-table-description">{!! nl2br($billable['description']) !!}</div></td>
                                     <td class="quantity">1</td>
                                     <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency($billable['cost']) }}</td>
                                 </tr>
@@ -121,7 +121,12 @@ $order = $invoice->order;
                         @endforeach
                     </tbody>
                 </table>
-
+            </div>
+            <div class="pagebreak"></div>
+            <div class="pageborder"></div>
+            <!-- Order Adjustments Section -->
+            <div class="section">
+                <h2 class="section-title header-title">Order Adjustments</h2>
                 <table class="order-table center">
                     <thead>
                         <tr>
@@ -131,16 +136,13 @@ $order = $invoice->order;
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="metadata center-text" colspan="3">Order Adjustments</td>
-                        </tr>
-                    @foreach($invoice->adjustments['billables'] as $billable)
-                        <tr>
-                            <td class="date"></td>
-                            <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                            <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
-                        </tr>
-                    @endforeach
+                        @foreach($invoice->adjustments['billables'] as $billable)
+                            <tr>
+                                <td class="date"></td>
+                                <td class="date-description">{!! nl2br($billable['description']) !!} </td>
+                                <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                            </tr>
+                        @endforeach
                         <tr>
                             <td colspan="3" class="metadata right-text">Total: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</td>
                         </tr>
@@ -152,8 +154,6 @@ $order = $invoice->order;
                     </div>
                 </div>
             </div>
-            <div class="pagebreak"></div>
-            <div class="pageborder"></div>
             <!-- Payments Section -->
             <div class="section">
                 <h2 class="section-title header-title">Payments</h2>
@@ -166,9 +166,6 @@ $order = $invoice->order;
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="metadata center-text" colspan="3">Method</td>
-                        </tr>
                         @foreach($invoice->payments['billables'] as $billable)
                             <tr>
                                 <td class="date">{{ StringFormatter::formatDateTime($billable['date']) }}</td>

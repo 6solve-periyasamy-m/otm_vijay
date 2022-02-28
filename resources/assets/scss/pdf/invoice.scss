@@ -2,6 +2,7 @@
 
 :root {
     --lightgrey: #8a8a8a;
+    --title-color: #7aadd4;
     --side-spacing: 12vw;
     --border-color: black;
     --inner-padding: 1rem;
@@ -24,8 +25,13 @@
     font-size: var(--text-global);
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 %title {
-    color: var(--lightgrey);
+    color: var(--title-color);
     font-size: var(--text-title);
 }
 
@@ -81,6 +87,12 @@
     bottom: 0;
     border: 1px solid var(--border-color);
     border-radius: 5px;
+    z-index: -1;
+}
+
+.tour-name {
+    text-align: center;
+    max-width: 800px;
 }
 
 .section {
@@ -251,7 +263,6 @@
     }
 
     .notes {
-        @extend %title;
         margin-top: 0;
         margin-left: auto;
         margin-right: auto;
@@ -305,9 +316,14 @@
             }
 
             .header-title {
-                color: var(--lightgrey);
+                color: var(--title-color) !important;
                 text-transform: uppercase;
                 font-size: var(--text-title);
+            }
+            .section-title {
+                color: var(--title-color);
+                font-size: var(--text-title);
+                margin-bottom: 0;
             }
 
             .metadata {
@@ -336,7 +352,9 @@
         tbody tr td {
             border: 1px solid var(--lightgrey);
         }
-
+        .order-table-description {
+            font-size: 12px !important;
+        }
         .order-table {
             width: 84vw;
             border-collapse: collapse;
