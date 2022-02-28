@@ -91,19 +91,6 @@ Route::middleware('auth:api')->group(function() {
     
 });
 
-Route::middleware('api.token.both')->name('api.')->group(function () {
-    Route::prefix('select')->group(function () {
-        Route::post('countries', [SelectController::class, 'getCountries'])->name('countries.select');
-        Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
-        Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
-        Route::prefix('selected')->group(function () {
-            Route::post('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('countries.selected');
-            Route::post('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
-            Route::post('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
-        });
-    });
-});
-
 Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
     Route::prefix('select')->group(function () {
@@ -113,6 +100,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
         Route::post('currencies', [SelectController::class, 'getCurrencies'])->name('currencies.select');
         Route::post('regions', [SelectController::class, 'getRegions'])->name('regions.select');
+        Route::post('countries', [SelectController::class, 'getCountries'])->name('countries.select');
         Route::post('location-types', [SelectController::class, 'getLocationTypes'])->name('location-types.select');
         Route::post('room-types', [SelectController::class, 'getRoomTypes'])->name('room-types.select');
         Route::post('board-types', [SelectController::class, 'getBoardTypes'])->name('board-types.select');
@@ -128,6 +116,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('quotes', [SelectController::class, 'getQuotes'])->name('quotes.select');
         Route::post('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
         Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
+        Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
+        Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
         Route::post('available-accommodation/{orderCustomer}', [SelectController::class, 'getAvailableAccommodation'])->name('available-accommodation.select');
@@ -152,6 +142,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('address/{id}', [SelectController::class, 'getSelectedAddress'])->name('addresses.selected');
             Route::post('currency/{id}', [SelectController::class, 'getSelectedCurrency'])->name('currencies.selected');
             Route::post('region/{id}', [SelectController::class, 'getSelectedRegion'])->name('regions.selected');
+            Route::post('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('countries.selected');
             Route::post('location-type/{id}', [SelectController::class, 'getSelectedLocationType'])->name('location-types.selected');
             Route::post('room-type/{id}', [SelectController::class, 'getSelectedRoomType'])->name('room-types.selected');
             Route::post('board-type/{id}', [SelectController::class, 'getSelectedBoardType'])->name('board-types.selected');
@@ -166,6 +157,8 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('airlines/{id}', [SelectController::class, 'getSelectedAirline'])->name('airlines.selected');
             Route::post('quotes/{id}', [SelectController::class, 'getSelectedQuote'])->name('quotes.selected');
             Route::post('customers/{id}', [SelectController::class, 'getSelectedCustomer'])->name('customers.selected');
+            Route::post('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
+            Route::post('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
             Route::post('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('payment-method.selected');
             Route::post('tour-category/{id}', [SelectController::class, 'getSelectedTourCategory'])->name('tour-categories.selected');
             Route::prefix('inventory/{id}')->group(function () {
@@ -234,5 +227,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
 
     Route::prefix('reports')->name('reports.')->group(function() {
        Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
+       Route::post('bespoke/export', [BespokeReportController::class, 'apiExport'])->name('bespoke.export');
     });
 });
