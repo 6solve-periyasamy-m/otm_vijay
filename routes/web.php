@@ -72,7 +72,7 @@ use App\Repository\OrderRepository;
 
 Route::get('/', function () {
     return view('pages.otm');
-});
+})->name('homepage');
 
 Route::get('/homepage', function () {
     return view('pages.homepage');
