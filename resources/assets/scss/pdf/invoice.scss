@@ -17,7 +17,7 @@
     --text-global: 14px;
     --text-metadata: 12px;
     --text-title: 24px;
-    --text-site-info: medium;
+    --text-site-info: 14px;
 }
 
 * {
@@ -310,6 +310,9 @@ a {
     }
 
     .section {
+        &.pagebreak-inside {
+            page-break-inside: avoid;
+        }
         .header {
             .header-logo {
                 width: 120px;

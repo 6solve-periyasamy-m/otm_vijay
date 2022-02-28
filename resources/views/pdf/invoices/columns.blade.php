@@ -125,7 +125,7 @@ $order = $invoice->order;
             <div class="pagebreak"></div>
             <div class="pageborder"></div>
             <!-- Order Adjustments Section -->
-            <div class="section">
+            <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Order Adjustments</h2>
                 <table class="order-table center">
                     <thead>
@@ -155,7 +155,7 @@ $order = $invoice->order;
                 </div>
             </div>
             <!-- Payments Section -->
-            <div class="section">
+            <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Payments</h2>
                 <table class="order-table center">
                     <thead>
@@ -185,7 +185,7 @@ $order = $invoice->order;
                 </div>
             </div>
             <!-- Installments Section -->
-            <div class="section">
+            <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Installments</h2>
                 <table class="order-table center">
                     <thead>
@@ -207,7 +207,7 @@ $order = $invoice->order;
                 </table>
             </div>
             <!-- Notes Section -->
-            <div class="section">
+            <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Notes</h2>
                 <div class="notes">
                     <div style="margin-top: 0">{!! $invoice->footer !!}</div> 
