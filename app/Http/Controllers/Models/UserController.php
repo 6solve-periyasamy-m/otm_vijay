@@ -31,12 +31,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if (UserRepository::getRemainingUserCount() <= 0) return back()->withErrors(['msg' => 'You have reached your user limit. Please contact your account manager to increase the user limit']);
-        $request->validate(User::getValidationRules());
+        $request->validate(User::getCreateValidationRules());
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
+        if ($request->has('avatar') && $request->file('avatar') != null) {
+            $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
+        }
         try {
             event(new Registered($user));
         } catch (\Exception $e) { Log::error($e); }
@@ -79,14 +82,21 @@ class UserController extends Controller
         if ($user->email !== $request->input('email')) {
             $user->email_verified_at = null;
         }
-        $request->validate(User::getValidationRules());
+        $request->validate(User::getUpdateValidationRules($user->email));
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
         ]);
+        if ($request->input('new_password') != null) {
+            $user->update([
+                'password' => Hash::make($request->input('new_password')),
+            ]);
+        }
         if (Auth::user()->id !== $user->id) {
             PermissionsRepository::assignRole($user, $request->input('role'));
+        }
+        if ($request->has('avatar') && $request->file('avatar') != null) {
+            $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
         }
         try {
             event(new Registered($user));

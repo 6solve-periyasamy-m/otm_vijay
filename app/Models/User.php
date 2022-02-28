@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Repository\UserRepository;
+use App\Rules\EmailCurrentOrUnique;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,10 +47,37 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $guard = 'web';
 
-    public static function getValidationRules(): array
+    public static function getUpdateValidationRules(?string $email = null): array
     {
         return [
-            'email' => 'required|unique:users,email|email:rfc,dns',
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                new EmailCurrentOrUnique('users', 'email', $email)
+            ],
+            'name' => 'required',
+            'current_password' => 'nullable|required_with:new_password|current_password:web',
+            'new_password' => [
+                'nullable',
+                'confirmed',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ]
+        ];
+    }
+
+    public static function getCreateValidationRules(): array
+    {
+        return [
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                new EmailCurrentOrUnique('users', 'email')
+            ],
             'name' => 'required',
             'password' => [
                 'required',
