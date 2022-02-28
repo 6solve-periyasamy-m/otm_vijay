@@ -26,6 +26,9 @@ class SendBookingConfirmedEmail
     public function handle(OrderCreatedEvent $event)
     {
         if (!$event->shouldInvoice) return;
-        MailRepository::sendMailable('booking-confirmed', $event->order->leadBooker->customer->email_address, $event->order);
+        $customer = $event->order->leadBooker->customer;
+        if (isset($customer->email_address)) {
+            MailRepository::sendMailable('booking-confirmed', $customer->email_address, $event->order);
+        }
     }
 }
