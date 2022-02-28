@@ -35,8 +35,8 @@ $order = $invoice->order;
                     <div class="flex-container">
                         <div class="flex-items site-info">
                             Website: <a href="{{ URL::to('/') }}">{{ URL::to('/') }}</a>
-                            <br />Email: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}
-                            <br />Telephone: {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}
+                            <br />Email: <a href="mailto:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}</a>
+                            <br />Telephone: <a href="tel:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Date<br /><span class="metadata-text">{{ StringFormatter::formatDate($invoice->generated) }}</span></div>
