@@ -136,16 +136,22 @@ $order = $invoice->order;
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($invoice->adjustments['billables'] as $billable)
+                        @if (empty($invoice->adjustments['billables']))
                             <tr>
-                                <td class="date"></td>
-                                <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                                <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                                <td colspan="3" class="center-text">No Order Adjustments recorded.</td>
                             </tr>
-                        @endforeach
-                        <tr>
-                            <td colspan="3" class="metadata right-text">Total: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</td>
-                        </tr>
+                        @else
+                            @foreach($invoice->adjustments['billables'] as $billable)
+                                <tr>
+                                    <td class="date"></td>
+                                    <td class="date-description">{!! nl2br($billable['description']) !!} </td>
+                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                                </tr>
+                            @endforeach
+                            <tr>
+                                <td colspan="3" class="metadata right-text">Total: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
@@ -166,16 +172,22 @@ $order = $invoice->order;
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($invoice->payments['billables'] as $billable)
+                        @if (empty($invoice->adjustments['billables']))
                             <tr>
-                                <td class="date">{{ StringFormatter::formatDateTime($billable['date']) }}</td>
-                                <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                                <td class="total">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                                <td colspan="3" class="center-text">No Payments recorded.</td>
                             </tr>
-                        @endforeach
-                        <tr>
-                            <td class="metadata right-text" colspan="3">Total Paid: {{ StringFormatter::formatCurrency($invoice->payments['total_cost']) }}</td>
-                        </tr>
+                        @else
+                            @foreach($invoice->payments['billables'] as $billable)
+                                <tr>
+                                    <td class="date">{{ StringFormatter::formatDateTime($billable['date']) }}</td>
+                                    <td class="date-description">{!! nl2br($billable['description']) !!} </td>
+                                    <td class="total">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                                </tr>
+                            @endforeach
+                            <tr>
+                                <td class="metadata right-text" colspan="3">Total Paid: {{ StringFormatter::formatCurrency($invoice->payments['total_cost']) }}</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
@@ -196,13 +208,19 @@ $order = $invoice->order;
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($invoice->installments as $installment)
-                            <tr>
-                                <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
-                                <td class="amount">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
-                                <td class="total">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
-                            </tr>
-                        @endforeach
+                        @if (empty($invoice->installments))
+                                <tr>
+                                    <td colspan="3" class="center-text">No Installments recorded.</td>
+                                </tr>
+                            @else
+                            @foreach($invoice->installments as $installment)
+                                <tr>
+                                    <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
+                                    <td class="amount">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
+                                    <td class="total">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
