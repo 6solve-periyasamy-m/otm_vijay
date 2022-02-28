@@ -72,7 +72,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('pages.otm');
-});
+})->name('homepage');
 
 Route::get('/homepage', function () {
     return view('pages.homepage');
