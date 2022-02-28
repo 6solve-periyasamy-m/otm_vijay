@@ -22,13 +22,13 @@ $order = $invoice->order;
             <div class="section">
                 <div class="header">
                     <div class="flex-container titles">
-                        <div class="flex-items site-info">
+                        <div class="flex-items site-info vert-align">
                             <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
                         </div>
-                        <div class="flex-items">
+                        <div class="flex-items vert-align">
                             <h2 class="header-title tour-name">{{ $order->tour->name }}</h2>
                         </div>
-                        <div class="flex-items">
+                        <div class="flex-items vert-align">
                             <h1 class="header-title">Invoice</h1>
                         </div>
                     </div>

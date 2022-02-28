@@ -144,7 +144,10 @@ a {
         .titles {
             min-height: 100px;
         }
-
+        .vert-align {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
         .header-logo {
             width: 200px;
             aspect-ratio: 15 / 7 !important;
