@@ -9,14 +9,7 @@ use Illuminate\Http\Request;
 
 class OrderSystemController extends Controller
 {
-    public function index(Request $request)
-    {
-        $searchQuery = $request->has('query') && $request->get('query') != null ? $request->get('query') : "";
-        $showArchived = $request->has('archived') ? $request->get('archived') : false;
-        return view('pages.orders.search', ['data' => OrderRepository::getSearchOrders($searchQuery, $showArchived), 'query' => $searchQuery, 'archived' => $showArchived,]);
-    }
-
-    public function newSearch() {
+    public function index() {
         return view('pages.orders.search2', ['orders' => Order::all(),]);
     }
 
