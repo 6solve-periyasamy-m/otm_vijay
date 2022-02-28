@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-class ApiAuthenticate
+class DualApiAuthenticate
 {
     /**
      * Handle an incoming request.
@@ -23,8 +23,11 @@ class ApiAuthenticate
             abort(403, 'API Token is Required');
         }
         try {
-            $token = ApiToken::findOrFail($request->input('__api_token'));
-            if ($token->hasExpired()) {
+            $token = ApiToken::find($request->input('__api_token'));
+            if (!isset($token)) {
+                $token = CustomerApiToken::find($request->input('__api_token'));
+            }
+            if (!isset($token) || $token->hasExpired()) {
                 abort(403, 'API Token is either not recognized or expired');
             }
         } catch (ModelNotFoundException $ignored) {

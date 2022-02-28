@@ -12,7 +12,8 @@
                     @foreach($orders as $order)
                     <option value='{{ $order->booking_reference }}'>{{ $order->booking_reference }}</option>
                     @endforeach
-                </select>                
+                </select>
+                <a href="#" class="invoice btn btn-primary">Invoice</a>
             </div>
         </form>
     </div>
@@ -34,7 +35,7 @@
                                     <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay"/>
                                 </div>
                                 <div class="form-group col-12 col-xl-2">
-                                    <input class="form-control form-control-line" type="submit">
+                                    <input class="form-control form-control-line" type="submit" value="Make Payment">
                                 </div>
                             </div>
                         </form>
@@ -49,11 +50,13 @@
 
 @section('footer-script')
 <script>
+    let route = "{{ route('customer.invoice', ['reference' => 'reference']) }}"
     function onOrderChange() {
         let newBooking = $('.order-select').val()
         $('.order').hide();
         $('.order-' + newBooking).show();
         $('#form-booking-reference').val(newBooking);
+        $('.invoice').prop('href', route.replace('reference', newBooking));
     }
     onOrderChange();
 </script>
