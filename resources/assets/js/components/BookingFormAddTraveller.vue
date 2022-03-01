@@ -160,12 +160,12 @@ export default {
         if (!this.traveller.id) {
             this.edit_fields = true
         }
-        this.debug && console.log(`&^&^&^&^&^& ${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
+        this.debug && console.log(`${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
     },
     created() {
         let that = this
         bus.$on('addTraveller', function(formId) {
-            that.debug && console.log('^^^ BookingFormAddTraveller setting', formId, that.form_id)
+            that.debug && console.log('BookingFormAddTraveller: setting', formId, that.form_id)
             if (formId === that.form_id) {
                 console.log('form ' + that.form_id + ' edit activated')
                 that.edit_fields = true
@@ -174,7 +174,7 @@ export default {
     },
     computed: {
         validForm: function () {
-            this.debug && console.log('validForm called', this)
+            this.debug && console.log('BookingFormAddTraveller: validForm called', this)
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
         },
         mobileNumberInvalid: function () {
@@ -209,7 +209,7 @@ export default {
                 case 'mobile_number':
                     if (!valid_uk.test(this.mobile_number)) {
                         this.mobile_number_invalid = true
-                        this.debug && console.log('Invalid!', this.mobile_number)
+                        this.debug && console.log('BookingFormAddTraveller: Invalid!', this.mobile_number)
                         return false
                     }
                     this.mobile_number_invalid = false
@@ -224,7 +224,7 @@ export default {
                 default:
                     alert(field + ' not handled in switch')
             }
-            this.debug && console.log(field, 'validated')
+            this.debug && console.log(field, 'BookingFormAddTraveller: validated')
             return true
         },
         validEmail() {

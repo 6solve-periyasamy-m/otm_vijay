@@ -124,7 +124,7 @@ class BookingCustomerController extends ApiController
                 'title' => 'required',
                 'first_name' => 'required | alpha',
                 'last_name' => 'required | alpha_dash',
-                'date_of_birth' => 'required | before: 18 years ago',
+                'date_of_birth' => 'required | date | before: 18 years ago',
                 'mobile_number' => 'required',
                 'gender' => 'required',
                 'address_line_1' => 'required',
@@ -151,7 +151,7 @@ class BookingCustomerController extends ApiController
                 'title' => 'required',
                 'first_name' => 'required | alpha',
                 'last_name' => 'required | alpha_dash',
-                'date_of_birth' => 'required | before: 18 years ago',
+                'date_of_birth' => 'required | date',
                 'mobile_number' => 'required',
                 'gender' => 'required',
                 'address_line_1' => 'required'
@@ -180,12 +180,17 @@ class BookingCustomerController extends ApiController
         ];
         $customer = Customer::where('email_address', $request->email_address)->first();
 
-        // if the customer exists, update the addresses // TODO: refactor the repeated code?
+        // if the customer exists, update the addresses
         if ($customer) {
             if ($isLead) {
                 $addressIds = $this->update_addresses($request, $customer);
-                //$customerData['home_address_id'] = $addressIds['home_address_id'];
-                //$customerData['billing_address_id'] = $addressIds['billing_address_id'];
+                // MAR record may have been created
+                if ($addressIds['home_address_id']) {
+                    $customerData['home_address_id'] = $addressIds['home_address_id'];
+                }
+                if ($customerData['billing_address_id']) {
+                    $addressIds['billing_address_id'];
+                }
             }
             $customer = $customerRepo->update($customerData);
         } else {
@@ -241,7 +246,7 @@ class BookingCustomerController extends ApiController
             throw new Exception('BookingCustomerController::update_address, no customer');
         }
 
-        // we get null address IDs i.e. for an additional customer or another reason create a minimal address
+        // we get null address IDs i.e. for an additional traveller - create a minimal address
         // BUT this is an update: therefore we should have an address field and not having one is an error
         // HOWEVER: it is not a fatal condition, just create the MAR Record
         $this->debug && Log::warning('When update_addresses called, the customer home_address ID was null, creating the address:', [$customer]);
@@ -316,11 +321,10 @@ class BookingCustomerController extends ApiController
      * create_addresses()
      * makes new address records and returns their id values in an updated $customer object
      *
-     * @param [type] $request
-     * @param [type] $customer
-     * @return Object ($customer)
+     * @param [type] $request data
+     * @return array home and billing address_ids
      */
-    private function create_addresses($request) {
+    private function create_addresses(Request $request) {
         $this->debug && Log::debug('Create a new home address using '. $request->address_line_1);
         $addressRepo = new AddressRepository();
         $address_record = [
@@ -437,7 +441,7 @@ class BookingCustomerController extends ApiController
      */
     public function bookingTraveller(Request $request)
     {
-        Log::debug('>>> BookingTraveller', $request->toArray());
+        $this->debug && Log::debug('BookingTraveller', $request->toArray());
 
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
         $this->createUpdateBookingTraveller($request->booking_token, $customer);
