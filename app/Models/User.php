@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 
@@ -47,13 +48,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $guard = 'web';
 
-    public static function getUpdateValidationRules(?string $email = null): array
+    public function getUpdateValidationRules(): array
     {
         return [
             'email' => [
                 'required',
                 'email:rfc,dns',
-                new EmailCurrentOrUnique('users', 'email', $email)
+                Rule::unique('users', 'email')->ignore($this->id),
             ],
             'name' => 'required',
             'current_password' => 'nullable|required_with:new_password|current_password:web',
@@ -76,7 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email' => [
                 'required',
                 'email:rfc,dns',
-                new EmailCurrentOrUnique('users', 'email')
+                'unique:users,email'
             ],
             'name' => 'required',
             'password' => [

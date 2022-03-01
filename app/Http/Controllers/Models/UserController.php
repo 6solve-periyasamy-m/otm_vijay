@@ -82,7 +82,7 @@ class UserController extends Controller
         if ($user->email !== $request->input('email')) {
             $user->email_verified_at = null;
         }
-        $request->validate(User::getUpdateValidationRules($user->email));
+        $request->validate($user->getUpdateValidationRules());
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
