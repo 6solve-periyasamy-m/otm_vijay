@@ -217,7 +217,7 @@ $order = $invoice->order;
                                 <tr>
                                     <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
                                     <td class="amount">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
-                                    <td class="total">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
+                                    <td class="paid">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
                                 </tr>
                             @endforeach
                         @endif

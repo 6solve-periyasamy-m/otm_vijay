@@ -268,6 +268,7 @@ a {
             width: var(--table-totals-column);
             vertical-align: top;
             padding-left: var(--table-cell-padding);
+            text-align: center;
         }
     }
 
@@ -418,6 +419,7 @@ a {
             .paid {
                 width: var(--table-totals-column);
                 vertical-align: top;
+                text-align: center;
             }
         }
 
