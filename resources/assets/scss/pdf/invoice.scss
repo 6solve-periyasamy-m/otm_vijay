@@ -111,6 +111,10 @@ a {
         text-align: center;
     }
 
+    .site-info-padding {
+        padding-left: 3px;
+    }
+
     .metadata {
         @extend %title-text;
 
@@ -244,6 +248,7 @@ a {
             width: var(--table-quantity-column);
             vertical-align: top;
             padding-left: var(--table-cell-padding);
+            text-align: center;
         }
 
         .date {
@@ -256,6 +261,7 @@ a {
             width: var(--table-totals-column);
             vertical-align: top;
             padding-left: var(--table-cell-padding);
+            text-align: center;
         }
 
         .paid {
@@ -312,6 +318,10 @@ a {
         left: 3vw;
     }
 
+    .site-info-padding {
+        padding-left: 3px;
+    }
+
     .section {
         &.pagebreak-inside {
             page-break-inside: avoid;
@@ -337,7 +347,6 @@ a {
                 color: var(--lightgrey);
                 font-weight: bold;
                 text-transform: uppercase;
-                border-bottom: var(--lightgrey) solid 1px;
 
                 .metadata-text {
                     font-size: var(--text-metadata);
@@ -392,6 +401,7 @@ a {
             .quantity {
                 width: var(--table-quantity-column);
                 vertical-align: top;
+                text-align: center;
             }
 
             .date {
@@ -402,6 +412,7 @@ a {
             .total {
                 width: var(--table-totals-column);
                 vertical-align: top;
+                text-align: center;
             }
 
             .paid {
