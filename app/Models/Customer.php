@@ -36,10 +36,6 @@ class Customer extends Authenticatable
             'date_of_birth' => 'required|date',
             'mobile_number' => 'required',
             'email_address' => 'nullable|email|unique:customers,email_address',
-            'gender' => 'required',
-            'emergency_contact_name' => 'required',
-            'emergency_contact_relationship' => 'required',
-            'emergency_contact_telephone' => 'required',
         ];
     }
 
