@@ -106,7 +106,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
-        $request->validate(Customer::getValidationRules());
+        $request->validate($customer->getUpdateValidationRules());
         $customer->update([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),
