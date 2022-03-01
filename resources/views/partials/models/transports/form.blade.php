@@ -16,8 +16,8 @@
         ['name' => 'Operator', 'field' => 'operator_id', 'value' => $operator_id ?? 0,
          'route' => 'operators',])
 @endcan
-@include('partials.fields.prefab.addresses.selector', ['namePrefix' => 'Departure', 'prefix' => 'departure_', 'value' => $departure_address_id ?? 0,])
-@include('partials.fields.prefab.addresses.selector', ['namePrefix' => 'Arrival', 'prefix' => 'arrival_', 'value' => $arrival_address_id ?? 0,])
+@include('partials.fields.prefab.addresses.transport', ['namePrefix' => 'Departure', 'prefix' => 'departure_', 'value' => $departure_address_id ?? 0,])
+@include('partials.fields.prefab.addresses.transport', ['namePrefix' => 'Arrival', 'prefix' => 'arrival_', 'value' => $arrival_address_id ?? 0,])
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,'width'=>10,])
 @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
