@@ -26,6 +26,9 @@ class SendAdditionalTravellerAddedEmail
     public function handle(OrderCustomerCreatedEvent $event)
     {
         if (!$event->shouldInvoice) return;
-        MailRepository::sendMailable('additional-traveller-added', $event->orderCustomer->customer->email_address, $event->orderCustomer);
+        $customer = $event->orderCustomer->customer;
+        if (isset($customer->email_address)) {
+            MailRepository::sendMailable('additional-traveller-added', $customer->email_address, $event->orderCustomer);
+        }
     }
 }
