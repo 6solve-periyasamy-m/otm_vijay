@@ -6,6 +6,7 @@ use Exception;
 
 use App\Models\Booking;
 use App\Models\Customer;
+use App\Models\Address;
 
 use Illuminate\Http\Request;
 
@@ -198,7 +199,8 @@ class BookingCustomerController extends ApiController
             $customer = $customerRepo->create($customerData);
         }
         if (!$isLead) {
-            $this->create_minimal_address($customer);
+            $this->create_minimal_address($customer, 'home');
+            $this->create_minimal_address($customer, 'billing');
         }
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
@@ -219,14 +221,17 @@ class BookingCustomerController extends ApiController
         if ($type == 'home' && $customer->home_address_id) {
             return;
         }
+        if ($type == 'billing' && $customer->billing_address_id) {
+            return;
+        }
         $address = new Address();
         if ($address->where('customer_id', $customer->id)->count()) {
             return;
         }
         // MAR address record is just a record that the customer has an address when no address supplied
-        $address->name = '(' .$customer->email_address. ')';
+        $address->name = '(' .$customer->email_address. ') ' . $customer->first_name . ' ' . $customer->last_name;
         $address->parent_id = 1;
-        $address->id = Address::save();
+        $address->id = $address->save();
     }
 
     private function update_addresses($request, $customer)
