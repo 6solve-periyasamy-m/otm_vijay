@@ -147,14 +147,13 @@ class BookingCustomerController extends ApiController
             }
         } else {
             $validated = $request->validate([
-                'email_address' => 'required | email:rfc,dns',
+                'email_address' => 'nullable | email:rfc,dns',
                 'title' => 'required',
                 'first_name' => 'required | alpha',
                 'last_name' => 'required | alpha_dash',
                 'date_of_birth' => 'required | date',
                 'mobile_number' => 'required',
-                'gender' => 'required',
-                'address_line_1' => 'required'
+                'gender' => 'required'
             ]);
         }
         if ($this->logging == 'customers') {
@@ -194,19 +193,25 @@ class BookingCustomerController extends ApiController
             }
             $customer = $customerRepo->update($customerData);
         } else {
-            // $customer->email_address = $request->email_address;
+            $customerData['email_address'] = $request->email_address;
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
                 $addressIds = $this->create_addresses($request);
-                $customerData['home_address_id'] = $addressIds['home_address_id'];
-                $customerData['billing_address_id'] = $addressIds['billing_address_id'];
+            } 
+            // additional travellers have a dummy address_1 field (unless they already exist)
+            if (!$isLead) {
+                if (empty($customerData['address_line_1'])) {
+                    $customerData['home_address_id'] = $this->create_minimal_address($customerData, 'Home address');
+                }
+                if (empty($customerData['billing_address_line_1'])) {
+                    $customerData['billing_address_id'] = $this->create_minimal_address($customerData, 'Billing address');
+                }
             }
+            $customerData['home_address_id'] = $addressIds['home_address_id'];
+            $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             $customer = $customerRepo->create($customerData);
         }
-        if (!$isLead) {
-            $this->create_minimal_address($customer, 'home');
-            $this->create_minimal_address($customer, 'billing');
-        }
+
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
         if ($booking) {
@@ -219,24 +224,33 @@ class BookingCustomerController extends ApiController
         return $customer;
     }
 
-    // if a customer is submitted with NULL address fields, means do not change an existing address
+    // if a customer is submitted with NULL address_id fields, means do not change an existing address
     // but ensure that a minimal address (type) exists for the customer
-    private function create_minimal_address($customer, $type)
+    private function create_minimal_address($customerData, $type)
     {
-        if ($type == 'home' && $customer->home_address_id) {
+        /*
+        if (empty($customerData)) {
             return;
         }
-        if ($type == 'billing' && $customer->billing_address_id) {
+        if ($type == 'home' && $customerData['home_address_id'] !== null) {
             return;
         }
+        if ($type == 'billing' && $customerData['billing_address_id'] !== null) {
+            return;
+        }
+        */
+        // do not update an address that already exists
         $address = new Address();
-        if ($address->where('customer_id', $customer->id)->count()) {
-            return;
+        if (isset($customerData['id']) && $address->where('customer_id', $customerData['id'])->count()) {
+            return $address->id;
         }
-        // MAR address record is just a record that the customer has an address when no address supplied
-        $address->name = '(' .$customer->email_address. ') ' . $customer->first_name . ' ' . $customer->last_name;
-        $address->parent_id = 1;
-        $address->id = $address->save();
+        // MAR address record is default when no address supplied
+        $address->address_line_1 = '(' .$customerData['email_address']. ') ' . $customerData['first_name'] . ' ' . $customerData['last_name'];
+        $address->name = $type;
+        $address->address_parent_id = 1;
+        $address->save();
+
+        return $address->id;
     }
 
     private function update_addresses($request, $customer)
@@ -441,8 +455,7 @@ class BookingCustomerController extends ApiController
      */
     public function bookingTraveller(Request $request)
     {
-        $this->debug && Log::debug('BookingTraveller', $request->toArray());
-
+        $this->logging == 'customers' && Log::debug('BookingTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
         $this->createUpdateBookingTraveller($request->booking_token, $customer);
 

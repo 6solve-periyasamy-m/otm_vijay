@@ -11,6 +11,7 @@
             <div v-if="edit_fields">
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
+                        <p>Entering email address is optional</p>
                         <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
                         <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
                         <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
@@ -137,7 +138,7 @@ export default {
             other_number_invalid: false,
             other_number_validation: 'Please enter a valid phone number',
             email_invalid: false,
-            email_validation: 'Please enter your email address',
+            email_validation: 'If you register your Email Address we can retrieve your details',
             validphone: false,
             other_phone_number_type: '',
             otherNumberType: '',
@@ -242,6 +243,7 @@ export default {
             const valid = valid_email.test(this.email_address)
             //this.debug && console.log(this.email_address, valid)
             this.email_invalid = !valid
+
             // is this an existing customer?
             axios.post('/api/booking/customer/email/check', {
                 email_address: this.email_address
@@ -285,7 +287,7 @@ export default {
                     date_of_birth: this.date_of_birth
                 })
                 .then(response => {
-                    console.log('response', response.data.success, response.data)
+                    console.log('additional traveller response', response.data.success, response.data)
                     if (response.data.success) {
                         that.include = 'checked'
                         that.edit_fields = false
