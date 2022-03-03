@@ -202,7 +202,7 @@ $order = $invoice->order;
                 <table class="order-table center">
                     <thead>
                         <tr>
-                            <td class="order-table-title date">Date</td>
+                            <td class="order-table-title date">Due Date</td>
                             <td class="order-table-title amount">Amount</td>
                             <td class="order-table-title paid">Paid</td>
                         </tr>
