@@ -65,9 +65,16 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => '$2a$12$cZrltF34KgJtI0V0Ob8nm.osVJavm4lvo.4E2vjol2iC652B.f2Oy',
             ]);
+            $steveEatherington = User::create([
+                'name' => 'Steve Eatherington',
+                'email' => 'sae@octopustravelmatrix.com',
+                'email_verified_at' => now(),
+                'password' => '$2a$12$t8H9Tx2lPdlQuJVbsFGEmelKuma6KAk4SfMJSo0S3L1HWZYKiENsS',
+            ]);
 
             $celeste->assign($otmStaff);
             $nicholas->assign($otmStaff);
+            $steveEatherington->assign($otmStaff);
         }
     }
 }
