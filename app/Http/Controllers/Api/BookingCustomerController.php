@@ -85,26 +85,6 @@ class BookingCustomerController extends ApiController
 
         return response()->json(["success" => true, "authorized" => $authorized]);
     }
-    /**
-     * storeOrUpdateOrderCustomer - stores the orderCustomer data from the booking form
-     *
-     * @param Customer $customer
-     * @param Request $request
-     * @param boolean $isLead
-     * @return JSON (record saved)
-     */
-    private function storeOrUpdateOrderCustomer($customer, Request $request, $isLead = false)
-    {
-        throw new Exception('BookingCustomerController::storeOrUpdateCustomer is deprecated!');
-        if (empty($request->order_id)) {
-            throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
-        }
-
-        $ordersCustomerRepository = new OrdersCustomerRepository;
-        $ordersCustomer = $ordersCustomerRepository->storeOrderCustomer($customer, $request, $isLead);
-
-        return $ordersCustomer;
-    }
 
     /**
      * storeOrUpdateCustomer
