@@ -263,7 +263,7 @@ export default {
     props: ['booked', 'tour'],
     data() {
         return {
-            debug: true,
+            debug: false,
             booking_token: null,
             moduleName: 'leadTraveller',
             countries: [],
