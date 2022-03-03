@@ -219,7 +219,7 @@
                             @foreach($order->orderCustomers as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
-                                <td>{{ StringFormatter::formatCurrency($order->tour->base_price_per_person) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($ordersCustomer->tour_cost) }}</td>
                             </tr>
                             @endforeach
                             @foreach($order->getAdditionals()['upgrades'] as $upgrade)
