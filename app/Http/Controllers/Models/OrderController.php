@@ -66,6 +66,11 @@ class OrderController extends Controller
         return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
     }
 
+    public function atol(Order $order)
+    {
+        return OrderRepository::showAtolCertificate($order);
+    }
+
     public function edit(Order $order)
     {
         return view('pages.models.orders.update', ['order' => $order,]);
