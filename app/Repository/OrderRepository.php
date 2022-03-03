@@ -796,6 +796,29 @@ class OrderRepository
 
         return $pdf;
     }
+    public static function assignDefaultRooming(OrderCustomer $orderCustomer)
+    {
+        $singleRoom = null;
+        foreach (AccommodationComponentRepository::getAvailableRoomTypes($orderCustomer->order->tour) as $roomType) {
+            if ($roomType->maximum_occupancy != 1) continue;
+            $singleRoom = $roomType;
+            break;
+        }
+        if (!isset($singleRoom)) return false;
+        $group = Group::create([
+            'room_type_id' => $singleRoom->id,
+            'name' => $orderCustomer->customer_name,
+        ]);
+        (new GroupRepository($group))->addCustomerToGroup($orderCustomer);
+        try {
+            self::addRoomsToGroup($orderCustomer->order, $group);
+            return true;
+        } catch (RoomingFailedException $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+    }
+
 
     public static function showAtolCertificate(Order $order)
     {
