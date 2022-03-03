@@ -434,12 +434,12 @@ export default {
             // loads current fight bookings if there are any
             axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
+                    that.showwait = false
                     that.bookings = response.data.flightBookings
                     that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', that.bookings, that.travellers[0])
 
                     if (that.bookings === null || that.bookings.length === 0) {
                         this.debug>1 && console.log('nothing has been booked yet')
-                        that.showwait = false
                         return
                     }
                     this.debug>4 && console.log('BookingFormFlight: flight orders', response)
@@ -457,14 +457,11 @@ export default {
                     }
                     that.debug>2 && console.log('loadFlightsForBooking SELECTED GROUP FLIGHTS', that.selected_outbound_flight, that.selected_inbound_flight)
 
-                        that.showwait = false
                     that.unselected_outbound = that.flights.filter(flight => {
-                        return flight.flight_inventory_tour_id != that.selected_outbound_flight &&
-                            flight.flight_type == 'Outbound'
+                        return flight.flight_inventory_tour_id != that.selected_outbound_flight && flight.flight_type == 'Outbound'
                     })
                     that.unselected_inbound = that.flights.filter(flight => {
-                        return flight.flight_inventory_tour_id != that.selected_inbound_flight &&
-                            flight.flight_type == 'Inbound'
+                        return flight.flight_inventory_tour_id != that.selected_inbound_flight && flight.flight_type == 'Inbound'
                     })
 
                     // process the addons TODO: Change orders -> bookings!
@@ -506,9 +503,9 @@ export default {
                             })
                         }
                     })
-                    //that.showwait = false
                 })
                 .catch(error => {
+                    that.showwait = false
                     console.log('loadFlightsForBooking >>>> error loading flights', error)
                 })
         },

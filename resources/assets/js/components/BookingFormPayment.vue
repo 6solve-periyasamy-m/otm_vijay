@@ -11,35 +11,46 @@
         <div class="card-body" v-if="paymentsActive">
             <div class="row">
                 <div v-if="showSummary" class="summary">
-                    <div class="travellers" v-for="traveller in booking.travellers" :key="traveller.customer_id">
-                        {{traveller.customer.first_name}} {{traveller.customer.last_name}}
-                    </div>
-                    <h3>Accommodations</h3>
-                    <div class="block accommodations" v-for="accommodation in booking.accommodations" :key="accommodation.accmoodation_inventory_tour_id">
-                      {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
-                    </div>
-                    <h3>Group Flights Booking</h3>
-                    <div class="block flights" v-for="flight in booking.flights" :key="flight.id">
-                        <div v-for="f in flight">
-                            <div>{{f.flight_type}} {{f.travel_class}}</div>
+                    <div v-if="booking != undefined">
+                        <div v=if="booking.travellers != undefined">
+                            <div class="travellers" v-for="traveller in booking.travellers" :key="traveller.customer_id">
+                                {{traveller.customer.first_name}} {{traveller.customer.last_name}}
+                            </div>
+                        </div>
+                        <div v=if="booking.accommodation != undefined">
+                            <h3>Accommodations</h3>
+                            <div class="block accommodations" v-for="accommodation in booking.accommodations" :key="accommodation.accmoodation_inventory_tour_id">
+                              {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
+                            </div>
+                        </div>
+                        <div v=if="booking.flights != undefined">
+                            <h3>Group Flights Booking</h3>
+                            <div class="block flights" v-for="flight in booking.flights" :key="flight.id">
+                                <div v-for="f in flight">
+                                    <div>{{f.flight_type}} {{f.travel_class}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v=if="booking.activities != undefined">
+                            <h3>Activities</h3>
+                            <div class="block activities" v-for="activity in booking.activities" :key="activity.id">
+                                {{activity.name}} {{activity.ticket_type_name}}
+                                Starts {{formatDate(activity.starts_at)}} Ends {{formatDate(activity.ends_at)}} 
+                                <br>
+                                {{activity.description}}
+                            </div>
+                        </div>
+                        <div v=if="booking.transports != undefined">
+                            <h3>Transports</h3>
+                            <div class="block transports" v-for="transport in booking.transports" :key="transport.id">
+                                {{transport.is_domestic ? 'Domestic' : 'International'}} {{transport.name }}
+                                <br>
+                                {{transport.departs_from}} {{transport.departure_address}}
+                                <br>
+                                {{formatDate(transport.arrives_at)}} {{transport.arrival_address}}
+                            </div>
                         </div>
                     </div>
-                    <h3>Activities</h3>
-                    <div class="block activities" v-for="activity in booking.activities" :key="activity.id">
-                        {{activity.name}} {{activity.ticket_type_name}}
-                        Starts {{formatDate(activity.starts_at)}} Ends {{formatDate(activity.ends_at)}} 
-                        <br>
-                        {{activity.description}}
-                    </div>
-                    <h3>Transports</h3>
-                    <div class="block transports" v-for="transport in booking.transports" :key="transport.id">
-                        {{transport.is_domestic ? 'Domestic' : 'International'}} {{transport.name }}
-                        <br>
-                        {{transport.departs_from}} {{transport.departure_address}}
-                        <br>
-                        {{formatDate(transport.arrives_at)}} {{transport.arrival_address}}
-                    </div>
-
                 </div>
             </div>
             <div v-if="priceBreakdown">
@@ -72,7 +83,7 @@
                         Transport
                     </div>
                     <div class="price_amount">
-                        {{priceFormat(totals.transports)}} x {{travellers}} = {{priceFormat(travellers * totals.transports)}}
+                        {{priceFormat(totals.transports)}} x {{countTravellers}} = {{priceFormat(countTravellers * totals.transports)}}
                     </div>
                 </div>
                 <div class="total row">
@@ -80,7 +91,7 @@
                         Tour Price total
                     </div>
                     <div class="price_amount">
-                        {{priceFormat(totalPrice)}} x {{travellers}} = {{priceFormat(travellers * totalPrice)}}
+                        {{priceFormat(totalPrice)}} x {{countTravellers}} = {{priceFormat(countTravellers * totalPrice)}}
                     </div>
                 </div>
             </div>
