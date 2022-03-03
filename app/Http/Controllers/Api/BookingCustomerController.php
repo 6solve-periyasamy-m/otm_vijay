@@ -195,11 +195,12 @@ Log::debug('found lead traveller customer record', [$customer->email_address]);
             }
             $customer = $customerRepo->update($customerData);
         } else {
-Log::debug('creating traveller customer record', [$request->email_address, $isLead, $token]);
             $customerData['email_address'] = $request->email_address;
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
                 $addressIds = $this->create_addresses($request);
+                $customerData['home_address_id'] = $addressIds['home_address_id'];
+                $customerData['billing_address_id'] = $addressIds['billing_address_id'];
             } 
             // additional travellers have a dummy address_1 field (unless they already exist)
             if (!$isLead) {
@@ -210,22 +211,7 @@ Log::debug('creating traveller customer record', [$request->email_address, $isLe
                     $customerData['billing_address_id'] = $this->create_minimal_address($customerData, 'Billing address');
                 }
             }
-            $customerData['home_address_id'] = $addressIds['home_address_id'];
-            $customerData['billing_address_id'] = $addressIds['billing_address_id'];
-Log::debug('create customer with ', $customerData);
             $customer = $customerRepo->create($customerData);
-Log::debug('created customer ', [$customer]);
-        }
-
-        //$bookingRepo = new BookingRepository();
-        ////$booking = $bookingRepo->findBookingByToken($token);
-        $booking = BookingRepository::findBooking($token);
-Log::debug('BOOKING FOUND: ', [$token, $booking]);
-        if ($booking) {
-            $bookingTraveller = new BookingTravellerRepository();
-            $newTraveller = $bookingTraveller->create($booking->id, $customer->id);
-        } else {
-            Log::error('Invalid token when creating additional traveller pivot record for customer', [$token, $customer]);
         }
 
         return $customer;

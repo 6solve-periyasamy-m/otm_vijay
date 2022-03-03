@@ -60,6 +60,7 @@ class BookingRepository implements BookingRepositoryInterface
     {
         try {
             $booking = Booking::where('token', $token)->first();
+            Log::debug('BCC: findBooking', [$booking]);
             return $booking;
         } catch (Exception $e) {
             Log::error("error finding booking for $token", $e->getMessage());

@@ -199,7 +199,9 @@ export default {
                 }
             })
             console.log('dob fields: ', that.date_of_birth)
-            that.date_of_birth = dates.isoString(that.date_of_birth)
+            if (that.date_of_birth != undefined && that.date_of_birth != null) {
+                that.date_of_birth = dates.isoString(that.date_of_birth)
+            }
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
