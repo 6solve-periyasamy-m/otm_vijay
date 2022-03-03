@@ -3,6 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Address;
+use App\Models\AddressParent;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Location;
@@ -54,7 +55,7 @@ class LocationsTransforms implements LocationsTransformsInterface
     public static function getAvailableSelectCountries($filter)
     {
         $data = [];
-        foreach (Country::orderBy('name')->get() as $country) {
+        foreach (Country::all() as $country) {
             $subData = [];
             $subData['id'] = $country->id;
             $subData['text'] = $country->name . ' - ' . $country->alpha_code;
@@ -113,8 +114,13 @@ class LocationsTransforms implements LocationsTransformsInterface
 
     public static function getAddresses($filter, $includeCustomer = false) {
         $data = [];
-        foreach (Address::all() as $address) {
-            if (!(isset($address->locationType) || $includeCustomer || !empty($filter))) continue; // Skip customer addresses unless filtered/included
+        if ($includeCustomer) {
+            $addresses = Address::all();
+        } else {
+            $addresses = Address::where('address_parent_id', '!=', AddressParent::getParentId('customer'))->get();
+        }
+        foreach ($addresses as $address) {
+            if (!(isset($address->locationType) || $includeCustomer)) continue; // Skip customer addresses unless filtered/included
             $subData = [];
             $subData['id'] = $address->id;
             $subData['text'] = $address->name . ' - ' . (isset($address->locationType) ?  $address->locationType->name : 'Customer Address') . ' - ' . $address->addressParent->name;

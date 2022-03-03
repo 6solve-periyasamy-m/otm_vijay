@@ -1,17 +1,10 @@
 <?php
 
-use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\Customer\CustomerDetailsController;
-use App\Http\Controllers\Customer\CustomerFinancesController;
-use App\Http\Controllers\Customer\CustomerForgotPasswordController;
-use App\Http\Controllers\Customer\CustomerLoginController;
-use App\Http\Controllers\Customer\CustomerPortalController;
-use App\Http\Controllers\Customer\CustomerRegisterController;
+use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
-use App\Http\Controllers\Customer\CustomerResetPasswordController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
 use App\Http\Controllers\Models\ActivityController;
 use App\Http\Controllers\Models\ActivityInventoryController;
@@ -54,6 +47,7 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
@@ -78,7 +72,7 @@ use App\Repository\OrderRepository;
 
 Route::get('/', function () {
     return view('pages.otm');
-});
+})->name('homepage');
 
 Route::get('/homepage', function () {
     return view('pages.homepage');
@@ -152,6 +146,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
             Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
             Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order,read');
+            Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order,read');
             Route::get('/occupancy', function (Order $order) { return view('pages.occupancy.manager', array_merge(OrderRepository::exportRoomingData($order), ['order' => $order,])); })->name('orders.occupancy')->middleware('bouncer:Order,update');
             Route::prefix('installments')->group(function () {
                 Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order,update');
@@ -448,6 +443,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour,update');
             Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour,update');
             Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour,delete');
+            Route::get('/atol', [\App\Http\Controllers\Models\TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour,read');
             Route::get('/add', function (Tour $tour) {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
             })->name('tours.add')->middleware('bouncer:Tour,update');
@@ -572,8 +568,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     Route::prefix('locations')->group(function () {
         Route::prefix('addresses')->group(function () {
             Route::get('/', [AddressController::class, 'index'])->name('addresses.all')->middleware('bouncer:Address,read');
-            Route::get('/create', [AddressController::class, 'create'])->name('addresses.create')->middleware('bouncer:Address,create');
-            Route::post('/create', [AddressController::class, 'store'])->name('addresses.store')->middleware('bouncer:Address,create');
+            Route::get('/create/{addressParent}', [AddressController::class, 'create'])->name('addresses.create')->middleware('bouncer:Address,create');
+            Route::post('/create/{addressParent}', [AddressController::class, 'store'])->name('addresses.store')->middleware('bouncer:Address,create');
             Route::prefix('{address}')->group(function () {
                 Route::get('/', [AddressController::class, 'view'])->name('addresses.view')->middleware('bouncer:Address,read');
                 Route::get('/update', [AddressController::class, 'edit'])->name('addresses.edit')->middleware('bouncer:Address,update');
@@ -716,25 +712,17 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 });
 
 Route::prefix('customer')->name('customer.')->group(function () {
-    Route::get('/login', [CustomerLoginController::class, 'show'])->name('login');
-    Route::get('/register', [CustomerRegisterController::class, 'show'])->name('register');
-    Route::post('/login', [CustomerLoginController::class, 'login'])->name('confirm-login');
-    Route::post('/register', [CustomerRegisterController::class, 'register'])->name('confirm-register');
-
+    Route::get('/login', [CustomerPortalController::class, 'showCustomerLogin'])->name('login');
+    //Route::get('/register', [CustomerPortalController::class, 'showCustomerRegister'])->name('register');
+    Route::post('/login', [CustomerPortalController::class, 'login'])->name('confirm-login');
+    //Route::post('/register', [CustomerPortalController::class, 'register'])->name('confirm-register');
     Route::middleware('auth:customer')->group(function () {
         Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
-        Route::get('/portal', [CustomerPortalController::class, 'show'])->name('portal');
-        Route::get('/details', [CustomerDetailsController::class, 'edit'])->name('edit');
-        Route::post('/details', [CustomerDetailsController::class, 'update'])->name('update');
-        Route::get('/finances', [CustomerFinancesController::class, 'show'])->name('finances');
-        Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
-        Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
-    });
-    Route::prefix('password')->name('password.')->group(function() {
-        Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
-        Route::post('/email', [CustomerForgotPasswordController::class, 'sendResetLinkEmail'])->name('email');
-        Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');
-        Route::post('/reset', [CustomerResetPasswordController::class, 'reset'])->name('update');
+        Route::get('/portal', [CustomerPortalController::class, 'showMainPortal'])->name('portal');
+        Route::get('/details', [CustomerPortalController::class, 'showDetailsPage'])->name('details');
+        Route::get('/details/edit', [CustomerPortalController::class, 'showEditDetailsPage'])->name('edit');
+        Route::get('/finances', [CustomerPortalController::class, 'showFinancesPage'])->name('finances');
+        Route::post('/payment/make', [CustomerPortalController::class, 'makePayment'])->name('payment.make');
     });
 });
 

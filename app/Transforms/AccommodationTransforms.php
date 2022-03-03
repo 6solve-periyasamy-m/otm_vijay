@@ -9,6 +9,7 @@ use App\Models\BoardType;
 use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Repository\AccommodationComponentRepository;
+use App\Repository\Facades\StringFormatter;
 use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {
@@ -119,11 +120,14 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         if (!isset($group)) return $data;
         foreach ($group->rooms as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type === "Add-on") {
+            if ($inventoryTour->tour_component_type !== "Upgrade") {
                 if (in_array($inventoryTour->id, $owned)) continue;
                 $subData = [];
                 $subData['id'] = $inventoryTour->id;
-                $subData['text'] = $inventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
+                    . ' - ' .
+                    ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
+                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

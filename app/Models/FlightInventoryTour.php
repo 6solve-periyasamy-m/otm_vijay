@@ -99,12 +99,10 @@ class FlightInventoryTour extends Model
         return $keys;
     }
 
-    public function addToOrder(OrderCustomer $orderCustomer): OrderFlight
+    public function getAtolStringAttribute(): string
     {
-        return OrderFlight::create([
-            'order_customer_id' => $orderCustomer->id,
-            'flight_inventory_tour_id' => $this->id,
-            'cost' => $this->tour_sales_price
-        ]);
+        return "{$this->flight_type} - {$this->inventory->flight->departureAirport} | " .
+            StringFormatter::formatDate($this->inventory->departs_at) .
+            " | {$this->inventory->flight->arrivalAirport} | {$this->inventory->flight->airline}";
     }
 }
