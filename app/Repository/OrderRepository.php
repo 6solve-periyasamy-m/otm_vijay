@@ -18,6 +18,7 @@ use App\Models\OrderTransport;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use App\Models\RoomType;
+use App\Repository\Facades\StringFormatter;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -102,11 +103,22 @@ class OrderRepository
     }
 
     public static function snapshotInstallments(Order $order) {
-        $data = [['due' => 'With Order', 'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit, ]];
+        $data = [['due' => 'With Order',
+            'description' => self::buildInstallmentString('Deposit', $order, $order->deposit, $order->calculated_deposit),
+            'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit, ]];
         foreach ($order->installments as $installment) {
-            $data[] = ['due' => $installment->due_on, 'amount' => $installment->amount, 'paid' => $installment->paid,];
+            $data[] = ['due' => $installment->due_on, 'description' => self::buildInstallmentString('Installment', $order, $installment->amount, $installment->calculated_amount),
+                'amount' => $installment->calculated_amount, 'paid' => $installment->paid,];
         }
+        $data[] = ['due' => $order->tour->final_payment, 'description' => 'Remaining Balance: ' . \StringFormatter::formatCurrency($order->remaining_installment),
+            'amount' => $order->remaining_installment, 'paid' => $order->paid >= $order->getCost(), ];
         return $data;
+    }
+
+    public static function buildInstallmentString(string $type, Order $order, float $amount, float $calculated): string
+    {
+        return $type . ': ' . $order->getCustomerCount() . ' Customer' . ($order->getCustomerCount() > 1 ? 's' : '') . ' x '
+            . \StringFormatter::formatCurrency($amount) . ' = ' . \StringFormatter::formatCurrency($calculated);
     }
 
     private static function processCustomerComponentsForInvoice(OrderCustomer $orderCustomer): array

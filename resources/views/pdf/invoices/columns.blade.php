@@ -216,7 +216,7 @@ $order = $invoice->order;
                             @foreach($invoice->installments as $installment)
                                 <tr>
                                     <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
-                                    <td class="amount">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
+                                    <td class="amount">{!! array_key_exists('description',$installment) ? nl2br($installment['description']) : nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
                                     <td class="paid">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
                                 </tr>
                             @endforeach
