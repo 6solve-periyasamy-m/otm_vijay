@@ -1,0 +1,427 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+
+:root {
+    --lightgrey: #8a8a8a;
+    --title-color: #7aadd4;
+    --side-spacing: 12vw;
+    --border-color: black;
+    --inner-padding: 1rem;
+
+    --table-description-column: 69.5289%;
+    --table-totals-column: 17%;
+    --table-date-description-column: 64.5289%;
+    --table-date-column: 15.4711%;
+    --table-quantity-column: 10.4711%;
+    --table-cell-padding: 15px;
+
+    --text-global: 14px;
+    --text-metadata: 12px;
+    --text-title: 24px;
+    --text-site-info: 14px;
+}
+
+* {
+    font-family: 'Poppins';
+    font-size: var(--text-global);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+%title {
+    color: var(--title-color);
+    font-size: var(--text-title);
+}
+
+%title-text {
+    color: var(--lightgrey);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+%flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: normal;
+    align-content: normal;
+}
+
+%flex-item {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+}
+
+.color {
+    &.green {
+        color: green !important;
+    }
+
+    &.red {
+        color: darkred !important;
+    }
+}
+
+.background {
+    height: auto;
+    width: 75vw;
+    position: absolute;
+    left: var(--side-spacing);
+}
+
+.pagebreak {
+    break-before: page;
+}
+
+.pageborder {
+    position: fixed;
+    left: var(--side-spacing);
+    right: var(--side-spacing);
+    top: 0;
+    bottom: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    z-index: -1;
+}
+
+.tour-name {
+    text-align: center;
+    max-width: 800px;
+}
+
+.section {
+    padding-left: var(--inner-padding);
+    padding-right: var(--inner-padding);
+
+    &:first-child {
+        padding-top: var(--inner-padding);
+    }
+
+    &:last-child {
+        padding-bottom: var(--inner-padding);
+    }
+
+    .metadata-wrapper {
+        text-align: center;
+    }
+
+    .site-info-padding {
+        padding-left: 3px;
+    }
+
+    .metadata {
+        @extend %title-text;
+
+        &~.metadata {
+            padding-top: 1.2rem;
+        }
+
+        &.divider {
+            border-bottom: var(--lightgrey) solid 1px;
+        }
+
+        .metadata-title {
+            padding-left: 15px;
+        }
+
+        .metadata-text {
+            font-size: var(--text-metadata);
+            font-weight: 500;
+        }
+    }
+
+    .center-text {
+        text-align: center;
+    }
+
+    .right-text {
+        text-align: right;
+    }
+
+    .header {
+        .titles {
+            min-height: 100px;
+        }
+        .vert-align {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .header-logo {
+            width: 200px;
+            aspect-ratio: 15 / 7 !important;
+        }
+
+        .site-info {
+            font-size: var(--text-site-info);
+
+            .header-title {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+
+    .header-title {
+        @extend %title;
+        text-transform: uppercase;
+    }
+
+    .section-title {
+        @extend %title;
+        margin-bottom: 0;
+    }
+
+    .billing-info-wrapper {
+        width: 48%;
+        text-align: left;
+
+        .billing-info {
+            padding-left: 15px;
+        }
+    }
+
+    .flex-container {
+        @extend %flex-container;
+        flex-direction: row;
+
+        .flex-items {
+            @extend %flex-item;
+        }
+    }
+
+    .flex-container-reverse {
+        @extend %flex-container;
+        flex-direction: row-reverse;
+
+        .flex-items {
+            @extend %flex-item;
+        }
+    }
+
+    tbody tr td {
+        border: var(--lightgrey) 1px solid;
+    }
+
+    th,
+    td {
+        padding-left: 15px;
+        padding-right: 15px;
+        line-height: 1.6;
+    }
+
+    .order-table {
+        width: 73vw;
+        border-collapse: collapse;
+
+        &.center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .order-table-title {
+            @extend %title-text;
+            padding-top: 1.2rem
+        }
+
+        .descrition {
+            width: var(--table-description-column);
+            padding-left: var(--table-cell-padding);
+        }
+
+        .date-description {
+            width: var(--table-date-description-column);
+            padding-left: var(--table-cell-padding);
+        }
+
+        .amount {
+            width: var(--table-date-description-column);
+            padding-left: var(--table-cell-padding);
+        }
+
+        .quantity {
+            width: var(--table-quantity-column);
+            vertical-align: top;
+            padding-left: var(--table-cell-padding);
+            text-align: center;
+        }
+
+        .date {
+            width: var(--table-date-column);
+            vertical-align: top;
+            padding-left: var(--table-cell-padding);
+        }
+
+        .total {
+            width: var(--table-totals-column);
+            vertical-align: top;
+            padding-left: var(--table-cell-padding);
+            text-align: center;
+        }
+
+        .paid {
+            width: var(--table-totals-column);
+            vertical-align: top;
+            padding-left: var(--table-cell-padding);
+            text-align: center;
+        }
+    }
+
+    .notes {
+        margin-top: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+}
+
+@page {
+    size: A4 portrait;
+    border: var(--border-color) 1px solid;
+}
+
+@media print {
+    div {
+        overflow: initial !important
+    }
+
+    body {
+        color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .pagebreak {
+        clear: both;
+        page-break-after: always;
+        break-after: always;
+    }
+
+    .pageborder {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        z-index: -1;
+    }
+
+    .background {
+        height: auto;
+        width: 94vw;
+        position: absolute;
+        left: 3vw;
+    }
+
+    .site-info-padding {
+        padding-left: 3px;
+    }
+
+    .section {
+        &.pagebreak-inside {
+            page-break-inside: avoid;
+        }
+        .header {
+            .header-logo {
+                width: 120px;
+            }
+
+            .header-title {
+                color: var(--title-color) !important;
+                text-transform: uppercase;
+                font-size: var(--text-title);
+            }
+            .section-title {
+                color: var(--title-color);
+                font-size: var(--text-title);
+                margin-bottom: 0;
+            }
+
+            .metadata {
+                text-align: center;
+                color: var(--lightgrey);
+                font-weight: bold;
+                text-transform: uppercase;
+
+                .metadata-text {
+                    font-size: var(--text-metadata);
+                    font-weight: 500;
+                }
+
+                &~.metadata {
+                    padding-top: 1.2rem
+                }
+            }
+
+            .site-info {
+                font-size: var(--text-site-info);
+            }
+        }
+
+        tbody,
+        tbody tr td {
+            border: 1px solid var(--lightgrey);
+        }
+        .order-table-description {
+            font-size: 12px !important;
+        }
+        .order-table {
+            width: 84vw;
+            border-collapse: collapse;
+
+            &.center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .order-table-title {
+                color: var(--lightgrey);
+                font-weight: bold;
+                text-transform: uppercase;
+                padding-top: 1.2rem
+            }
+
+            .descrition {
+                width: var(--table-description-column);
+            }
+
+            .date-description {
+                width: var(--table-date-description-column);
+            }
+
+            .amount {
+                width: var(--table-date-description-column);
+            }
+
+            .quantity {
+                width: var(--table-quantity-column);
+                vertical-align: top;
+                text-align: center;
+            }
+
+            .date {
+                width: var(--table-date-column);
+                vertical-align: top;
+            }
+
+            .total {
+                width: var(--table-totals-column);
+                vertical-align: top;
+                text-align: center;
+            }
+
+            .paid {
+                width: var(--table-totals-column);
+                vertical-align: top;
+                text-align: center;
+            }
+        }
+
+    }
+}
