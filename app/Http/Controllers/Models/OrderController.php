@@ -49,6 +49,7 @@ class OrderController extends Controller
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
         OrderRepository::addIncludedToCustomer($orderCustomer);
+        OrderRepository::assignDefaultRooming($orderCustomer);
         OrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
