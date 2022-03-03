@@ -9,6 +9,7 @@ use App\Models\TransportInventoryTour;
 use App\Models\TransportType;
 use App\Models\TravelClass;
 use App\Repository\TourRepository;
+use StringFormatter;
 
 interface TransportTransformsInterface {
     public static function getSelectTransportTypes($filter);
@@ -144,7 +145,9 @@ class TransportTransforms implements TransportTransformsInterface
                 $subData = [];
                 $subData['id'] = $inventoryTour->id;
                 $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
-                    . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                    . ' - ' .
+                    ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
+                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

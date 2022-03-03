@@ -9,6 +9,7 @@ use App\Models\BoardType;
 use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Repository\AccommodationComponentRepository;
+use App\Repository\Facades\StringFormatter;
 use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {
@@ -124,7 +125,9 @@ class AccommodationTransforms implements AccommodationTransformsInterface
                 $subData = [];
                 $subData['id'] = $inventoryTour->id;
                 $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
-                    . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                    . ' - ' .
+                    ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
+                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

@@ -2,12 +2,14 @@
 
 namespace App\Transforms;
 
+use App\Facades\StringFormatterFacade;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityType;
 use App\Models\OrderCustomer;
 use App\Models\TicketType;
 use App\Repository\TourRepository;
+use StringFormatter;
 
 interface ActivityTransformsInterface {
     public static function getSelectActivityTypes($filter);
@@ -114,13 +116,15 @@ class ActivityTransforms implements ActivityTransformsInterface
         $data = [];
         $owned = [];
         foreach ($orderCustomer->orderActivities as $orderActivity) $owned[] = $orderActivity->tourComponent->id;
-        foreach ($tour->activityInventoryTours as $activityInventoryTour) {
-            if ($activityInventoryTour->tour_component_type  !== "Upgrade") {
-                if (in_array($activityInventoryTour->id, $owned)) continue;
+        foreach ($tour->activityInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type  !== "Upgrade") {
+                if (in_array($inventoryTour->id, $owned)) continue;
                 $subData = [];
-                $subData['id'] = $activityInventoryTour->id;
-                $subData['text'] = $activityInventoryTour . " ({$activityInventoryTour->tour_component_type})"
-                    . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($activityInventoryTour->tour_sales_price);
+                $subData['id'] = $inventoryTour->id;
+                $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
+                    . ' - ' .
+                    ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
+                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }
