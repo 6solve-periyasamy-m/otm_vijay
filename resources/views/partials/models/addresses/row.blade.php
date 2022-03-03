@@ -1,19 +1,16 @@
 <tr>
-    <td><a href="{{ route('addresses.view', ['address' => $address,]) }}">{{ $address_line_1 }}</a></td>
-    <td>{{ $address_line_2 }}</td>
-    <td>{{ $town }}</td>
-    <td>{{ $region }}</td>
-    <td>{{ $country }}</td>
-    <td>{{ $postcode }}</td>
-    <td>
-        <a href="{{route('addresses.edit', ['address' => $address,])}}">
-            <ion-icon name="create"></ion-icon>
+    <td>{{ $address->name ?? 'Not Set' }}</td>
+    <td>{{ $address->locationType ?? 'Not Set' }}</td>
+    <td>{{ $address->addressParent ?? 'Not Set' }}</td>
+    <td>{{ $address->address_line_1 ?? 'Not Set' }}</td>
+    <td>{{ $address->address_line_2 ?? '' }}</td>
+    <td>{{ $address->town ?? '' }}</td>
+    <td>{{ $address->region ?? '' }}</td>
+    <td>{{ $address->country ?? 'Not Set' }}</td>
+    <td>{{ $address->postcode ?? 'Not Set' }}</td>
+    <td class="actions">
+        <a href="{{route('addresses.edit', ['address' => $address,])}}" class="btn btn-outline-success btn-sm mb-1">
+            <i class="icon-note"></i>
         </a>
-        <a href="#"
-           onclick="event.preventDefault();document.getElementById('address-{{ $address->id }}-delete').submit();">
-            <ion-icon name="trash"></ion-icon>
-        </a>
-        <form id="address-{{ $address->id }}-delete" action="{{ route('addresses.delete', ['address' => $address,]) }}"
-              method="POST" style="display: none;">{{ csrf_field() }}</form>
     </td>
 </tr>

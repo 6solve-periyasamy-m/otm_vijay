@@ -78,7 +78,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('pages.otm');
-});
+})->name('homepage');
 
 Route::get('/homepage', function () {
     return view('pages.homepage');
@@ -572,8 +572,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     Route::prefix('locations')->group(function () {
         Route::prefix('addresses')->group(function () {
             Route::get('/', [AddressController::class, 'index'])->name('addresses.all')->middleware('bouncer:Address,read');
-            Route::get('/create', [AddressController::class, 'create'])->name('addresses.create')->middleware('bouncer:Address,create');
-            Route::post('/create', [AddressController::class, 'store'])->name('addresses.store')->middleware('bouncer:Address,create');
+            Route::get('/create/{addressParent}', [AddressController::class, 'create'])->name('addresses.create')->middleware('bouncer:Address,create');
+            Route::post('/create/{addressParent}', [AddressController::class, 'store'])->name('addresses.store')->middleware('bouncer:Address,create');
             Route::prefix('{address}')->group(function () {
                 Route::get('/', [AddressController::class, 'view'])->name('addresses.view')->middleware('bouncer:Address,read');
                 Route::get('/update', [AddressController::class, 'edit'])->name('addresses.edit')->middleware('bouncer:Address,update');
