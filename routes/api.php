@@ -73,7 +73,6 @@ Route::prefix('booking')->group(function () {
     Route::get('/airports', [AirlinesController::class, 'getAirports']);
 
     // Travellers
-    // DEPRECATE Route::get('/tourparty', [CustomerController::class, 'getTravellers']);
     Route::get('/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
     Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadTravellers']);
 

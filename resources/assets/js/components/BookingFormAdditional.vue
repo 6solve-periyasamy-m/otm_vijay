@@ -4,9 +4,7 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="dropdown-button">
                     <p v-if="!leadTraveller && !showAdditional">{{ travellerBookings.length ? `Group Size: ${travellerBookings.length+1}`: 'Please add all travellers to your tour party'}}</p>
-                    <button :disabled="!booking_token" class="btn btn-link collapsed cardhead" @click="toggleAdditional">
-                        <font-awesome-icon icon="book-reader" /> Additional Travellers <div v-if="form_info">on order {{order_id}}</div>
-                    </button>
+                    <button :disabled="!booking_token" class="btn btn-link collapsed cardhead" @click="toggleAdditional"><font-awesome-icon icon="book-reader" /> Additional Travellers </button>
                 </h5>
             </div>
             <div class="card-body" v-show="showAdditional">
@@ -42,11 +40,11 @@
     import axios from 'axios'
     import { bus } from '../bus' 
     export default {
-        props: ['form_info', 'booked', 'tour'],
+        props: ['tour'],
         data() {
             return {
                 debug: true,
-                moduleName: 'Additional',
+                moduleName: 'AdditionalTravellers',
                 booking_token: null,
                 id: 0,
                 formId: 0,
@@ -62,13 +60,14 @@
             this.debug && console.log('*** travellerBookings created: check props', this.tour, this.leadTraveller )
             
             bus.$on('setLeadTraveller', customer => {
-              console.log('setLead', customer)
+              console.log(`${that.moduleName} set the Lead Traveller`, customer)
               that.leadTraveller = customer
             })
 
             bus.$on('setBookingToken', (token) => {
                 that.booking_token = token
                 that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)            
+                that.loadLeadTraveler(token)
                 that.loadTravellerBookings()
             })
             bus.$on('checkEmailUnique', email => {
@@ -82,8 +81,18 @@
         },
         mounted() {
             console.log(`${this.moduleName} mounted`)
+            this.debug && console.log('*** travellerBookings mounted: check token and lead are set', this.booking_token, this.leadTraveller )
         },
         methods: {
+            loadLeadTraveler(token) {
+                let that = this
+                axios.get(`/api/booking/customer/{token}`)
+                    .then(response => {
+                        console.log('FLIGHT GET LEAD', response)
+                        that.leadTraveller = response.data.customer
+                    })
+                    .catch(error => console.log(error))
+            },
             submit() {
                 this.$forceUpdate()
                 this.toggleAdditional()
