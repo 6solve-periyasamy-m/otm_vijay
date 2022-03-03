@@ -22,7 +22,13 @@
                     </div>
                     <div class="col-12">
                         <p>Email Address</p>
-                        <h6 class="fw-bold"><a href="mailto:{{ $customer->email_address }}">{{ $customer->email_address }}</a></h6>
+                        <h6 class="fw-bold">
+                            @if(isset($customer->email_address))
+                            <a href="mailto:{{ $customer->email_address }}">{{ $customer->email_address }}</a>
+                            @else
+                            Email Address Not Set
+                            @endif
+                        </h6>
                     </div>
                     <div class="col-12">
                         <p>Phone Number</p>

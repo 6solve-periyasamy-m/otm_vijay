@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
 use Laravel\Cashier\Billable;
 
 
@@ -43,11 +44,23 @@ class Customer extends Authenticatable
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
             'mobile_number' => 'required',
-            'email_address' => 'required|email|unique:customers,email_address',
-            'gender' => 'required',
-            'emergency_contact_name' => 'required',
-            'emergency_contact_relationship' => 'required',
-            'emergency_contact_telephone' => 'required',
+            'email_address' => 'nullable|email|unique:customers,email_address',
+        ];
+    }
+
+    public function getUpdateValidationRules()
+    {
+        return [
+            'title' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'date_of_birth' => 'required|date',
+            'mobile_number' => 'required',
+            'email_address' => [
+                'nullable',
+                'email',
+                Rule::unique('customers','email_address')->ignore($this->id),
+            ],
         ];
     }
 
