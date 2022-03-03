@@ -154,7 +154,6 @@ import Vue from 'vue'
 export default {
     components: { BookingFormFlightSelector },
     props: {
-        lead_traveller: Object,
         tour: Object
     },
     data() {
@@ -216,6 +215,7 @@ export default {
     },
     mounted() {
         let that = this
+        this.debug>1 && console.log('BookingFormFlights mounted', this.booking_id, that.booking_token, that.leadTraveller);
         bus.$on('debugOverride', (debug) => that.debug = debug)
         this.outbound_flights = this.flights.filter((flight) => flight.flight_type == 'Outbound')
         this.inbound_flights = this.flights.filter((flight) => flight.flight_type == 'Inbound')
@@ -228,15 +228,13 @@ export default {
     },
     created() {
         let that = this
-        this.leadTraveller = this.lead_traveller
-
-        this.debug>1 && console.log('BookingFormFlights created', this.booking_id, that.booking_token, that.leadTraveller);
 
         bus.$on('setBookingToken', (token) => {
             that.booking_token = token
-            that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+            that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
             that.getFlights(that.tour)
             that.loadFlightsForBooking(that.booking_token)
+            that.leadTraveller = that.loadLeadTraveler(that.booking_token)
         })
 
         bus.$on('TravellerBookingsLoaded', travellers => {
@@ -244,20 +242,12 @@ export default {
             that.travellers = travellers
         })
 
-        // bus.$on('setBookingToken', token => {
-        //     that.debug && console.log(`>>>> ${that.moduleName} : setBooking ${token} for tour ${that.tour.name}`)
-        //     that.booking_token = token
-        //    // console.log('BFF created setBooking handler', this.booking.token, this.booking.tour, this.booking.tour.id, this.booking.id)
-        //     that.getFlights(that.tour)
-        //     that.loadFlightsForBooking(that.booking_token)
-        // })
-
         bus.$on('set_outbound', (flight_inventory_tour_id, flight_tour, traveller, custom, token) => {
             if (custom && !traveller) {
                 alert('can not set outbound for a custom traveller without the traveller')
             }
             if (!custom && traveller) {
-                this.debug>1 && console.log('>>>>>> group booking with traveller', traveller)
+                this.debug>1 && console.log('FLIGHTS ... group booking with traveller', traveller)
                 // alert('group booking with traveller set?', traveller)
             }
             that.debug>4 && console.log('BFF set_outbound event: ', flight_inventory_tour_id, flight_tour, traveller, custom)
@@ -327,6 +317,15 @@ export default {
         }
     },
     methods: {
+        loadLeadTraveler(token) {
+            let that = this
+            axios.get(`/api/booking/customer/{token}`)
+                .then(response => {
+                    console.log('FLIGHT GET LEAD', response)
+                    that.leadTraveller = response.data.customer
+                })
+                .catch(error => console.log(error))
+        },
         dmy(s) {
             return dates.makeDateFromString(s)
         },
@@ -337,7 +336,6 @@ export default {
         },
         // filter out already selected item for this traveller
         flightOptionsCustomer(id) {
-            console.log('>>>>>>> ',  !this.travellerFlightOptions[id])
             if (typeof this.travellerFlightOptions[id] == 'undefined' || this.travellerFlightOptions.length == 0 || this.travellerFlightOptions[id] == null) {
                 Vue.set(this.travellerFlightOptions, id, true)
             } else {
@@ -346,7 +344,7 @@ export default {
         },
         hasCustomFlights(traveller) {
             if (traveller.id) {
-                console.log('DOES traveller have custom flights?', traveller)
+                console.log('FLIGHTS : DOES traveller have custom flights?', traveller)
                 // this weirdly sometimes works??? this.flightOptionsCustomer(traveller.order_customer_id)
                 this.flightOptionsCustomer(traveller.id)
                 return true
@@ -434,12 +432,12 @@ export default {
             // loads current fight bookings if there are any
             axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
+                    that.showwait = false
                     that.bookings = response.data.flightBookings
                     that.debug>1 && console.log('loadFlightsForBooking >>>> flights in booking', that.bookings, that.travellers[0])
 
                     if (that.bookings === null || that.bookings.length === 0) {
                         this.debug>1 && console.log('nothing has been booked yet')
-                        that.showwait = false
                         return
                     }
                     this.debug>4 && console.log('BookingFormFlight: flight orders', response)
@@ -457,14 +455,11 @@ export default {
                     }
                     that.debug>2 && console.log('loadFlightsForBooking SELECTED GROUP FLIGHTS', that.selected_outbound_flight, that.selected_inbound_flight)
 
-                        that.showwait = false
                     that.unselected_outbound = that.flights.filter(flight => {
-                        return flight.flight_inventory_tour_id != that.selected_outbound_flight &&
-                            flight.flight_type == 'Outbound'
+                        return flight.flight_inventory_tour_id != that.selected_outbound_flight && flight.flight_type == 'Outbound'
                     })
                     that.unselected_inbound = that.flights.filter(flight => {
-                        return flight.flight_inventory_tour_id != that.selected_inbound_flight &&
-                            flight.flight_type == 'Inbound'
+                        return flight.flight_inventory_tour_id != that.selected_inbound_flight && flight.flight_type == 'Inbound'
                     })
 
                     // process the addons TODO: Change orders -> bookings!
@@ -506,9 +501,9 @@ export default {
                             })
                         }
                     })
-                    //that.showwait = false
                 })
                 .catch(error => {
+                    that.showwait = false
                     console.log('loadFlightsForBooking >>>> error loading flights', error)
                 })
         },
