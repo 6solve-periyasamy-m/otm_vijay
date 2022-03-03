@@ -15,6 +15,7 @@
                         <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
                         <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
                         <label v-else class="valid">Email address</label>
+                        <p>Entering email address is optional</p>
                     </div>
                     <div class="col-sm-6 form-group field-separation">
                         <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
@@ -137,7 +138,7 @@ export default {
             other_number_invalid: false,
             other_number_validation: 'Please enter a valid phone number',
             email_invalid: false,
-            email_validation: 'Please enter your email address',
+            email_validation: 'If you register your Email Address we can retrieve your details',
             validphone: false,
             other_phone_number_type: '',
             otherNumberType: '',
@@ -160,12 +161,12 @@ export default {
         if (!this.traveller.id) {
             this.edit_fields = true
         }
-        this.debug && console.log(`&^&^&^&^&^& ${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
+        this.debug && console.log(`${this.moduleName} mounted for ${this.booking_token}, FormID:${this.form_id} Tour: ${this.tour}  Traveller: ${this.traveller.id}`)
     },
     created() {
         let that = this
         bus.$on('addTraveller', function(formId) {
-            that.debug && console.log('^^^ BookingFormAddTraveller setting', formId, that.form_id)
+            that.debug && console.log('BookingFormAddTraveller: setting', formId, that.form_id)
             if (formId === that.form_id) {
                 console.log('form ' + that.form_id + ' edit activated')
                 that.edit_fields = true
@@ -174,7 +175,7 @@ export default {
     },
     computed: {
         validForm: function () {
-            this.debug && console.log('validForm called', this)
+            this.debug && console.log('BookingFormAddTraveller: validForm called', this)
             return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
         },
         mobileNumberInvalid: function () {
@@ -198,7 +199,9 @@ export default {
                 }
             })
             console.log('dob fields: ', that.date_of_birth)
-            that.date_of_birth = dates.isoString(that.date_of_birth)
+            if (that.date_of_birth != undefined && that.date_of_birth != null) {
+                that.date_of_birth = dates.isoString(that.date_of_birth)
+            }
         },
         validPhone(e) {
             // valid_uk appears to be fairly accurate
@@ -209,7 +212,7 @@ export default {
                 case 'mobile_number':
                     if (!valid_uk.test(this.mobile_number)) {
                         this.mobile_number_invalid = true
-                        this.debug && console.log('Invalid!', this.mobile_number)
+                        this.debug && console.log('BookingFormAddTraveller: Invalid!', this.mobile_number)
                         return false
                     }
                     this.mobile_number_invalid = false
@@ -224,7 +227,7 @@ export default {
                 default:
                     alert(field + ' not handled in switch')
             }
-            this.debug && console.log(field, 'validated')
+            this.debug && console.log(field, 'BookingFormAddTraveller: validated')
             return true
         },
         validEmail() {
@@ -242,6 +245,7 @@ export default {
             const valid = valid_email.test(this.email_address)
             //this.debug && console.log(this.email_address, valid)
             this.email_invalid = !valid
+
             // is this an existing customer?
             axios.post('/api/booking/customer/email/check', {
                 email_address: this.email_address
@@ -285,7 +289,7 @@ export default {
                     date_of_birth: this.date_of_birth
                 })
                 .then(response => {
-                    console.log('response', response.data.success, response.data)
+                    console.log('additional traveller response', response.data.success, response.data)
                     if (response.data.success) {
                         that.include = 'checked'
                         that.edit_fields = false

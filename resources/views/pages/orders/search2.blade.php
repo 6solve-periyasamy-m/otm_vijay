@@ -34,6 +34,7 @@
                     <th scope="col">Lead Booker</th>
                     <th scope="col">Booking Reference</th>
                     <th scope="col">Tour</th>
+                    <th scope="col">Passengers</th>
                     <th scope="col">Order Status</th>
                 </tr>
                 </thead>
@@ -48,6 +49,7 @@
                         <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
                         <td><a href="{{ route('orders.view', ['order' => $order->id]) }}" class="link-info"><u>{{ $order->booking_reference }}</u></a></td>
                         <td>{{ $order->tour->name }}</td>
+                        <td>{{ $order->getCustomerCount() }}</td>
                         <td><h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status'] }}</h6></td>
                     </tr>
                 @endforeach

@@ -11,6 +11,31 @@
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');
 
+.dp-down {
+    position: relative;
+    display: inline-block;
+}
+
+.dp-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dp-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dp-content a:hover { background-color: #ddd; }
+
+.dp-down:hover .dp-content {display: block;}
+
 a {
     text-decoration: none!important;
 }

@@ -6,9 +6,7 @@ use App\Http\Gateways\StripeGateway;
 use App\Models\Customer;
 use App\Repository\OrderRepository;
 use Auth;
-use App\Models\Booking;
 use Illuminate\Http\Request;
-use App\Repository\BookingRepository;
 
 class CustomerPortalController extends Controller
 {
@@ -73,6 +71,10 @@ class CustomerPortalController extends Controller
         if ($amount > $order->remaining) {
             return back()->withErrors('Cannot pay more than you owe');
         }
+<<<<<<< HEAD
         return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', $this->getCustomer()->id);
+=======
+        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order, 'Installment', $this->getCustomer()->id);
+>>>>>>> main
     }
 }

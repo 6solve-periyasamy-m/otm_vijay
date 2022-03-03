@@ -139,7 +139,7 @@ class CustomerController extends Controller
             'address_line_2' => $request->input('home_address_line_2'),
             'town' => $request->input('home_town'),
             'region' => $request->input('home_region'),
-            'country_id' => $request->input('home_country'),
+            'country' => $request->input('home_country'),
             'postcode' => $request->input('home_postcode'),
         ]);
         $customer->homeAddress->save();
@@ -152,7 +152,7 @@ class CustomerController extends Controller
                 'address_line_2' => $request->input('billing_address_line_2'),
                 'town' => $request->input('billing_town'),
                 'region' => $request->input('billing_region'),
-                'country_id' => $request->input('billing_country'),
+                'country' => $request->input('billing_country'),
                 'postcode' => $request->input('billing_postcode'),
             ]);
             $customer->billingAddress->save();
