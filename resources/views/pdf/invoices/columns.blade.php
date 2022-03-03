@@ -34,7 +34,7 @@ $order = $invoice->order;
                     </div>
                     <div class="flex-container">
                         <div class="flex-items">
-                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ URL::to('/') }}">{{ URL::to('/') }}</a>
+                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ \App\Repository\SettingsRepository::getOrDefault('company.url', URL::to('/')) }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.url', URL::to('/')) }}</a>
                             <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}</a>
                             <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
@@ -72,6 +72,7 @@ $order = $invoice->order;
                         <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
                         <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.city', 'Company City Not Set') }}</div>
                         <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.region', 'Company Region Not Set') }}</div>
+                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.country', 'Company Country Not Set') }}</div>
                         <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', 'Company Postcode Not Set') }}</div>
                     </div>
                 </div>
@@ -202,7 +203,7 @@ $order = $invoice->order;
                 <table class="order-table center">
                     <thead>
                         <tr>
-                            <td class="order-table-title date">Date</td>
+                            <td class="order-table-title date">Due Date</td>
                             <td class="order-table-title amount">Amount</td>
                             <td class="order-table-title paid">Paid</td>
                         </tr>
@@ -216,7 +217,7 @@ $order = $invoice->order;
                             @foreach($invoice->installments as $installment)
                                 <tr>
                                     <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
-                                    <td class="amount">{!! nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
+                                    <td class="amount">{!! array_key_exists('description',$installment) ? nl2br($installment['description']) : nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
                                     <td class="paid">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
                                 </tr>
                             @endforeach
