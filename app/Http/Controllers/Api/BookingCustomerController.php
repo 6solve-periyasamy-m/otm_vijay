@@ -162,7 +162,6 @@ class BookingCustomerController extends ApiController
 
         // if the customer exists, update the addresses
         if (isset($customer) && isset($customer->email_address)) {
-Log::debug('found lead traveller customer record', [$customer->email_address]);
             if ($isLead) {
                 $addressIds = $this->update_addresses($request, $customer);
                 // MAR record may have been created
@@ -388,7 +387,6 @@ Log::debug('found lead traveller customer record', [$customer->email_address]);
         } else {
             Log::info('NO LOGIN TOKEN TO UPDATE:' . $request->login_token);
         }
-Log::debug('updateLoginToken: customer', [$customer]);
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
