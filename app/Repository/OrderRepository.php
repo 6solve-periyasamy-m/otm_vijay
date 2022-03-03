@@ -18,12 +18,15 @@ use App\Models\OrderTransport;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use App\Models\RoomType;
+use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Log;
 use mikehaertl\pdftk\Pdf;
+use Storage;
 use Throwable;
+use ZipArchive;
 
 class OrderRepository
 {
@@ -756,7 +759,7 @@ class OrderRepository
         return $ids;
     }
 
-    public static function generateAtolCertificate(Order $order)
+    private static function generateAtolCertificate(Order $order): Pdf
     {
         $data = self::generateFlightList($order);
         $protected = $data['normal'];
@@ -774,7 +777,44 @@ class OrderRepository
             'excess' => $excess,
         ])->flatten();
 
-        return $pdf->send();
+        return $pdf;
+    }
+
+    public static function showAtolCertificate(Order $order)
+    {
+        return self::generateAtolCertificate($order)->send();
+    }
+
+    public static function generateAllAtolCertificates(Tour $tour): ?string
+    {
+        Storage::makeDirectory('uploads/atol');
+        while (true) {
+            try {
+                $filename = str_replace(' ', '_', strtolower($tour->name)) . '-' . now()->unix();
+                $directory = 'public/' . $filename;
+                if (Storage::exists($directory)) continue;
+                Storage::makeDirectory($directory);
+                break;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+        foreach ($tour->orders as $order) {
+            if ($order->cancelled) continue;
+            $atol = self::generateAtolCertificate($order);
+            $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
+        }
+        $zip = new ZipArchive();
+        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
+            foreach (Storage::files($directory) as $file) {
+                $exploded = explode('/', $file);
+                $zip->addFile(Storage::path($file), trim(end($exploded)));
+            }
+            $zip->close();
+            Storage::deleteDirectory($directory);
+            return asset('uploads/atol/' . $filename . '.zip');
+        }
+        return null;
     }
 
     private static function generateFlightList(Order $order): array

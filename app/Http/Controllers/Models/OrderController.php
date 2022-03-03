@@ -67,7 +67,7 @@ class OrderController extends Controller
 
     public function atol(Order $order)
     {
-        return OrderRepository::generateAtolCertificate($order);
+        return OrderRepository::showAtolCertificate($order);
     }
 
     public function edit(Order $order)

@@ -25,7 +25,8 @@
         "silber/bouncer": "v1.0.0-rc.11",
         "ext-json": "*",
         "spatie/laravel-stripe-webhooks": "^2.6",
-        "stripe/stripe-php": "^7.110"
+        "stripe/stripe-php": "^7.110",
+        "ext-zip": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
