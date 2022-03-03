@@ -14,11 +14,15 @@
             </a>
         </div>
         @if(Auth::check())
-            <div class="nav-item">
-                <a class="nav-item nav-link" href="#">
+            <div class="nav-item dp-down">
+                <a class="nav-item nav-link dp-button" href="#">
                     <span class='text-light'>{{ Auth::user()->name }}</span>
                     <img src="{{ asset(Auth::user()->avatar) }}" class="img-thumbnail">
                 </a>
+                <div class="dp-content">
+                    <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}"><i class="icon-note"></i>&nbsp;Edit Account</a>
+                    <a href="#" onclick="event.preventDefault();logout();"><i class="icon-login"></i>&nbsp;Logout</a>
+                </div>
             </div>
         @else
             <div class="nav-item">
@@ -29,3 +33,11 @@
         @endif
     </div>       
 </div>
+
+@push('footer-stack')
+    <script type="text/javascript">
+        function logout() {
+            $.post('{{ route('logout') }}', {'_token': '{{ csrf_token() }}',}).then(function () { window.location = '{{ route('homepage') }}'; });
+        }
+    </script>
+@endpush
