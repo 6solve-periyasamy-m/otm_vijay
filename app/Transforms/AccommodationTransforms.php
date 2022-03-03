@@ -119,11 +119,12 @@ class AccommodationTransforms implements AccommodationTransformsInterface
         if (!isset($group)) return $data;
         foreach ($group->rooms as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type === "Add-on") {
+            if ($inventoryTour->tour_component_type !== "Upgrade") {
                 if (in_array($inventoryTour->id, $owned)) continue;
                 $subData = [];
                 $subData['id'] = $inventoryTour->id;
-                $subData['text'] = $inventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
+                    . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

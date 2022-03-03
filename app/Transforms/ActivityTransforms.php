@@ -115,11 +115,12 @@ class ActivityTransforms implements ActivityTransformsInterface
         $owned = [];
         foreach ($orderCustomer->orderActivities as $orderActivity) $owned[] = $orderActivity->tourComponent->id;
         foreach ($tour->activityInventoryTours as $activityInventoryTour) {
-            if ($activityInventoryTour->tour_component_type === "Add-on") {
+            if ($activityInventoryTour->tour_component_type  !== "Upgrade") {
                 if (in_array($activityInventoryTour->id, $owned)) continue;
                 $subData = [];
                 $subData['id'] = $activityInventoryTour->id;
-                $subData['text'] = $activityInventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($activityInventoryTour->tour_sales_price);
+                $subData['text'] = $activityInventoryTour . " ({$activityInventoryTour->tour_component_type})"
+                    . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($activityInventoryTour->tour_sales_price);
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

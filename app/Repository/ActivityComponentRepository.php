@@ -50,7 +50,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
-            if ($component->tour_component_type == "Add-on") {
+            if ($component->tour_component_type  !== "Upgrade") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->activityInventory->activity->name;
