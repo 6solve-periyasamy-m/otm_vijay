@@ -762,7 +762,7 @@ class OrderRepository
             self::addRoomsToGroup($orderCustomer->order, $group);
             return true;
         } catch (RoomingFailedException $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             return false;
         }
     }
