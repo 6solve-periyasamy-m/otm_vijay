@@ -39,7 +39,7 @@ class CustomerImport implements ToModel
             'postcode' => trim($row[20]),
         ]);
         $customer = Customer::create([
-            'email_address' => trim($row[0]),
+            'email_address' => empty(trim($row[0])) ? null : trim($row[0]),
             'password' => Hash::make(Str::random(60)),
             'title' => trim($row[1]),
             'first_name' => trim($row[2]),
