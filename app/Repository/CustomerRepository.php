@@ -48,7 +48,8 @@ class CustomerRepository implements CustomerRepositoryInterface
             }
         }
         try {
-            $customer = $this->model->save();
+            $this->model->save();
+            $this->logging && Log::debug('CustomerRepo: create returning customer: ', [$this->model]);
             return $this->model;
         } catch (\Exception $e) {
             Log::error('Error creating customer record, details: '. $e->getMessage());
@@ -65,11 +66,11 @@ class CustomerRepository implements CustomerRepositoryInterface
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
                 // $this->model->$field = $customer[$field];
                 $customerRecord->$field = $customer[$field];
-                $this->logging && Log::info('check model', [$field, $customer[$field], $this->model->$field]);
+                $this->logging && Log::info('check field ', [$field, $customer[$field], $this->model->$field]);
+            } else {
+                $this->logging && Log::info('no update data for field ', [$field, $this->model->$field]);
             }
         }
-        // force the billing_address_id (as it is not in the request) 
-        $customerRecord->billing_address_id = $customer['billing_address_id'];
         try {
             $customerRecord->save();
             $this->logging && Log::info('customer saved: ', $this->model->toArray());

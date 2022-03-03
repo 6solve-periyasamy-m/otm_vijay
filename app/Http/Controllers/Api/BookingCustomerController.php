@@ -95,6 +95,7 @@ class BookingCustomerController extends ApiController
      */
     private function storeOrUpdateOrderCustomer($customer, Request $request, $isLead = false)
     {
+        throw new Exception('BookingCustomerController::storeOrUpdateCustomer is deprecated!');
         if (empty($request->order_id)) {
             throw new \Exception('storeOrUpdateOrderCustomer has no order ID');
         }
@@ -180,7 +181,8 @@ class BookingCustomerController extends ApiController
         $customer = Customer::where('email_address', $request->email_address)->first();
 
         // if the customer exists, update the addresses
-        if ($customer) {
+        if (isset($customer) && isset($customer->email_address)) {
+Log::debug('found lead traveller customer record', [$customer->email_address]);
             if ($isLead) {
                 $addressIds = $this->update_addresses($request, $customer);
                 // MAR record may have been created
@@ -193,6 +195,7 @@ class BookingCustomerController extends ApiController
             }
             $customer = $customerRepo->update($customerData);
         } else {
+Log::debug('creating traveller customer record', [$request->email_address, $isLead, $token]);
             $customerData['email_address'] = $request->email_address;
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
@@ -209,11 +212,15 @@ class BookingCustomerController extends ApiController
             }
             $customerData['home_address_id'] = $addressIds['home_address_id'];
             $customerData['billing_address_id'] = $addressIds['billing_address_id'];
+Log::debug('create customer with ', $customerData);
             $customer = $customerRepo->create($customerData);
+Log::debug('created customer ', [$customer]);
         }
 
-        $bookingRepo = new BookingRepository();
-        $booking = $bookingRepo->findBookingByToken($token);
+        //$bookingRepo = new BookingRepository();
+        ////$booking = $bookingRepo->findBookingByToken($token);
+        $booking = BookingRepository::findBooking($token);
+Log::debug('BOOKING FOUND: ', [$token, $booking]);
         if ($booking) {
             $bookingTraveller = new BookingTravellerRepository();
             $newTraveller = $bookingTraveller->create($booking->id, $customer->id);
@@ -263,7 +270,7 @@ class BookingCustomerController extends ApiController
         // we get null address IDs i.e. for an additional traveller - create a minimal address
         // BUT this is an update: therefore we should have an address field and not having one is an error
         // HOWEVER: it is not a fatal condition, just create the MAR Record
-        $this->debug && Log::warning('When update_addresses called, the customer home_address ID was null, creating the address:', [$customer]);
+        $this->logging == 'customer' && Log::warning('When update_addresses called, the customer home_address ID was null, creating the address:', [$customer]);
         if (!$customer->home_address_id) {
             $addressIds = $this->create_addresses($request);
             $customer->home_address_id = $addressIds['home_address_id'];
@@ -283,7 +290,7 @@ class BookingCustomerController extends ApiController
                 'country_id' => $request->country_id,
                 'postcode' => $request->postcode,
                 'same_address' => $request->same_address,
-                'address_parent_id' => $customer->id,
+                'address_parent_id' => 1,
                 'name' => 'Home Address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
             $home_address = $addressRepo->update($newHomeAddress);
@@ -301,7 +308,7 @@ class BookingCustomerController extends ApiController
                 'region' => $request->region,
                 'country_id' => $request->country_id,
                 'postcode' => $request->postcode,
-                'address_parent_id' => $customer->id,
+                'address_parent_id' => 1,
                 'name' => 'Billing address: ' . $customer->first_name . ' ' . $customer->last_name,
             ];
         } else {
@@ -339,7 +346,7 @@ class BookingCustomerController extends ApiController
      * @return array home and billing address_ids
      */
     private function create_addresses(Request $request) {
-        $this->debug && Log::debug('Create a new home address using '. $request->address_line_1);
+        $this->logging == 'customer' && Log::debug('Create a new home address using '. $request->address_line_1);
         $addressRepo = new AddressRepository();
         $address_record = [
             'name' => 'Home address',
@@ -415,7 +422,7 @@ class BookingCustomerController extends ApiController
         } else {
             Log::info('NO LOGIN TOKEN TO UPDATE:' . $request->login_token);
         }
-
+Log::debug('updateLoginToken: customer', [$customer]);
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 

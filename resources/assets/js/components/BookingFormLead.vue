@@ -263,7 +263,7 @@ export default {
     props: ['booked', 'tour'],
     data() {
         return {
-            debug: false,
+            debug: true,
             booking_token: null,
             moduleName: 'leadTraveller',
             countries: [],
@@ -332,8 +332,8 @@ export default {
     },
     created() {
         let that = this
-        bus.$on('setBookingToken', (bookingData) => {
-            that.booking_token = bookingData
+        bus.$on('setBookingToken', token => {
+            that.booking_token = token
             that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
         })
         bus.$on('leadTravellerLoaded', (customer) => {
@@ -562,7 +562,7 @@ export default {
                     bus.$emit('bookingCreated', booking)
                 })
                 .catch(error => {
-                    console.log('error createBooking', eachQuarterOfInterval)
+                    console.log('error createBooking', error)
                 })
         },
 
@@ -595,6 +595,7 @@ export default {
             }
             */
             axios.post('/api/booking/lead-traveller', {
+                    booking_token: this.booking_token,
                     title: this.title,
                     first_name: this.first_name,
                     middle_names: this.middle_names,
@@ -620,7 +621,6 @@ export default {
                     billing_region: this.billing_region,
                     billing_town: this.billing_town,
                     billing_postcode: this.billing_postcode,
-                    booking_token: this.booking_token,
                     tour: this.tour
                 })
                 .then(response => {

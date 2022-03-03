@@ -12,18 +12,18 @@
             <div class="row">
                 <div v-if="showSummary" class="summary">
                     <div v-if="booking != undefined">
-                        <div v=if="booking.travellers != undefined">
+                        <div v-if="booking.travellers != undefined">
                             <div class="travellers" v-for="traveller in booking.travellers" :key="traveller.customer_id">
                                 {{traveller.customer.first_name}} {{traveller.customer.last_name}}
                             </div>
                         </div>
-                        <div v=if="booking.accommodation != undefined">
+                        <div v-if="booking.accommodation != undefined">
                             <h3>Accommodations</h3>
                             <div class="block accommodations" v-for="accommodation in booking.accommodations" :key="accommodation.accmoodation_inventory_tour_id">
                               {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
                             </div>
                         </div>
-                        <div v=if="booking.flights != undefined">
+                        <div v-if="booking.flights != undefined">
                             <h3>Group Flights Booking</h3>
                             <div class="block flights" v-for="flight in booking.flights" :key="flight.id">
                                 <div v-for="f in flight">
@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v=if="booking.activities != undefined">
+                        <div v-if="booking.activities != undefined">
                             <h3>Activities</h3>
                             <div class="block activities" v-for="activity in booking.activities" :key="activity.id">
                                 {{activity.name}} {{activity.ticket_type_name}}
@@ -190,11 +190,11 @@ export default {
         this.csrf_token = csrf
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
-            that.debug && console.log(`>>>><<<<>>>>> ${that.moduleName} module, booking ${that.booking_token}`)
+            that.debug && console.log(`${that.moduleName} module, booking ${that.booking_token}`)
             that.loadBooking(that.booking_token)
         })
         bus.$on("ReloadBooking", (token) => {
-            this.debug>2 && console.log(">>>> Payment: booking reloaded", token);
+            this.debug>2 && console.log("Payment: booking reloaded", token);
             if (this.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
                 this.loadBooking(this.booking_token)
             } else {

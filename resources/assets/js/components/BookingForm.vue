@@ -12,8 +12,8 @@
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
                         <div v-if="tour && bookingToken">
-                            <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
-                            <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
+                            <booking-form-additional :tour="tour"></booking-form-additional>
+                            <booking-form-flights :tour="tour"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity :tour="tour"></booking-form-activity>
                             <booking-form-transport :tour="tour"></booking-form-transport>
@@ -42,7 +42,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 9,
             formInfo: false,
             bookingId: '',
             leadTraveller: null,
@@ -62,21 +62,23 @@ export default {
             termsaccepted: false
         }
     },
-    async created() {
+    created() {
         let that = this
-        this.debug && console.log('1) BookingForm created for tour:', this.tour)
-        bus.$emit('debugOverride', this.debug)
+        this.debug && console.log('BookingForm created for tour:', this.tour)
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
         })
         bus.$on('TermsAgreed', function(state) {
           that.termsaccepted = state
         })
-
+        bus.$emit('debugOverride', this.debug)
         that.bookingToken = getCookie(that.tokenName); 
-        this.debug && console.log('Cookie read:', that.bookingToken)
+
+        this.debug && console.log('BookingForm mounted for tour:', this.tour)
+        this.debug && console.log('Form Cookie read:', that.bookingToken)
 
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
+            this.debug && console.log('Form Data requested with token:', that.bookingToken)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
                 if (response.data.success) {
@@ -93,16 +95,16 @@ export default {
                     console.log('**** requested token but no success, resetting it')
                     that.bookingToken = null
                     that.resetToken()
-                    //that.createBooking(that.bookingToken)
+                    that.createBooking(that.bookingToken)
                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
             })
         } else {
-            console.log('BookingForm: booking token not present')
+            console.log('BookingForm: no booking token set, resetting...')
             that.resetToken()
-            //that.createBooking(that.bookingToken)
+            that.createBooking(that.bookingToken)
         }
     },
     methods: {

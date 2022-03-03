@@ -36,8 +36,11 @@ class BookingRepository implements BookingRepositoryInterface
 
     public function findBookingByToken($token)
     {
+
         $booking = $this->model->where('token', $token)->first();
-        if (isset($booking) && isset($booking->customer)) {
+
+        Log::debug('findBookingByToken:', [$token, $booking, isset($booking->customer), isset($booking->customer_id)]);
+        if (isset($booking) && isset($booking->customer_id)) {
             $booking->customer->home_address = Address::find($booking->customer->home_address_id);
             $booking->customer->billing_address = Address::find($booking->customer->billing_address_id);
             return $booking;
@@ -55,7 +58,14 @@ class BookingRepository implements BookingRepositoryInterface
      */
     public static function findBooking($token)
     {
-        return (new BookingRepository)->findBookingByToken($token);
+        try {
+            $booking = Booking::where('token', $token)->first();
+            return $booking;
+        } catch (Exception $e) {
+            Log::error("error finding booking for $token", $e->getMessage());
+        }
+        return null;
+        //return (new BookingRepository)->findBookingByToken($token);
     }
 
     /**
