@@ -18,12 +18,16 @@ use App\Models\OrderTransport;
 use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use App\Models\RoomType;
+use App\Models\Tour;
 use App\Repository\Facades\StringFormatter;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Log;
+use mikehaertl\pdftk\Pdf;
+use Storage;
 use Throwable;
+use ZipArchive;
 
 class OrderRepository
 {
@@ -96,16 +100,18 @@ class OrderRepository
         ]);
     }
 
-    public static function saveInvoice(Order $order) {
+    public static function saveInvoice(Order $order)
+    {
         $invoice = self::generateInvoice($order);
         $invoice->save();
         return $invoice;
     }
 
-    public static function snapshotInstallments(Order $order) {
+    public static function snapshotInstallments(Order $order)
+    {
         $data = [['due' => 'With Order',
             'description' => self::buildInstallmentString('Deposit', $order, $order->deposit, $order->calculated_deposit),
-            'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit, ]];
+            'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit,]];
         foreach ($order->installments as $installment) {
             $data[] = ['due' => $installment->due_on, 'description' => self::buildInstallmentString('Installment', $order, $installment->amount, $installment->calculated_amount),
                 'amount' => $installment->calculated_amount, 'paid' => $installment->paid,];
@@ -181,7 +187,9 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $name = $group->name . ': ';
-        foreach ($group->orderCustomers as $orderCustomer) { $name .= $orderCustomer->customer_name . ', '; }
+        foreach ($group->orderCustomers as $orderCustomer) {
+            $name .= $orderCustomer->customer_name . ', ';
+        }
         foreach ($group->rooms as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type != 'Included') {
@@ -578,7 +586,8 @@ class OrderRepository
      * Clone tour installments into order installments
      * @param Order $order
      */
-    public static function cloneInstallments(Order $order) {
+    public static function cloneInstallments(Order $order)
+    {
         foreach ($order->tour->paymentInstallments as $installment) {
             $oInstallment = OrderInstallment::make([
                 'amount' => $installment->cost,
@@ -589,23 +598,26 @@ class OrderRepository
     }
 
     // TODO: REWORK
-    public static function getOrderFromBookingReference(string $bookingReference) : ?Order
+    public static function getOrderFromBookingReference(string $bookingReference): ?Order
     {
         return Order::where('booking_reference', '=', $bookingReference)->first();
     }
 
-    public static function isLeadBooker(Order $order, Customer $customer) : bool {
+    public static function isLeadBooker(Order $order, Customer $customer): bool
+    {
         return $order->leadBooker->customer_id == $customer->id;
     }
 
-    public static function isOrderCustomer(Order $order, Customer $customer) : bool {
+    public static function isOrderCustomer(Order $order, Customer $customer): bool
+    {
         foreach ($order->orderCustomers as $orderCustomer) {
             if ($orderCustomer->customer_id == $customer->id) return true;
         }
         return false;
     }
 
-    public static function getCustomersForOrder(Order $order) {
+    public static function getCustomersForOrder(Order $order)
+    {
         $customers = [];
         foreach ($order->orderCustomers as $orderCustomer) {
             $customers[] = $orderCustomer->customer;
@@ -648,11 +660,14 @@ class OrderRepository
      * @throws Throwable
      * @var Group $group
      */
-    public static function buildGroupRooming(Order $order, $data) {
+    public static function buildGroupRooming(Order $order, $data)
+    {
         try {
             DB::beginTransaction();
             $inflated = self::inflateRoomingData($data);
-            foreach ($order->groups() as $group) { $group->delete(); }
+            foreach ($order->groups() as $group) {
+                $group->delete();
+            }
             foreach ($inflated as $groupData) {
                 $group = Group::create([
                     'room_type_id' => $groupData->room_type->id,
@@ -722,7 +737,7 @@ class OrderRepository
             $grouping = ['name' => $group->name, 'roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
             $customers = [];
             foreach ($group->orderCustomers as $orderCustomer) {
-                $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+                $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture),];
                 $usedIds[] = $orderCustomer->id;
             }
             $grouping['customers'] = $customers;
@@ -730,14 +745,14 @@ class OrderRepository
         }
         $data['rooms'] = [];
         foreach (AccommodationComponentRepository::getAvailableRoomTypes($order->tour) as $roomType) {
-            $data['rooms'][] = ['id' => $roomType->id, 'name' => $roomType->name, 'size' => $roomType->maximum_occupancy, ];
+            $data['rooms'][] = ['id' => $roomType->id, 'name' => $roomType->name, 'size' => $roomType->maximum_occupancy,];
         }
         $data['groups'] = $groups;
         $data['customers'] = [];
         $data['unused'] = [];
         $unused = array_diff(self::getOrderCustomerIds($order), $usedIds);
         foreach ($order->orderCustomers as $orderCustomer) {
-            $customerData = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture), ];
+            $customerData = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture),];
             $data['customers'][] = $customerData;
             if (in_array($orderCustomer->id, $unused)) {
                 $data['unused'][] = $customerData;
@@ -756,5 +771,99 @@ class OrderRepository
         return $ids;
     }
 
+    private static function generateAtolCertificate(Order $order): Pdf
+    {
+        $data = self::generateFlightList($order);
+        $protected = $data['normal'];
+        $excess = $data['excess'];
+        $pdf = new Pdf(\Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
+        $pdf->fillForm([
+            'companyName' => SettingsRepository::get('company.name'),
+            'issuerName' => SettingsRepository::get('atol.issuer'),
+            'issueDate' => \StringFormatter::formatDate($order->ordered_on),
+            'atolNumber' => SettingsRepository::get('atol.number'),
+            'reference' => $order->booking_reference,
+            'customerNames' => $order->customer_names,
+            'customerCount' => $order->getCustomerCount(),
+            'protected' => $protected,
+            'excess' => $excess,
+        ])->flatten();
 
+        return $pdf;
+    }
+
+    public static function showAtolCertificate(Order $order)
+    {
+        return self::generateAtolCertificate($order)->send();
+    }
+
+    public static function generateAllAtolCertificates(Tour $tour): ?string
+    {
+        Storage::makeDirectory('uploads/atol');
+        while (true) {
+            try {
+                $filename = str_replace(' ', '_', strtolower($tour->name)) . '-' . now()->unix();
+                $directory = 'public/' . $filename;
+                if (Storage::exists($directory)) continue;
+                Storage::makeDirectory($directory);
+                break;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+        foreach ($tour->orders as $order) {
+            if ($order->cancelled) continue;
+            $atol = self::generateAtolCertificate($order);
+            $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
+        }
+        $zip = new ZipArchive();
+        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
+            foreach (Storage::files($directory) as $file) {
+                $exploded = explode('/', $file);
+                $zip->addFile(Storage::path($file), trim(end($exploded)));
+            }
+            $zip->close();
+            Storage::deleteDirectory($directory);
+            return asset('uploads/atol/' . $filename . '.zip');
+        }
+        return null;
+    }
+
+    private static function generateFlightList(Order $order): array
+    {
+        $inbound = [];
+        $outbound = [];
+        foreach ($order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->orderFlights as $orderFlight) {
+                if ($orderFlight->tourComponent->flight_type == 'Inbound') {
+                    $inbound[$orderFlight->tourComponent->id] = $orderFlight->tourComponent;
+                } elseif ($orderFlight->tourComponent->flight_type == 'Outbound') {
+                    $outbound[$orderFlight->tourComponent->id] = $orderFlight->tourComponent;
+                }
+            }
+        }
+        $string = '';
+        $excessString = '';
+        $excess = 3 + (count($outbound) < 3 ? 3 - count($outbound) : 0);
+        foreach ($inbound as $tourComponent) {
+            if ($excess > 0) {
+                $string .= $tourComponent->atol_string . "\n";
+                $excess--;
+            }
+            else {
+                $excessString .= $tourComponent->atol_string . "\n";
+            }
+        }
+        $excess += 3;
+        foreach ($outbound as $tourComponent) {
+            if ($excess > 0) {
+                $string .= $tourComponent->atol_string . "\n";
+                $excess--;
+            }
+            else {
+                $excessString .= $tourComponent->atol_string . "\n";
+            }
+        }
+        return ['normal' => $string, 'excess' => $excessString,];
+    }
 }

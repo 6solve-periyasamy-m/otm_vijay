@@ -62,14 +62,18 @@
                 <p>Description</p>
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
-            @can('update', \App\Models\Tour::class)
             <div class="col-12">
+                @can('update', \App\Models\Tour::class)
                 <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
                     <i class="icon-note"></i>
                     <span>Edit Tour</span>
                 </a>
+                @endcan
+                <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
+                    <i class="icon-folder-alt"></i>
+                    <span>Export ATOL Certificates</span>
+                </a>
             </div>
-            @endcan
         </div>
     </div>
     <hr class="splitter"/>
