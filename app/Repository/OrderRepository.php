@@ -120,6 +120,10 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $included = "Base Components Include:\n";
+        if ($orderCustomer->hasSurcharge) {
+            $data[] = ['description' => 'Single Occupancy Surcharge', 'cost' => $orderCustomer->single_occupancy_surcharge,];
+            $totalCost += $orderCustomer->single_occupancy_surcharge;
+        }
         foreach ($orderCustomer->orderAccommodation() as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type == 'Included') {
@@ -373,6 +377,7 @@ class OrderRepository
         $total = 0;
         foreach ($order->orderCustomers as $orderCustomer) {
             $customerValue = $orderCustomer->tour_cost;
+            if ($orderCustomer->has_surcharge) $customerValue += $orderCustomer->single_occupancy_surcharge;
             $customerData = [];
             $data = self::getCustomerAdditionals($orderCustomer);
             $customerData['upgrades'] = $data['upgrades'];
