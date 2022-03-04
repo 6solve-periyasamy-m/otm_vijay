@@ -8,6 +8,7 @@ use App\Http\Controllers\Customer\CustomerForgotPasswordController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerPortalController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
+use App\Http\Controllers\Customer\CustomerTourController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
@@ -731,6 +732,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/finances', [CustomerFinancesController::class, 'show'])->name('finances');
         Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
+        Route::get('/itinerary/{reference}', [CustomerTourController::class, 'showItinerary'])->name('itinerary');
     });
     Route::prefix('password')->name('password.')->group(function() {
         Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
