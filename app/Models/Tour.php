@@ -139,5 +139,10 @@ class Tour extends Model
     public function getRemainingPercentageAttribute()
     {
         return round(($this->remaining_installment / $this->base_price_per_person) * 100, 2);
-}
+    }
+
+    public function getHasAtolCertificateAttribute(): bool
+    {
+        return $this->flightInventoryTours()->count() > 0;
+    }
 }

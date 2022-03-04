@@ -841,6 +841,7 @@ class OrderRepository
         }
         foreach ($tour->orders as $order) {
             if ($order->cancelled) continue;
+            if (!$order->has_atol_certificate) continue;
             $atol = self::generateAtolCertificate($order);
             $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
         }
@@ -893,5 +894,17 @@ class OrderRepository
             }
         }
         return ['normal' => $string, 'excess' => $excessString,];
+    }
+
+    public static function hasFlight(Order $order): bool
+    {
+        $query = DB::table('order_flights');
+        $query->join('order_customers', 'order_flights.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('orders.id', '=', $order->id);
+        $query->whereNull('order_flights.deleted_at');
+        $query->select('order_flights.id');
+        $results = $query->get();
+        return $results->count() > 0;
     }
 }
