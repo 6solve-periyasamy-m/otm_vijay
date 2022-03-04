@@ -27,7 +27,7 @@
             <div class="menu-item" onclick="window.location = '{{ route('customer.finances') }}'">
                 <div class="menu-text">
                     <span class="icon-credit-card menu-icon"></span>
-                    <span>Your Bills</span>
+                    <span>Your Finance</span>
                 </div>
             </div>
             <div class="menu-item">
