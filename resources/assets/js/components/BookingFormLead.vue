@@ -43,9 +43,9 @@
                     </div>
                 </div>
                 <div v-if="booking_token && !show_traveller">
-                    <div>
+                    <p class="caption">
                         <font-awesome-icon icon="arrow-right" /> Please fill in all sections
-                    </div>
+                    </p>
                     <div v-if="!booking_token">
                         You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
                     </div>

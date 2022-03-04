@@ -3,9 +3,14 @@
         <div class="card card-options">
             <div class="card-header" id="headingTwo">
                 <h5 class="dropdown-button">
-                    <p v-if="!leadTraveller && !showAdditional">{{ travellerBookings.length ? `Group Size: ${travellerBookings.length+1}`: 'Please add all travellers to your tour party'}}</p>
-                    <button :disabled="!booking_token" class="btn btn-link collapsed cardhead" @click="toggleAdditional"><font-awesome-icon icon="book-reader" /> Additional Travellers </button>
+                    <button :disabled="!booking_token" class="btn btn-link collapsed cardhead" @click="toggleAdditional"><font-awesome-icon icon="book-reader" />
+                        Additional Travellers
+                    </button>
                 </h5>
+                <p class="caption" v-if="!leadTraveller && !showAdditional">
+                    <font-awesome-icon icon="arrow-right" /> 
+                    {{ travellerBookings.length ? `Group Size: ${travellerBookings.length+1}`: 'Please add all travellers to your tour party'}}
+                </p>
             </div>
             <div class="card-body" v-show="showAdditional">
                 <div v-if="showInstruction">
@@ -24,7 +29,7 @@
                 </div>
                 <button type="button" 
                     class="btn btn-primary" 
-                    @click="addAdditional">Add traveller</button>
+                    @click="addAdditional">Add additional travellers</button>
                 <button
                     type="button"
                     class="btn btn-primary"
