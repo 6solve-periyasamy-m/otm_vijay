@@ -155,6 +155,7 @@ a {
         .header-logo {
             width: 200px;
             aspect-ratio: 15 / 7 !important;
+            object-fit: scale-down;
         }
 
         .site-info {
