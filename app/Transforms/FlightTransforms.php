@@ -8,6 +8,7 @@ use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
 use App\Models\OrderCustomer;
 use App\Repository\TourRepository;
+use StringFormatter;
 
 interface FlightTransformsInterface {
     public static function getSelectAirlines($filter);
@@ -115,11 +116,14 @@ class FlightTransforms implements FlightTransformsInterface
         $owned = [];
         foreach ($orderCustomer->orderFlights as $orderComponent) $owned[] = $orderComponent->tourComponent->id;
         foreach ($tour->flightInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type === "Add-on") {
+            if ($inventoryTour->tour_component_type  !== "Upgrade") {
                 if (in_array($inventoryTour->id, $owned)) continue;
                 $subData = [];
                 $subData['id'] = $inventoryTour->id;
-                $subData['text'] = $inventoryTour . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($inventoryTour->tour_sales_price);
+                $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
+                    . ' - ' .
+                    ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
+                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

@@ -31,23 +31,25 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $exists > 0;
     }
 
-    public function create(array $customer)
+    public function create(array $customerData)
     {
-        $email = $customer['email_address'];
+        $email = $customerData['email_address'];
         if (empty($email)) {
-            throw new \Exception('Can not create a customer without an email address');
-        }
-        $emailUsed = $this->model->where('email_address', $email)->get();
-        if ($emailUsed->count()) {
-            throw new \Exception('Can not create a customer with an email address that already exists');
+            Log::warning('Customer::create creating a customer without an email address', [$customerData]);
+        } else {
+            $emailUsed = $this->model->where('email_address', $email)->get();
+            if ($emailUsed->count()) {
+                throw new \Exception('Can not create a customer with an email address that already exists');
+            }
         }
         foreach ($this->fields as $field) {
-            if (isset($customer[$field])) {
-                $this->model->$field = $customer[$field];
+            if (isset($customerData[$field])) {
+                $this->model->$field = $customerData[$field];
             }
         }
         try {
             $this->model->save();
+            $this->logging && Log::debug('CustomerRepo: create returning customer: ', [$this->model]);
             return $this->model;
         } catch (\Exception $e) {
             Log::error('Error creating customer record, details: '. $e->getMessage());
@@ -64,11 +66,11 @@ class CustomerRepository implements CustomerRepositoryInterface
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
                 // $this->model->$field = $customer[$field];
                 $customerRecord->$field = $customer[$field];
-                $this->logging && Log::info('check model', [$field, $customer[$field], $this->model->$field]);
+                $this->logging && Log::info('check field ', [$field, $customer[$field], $this->model->$field]);
+            } else {
+                $this->logging && Log::info('no update data for field ', [$field, $this->model->$field]);
             }
         }
-        // force the billing_address_id (as it is not in the request) 
-        $customerRecord->billing_address_id = $customer['billing_address_id'];
         try {
             $customerRecord->save();
             $this->logging && Log::info('customer saved: ', $this->model->toArray());
