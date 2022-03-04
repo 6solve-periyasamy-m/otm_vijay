@@ -77,7 +77,7 @@
                 <i class="icon-globe"></i>
                 View Tour
             </a>
-            @if($order->has_atol_certificate)
+            @if($order->has_atol_certificate && !$order->cancelled)
             <a href="{{ route('orders.atol', ['order' => $order,]) }}" class="btn btn-secondary">
                 <i class="icon-plane"></i>
                 ATOL Certificate
