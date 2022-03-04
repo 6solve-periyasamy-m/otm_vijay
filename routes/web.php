@@ -152,6 +152,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
             Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
             Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order,read');
+            Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order,read');
             Route::get('/occupancy', function (Order $order) { return view('pages.occupancy.manager', array_merge(OrderRepository::exportRoomingData($order), ['order' => $order,])); })->name('orders.occupancy')->middleware('bouncer:Order,update');
             Route::prefix('installments')->group(function () {
                 Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order,update');
@@ -448,6 +449,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour,update');
             Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour,update');
             Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour,delete');
+            Route::get('/atol', [\App\Http\Controllers\Models\TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour,read');
             Route::get('/add', function (Tour $tour) {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
             })->name('tours.add')->middleware('bouncer:Tour,update');

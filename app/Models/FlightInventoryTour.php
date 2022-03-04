@@ -98,4 +98,11 @@ class FlightInventoryTour extends Model
         }
         return $keys;
     }
+
+    public function getAtolStringAttribute(): string
+    {
+        return "{$this->flight_type} - {$this->inventory->flight->departureAirport} | " .
+            StringFormatter::formatDate($this->inventory->departs_at) .
+            " | {$this->inventory->flight->arrivalAirport} | {$this->inventory->flight->airline}";
+    }
 }

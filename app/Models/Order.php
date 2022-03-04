@@ -206,6 +206,15 @@ class Order extends Model
         return $this->deposit * $this->getCustomerCount();
     }
 
+    public function getCustomerNamesAttribute(): string
+    {
+        $names = "";
+        foreach ($this->orderCustomers as $orderCustomer) {
+            $names .= $orderCustomer->customer_name . ', ';
+        }
+        return substr($names, 0, -2);
+    }
+
     public function groups()
     {
         return OrderRepository::getOrderGroups($this);

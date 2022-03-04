@@ -106,4 +106,12 @@ class OrderCustomer extends Model
     {
         return $this->groups()->first();
     }
+
+    public function getHasSurchargeAttribute(): bool
+    {
+        foreach ($this->orderAccommodation() as $orderAccommodation) {
+            if ($orderAccommodation->tourComponent->inventory->roomType->maximum_occupancy == 1) return true;
+        }
+        return false;
+    }
 }

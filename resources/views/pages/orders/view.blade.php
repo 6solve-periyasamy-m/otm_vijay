@@ -77,6 +77,10 @@
                 <i class="icon-globe"></i>
                 View Tour
             </a>
+            <a href="{{ route('orders.atol', ['order' => $order,]) }}" class="btn btn-secondary">
+                <i class="icon-plane"></i>
+                ATOL Certificate
+            </a>
             @can('delete', \App\Models\Order::class)
                 @if($order->cancelled)
                     <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning"><i class="icon-trash"></i>Restore Order</a>
@@ -219,8 +223,14 @@
                             @foreach($order->orderCustomers as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
-                                <td>{{ StringFormatter::formatCurrency($order->tour->base_price_per_person) }}</td>
+                                <td>{{ StringFormatter::formatCurrency($ordersCustomer->tour_cost) }}</td>
                             </tr>
+                            @if($ordersCustomer->hasSurcharge)
+                                <tr>
+                                    <td>Single Occupancy Surcharge: {{ $ordersCustomer->customer->full_name }}</td>
+                                    <td>{{ StringFormatter::formatCurrency($ordersCustomer->single_occupancy_surcharge) }}</td>
+                                </tr>
+                            @endif
                             @endforeach
                             @foreach($order->getAdditionals()['upgrades'] as $upgrade)
                                 <tr>

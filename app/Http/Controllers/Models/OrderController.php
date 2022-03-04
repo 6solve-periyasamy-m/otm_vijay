@@ -49,6 +49,7 @@ class OrderController extends Controller
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
         OrderRepository::addIncludedToCustomer($orderCustomer);
+        OrderRepository::assignDefaultRooming($orderCustomer);
         OrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
@@ -63,6 +64,11 @@ class OrderController extends Controller
     public function invoice(Order $order)
     {
         return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
+    }
+
+    public function atol(Order $order)
+    {
+        return OrderRepository::showAtolCertificate($order);
     }
 
     public function edit(Order $order)
