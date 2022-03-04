@@ -44,7 +44,7 @@
         @endif
 
         <!-- Main Body -->
-        <div class="container h-100">
+        <div class="container h-80" @if(isset($overflow) && !$overflow) style="overflow: hidden;" @endif>
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-md-6 col-8 align-self-center">

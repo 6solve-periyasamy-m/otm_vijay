@@ -1,45 +1,46 @@
-@extends('layout.customer')
+@extends('layout.customer', ['overflow' => false,])
 
 @section('title', 'Customer Portal')
 
 @section('content')
-
-<div class="d-flex justify-content-center align-items-center h-75 mt-4">
-    <div class="donut-menu">
-        <div class="menu-item">
-        </div>
-        <div class="menu-item">
-        </div>
-        <div class="menu-item">
-        </div>
-        <div class="menu-item">
-        </div>
-        <div class="donut-center">
-        </div>
-    </div>
-    <div class="click-menu">
-        <div class="menu-item" onclick="window.location = '{{ route('customer.edit') }}'">
-            <div class="menu-text">
-                <span class="icon-user menu-icon"></span>
-                <span>Your Detail</span>
+<div style="position: relative;">
+    <div class="d-flex justify-content-center align-items-center h-75 mt-4">
+        <div class="donut-menu">
+            <div class="menu-item">
+            </div>
+            <div class="menu-item">
+            </div>
+            <div class="menu-item">
+            </div>
+            <div class="menu-item">
+            </div>
+            <div class="donut-center">
             </div>
         </div>
-        <div class="menu-item" onclick="window.location = '{{ route('customer.finances') }}'">
-            <div class="menu-text">
-                <span class="icon-credit-card menu-icon"></span>
-                <span>Your Finance</span>
+        <div class="click-menu">
+            <div class="menu-item" onclick="window.location = '{{ route('customer.edit') }}'">
+                <div class="menu-text">
+                    <span class="icon-user menu-icon"></span>
+                    <span>Your Details</span>
+                </div>
             </div>
-        </div>
-        <div class="menu-item">
-            <div class="menu-text">
-                <span class="icon-diamond menu-icon"></span>
-                <span>Extra</span>
+            <div class="menu-item" onclick="window.location = '{{ route('customer.finances') }}'">
+                <div class="menu-text">
+                    <span class="icon-credit-card menu-icon"></span>
+                    <span>Your Bills</span>
+                </div>
             </div>
-        </div>
-        <div class="menu-item">
-            <div class="menu-text">
-                <span class="icon-globe menu-icon"></span>
-                <span>Your Tours</span>
+            <div class="menu-item">
+                <div class="menu-text">
+                    <span class="icon-diamond menu-icon"></span>
+                    <span>Your Extras</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-text">
+                    <span class="icon-globe menu-icon"  onclick="window.location = '{{ route('customer.itinerary') }}'"></span>
+                    <span>Your Tours</span>
+                </div>
             </div>
         </div>
     </div>
