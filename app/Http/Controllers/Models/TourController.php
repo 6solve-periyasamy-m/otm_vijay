@@ -86,6 +86,7 @@ class TourController extends Controller
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
             'terms' => $request->input('terms'),
+            'final_payment' => $request->input('final_payment'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
