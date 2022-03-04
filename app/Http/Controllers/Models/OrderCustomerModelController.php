@@ -36,6 +36,7 @@ class OrderCustomerModelController extends Controller
         ]);
         $order->orderCustomers()->save($orderCustomer);
         OrderRepository::addIncludedToCustomer($orderCustomer);
+        OrderRepository::assignDefaultRooming($orderCustomer);
         event(new OrderCustomerCreatedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
