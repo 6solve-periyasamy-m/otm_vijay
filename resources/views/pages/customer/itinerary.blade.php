@@ -42,12 +42,12 @@
                     @foreach($itinerary as $timeslot)
                         @php $currentSlot = $timeslot['start']->copy()->setTime(0, 0, 0) @endphp
                         @if (!isset($previousSlot))
-                            <tr class="text-center font-bold bg-gray">
+                            <tr class="text-center font-bold bg-light-blue">
                                 <td colspan="3">Day {{ $day }}: {{ StringFormatter::formatDate($currentSlot) }}</td>
                             </tr>
                         @elseif ($previousSlot->diffInDays($currentSlot) >= 1)
                             @php $day += $previousSlot->diffInDays($currentSlot) @endphp
-                            <tr class="text-center font-bold bg-gray">
+                            <tr class="text-center font-bold bg-light-blue">
                                 <td colspan="3">Day {{ $day }}: {{ StringFormatter::formatDate($currentSlot) }}</td>
                             </tr>
                         @endif
