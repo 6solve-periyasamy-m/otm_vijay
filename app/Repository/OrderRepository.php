@@ -472,7 +472,6 @@ class OrderRepository
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $paid -= self::getTotalAdjustedValue($order);
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         foreach ($order->installments as $installment) {
@@ -818,7 +817,6 @@ class OrderRepository
             return false;
         }
     }
-
 
     public static function showAtolCertificate(Order $order)
     {
