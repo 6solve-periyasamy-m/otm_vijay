@@ -14,7 +14,9 @@ let num = {
 
 let dates = {
     isoString(ds) {
-        return new Date(ds).toISOString().substring(0, 10)
+        if (ds != undefined && ds != null) {
+            return new Date(ds).toISOString().substring(0, 10)
+        }
     },
     makeDateFromString(s) {
         if (typeof(s) === 'undefined' || s.length < 6) {

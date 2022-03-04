@@ -4,8 +4,8 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div> OTM Booking Form version 0.82 </div>
-                        <bookingform-control token="tokenName" :user="auth_user"></bookingform-control>
+                        <div> OTM Booking Form pre-release version 0.84</div>
+                        <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
@@ -13,8 +13,8 @@
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
                         <div v-if="tour && bookingToken">
-                            <booking-form-additional :tour="tour" :lead_traveller="leadTraveller"></booking-form-additional>
-                            <booking-form-flights :tour="tour" :lead_traveller="leadTraveller"></booking-form-flights>
+                            <booking-form-additional :tour="tour"></booking-form-additional>
+                            <booking-form-flights :tour="tour"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
                             <booking-form-activity :tour="tour"></booking-form-activity>
                             <booking-form-transport :tour="tour"></booking-form-transport>
@@ -32,7 +32,6 @@
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
 import { setCookie, getCookie, deleteCookie } from '../cookies'
-// import eachQuarterOfInterval from 'date-fns/esm/fp/eachQuarterOfInterval/index';
 
 export default {
     props: {
@@ -44,7 +43,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 9,
             formInfo: false,
             bookingId: '',
             leadTraveller: null,
@@ -64,14 +63,20 @@ export default {
             termsaccepted: false
         }
     },
-    async created() {
+    created() {
         let that = this
+
         this.debug && console.log('1) BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
+        bus.$on('initialiseForm', () => {
+            this.resetToken()
+            window.location.reload(true)
+        })
         bus.$on('removeBookingCookie', token => {
             deleteCookie(that.tokenName)
             alert('Booking form clearance')
         })
+
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
         })
@@ -83,6 +88,7 @@ export default {
         this.debug && console.log('Cookie read:', that.bookingToken)
 
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
+            this.debug && console.log('Form Data requested with token:', that.bookingToken)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
                 if (response.data.success) {
@@ -99,16 +105,16 @@ export default {
                     console.log('**** requested token but no success, resetting it')
                     that.bookingToken = null
                     that.resetToken()
-                    //that.createBooking(that.bookingToken)
+                    that.createBooking(that.bookingToken)
                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
             })
         } else {
-            console.log('BookingForm: booking token not present')
+            console.log('BookingForm: no booking token set, resetting...')
             that.resetToken()
-            //that.createBooking(that.bookingToken)
+            that.createBooking(that.bookingToken)
         }
     },
     methods: {
@@ -123,8 +129,12 @@ export default {
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
-            that.debug && console.log('bookingToken reset ', that.bookingToken)
-            bus.$emit('setBookingToken', that.bookingToken)
+            // that.debug && console.log('bookingToken reset ', that.bookingToken)
+            // bus.$emit('setBookingToken', that.bookingToken)
+        },
+        resetForm() {
+            this.resetToken()
+            window.history.go()
         },
         changeTheme(theme) {
             const bookingForm = document.querySelector('#booking-form')

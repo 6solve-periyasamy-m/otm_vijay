@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Repository\UserRepository;
+use App\Rules\EmailCurrentOrUnique;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -44,6 +47,50 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $guard = 'web';
+
+    public function getUpdateValidationRules(): array
+    {
+        return [
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                Rule::unique('users', 'email')->ignore($this->id),
+            ],
+            'name' => 'required',
+            'current_password' => 'nullable|required_with:new_password|current_password:web',
+            'new_password' => [
+                'nullable',
+                'confirmed',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ]
+        ];
+    }
+
+    public static function getCreateValidationRules(): array
+    {
+        return [
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                'unique:users,email'
+            ],
+            'name' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ]
+        ];
+    }
 
     public function tokens()
     {

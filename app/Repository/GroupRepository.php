@@ -48,6 +48,7 @@ class GroupRepository
     {
         $query = DB::table('order_customer_group');
         $query->where('order_customer_id', '=', $orderCustomer->id);
+        $query->whereNull('deleted_at');
         $query->select('group_id');
         $groups = [];
         foreach ($query->get() as $result) {
@@ -60,6 +61,7 @@ class GroupRepository
     {
         $accommodation = new Collection();
         foreach (self::getGroups($orderCustomer) as $group) {
+            if (!isset($group)) continue;
             $accommodation = $accommodation->merge($group->rooms);
         }
         return $accommodation;

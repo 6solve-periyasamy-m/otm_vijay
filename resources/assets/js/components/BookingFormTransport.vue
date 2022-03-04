@@ -6,8 +6,11 @@
                     <button @click="toggleTransports" class="btn btn-link cardhead">
                         Transportation
                     </button>
-                    <p>Form section for booking or confirming ground transport including options available to support activities</p>
                 </h5>
+                <p class="caption">
+                    <font-awesome-icon icon="arrow-right" />
+                    Form section for booking or confirming ground transport including options available to support activities
+                </p>
             </div>
             <div  v-if="activated" class="card-body">
                 <div class="transports">

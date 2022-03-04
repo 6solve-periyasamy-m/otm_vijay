@@ -4,7 +4,7 @@ import Vue from 'vue'
 import { bus } from './bus'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faUserSecret, faFutbol, faTrain, faListAlt, faPlane, faHome} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faFacebookSquare, faInstagramSquare, faTwitterSquare } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

@@ -19,27 +19,27 @@ class CustomerImport implements ToModel
         $homeCountry = Country::where('name', 'like', trim($row[13]))->first();
         $billingCountry = Country::where('name', 'like', trim($row[19]))->first();
         $homeAddress = Address::create([
-            'name' => trim($row[2]) . " " . trim($row[4]) . " (Imported Home)",
+            'name' => "(".trim($row[0]).")" . trim($row[2]) . " " . trim($row[4]),
             'address_parent_id' => AddressParent::getParentId('customer'),
             'address_line_1' => trim($row[9]),
             'address_line_2' => trim($row[10] ?? ''),
             'town' => trim($row[11] ?? ''),
             'region' => trim($row[12] ?? ''),
-            'country_id' => $homeCountry->id,
+            'country_id' => $homeCountry?->id,
             'postcode' => trim($row[14]),
         ]);
         $billingAddress = Address::create([
-            'name' => trim($row[2]) . " " . trim($row[4]) . " (Imported Billing)",
+            'name' => "(".trim($row[0]).")" . trim($row[2]) . " " . trim($row[4]),
             'address_parent_id' => AddressParent::getParentId('customer'),
             'address_line_1' => trim($row[15]),
             'address_line_2' => trim($row[16] ?? ''),
             'town' => trim($row[17] ?? ''),
             'region' => trim($row[18] ?? ''),
-            'country_id' => $billingCountry->id,
+            'country_id' => $billingCountry?->id,
             'postcode' => trim($row[20]),
         ]);
         $customer = Customer::create([
-            'email_address' => trim($row[0]),
+            'email_address' => empty(trim($row[0])) ? null : trim($row[0]),
             'password' => Hash::make(Str::random(60)),
             'title' => trim($row[1]),
             'first_name' => trim($row[2]),
@@ -57,11 +57,11 @@ class CustomerImport implements ToModel
             'passport_first_name' => trim($row[24] ?? ''),
             'passport_middle_name' => trim($row[25] ?? ''),
             'passport_last_name' => trim($row[26] ?? ''),
-            'passport_number' => trim($row[26] ?? ''),
-            'passport_expiry_date' => isset($row[27]) ? Carbon::createFromFormat('d/m/Y', trim($row[27])) : null,
+            'passport_number' => trim($row[27] ?? ''),
+            'passport_expiry_date' => isset($row[28]) ? Carbon::createFromFormat('d/m/Y', trim($row[28])) : null,
             'passport_country_of_issue' => trim($row[29] ?? ''),
+            'loyalty_number' => trim($row[30] ?? ''),
         ]);
-        $customer->sendPasswordResetNotification(Str::random(60));
         return $customer;
     }
 }

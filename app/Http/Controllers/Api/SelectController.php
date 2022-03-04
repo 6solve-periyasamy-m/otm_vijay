@@ -18,6 +18,7 @@ use App\Transforms\FlightTransforms;
 use Illuminate\Http\Request;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\LocationsTransforms;
+use Log;
 
 class SelectController extends ApiController
 {
@@ -244,7 +245,8 @@ class SelectController extends ApiController
 
     public function getAddresses(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsTransforms::getAddresses($filter);
+        $customers = $request->has('customers') && $request->boolean('customers');
+        return LocationsTransforms::getAddresses($filter, $customers);
     }
 
     public function getSelectedAddress($id) {

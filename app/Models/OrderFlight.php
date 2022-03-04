@@ -6,6 +6,7 @@ use App\Repository\FlightComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use StringFormatter;
 
 class OrderFlight extends Model
 {
@@ -81,5 +82,16 @@ class OrderFlight extends Model
     public function orderCustomer()
     {
         return $this->orderCustomers();
+    }
+
+    public function swap(FlightInventoryTour $swap) {
+        $this->flight_inventory_tour_id = $swap->id;
+        $this->cost = $swap->tour_sales_price;
+        $this->save();
+    }
+
+    public function getAtolStringAttribute(): string
+    {
+        return $this->tourComponent->atol_string;
     }
 }

@@ -4,27 +4,6 @@
         flightTable = $('.flight-inventory-table').DataTable({
             fixedHeader: true,
             select: { style: "multi+shift" },
-            "ajax": {
-                "url": "{{ route('api.flight-inventory.datatables', ['tour' => $tour,]) }}",
-                "data": {
-                    "__api_token": "{{ Auth::user()->getCurrentToken()->token }}",
-                },
-                "type": "post",
-            },
-            "columns": [
-                { "data": "flight_number" },
-                { "data": "travel_class" },
-                { "data": "departure_airport" },
-                { "data": "departure_time" },
-                { "data": "arrival_airport" },
-                { "data": "arrival_time" },
-                { "data": "is_domestic" },
-                { "data": "fit_selectable" },
-                { "data": "stock" },
-                { "data": "purchase_price" },
-                { "data": "sales_price" },
-                { "data": "notes" },
-            ]
         });
     });
     @can('create', \App\Models\FlightInventoryTour::class)
@@ -32,7 +11,7 @@
         let ids = [];
         flightTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
             let row = flightTable.row(rowIdx);
-            ids.push(row.data().id);
+            ids.push($(row.node()).attr('inventory_id'));
         });
         if (ids.length <= 0) return alert('No components are selected');
         $.ajax({
@@ -40,7 +19,7 @@
             url: "{{ route('api.tour.flight.inventory.add', ['tour' => $tour,]) }}",
             dataType: "json",
             statusCode: {
-                200: function () { alert('Components added successfully'); flightTable.ajax.reload(); },
+                200: function () { alert('Components added successfully'); location.reload(); },
                 400: function () { alert('An incorrect component type has been provided'); },
                 403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
@@ -86,4 +65,25 @@
         <th scope="col">Notes</th>
     </tr>
     </thead>
+    @foreach(\App\Repository\FlightComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(11, 59, 59)) as $inventory)
+        <tr inventory_id="{{ $inventory->id }}">
+            <td>{{ $inventory->flight_number }}</td>
+            <td>{{ $inventory->travelClass }}</td>
+            <td>{{ $inventory->component->departureAirport }}</td>
+            <td>{{ StringFormatter::formatDateTime($inventory->departs_at) }}</td>
+            <td>{{ $inventory->component->arrivalAirport }}</td>
+            <td>{{ StringFormatter::formatDateTime($inventory->arrives_at) }}</td>
+            <td>{{ StringFormatter::formatBoolean($inventory->component->is_domestic) }}</td>
+            <td>
+                <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
+            </td>
+            <td>
+                {{$inventory->stock - $inventory->getUsedStock()}}/{{ $inventory->stock }}<br/>
+                ({{$inventory->getUsedStock()}} Sold)
+            </td>
+            <td>{{ StringFormatter::formatCurrency($inventory->purchase_price) }}</td>
+            <td>{{ StringFormatter::formatCurrency($inventory->sales_price) }}</td>
+            <td>{{ $inventory->notes }}</td>
+        </tr>
+    @endforeach
 </table>

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\OrderActivity;
@@ -21,7 +22,7 @@ interface ActivityComponentRepositoryInterface
 
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
-    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
 }
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
@@ -49,7 +50,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
-            if ($component->tour_component_type == "Add-on") {
+            if ($component->tour_component_type  !== "Upgrade") {
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->activityInventory->activity->name;
@@ -77,41 +78,27 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $orderComponent;
     }
 
-    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
-    {
-        $alreadyAdded = [];
-        foreach ($tour->activityInventoryTours as $inventoryTour) {
-            $alreadyAdded[$inventoryTour->activityInventory->id] = $inventoryTour->activityInventory->id;
-        }
-        $query = DB::table('activity_inventories');
-        $query->join('activities', 'activity_inventories.activity_id', '=', 'activities.id');
-        $query->join('activity_types', 'activities.activity_type_id', '=', 'activity_types.id');
-        $query->join('ticket_types', 'activity_inventories.ticket_type_id', '=', 'ticket_types.id');
-        $query->join('addresses', 'activities.address_id', '=', 'addresses.id');
-        $query->select(
-            'activity_inventories.id AS id',
-            'activities.id AS activity_id',
-            'activities.name AS name',
-            'activities.description AS description',
-            'addresses.name AS location',
-            'ticket_types.name AS ticket_type',
-            'activity_types.name AS activity_type',
-            'activity_inventories.starts_at AS start_date',
-            'activity_inventories.ends_at AS end_date',
-            DB::raw('CASE WHEN `activity_inventories`.`fit_selectable` = 1 THEN \'Yes\' ELSE \'No\' END AS fit_selectable'),
-            'activity_inventories.stock AS stock',
-            'activity_inventories.purchase_price AS purchase_price',
-            'activity_inventories.sales_price AS sales_price',
-            'activity_inventories.notes AS notes'
-        );
-        $query->whereNotIn('activity_inventories.id', $alreadyAdded);
-        if (isset($dateFrom)) $query = $query->whereRaw("'" . $dateFrom->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
-        if (isset($dateTo)) $query = $query->whereRaw("'" . $dateTo->format('Y-m-d') . "' BETWEEN `activity_inventories`.`starts_at` AND `activity_inventories`.`ends_at`");
-        return $query->get();
-    }
-
     public static function getParentComponent(ActivityInventoryTour $inventoryTour) {
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
+        if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
+    }
+
+    public static function isOnUpgradeTree(ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade): bool
+    {
+        if ($upgrade->base_id == $inventoryTour->id) return true;
+        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
+    }
+
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    {
+        $inventories = [];
+        foreach ($tour->activityInventoryTours as $inventoryTour) {
+            $inventories[] = $inventoryTour->inventory->id;
+        }
+        return ActivityInventory::whereBetween('starts_at', [$dateFrom, $dateTo])->whereBetween('ends_at', [$dateFrom, $dateTo])->whereNotIn('id', $inventories)->get();
     }
 }

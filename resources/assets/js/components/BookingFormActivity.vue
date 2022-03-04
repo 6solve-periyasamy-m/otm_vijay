@@ -6,8 +6,11 @@
                     <button class="btn btn-link cardhead" @click="toggleActivities">
                         Activities
                     </button>
-                    <p>Activities planned as part of your package, plus available options for each traveller in your group.</p>
                 </h5>
+                <p class="caption">
+                    <font-awesome-icon icon="arrow-right" />
+                    Activities planned as part of your package, plus available options for each traveller in your group.
+                </p>
             </div>
             <div class="card-body" v-if="activated">
                 <div class="listing headings">

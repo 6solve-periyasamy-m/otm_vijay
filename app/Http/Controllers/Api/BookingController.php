@@ -47,22 +47,20 @@ class BookingController extends ApiController
    * @param $customer_id
    * @return JSON booking data
    */
-   public function collect($customer_id)
+   public function collect($token)
    {
-      if (!Auth::user()) {
-        return response()->json(['success' => false, 'message' => 'Not allowed']);
-        throw new Exception('Can not get this data unless logged in');
+      //$booking = Booking::select('customer_id')->where('token', $token)->first();
+      $booking = BookingRepository::findBooking($token);
+      if (!$booking) {
+        return null;
       }
-      // todo : move to repo
-      $booking = new Booking();
-      $bookings = $booking->select('tours.name as tour_name', 'bookings.token', 'bookings.status')
+      $bookings = Booking::select('tours.name as tour_name', 'bookings.token', 'bookings.status')
         ->join('tours', 'tours.id', 'bookings.tour_id')
-        ->where('customer_id', $customer_id)
-        ->orderBy('tour_id', 'desc')
-        ->orderBy('created_at', 'desc')
+        ->where('customer_id', $booking->customer_id)
+        ->orderBy('bookings.tour_id', 'desc')
+        ->orderBy('bookings.created_at', 'desc')
         ->get();
-
-      return response()->json(['success' => true, 'data' => $bookings]);
+      return response()->json(['success' => true, 'bookings' => $bookings]);
    }
 
     /**

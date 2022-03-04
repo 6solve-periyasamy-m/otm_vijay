@@ -32,7 +32,6 @@ class OrderController extends Controller
         $request->validate(Order::getValidationRules());
         $tour = Tour::findOrFail($request->input('tour_id'));
         $order = Order::create([
-            'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),
@@ -66,6 +65,11 @@ class OrderController extends Controller
         return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
     }
 
+    public function atol(Order $order)
+    {
+        return OrderRepository::showAtolCertificate($order);
+    }
+
     public function edit(Order $order)
     {
         return view('pages.models.orders.update', ['order' => $order,]);
@@ -76,7 +80,6 @@ class OrderController extends Controller
         $request->validate(Order::getValidationRules());
         $request->validate(['deposit' => 'required|numeric',]);
         $order->update([
-            'quote_id' => $request->input('quote_id'),
             'tour_id' => $request->input('tour_id'),
             'ordered_on' => $request->input('ordered_on'),
             'internal_notes' => $request->input('internal_notes'),

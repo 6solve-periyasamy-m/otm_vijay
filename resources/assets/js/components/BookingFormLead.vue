@@ -26,8 +26,11 @@
                                </button>
                         </div>
                     </div>
-                    <div v-else>
+                    <div v-if="noUser">
                         <p v-if="!email_address">Please enter the Lead Traveller details</p>
+                    </div>
+                    <div v-if="!noUser">
+                        <p v-if="email_address">Welcome {{first_name}}</p>
                     </div>
     
                     <div v-if="!booking_token && activeUser">
@@ -40,9 +43,9 @@
                     </div>
                 </div>
                 <div v-if="booking_token && !show_traveller">
-                    <div>
-                        <font-awesome-icon icon="arrow-right" /> You can continue with your booking, please fill in all sections
-                    </div>
+                    <p class="caption">
+                        <font-awesome-icon icon="arrow-right" /> Please fill in all sections
+                    </p>
                     <div v-if="!booking_token">
                         You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
                     </div>
@@ -287,6 +290,7 @@ export default {
             address_line_2: '',
             address_line_3: '',
             country: '',
+            country_id: 0,
             countries: [],
             region: '',
             town: '',
@@ -298,6 +302,7 @@ export default {
             billing_region: '',
             billing_town: '',
             billing_postcode: '',
+            billing_country_id: 0,
             mobile_number: '',
             other_phone_number: '',
             other_phone_number_input: '',
@@ -330,9 +335,18 @@ export default {
     },
     created() {
         let that = this
-        bus.$on('setBookingToken', (bookingData) => {
-            that.booking_token = bookingData
+        bus.$on('setBookingToken', token => {
+            that.booking_token = token
             that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
+            let tokens
+            if (localStorage.tokens == undefined) {
+                tokens = new Array()
+            } else {
+                tokens = localStorage.tokens
+            }
+            tokens.push(that.booking_token)
+            localStorage.tokens = JSON.stringify(tokens)
+            localStorage.active_token = that.booking_token
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             that.setCustomer(customer)
@@ -560,7 +574,7 @@ export default {
                     bus.$emit('bookingCreated', booking)
                 })
                 .catch(error => {
-                    console.log('error createBooking', eachQuarterOfInterval)
+                    console.log('error createBooking', error)
                 })
         },
 
@@ -593,6 +607,7 @@ export default {
             }
             */
             axios.post('/api/booking/lead-traveller', {
+                    booking_token: this.booking_token,
                     title: this.title,
                     first_name: this.first_name,
                     middle_names: this.middle_names,
@@ -618,7 +633,6 @@ export default {
                     billing_region: this.billing_region,
                     billing_town: this.billing_town,
                     billing_postcode: this.billing_postcode,
-                    booking_token: this.booking_token,
                     tour: this.tour
                 })
                 .then(response => {

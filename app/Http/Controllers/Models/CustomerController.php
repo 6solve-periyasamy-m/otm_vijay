@@ -61,7 +61,7 @@ class CustomerController extends Controller
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
         $homeAddress = Address::create([
-            'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' . $request->input('last_name'),
+            'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',
             'address_parent_id' => AddressParent::getParentId('customer'),
             'address_line_1' => $request->input('home_address_line_1'),
             'address_line_2' => $request->input('home_address_line_2'),
@@ -75,7 +75,7 @@ class CustomerController extends Controller
             $customer->billing_address_id = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'))->id;
         } else {
             $billingAddress = Address::create([
-                'name' => $request->input('title') . ' ' . $request->input('first_name') . ' ' . $request->input('last_name'),
+                'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Billing)',
                 'address_parent_id' => AddressParent::getParentId('customer'),
                 'address_line_1' => $request->input('billing_address_line_1'),
                 'address_line_2' => $request->input('billing_address_line_2'),
@@ -106,7 +106,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
-        $request->validate(Customer::getValidationRules());
+        $request->validate($customer->getUpdateValidationRules());
         $customer->update([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),
@@ -134,6 +134,7 @@ class CustomerController extends Controller
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
         $customer->homeAddress->update([
+            'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',
             'address_line_1' => $request->input('home_address_line_1'),
             'address_line_2' => $request->input('home_address_line_2'),
             'town' => $request->input('home_town'),
@@ -146,6 +147,7 @@ class CustomerController extends Controller
             LocationsRepository::cloneAddressToAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->billingAddress);
         } else {
             $customer->billingAddress->update([
+                'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Billing)',
                 'address_line_1' => $request->input('billing_address_line_1'),
                 'address_line_2' => $request->input('billing_address_line_2'),
                 'town' => $request->input('billing_town'),

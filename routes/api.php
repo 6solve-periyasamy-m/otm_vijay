@@ -4,6 +4,8 @@
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+use App\Http\Controllers\BespokeReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -33,7 +35,7 @@ use App\Repository\OrderRepository;
 // Booking Repo
 Route::prefix('booking')->group(function () {
 
-    Route::get('/customer/bookings/{customer_id}', [BookingController::class, 'collect']);
+    Route::get('/customer/bookings/{token}', [BookingController::class, 'collect']);
     Route::get('/token/{token}', [BookingController::class, 'get']);
     Route::post('/create', [BookingController::class, 'create']);
 
@@ -71,7 +73,6 @@ Route::prefix('booking')->group(function () {
     Route::get('/airports', [AirlinesController::class, 'getAirports']);
 
     // Travellers
-    // DEPRECATE Route::get('/tourparty', [CustomerController::class, 'getTravellers']);
     Route::get('/customer/{token}', [CustomerController::class, 'getCustomerByToken']);
     Route::get('/travellers/{token}', [BookingCustomerController::class, 'loadTravellers']);
 
@@ -275,6 +276,10 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::get('/transports/{oCustomerId}', [TourComponentController::class, 'getAvailableTransportAddons'])->name('transport');
             });
         });
+        Route::post('accommodation/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('accommodation.upgrade');
+        Route::post('activity/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('activity.upgrade');
+        Route::post('flight/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('flight.upgrade');
+        Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
         Route::get('/status', function(){})->name('status.stub');
@@ -282,5 +287,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
 
     Route::prefix('reports')->name('reports.')->group(function() {
        Route::post('bespoke/save', [BespokeReportController::class, 'store'])->name('bespoke.save');
+       Route::post('bespoke/export', [BespokeReportController::class, 'apiExport'])->name('bespoke.export');
     });
 });

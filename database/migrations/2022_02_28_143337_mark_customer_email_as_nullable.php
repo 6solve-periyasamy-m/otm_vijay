@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTelescopeMonitoringTable extends Migration
+class MarkCustomerEmailAsNullable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateTelescopeMonitoringTable extends Migration
      */
     public function up()
     {
-        Schema::create('telescope_monitoring', function (Blueprint $table) {
-            $table->string('tag', 255);
+        Schema::table('customers', function (Blueprint $table) {
+           $table->string('email_address', 255)->nullable()->change();
         });
     }
 
@@ -25,6 +25,6 @@ class CreateTelescopeMonitoringTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('telescope_monitoring');
+        //
     }
 }

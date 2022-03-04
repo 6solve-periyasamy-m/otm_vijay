@@ -7,7 +7,7 @@ let {{ $field }}Select = $('.{{ $field }}-input');
             return {
                 filter: params.term,
                 __api_token: '{{ Auth::user()->getCurrentToken()->token }}',
-                {{ $additionalParams }}
+                {!! $additionalParams !!}
             };
         },
         type: 'post',

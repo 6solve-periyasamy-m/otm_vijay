@@ -25,7 +25,7 @@ interface AccommodationRepositoryInterface {
 class AccommodationRepository implements AccommodationRepositoryInterface
 {
     protected $model;
-    private $debug = 5;
+    private $debug = 0;
 
     public function __construct()
     {
