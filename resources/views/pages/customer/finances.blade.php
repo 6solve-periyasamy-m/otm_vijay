@@ -13,7 +13,7 @@
                     <option value='{{ $order->booking_reference }}'>{{ $order->booking_reference }}</option>
                     @endforeach
                 </select>
-                <a href="#" class="invoice btn btn-primary">Invoice</a>
+                <a href="#" class="invoice btn btn-primary m-l-20">View Invoice</a>
             </div>
         </form>
     </div>
