@@ -86,6 +86,7 @@ class TourController extends Controller
             'notes' => $request->input('notes'),
             'invoice_footer' => $request->input('invoice_footer'),
             'terms' => $request->input('terms'),
+            'final_payment' => $request->input('final_payment'),
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
@@ -93,7 +94,7 @@ class TourController extends Controller
     public function destroy(Tour $tour)
     {
         if ($tour->orders()->count() > 0) {
-            return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Tour', 'parent' => 'ORder']));
+            return back()->withErrors(trans('custom.used-elsewhere', ['model' => 'Tour', 'parent' => 'Order']));
         }
         $tour->delete();
         return redirect()->route('tours.all');
