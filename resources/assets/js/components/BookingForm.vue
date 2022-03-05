@@ -43,7 +43,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: 9,
+            debug: null,
             formInfo: false,
             bookingId: '',
             leadTraveller: null,
@@ -88,12 +88,13 @@ export default {
         this.debug && console.log('Cookie read:', that.bookingToken)
 
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
-            this.debug && console.log('Form Data requested with token:', that.bookingToken)
+            this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
                 if (response.data.success) {
-                    that.debug && console.log(`BookingForm: booking found by token`, response.data.booking)
+                    that.debug && console.log(`BookingForm: booking loaded `, response.data.booking)
                     that.leadTraveller = response.data.booking.customer
+
                     bus.$emit('setBookingToken', response.data.booking.token)
 
                     // TODO: are these events really needed?
@@ -102,10 +103,8 @@ export default {
                     bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
                 } else {
                     // the token is not registered
-                    console.log('**** requested token but no success, resetting it')
-                    that.bookingToken = null
+                    console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
                     that.resetToken()
-                    that.createBooking(that.bookingToken)
                 }
             })
             .catch(error => {
@@ -114,7 +113,6 @@ export default {
         } else {
             console.log('BookingForm: no booking token set, resetting...')
             that.resetToken()
-            that.createBooking(that.bookingToken)
         }
     },
     methods: {
@@ -129,8 +127,8 @@ export default {
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
-            // that.debug && console.log('bookingToken reset ', that.bookingToken)
-            // bus.$emit('setBookingToken', that.bookingToken)
+            that.debug && console.log('bookingToken reset ', that.bookingToken)
+            bus.$emit('setBookingToken', that.bookingToken)
         },
         resetForm() {
             this.resetToken()

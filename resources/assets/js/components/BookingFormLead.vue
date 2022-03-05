@@ -7,7 +7,7 @@
                 </div>
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
-                    <p v-if="!booking_token && !show_traveller">Click this button to start your booking</p>
+                    <p v-if="!booking_token && !show_traveller">Start your booking by entering your details</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                             <font-awesome-icon icon="book-reader" />
                             Lead Traveller details
@@ -245,7 +245,6 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 form-group field-separation">
-                                <input type="hidden" name="booking_token" :value="booking_token" />
                                 <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                             </div>
                         </div>
@@ -594,7 +593,7 @@ export default {
                 })
         },
 
-        async storeTraveller() {
+        storeTraveller() {
             let that = this
 
             that.debug && console.log('BOOKING: storeTraveller', this.email_address)
