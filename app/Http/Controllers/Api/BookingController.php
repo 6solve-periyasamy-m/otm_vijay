@@ -5,15 +5,16 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\ApiController;
-
 use App\Models\Tour;
 use App\Models\Booking;
+use Illuminate\Http\Request;
+
 use App\Models\BookingTraveller;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
+use App\Http\Controllers\ApiController;
 use App\Repository\AccommodationRepository;
 use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
@@ -39,6 +40,28 @@ class BookingController extends ApiController
         }
         return response()->json(['success' => false]);
     }
+
+  /**
+   * collect booking references for this customer
+   * NB: Customer must be logged in
+   * @param $customer_id
+   * @return JSON booking data
+   */
+   public function collect($token)
+   {
+      //$booking = Booking::select('customer_id')->where('token', $token)->first();
+      $booking = BookingRepository::findBooking($token);
+      if (!$booking) {
+        return null;
+      }
+      $bookings = Booking::select('tours.name as tour_name', 'bookings.token', 'bookings.status')
+        ->join('tours', 'tours.id', 'bookings.tour_id')
+        ->where('customer_id', $booking->customer_id)
+        ->orderBy('bookings.tour_id', 'desc')
+        ->orderBy('bookings.created_at', 'desc')
+        ->get();
+      return response()->json(['success' => true, 'bookings' => $bookings]);
+   }
 
     /**
      * create

@@ -11,11 +11,11 @@
             <div v-if="edit_fields">
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
+                        <span>Entering email address is advised but is optional</span>
                         <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
                         <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
                         <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
                         <label v-else class="valid">Email address</label>
-                        <p>Entering email address is optional</p>
                     </div>
                     <div class="col-sm-6 form-group field-separation">
                         <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
@@ -98,9 +98,9 @@
         
             </div>
             <div v-else>
-                {{!title ? 'You must select a title field' : `${title} ${first_name} ${last_name}` }}
+                {{!title ? 'Add a new member of your travel group' : `${title} ${first_name} ${last_name}` }}
                 &nbsp;
-                <button class="btn btn-warning" @click="edit_fields = true">Edit</button> 
+                <button class="btn btn-warning" @click="edit_fields = true">Add/Edit</button> 
             </div>
         </div>
     </div>

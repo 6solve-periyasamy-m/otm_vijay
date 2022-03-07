@@ -69,10 +69,12 @@
                     <span>Edit Tour</span>
                 </a>
                 @endcan
+                @if($tour->has_atol_certificate)
                 <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
                     <i class="icon-folder-alt"></i>
                     <span>Export ATOL Certificates</span>
                 </a>
+                @endif
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ import Vue from 'vue'
 import { bus } from './bus'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faArrowRight, faBookReader, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faUserSecret, faFutbol, faTrain, faListAlt, faPlane, faHome} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faFacebookSquare, faInstagramSquare, faTwitterSquare } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -103,6 +103,7 @@ Vue.component('payment-installments', require('./components/PaymentInstallments.
 Vue.component('booking-info', require('./components/BookingInfo.vue').default);
 Vue.component('vue-test', require('./components/VueTest.vue').default);
 Vue.component('finance-menu', require('./components/finance-menu.vue').default);
+Vue.component('bookingform-control', require('./components/BookingFormControl.vue').default);
 Vue.component('bookingform-header', require('./components/BookingFormHeader.vue').default);
 Vue.component('bookingform-footer', require('./components/bookingform-footer.vue').default);
 Vue.component('AtolCertificate', require('./components/AtolCertificate.vue').default);

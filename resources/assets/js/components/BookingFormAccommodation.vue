@@ -4,8 +4,12 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
                     <button class="btn btn-link collapsed cardhead" @click="toggleAccommodation">Accommodation</button>
-                    <p>Accommodation options for your tour group including indication of single or shared rooms requirements. Sharing is indicated by assignment of a group number.</p>
                 </h5>
+                <p class="caption">
+                    <font-awesome-icon icon="arrow-right" />
+                    Accommodation options for your tour group including single or shared rooms requirements. 
+                    Sharing is designated by selection of a group.
+                </p>
             </div>
             <div v-if="showAccommodation" class="card-body ept-form">
                 <div v-if="showRegistered">
@@ -49,7 +53,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 4,
+            debug: false,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
