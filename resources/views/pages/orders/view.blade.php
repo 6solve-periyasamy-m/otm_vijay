@@ -77,10 +77,12 @@
                 <i class="icon-globe"></i>
                 View Tour
             </a>
+            @if($order->has_atol_certificate && !$order->cancelled)
             <a href="{{ route('orders.atol', ['order' => $order,]) }}" class="btn btn-secondary">
                 <i class="icon-plane"></i>
                 ATOL Certificate
             </a>
+            @endif
             @can('delete', \App\Models\Order::class)
                 @if($order->cancelled)
                     <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning"><i class="icon-trash"></i>Restore Order</a>
