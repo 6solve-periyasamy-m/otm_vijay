@@ -9,6 +9,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Gateways\StripeGateway;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
 
@@ -77,7 +78,7 @@ class BookingController extends Controller
         }
 
         if (isset($tour) && isset($event)) {
-            return view('pages.booking.tour.form')->with(['tour' => $tour, 'event' => $event]);
+            return view('pages.booking.tour.form')->with(['auth_user' => Auth::user(), 'tour' => $tour, 'event' => $event]);
         }
 
         abort(404);

@@ -7,7 +7,7 @@
                 </div>
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
-                    <p v-if="!booking_token && !show_traveller">Click this button to start your booking</p>
+                    <p v-if="!booking_token && !show_traveller">Start your booking by entering your details</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                             <font-awesome-icon icon="book-reader" />
                             Lead Traveller details
@@ -26,8 +26,11 @@
                                </button>
                         </div>
                     </div>
-                    <div v-else>
+                    <div v-if="noUser">
                         <p v-if="!email_address">Please enter the Lead Traveller details</p>
+                    </div>
+                    <div v-if="!noUser">
+                        <p v-if="email_address">Welcome {{first_name}}</p>
                     </div>
     
                     <div v-if="!booking_token && activeUser">
@@ -40,9 +43,9 @@
                     </div>
                 </div>
                 <div v-if="booking_token && !show_traveller">
-                    <div>
-                        <font-awesome-icon icon="arrow-right" /> You can continue with your booking, please fill in all sections
-                    </div>
+                    <p class="caption">
+                        <font-awesome-icon icon="arrow-right" /> Please fill in all sections
+                    </p>
                     <div v-if="!booking_token">
                         You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
                     </div>
@@ -242,7 +245,6 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 form-group field-separation">
-                                <input type="hidden" name="booking_token" :value="booking_token" />
                                 <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                             </div>
                         </div>
@@ -335,6 +337,15 @@ export default {
         bus.$on('setBookingToken', token => {
             that.booking_token = token
             that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
+            let tokens
+            if (localStorage.tokens == undefined) {
+                tokens = new Array()
+            } else {
+                tokens = localStorage.tokens
+            }
+            tokens.push(that.booking_token)
+            localStorage.tokens = JSON.stringify(tokens)
+            localStorage.active_token = that.booking_token
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             that.setCustomer(customer)
@@ -582,7 +593,7 @@ export default {
                 })
         },
 
-        async storeTraveller() {
+        storeTraveller() {
             let that = this
 
             that.debug && console.log('BOOKING: storeTraveller', this.email_address)

@@ -67,7 +67,6 @@ class BookingTravellerRepository implements BookingTravellerRepositoryInterface
     public function getIds($booking_id)
     {
         $customers = $this->getGroup($booking_id);
-        Log::debug('>>>>>>>customers', [$customers]);
         $ids = $customers->map(function($item, $key) {
             return $item->customer_id;
         });
