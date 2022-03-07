@@ -219,4 +219,9 @@ class Order extends Model
     {
         return OrderRepository::getOrderGroups($this);
     }
+
+    public function getHasAtolCertificateAttribute(): bool
+    {
+        return OrderRepository::hasFlight($this);
+    }
 }

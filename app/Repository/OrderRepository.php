@@ -472,7 +472,6 @@ class OrderRepository
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getOrderAdditionals($order)['additionalValue'];
         $paid -= self::getTotalAdjustedValue($order);
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         foreach ($order->installments as $installment) {
@@ -633,7 +632,7 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = $order->getAdjustmentValue() + $order->getPaid() - $order->calculated_deposit;
+        $paid = ($order->getAdjustmentValue()*-1) + $order->getPaid() - $order->calculated_deposit;
         foreach ($order->installments as $orderInstallment) {
             $paid -= $orderInstallment->calculated_amount;
             if ($paid < 0) return false;
@@ -819,7 +818,6 @@ class OrderRepository
         }
     }
 
-
     public static function showAtolCertificate(Order $order)
     {
         return self::generateAtolCertificate($order)->send();
@@ -841,6 +839,7 @@ class OrderRepository
         }
         foreach ($tour->orders as $order) {
             if ($order->cancelled) continue;
+            if (!$order->has_atol_certificate) continue;
             $atol = self::generateAtolCertificate($order);
             $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
         }
@@ -893,5 +892,17 @@ class OrderRepository
             }
         }
         return ['normal' => $string, 'excess' => $excessString,];
+    }
+
+    public static function hasFlight(Order $order): bool
+    {
+        $query = DB::table('order_flights');
+        $query->join('order_customers', 'order_flights.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('orders.id', '=', $order->id);
+        $query->whereNull('order_flights.deleted_at');
+        $query->select('order_flights.id');
+        $results = $query->get();
+        return $results->count() > 0;
     }
 }
