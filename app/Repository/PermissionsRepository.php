@@ -260,7 +260,7 @@ class PermissionsRepository
 
     public static function createRole(string $name, string $title, int $level)
     {
-        return Bouncer::roles()->firstOrCreate([
+        return \Bouncer::role()->firstOrCreate([
             'name' => $name,
             'title' => $title,
             'level' => $level,
