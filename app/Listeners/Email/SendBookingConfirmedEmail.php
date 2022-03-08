@@ -28,7 +28,7 @@ class SendBookingConfirmedEmail
         if (!$event->shouldInvoice) return;
         $customer = $event->order->leadBooker->customer;
         if (isset($customer->email_address)) {
-            MailRepository::sendMailable('booking-confirmed', $customer->email_address, $event->order);
+            MailRepository::sendMailable('booking-confirmation', $customer->email_address, $event->order);
         }
     }
 }
