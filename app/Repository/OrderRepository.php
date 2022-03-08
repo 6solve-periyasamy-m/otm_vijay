@@ -707,11 +707,13 @@ class OrderRepository
             $collection->room_type = $roomType;
             $members = [];
             $collection->name = $object['name'];
+            if (!array_key_exists('customers', $object)) continue;
             foreach ($object['customers'] as $customerId) {
                 $customer = OrderCustomer::find($customerId);
                 if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
                 $members[] = $customer;
             }
+            if (sizeof($members) < 1) continue;
             $collection->customers = $members;
             $inflated[] = $collection;
         }

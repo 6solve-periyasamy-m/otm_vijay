@@ -142,7 +142,6 @@
 
     function addRoom() {
         let selected = $('.room-types').find(':selected')
-        if ($('.bed').length + parseInt(selected.val()) > Object.keys(customers).length) return alert('Cannot add more rooms!');
         addRoomToManager(createRoomBox(selected.val(), "Group " + $('.room').length, selected.attr('name'), selected.attr('occupancy')))
     }
     function addRoomToManager(roomBox) {
