@@ -366,8 +366,10 @@ export default {
             let that = this
             if (customer == undefined || customer == null) {
                 console.log('WARNING: updateFlight customer data missing')
-                alert('UpdateFlight does not know the customer ... ')
-                alert('Form data missing, please refresh or contact support')
+                if (that.debug) {
+                    alert('UpdateFlight does not know the customer ... ')
+                    alert('Form data missing, please refresh or contact support')
+                }
                 return
             }
 
