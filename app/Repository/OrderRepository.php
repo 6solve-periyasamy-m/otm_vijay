@@ -804,7 +804,7 @@ class OrderRepository
     {
         $singleRoom = null;
         foreach (AccommodationComponentRepository::getAvailableRoomTypes($orderCustomer->order->tour) as $roomType) {
-            if ($roomType->maximum_occupancy != 1) continue;
+            if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
             $singleRoom = $roomType;
             break;
         }
