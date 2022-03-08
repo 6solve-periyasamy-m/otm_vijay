@@ -27,6 +27,6 @@ class RoomType extends Model
 
     public function __toString()
     {
-        return $this->name . ' (' . $this->maximum_occupancy . ' max)';
+        return $this->name . ' (Occupancy ' . $this->maximum_occupancy . ')';
     }
 }
