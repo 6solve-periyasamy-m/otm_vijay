@@ -30,7 +30,6 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                {{leadTraveller}}
                                 <booking-form-flight-selector
                                     v-model="selected_inbound"
                                     :enabled="!travellerFlightOptions.includes(true)"
