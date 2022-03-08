@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Api;
 use Exception;
 use App\Models\Tour;
 use App\Models\Booking;
+use App\Models\Address;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 use App\Models\BookingTraveller;
@@ -34,9 +36,16 @@ class BookingController extends ApiController
     public function get($token)
     {
         $booking = BookingRepository::findBooking($token);
+        if (empty($booking)) {
+            return response()->json(['success' => false]);
+        }
 
+        $customer = Customer::find($booking->customer_id);
+        $customer->home_address = Address::find($customer->home_address_id);
+        $customer->billing_address = Address::find($customer->billing_address_id);
+Log::debug('getBooking: customer', [$customer, $booking]);
         if (isset($booking)) {
-            return response()->json(['success' => true, 'booking' => $booking, 'tour' => $booking->tour]);
+            return response()->json(['success' => true, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
         }
         return response()->json(['success' => false]);
     }
@@ -86,7 +95,7 @@ class BookingController extends ApiController
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->create($customer_id, $tour_id, $token);
         $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
-        
+        $booking->token = $token; 
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 

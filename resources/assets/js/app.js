@@ -42,7 +42,7 @@ if (busEventLogging) {
         console.log('>>> getLoginToken cookie')
     })
     bus.$on('setBookingToken', token => {
-        console.log('>>>> setBookingToken event monitor ', token);
+        console.log('>>>><<<< setBookingToken event monitor ', token);
     })
     bus.$on('bookingCreated', booking => {
         console.log('>>> booking created by lead traveller', booking)

@@ -319,7 +319,7 @@ export default {
     methods: {
         loadLeadTraveler(token) {
             let that = this
-            axios.get(`/api/booking/customer/{token}`)
+            axios.get(`/api/booking/customer/${token}`)
                 .then(response => {
                     console.log('FLIGHT GET LEAD', response)
                     that.leadTraveller = response.data.customer

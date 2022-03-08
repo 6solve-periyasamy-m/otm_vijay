@@ -72,10 +72,13 @@
             bus.$on('setBookingToken', (token) => {
                 that.booking_token = token
                 that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)            
-                that.loadLeadTraveler(token)
                 that.loadTravellerBookings()
+                that.loadLeadTraveler(token)
             })
             bus.$on('checkEmailUnique', email => {
+                if (email == null) {
+                    return
+                }
                 that.travellerBookings.map(traveller => {
                     if (traveller.email == email) {
                         bus.$emit('emailUsed', true)
@@ -91,9 +94,9 @@
         methods: {
             loadLeadTraveler(token) {
                 let that = this
-                axios.get(`/api/booking/customer/{token}`)
+                axios.get(`/api/booking/customer/${token}`)
                     .then(response => {
-                        console.log('FLIGHT GET LEAD', response)
+                        console.log('ADDIITIONAL GET LEAD', response)
                         that.leadTraveller = response.data.customer
                     })
                     .catch(error => console.log(error))
@@ -116,14 +119,16 @@
             },
             loadTravellerBookings() {
                 let that = this
-                this.debug && console.log(`...... loading additional travellers for ${this.booking_token}`)
+                this.debug && console.log(`...... loading additional travellers for ${this.booking_token}`, that.leadTraveller)
                 axios.get(`/api/booking/travellers/${this.booking_token}`)
                     .then(response => {
                         if (response.data.success) {
                             const travellers = response.data.travellers
-                            bus.$emit('TravellersLoaded', travellers)
+                            console.log('>>>><<<<>>><<< travellers', travellers, that.leadTraveller);
                             that.travellerBookings = travellers.filter(traveller => traveller.id !== that.leadTraveller.id)
+                            console.log('>>>><<<<>>><<< travellerBookings', that.travellerBookings);
                             bus.$emit('TravellerBookingsLoaded', that.travellerBookings)
+                            bus.$emit('TravellersLoaded', travellers)
                         }
                     })
                     .catch(error => {

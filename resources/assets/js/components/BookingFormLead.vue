@@ -332,16 +332,16 @@ export default {
             validationErrors: ''
         }
     },
-    created() {
+    async created() {
         let that = this
         bus.$on('setBookingToken', token => {
             that.booking_token = token
-            that.debug && console.log(`>>>> ${that.moduleName} created: booking ${that.booking_token}`)
+            that.debug && console.log(`>>>><<<< ${that.moduleName} created: booking ${that.booking_token}`)
             let tokens
             if (localStorage.tokens == undefined) {
                 tokens = new Array()
             } else {
-                tokens = localStorage.tokens
+                tokens = JSON.parse(localStorage.tokens)
             }
             tokens.push(that.booking_token)
             localStorage.tokens = JSON.stringify(tokens)
@@ -354,6 +354,7 @@ export default {
             bus.$emit('setLeadTraveller', customer)
         })
         bus.$on('homeAddressLoaded', home_address => {
+            console.log('home address:', home_address)
             that.address_line_1 = home_address.address_line_1
             that.address_line_2 = home_address.address_line_2
             that.address_line_3 = home_address.address_line_3
@@ -570,6 +571,7 @@ export default {
                 .then(response => {
                     const booking = response.data.booking
                     // set the booking in each module
+                    bus.$emit('setBookingToken', booking.token)
                     bus.$emit('bookingCreated', booking)
                 })
                 .catch(error => {
