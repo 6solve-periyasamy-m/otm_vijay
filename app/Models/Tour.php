@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Repository\StockRepository;
+use App\Repository\TourRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -144,5 +145,10 @@ class Tour extends Model
     public function getHasAtolCertificateAttribute(): bool
     {
         return $this->flightInventoryTours()->count() > 0;
+    }
+
+    public function clone(): Tour
+    {
+        return TourRepository::clone($this);
     }
 }
