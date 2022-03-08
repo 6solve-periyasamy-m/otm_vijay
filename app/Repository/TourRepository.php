@@ -190,4 +190,41 @@ class TourRepository implements TourRepositoryInterface
             $inventoryTour->save();
         }
     }
+
+    public static function clone(Tour $oldTour): Tour
+    {
+        $newTour = $oldTour->replicate();
+        $newTour->save();
+        foreach ($oldTour->accommodationInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->activityInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->flightInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->transportInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->merchandise as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->paymentInstallments as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        return $newTour;
+    }
 }

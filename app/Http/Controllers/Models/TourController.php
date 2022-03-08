@@ -52,6 +52,12 @@ class TourController extends Controller
         return view('pages.tour.view', TourRepository::getTourDetails($tour->id));
     }
 
+    public function duplicate(Tour $tour)
+    {
+        $newTour = $tour->clone();
+        return redirect()->route('tours.view', ['tour' => $newTour,]);
+    }
+
     public function exportAtol(Tour $tour) {
         $asset = OrderRepository::generateAllAtolCertificates($tour);
         if (!isset($asset)) {
