@@ -35,7 +35,7 @@ class CustomerController extends ApiController
         $home_address = null;
         $billing_address = null;
         $booking = Booking::where('token', $token)->first();
-        if (empty($bookinng)) {
+        if (empty($booking)) {
             Log::warning('CustomerController::getCustomerByToken: WARNING: no booking for token '.$token);
             return null;
         }
@@ -53,7 +53,8 @@ class CustomerController extends ApiController
         if (isset($customer->billing_address_id)) {
             $customer->billing_address = $addressRepo->get($customer->billing_address_id);
         }
-Log::debug('********** getCustomer', [$customer]);
+        // Log::debug('********** getCustomer', [$customer]);
+
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
