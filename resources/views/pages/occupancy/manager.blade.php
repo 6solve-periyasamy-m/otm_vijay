@@ -96,6 +96,11 @@
                 for (let customer in customers) {
                     bedString += '<div class="bed">' + createCustomerBox(customers[customer]['id'], customers[customer]['name'], customers[customer]['avatar']) + '</div>'
                 }
+                if (customers.length < size) {
+                    for (let i = 0; i < size - customers.length; i++) {
+                        bedString += '<div class="bed"></div>'
+                    }
+                }
             } else {
                 for (let i = 0; i < size; i++) {
                     bedString += '<div class="bed"></div>'
