@@ -21,9 +21,12 @@
     <td>{{ $booking_form_url }}</td>
     <td>{{ $is_active ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
-    <td class="actions">
+    <td class="actions-3">
+        <a href="{{route('tours.duplicate', ['tour' => $tour,])}}" class="btn btn-outline-info btn-sm mb-1">
+            <i class="icon-layers"></i>
+        </a>
         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
-            <i class="icon-note"></i>            
+            <i class="icon-note"></i>
         </a>
         <a href="#" onclick="event.preventDefault();document.getElementById('tour-{{ $tour->id }}-delete').submit();" class="btn btn-outline-danger btn-sm mb-1">
             <i class="icon-trash"></i>

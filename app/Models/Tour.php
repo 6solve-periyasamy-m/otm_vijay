@@ -158,4 +158,9 @@ class Tour extends Model
     {
         return AccommodationComponentRepository::getTemplateTourInventory($this);
     }
+
+    public function clone(): Tour
+    {
+        return TourRepository::clone($this);
+    }
 }
