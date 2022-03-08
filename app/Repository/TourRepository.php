@@ -191,6 +191,19 @@ class TourRepository implements TourRepositoryInterface
         }
     }
 
+    public static function getTemplateData(Tour $tour): array
+    {
+        $data = [];
+        foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {
+            $templateData = ['template' => $template, 'available' => []];
+            foreach (AccommodationComponentRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
+                $templateData['available'][] = $roomType;
+            }
+            $data[] = $templateData;
+        }
+        return $data;
+    }
+
     public static function clone(Tour $oldTour): Tour
     {
         $newTour = $oldTour->replicate();

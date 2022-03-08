@@ -102,6 +102,8 @@ class Order extends Model
                 return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
             case 3:
                 return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            case 4:
+                return ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'];
             default:
                 return ['status' => 'Status Unknown', 'color' => 'dark'];
         }

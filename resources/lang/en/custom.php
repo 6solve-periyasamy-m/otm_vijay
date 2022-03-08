@@ -9,6 +9,7 @@ return [
             'outstanding' => 'Balance Outstanding',
             'overdue' => 'Payment Overdue',
             'overpaid' => 'Overpaid',
+            'occupancy' => 'Missing Occupancy',
             'cancelled' => [
                 'deposit' => 'Cancelled: Deposit Held',
                 'full' => 'Cancelled: Fully Refunded',

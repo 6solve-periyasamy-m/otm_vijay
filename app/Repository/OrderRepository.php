@@ -363,6 +363,9 @@ class OrderRepository
                 return -1;
             }
         } else {
+            foreach ($order->orderCustomers as $orderCustomer) {
+                if (!$orderCustomer->has_occupancy) return 4;
+            }
             if ($total > $paidAmount) {
                 $next = self::getNextPaymentDetails($order);
                 if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
@@ -704,11 +707,13 @@ class OrderRepository
             $collection->room_type = $roomType;
             $members = [];
             $collection->name = $object['name'];
+            if (!array_key_exists('customers', $object)) continue;
             foreach ($object['customers'] as $customerId) {
                 $customer = OrderCustomer::find($customerId);
                 if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
                 $members[] = $customer;
             }
+            if (sizeof($members) < 1) continue;
             $collection->customers = $members;
             $inflated[] = $collection;
         }
@@ -799,7 +804,7 @@ class OrderRepository
     {
         $singleRoom = null;
         foreach (AccommodationComponentRepository::getAvailableRoomTypes($orderCustomer->order->tour) as $roomType) {
-            if ($roomType->maximum_occupancy != 1) continue;
+            if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
             $singleRoom = $roomType;
             break;
         }
@@ -904,5 +909,20 @@ class OrderRepository
         $query->select('order_flights.id');
         $results = $query->get();
         return $results->count() > 0;
+    }
+
+    public static function checkOccupancy(OrderCustomer $orderCustomer): bool
+    {
+        $owned = [];
+        foreach ($orderCustomer->orderAccommodation() as $orderAccommodation) {
+            $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0,0,0);
+            $owned[$date->unix()] = $orderAccommodation;
+        }
+        foreach ($orderCustomer->order->tour->templates as $template) {
+            $date = $template->inventory->check_in->clone()->setTime(0,0,0);
+            if (array_key_exists($date->unix(), $owned)) continue;
+            return false;
+        }
+        return true;
     }
 }
