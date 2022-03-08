@@ -11,7 +11,7 @@ class CountryApiController extends ApiController
     public function getCountries()
     {
         $country = new Country();
-        $countries = $country->orderBy('id')->get();
+        $countries = $country->orderBy('name', 'ASC')->get();
 
         return response()->json(['success' => true, 'countries' => $countries]);
     }
