@@ -124,9 +124,9 @@
                     .then(response => {
                         if (response.data.success) {
                             const travellers = response.data.travellers
-                            console.log('>>>><<<<>>><<< travellers', travellers, that.leadTraveller);
+                            that.debug && console.log('>>>><<<<>>><<< travellers', travellers, that.leadTraveller);
                             that.travellerBookings = travellers.filter(traveller => traveller.id !== that.leadTraveller.id)
-                            console.log('>>>><<<<>>><<< travellerBookings', that.travellerBookings);
+                            that.debug && console.log('>>>><<<<>>><<< travellerBookings', that.travellerBookings);
                             bus.$emit('TravellerBookingsLoaded', that.travellerBookings)
                             bus.$emit('TravellersLoaded', travellers)
                         }
