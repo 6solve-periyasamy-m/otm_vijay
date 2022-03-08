@@ -43,7 +43,7 @@ class BookingController extends ApiController
         $customer = Customer::find($booking->customer_id);
         $customer->home_address = Address::find($customer->home_address_id);
         $customer->billing_address = Address::find($customer->billing_address_id);
-Log::debug('getBooking: customer', [$customer, $booking]);
+        // Log::debug('getBooking: customer', [$customer, $booking]);
         if (isset($booking)) {
             return response()->json(['success' => true, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
         }
