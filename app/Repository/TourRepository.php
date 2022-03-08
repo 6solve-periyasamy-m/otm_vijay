@@ -190,4 +190,17 @@ class TourRepository implements TourRepositoryInterface
             $inventoryTour->save();
         }
     }
+
+    public static function getTemplateData(Tour $tour): array
+    {
+        $data = [];
+        foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {
+            $templateData = ['template' => $template, 'available' => []];
+            foreach (AccommodationComponentRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
+                $templateData['available'][] = $roomType;
+            }
+            $data[] = $templateData;
+        }
+        return $data;
+    }
 }

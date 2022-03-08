@@ -153,12 +153,12 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');
         $query->whereNull('accommodation_inventory_tours.deleted_at');
         $query->select('accommodation_inventories.room_type_id AS id');
-        \Log::error($query->toSql());
+
         $available = [];
         foreach ($query->get('id') as $result) {
             $available[] = $result->id;
         }
-        \Log::error(implode(',', $available));
+
         return $available;
     }
 
@@ -169,6 +169,11 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             $types[] = RoomType::find($id);
         }
         return $types;
+    }
+
+    public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
+    {
+        return self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
     }
 
     public static function isOnUpgradeTree(AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade): bool
