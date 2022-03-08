@@ -40,7 +40,7 @@
                                 {{activity.description}}
                             </div>
                         </div>
-                        <div v=if="booking.transports != undefined">
+                        <div v-if="booking.transports != undefined">
                             <h3>Transports</h3>
                             <div class="block transports" v-for="transport in booking.transports" :key="transport.id">
                                 {{transport.is_domestic ? 'Domestic' : 'International'}} {{transport.name }}
