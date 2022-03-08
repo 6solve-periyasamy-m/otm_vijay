@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div> OTM Booking Form pre-release version 0.84</div>
+                        <div> OTM Booking Form pre-release version 0.85</div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>

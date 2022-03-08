@@ -7,7 +7,7 @@
                         Additional Travellers
                     </button>
                 </h5>
-                <p class="caption" v-if="!leadTraveller && !showAdditional">
+                <p class="caption" v-if="!showAdditional">
                     <font-awesome-icon icon="arrow-right" /> 
                     {{ travellerBookings.length ? `Group Size: ${travellerBookings.length+1}`: 'Please add all travellers to your tour party'}}
                 </p>
