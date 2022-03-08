@@ -161,7 +161,7 @@
                             New Payment
                         </a>
                         @endcan
-                        <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" class="btn btn-primary text-white mb-1">View Invoice</a>
+                        <a href="{{ route('orders.invoice.latest', ['order' => $order,]) }}" target="_blank" class="btn btn-primary text-white mb-1">View Invoice</a>
                         {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">Email Invoice</button>--}}
                         {{-- TODO: Implement <button class="btn btn-primary text-white mb-1" onclick="alert('This is non-functional')">View Previous Invoices</button>--}}
                     </div>
