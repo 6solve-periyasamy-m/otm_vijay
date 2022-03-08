@@ -114,4 +114,9 @@ class OrderCustomer extends Model
         }
         return false;
     }
+
+    public function getHasOccupancyAttribute(): bool
+    {
+        return OrderRepository::checkOccupancy($this);
+    }
 }
