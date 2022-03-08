@@ -55,7 +55,7 @@ class TourController extends Controller
     public function duplicate(Tour $tour)
     {
         $newTour = $tour->clone();
-        return redirect()->route('tours.view', ['tour' => $newTour,]);
+        return redirect()->route('tours.edit', ['tour' => $newTour,]);
     }
 
     public function exportAtol(Tour $tour) {
