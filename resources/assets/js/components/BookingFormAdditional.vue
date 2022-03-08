@@ -48,7 +48,7 @@
         props: ['tour'],
         data() {
             return {
-                debug: true,
+                debug: false,
                 moduleName: 'AdditionalTravellers',
                 booking_token: null,
                 id: 0,
