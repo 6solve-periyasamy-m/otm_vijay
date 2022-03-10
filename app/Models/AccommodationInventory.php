@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\Facades\StringFormatter;
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -111,7 +112,12 @@ class AccommodationInventory extends Model
 
     public function __toString()
     {
-        return "{$this->component} - {$this->roomType} {$this->boardType} ({$this->check_in} to {$this->check_out})";
+        return "{$this->component} - {$this->roomType} {$this->boardType} (" . \StringFormatter::formatDateTime($this->check_in) . " to " . \StringFormatter::formatDateTime($this->check_out) . ")";
+    }
+
+    public function getCustomerDisplayAttribute()
+    {
+        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . \StringFormatter::formatDateTime($this->check_in) . " to " . \StringFormatter::formatDateTime($this->check_out) . ")";
     }
 }
 

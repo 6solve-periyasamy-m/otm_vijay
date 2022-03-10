@@ -734,6 +734,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
         Route::get('/itinerary/{reference?}', [CustomerTourController::class, 'showItinerary'])->name('itinerary');
+        Route::get('/extras/{reference?}', [CustomerTourController::class, 'showExtras'])->name('extras');
     });
     Route::prefix('password')->name('password.')->group(function() {
         Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');

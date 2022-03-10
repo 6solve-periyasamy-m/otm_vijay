@@ -29,4 +29,26 @@ class CustomerTourController extends Controller
         return view('pages.customer.itinerary',
             ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders]);
     }
+
+    public function showExtras(?string $reference = null)
+    {
+        $customer = CustomerAuthenticationRepository::getCustomer();
+        if (isset($reference)) {
+            $order = OrderRepository::getOrderFromBookingReference($reference);
+        } else {
+            $order = $customer->orders()->orderByDesc('ordered_on')->first();
+        }
+        if (!isset($order)) abort(404);
+        $oCustomer = null;
+        foreach ($order->orderCustomers as $orderCustomer) {
+            if ($orderCustomer->customer_id == $customer->id) {
+                $oCustomer = $orderCustomer;
+                break;
+            }
+        }
+        if (!isset($oCustomer)) abort(404);
+        return view('pages.customer.extras',
+            array_merge(['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders],
+                OrderRepository::getAvailableForExtras($oCustomer)));
+    }
 }
