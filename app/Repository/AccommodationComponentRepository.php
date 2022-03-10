@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
@@ -84,7 +85,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'share_with_user_id' => null,
             'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
         ]);
-        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $orderComponent;
     }
 
@@ -102,11 +103,11 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
         $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
-        $query->where('accommodation_inventories.check_in', '=', $inventory->check_in);
-        $query->where('accommodation_inventories.check_out', '=', $inventory->check_out);
+        $query->whereRaw("DATE(`accommodation_inventories`.`check_in`) = '{$inventory->check_in->format('Y-m-d')}'");
         $query->where('accommodation_inventories.room_type_id', '=', $roomType->id);
         $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
         $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');
+        $query->whereNull('accommodation_inventory_tours.deleted_at');
         $query->select('accommodation_inventory_tours.id');
 
         return AccommodationInventoryTour::find($query->first()->id);
@@ -129,10 +130,12 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         foreach ($templates as $template) {
             if ($first && empty($available)) {
                 $available = self::getRoomTypesForInventory($template);
+                $first = false;
                 continue;
             }
             $roomTypes = self::getRoomTypesForInventory($template);
             $missing = array_diff($available, $roomTypes);
+            \Log::error(implode(',', $missing));
             $available = array_diff($available, $missing);
         }
         return self::hydrateRoomTypes($available);
@@ -146,10 +149,10 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
         $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
-        $query->where('accommodation_inventories.check_in', '=', $inventory->check_in);
-        $query->where('accommodation_inventories.check_out', '=', $inventory->check_out);
+        $query->whereRaw("DATE(`accommodation_inventories`.`check_in`) = '{$inventory->check_in->format('Y-m-d')}'");
         $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
         $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');
+        $query->whereNull('accommodation_inventory_tours.deleted_at');
         $query->select('accommodation_inventories.room_type_id AS id');
 
         $available = [];
@@ -167,6 +170,11 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             $types[] = RoomType::find($id);
         }
         return $types;
+    }
+
+    public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
+    {
+        return self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
     }
 
     public static function isOnUpgradeTree(AccommodationInventoryTour $inventoryTour, AccommodationInventoryTourUpgrade $upgrade): bool

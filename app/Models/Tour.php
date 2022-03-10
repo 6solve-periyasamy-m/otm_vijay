@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Repository\AccommodationComponentRepository;
 use App\Repository\StockRepository;
+use App\Repository\TourRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class Tour extends Model
 {
@@ -144,5 +147,20 @@ class Tour extends Model
     public function getHasAtolCertificateAttribute(): bool
     {
         return $this->flightInventoryTours()->count() > 0;
+    }
+
+    public function getAccommodationTemplateData(): array
+    {
+        return TourRepository::getTemplateData($this);
+    }
+
+    public function getTemplatesAttribute(): Collection
+    {
+        return AccommodationComponentRepository::getTemplateTourInventory($this);
+    }
+
+    public function clone(): Tour
+    {
+        return TourRepository::clone($this);
     }
 }
