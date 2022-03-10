@@ -136,12 +136,12 @@ class Tour extends Model
 
     public function getDepositPercentageAttribute()
     {
-        return round(($this->deposit / $this->base_price_per_person) * 100, 2);
+        return $this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2);
     }
 
     public function getRemainingPercentageAttribute()
     {
-        return round(($this->remaining_installment / $this->base_price_per_person) * 100, 2);
+        return $this->base_price_per_person == 0 ? 0 : round(($this->remaining_installment / $this->base_price_per_person) * 100, 2);
     }
 
     public function getHasAtolCertificateAttribute(): bool
