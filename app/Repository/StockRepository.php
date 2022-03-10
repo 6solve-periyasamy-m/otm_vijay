@@ -85,7 +85,7 @@ class StockRepository
     {
         $used = 0;
         foreach ($tour->orders as $order) {
-            if (!$order->cancelled) $used++;
+            if (!$order->cancelled) $used += $order->orderCustomers()->count();
         }
         return $used;
     }
