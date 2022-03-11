@@ -53,6 +53,18 @@ class OrderController extends Controller
         OrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
+        if (isset($request->customers)) {
+            foreach ($request->customers as $customerId) {
+                $orderCustomer = OrderCustomer::make([
+                    'customer_id' => $customerId,
+                    'tour_cost' => $order->tour->base_price_per_person,
+                    'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
+                ]);
+                $order->orderCustomers()->save($orderCustomer);
+                OrderRepository::addIncludedToCustomer($orderCustomer);
+                OrderRepository::assignDefaultRooming($orderCustomer);
+            }
+        }
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

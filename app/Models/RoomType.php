@@ -14,7 +14,7 @@ class RoomType extends Model
 
     public static function getValidationRules()
     {
-        return ['name' => 'required|unique:room_types,name','maximum_occupancy'=>'required|integer'];
+        return ['name' => 'required|unique:room_types,name','maximum_occupancy'=>'required|integer|min:1'];
     }
 
     public static function firstOrCreate(string $name, int $maximumOccupancy) {
@@ -27,7 +27,7 @@ class RoomType extends Model
 
     public function __toString()
     {
-        return $this->name . ' (' . $this->maximum_occupancy . ' max)';
+        return $this->name . ' (Occupancy ' . $this->maximum_occupancy . ')';
     }
 }
 

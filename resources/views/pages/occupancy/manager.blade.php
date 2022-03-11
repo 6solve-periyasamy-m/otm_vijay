@@ -96,6 +96,11 @@
                 for (let customer in customers) {
                     bedString += '<div class="bed">' + createCustomerBox(customers[customer]['id'], customers[customer]['name'], customers[customer]['avatar']) + '</div>'
                 }
+                if (customers.length < size) {
+                    for (let i = 0; i < size - customers.length; i++) {
+                        bedString += '<div class="bed"></div>'
+                    }
+                }
             } else {
                 for (let i = 0; i < size; i++) {
                     bedString += '<div class="bed"></div>'
@@ -142,7 +147,6 @@
 
     function addRoom() {
         let selected = $('.room-types').find(':selected')
-        if ($('.bed').length + parseInt(selected.val()) > Object.keys(customers).length) return alert('Cannot add more rooms!');
         addRoomToManager(createRoomBox(selected.val(), "Group " + $('.room').length, selected.attr('name'), selected.attr('occupancy')))
     }
     function addRoomToManager(roomBox) {

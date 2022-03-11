@@ -72,7 +72,8 @@ class ReportRepository
             $row->stock = $tour->stock_control_active ? $tour->stock : 'Not Controlled';
             $row->booked = $tour->getUsedStock();
             $row->available = $tour->stock_control_active ? $tour->stock - $tour->getUsedStock() : 'Not Controlled';
-            $row->percentage = $tour->stock_control_active ? round(($tour->getUsedStock() / $tour->stock)*100, 2) . '%' : 'Not Controlled';
+            $row->percentage = $tour->stock_control_active ?
+                ($tour->stock == 0 ? 100 : round(($tour->getUsedStock() / $tour->stock)*100, 2)) . '%' : 'Not Controlled';
             $data[] = $row;
         }
         return $data;

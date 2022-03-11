@@ -15,7 +15,7 @@ class OrderCustomer extends Model
     use SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',];
-    protected $cascadeDeletes = ['orderAccommodation', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
+    protected $cascadeDeletes = ['orderCustomerGroups', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
     public $additional_attributes = ['booking_reference', 'ordered_on', 'lead_booker_name', 'is_lead_booker', 'customer_name'];
 
     public static function getValidationRules()
@@ -35,6 +35,11 @@ class OrderCustomer extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function orderCustomerGroups()
+    {
+        return $this->hasMany(OrderCustomerGroup::class, 'order_customer_id');
     }
 
     public function orderAccommodation()
@@ -109,9 +114,14 @@ class OrderCustomer extends Model
 
     public function getHasSurchargeAttribute(): bool
     {
-        foreach ($this->orderAccommodation() as $orderAccommodation) {
-            if ($orderAccommodation->tourComponent->inventory->roomType->maximum_occupancy == 1) return true;
+        foreach ($this->groups as $group) {
+            if ($group->orderCustomers()->count() == 1) return true;
         }
         return false;
+    }
+
+    public function getHasOccupancyAttribute(): bool
+    {
+        return OrderRepository::checkOccupancy($this);
     }
 }
