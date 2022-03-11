@@ -84,6 +84,11 @@ class FlightController extends ApiController
         return response()->json(["success" => true, "data" => $result]);
     }
 
+    public function postFlightBooking(Request $request)
+    {
+        Log::debug('postFlightBooking called');
+    }
+
     public function addFlightInventoryToTour(Request $request, Tour $tour) {
         // TODO: Get actual enum values
         if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {
