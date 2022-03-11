@@ -84,7 +84,8 @@ Route::prefix('booking')->group(function () {
     Route::get('/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
     // function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
     // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
-    Route::post('/flight', [FlightDetailsController::class, 'bookFlightDetails']);
+
+    Route::post('/flight', [FlightDetailsController::class, 'bookFlights']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
     // Booking summary for payment

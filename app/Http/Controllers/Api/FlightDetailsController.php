@@ -29,6 +29,8 @@ class FlightDetailsController extends ApiController
      * @param [type] $flightInventoryTour
      * @return void
      */
+    private $logging = 'flights';
+
     private function storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour)
     {
         $bookingFlight = new BookingFlight();
@@ -80,34 +82,33 @@ class FlightDetailsController extends ApiController
      * @param passenger
      * @param flight (we are sending in the flight->id - which should be the flightInventoryTour record id)
      */
-    public function bookFlightDetails(Request $request)
+    public function bookFlights(Request $request)
     {
+        Log::info('bookFlights');
         // validation
         $validated = $request->validate([
             'customer_id' => 'required',
             'tour_id' => 'required',
             'flight_type' => 'required',
-            'flight_inventory_tour_id' => 'required',
             'custom' => 'required',
             'token' => 'required'
         ]);
+        Log::info('bookFlights post Validation');
         $customer_id = $request->customer_id;
         $tour_id = $request->tour_id;
         $flight_type = $request->flight_type;
-        $flight_inventory_tour_id = $request->flight_inventory_tour_id;
         $custom = $request->custom;
         $booking_token = $request->token;
-
         // token is posted: why look it up?  opportunity to catch a false post?
         $token = $_COOKIE['OTM_booking_token'];
         if ($token !== $booking_token) {
             throw new \Exception('Booking token mismatch');
         }
 
-        $this->logging == 'flights' && Log::info('***** bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $token]);
-
+        $this->logging == 'flights' && Log::debug('***** bookFlightDetails parameters:', [$customer_id, $tour_id, $order_id, $flight_type, $inventory_tour_id, $custom, $token]);
         $tours = new Tour();
         $rejection = 0;
+        $result = null;
         // validate parameters are valid
         if ($flight_inventory_tour_id) {
             $flightInventoryTour = $this->getFlightInventoryTour($flight_inventory_tour_id);
@@ -136,7 +137,7 @@ class FlightDetailsController extends ApiController
         } else {
             throw new Exception('ERROR: can not store a flight without a flightInventoryTour record');
         }
-
+Log::info('returning a result from flightDetails', [$result]);
         return response()->json(['success' => $result]);
     }
 
@@ -156,3 +157,4 @@ class FlightDetailsController extends ApiController
         return $booking;
     }
 }
+

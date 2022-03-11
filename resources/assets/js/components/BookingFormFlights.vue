@@ -157,7 +157,7 @@ export default {
     },
     data() {
         return {
-            debug: false,
+            debug: 9,
             booking_token: null,
             moduleName: 'Flights',
             activated: false,
@@ -166,6 +166,7 @@ export default {
             flights: [],
             travellers: [],
             leadTraveller: {},
+            lead_traveller: {},
 
             bookings: [],
             outbound_flights: [],
@@ -372,11 +373,10 @@ export default {
                 }
                 return
             }
-
+            this.debug && console.log('that.lead_traveller', that.lead_traveller, that.leadTraveller, that.booking_token);
             const data = {
-                customer_id: this.lead_traveller.id,
+                customer_id: that.leadTraveller.id,
                 tour_id: that.tour.id,
-                booking_id: that.booking_id,
                 flight_type: flight_type,
                 flight_inventory_tour_id: flight_inventory_tour_id,
                 custom: custom,
