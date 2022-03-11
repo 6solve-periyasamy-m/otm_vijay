@@ -22,7 +22,6 @@ use App\Http\Controllers\Api\ActivitiesController;
 use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\AccommodationController;
-use App\Http\Controllers\Api\FlightDetailsController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\BookingCustomerController;
 
@@ -82,9 +81,8 @@ Route::prefix('booking')->group(function () {
     Route::get('/flights/tour/{tour_id}', [FlightController::class, 'getFlightInventoriesForTour']);
     Route::get('/flight-inventories', [FlightController::class, 'getFlightsInventories']);
     Route::get('/flights/airport/{airport}', [FlightController::class, 'getFlightsFromAirport']);
-    // function removeCustomerOrderDetail($componentType, $order, $orderCustomer, $type, $custom, $reference)
-    // Route::post('/booking/flights/remove/flight/{order_id}/{order_customer_id}/{component_type}/{custom}/{inventory_tour_id}', [BookingController::class, 'removeFlightBooking']);
-    Route::post('/flight', [FlightDetailsController::class, 'bookFlightDetails']);
+
+    Route::post('/flight', [FlightController::class, 'postFlightBooking']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
     // Booking summary for payment

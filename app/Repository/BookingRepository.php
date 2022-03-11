@@ -28,10 +28,12 @@ interface BookingRepositoryInterface {
 class BookingRepository implements BookingRepositoryInterface
 {
     protected $model;
+    protected $debug;
 
     public function __construct()
     {
         $this->model = new Booking();
+        $this->debug = false;
     }
 
     public function findBookingByToken($token)
@@ -39,13 +41,14 @@ class BookingRepository implements BookingRepositoryInterface
 
         $booking = $this->model->where('token', $token)->first();
 
-        Log::debug('findBookingByToken:', [$token, $booking, isset($booking->customer), isset($booking->customer_id)]);
+        $this->debug && Log::debug('findBookingByToken:', [$token, $booking, isset($booking->customer), isset($booking->customer_id)]);
+
         if (isset($booking) && isset($booking->customer_id)) {
             $booking->customer->home_address = Address::find($booking->customer->home_address_id);
             $booking->customer->billing_address = Address::find($booking->customer->billing_address_id);
             return $booking;
         }
-        Log::debug('findBookingByToken: token not found', [$token]);
+        Log::warning('BookingRepository::findBookingByToken: token not found', [$token]);
 
         return null;
     }
@@ -60,7 +63,7 @@ class BookingRepository implements BookingRepositoryInterface
     {
         try {
             $booking = Booking::where('token', $token)->first();
-            Log::debug('BCC: findBooking', [$booking]);
+            Log::debug('BookingRepository::static findBooking', [$booking]);
             return $booking;
         } catch (Exception $e) {
             Log::error("error finding booking for $token", $e->getMessage());
