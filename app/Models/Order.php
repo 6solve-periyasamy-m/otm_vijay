@@ -175,7 +175,7 @@ class Order extends Model
 
     public function getTotalAttribute(): float
     {
-        return $this->getCost();
+        return $this->cancelled ? $this->paid : $this->getCost();
     }
 
     public function getRemainingAttribute(): float
