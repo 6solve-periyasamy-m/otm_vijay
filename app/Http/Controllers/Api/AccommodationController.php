@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Exceptions\RoomingFailedException;
 use App\Models\Order;
 use App\Repository\OrderRepository;
+use App\Repository\TourRepository;
 use Exception;
 use App\Models\Tour;
 
@@ -170,6 +171,7 @@ class AccommodationController extends ApiController
                     $tour->accommodationInventoryTours()->save($inventoryTour);
                 }
             }
+            TourRepository::autoAssignTemplating($tour);
             return response('Any listed components have been successfully added', 200);
         }
         abort(400, 'Invalid component type has been provided');

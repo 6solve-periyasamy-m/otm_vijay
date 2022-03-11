@@ -82,6 +82,7 @@
                         <th scope="col">Tour Name</th>
                         <th scope="col">Ordered On</th>
                         <th scope="col">Tour Cost</th>
+                        <th scope="col">Order Status</th>
                     </tr>
                 </thead>
                 @foreach($customer->orderCustomers as $orderCustomer)
@@ -90,6 +91,7 @@
                         <td>{{ $orderCustomer->order->tour->name }}</td>
                         <td>{{ StringFormatter::formatDateTime($orderCustomer->order->ordered_on) }}</td>
                         <td>{{ StringFormatter::formatCurrency($orderCustomer->tour_cost) }}</td>
+                        <td><h6 class="badge badge-{{ $orderCustomer->order->getStatus()['color'] }} fw-bold">{{ $orderCustomer->order->getStatus()['status'] }}</h6></td>
                     </tr>
                 @endforeach
             </table>

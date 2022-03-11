@@ -9,6 +9,7 @@
             $('#activities-table').DataTable({fixedHeader: true});
             $('#flights-table').DataTable({fixedHeader: true});
             $('#transports-table').DataTable({fixedHeader: true});
+            $('#templates-table').DataTable({fixedHeader: true});
             $('#installments-table').DataTable({fixedHeader: true});
             $('#merchandise-table').DataTable({fixedHeader: true});
             $('#orders-table').DataTable({fixedHeader: true});
@@ -381,8 +382,33 @@
     {{-- Payment Installment Section --}}
     <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">Payment Installments</h2>        
-    </div>    
+        <h2 class="fw-bold">Room Availability</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table id="templates-table" class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Template</th>
+                    <th scope="col">Available</th>
+                </tr>
+                </thead>
+                @foreach($tour->getAccommodationTemplateData() as $templateData)
+                    <tr>
+                        <th scope="row">{{ StringFormatter::formatDate($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
+                        <td>{{ $templateData['template'] }}</td>
+                        <td>{{ implode(', ', $templateData['available']) }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+    {{-- Payment Installment Section --}}
+    <hr class="splitter"/>
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">Payment Installments</h2>
+    </div>
     <div class="card">
         <div class="card-body text-end">
             <a href="{{ route('payment-installments.create', ['tour' => $tour,]) }}" class="btn btn-primary">
