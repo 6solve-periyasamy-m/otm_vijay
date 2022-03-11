@@ -134,6 +134,21 @@ class FlightController extends ApiController
             return response()->json(["success" => false, "message" => "no flight bookings"]);
         }
     }
+    /**
+     * Remove flight booking
+     *
+     * @param Request $request
+     * @return JSON response
+     */
+    public function removeFlightBooking($booking, $flightInventoryTour)
+    {
+        $bookingFlight = new BookingFlight();
+        $booking = $bookingFlight->where('booking_id', $booking->id)
+            ->where('flight_inventory_id', $flightInventoryTour->flight_inventory_id)
+            ->delete();
+        
+        return $booking;
+    }
 
     /**
      * storeOrUpdateFlightBooking
