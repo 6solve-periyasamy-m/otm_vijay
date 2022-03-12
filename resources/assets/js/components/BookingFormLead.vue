@@ -9,9 +9,9 @@
                 <h5 class="dropdown-button">
                     <p v-if="!booking_token && !show_traveller">Start your booking by entering your details</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
-                            <font-awesome-icon icon="book-reader" />
-                            Lead Traveller details
-                        </button>
+                        <font-awesome-icon icon="book-reader" />
+                        Lead Traveller details
+                    </button>
                 </h5>
     
                 <div class="card-info" v-if="!show_traveller">
@@ -336,7 +336,7 @@ export default {
         let that = this
         bus.$on('setBookingToken', token => {
             that.booking_token = token
-            that.debug && console.log(`>>>><<<< ${that.moduleName} created: booking ${that.booking_token}`)
+            that.debug && console.log(`${that.moduleName} created: booking ${that.booking_token}`)
             let tokens
             if (localStorage.tokens == undefined) {
                 tokens = new Array()
@@ -354,7 +354,7 @@ export default {
             bus.$emit('setLeadTraveller', customer)
         })
         bus.$on('homeAddressLoaded', home_address => {
-            console.log('home address:', home_address)
+            that.debug>1 && console.log('BookingFormLead: home address:', home_address)
             that.address_line_1 = home_address.address_line_1
             that.address_line_2 = home_address.address_line_2
             that.address_line_3 = home_address.address_line_3
@@ -372,7 +372,7 @@ export default {
             that.billing_postcode = billing_address.postcode
             that.billing_country_id = billing_address.country_id
         })
-        console.log(`${this.moduleName} created`)
+        that.debug>1 && console.log(`${this.moduleName} created`)
     },
     mounted() {
         let that = this
@@ -383,7 +383,7 @@ export default {
         }
         this.activeBookings = ''
         this.loadCountries()
-        console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`)
+        that.debug>1 && console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`)
     },
     computed: {
         otherNumberType: function() {
@@ -426,7 +426,7 @@ export default {
                         })
                         .then(response => {
                             that.auth = false
-                            console.log('authorised', response)
+                            that.debug>1 && console.log('BookingFormLead: authorised', response)
                             if (response.authorised) {
                                 that.auth = true
                             }
@@ -445,13 +445,12 @@ export default {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
             let that = this
-            // alert('retriveUser');
             // is it a registered user?
             if (!this.auth) {
-                console.log('checking for auth user');
+                this.debug>1 && console.log('BookingFormLead: checking for auth user');
                 axios.get(`/api/booking/email/registered/${this.email}`)
                     .then(response => {
-                        console.log('email registered? response', response)
+                        this.debug>1 && console.log('BookingFormLead: email registered? response', response)
                         this.activeUser = response.data.existing
                         if (that.activeUser) {
                             that.email_address = that.email
@@ -463,14 +462,14 @@ export default {
                     .catch(error => console.log(error));
             } else {
                 alert('You have been authenticated')
-                console.log('Authenticated user', that.customer)
+                this.debug>1 && console.log('BookingFormLead: Authenticated user', that.customer)
             }
         },
         retrieveBookingToken() {
             let that = this
             axios.post('/api/booking/recover/token', this.email)
                 .then(response => {
-                    console.log(response);
+                    that.debug>3 && console.log('BookingFomrLead: retrieveBookingToken: ', response);
                     if (response.data.success) {
                         bus.$emit('setBookingToken', response.data.token)
                         alert('token retrieved for ' + that.email, response.data.token, that.booking_token)
@@ -486,7 +485,7 @@ export default {
             axios.get(`/api/booking/findOrderByEmail/${this.email}`)
             .then(response => {
                 const data = response.data.data
-                console.log('find order by email, data', data)
+                console.log('BookingFormLead: find order by email, data', data)
                 if (data) {
                     bus.$emit('setBookingToken', data[0].token, data[0].order_id)
                     alert('You have one active order retrieved.  Refresh browser')
@@ -587,7 +586,7 @@ export default {
                         that.countries = response.data.countries
                     } else {
                         that.countries = { id: 1, name: "United Kingdom", code: "UK", currency: "GBP" }
-                        console.log('Country list: ', response)
+                        console.log('BookingFormLead: Country list: ', response)
                     }
                 })
                 .catch(error => {

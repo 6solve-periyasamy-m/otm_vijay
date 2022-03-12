@@ -34,12 +34,13 @@ import { bus } from '../bus'
 export default {
     props: ['tour'],
     mounted() {
-        console.log("Booking Form Terms and Conditions active.")
+        this.debug && console.log("Booking Form Terms and Conditions active.")
         this.tourdata = this.tour
     },
     data() {
         return {
             showTermsConditions: false,
+            debug: false,
             accepted: false,
             tourData: {}
         };

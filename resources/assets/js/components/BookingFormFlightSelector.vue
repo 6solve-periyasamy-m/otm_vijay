@@ -35,7 +35,7 @@
 import dates from '../utilities'
 import { bus } from '../bus'
 export default {
-    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
+    props: [ 'traveler', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
     data() {
         return {
             debug: false,
@@ -55,7 +55,7 @@ export default {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
         console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
-        this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
+        this.debug && console.log('BFFS Mounted', this.traveler, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
     },
     created() {
         let that = this
@@ -79,8 +79,8 @@ console.log('items in created: ',this.selected_item, this.identification, this.t
             console.log('WARNING: selected_item not set?', this.selected_item)
         }
         this.filterFlights()
-        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
-            console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
+        bus.$on('setCustomFlightsForTraveller', function(customtraveler, selected) {
+            console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveler, selected, that.flightId)
         })
          
     },
@@ -88,18 +88,18 @@ console.log('items in created: ',this.selected_item, this.identification, this.t
         changeFlight() {
             if (typeof this.flightId != 'undefined' && this.flightId != null && this.flightId != 0) {
                 this.caption = 'Remove selection'
-                this.debug>4 && console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveller, this.custom, this.token)
-                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom, this.token)
+                this.debug>4 && console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveler, this.custom, this.token)
+                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveler, this.custom, this.token)
             } else {
                 this.caption = 'You can select a custom flight'
             }
         },
         removeBooking(booking, flight_type) {
-            // props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
+            // props: [ 'traveler', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
             // /booking/flights/remove/flight/{order_id]/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
             this.caption = 'Reselect'
             this.debug>4 && console.log('removing', booking, flight_type, this.tour)
-            bus.$emit('removeBooking', booking, flight_type, this.traveller);
+            bus.$emit('removeBooking', booking, flight_type, this.traveler);
         },
         filterFlights() {
             var that = this

@@ -39,16 +39,16 @@ bus.$on('saveLeadCustomer', function(name) {
 
 if (busEventLogging) {
     bus.$on('getLoginToken', () => {
-        console.log('>>> getLoginToken cookie')
+        console.log('Event Bus: getLoginToken cookie')
     })
     bus.$on('setBookingToken', token => {
-        console.log('>>>><<<< setBookingToken event monitor ', token);
+        console.log('Event Bus: setBookingToken event monitor ', token);
     })
     bus.$on('bookingCreated', booking => {
-        console.log('>>> booking created by lead traveller', booking)
+        console.log('Event Bus: booking created by lead traveller', booking)
     })
     bus.$on('click', function(id) {
-        console.log('added traveller', id)
+        console.log('Event Bus: added traveller', id)
     })
     bus.$on('leadTravellerLoaded', function(customer) {
         console.log('Event Bus: leadTravellerLoaded', customer)
@@ -57,7 +57,7 @@ if (busEventLogging) {
         console.log('Event Bus: removed traveller ',id)
     })
     bus.$on('accommodationBookingsLoaded', function() {
-        console.log('accommodationBookingsLoaded')
+        console.log('Event Bus: accommodationBookingsLoaded')
     })
 }
 

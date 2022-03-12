@@ -201,7 +201,7 @@ export default {
                 console.log('Payment ignored: ', token);
             }
         })
-        bus.$on("TravellersLoaded", (travellers) => {
+        bus.$on("AdditionalTravelersLoaded", (travellers) => {
             this.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             travellers.map(traveller => this.travellers.push(traveller));
         })
@@ -226,7 +226,6 @@ export default {
         calculateSingleRooms: function() {
             let rooms = 0
             this.travellers.map(t => {
-              console.log(t)
               if (t.room_type === 1) {
                 rooms++;
               }
@@ -346,10 +345,10 @@ export default {
         },
         calcTourPrice() {
             let that = this
-            console.log('tour', this.tour);
+            this.debug>1 && console.log('BookingFormPayment: calcTourPrice: tour', this.tour);
             axios.get(`/api/booking/tour/price/${this.tour.id}`)
                 .then(response => {
-                  console.log('tour price data', response)
+                  that.debug>1 && console.log('BookingFormPayment: tour price data', response)
                   that.tourPrice = parseFloat(response.data.tour_price)
                   that.singleOccupancySurcharge = parseFloat(response.data.single_occupancy_surcharge)
                   that.deposit = parseFloat(response.data.deposit)
@@ -378,9 +377,10 @@ export default {
         loadBooking(token) {
             let that = this
             if (token == undefined) {
-              console.log('ERROR: payment stage has no token');
+              console.log('BookingFormPayment: ERROR: payment stage has no token')
               return
             }
+            console.log('BookingFormPayment: loading summary data for ', token)
             axios.get(`/api/booking/summary/${token}/gather`)
                 .then(response => {
                     that.booking = response.data.booking

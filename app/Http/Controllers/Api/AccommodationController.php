@@ -34,10 +34,8 @@ class AccommodationController extends ApiController
      */
     public function getAccommodationOptions(Tour $tour)
     {
-        $room_types = RoomType::select('id', 'name', 'maximum_occupancy') 
-          ->whereNull('deleted_at')
-          ->get();
-
+        // $room_types = RoomType::select('id', 'name', 'maximum_occupancy') ->whereNull('deleted_at') ->get();
+        $room_types = AccommodationRepository::loadRoomsForTour($tour);
         return response()->json(['success' => true, 'options' => [ 'room_types' => $room_types ]]);
     }
 

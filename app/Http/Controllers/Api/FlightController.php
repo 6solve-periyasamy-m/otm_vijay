@@ -36,6 +36,7 @@ class FlightController extends ApiController
     // same as above??
     public function getFlightInventoryData()
     {
+die('getFlightInventoryData');
         $inventory = new FlightInventory();
         $records = $inventory->get();
         $result = $records->map(function ($flightInventory) {
@@ -65,9 +66,7 @@ class FlightController extends ApiController
     {
         $flightsRepository = new FlightsRepository();
         $flights = $flightsRepository->flightsAvailableForTour($tour_id, $flight_type);
-
-        $this->debug > 3 && Log::info('flightsAvailableForTour:: DATA found'. print_r($flights->toArray(), 1));
-        $this->debug && Log::info('flightsAvailableForTour:: found ' . count($flights) . ' flights available');
+        $this->debug && Log::debug('getFlightsInventoriesForTour::', [$flights]);
 
         return response()->json(["success" => true, "data" => $flights]);
     }
@@ -83,6 +82,7 @@ class FlightController extends ApiController
         // Returns a list of flights from an airport
         $flightsRepository = new FlightsRepository();
         $result = $flightsRepository->flightsDepartingAfterToday($airport);
+        $this->debug && Log::info('getFlightsFromAirport::', [$result]);
 
         return response()->json(["success" => true, "data" => $result]);
     }
@@ -100,6 +100,7 @@ class FlightController extends ApiController
                             'tour_sales_price' => $inventory->sales_price,
                             'flight_type' => $request->input('direction'),
                         ]);
+                        $this->debug && Log::info('addFlightInventoryToTour -> save', [$inventoryTour]);
                         $tour->flightInventoryTours()->save($inventoryTour);
                     }
                 }
@@ -181,7 +182,8 @@ class FlightController extends ApiController
         }
 
         try {
-            $bookingFlight->save();
+            $status = $bookingFlight->save();
+            Log::debug("storeOrUpdateFlightBooking", [$bookingFlight, $status]);
         } catch (Exception $e) {
             Log::error('Error saving Booking flight' . $e->getMessage());
         }
@@ -233,7 +235,7 @@ class FlightController extends ApiController
             throw new \Exception('Booking token mismatch');
         }
 
-        $this->debug == 'flights' && Log::info('***** bookFlightDetails parameters:', [$customer_id, $tour_id, $flight_type, $flight_inventory_tour_id, $custom, $token]);
+        $this->debug == 'flights' && Log::debug('postFlightBooking: validated parameters', [$customer_id, $tour_id, $flight_type, $flight_inventory_tour_id, $custom, $token]);
 
         $tours = new Tour();
         $rejection = 0;
@@ -261,6 +263,7 @@ class FlightController extends ApiController
             throw new Exception('BookFlightDetails: booking and customer IDs do not agree');
         }
         if (isset($flightInventoryTour)) {
+            $this->debug && Log::debug('postFlightBooking', [$booking, $flight_type, $flightInventoryTour]);
             $result = $this->storeOrUpdateFlightBooking($booking, $flight_type, $flightInventoryTour);
         } else {
             throw new Exception('ERROR: can not store a flight without a flightInventoryTour record');

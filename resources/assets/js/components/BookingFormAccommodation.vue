@@ -53,14 +53,14 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: false,
+            debug: 2,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
             showRegistered: true,
             accommodations: [],
             travellers: [],
-            initTravellers: [],
+            initTravelers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
             room_type: {},
             groups: []
@@ -72,11 +72,11 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on("TravellersLoaded", (travellers) => {
+        bus.$on("AdditionalTravelersLoaded", (travellers) => {
             this.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadAccommodationBooking(this.travellers)
-            this.initTravellers = this.travellers
+            this.initTravelers = this.travellers
         })
     },
     mounted() {
@@ -92,19 +92,20 @@ export default {
                 t.group = 0;
               }
             })
-            console.log('setAccommodation', this.booking_token, this.travellers)
+            this.debug>1 && console.log('BookingFormAccommodation: setAccommodation', this.booking_token, this.travellers)
             axios.post(`/api/booking/accommodation/reserve`, {
                 token : this.booking_token,
                 travellers :  this.travellers 
               })
               .then(response => {
                 that.showAccommodation = false
-                console.log(response)
+                that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
+                // TODO: do something with response?
               })
               .catch(error => console.log(error))
         },
         resetTravellers() {
-            this.travellers = this.initTravellers
+            this.travellers = this.initTravelers
             this.travellers.map(t => Vue.set(t, 'group', '0'))
             this.travellers.map(t => Vue.set(t, 'room_type', '0'))
         },
@@ -115,7 +116,7 @@ export default {
                 travellers: this.travellers
               })
               .then(response => {
-                  this.travellers = this.initTravellers
+                  this.travellers = this.initTravelers
                   this.loadAccommodationBooking(this.travellers)
               })
               .catch(error => console.log(error))
@@ -140,12 +141,12 @@ export default {
         },
         getAccommodationOptions() {
             const that = this
-            const url = `/api/booking/accommodation/options/${this.tour.id}`
+            const url = `/api/booking/accommodation/rooms/tour/${this.tour.id}`
             axios.get(url)
                 .then(response => {
-                    that.debug>3 && console.log('getAccommodationOptions', response.data)
-                    that.room_types = response.data.options.room_types
-                    console.log('accommodation: roomtypes: ', that.room_types)
+                    that.debug && console.log('BookingFormAccommodation: getAccommodationOptions: response: ', response)
+                    that.room_types = response.data.rooms
+                    that.debug>1 && console.log('BookingFormAccommodation: getAccommodationOptions: roomtypes: ', that.room_types)
                 })
                 .catch(error => console.log(error))
         },
@@ -155,7 +156,7 @@ export default {
                 console.log('loadAccommodationBooking has no travellers to load')
                 return
             }
-            this.debug > 3 && console.log('***** loadAccommodationBooking started... travellers ', travellers)
+            this.debug > 3 && console.log('BookingFormAccommodations: loadAccommodationBooking: travellers ', travellers)
 
             let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
             axios.get(url)
@@ -167,17 +168,16 @@ export default {
                     that.travellers = []
 
                     that.resetTravellers()
-                    that.debug > 7 && console.log('Accommodation: loadBooking response ', bookings)
 
-                    console.log('travellers', that.travellers, bookings)
+                    that.debug > 5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
                     bookings.map((booking, index) => {
-                       console.log('BOOKING', index, booking.room_type_id, booking.group_id)
+                       that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, booking.room_type_id, booking.group_id)
                        if (booking.room_type_id) {
                            Vue.set(that.travellers[index], 'room_type', booking.room_type_id)
                        }
                        Vue.set(that.travellers[index], 'group', booking.group_id)
                     })
-                    console.log('travellers', that.travellers, bookings)
+                    that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
                 })
                 .catch((error) => console.log(error));
         },
