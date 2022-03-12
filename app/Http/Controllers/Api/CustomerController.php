@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Cookie;
 
+use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Customer;
 
@@ -17,9 +18,9 @@ class CustomerController extends ApiController
 {
     protected $logging = false;
     /** 
-     * getCustomerByToken - No longer used by booking form, the user can find their bookings by token
-     * or authenticate to access their bookings by customer_id: may be adapted to getCustomerByEmail
-     * as a secure way to restore booking tokens before logging in
+     * getCustomerByToken - being used by FLIGHTS so fixed by using the booking token
+     * TODO: refactor
+     * WAS using the login_token to retrieve customer but login_token is not active in the booking form (cookies being used instead)
      * 
      * @param $token
      * @return $customer or NULL if token no longer valid
@@ -33,8 +34,13 @@ class CustomerController extends ApiController
 
         $home_address = null;
         $billing_address = null;
-        $customers = new Customer();
-        $customer = $customers->where('login_token', $token)->first();
+        $booking = Booking::where('token', $token)->first();
+        if (empty($booking)) {
+            Log::warning('CustomerController::getCustomerByToken: WARNING: no booking for token '.$token);
+            return null;
+        }
+         
+        $customer = Customer::find($booking->customer_id);
         if (empty($customer)) {
             Log::warning('CustomerController::getCustomerByToken: WARNING: no customer for token '.$token);
             return null;
@@ -42,13 +48,14 @@ class CustomerController extends ApiController
 
         $addressRepo = new AddressRepository();
         if (isset($customer->home_address_id)) {
-            $home_address = $addressRepo->get($customer->home_address_id);
+            $customer->home_address = $addressRepo->get($customer->home_address_id);
         }
         if (isset($customer->billing_address_id)) {
-            $billing_address = $addressRepo->get($customer->billing_address_id);
+            $customer->billing_address = $addressRepo->get($customer->billing_address_id);
         }
+        // Log::debug('********** getCustomer', [$customer]);
 
-        return response()->json(['success' => true, 'customer' => $customer, 'home_address' => $home_address, 'billing_address' => $billing_address]);
+        return response()->json(['success' => true, 'customer' => $customer]);
     }
 
     /**

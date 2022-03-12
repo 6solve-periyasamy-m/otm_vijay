@@ -7,7 +7,7 @@
                         Additional Travellers
                     </button>
                 </h5>
-                <p class="caption" v-if="!leadTraveller && !showAdditional">
+                <p class="caption" v-if="!showAdditional">
                     <font-awesome-icon icon="arrow-right" /> 
                     {{ travellerBookings.length ? `Group Size: ${travellerBookings.length+1}`: 'Please add all travellers to your tour party'}}
                 </p>
@@ -48,7 +48,7 @@
         props: ['tour'],
         data() {
             return {
-                debug: true,
+                debug: false,
                 moduleName: 'AdditionalTravellers',
                 booking_token: null,
                 id: 0,
@@ -65,17 +65,20 @@
             this.debug && console.log('*** travellerBookings created: check props', this.tour, this.leadTraveller )
             
             bus.$on('setLeadTraveller', customer => {
-              console.log(`${that.moduleName} set the Lead Traveller`, customer)
+              that.debug>1 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
               that.leadTraveller = customer
             })
 
             bus.$on('setBookingToken', (token) => {
                 that.booking_token = token
                 that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)            
-                that.loadLeadTraveler(token)
                 that.loadTravellerBookings()
+                that.loadLeadTraveler(token)
             })
             bus.$on('checkEmailUnique', email => {
+                if (email == null) {
+                    return
+                }
                 that.travellerBookings.map(traveller => {
                     if (traveller.email == email) {
                         bus.$emit('emailUsed', true)
@@ -85,15 +88,15 @@
 
         },
         mounted() {
-            console.log(`${this.moduleName} mounted`)
-            this.debug && console.log('*** travellerBookings mounted: check token and lead are set', this.booking_token, this.leadTraveller )
+            this.debug && console.log(`${this.moduleName} mounted`)
+            this.debug>3 && console.log('*** travellerBookings mounted: check token and lead are set', this.booking_token, this.leadTraveller )
         },
         methods: {
             loadLeadTraveler(token) {
                 let that = this
-                axios.get(`/api/booking/customer/{token}`)
+                axios.get(`/api/booking/customer/${token}`)
                     .then(response => {
-                        console.log('FLIGHT GET LEAD', response)
+                        that.debug>1 && console.log('ADDITIONAL GET LEAD response:', response)
                         that.leadTraveller = response.data.customer
                     })
                     .catch(error => console.log(error))
@@ -108,7 +111,7 @@
                 return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             },
             removeTraveller() {
-                this.debug  && console.log('...... removing additional traveller ', this.formId)
+                this.debug && console.log('ADDITIONAL: removing additional traveller ', this.formId)
                 return false
             },
             toggleAdditional() {
@@ -116,14 +119,15 @@
             },
             loadTravellerBookings() {
                 let that = this
-                this.debug && console.log(`...... loading additional travellers for ${this.booking_token}`)
+                this.debug && console.log(`ADDITIONAL: loading additional travellers for ${this.booking_token}`, that.leadTraveller)
                 axios.get(`/api/booking/travellers/${this.booking_token}`)
                     .then(response => {
                         if (response.data.success) {
                             const travellers = response.data.travellers
-                            bus.$emit('TravellersLoaded', travellers)
+                            that.debug && console.log('ADDITIONAL: travellers', travellers, that.leadTraveller);
                             that.travellerBookings = travellers.filter(traveller => traveller.id !== that.leadTraveller.id)
-                            bus.$emit('TravellerBookingsLoaded', that.travellerBookings)
+                            that.debug && console.log('ADDITIONAL: travellerBookings', that.travellerBookings);
+                            bus.$emit('AdditionalTravelersLoaded', that.travellerBookings)
                         }
                     })
                     .catch(error => {
@@ -135,7 +139,7 @@
                 this.showInstruction = false
                 this.travellerBookings.push(`traveller_${this.formId}`) 
                 this.showAdditional = true
-                this.debug && console.log('????? additional added', this.formId)
+                this.debug && console.log('ADDITIONAL addAdditional form:', this.formId)
                 // Event handler in BookingFormAddTraveller used this.formId (which was not defined?)
                 bus.$emit('addTraveller', this.formId)
             }

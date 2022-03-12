@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div> OTM Booking Form pre-release version 0.84</div>
+                        <div> OTM Booking Form pre-release version 0.85</div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
@@ -43,7 +43,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: null,
+            debug: false,
             formInfo: false,
             bookingId: '',
             leadTraveller: null,
@@ -92,15 +92,20 @@ export default {
             axios.get(`/api/booking/token/${that.bookingToken}`)
             .then(response => {
                 if (response.data.success) {
-                    that.debug && console.log(`BookingForm: booking loaded `, response.data.booking)
-                    that.leadTraveller = response.data.booking.customer
+                    const data = response.data
+                    that.debug && console.log(`BookingForm: booking loaded `, data)
+                    if (data.success == false) {
+                        alert('error loading booking!')
+                        return
+                    }
+                    that.leadTraveller = data.customer
 
-                    bus.$emit('setBookingToken', response.data.booking.token)
+                    bus.$emit('setBookingToken', data.booking.token)
 
                     // TODO: are these events really needed?
                     bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                    bus.$emit('homeAddressLoaded', response.data.booking.customer.home_address)
-                    bus.$emit('billingAddressLoaded', response.data.booking.customer.billing_address)
+                    bus.$emit('homeAddressLoaded', data.customer.home_address)
+                    bus.$emit('billingAddressLoaded', data.customer.billing_address)
                 } else {
                     // the token is not registered
                     console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)

@@ -75,9 +75,8 @@ export default {
         })
         bus.$on('customerLoaded', (leadTraveller) => {
             this.leadTraveller = leadTraveller
-            console.log('leadtravllerloaded')
         })
-        bus.$on("TravellerBookingsLoaded", (travellers) => {
+        bus.$on("AdditionalTravelersLoaded", (travellers) => {
             this.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadActivityBooking(this.travellers)
@@ -87,7 +86,6 @@ export default {
     },
     methods: {
         startDate(event) {
-            console.log(event.starts_at)
             return dates.bookingTime(event.starts_at)
         },
         endDate(event) {
@@ -100,7 +98,7 @@ export default {
             let that = this
             axios.get(`/api/booking/activities/tour/${this.tour.id}`)
                 .then(response => {
-                    console.log('Activity Inventory: ',response)
+                    that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
                     that.activities = response.data.activities
                 })
                 .catch(error => {
@@ -108,7 +106,7 @@ export default {
                 })
         },
         loadActivityBooking() {
-            console.log('loadActivityBooking')
+            this.debug>1 && console.log('loadActivityBooking')
         }
     }
 }

@@ -168,7 +168,7 @@ export default {
         bus.$on('addTraveller', function(formId) {
             that.debug && console.log('BookingFormAddTraveller: setting', formId, that.form_id)
             if (formId === that.form_id) {
-                console.log('form ' + that.form_id + ' edit activated')
+                console.log('BookingFormAddTraveller: form ' + that.form_id + ' edit activated')
                 that.edit_fields = true
             }
         })
@@ -192,13 +192,13 @@ export default {
         setCustomerFields() {
             let that = this
             this['id'] = this.customer['id']
-            console.log('customer fields: ', that.customer)
+            this.debug>5 && console.log('BookingFormAddTraveller: customer fields: ', that.customer)
             this.fields.forEach(function(key,value) {
                 if (typeof that.customer[key] !== 'undefined') {
                     that[key] = that.customer[key]
                 }
             })
-            console.log('dob fields: ', that.date_of_birth)
+            this.debug>5 && console.log('BookingFormAddTraveller: dob fields: ', that.date_of_birth)
             if (that.date_of_birth != undefined && that.date_of_birth != null) {
                 that.date_of_birth = dates.isoString(that.date_of_birth)
             }
@@ -207,12 +207,12 @@ export default {
             // valid_uk appears to be fairly accurate
             const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
             const field = e.srcElement.name
-            this.debug && console.log('validating ', field)
+            this.debug>5 && console.log('BookingFormAddTraveller: validating ', field)
             switch (field) {
                 case 'mobile_number':
                     if (!valid_uk.test(this.mobile_number)) {
                         this.mobile_number_invalid = true
-                        this.debug && console.log('BookingFormAddTraveller: Invalid!', this.mobile_number)
+                        this.debug>1 && console.log('BookingFormAddTraveller: Invalid!', this.mobile_number)
                         return false
                     }
                     this.mobile_number_invalid = false
@@ -227,7 +227,7 @@ export default {
                 default:
                     alert(field + ' not handled in switch')
             }
-            this.debug && console.log(field, 'BookingFormAddTraveller: validated')
+            this.debug>3 && console.log(field, 'BookingFormAddTraveller: validated')
             return true
         },
         validEmail() {
@@ -243,7 +243,6 @@ export default {
             bus.$emit('checkEmailUnique', this.email_address);
             const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             const valid = valid_email.test(this.email_address)
-            //this.debug && console.log(this.email_address, valid)
             this.email_invalid = !valid
 
             // is this an existing customer?
@@ -251,7 +250,7 @@ export default {
                 email_address: this.email_address
             })
                 .then(response => {
-                    console.log(response)
+                    that.debug>3 && console.log('BookingFormAddTraveller: email/check: ', response)
                     if (response.data.success) {
                         const customer = response.data.customer
                         that.title = customer.title
@@ -271,7 +270,7 @@ export default {
         },
         storeTraveller() {
             const that = this
-            console.log('store additional', that.booking_token)
+            that.debug>1 && console.log('BookingFormAddTraveller: store additional', that.booking_token)
             that.errors = []
             that.validationErrors = null
             axios.post('/api/booking/additional-traveller', {
@@ -289,11 +288,11 @@ export default {
                     date_of_birth: this.date_of_birth
                 })
                 .then(response => {
-                    console.log('additional traveller response', response.data.success, response.data)
+                    that.debug>1 && console.log('BookingFormAddTraveller: additional traveller response', response.data.success, response.data)
                     if (response.data.success) {
                         that.include = 'checked'
                         that.edit_fields = false
-                        that.debug && console.log('stored', response)
+                        that.debug>3 && console.log('BookingFormAddTraveller: stored', response)
                         const customer = response.data.customer
                         that.id = customer.id
                         that.title = customer.title
@@ -313,7 +312,7 @@ export default {
                     }
                 })
                 .catch(e => {
-                    console.log('submit error', e)
+                    console.log('BookingFormAddTraveller: submit error', e)
                     that.errors.push(e.response.errors)
                     that.validationErrors = e.response.errors
                     that.validated = false
@@ -321,7 +320,7 @@ export default {
         },
         removeTraveller() {
             const that = this
-            this.debug && console.log('removing ', this.traveller.id)
+            this.debug && console.log('BookingFormAddTraveller: removing ', this.traveller.id)
             if (!this.traveller.id) {
                 this.removed = true
                 return
@@ -333,7 +332,7 @@ export default {
             .then(response => {
                 that.removed = true
             })
-            .catch(error => console.log('remove customer error', error))            
+            .catch(error => console.log('BookingFormAddTraveller: remove customer error', error))            
 
             bus.$emit('removeTraveller', this.traveller.id)
         }
