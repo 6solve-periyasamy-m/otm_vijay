@@ -102,6 +102,8 @@ class Order extends Model
                 return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
             case 3:
                 return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
+            case 4:
+                return ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'];
             default:
                 return ['status' => 'Status Unknown', 'color' => 'dark'];
         }
@@ -193,12 +195,12 @@ class Order extends Model
 
     public function getDepositPercentageAttribute(): float
     {
-        return round(($this->calculated_deposit / $this->getCost()) * 100, 2);
+        return $this->getCost() == 0 ? 0 : round(($this->calculated_deposit / $this->getCost()) * 100, 2);
     }
 
     public function getRemainingPercentageAttribute(): float
     {
-        return round(($this->remaining_installment / $this->getCost()) * 100, 2);
+        return $this->getCost() == 0 ? 0 : round(($this->remaining_installment / $this->getCost()) * 100, 2);
     }
 
     public function getCalculatedDepositAttribute(): float

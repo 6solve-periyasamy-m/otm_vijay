@@ -14,7 +14,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - OTM Customer End Portal</title>    
     <!-- Custom CSS -->
-    <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet">    
+    <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
+
+    @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @stack('header-ready')
+        });
+    </script>
 </head>
 <body>
     <!-- Preloader -->
@@ -35,7 +44,7 @@
         @endif
 
         <!-- Main Body -->
-        <div class="container h-100">
+        <div class="container h-80" @if(isset($overflow) && !$overflow) style="overflow: hidden;" @endif>
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-md-6 col-8 align-self-center">
@@ -46,9 +55,10 @@
             @yield('content')
         </div>
     </div>
-    <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
     <script src="{{ asset('js/customer/sidebarmenu.js') . '?' . date('U')  }}"></script>
     <script src="{{ asset('js/customer/customer.js') . '?' . date('U')  }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @yield('footer-script')
+    @stack('footer-stack')
 </body>

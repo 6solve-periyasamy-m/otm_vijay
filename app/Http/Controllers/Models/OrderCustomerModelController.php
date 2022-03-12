@@ -62,6 +62,9 @@ class OrderCustomerModelController extends Controller
 
     public function destroy(Order $order, OrderCustomer $orderCustomer)
     {
+        foreach ($orderCustomer->groups as $group) {
+            if ($group->orderCustomers->count() == 1) { $group->delete(); }
+        }
         $orderCustomer->delete();
         event(new OrderCustomerRemovedEvent($orderCustomer));
         return redirect()->route('orders.view', ['order' => $order,]);

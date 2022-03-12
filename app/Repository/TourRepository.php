@@ -169,4 +169,75 @@ class TourRepository implements TourRepositoryInterface
         $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         return isset($upgrade) ? $upgrade->id : -1;
     }
+
+    public static function autoAssignTemplating(Tour $tour)
+    {
+        $dates = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type !== 'Included') continue;
+            $start = $inventoryTour->inventory->check_in->clone();
+            $start->setTime(0,0,0);
+            if (array_key_exists($start->unix(), $dates)) {
+                if ($inventoryTour->is_template && !$dates[$start->unix()]->is_template) {
+                    $dates[$start->unix()] = $inventoryTour;
+                }
+            } else {
+                $dates[$start->unix()] = $inventoryTour;
+            }
+        }
+        foreach ($dates as $inventoryTour) {
+            $inventoryTour->is_template = true;
+            $inventoryTour->save();
+        }
+    }
+
+    public static function getTemplateData(Tour $tour): array
+    {
+        $data = [];
+        foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {
+            $templateData = ['template' => $template, 'available' => []];
+            foreach (AccommodationComponentRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
+                $templateData['available'][] = $roomType;
+            }
+            $data[] = $templateData;
+        }
+        return $data;
+    }
+
+    public static function clone(Tour $oldTour): Tour
+    {
+        $newTour = $oldTour->replicate();
+        $newTour->save();
+        foreach ($oldTour->accommodationInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->activityInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->flightInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->transportInventoryTours as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->merchandise as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($oldTour->paymentInstallments as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        return $newTour;
+    }
 }
