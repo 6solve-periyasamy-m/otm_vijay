@@ -47,8 +47,6 @@ class CustomerTourController extends Controller
             }
         }
         if (!isset($oCustomer)) abort(404);
-        return view('pages.customer.extras',
-            array_merge(['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders],
-                OrderRepository::getAvailableForExtras($oCustomer)));
+        return view('pages.customer.components', ['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'orderCustomer' => $oCustomer]);
     }
 }

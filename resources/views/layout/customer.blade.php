@@ -14,9 +14,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - OTM Customer End Portal</title>    
     <!-- Custom CSS -->
+    <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
     <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
+    <style>
+        .select2-container--default .select2-selection--single {
+            border: none !important;
+        }
+    </style>
 
     @stack('header-stack') <!-- TODO: Rename to script once all sections are converted -->
     <script type="text/javascript">
