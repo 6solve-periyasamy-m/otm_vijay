@@ -143,7 +143,8 @@
         {{-- Accommodation --}}
         <div class="card">
             <div class="card-body">
-                <span class="h2">Accommodation</span>
+                <span class="h2">Accommodation</span><br />
+                <span>Click <span class="btn btn-success">+</span> to add to order for payment later, or <span class="btn btn-primary">$</span> to buy now</span>
             </div>
         </div>
         <div class="card">
@@ -204,7 +205,8 @@
         {{-- Activities --}}
         <div class="card">
             <div class="card-body">
-                <span class="h2">Activities</span>
+                <span class="h2">Activities</span><br />
+                <span>Click <span class="btn btn-success">+</span> to add to order for payment later, or <span class="btn btn-primary">$</span> to buy now</span>
             </div>
         </div>
         <div class="card">
@@ -263,7 +265,8 @@
         {{-- Flights --}}
         <div class="card">
             <div class="card-body">
-                <span class="h2">Flights</span>
+                <span class="h2">Flights</span><br />
+                <span>Click <span class="btn btn-success">+</span> to add to order for payment later, or <span class="btn btn-primary">$</span> to buy now</span>
             </div>
         </div>
         <div class="card">
@@ -324,7 +327,8 @@
         {{-- Transport --}}
         <div class="card">
             <div class="card-body">
-                <span class="h2">Transport</span>
+                <span class="h2">Transport</span><br />
+                <span>Click <span class="btn btn-success">+</span> to add to order for payment later, or <span class="btn btn-primary">$</span> to buy now</span>
             </div>
         </div>
         <div class="card">
@@ -387,7 +391,8 @@
         {{-- Add-ons and Extras --}}
         <div class="card">
             <div class="card-body">
-                <span class="h2">Add-ons and Extras</span>
+                <span class="h2">Add-ons and Extras</span><br />
+                <span>Click <span class="btn btn-success">+</span> to add to order for payment later, or <span class="btn btn-primary">$</span> to buy now</span>
             </div>
         </div>
         <div class="card">
