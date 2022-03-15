@@ -53,7 +53,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 2,
+            debug: 9,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
@@ -73,10 +73,15 @@ export default {
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
         bus.$on("AdditionalTravelersLoaded", (travellers) => {
-            this.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
-            travellers.map(traveller => this.travellers.push(traveller));
-            this.loadAccommodationBooking(this.travellers)
-            this.initTravelers = this.travellers
+            that.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
+            travellers.map(traveller => that.travellers.push(traveller));
+            that.loadAccommodationBooking(that.travellers)
+            that.initTravelers = that.travellers
+        })
+        bus.$on("AddedTraveler", traveler => {
+            console.log('added traveller!', traveler)
+            that.travellers.push(traveler)
+            this.loadAccommodationBooking()
         })
     },
     mounted() {

@@ -48,7 +48,7 @@
         props: ['tour'],
         data() {
             return {
-                debug: false,
+                debug: 9,
                 moduleName: 'AdditionalTravellers',
                 booking_token: null,
                 id: 0,
@@ -75,6 +75,7 @@
                 that.loadTravellerBookings()
                 that.loadLeadTraveler(token)
             })
+
             bus.$on('checkEmailUnique', email => {
                 if (email == null) {
                     return
@@ -85,7 +86,6 @@
                     }
                 })
             })
-
         },
         mounted() {
             this.debug && console.log(`${this.moduleName} mounted`)
@@ -112,6 +112,7 @@
             },
             removeTraveller() {
                 this.debug && console.log('ADDITIONAL: removing additional traveller ', this.formId)
+                alert('ADDITIONAL: removing additional traveller')
                 return false
             },
             toggleAdditional() {

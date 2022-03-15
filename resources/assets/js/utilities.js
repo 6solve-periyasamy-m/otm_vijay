@@ -14,8 +14,8 @@ let num = {
 
 let dates = {
     isoString(ds) {
-        if (ds != undefined && ds != null) {
-            // console.log('isoString:', ds);
+        if (ds != undefined && ds != null && ds.length>6) {
+            console.log('isoString:', ds.length);
             return new Date(ds).toISOString().substring(0, 10)
         }
     },

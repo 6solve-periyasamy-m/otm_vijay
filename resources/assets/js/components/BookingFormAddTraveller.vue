@@ -250,7 +250,7 @@ export default {
                 email_address: this.email_address
             })
                 .then(response => {
-                    that.debug>3 && console.log('BookingFormAddTraveller: email/check: ', response)
+                    that.debug>3 && console.log('BookingForm: email/check: ', response)
                     if (response.data.success) {
                         const customer = response.data.customer
                         that.title = customer.title
@@ -294,6 +294,7 @@ export default {
                         that.edit_fields = false
                         that.debug>3 && console.log('BookingFormAddTraveller: stored', response)
                         const customer = response.data.customer
+
                         that.id = customer.id
                         that.title = customer.title
                         that.first_name = customer.first_name
@@ -307,6 +308,7 @@ export default {
                         that.gender = customer.gender
                         that.validated = true
                         that.validationErrors = ''
+                        bus.$emit('AddedTraveler', customer)
                     } else {
                         that.validationMessage = 'Something did not appear to work correctly, please try again'
                     }
