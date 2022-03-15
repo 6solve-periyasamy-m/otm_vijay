@@ -50,9 +50,9 @@ class ReportRepository
             $row->lb_last_name = $order->leadBooker->customer->last_name;
             $row->customer_count = $order->getCustomerCount();
             $row->tour_name = $order->tour->name;
-            $row->total_order_value = $order->getCost();
-            $row->balance_outstanding = $order->getRemaining();
-            $row->balance_paid = $order->getPaid();
+            $row->total_order_value = $order->total;
+            $row->balance_outstanding = $order->remaining;
+            $row->balance_paid = $order->paid;
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }
