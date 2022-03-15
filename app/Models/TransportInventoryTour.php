@@ -90,4 +90,22 @@ class TransportInventoryTour extends Model
         }
         return $keys;
     }
+
+    public function getCustomerUpgradeKeyMap(): array
+    {
+        $upgrades = $this->upgrades;
+        $keys = [];
+        if (!empty($upgrades->all())) {
+            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        } else {
+            $upgrades = $this->parent()->upgrades;
+        }
+
+        foreach ($upgrades as $upgrade) {
+            if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
+                $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+            }
+        }
+        return $keys;
+    }
 }

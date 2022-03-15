@@ -1062,4 +1062,43 @@ class OrderRepository
             'transports' => array_unique($data['transports']),
         ];
     }
+
+    public static function getAllAdditionals(Order $order): array
+    {
+        $data = [];
+        foreach ($order->tour->merchandise as $tourComponent) {
+            $data[] = ['name' => $tourComponent->name, 'type' => $tourComponent->tour_component_type,
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(),];
+        }
+        foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
+            }
+        }
+        foreach ($order->tour->activityInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),];
+            }
+        }
+        foreach ($order->tour->flightInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
+            }
+        }
+        foreach ($order->tour->transportInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),];
+            }
+        }
+        usort($data, function ($previous, $next) { return $previous['date'] <=> $next['date']; });
+        return $data;
+    }
 }

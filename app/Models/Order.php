@@ -226,4 +226,9 @@ class Order extends Model
     {
         return OrderRepository::hasFlight($this);
     }
+
+    public function getAvailableAdditionals(): array
+    {
+        return OrderRepository::getAllAdditionals($this);
+    }
 }
