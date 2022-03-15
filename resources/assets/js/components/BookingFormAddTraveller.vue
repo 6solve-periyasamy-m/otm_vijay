@@ -81,7 +81,7 @@
                 <div class="row">
                     <div class="col-sm-10 form-group field-separation">
                         <button 
-                            :disabled="!validForm"
+                            :disabled="!validForm && !latch"
                             type="button"
                             :formId="form_id"
                             class="btn"
@@ -151,7 +151,8 @@ export default {
             edit_fields: false,
             validationMessage: '',
             validationErrors: '',
-            validated: false
+            validated: false,
+            latch: false
         }
     },
     mounted() {
@@ -271,6 +272,7 @@ export default {
         },
         storeTraveller() {
             const that = this
+            this.latch = true
             that.debug>1 && console.log('BookingFormAddTraveller: store additional', that.booking_token)
             that.errors = []
             that.validationErrors = null

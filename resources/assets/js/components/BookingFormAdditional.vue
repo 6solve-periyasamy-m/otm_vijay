@@ -19,7 +19,7 @@
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
                 <div v-for="item in travellerBookings" :key="item.id">
-                    {{item.id}}
+                    {{debug?item.id:''}}
                     <booking-form-add-traveller 
                         :booking_token="booking_token"
                         :tour="tour"
@@ -43,7 +43,7 @@
         props: ['tour'],
         data() {
             return {
-                debug: 9,
+                debug: 5,
                 moduleName: 'AdditionalTravellers',
                 booking_token: null,
                 id: 0,
@@ -108,6 +108,9 @@
             },
             removeTraveler(id) {
                 let that = this
+                if(confirm(`Remove traveller?`) !== true) {
+                    return
+                }
                 this.debug && console.log('ADDITIONAL: removing additional traveller ', id)
                 // bus.$emit('removeTraveler', id)
                 if (id) {
