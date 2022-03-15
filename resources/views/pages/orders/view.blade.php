@@ -42,7 +42,13 @@
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getCost() + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before adjustments)</h6>
+            <h6 class="fw-bold">
+                @if($order->cancelled)
+                    {{ StringFormatter::formatCurrency($order->total) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before cancellation)
+                @else
+                    {{ StringFormatter::formatCurrency($order->getCost() + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before adjustments)
+                @endif
+            </h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
