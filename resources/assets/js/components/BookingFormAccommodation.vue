@@ -19,7 +19,7 @@
                        <div class="col">room type</div>
                        <div class="col">share group</div>
                     </div>
-                    <div v-for="traveller in travellers" class="row">
+                    <div v-for="traveller in alltravellers" class="row">
                         <input type="hidden" readonly :value="traveller.id">
                         <div class="col">
                             <input type="text" readonly :value="`${traveller.first_name} ${traveller.last_name}`">
@@ -59,6 +59,7 @@ export default {
             booking_token: null,
             showRegistered: true,
             accommodations: [],
+            leadTraveller: {},
             travellers: [],
             initTravelers: [],
             room_types: ['Single', 'Twin', 'Double', 'Shared'],
@@ -72,10 +73,14 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on("AdditionalTravelersLoaded", (travellers) => {
+        bus.$on('leadTravellerLoaded', t => that.leadTraveller = t)
+        bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
             that.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
+            if (init) {
+                that.travellers = [];
+            }
             travellers.map(traveller => that.travellers.push(traveller));
-            that.loadAccommodationBooking(that.travellers)
+            that.loadAccommodationBooking()
             that.initTravelers = that.travellers
         })
         bus.$on("AddedTraveler", traveler => {
@@ -83,6 +88,17 @@ export default {
             that.travellers.push(traveler)
             this.loadAccommodationBooking()
         })
+        bus.$on("reloadTravelers", () => {
+            console.log('reloadTraveller (accommodation)')
+            this.loadAccommodationBooking()
+        })
+    },
+    computed: {
+        alltravellers: function() {
+            const travellers = this.travellers
+            travellers.unshift(this.leadTraveller)
+            return travellers
+        }
     },
     mounted() {
       this.getAccommodationOptions()
@@ -122,7 +138,7 @@ export default {
               })
               .then(response => {
                   this.travellers = this.initTravelers
-                  this.loadAccommodationBooking(this.travellers)
+                  this.loadAccommodationBooking()
               })
               .catch(error => console.log(error))
         },
@@ -155,14 +171,8 @@ export default {
                 })
                 .catch(error => console.log(error))
         },
-        loadAccommodationBooking(travellers) {
+        loadAccommodationBooking() {
             const that = this;
-            if (travellers == undefined || !travellers.length) {
-                console.log('loadAccommodationBooking has no travellers to load')
-                return
-            }
-            this.debug > 3 && console.log('BookingFormAccommodations: loadAccommodationBooking: travellers ', travellers)
-
             let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
             axios.get(url)
                 .then((response) => {
@@ -170,7 +180,7 @@ export default {
                     if (bookings == undefined || !bookings.length) {
                       return
                     }
-                    that.travellers = []
+                    that.travellers = [], 
 
                     that.resetTravellers()
 

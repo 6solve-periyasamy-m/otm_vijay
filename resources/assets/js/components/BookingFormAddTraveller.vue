@@ -101,6 +101,7 @@
                 {{!title ? 'Add a new member of your travel group' : `${title} ${first_name} ${last_name}` }}
                 &nbsp;
                 <button class="btn btn-warning" @click="edit_fields = true">Add/Edit</button> 
+                <slot name="remove"></slot>
             </div>
         </div>
     </div>
@@ -336,7 +337,7 @@ export default {
             })
             .catch(error => console.log('BookingFormAddTraveller: remove customer error', error))            
 
-            bus.$emit('removeTraveller', this.traveller.id)
+            bus.$emit('removeTraveler', this.traveller.id)
         }
     }
 }
