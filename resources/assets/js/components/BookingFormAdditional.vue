@@ -19,14 +19,14 @@
                     <p>Use the add button to add more travellers or remove to delete entries.</p>
                 </div>
                 <div v-for="item in travellerBookings" :key="item.id">
-                    {{debug?item.id:''}}
+                    
                     <booking-form-add-traveller 
                         :booking_token="booking_token"
                         :tour="tour"
                         :traveller="item"
                         :form_id="item.id"
                     >
-                    <button class="btn" slot="remove" @click="removeTraveler(item.id)">X</button>
+                    <button v-if="item.id" class="btn btn-default btn-remove" slot="remove" @click="removeTraveler(item.id)">X {{debug?item.id:''}}</button>
                     </booking-form-add-traveller>
                 </div>
                 <button type="button" class="btn btn-primary" @click="addAdditional">Add additional travellers</button>
@@ -35,7 +35,16 @@
         </div>
     </div>
 </template>
-
+<style lang="scss" scoped>
+.btn.btn-remove {
+    color: red;
+    border: none;
+    &:hover {
+        background: red;
+        color: black;
+    }
+}
+</style>
 <script>
     import axios from 'axios'
     import { bus } from '../bus' 
@@ -43,7 +52,7 @@
         props: ['tour'],
         data() {
             return {
-                debug: 5,
+                debug: false,
                 moduleName: 'AdditionalTravellers',
                 booking_token: null,
                 id: 0,
@@ -102,25 +111,25 @@
                 this.toggleAdditional()
             },
             getFormId() {
-                return this.travellerBookings.length + 1; //this.id++
-                
-                return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                return this.travellerBookings.length + 1;   
+                // return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             },
             removeTraveler(id) {
                 let that = this
-                if(confirm(`Remove traveller?`) !== true) {
+                if (confirm(`Remove traveller?`) !== true) {
                     return
                 }
-                this.debug && console.log('ADDITIONAL: removing additional traveller ', id)
-                // bus.$emit('removeTraveler', id)
                 if (id) {
                     axios.post(`/api/booking/additional-traveller/remove`, {
                         customer_id: id,
                         booking_token: this.booking_token
                     })
                     .then(response => {
-                        that.removed = true
-                        that.loadTravellerBookings()
+                        console.log('additionalTraveller: remove', response)
+                        that.removed = response.data.success
+                        if (that.removed) {
+                            that.loadTravellerBookings()
+                        }
                     })
                 }
             },

@@ -1,8 +1,8 @@
 <template>
-<div class="container">
+<div class="xcontainer">
     <div class="card-options" v-if="!removed">
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}}</h3>
-        <div class="ept-form" :id="form_id">
+        <div class="ept-form additional" :id="form_id">
             <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
             <validation-message v-if="validationErrors"></validation-message>
             <div v-if="debug">
@@ -97,17 +97,45 @@
                 </div>
         
             </div>
-            <div v-else>
-                {{!title ? 'Add a new member of your travel group' : `${title} ${first_name} ${last_name}` }}
-                &nbsp;
-                <button class="btn btn-warning" @click="edit_fields = true">Add/Edit</button> 
-                <slot name="remove"></slot>
+            <div class="additional__name" v-else>
+                <div class="additional__name--field">{{!title ? 'Add a new member of your travel group' : `${title} ${first_name} ${last_name}` }}</div>
+                <div class="additional__name--controls">
+                    <button class="btn btn-warning btn-edit" @click="edit_fields = true">Edit</button> 
+                    <slot name="remove"></slot>
+                </div>
             </div>
         </div>
     </div>
 </div>
 </template>
+<style lang="scss" scoped>
+    .additional {
+        &__name {
+            display: flex;
+            flex-direction: row;
+            flex: 1 1 25%;
+            width: 100%;
+            align-items: center;
+            justify-content: flex-start;
+            &--field {
+                min-width: 50%;
+            }
+            &--controls {
+                min-width: calc(50% - 10rem);
+                .btn-edit {
+                    &:hover {
+                        background: blue;
+                        color: yellow;
+                    }
+                }
+            }
+            padding: 0 0 0.25rem 0;
+            margin: 0;
+            border-bottom: thin #ddf solid;
+        }
 
+    }
+</style>
 <script>
 import axios from 'axios'
 import { bus } from '../bus'
