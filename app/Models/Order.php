@@ -136,7 +136,7 @@ class Order extends Model
 
     public function installments()
     {
-        return $this->hasMany(OrderInstallment::class, 'order_id');
+        return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
     }
 
     public function getRemaining(): float
