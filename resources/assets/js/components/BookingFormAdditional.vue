@@ -70,17 +70,16 @@
         created() {
             let that = this
             this.debug && console.log('*** travellerBookings created: check props', this.tour, this.leadTraveller )
-            
-            bus.$on('setLeadTraveller', customer => {
-              that.debug>1 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
-              that.leadTraveller = customer
-            })
 
             bus.$on('setBookingToken', (token) => {
                 that.booking_token = token
-                that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)            
-                that.loadTravellerBookings()
-                that.loadLeadTraveler(token)
+                that.debug && console.log(`>>> ${that.moduleName} created for booking ${that.booking_token}`)
+                that.loadLeadTraveler(token).then(() => that.loadTravellerBookings());
+            })
+
+            bus.$on('setLeadTraveller', customer => {
+              that.debug>1 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
+              that.leadTraveller = customer
             })
 
             bus.$on('checkEmailUnique', email => {
@@ -96,12 +95,11 @@
         },
         mounted() {
             this.debug && console.log(`${this.moduleName} mounted`)
-            this.debug>3 && console.log('*** travellerBookings mounted: check token and lead are set', this.booking_token, this.leadTraveller )
         },
         methods: {
-            loadLeadTraveler(token) {
+            async loadLeadTraveler(token) {
                 let that = this
-                axios.get(`/api/booking/customer/${token}`)
+                await axios.get(`/api/booking/customer/${token}`)
                     .then(response => {
                         that.debug>1 && console.log('ADDITIONAL GET LEAD response:', response)
                         that.leadTraveller = response.data.customer
@@ -138,10 +136,10 @@
             toggleAdditional() {
                 this.showAdditional = !this.showAdditional
             },
-            loadTravellerBookings(init = false) {
+            async loadTravellerBookings(init = false) {
                 let that = this
                 this.debug && console.log(`ADDITIONAL: loading additional travellers for ${this.booking_token}`, that.leadTraveller)
-                axios.get(`/api/booking/travellers/${this.booking_token}`)
+                await axios.get(`/api/booking/travellers/${this.booking_token}`)
                     .then(response => {
                         if (response.data.success) {
                             const travellers = response.data.travellers

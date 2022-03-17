@@ -229,20 +229,21 @@ export default {
         bus.$on('setBookingToken', (token) => {
             that.booking_token = token
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}, lead ${that.leadTraveller}`)
-            that.leadTraveller = that.loadLeadTraveler(that.booking_token).then(() => {
-                that.getFlights(that.tour).then(() => {
-                    that.debug>5 && console.log('BookingFormFlights loaded: outbound flights', that.outbound_flights)
-                    that.debug>5 && console.log('BookingFormFlights loaded: inbound flights', that.inbound_flights)
-                    that.loadFlightsForBooking(that.booking_token)
+            that.leadTraveller = that.loadLeadTraveler(that.booking_token)
+                .then(() => {
+                    that.getFlights(that.tour).then(() => {
+                        that.debug>5 && console.log('BookingFormFlights loaded: outbound flights', that.outbound_flights)
+                        that.debug>5 && console.log('BookingFormFlights loaded: inbound flights', that.inbound_flights)
+                        that.loadFlightsForBooking(that.booking_token)
 
-                    that.ready = true
-                    that.activated = true
-                })
+                        that.ready = true
+                        that.activated = true
+                    })
             })
         })
 
         // BookingFormsAdditional: additionalTravellers loaded event
-        bus.$on('AdditionalTravelersLoaded', travelers => {
+        bus.$on("AdditionalTravelersLoaded", (travelers, init = false) => {
             that.debug>1 && console.log(`${that.moduleName}: AdditionalTravelersLoaded event`, travelers)
             that.travelers = travelers
         })
@@ -427,7 +428,7 @@ export default {
         },
 
         // loads current flight orders 
-        loadFlightsForBooking(booking_token) {
+        async loadFlightsForBooking(booking_token) {
             if (!booking_token) {
                 alert('Flight booking: No booking active')
                 return
@@ -437,7 +438,7 @@ export default {
             let inbound = {}
             this.showwait = true
             // loadFlightsForBooking
-            axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
+            await axios.get(`/api/booking/flight/bookings/${this.booking_token}`)
                 .then(response => {
                     that.showwait = false
                     that.bookings = response.data.flightBookings
