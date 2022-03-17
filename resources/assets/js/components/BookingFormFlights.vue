@@ -161,7 +161,7 @@ export default {
     },
     data() {
         return {
-            debug: null,
+            debug: false,
             booking_token: null,
             moduleName: 'BookingFormFlights',
             activated: false,
