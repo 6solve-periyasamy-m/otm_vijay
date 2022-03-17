@@ -34,6 +34,8 @@
                 <span>Save Report</span>
             </a>
             @endcan
+            @if(false)
+            {{-- TODO: Fix temporary exporting --}}
             <a class="btn btn-primary float-end" href="#" onclick="exportCsv()" style="margin-right: 5px">
                 <i class="icon-list"></i>
                 <span>Export to CSV</span>
@@ -42,6 +44,7 @@
                 <i class="icon-chart"></i>
                 <span>Export to XLSX</span>
             </a>
+            @endif
         </div>
     </div>
     @include('partials.reports.bespoke.output')
