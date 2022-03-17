@@ -1,8 +1,8 @@
 <template>
-<div class="container">
+<div class="xcontainer">
     <div class="card-options" v-if="!removed">
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}}</h3>
-        <div class="ept-form" :id="form_id">
+        <div class="ept-form additional" :id="form_id">
             <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
             <validation-message v-if="validationErrors"></validation-message>
             <div v-if="debug">
@@ -11,22 +11,19 @@
             <div v-if="edit_fields">
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
-                        <span>Entering email address is advised but is optional</span>
-                        <label class="form-label" for="email_address" v-show="email_address">E-mail</label>
                         <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
                         <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                        <label v-else class="valid">Email address</label>
+                        <label v-else class="valid">Email address *</label>
                     </div>
                     <div class="col-sm-6 form-group field-separation">
-                        <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
+                        <input required type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
                         <label :class="{invalid: mobileNumberInvalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                        <label class="valid" v-else>Mobile Number</label>
+                        <label class="valid" v-else>Mobile Number *</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3 form-group field-separation">
-                        <select @change="edit_fields = true" v-model="title" class="form-control form-select form-select-lg">
+                        <select required @change="edit_fields = true" v-model="title" class="form-control form-select form-select-lg">
                             <option value="" default>Select a title</option>
                             <option value="Mr">Mr</option>
                             <option value="Ms">Ms</option>
@@ -37,16 +34,16 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group field-separation">
-                        <label type="form-label" for="first_name" v-show="first_name">First name</label>
-                        <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
+                        <label type="form-label" for="first_name" v-show="first_name">First name *</label>
+                        <input required type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
                     </div>
                     <div class="col-md-3 form-group field-separation">
                         <label class="form-label" for="middle_names" v-show="middle_names">Middle name(s)</label>
                         <input type="text" v-model="middle_names" placeholder="Middle name" name="middle_names" class="form-control maxwidth" />
                     </div>
                     <div class="col-md-3 form-group field-separation">
-                        <label class="form-label" for="last_name" v-show="last_name">Last name</label>
-                        <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
+                        <label class="form-label" for="last_name" v-show="last_name">Last name *</label>
+                        <input required type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
                     </div>
                 </div>
                 <div class="row">
@@ -66,11 +63,11 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 form-group field-separation">
-                        <label class="form-label" for="date_of_birth">Date of Birth</label>
+                        <label class="form-label required" for="date_of_birth">Date of Birth *</label>
                         <input type="date" v-model="date_of_birth" name="date_of_birth" class="form-control" />
                     </div>
                     <div class="col-sm-6 form-group field-separation">
-                        <label class="form-label" for="gender">Gender</label>
+                        <label class="form-label required" for="gender">Gender *</label>
                         <select v-model="gender" class="form-control">
                             <option default value="">Select gender</option>
                             <option>Male</option>
@@ -79,34 +76,71 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-10 form-group field-separation">
+                    <div class="form-group field-separation additional__buttons">
                         <button 
-                            :disabled="!validForm"
+                            :disabled="!validForm && !latch"
                             type="button"
                             :formId="form_id"
                             class="btn"
                             :class="{'btn-default': !validForm,'btn-primary': validForm}"
                             @click="storeTraveller">Save Traveller</button>
-                        <button v-if="removal" type="button" :formId="form_id" class="btn btn-warning" @click="removeTraveller">Remove Traveller</button>
-                        <button class="btn btn-secondary" @click="removal=!removal">{{removal?'Disable':'Enable'}} removal</button>
+                        <button class="btn btn-secondary" 
+                            @click="removal=!removal">{{removal?'Disable':'Enable'}} removal</button>
+                        <button v-if="removal" 
+                            type="button"
+                            :formId="form_id"
+                            class="btn btn-warning"
+                            @click="removeTraveller">Remove Traveller</button>
                     </div>
                 </div>
                 <div class="row" v-if="errors.length">
                 Errors:
                     {{errors}}
                 </div>
-        
             </div>
-            <div v-else>
-                {{!title ? 'Add a new member of your travel group' : `${title} ${first_name} ${last_name}` }}
-                &nbsp;
-                <button class="btn btn-warning" @click="edit_fields = true">Add/Edit</button> 
+            <div class="additional__name" v-else>
+                <div class="additional__name--field">{{!title ? 'Add a new member of your travel group' : `${title} ${first_name} ${last_name}` }}</div>
+                <div class="additional__name--controls">
+                    <button class="btn btn-warning btn-edit" @click="edit_fields = true">Edit</button> 
+                    <slot name="remove"></slot>
+                </div>
             </div>
         </div>
     </div>
 </div>
 </template>
+<style lang="scss" scoped>
+    .additional {
+        &__buttons {
+            display: flex;
+            flex-direction: row;
+        }
+        &__name {
+            display: flex;
+            flex-direction: row;
+            flex: 1 1 25%;
+            width: 100%;
+            align-items: center;
+            justify-content: flex-start;
+            &--field {
+                min-width: 50%;
+            }
+            &--controls {
+                min-width: calc(50% - 10rem);
+                .btn-edit {
+                    &:hover {
+                        background: blue;
+                        color: yellow;
+                    }
+                }
+            }
+            padding: 0 0 0.25rem 0;
+            margin: 0;
+            border-bottom: thin #ddf solid;
+        }
 
+    }
+</style>
 <script>
 import axios from 'axios'
 import { bus } from '../bus'
@@ -150,7 +184,8 @@ export default {
             edit_fields: false,
             validationMessage: '',
             validationErrors: '',
-            validated: false
+            validated: false,
+            latch: false
         }
     },
     mounted() {
@@ -270,6 +305,7 @@ export default {
         },
         storeTraveller() {
             const that = this
+            this.latch = true
             that.debug>1 && console.log('BookingFormAddTraveller: store additional', that.booking_token)
             that.errors = []
             that.validationErrors = null
@@ -336,7 +372,7 @@ export default {
             })
             .catch(error => console.log('BookingFormAddTraveller: remove customer error', error))            
 
-            bus.$emit('removeTraveller', this.traveller.id)
+            bus.$emit('removeTraveler', this.traveller.id)
         }
     }
 }
