@@ -141,4 +141,9 @@ class Customer extends Authenticatable
     {
         CustomerAuthenticationRepository::purgeUserTokens($this, $limit);
     }
+
+    public function leadingOrders()
+    {
+        return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'lead_booker_id');
+    }
 }

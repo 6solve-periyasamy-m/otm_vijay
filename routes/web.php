@@ -730,6 +730,8 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/portal', [CustomerPortalController::class, 'show'])->name('portal');
         Route::get('/details', [CustomerDetailsController::class, 'edit'])->name('edit');
         Route::post('/details', [CustomerDetailsController::class, 'update'])->name('update');
+        Route::get('/details/other/{customer}', [CustomerDetailsController::class, 'editOther'])->name('edit.other');
+        Route::post('/details/other/{customer}', [CustomerDetailsController::class, 'updateOther'])->name('update.other');
         Route::get('/finances', [CustomerFinancesController::class, 'show'])->name('finances');
         Route::post('/payment/make', [CustomerFinancesController::class, 'makePayment'])->name('payment.make');
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');

@@ -21,13 +21,40 @@
                     </center>
                 </div>
             </div>
+            @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                <div class="card other-profile" onclick="window.location = '{{ route('customer.edit') }}';">
+                    <div class="card-body profile-card">
+                        <center class="mt-4">
+                            <h4 class="card-title mt-2">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
+                            <h6 class="card-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
+                        </center>
+                    </div>
+                </div>
+            @endif
+            @foreach($editable as $editee)
+                @if($editee->id === $customer->id) @continue @endif
+                <div class="card other-profile" onclick="window.location = '{{ route('customer.edit.other', ['customer' => $editee,]) }}';">
+                    <div class="card-body profile-card">
+                        <center class="mt-4">
+                            <h4 class="card-title mt-2">{{ $editee->first_name }} {{ $editee->last_name }}</h4>
+                            <h6 class="card-subtitle">{{ $editee->email_address }}</h6>
+                        </center>
+                    </div>
+                </div>
+            @endforeach
         </div>
         <!-- Column -->
         <!-- Column -->
         <div class="col-lg-9 col-xxl-10 col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form class="form-horizontal form-material mx-2 row" action="{{ route('customer.update') }}" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal form-material mx-2 row"
+                          @if (!isset($other))
+                          action="{{ route('customer.update') }}"
+                          @else
+                          action="{{ route('customer.update.other', ['customer' => $customer,]) }}"
+                          @endif
+                          method="post" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="profile_picture" id="profile_picture" style="display: none;" onchange="form.submit()">
                         <hr class="splitter">
@@ -247,6 +274,7 @@
                         @include('partials.fields.selector.default',
                             ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $customer->hat_size_id ?? 0, 'route' => 'hat-size', 'width' => 6])
                         <hr class="splitter">
+                        @if(!isset($other))
                         <div class="form-group">
                             <h4 class="col-md-12 mb-0">Change your password</h4>
                         </div>
@@ -270,6 +298,7 @@
                             </div>
                         </div>
                         <hr class="splitter">
+                        @endif
                         <div class="form-group">
                             <div class="col-sm-12 d-flex">
                                 <button type="submit" class="btn btn-success mx-auto mx-md-0 text-white">
