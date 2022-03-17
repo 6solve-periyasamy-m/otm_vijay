@@ -95,7 +95,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $upgrade->base;
     }
 
-    public static function getInventoryWithRoomType(AccommodationInventoryTour $inventoryTour, RoomType $roomType): AccommodationInventoryTour
+    public static function getInventoryWithRoomType(AccommodationInventoryTour $inventoryTour, RoomType $roomType): ?AccommodationInventoryTour
     {
         $inventory = $inventoryTour->inventory;
         $accommodation = $inventory->component;
@@ -110,7 +110,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query->whereNull('accommodation_inventory_tours.deleted_at');
         $query->select('accommodation_inventory_tours.id');
 
-        return AccommodationInventoryTour::find($query->first()->id);
+        return $query->first() == null ? null : AccommodationInventoryTour::find($query->first()->id);
     }
 
     /**
@@ -125,23 +125,59 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     public static function getAvailableRoomTypes(Tour $tour): array
     {
         $templates = self::getTemplateTourInventory($tour);
+        $sizes = self::getAvailableRoomSizes($tour);
+        $available = [];
+        foreach ($templates as $template) {
+            $availableTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
+            foreach ($availableTypes as $type) {
+                if (in_array($type->maximum_occupancy, $sizes)) {
+                    $available[] = $type->id;
+                }
+            }
+        }
+        return self::hydrateRoomTypes(array_unique($available));
+    }
+
+    public static function getAvailableRoomSizes(Tour $tour): array
+    {
+        $templates = self::getTemplateTourInventory($tour);
         $first = true;
         $available = [];
         foreach ($templates as $template) {
             if ($first && empty($available)) {
-                $available = self::getRoomTypesForInventory($template);
-                $first = false;
+                $types = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
+                foreach ($types as $type) {
+                    $available[] = $type->maximum_occupancy;
+                }
+                $available = array_unique($available);
                 continue;
             }
-            $roomTypes = self::getRoomTypesForInventory($template);
-            $missing = array_diff($available, $roomTypes);
-            \Log::error(implode(',', $missing));
+            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($template));
+            $types = [];
+            foreach ($roomTypes as $type) {
+                $types[] = $type->maximum_occupancy;
+            }
+            $types = array_unique($types);
+            $missing = array_diff($available, $types);
             $available = array_diff($available, $missing);
         }
-        return self::hydrateRoomTypes($available);
+        return $available;
     }
 
-    private static function getRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
+    public static function getSizeList(Tour $tour): array
+    {
+        $availableSizes = self::getAvailableRoomSizes($tour);
+        $availableTypes = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
+            foreach ($roomTypes as $type) {
+                if (in_array($type->maximum_occupancy, $availableSizes)) $availableTypes[] = $type->id;
+            }
+        }
+        return self::hydrateRoomTypes(array_unique($availableTypes));
+    }
+
+    public static function getRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
     {
         $inventory = $inventoryTour->inventory;
         $accommodation = $inventory->component;
@@ -163,7 +199,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $available;
     }
 
-    private static function hydrateRoomTypes(array $ids): array
+    public static function hydrateRoomTypes(array $ids): array
     {
         $types = [];
         foreach ($ids as $id) {
