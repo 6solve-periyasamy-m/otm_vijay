@@ -29,8 +29,10 @@
                     <button v-if="item.id" class="btn btn-default btn-remove" slot="remove" @click="removeTraveler(item.id)">X {{debug?item.id:''}}</button>
                     </booking-form-add-traveller>
                 </div>
-                <button type="button" class="btn btn-primary" @click="addAdditional">Add additional travellers</button>
-                <button type="button" class="btn btn-primary" @click="submit">All travellers entered</button>
+                <div class="controls">
+                    <button type="button" class="btn btn-primary" @click="addAdditional">Add additional travellers</button>
+                    <button type="button" class="btn btn-primary" @click="submit">All travellers entered</button>
+                </div>
             </div>
         </div>
     </div>

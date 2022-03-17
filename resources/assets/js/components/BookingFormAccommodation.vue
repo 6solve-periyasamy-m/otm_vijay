@@ -84,8 +84,13 @@ export default {
             that.initTravelers = that.travellers
         })
         bus.$on("AddedTraveler", traveler => {
-            console.log('added traveller!', traveler)
-            that.travellers.push(traveler)
+            let checks = that.travellers.map(t => {
+                //return t.id !== traveler.id - does not work for new travelers!
+                return t.first_name != traveler.first_name && t.last_name != traveler.last_name
+            })
+            if (checks.every(c => c == true)) {
+                that.travellers.push(traveler)
+            }
             this.loadAccommodationBooking()
         })
         bus.$on("reloadTravelers", () => {
@@ -95,8 +100,12 @@ export default {
     },
     computed: {
         alltravellers: function() {
+            let that = this
             const travellers = this.travellers
-            travellers.unshift(this.leadTraveller)
+            let checks = travellers.map(t => t.id != that.leadTraveller.id);
+            if (checks.every(c => c == true)) {
+                travellers.unshift(this.leadTraveller)
+            }
             return travellers
         }
     },
@@ -105,6 +114,9 @@ export default {
       this.getAccommodationGroups()
     },
     methods: {
+        addTraveller(t) {
+            this.travellers.push(t)
+        },
         setAccommodation() {
           let that = this
           // booking the accommodation options in the booking_accommodations table
