@@ -76,7 +76,7 @@ export default {
         bus.$on('customerLoaded', (leadTraveller) => {
             this.leadTraveller = leadTraveller
         })
-        bus.$on("AdditionalTravelersLoaded", (travellers) => {
+        bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
             this.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
             travellers.map(traveller => this.travellers.push(traveller));
             this.loadActivityBooking(this.travellers)
