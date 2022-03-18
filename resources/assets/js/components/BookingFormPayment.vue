@@ -27,7 +27,7 @@
                             <h3>Group Flights Booking</h3>
                             <div class="block flights" v-for="flight in booking.flights" :key="flight.id">
                                  <div v-for="f in flight">
-                                    {{f.flight_type}} {{f.travel_class}} {{f.tour_component_type}} {{priceFormat(f.sales_price)}}
+                                    {{f.flight_type}} {{f.travel_class}} {{f.tour_component_type}} 
                                 </div>
                             </div>
                         </div>
