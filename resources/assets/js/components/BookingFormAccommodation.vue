@@ -31,7 +31,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <span v-if="occupancy(traveller.room_type) > 1">
+                            <span v-if="occupancy(traveller.room_type_id) > 1">
                                 <select v-model="traveller.group">
                                     <option default value="0">Share group selection</option>
                                     <option v-for="group in groups" :value="group.id" :key="group.id">{{group.name}}</option>
@@ -53,7 +53,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: false,
+            debug: 9,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
@@ -73,15 +73,23 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on('leadTravellerLoaded', t => that.leadTraveller = t)
+        bus.$on('leadTravellerLoaded', t => {
+            that.leadTraveller = t
+            if (that.travellers == undefined || that.travellers.length == 0) {
+                that.travellers.unshift(t)
+            }
+        })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
-            that.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
+            that.debug>2 && console.log("Accommodation: travellers loaded", travellers, that.leadTraveller, that.travellers);
             if (init) {
                 that.travellers = [];
             }
+            if (that.leadTraveller && that.travellers.length===0) {
+                that.travellers.unshift(that.leadTraveller)
+            }
             travellers.map(traveller => that.travellers.push(traveller));
-            that.loadAccommodationBooking()
             that.initTravelers = that.travellers
+            that.loadAccommodationBooking()            
         })
         bus.$on("AddedTraveler", traveler => {
             let checks = that.travellers.map(t => {
@@ -121,7 +129,7 @@ export default {
           let that = this
           // booking the accommodation options in the booking_accommodations table
             this.travellers.map(t => {
-              if (t.room_type === 1) {
+              if (t.room_type_id === 1) {
                 t.group = 0;
               }
             })
@@ -188,6 +196,7 @@ export default {
             let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
             axios.get(url)
                 .then((response) => {
+                    console.log('/api/booking/accommodation/booking/',response.data)
                     const bookings = response.data.bookings
                     if (bookings == undefined || !bookings.length) {
                       return
@@ -198,11 +207,13 @@ export default {
 
                     that.debug > 5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
                     bookings.map((booking, index) => {
-                       that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, booking.room_type_id, booking.group_id)
+                       that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, that.travellers, booking.room_type_id, booking.group_id)
                        if (booking.room_type_id) {
                            Vue.set(that.travellers[index], 'room_type', booking.room_type_id)
                        }
-                       Vue.set(that.travellers[index], 'group', booking.group_id)
+                       if (booking.group_id) {
+                           Vue.set(that.travellers[index], 'group', booking.group_id)
+                       }
                     })
                     that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
                 })
