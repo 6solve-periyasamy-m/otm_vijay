@@ -31,7 +31,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <span v-if="occupancy(traveller.room_type_id) > 1">
+                            <span v-if="occupancy(traveller.room_type) > 1">
                                 <select v-model="traveller.group">
                                     <option default value="0">Share group selection</option>
                                     <option v-for="group in groups" :value="group.id" :key="group.id">{{group.name}}</option>
@@ -126,24 +126,26 @@ export default {
             this.travellers.push(t)
         },
         setAccommodation() {
-          let that = this
-          // booking the accommodation options in the booking_accommodations table
+            let that = this
+            // booking the accommodation options in the booking_accommodations table
             this.travellers.map(t => {
-              if (t.room_type_id === 1) {
-                t.group = 0;
-              }
+                if (t.room_type_id === 1) {
+                    t.group = 0;
+                }
             })
+            
             this.debug>1 && console.log('BookingFormAccommodation: setAccommodation', this.booking_token, this.travellers)
             axios.post(`/api/booking/accommodation/reserve`, {
                 token : this.booking_token,
                 travellers :  this.travellers 
-              })
-              .then(response => {
-                that.showAccommodation = false
-                that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
-                // TODO: do something with response?
-              })
-              .catch(error => console.log(error))
+                })
+                .then(response => {
+                    that.showAccommodation = false
+                    that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
+                    // TODO: do something with response?
+                    bus.$emit('recalculate')
+                })
+                .catch(error => console.log(error))
         },
         resetTravellers() {
             this.travellers = this.initTravelers
@@ -215,6 +217,7 @@ export default {
                            Vue.set(that.travellers[index], 'group', booking.group_id)
                        }
                     })
+                    bus.$emit('recalculate')
                     that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
                 })
                 .catch((error) => console.log(error));

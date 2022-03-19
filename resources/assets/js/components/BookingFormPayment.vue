@@ -205,11 +205,18 @@ export default {
             }
         })
          bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
-            this.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
+            that.travellers = [];
+            that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             that.travellers.push(that.leadTraveller)
-            travellers.map(traveller => this.travellers.push(traveller));
-            this.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
+            travellers.map(traveller => that.travellers.push(traveller));
+            that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             that.countTravellers()
+        })
+        bus.$on('recalculate', () => {
+            this.debug && console.log('Recalculat payment event')
+            that.loadBooking(that.booking_token)
+            that.calcPrice()
+            that.calcTourPrice()
         })
         bus.$on("TermsAgreed", (agreed) => {
           this.agreement = agreed
