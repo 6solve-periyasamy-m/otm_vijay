@@ -84,8 +84,6 @@
                     })
                     .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
             }
-            console.log(upgrade_id);
-            console.log(component_id);
         }
         function applyFlightUpgrade(selector, btn) {
             let upgrade_id = $('#' + selector).find(':selected').val();
@@ -105,6 +103,74 @@
             }
         }
         function applyTransportUpgrade(selector, btn) {
+            let upgrade_id = $('#' + selector).find(':selected').val();
+            let component_id = $(btn).closest('tr').attr('component');
+            if (upgrade_id != null && component_id != null) {
+                $.post('{{ route('api.order.transport.upgrade') }}',
+                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                        '_token': '{{ csrf_token() }}',
+                        'component_id': component_id,
+                        'upgrade_id': upgrade_id
+                    })
+                    .done(function (xhr, textStatus, errorThrown) {
+                        if (xhr.success) location.reload();
+                        else alert(xhr.message);
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+            }
+        }
+        function purchaseAccommodationUpgrade(selector, btn) {
+            let upgrade_id = $('#' + selector).find(':selected').val();
+            let component_id = $(btn).closest('tr').attr('component');
+            if (upgrade_id != null && component_id != null) {
+                $.post('{{ route('api.order.accommodation.upgrade') }}',
+                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                        '_token': '{{ csrf_token() }}',
+                        'component_id': component_id,
+                        'upgrade_id': upgrade_id
+                    })
+                    .done(function (xhr, textStatus, errorThrown) {
+                        if (xhr.success) location.reload();
+                        else alert(xhr.message);
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+            }
+        }
+        function purchaseActivityUpgrade(selector, btn) {
+            let upgrade_id = $('#' + selector).find(':selected').val();
+            let component_id = $(btn).closest('tr').attr('component');
+            if (upgrade_id != null && component_id != null) {
+                $.post('{{ route('api.order.activity.upgrade') }}',
+                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                        '_token': '{{ csrf_token() }}',
+                        'component_id': component_id,
+                        'upgrade_id': upgrade_id
+                    })
+                    .done(function (xhr, textStatus, errorThrown) {
+                        if (xhr.success) location.reload();
+                        else alert(xhr.message);
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+            }
+        }
+        function purchaseFlightUpgrade(selector, btn) {
+            let upgrade_id = $('#' + selector).find(':selected').val();
+            let component_id = $(btn).closest('tr').attr('component');
+            if (upgrade_id != null && component_id != null) {
+                $.post('{{ route('api.order.flight.upgrade') }}',
+                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                        '_token': '{{ csrf_token() }}',
+                        'component_id': component_id,
+                        'upgrade_id': upgrade_id
+                    })
+                    .done(function (xhr, textStatus, errorThrown) {
+                        if (xhr.success) location.reload();
+                        else alert(xhr.message);
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
+            }
+        }
+        function purchaseTransportUpgrade(selector, btn) {
             let upgrade_id = $('#' + selector).find(':selected').val();
             let component_id = $(btn).closest('tr').attr('component');
             if (upgrade_id != null && component_id != null) {
@@ -188,10 +254,14 @@
                                             @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 2)
                                                 No Upgrades Available
                                             @else
-                                                @include('partials.fields.selector.adder-preset',
+                                                @include('partials.fields.selector.upgrade-purchase',
                                                     ['field' => 'accommodation_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)', 'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    'createRoute' => '#', 'purchaseRoute' => '#',
+                                                    'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'onclickPurchase' => 'purchaseAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'target' => '',
+                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderComponent->tourComponent),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
                                     </td>
@@ -248,9 +318,11 @@
                                             @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 2)
                                                 No Upgrades Available
                                             @else
-                                                @include('partials.fields.selector.adder-preset',
+                                                @include('partials.fields.selector.upgrade-purchase',
                                                     ['field' => 'activity_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)', 'target' => '',
+                                                    'createRoute' => '#', 'purchaseRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'onclickPurchase' => 'purchaseActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'target' => '',
                                                     'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
@@ -310,9 +382,11 @@
                                             @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 2)
                                                 No Upgrades Available
                                             @else
-                                                @include('partials.fields.selector.adder-preset',
+                                                @include('partials.fields.selector.upgrade-purchase',
                                                     ['field' => 'flight_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)', 'target' => '',
+                                                    'createRoute' => '#', 'purchaseRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'onclickPurchase' => 'purchaseFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'target' => '',
                                                     'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
@@ -374,9 +448,11 @@
                                             @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 2)
                                                 No Upgrades Available
                                             @else
-                                                @include('partials.fields.selector.adder-preset',
+                                                @include('partials.fields.selector.upgrade-purchase',
                                                     ['field' => 'transport_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)', 'target' => '',
+                                                    'createRoute' => '#', 'purchaseRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'onclickPurchase' => 'purchaseTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
+                                                    'target' => '',
                                                     'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
