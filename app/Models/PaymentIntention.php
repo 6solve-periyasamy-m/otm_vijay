@@ -43,6 +43,7 @@ class PaymentIntention extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
+    protected $casts = ['data' => 'array',];
 
     public static function build(Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
     {
@@ -84,7 +85,7 @@ class PaymentIntention extends Model
         try { DB::beginTransaction(); } catch (\Throwable $e) { Log::error($e); return false; }
 
         if (array_key_exists('additions', $this->data)) {
-            foreach ($this->data['additions'] as $datum) {
+            foreach ($this->data['additions'] as $key =>  $datum) {
                 $owner = $this->getOwner($datum['component'], $order, $datum['customer']);
                 if (!isset($owner)) return $this->handleError('Owner not found on addition');
                 $component = $this->findTourComponent($datum['component'], $datum['id']);
@@ -94,7 +95,7 @@ class PaymentIntention extends Model
         }
 
         if (array_key_exists('upgrades', $this->data)) {
-            foreach ($this->data['upgrades'] as $datum) {
+            foreach ($this->data['upgrades'] as $key => $datum) {
                 $owner = $this->getOwner($datum['component'], $order, $datum['customer']);
                 if (!isset($owner)) return $this->handleError('Owner not found on upgrade');
                 $orderComponent = $this->findOrderComponent($owner, $datum['component'], $datum['from']);
@@ -106,7 +107,7 @@ class PaymentIntention extends Model
         }
 
         if (array_key_exists('removals', $this->data)) {
-            foreach ($this->data['removals'] as $datum) {
+            foreach ($this->data['removals'] as $key => $datum) {
                 $owner = $this->getOwner($datum['component'], $order, $datum['customer']);
                 if (!isset($owner)) return $this->handleError('Owner not found on removal');
                 $orderComponent = $this->findOrderComponent($owner, $datum['component'], $datum['id']);

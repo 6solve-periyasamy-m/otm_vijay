@@ -121,6 +121,7 @@ Route::middleware('api.token.both')->name('api.')->group(function () {
         Route::post('accommodation/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('accommodation.upgrade');
         Route::post('activity/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('activity.upgrade');
         Route::post('flight/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('flight.upgrade');
+        Route::post('flight/upgrade/buy', [TourComponentController::class, 'purchaseFlightUpgrade'])->name('flight.upgrade.purchase');
         Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
     });
 });
