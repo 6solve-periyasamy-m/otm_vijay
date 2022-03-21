@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Repository\CustomerAuthenticationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,6 +11,7 @@ class CustomerLoginController extends Controller
 {
     public function show()
     {
+        if (CustomerAuthenticationRepository::getCustomer() !== null) return redirect()->route('customer.portal');
         return view('pages.customer.auth.login');
     }
 
