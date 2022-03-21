@@ -456,7 +456,7 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true, 'travellers' => $travellers]);
     }
 
-    public function removeBookingTravellers(Request $request)
+    public function removeBookingTraveller(Request $request)
     {
         $request->validate([
             'customer_id' => 'required | exists:customers,id',
