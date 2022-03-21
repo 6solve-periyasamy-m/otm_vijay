@@ -108,4 +108,13 @@ class AccommodationInventoryTour extends Model
         }
         return $keys;
     }
+
+    public function addToOrder(Group $group)
+    {
+        return OrderAccommodation::create([
+            'group_id' => $group->id,
+            'accommodation_inventory_tour_id' => $this->id,
+            'cost' => $this->tour_sales_price,
+        ]);
+    }
 }

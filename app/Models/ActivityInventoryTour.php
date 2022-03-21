@@ -106,4 +106,13 @@ class ActivityInventoryTour extends Model
         }
         return $keys;
     }
+
+    public function addToOrder(OrderCustomer $orderCustomer)
+    {
+        return OrderActivity::create([
+            'order_customer_id' => $orderCustomer->id,
+            'activity_inventory_tour_id' => $this->id,
+            'cost' => $this->tour_sales_price,
+        ]);
+    }
 }
