@@ -15,23 +15,23 @@ use Log;
       [
         'customer' => 'Customer ID (Group ID for accommodation)',
         'component' => 'accommodation/activity/flight/transport/extra',
-        'id' => 'Relevant tour id'
+        'id' => 'Relevant tour component id'
       ]
    ],
    'upgrades' => [
       [
         'customer' => 'Customer ID (Group ID for accommodation)',
         'component' => 'accommodation/activity/flight/transport/extra',
-        'from' => 'Relevant from tour id',
-        'to' => 'Relevant new tour id',
+        'from' => 'Relevant from tour component id',
+        'to' => 'Relevant new tour component id',
       ],
    ],
    'removals' => [
        [
         'customer' => 'Customer ID (Group ID for accommodation)',
         'component' => 'accommodation/activity/flight/transport/extra',
-        'from' => 'Relevant from tour id',
-        'to' => 'Relevant new tour id',
+        'from' => 'Relevant from tour component id',
+        'to' => 'Relevant new tour component id',
       ]
    ],
   ]
