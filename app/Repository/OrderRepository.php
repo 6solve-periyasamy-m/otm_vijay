@@ -730,7 +730,16 @@ class OrderRepository
         $roomType = $group->roomType;
         foreach ($templates as $template) {
             $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $roomType);
-            if (!isset($found)) throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name}");
+            if (!isset($found)) {
+                $types = AccommodationComponentRepository::hydrateRoomTypes(AccommodationComponentRepository::getRoomTypesForInventory($template));
+                foreach ($types as $type) {
+                    if ($type->maximum_occupancy == $roomType->maximum_occupancy) {
+                        $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $type);
+                        break;
+                    }
+                }
+            }
+            if (!isset($found)) throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name} or size {$roomType->maximum_occupancy}");
             OrderAccommodation::create([
                 'accommodation_inventory_tour_id' => $found->id,
                 'group_id' => $group->id,

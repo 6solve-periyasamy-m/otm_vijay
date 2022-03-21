@@ -5,8 +5,8 @@ namespace App\Repository;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
-use Silber\Bouncer\BouncerFacade as Bouncer;
 use Silber\Bouncer\Database\Role;
+use Bouncer;
 
 class PermissionsRepository
 {
@@ -260,7 +260,7 @@ class PermissionsRepository
 
     public static function createRole(string $name, string $title, int $level)
     {
-        return Bouncer::roles()->firstOrCreate([
+        return Bouncer::role()->firstOrCreate([
             'name' => $name,
             'title' => $title,
             'level' => $level,

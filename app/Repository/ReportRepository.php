@@ -50,9 +50,9 @@ class ReportRepository
             $row->lb_last_name = $order->leadBooker->customer->last_name;
             $row->customer_count = $order->getCustomerCount();
             $row->tour_name = $order->tour->name;
-            $row->total_order_value = $order->getCost();
-            $row->balance_outstanding = $order->getRemaining();
-            $row->balance_paid = $order->getPaid();
+            $row->total_order_value = $order->total;
+            $row->balance_outstanding = $order->remaining;
+            $row->balance_paid = $order->paid;
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }
@@ -72,7 +72,8 @@ class ReportRepository
             $row->stock = $tour->stock_control_active ? $tour->stock : 'Not Controlled';
             $row->booked = $tour->getUsedStock();
             $row->available = $tour->stock_control_active ? $tour->stock - $tour->getUsedStock() : 'Not Controlled';
-            $row->percentage = $tour->stock_control_active ? round(($tour->getUsedStock() / $tour->stock)*100, 2) . '%' : 'Not Controlled';
+            $row->percentage = $tour->stock_control_active ?
+                ($tour->stock == 0 ? 100 : round(($tour->getUsedStock() / $tour->stock)*100, 2)) . '%' : 'Not Controlled';
             $data[] = $row;
         }
         return $data;

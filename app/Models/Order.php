@@ -136,7 +136,7 @@ class Order extends Model
 
     public function installments()
     {
-        return $this->hasMany(OrderInstallment::class, 'order_id');
+        return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
     }
 
     public function getRemaining(): float
@@ -175,7 +175,7 @@ class Order extends Model
 
     public function getTotalAttribute(): float
     {
-        return $this->getCost();
+        return $this->cancelled ? $this->paid : $this->getCost();
     }
 
     public function getRemainingAttribute(): float
@@ -195,12 +195,12 @@ class Order extends Model
 
     public function getDepositPercentageAttribute(): float
     {
-        return round(($this->calculated_deposit / $this->getCost()) * 100, 2);
+        return $this->getCost() == 0 ? 0 : round(($this->calculated_deposit / $this->getCost()) * 100, 2);
     }
 
     public function getRemainingPercentageAttribute(): float
     {
-        return round(($this->remaining_installment / $this->getCost()) * 100, 2);
+        return $this->getCost() == 0 ? 0 : round(($this->remaining_installment / $this->getCost()) * 100, 2);
     }
 
     public function getCalculatedDepositAttribute(): float
