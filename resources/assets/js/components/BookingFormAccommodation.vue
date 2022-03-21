@@ -53,7 +53,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: false,
+            debug: true,
             moduleName: 'Accommodation',
             showAccommodation: false,
             booking_token: null,
@@ -75,9 +75,14 @@ export default {
         })
         bus.$on('leadTravellerLoaded', t => {
             that.leadTraveller = t
+            console.log('leadTravellerLoaded', t)
             if (that.travellers == undefined || that.travellers.length == 0) {
                 that.travellers.unshift(t)
             }
+        })
+        bus.$on('setLeadTraveller', customer => {
+            that.debug>1 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
+            that.leadTraveller = customer
         })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
             that.debug>2 && console.log("Accommodation: travellers loaded", travellers, that.leadTraveller, that.travellers);
