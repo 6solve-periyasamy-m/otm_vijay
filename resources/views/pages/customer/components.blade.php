@@ -439,9 +439,10 @@
                             <th scope="col">Name</th>
                             <th scope="col">Component Type</th>
                             <th scope="col">Cost</th>
+                            <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($orderCustomer->order->getAvailableAdditionals() as $orderComponent)
+                        @foreach($orderCustomer->getAvailableAdditionals() as $orderComponent)
                             <tr>
                                 <td>{{ $orderComponent['name'] }}</td>
                                 @if($orderComponent['type'] === 'Included')
@@ -456,6 +457,18 @@
                                         {{ StringFormatter::formatCurrency($orderComponent['cost']) }}
                                     </td>
                                 @endif
+                                <td>
+                                    @if(!(\App\Repository\SettingsRepository::getOrDefault('payment.required', true)))
+                                    <a href="{{ route('customer.extras.purchase',
+                                        ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                         'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                       class="btn btn-success d-inline ms-1">+</a>
+                                    @endif
+                                    <a href="{{ route('customer.extras.purchase',
+                                        ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                         'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                       class="btn btn-primary d-inline ms-1">$</a>
+                                </td>
                             </tr>
                         @endforeach
                     </table>

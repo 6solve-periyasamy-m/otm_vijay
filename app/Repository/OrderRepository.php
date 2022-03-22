@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Exceptions\RoomingFailedException;
+use App\Models\AccommodationInventoryTour;
+use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
+use App\Models\FlightInventoryTour;
 use App\Models\Group;
 use App\Models\Merchandise;
 use App\Models\Order;
@@ -19,8 +22,10 @@ use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use App\Models\RoomType;
 use App\Models\Tour;
+use App\Models\TransportInventoryTour;
 use App\Repository\Facades\StringFormatter;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
@@ -624,6 +629,14 @@ class OrderRepository
         return false;
     }
 
+    public static function getOrderCustomer(Order $order, Customer $customer): ?OrderCustomer
+    {
+        foreach ($order->orderCustomers as $orderCustomer) {
+            if ($orderCustomer->customer_id == $customer->id) return $orderCustomer;
+        }
+        return null;
+    }
+
     public static function getCustomersForOrder(Order $order)
     {
         $customers = [];
@@ -1076,34 +1089,34 @@ class OrderRepository
     {
         $data = [];
         foreach ($order->tour->merchandise as $tourComponent) {
-            $data[] = ['name' => $tourComponent->name, 'type' => $tourComponent->tour_component_type,
-                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(),];
+            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), ];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
-                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
             }
         }
         foreach ($order->tour->activityInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
-                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),];
             }
         }
         foreach ($order->tour->flightInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
-                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
             }
         }
         foreach ($order->tour->transportInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
-                $data[] = ['name' => $inventory->__toString(), 'type' => $tourComponent->tour_component_type,
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'transport', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),];
             }
         }
