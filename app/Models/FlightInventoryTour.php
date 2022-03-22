@@ -94,6 +94,7 @@ class FlightInventoryTour extends Model
         if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
         $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
         foreach ($upgrades as $upgrade) {
+            if ($upgrade->upgrade->available_stock <= 0) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
@@ -116,6 +117,7 @@ class FlightInventoryTour extends Model
 
         foreach ($upgrades as $upgrade) {
             if ($upgrade->upgrade->id == $this->id) continue;
+            if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
                 $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
             }
@@ -130,5 +132,10 @@ class FlightInventoryTour extends Model
             'flight_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price,
         ]);
+    }
+
+    public function getAvailableStockAttribute()
+    {
+        return $this->inventory->stock - $this->inventory->used_stock;
     }
 }

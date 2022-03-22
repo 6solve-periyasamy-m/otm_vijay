@@ -1130,21 +1130,25 @@ class OrderRepository
         $owned = self::getOwnedComponentsAndUpgradedIncluded($orderCustomer);
         $data = [];
         foreach ($order->tour->merchandise as $tourComponent) {
+            $owned = in_array($tourComponent->id, $owned['extras']);
+            if ($tourComponent->available_stock <= 0 && !$owned) continue;
             $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
-                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => in_array($tourComponent->id, $owned['extras'])];
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owned,];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
-
+                $owned = in_array($tourComponent->id, $owned['accommodation']);
+                if ($tourComponent->available_stock <= 0 && !$owned) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => in_array($tourComponent->id, $owned['accommodation'])];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => $owned];
             }
         }
         foreach ($order->tour->activityInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),'owned' => false,];
             }
@@ -1153,6 +1157,7 @@ class OrderRepository
             if ($tourComponent->tour_component_type  !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['flights'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => false,];
             }
@@ -1161,6 +1166,7 @@ class OrderRepository
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['transport'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'transport', 'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),'owned' => false,];
             }

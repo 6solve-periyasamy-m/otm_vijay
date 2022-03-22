@@ -113,6 +113,9 @@ class CustomerComponentController extends Controller
             && $orderComponent->tour_component_type != 'Included')
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
 
+        if ($upgrade->upgrade->available_stock <= 0)
+            return response()->json(['success' => false, 'message' => 'This upgrade is currently out of stock',]);
+
         if (!app($repository)->isOnUpgradeTree($orderComponent->tourComponent, $upgrade))
             return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
 
@@ -135,6 +138,9 @@ class CustomerComponentController extends Controller
         if ($upgrade->upgrade->tour_sales_price < $orderComponent->cost
             && $orderComponent->tour_component_type != 'Included')
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
+
+        if ($upgrade->upgrade->available_stock <= 0)
+            return response()->json(['success' => false, 'message' => 'This upgrade is currently out of stock',]);
 
         if (!app($repository)->isOnUpgradeTree($orderComponent->tourComponent, $upgrade))
             return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);

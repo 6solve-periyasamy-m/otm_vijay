@@ -47,6 +47,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         $components = [];
         foreach ($tour->transportInventoryTours as $component) {
             if ($component->tour_component_type  !== "Upgrade") {
+                if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->transportInventory->transport->name;

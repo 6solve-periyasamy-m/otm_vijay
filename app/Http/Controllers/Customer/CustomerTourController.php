@@ -73,6 +73,8 @@ class CustomerTourController extends Controller
         $tourComponent = $this->getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
 
+        if ($tourComponent->available_stock <= 0) abort(404);
+
         $data = [
             'additions' => [[
                 'customer' => $componentType == 'accommodation' ? $orderCustomer->primary_group->id : $orderCustomer->customer->id,
