@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CustomerComponentController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
@@ -91,7 +92,7 @@ Route::middleware('auth:api')->group(function() {
     
 });
 
-Route::middleware('api.token.both')->name('api.')->group(function () {
+Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {
         Route::post('countries', [SelectController::class, 'getCountries'])->name('countries.select');
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
@@ -118,11 +119,14 @@ Route::middleware('api.token.both')->name('api.')->group(function () {
                 Route::post('/merchandise/add', [TourComponentController::class, 'addMerchandiseAddon'])->name('merchandise');
             });
         });
-        Route::post('accommodation/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('accommodation.upgrade');
-        Route::post('activity/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('activity.upgrade');
-        Route::post('flight/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('flight.upgrade');
-        Route::post('flight/upgrade/buy', [TourComponentController::class, 'purchaseFlightUpgrade'])->name('flight.upgrade.purchase');
-        Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
+        Route::post('accommodation/upgrade', [CustomerComponentController::class, 'applyAccommodationUpgrade'])->name('customer.accommodation.upgrade');
+        Route::post('accommodation/upgrade/buy', [CustomerComponentController::class, 'purchaseAccommodationUpgrade'])->name('customer.accommodation.upgrade.purchase');
+        Route::post('activity/upgrade', [CustomerComponentController::class, 'applyActivityUpgrade'])->name('customer.activity.upgrade');
+        Route::post('activity/upgrade/buy', [CustomerComponentController::class, 'purchaseActivityUpgrade'])->name('customer.activity.upgrade.purchase');
+        Route::post('flight/upgrade', [CustomerComponentController::class, 'applyFlightUpgrade'])->name('customer.flight.upgrade');
+        Route::post('flight/upgrade/buy', [CustomerComponentController::class, 'purchaseFlightUpgrade'])->name('customer.flight.upgrade.purchase');
+        Route::post('transport/upgrade', [CustomerComponentController::class, 'applyTransportUpgrade'])->name('customer.transport.upgrade');
+        Route::post('transport/upgrade/buy', [CustomerComponentController::class, 'purchaseTransportUpgrade'])->name('customer.transport.upgrade.purchase');
     });
 });
 
@@ -233,6 +237,10 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
                 Route::get('/transports/{oCustomerId}', [TourComponentController::class, 'getAvailableTransportAddons'])->name('transport');
             });
         });
+        Route::post('accommodation/upgrade', [TourComponentController::class, 'applyAccommodationUpgrade'])->name('accommodation.upgrade');
+        Route::post('activity/upgrade', [TourComponentController::class, 'applyActivityUpgrade'])->name('activity.upgrade');
+        Route::post('flight/upgrade', [TourComponentController::class, 'applyFlightUpgrade'])->name('flight.upgrade');
+        Route::post('transport/upgrade', [TourComponentController::class, 'applyTransportUpgrade'])->name('transport.upgrade');
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
         Route::get('/status', function(){})->name('status.stub');

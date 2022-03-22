@@ -93,13 +93,13 @@ class ActivityInventoryTour extends Model
     {
         $upgrades = $this->upgrades;
         $keys = [];
-        if (!empty($upgrades->all())) {
-            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
-        } else {
+
+        if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
         }
 
         foreach ($upgrades as $upgrade) {
+            if ($upgrade->upgrade->id == $this->id) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
                 $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
             }

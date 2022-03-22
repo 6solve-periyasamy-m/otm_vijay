@@ -9,7 +9,9 @@
                 <option value="{{ $key }}" @if($selected == $key) selected @endif>{{ $value }}</option>
             @endforeach
         </select>
+        @if(!(\App\Repository\SettingsRepository::getOrDefault('payment.required', true)))
         <a href="{{ $createRoute }}" target="{{ $target ?? '_blank' }}" class="btn btn-success d-inline ms-1" onclick="{{$onclick ?? ''}}">+</a>
+        @endif
         <a href="{{ $purchaseRoute }}" target="{{ $targetPurchase ?? '_blank' }}" class="btn btn-primary d-inline ms-1" onclick="{{$onclickPurchase ?? ''}}">$</a>
     </div>
 </div>
