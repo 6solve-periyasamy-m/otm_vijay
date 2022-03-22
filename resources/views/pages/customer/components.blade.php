@@ -442,7 +442,7 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach($orderCustomer->getAvailableAdditionals() as $orderComponent)
+                        @foreach(\App\Repository\OrderRepository::getOrderCustomerAdditionals($orderCustomer) as $orderComponent)
                             <tr>
                                 <td>{{ $orderComponent['name'] }}</td>
                                 @if($orderComponent['type'] === 'Included')
@@ -458,16 +458,20 @@
                                     </td>
                                 @endif
                                 <td>
-                                    @if(!(\App\Repository\SettingsRepository::getOrDefault('payment.required', true)))
-                                    <a href="{{ route('customer.extras.purchase',
-                                        ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
-                                         'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
-                                       class="btn btn-success d-inline ms-1">+</a>
+                                    @if($orderComponent['owned'])
+                                        Owned
+                                    @else
+                                        @if(!(\App\Repository\SettingsRepository::getOrDefault('payment.required', true)))
+                                        <a href="{{ route('customer.extras.purchase',
+                                            ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                             'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                           class="btn btn-success d-inline ms-1">+</a>
+                                        @endif
+                                        <a href="{{ route('customer.extras.purchase',
+                                            ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                             'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                           class="btn btn-primary d-inline ms-1">$</a>
                                     @endif
-                                    <a href="{{ route('customer.extras.purchase',
-                                        ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
-                                         'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
-                                       class="btn btn-primary d-inline ms-1">$</a>
                                 </td>
                             </tr>
                         @endforeach
