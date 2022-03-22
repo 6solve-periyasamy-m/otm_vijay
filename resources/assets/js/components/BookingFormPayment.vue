@@ -104,12 +104,12 @@
                         {{priceFormat(tourPrice)}} x {{travellerCount}} = {{priceFormat(calculateTourPrice)}}
                     </div>
                 </div>
-                <div class="summary row" v-if="calculateSingleRooms">
+                <div class="summary row" v-if="singleRooms">
                     <div class="price">
                         Single Room Surcharge
                     </div>
                     <div class="price_amount">
-                        {{priceFormat(singleOccupancySurcharge)}} x {{calculateSingleRooms}} = {{priceFormat(calculateSingleRooms * singleOccupancySurcharge)}}
+                        {{priceFormat(singleOccupancySurcharge)}} x {{singleRooms}} = {{priceFormat(singleRooms * singleOccupancySurcharge)}}
                     </div>
                 </div>
                 <div class="summary row">
@@ -184,7 +184,8 @@ export default {
             singleOccupancySurcharge: 100,
             singleRooms: 0,
             deposit: 0,
-            travellerCount: 0
+            travellerCount: 0,
+            singleRooms: 0
         }    
     },
     created() {
@@ -196,57 +197,55 @@ export default {
             that.loadBooking(that.booking_token)
         })
         bus.$on("ReloadBooking", (token) => {
-            this.debug>2 && console.log("Payment: booking reloaded", token);
-            if (this.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
-                this.loadBooking(this.booking_token)
+            that.debug>2 && console.log("Payment: booking reloaded", token);
+            if (that.booking_token != undefined && this.booking_token.length && this.booking_token === token) {
+                that.loadBooking(that.booking_token)
             } else {
                 console.log('Payment ignored: ', token);
             }
         })
          bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
-            this.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
-            travellers.map(traveller => this.travellers.push(traveller));
+            that.travellers = [];
+            that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
+            that.travellers.push(that.leadTraveller)
+            travellers.map(traveller => that.travellers.push(traveller));
+            that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             that.countTravellers()
+        })
+        bus.$on('recalculate', () => {
+            this.debug && console.log('Recalculat payment event')
+            that.loadBooking(that.booking_token)
+            that.calcPrice()
+            that.calcTourPrice()
         })
         bus.$on("TermsAgreed", (agreed) => {
           this.agreement = agreed
         })
     },
     mounted() {
-        
-        console.log('BookingFormPayment form mounted travellers:', this.travellerCount);
-        
+        this.debug && console.log('BookingFormPayment form mounted travellers:', this.travellerCount);
     },
     computed: {
         calculateTourPrice: function() {
           return this.tourPrice * this.travellerCount
         },
         totalPrice: function() {
-          return this.calculateTourPrice + this.calculateSingleRooms * this.singleOccupancySurcharge;
-        }, 
-        calculateSingleRooms: function() {
-            let rooms = 0
-            this.travellers.map(t => {
-              if (t.room_type === 1) {
-                rooms++;
-              }
-            })
-            return rooms
-        },
-        countBookingTravellers: function() {
-            if (typeof this.booking.travellers !== 'undefined') {
-              return this.booking.travellers.length
-            } else {
-              // this should not happen but to detect if there is a problem with this function
-              console.log('ERROR: computed travellers counter does not have travellers in this booking: ',this.booking)
-              return 1
-            }
+          return this.calculateTourPrice + this.singleRooms * this.singleOccupancySurcharge;
         }
     },
     methods: {
+        calculateSingleRooms() {
+            let rooms = 0
+            this.booking.accommodations.map(t => {
+                console.log(t)
+              if (t.room_type_id === 1) {
+                rooms++;
+              }
+            })
+            this.singleRooms = rooms
+        },
         countTravellers() {
-            console.log('counting travellers', this.travellers.length + 1)
-            this.travellerCount = this.travellers.length + 1
+            this.travellerCount = this.travellers.length 
             return this.travellerCount
         },
         priceFormat(a) {
@@ -396,10 +395,12 @@ export default {
                         .then(response => {
                             that.booking = response.data.booking
                             console.log('BookingPrice:', that.booking)
+                            that.calculateSingleRooms()
                             that.countTravellers()
                             that.calcPrice()
                             that.tourPrice = 9999.99
                             that.calcTourPrice()
+                            
                         })
                         .catch(error => {
                             console.log(error)
