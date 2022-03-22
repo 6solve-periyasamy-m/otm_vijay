@@ -73,15 +73,28 @@ export default {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
         })
-        bus.$on('leadTravellerLoaded', t => that.leadTraveller = t)
+        bus.$on('leadTravellerLoaded', t => {
+            that.leadTraveller = t
+            that.debug>2 && console.log('leadTravellerLoaded', t)
+            if (that.travellers == undefined || that.travellers.length == 0) {
+                that.travellers.unshift(t)
+            }
+        })
+        bus.$on('setLeadTraveller', customer => {
+            that.debug>4 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
+            that.leadTraveller = customer
+        })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
-            that.debug>2 && console.log("Accommodation: travellers loaded", travellers, this.travellers, that.travellers);
+            that.debug>2 && console.log("Accommodation: travellers loaded", travellers, that.leadTraveller, that.travellers);
             if (init) {
                 that.travellers = [];
             }
+            if (that.leadTraveller && that.travellers.length===0) {
+                that.travellers.unshift(that.leadTraveller)
+            }
             travellers.map(traveller => that.travellers.push(traveller));
-            that.loadAccommodationBooking()
             that.initTravelers = that.travellers
+            that.loadAccommodationBooking()            
         })
         bus.$on("AddedTraveler", traveler => {
             let checks = that.travellers.map(t => {
@@ -94,7 +107,7 @@ export default {
             this.loadAccommodationBooking()
         })
         bus.$on("reloadTravelers", () => {
-            console.log('reloadTraveller (accommodation)')
+            that.debug>4 && console.log('reloadTraveller (accommodation)')
             this.loadAccommodationBooking()
         })
     },
@@ -118,24 +131,26 @@ export default {
             this.travellers.push(t)
         },
         setAccommodation() {
-          let that = this
-          // booking the accommodation options in the booking_accommodations table
+            let that = this
+            // booking the accommodation options in the booking_accommodations table
             this.travellers.map(t => {
-              if (t.room_type === 1) {
-                t.group = 0;
-              }
+                if (t.room_type_id === 1) {
+                    t.group = 0;
+                }
             })
+            
             this.debug>1 && console.log('BookingFormAccommodation: setAccommodation', this.booking_token, this.travellers)
             axios.post(`/api/booking/accommodation/reserve`, {
                 token : this.booking_token,
                 travellers :  this.travellers 
-              })
-              .then(response => {
-                that.showAccommodation = false
-                that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
-                // TODO: do something with response?
-              })
-              .catch(error => console.log(error))
+                })
+                .then(response => {
+                    that.showAccommodation = false
+                    that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
+                    // TODO: do something with response?
+                    bus.$emit('recalculate')
+                })
+                .catch(error => console.log(error))
         },
         resetTravellers() {
             this.travellers = this.initTravelers
@@ -188,6 +203,7 @@ export default {
             let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
             axios.get(url)
                 .then((response) => {
+                    that.debug>4 && console.log('/api/booking/accommodation/booking/',response.data)
                     const bookings = response.data.bookings
                     if (bookings == undefined || !bookings.length) {
                       return
@@ -196,14 +212,17 @@ export default {
 
                     that.resetTravellers()
 
-                    that.debug > 5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
+                    that.debug>5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
                     bookings.map((booking, index) => {
-                       that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, booking.room_type_id, booking.group_id)
+                       that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, that.travellers, booking.room_type_id, booking.group_id)
                        if (booking.room_type_id) {
                            Vue.set(that.travellers[index], 'room_type', booking.room_type_id)
                        }
-                       Vue.set(that.travellers[index], 'group', booking.group_id)
+                       if (booking.group_id) {
+                           Vue.set(that.travellers[index], 'group', booking.group_id)
+                       }
                     })
+                    bus.$emit('recalculate')
                     that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
                 })
                 .catch((error) => console.log(error));
