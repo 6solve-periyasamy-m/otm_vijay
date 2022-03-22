@@ -4,7 +4,8 @@
         <div v-if="showControl">
             <div class="booking-form--control">
                 <button class="btn btn-sm btn-primary" @click="clearForm">Clear form</button>
-                <button class="btn btn-sm btn-primary" @click="controlForms">Show forms</button>
+                <button v-show="login" class="btn btn-sm btn-default" @click="controlForms">Show forms</button>
+                <button v-show="login" class="btn btn-sm btn-default" @click="findBookings">Find bookings</button>
             </div>
             <div v-if="showForms">
                 <select v-model="activateBooking" @change="activate">
@@ -22,18 +23,20 @@ export default {
   props: ['tour', 'customer', 'token_label'],
   data() {
     return {
-        showControl: false,
+        showControl: true,
         showForms: false,
         booking_token: null,
         activateBooking: String,
         debug: false,
         bookings: [],
+        login: false,
         auth: false
     }
   },
   created() {
     const that=this
     bus.$on('setBookingToken', (current_token) => {
+      console.log('CONTROL', current_token)
         that.booking_token = current_token
         setCookie(that.token_label, that.booking_token)
         localStorage.active_token = that.booking_token
@@ -43,6 +46,16 @@ export default {
     })
   },
   methods: {
+    findBookings() {
+      const tokens = JSON.parse(localStorage.getItem('tokens'))
+      console.log(tokens)
+      localStorage.setItem('tokens', JSON.stringify([]));
+      tokens.map((t) => {
+        console.log(t)
+        this.getBookings(t)
+      })
+      this.getCustomerBookings()
+    },
     restoreActive() {
         if (localStorage.active_token) {
             this.getBookings(localStorage.active_token)
@@ -50,6 +63,7 @@ export default {
         } 
     },
     controlForms() {
+        console.log('controlForms', this.bookings)
         if (this.bookings.length === 0) {
             this.restoreActive()
         }
@@ -59,18 +73,29 @@ export default {
         }
         this.showForms = !this.showForms
     },
+    getCustomerBookings() {
+      console.log(this.customer)
+    },
     // get bookings for this customer
     getBookings(token) {
       let that=this
+      console.log('getBookings', token)
       if (localStorage.active_token !== token) {
         token = localStorage.active_token
       }
       axios.get(`/api/booking/customer/bookings/${token}`)
         .then(response => {
-          that.bookings = response.data.bookings
-          that.bookings.map(booking => {
-            localStorage.setItem('tokens', JSON.stringify([booking.token]));
-          })
+          console.log('getBooking:',response)
+          if (response.data.length) {
+            that.bookings = response.data.bookings
+            that.bookings.map(booking => {
+              console.log('setting token in local'. booking)
+              localStorage.setItem('tokens', JSON.stringify([booking.token]));
+            })
+          } else {
+            console.log('not setting token as no data for it', token);
+          }
+
         })
         .catch(error => console.log(error))
     },
