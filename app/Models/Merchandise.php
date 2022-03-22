@@ -35,9 +35,9 @@ class Merchandise extends Model
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
-    public function orderCustomers()
+    public function orderMerchandise()
     {
-        return $this->hasMany(OrderCustomer::class, 'order_customer_id');
+        return $this->hasMany(OrderMerchandise::class, 'merchandise_id');
     }
 
     public function __toString()

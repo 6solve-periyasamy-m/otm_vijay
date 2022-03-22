@@ -94,8 +94,8 @@ class StockRepository
     public static function getExtraStock(Merchandise $merchandise): int
     {
         $used = 0;
-        foreach ($merchandise->orderCustomers as $orderCustomer) {
-            if (!$orderCustomer->isCancelled()) $used++;
+        foreach ($merchandise->orderMerchandise as $orderMerchandise) {
+            if (!$orderMerchandise->isCancelled()) $used++;
         }
         return $used;
     }

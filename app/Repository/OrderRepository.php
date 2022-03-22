@@ -1130,18 +1130,18 @@ class OrderRepository
         $owned = self::getOwnedComponentsAndUpgradedIncluded($orderCustomer);
         $data = [];
         foreach ($order->tour->merchandise as $tourComponent) {
-            $owned = in_array($tourComponent->id, $owned['extras']);
+            $owns = in_array($tourComponent->id, $owned['extras']);
             if ($tourComponent->available_stock <= 0 && !$owned) continue;
             $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
-                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owned,];
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owns,];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
-                $owned = in_array($tourComponent->id, $owned['accommodation']);
+                $owns = in_array($tourComponent->id, $owned['accommodation']);
                 if ($tourComponent->available_stock <= 0 && !$owned) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => $owned];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => $owns];
             }
         }
         foreach ($order->tour->activityInventoryTours as $tourComponent) {
