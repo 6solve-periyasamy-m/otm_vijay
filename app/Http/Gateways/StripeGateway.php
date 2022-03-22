@@ -19,7 +19,7 @@ class StripeGateway extends Gateway
                     'product_data' => [
                         'name' => $item['name'],
                     ],
-                    'unit_amount' => $item['cost'] * 100,
+                    'unit_amount' => round($item['cost'] * 100),
                 ],
                 'quantity' => $item['quantity'],
             ];
