@@ -1,6 +1,6 @@
 @extends('layout.customer')
 
-@section('title', 'Balance & Payment')
+@section('title', 'Your Extras')
 
 
 @push('header-stack')
