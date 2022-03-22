@@ -75,13 +75,13 @@ export default {
         })
         bus.$on('leadTravellerLoaded', t => {
             that.leadTraveller = t
-            console.log('leadTravellerLoaded', t)
+            that.debug>2 && console.log('leadTravellerLoaded', t)
             if (that.travellers == undefined || that.travellers.length == 0) {
                 that.travellers.unshift(t)
             }
         })
         bus.$on('setLeadTraveller', customer => {
-            that.debug>1 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
+            that.debug>4 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
             that.leadTraveller = customer
         })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
@@ -107,7 +107,7 @@ export default {
             this.loadAccommodationBooking()
         })
         bus.$on("reloadTravelers", () => {
-            console.log('reloadTraveller (accommodation)')
+            that.debug>4 && console.log('reloadTraveller (accommodation)')
             this.loadAccommodationBooking()
         })
     },
@@ -203,7 +203,7 @@ export default {
             let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
             axios.get(url)
                 .then((response) => {
-                    console.log('/api/booking/accommodation/booking/',response.data)
+                    that.debug>4 && console.log('/api/booking/accommodation/booking/',response.data)
                     const bookings = response.data.bookings
                     if (bookings == undefined || !bookings.length) {
                       return
@@ -212,7 +212,7 @@ export default {
 
                     that.resetTravellers()
 
-                    that.debug > 5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
+                    that.debug>5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
                     bookings.map((booking, index) => {
                        that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, that.travellers, booking.room_type_id, booking.group_id)
                        if (booking.room_type_id) {
