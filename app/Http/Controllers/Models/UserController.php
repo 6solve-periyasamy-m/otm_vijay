@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Log;
+use Storage;
 
 class UserController extends Controller
 {
@@ -38,6 +39,13 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
         if ($request->has('avatar') && $request->file('avatar') != null) {
+            if (!empty($user->avatar)) {
+                try {
+                    Storage::delete($user->avatar);
+                } catch (\Throwable $e) {
+                    \Log::error($e);
+                }
+            }
             $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
         }
         try {
@@ -96,6 +104,13 @@ class UserController extends Controller
             PermissionsRepository::assignRole($user, $request->input('role'));
         }
         if ($request->has('avatar') && $request->file('avatar') != null) {
+            if (!empty($user->avatar)) {
+                try {
+                    Storage::delete($user->avatar);
+                } catch (\Throwable $e) {
+                    \Log::error($e);
+                }
+            }
             $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
         }
         try {
