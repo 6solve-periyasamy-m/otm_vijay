@@ -4,14 +4,32 @@
             <div class="p-3 ps-5 d-flex">
                 <img class="stamp-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('atol.stamp', '')) }}">
                 <div class="d-flex flex-column ms-3">
-                    <span><font-awesome-icon icon="facebook" class="menu-icon" /></span>
-                    <span>@twitterID</span>
-                    <span>@instagramID</span>
+                    @if(!empty(\App\Repository\SettingsRepository::get('social.facebook')))
+                    <span>
+                        <a href="{{ \App\Repository\SettingsRepository::get('social.facebook') }}" class="link link-primary">
+                            Facebook
+                        </a>
+                    </span>
+                    @endif
+                    @if(!empty(\App\Repository\SettingsRepository::get('social.twitter')))
+                    <span>
+                        <a href="{{ \App\Repository\SettingsRepository::get('social.twitter') }}" class="link link-primary">
+                            Twitter
+                        </a>
+                    </span>
+                    @endif
+                    @if(!empty(\App\Repository\SettingsRepository::get('social.instagram')))
+                    <span>
+                        <a href="{{ \App\Repository\SettingsRepository::get('social.instagram') }}" class="link link-primary">
+                            Instagram
+                        </a>
+                    </span>
+                    @endif
                 </div>
             </div>
             <div class="p-3 dp-down">
                 <img class="setting-logo dp-button" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}" onclick="window.location = '{{ route('customer.portal') }}'">
-                <div class="dp-content">
+                <div class="drop-content">
                     <a href="#" onclick="event.preventDefault();logout();"><i class="icon-login"></i>&nbsp;Logout</a>
                 </div>
             </div>

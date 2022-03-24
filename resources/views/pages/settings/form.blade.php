@@ -62,6 +62,10 @@
     'width' => 6,
 ])
 <hr class="splitter"/>
+@include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.facebook', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.twitter', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.instagram', ''), 'width' => 4])
+<hr class="splitter"/>
 @include('partials.fields.submit')
 <hr class="splitter"/>
 <div class="col-sm-12">
