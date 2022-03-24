@@ -22,4 +22,9 @@ class CustomerLoginController extends Controller
         }
         return back()->withErrors('Could not authenticate with those credentials')->withInput($request->only('email', 'remember'));
     }
+
+    public function logout()
+    {
+        Auth::guard('customer')->logout();
+    }
 }

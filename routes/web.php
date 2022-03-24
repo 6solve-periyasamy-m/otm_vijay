@@ -726,6 +726,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
     Route::post('/register', [CustomerRegisterController::class, 'register'])->name('confirm-register');
 
     Route::middleware('auth:customer')->group(function () {
+        Route::post('/logout', [CustomerLoginController::class, 'logout'])->name('logout');
         Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
         Route::get('/portal', [CustomerPortalController::class, 'show'])->name('portal');
         Route::get('/details', [CustomerDetailsController::class, 'edit'])->name('edit');
