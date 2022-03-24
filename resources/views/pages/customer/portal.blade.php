@@ -46,13 +46,3 @@
     </div>
 </div>
 @endsection
-
-@section('footer-script')
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.donut-menu .menu-item').click(function() {
-            alert();
-        })
-    });
-</script>
-@endsection
