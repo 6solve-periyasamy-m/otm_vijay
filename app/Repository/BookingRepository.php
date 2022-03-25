@@ -48,7 +48,7 @@ class BookingRepository implements BookingRepositoryInterface
             $booking->customer->billing_address = Address::find($booking->customer->billing_address_id);
             return $booking;
         }
-        Log::warning('BookingRepository::findBookingByToken: token not found', [$token]);
+        Log::warning('BookingRepository::findBookingByToken: token was not found', [$token]);
 
         return null;
     }

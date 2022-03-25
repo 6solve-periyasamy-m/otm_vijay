@@ -99,12 +99,14 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->select('booking_accommodations.group_id',
                 'booking_accommodations.customer_id',
                 'booking_accommodations.room_type_id',
-               // 'accommodation_groups.name as group_name',
+                'accommodation_groups.name as group_name',
                 'room_types.maximum_occupancy',
                 'room_types.name as room_type_name'
             ) 
             ->join('room_types', 'booking_accommodations.room_type_id', 'room_types.id')
-            // ->join('accommodation_groups', 'booking_accommodations.group_id', 'accommodation_groups.id')
+            ->join('bookings', 'booking_accommodations.booking_id', 'bookings.id')
+            ->join('customers', 'bookings.customer_id', 'customers.id')
+            ->leftJoin('accommodation_groups', 'booking_accommodations.group_id', 'accommodation_groups.id')
             ->where('booking_accommodations.booking_id', $booking->id)
             ->whereIn('booking_accommodations.customer_id', $travellerIds);
         try {
@@ -114,7 +116,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             Log::error('Retrieving booking data error: ' . $e->getMessage());
             throw new Exception('error with bookingAccommodation query'. $e->getMessage());
         }
-
+Log::debug('GetAccommodationBooking result:', [$bookings, $bookingObj->toSql()]);
         return $bookings;
     }
 

@@ -111,7 +111,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6 form-group field-separation">{{date_of_birth}}
+                                <div class="col-sm-6 form-group field-separation">
                                     <label class="form-label" for="date_of_birth">Date of Birth</label>
                                     <input type="date" v-model="date_of_birth" class="form-control" />
                                 </div>
@@ -343,9 +343,9 @@ export default {
             } else {
                 tokens = JSON.parse(localStorage.tokens)
             }
-            tokens.push(that.booking_token)
-            localStorage.tokens = JSON.stringify(tokens)
-            localStorage.active_token = that.booking_token
+            // tokens.push(that.booking_token)
+            // localStorage.tokens = JSON.stringify(tokens)
+            // localStorage.active_token = that.booking_token
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             that.setCustomer(customer)

@@ -390,7 +390,7 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
-    private function createUpdateBookingTraveller($token, $customer) 
+    private function updateBookingTraveller($token, $customer) 
     {
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
@@ -412,8 +412,9 @@ class BookingCustomerController extends ApiController
      */
     public function leadTraveller(Request $request)
     {
+        Log::debug('BookingCustomerController:leadTraveller', [$request->booking_token]);
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
-        $this->createUpdateBookingTraveller($request->booking_token, $customer);
+        $this->updateBookingTraveller($request->booking_token, $customer);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }
@@ -428,7 +429,7 @@ class BookingCustomerController extends ApiController
     {
         $this->logging == 'customers' && Log::debug('BookingTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
-        $this->createUpdateBookingTraveller($request->booking_token, $customer);
+        $this->updateBookingTraveller($request->booking_token, $customer);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }

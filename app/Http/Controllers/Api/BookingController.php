@@ -61,15 +61,18 @@ class BookingController extends ApiController
       //$booking = Booking::select('customer_id')->where('token', $token)->first();
       $booking = BookingRepository::findBooking($token);
       if (!$booking) {
-        return null;
+        return response()->json(['success' => false, 'message' => 'No bookings for token '.$token]);
       }
-      $bookings = Booking::select('tours.name as tour_name', 'bookings.token', 'bookings.status')
+
+      $bookings = Booking::select('bookings.id as booking_id', 'tours.name as tour_name', 'bookings.token', 'bookings.status')
         ->join('tours', 'tours.id', 'bookings.tour_id')
         ->where('customer_id', $booking->customer_id)
         ->orderBy('bookings.tour_id', 'desc')
         ->orderBy('bookings.created_at', 'desc')
         ->get();
-      return response()->json(['success' => true, 'bookings' => $bookings]);
+        Log::debug('Booking Collected: ', [$bookings]);
+
+        return response()->json(['success' => true, 'bookings' => $bookings]);
    }
 
     /**
@@ -93,9 +96,13 @@ class BookingController extends ApiController
         $token = $request->token;
 
         $bookingRepo = new BookingRepository();
-        $booking = $bookingRepo->create($customer_id, $tour_id, $token);
-        $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
-        $booking->token = $token; 
+        // check if a booking is active
+        $booking = $bookingRepo->findBookingByToken($token);
+        if (!$booking) {
+            $booking = $bookingRepo->create($customer_id, $tour_id, $token);
+            $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
+            $booking->token = $token;
+        }
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
