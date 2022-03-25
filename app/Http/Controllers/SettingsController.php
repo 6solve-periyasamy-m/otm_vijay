@@ -29,6 +29,7 @@ class SettingsController extends Controller
             'currency_id' => 'required|exists:currencies,id',
             'stripe_key' => 'nullable',
             'date_format' => 'required',
+            'year_start' => 'required|date',
         ];
     }
 
@@ -37,7 +38,7 @@ class SettingsController extends Controller
     }
 
     public function update(Request $request) {
-        $request->validate(SettingsController::getValidationRules());
+        $request->validate(SettingsController::getValidationRules());;
         SettingsRepository::setAll([
             'company.name' => $request->input('company_name'),
             'company.contact.email' => $request->input('company_email'),
@@ -56,6 +57,7 @@ class SettingsController extends Controller
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
             'system.format.time' => $request->input('time_format'),
+            'system.year.start' => $request->input('year_start'),
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             SettingsRepository::set('company.logo', $this->saveImage($request->file('company_logo')));
