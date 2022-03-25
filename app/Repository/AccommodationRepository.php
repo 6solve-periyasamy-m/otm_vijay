@@ -116,7 +116,8 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             Log::error('Retrieving booking data error: ' . $e->getMessage());
             throw new Exception('error with bookingAccommodation query'. $e->getMessage());
         }
-Log::debug('GetAccommodationBooking result:', [$bookings, $bookingObj->toSql()]);
+        //Log::debug('GetAccommodationBooking result:', [$bookings, $bookingObj->toSql()]);
+
         return $bookings;
     }
 
