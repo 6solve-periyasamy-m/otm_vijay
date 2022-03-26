@@ -9,7 +9,7 @@
             <div v-if="showForms && activeTokens">
                 <select v-model="activateBooking" @change="activate">
                   <option default value="" placeholder="Load Tour">Select a booking to load form</option>
-                  <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}}</option>
+                  <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}} {{booking.token}}</option>
                 </select>
             </div>
         </div>

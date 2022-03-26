@@ -12,32 +12,25 @@ use App\Models\Tour;
  */
 class TourController extends ApiController
 {
-    public function getEvents() {
+    /**
+     * getEvents
+     * returns events that have not yet started
+     *
+     * @return JSON events
+     */
+    public function getEvents() 
+    {
         $events = Event::where('starts_at', '>', date('Y-m-d'))->get();
 
-        return response()->json(['success' => true, 'data' => $events->toArray()]);
+        return response()->json(['success' => true, 'data' => $events]);
     }
 
-    public function getTours($event_id = null) {
-        $today = date('Y-m-d');
-        if ($event_id) {
-            $tours = Tour::where('event_id', $event_id)
-                        ->get();
-        } else {
-            $tours = Tour::get();
-        }
-
-        return response()->json(['success' => true, 'data' => $tours->toArray()]);
-    }
-
-    public function getTourPrice($tour_id)
-    {
-        $tour = Tour::find($tour_id);
-        if ($tour) {
-            return response()->json(['success' => true, 'tour_price' => $tour->base_price_per_person, 'single_occupancy_surcharge' => $tour->single_occupancy_surcharge, 'deposit' => $tour->deposit]);
-        }
-    }
-
+    /**
+     * getTour 
+     *
+     * @param [type] $tour_id
+     * @return JSON tour
+     */
     public function getTour($tour_id)
     {
         $tour = Tour::find($tour_id);
@@ -48,19 +41,38 @@ class TourController extends ApiController
         }
     }
 
-    // deprecated
-    // public function getBasicTourInformation(Tour $tour)
-    // {
-    //     $tour = Tour::findOrFail($tour->id);
+    /**
+     * getTours 
+     *
+     * @param OPTIONAL $event_id
+     * @return JSON tours for a specific event after today, or all tours if no event specified
+     */
+    public function getTours($event_id = null) 
+    {
+        $today = date('Y-m-d');
+        if ($event_id) {
+            $tours = Tour::where('event_id', $event_id)
+                    ->join('events', 'tours.event_id', 'events.id')
+                    ->where('events.starts_at', '>', $today)
+                    ->get();
+        } else {
+            $tours = Tour::get();
+        }
 
-    //     return response()->json([
-    //         "success" => true,
-    //         "title" => $tour->name,
-    //         "description" => $tour->description,
-    //         "base_price_per_person" => $tour->base_price_per_person,
-    //         // tour_colour - is an ID so i'm assuming there would be a relationship, doesn't exist yet
-    //         // tour_merchandise - is an ID so i'm assuming there would be a relationship, doesn't exist yet
-    //         // This is just a basic start with the models that I have access to and the relationships I currently have
-    //     ]);
-    // }
+        return response()->json(['success' => true, 'data' => $tours]);
+    }
+
+    /**
+     * getTourPrice
+     *
+     * @param [type] $tour_id
+     * @return JSON response with tour_price (per person), accommodation single surchage and deposit
+     */
+    public function getTourPrice($tour_id)
+    {
+        $tour = Tour::find($tour_id);
+        if ($tour) {
+            return response()->json(['success' => true, 'tour_price' => $tour->base_price_per_person, 'single_occupancy_surcharge' => $tour->single_occupancy_surcharge, 'deposit' => $tour->deposit]);
+        }
+    }
 }

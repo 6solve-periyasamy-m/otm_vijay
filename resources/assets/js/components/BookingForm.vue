@@ -4,7 +4,9 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div> OTM Booking Form pre-release version 0.91</div>
+                        <div>{{agencyName}} 
+                        <label for="booking_name">Booking for </label>
+                        <input type="text" name="booking_name" v-model="bookingName" /></div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
@@ -45,6 +47,8 @@ export default {
         return {
             debug: false,
             formInfo: false,
+            bookingName: '',
+            agencyName: 'OTM',
             bookingId: '',
             leadTraveller: null,
             home_address: {},
@@ -98,6 +102,7 @@ export default {
                         alert('error loading booking!')
                         return
                     }
+                    that.bookingName = data.booking.token
                     that.leadTraveller = data.customer
 
                     bus.$emit('setBookingToken', data.booking.token)
