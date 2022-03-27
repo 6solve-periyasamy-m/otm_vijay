@@ -90,12 +90,12 @@ class BookingController extends ApiController
             'customer_id' => 'required',
             'tour_id' => 'required',
             'token' => 'required',
-            'name' => 'required'
+            'fullname' => 'required'
         ]);
         $customer_id = $request->customer_id;
         $tour_id = $request->tour_id;
         $token = $request->token;
-        $name = $request->name;
+        $fullname = $request->fullname;
         // Log::debug('booking create', [$customer_id, $tour_id, $token, $name]);
 
         // check if a booking is active
@@ -105,9 +105,9 @@ class BookingController extends ApiController
             $booking = $bookingRepo->create($customer_id, $tour_id, $token, $name);
             $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
             $booking->token = $token;
+            $booking->name = $fullname;
         } else {
             Log::warning('BookingCreate: booking already exists: name updated', [$name]);
-            $booking->name = $name;
             $booking->save();
         }
         return response()->json(["success" => true, 'booking' => $booking]);

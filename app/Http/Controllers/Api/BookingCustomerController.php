@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 
-use App\Models\Booking;
-use App\Models\Customer;
+use Carbon\Carbon;
 use App\Models\Address;
+use App\Models\Booking;
+
+use App\Models\Customer;
 
 use Illuminate\Http\Request;
-
 use App\Models\BookingTraveller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
@@ -35,8 +36,13 @@ class BookingCustomerController extends ApiController
     {
         $customerRepo = new CustomerRepository();
         $isRegistered = $customerRepo->isRegistered($email);
+        if ($isRegistered) {
+            $customer = Customer::where('email_address', $email)->first();
+            $booking = Booking::where('customer_id', $customer->id)->first();
+            return response()->json(["success" => true, "existing" => $isRegistered, "customer" => $customer, "token" => $booking->token]);
+        }   
 
-        return response()->json(["success" => true, "existing" => $isRegistered]);
+        return response()->json(["success" => false]);
     }
 
     /**

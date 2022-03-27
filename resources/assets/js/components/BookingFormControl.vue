@@ -1,5 +1,5 @@
 <template>
-    <div class="controls">{{bookings}}
+    <div class="controls">{{debug ? bookings : null}}
         <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
         <div v-if="showControl">
             <div class="booking-form--control">
@@ -22,13 +22,13 @@ export default {
   props: ['tour', 'customer', 'token_label'],
   data() {
     return {
+        debug: false,
         showControl: true,
         showForms: true,
         moduleName: 'BookingFormControl',
-        booking_token: null,
+        bookingToken: null,
         activateBooking: String,
         activeTokens: [],
-        debug: false,
         bookings: [],
         login: true,
         auth: false
@@ -36,16 +36,16 @@ export default {
   },
   created() {
     const that=this
-    bus.$on('', (current_token) => {
+    bus.$on('setBookingToken', (current_token) => {
         console.log('CONTROL', current_token)
-        that.booking_token = current_token
-        that.findBookings(current_token)
-        setCookie(that.token_label, that.booking_token)
-        localStorage.active_token = that.booking_token
-        that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+        that.bookingToken = current_token
+        setCookie(that.token_label, that.bookingToken)
+        localStorage.active_token = that.bookingToken
+        that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.bookingToken}`)
     })
     bus.$on('controlLoadBookings', () => {
-      that.findBookings()
+      //that.findBookings()
+      that.controlForms(true)
     })
   },
   mounted() {
@@ -53,17 +53,17 @@ export default {
   },
   methods: {
     findBookings(current_token = null) {
-console.log('findBookings: current_token is set to ', current_token)
+      // console.log('findBookings: current_token is set to ', current_token)
       const tokens = JSON.parse(localStorage.getItem('tokens'))
       if (current_token == null && tokens && tokens.length) {
         current_token = tokens[0];
       }
-console.log('findBookings: current_token is set to ', current_token)      
+      // console.log('findBookings: current_token is set to ', current_token)      
       tokens.map((t) => {
-        console.log('locally stored token getting booking for',t)
+        // console.log('locally stored token getting booking for',t)
         this.getBookings(t)
       })
-      console.log('findBookings', this.bookings)
+      // console.log('findBookings', this.bookings)
       this.activeTokens = localStorage.tokens
     },
     restoreActive() {
@@ -72,21 +72,25 @@ console.log('findBookings: current_token is set to ', current_token)
             setCookie(this.token_label, localStorage.active_token)
         } 
     },
-    controlForms() {
+    controlForms(show = false) {
         console.log('controlForms', this.bookings)
         if (this.bookings.length === 0) {
             this.restoreActive()
-        }
-        if (localStorage.active_token !== this.booking_token) {
-            console.log('restoring cookie to active token')
+        } else
+        if (localStorage.active_token !== this.bookingToken) {
+            // console.log('restoring cookie to active token')
             this.restoreActive()
         }
-        this.showForms = !this.showForms
+        if (show == false) {
+          this.showForms = !this.showForms
+        } else {
+          this.showForms = true
+        }
     },
     // get bookings for this customer
     getBookings(token) {
       let that=this
-      console.log('getBookings', token)
+      // console.log('getBookings', token)
       // if (localStorage.active_token !== token) {
       //   token = localStorage.active_token
       // }
@@ -119,18 +123,17 @@ console.log('findBookings: current_token is set to ', current_token)
     },
     // initialise form
     async initForm() {
-        deleteCookie(this.token_label)
         bus.$emit('initialiseForm')
     },
     // remove cookie
     clearForm() {
-      this.initForm().then(() => that.findBookings())
-
-      // init form is an event that may not yet have happend
-      //this.getBookings(localStorage.active_token)
+      localStorage.setItem('tokens', JSON.stringify([]));
+      deleteCookie(this.token_label)
+      bus.$emit('resetBookingToken')
+      window.location.reload(true)
     },
     storeActiveToken() {
-      // localStorage.active_token[this.booking_token] = 'active'
+      // localStorage.active_token[this.bookingToken] = 'active'
     }
   }
 }

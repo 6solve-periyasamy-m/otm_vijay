@@ -7,8 +7,7 @@
                         <div class="bookingform-header__title">
                             {{agencyName}} 
                             <label for="booking_name">Booking for </label>
-                            <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" />
-                            <button class="btn btn-small" @change="updateBookingName">Update</button>
+                            <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" @change="updateBookingName" />
                         </div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
@@ -76,10 +75,12 @@ export default {
 
         this.debug && console.log('1) BookingForm created for tour:', this.tour)
         bus.$emit('debugOverride', this.debug)
+
         bus.$on('initialiseForm', () => {
             this.resetToken()
             window.location.reload(true)
         })
+
         bus.$on('removeBookingCookie', token => {
             deleteCookie(that.tokenName)
             alert('Booking form clearance')
@@ -88,13 +89,18 @@ export default {
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
         })
+
         bus.$on('TermsAgreed', function(state) {
           that.termsaccepted = state
         })
 
         bus.$on('bookingCreated', booking => {
             that.bookingName = booking.name
-        });
+        })
+
+        bus.$on('resetBookingToken', () => {
+            that.resetToken()
+        })
 
         that.bookingToken = getCookie(that.tokenName)
         this.debug && console.log('Cookie read:', that.bookingToken)
@@ -216,7 +222,7 @@ button.btn-themed.action {
 .card-header {
   display: flex;
   gap: 2rem;
-  flex-direction: column;
+  flex-direction: row;
   align-content: space-between;
   input {
       border: none;

@@ -3,11 +3,11 @@
         <div class="card card-options">
             <div class="card-header">
                 <div v-if="debug">
-                    [Booking Token: {{booking_token}}]
+                    [Booking Token: {{bookingToken}}]
                 </div>
                 <validation-errors :errors="validationErrors" v-if="validationErrors"></validation-errors>
                 <h5 class="dropdown-button">
-                    <p v-if="!booking_token && !show_traveller">Start your booking by entering your details</p>
+                    <p v-if="!bookingToken && !show_traveller">Start your booking by entering your details</p>
                     <button class="btn btn-link cardhead" @click="toggleTraveller">
                         <font-awesome-icon icon="book-reader" />
                         Lead Traveller details
@@ -15,7 +15,7 @@
                 </h5>
     
                 <div class="card-info" v-if="!show_traveller">
-                    <div v-if="!booking_token && noUser">
+                    <div v-if="!bookingToken && noUser">
                         <p>
                             <font-awesome-icon icon="arrow-right" /> If you have a booking in progress, try entering your email address
                         </p>
@@ -33,7 +33,7 @@
                         <p v-if="email_address">Welcome {{first_name}}</p>
                     </div>
     
-                    <div v-if="!booking_token && activeUser">
+                    <div v-if="!bookingToken && activeUser">
                         <p>Active User</p>
                         <label for="password">Enter your password</label>
                         <input type="password" v-model="password">
@@ -42,16 +42,16 @@
                             </button>
                     </div>
                 </div>
-                <div v-if="booking_token && !show_traveller">
+                <div v-if="bookingToken && !show_traveller">
                     <p class="caption">
                         <font-awesome-icon icon="arrow-right" /> Please fill in all sections
                     </p>
-                    <div v-if="!booking_token">
+                    <div v-if="!bookingToken">
                         You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
                     </div>
                 </div>
             </div>
-            {{debug ? 'DEBUG MODE: Order retrieved by cookie: booking_token: '+ booking_token : ''}}
+            {{debug ? 'DEBUG MODE: Order retrieved by cookie: bookingToken: '+ bookingToken : ''}}
             <div class="card-body" v-if="show_traveller">
                 <div class="container">
                     <div class="card-options">
@@ -267,7 +267,7 @@ export default {
     data() {
         return {
             debug: false,
-            booking_token: null,
+            bookingToken: null,
             moduleName: 'leadTraveller',
             countries: [],
             email: '',
@@ -336,17 +336,17 @@ export default {
     async created() {
         let that = this
         bus.$on('setBookingToken', token => {
-            that.booking_token = token
-            that.debug && console.log(`${that.moduleName} created: booking ${that.booking_token}`)
+            that.bookingToken = token
+            that.debug && console.log(`${that.moduleName} created: booking ${that.bookingToken}`)
             let tokens
             if (localStorage.tokens == undefined) {
                 tokens = new Array()
             } else {
                 tokens = JSON.parse(localStorage.tokens)
             }
-            // tokens.push(that.booking_token)
+            // tokens.push(that.bookingToken)
             // localStorage.tokens = JSON.stringify(tokens)
-            // localStorage.active_token = that.booking_token
+            // localStorage.active_token = that.bookingToken
         })
         bus.$on('leadTravellerLoaded', (customer) => {
             that.setCustomer(customer)
@@ -412,7 +412,7 @@ export default {
             const username = this.email
             const password = this.password
             const t = new Date()
-            alert('login user');
+            alert('TEST: login user');
             // request a salt value from the server which is then used in the encryption
             axios.get(`/api/booking/auth/token/${username}`)
                 .then(response => {
@@ -442,6 +442,20 @@ export default {
                 })
 
         },
+        validEmail() {
+            if (!this.email_address.length) {
+                return false
+            }
+            const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+            const valid = valid_email.test(this.email_address)
+            // this.debug && console.log(this.email_address, valid)
+            this.email_invalid = !valid
+            if (this.email && this.email_address !== this.email) {
+                alert('you can not change your email address in this form, contact support');
+                this.email_address = this.email
+            }
+            this.retrieveUser()
+        },
         retrieveUser() {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
@@ -449,13 +463,16 @@ export default {
             // is it a registered user?
             if (!this.auth) {
                 this.debug>1 && console.log('BookingFormLead: checking for auth user');
-                axios.get(`/api/booking/email/registered/${this.email}`)
+                axios.get(`/api/booking/email/registered/${this.email_address}`)
                     .then(response => {
                         this.debug>1 && console.log('BookingFormLead: email registered? response', response)
                         this.activeUser = response.data.existing
                         if (that.activeUser) {
-                            that.email_address = that.email
-                            that.retrieveBookingToken()
+                            that.bookingToken = response.data.token
+                            alert('You have active booking forms')
+                            bus.$emit('setBookingToken', that.bookingToken)
+                            bus.$emit('controlLoadBookings')
+                            that.show_traveller = false
                         } else {
                             that.noUser = true
                         }
@@ -473,7 +490,7 @@ export default {
                     that.debug>3 && console.log('BookingFomrLead: retrieveBookingToken: ', response);
                     if (response.data.success) {
                         bus.$emit('setBookingToken', response.data.token)
-                        alert('token retrieved for ' + that.email, response.data.token, that.booking_token)
+                        alert('token retrieved for ' + that.email, response.data.token, that.bookingToken)
                     } else {
                         that.noUser = true
                     }
@@ -503,6 +520,7 @@ export default {
         },
         setCustomer(customer) {
             let that = this
+            console.log('setting customer data', dates.isoString(customer.date_of_birth))
             this.fields.forEach(function(key, value) {
                 if (customer[key]) {
                     that[key] = customer[key]
@@ -519,6 +537,7 @@ export default {
                 })
             }
             that.full_name = customer.first_name + ' ' + customer.last_name
+            that.date_of_birth = dates.isoString(customer.date_of_birth)
         },
         toggleTraveller() {
             this.show_traveller = !this.show_traveller
@@ -549,29 +568,16 @@ export default {
             }
             return true
         },
-        validEmail() {
-            if (!this.email_address.length) {
-                return false
-            }
-            const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-            const valid = valid_email.test(this.email_address)
-            this.debug && console.log(this.email, valid)
-            this.email_invalid = !valid
-            if (this.email && this.email_address !== this.email) {
-                alert('you can not change your email address in this form, contact support');
-                this.email_address = this.email
-            }
-        },
         createBooking(customer_id, tour_id) {
-console.log('create booking', customer_id, tour_id, this.full_name)
+            // console.log('create booking', customer_id, tour_id, this.full_name)
             axios.post('/api/booking/create-booking', {
                     customer_id: customer_id,
                     tour_id: tour_id,
-                    token: this.booking_token,
-                    name: this.full_name
+                    token: this.bookingToken,
+                    fullname: this.full_name
                 })
                 .then(response => {
-console.log('createBooking response', response)
+                    // console.log('createBooking response', response)
                     const booking = response.data.booking
                     // set the booking in each module
                     bus.$emit('setBookingToken', booking.token)
@@ -611,7 +617,7 @@ console.log('createBooking response', response)
             }
             */
             axios.post('/api/booking/lead-traveller', {
-                    booking_token: this.booking_token,
+                    bookingToken: this.bookingToken,
                     title: this.title,
                     first_name: this.first_name,
                     middle_names: this.middle_names,
