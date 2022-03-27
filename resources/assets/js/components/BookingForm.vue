@@ -4,9 +4,12 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div>{{agencyName}} 
-                        <label for="booking_name">Booking for </label>
-                        <input type="text" name="booking_name" v-model="bookingName" /></div>
+                        <div class="bookingform-header__title">
+                            {{agencyName}} 
+                            <label for="booking_name">Booking for </label>
+                            <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" />
+                            <button class="btn btn-small" @change="updateBookingName">Update</button>
+                        </div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
@@ -34,6 +37,7 @@
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
 import { setCookie, getCookie, deleteCookie } from '../cookies'
+import axios from 'axios'
 
 export default {
     props: {
@@ -88,6 +92,10 @@ export default {
           that.termsaccepted = state
         })
 
+        bus.$on('bookingCreated', booking => {
+            that.bookingName = booking.name
+        });
+
         that.bookingToken = getCookie(that.tokenName)
         this.debug && console.log('Cookie read:', that.bookingToken)
 
@@ -102,7 +110,7 @@ export default {
                         alert('error loading booking!')
                         return
                     }
-                    that.bookingName = data.booking.token
+                    that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
 
                     bus.$emit('setBookingToken', data.booking.token)
@@ -130,6 +138,17 @@ export default {
             if (typeof obj !== 'undefined' && obj !== null) {
                 return Object.keys(obj).length > 0
             }
+        },
+        updateBookingName() {
+            const name = this.bookingName
+            const token = this.bookingToken
+            console.log('update', name)
+            axios.post('/api/booking/name/update', {name: name, token: token})
+                .then(response => {
+                    console.log('updateBookingName response', response)
+                    bus.$emit('controlLoadBookings')
+                })
+                .catch(error => console.log(error))
         },
         // todo integrate with login - list and activate tokens
         resetToken() {
@@ -197,8 +216,13 @@ button.btn-themed.action {
 .card-header {
   display: flex;
   gap: 2rem;
-  flex-direction: row;
+  flex-direction: column;
   align-content: space-between;
+  input {
+      border: none;
+      padding: 0;
+      font-size: small;
+  }
 }
 .card-container {
   width: 100%;

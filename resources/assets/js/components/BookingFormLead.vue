@@ -70,7 +70,7 @@
                                         </select>
                                 </div>
                                 <div class="col-md-3 form-group field-separation">
-                                    <label type="form-label" for="first_name" v-show="first_name">First name</label>
+                                    <label class="form-label" for="first_name" v-show="first_name">First name</label>
                                     <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
                                 </div>
                                 <div class="col-md-3 form-group field-separation">
@@ -84,15 +84,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="email_address">Email address</label>
                                     <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
                                     <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                                    <label v-else class="valid">Email address</label>
+                                    
                                 </div>
                                 <div class="col-sm-6 form-group field-separation">
                                     <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
                                     <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
-                                    <label :class="{invalid: mobile_number_invalid}" v-if="mobile_number_invalid">{{mobile_number_validation}}</label>
-                                    <label class="valid" v-else>{{mobile_number_validation}}</label>
+                                    <label v-if="mobile_number_invalid" :class="{invalid: mobile_number_invalid}">{{mobile_number_validation}}</label>
                                 </div>
                             </div>
     
@@ -169,9 +169,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-8 form-group field-separation">
-                                            <label class="form-label" for="country" v-show="country">Country</label>
+                                            <label class="form-label" for="country">Country</label>
                                             <select name="country" class="dropdown" v-model="country_id" :key="country.id">
-                                                    <option default disabled value="">Select country</option>
+                                                    <option disabled value="">Select country</option>
+                                                    <option default value="67">United Kingdom</option>
                                                     <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
                                                 </select>
                                         </div>
@@ -561,13 +562,16 @@ export default {
                 this.email_address = this.email
             }
         },
-        createBooking(customer_id, token, tour_id) {
+        createBooking(customer_id, tour_id) {
+console.log('create booking', customer_id, tour_id, this.full_name)
             axios.post('/api/booking/create-booking', {
-                    token: token,
                     customer_id: customer_id,
-                    tour_id: tour_id
+                    tour_id: tour_id,
+                    token: this.booking_token,
+                    name: this.full_name
                 })
                 .then(response => {
+console.log('createBooking response', response)
                     const booking = response.data.booking
                     // set the booking in each module
                     bus.$emit('setBookingToken', booking.token)
@@ -642,7 +646,7 @@ export default {
                     that.full_name = customer.first_name + ' ' + customer.last_name
                     that.show_traveller = false
                     that.validationErrors = null
-                    that.createBooking(customer.id, that.booking_token, that.tour.id)
+                    that.createBooking(customer.id, that.tour.id)
                     bus.$emit('setLeadTraveller', customer)
                 })
                 .catch(e => {

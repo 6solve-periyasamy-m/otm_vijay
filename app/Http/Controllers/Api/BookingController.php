@@ -25,7 +25,7 @@ use App\Repository\TransportBookingRepository;
 
 class BookingController extends ApiController
 {
-    protected $logging = 'customer';
+    protected $logging = '';
 
     /**
      * get retrieve a booking 
@@ -64,7 +64,7 @@ class BookingController extends ApiController
         return response()->json(['success' => false, 'message' => 'No bookings for token '.$token]);
       }
 
-      $bookings = Booking::select('bookings.id as booking_id', 'tours.name as tour_name', 'bookings.token', 'bookings.status')
+      $bookings = Booking::select('bookings.id as booking_id', 'tours.name as tour_name', 'bookings.token', 'bookings.name', 'bookings.status')
         ->join('tours', 'tours.id', 'bookings.tour_id')
         ->where('customer_id', $booking->customer_id)
         ->orderBy('bookings.tour_id', 'desc')
@@ -89,23 +89,42 @@ class BookingController extends ApiController
         $request->validate([
             'customer_id' => 'required',
             'tour_id' => 'required',
-            'token' => 'required'
+            'token' => 'required',
+            'name' => 'required'
         ]);
         $customer_id = $request->customer_id;
         $tour_id = $request->tour_id;
         $token = $request->token;
+        $name = $request->name;
+        // Log::debug('booking create', [$customer_id, $tour_id, $token, $name]);
 
-        $bookingRepo = new BookingRepository();
         // check if a booking is active
+        $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
         if (!$booking) {
-            $booking = $bookingRepo->create($customer_id, $tour_id, $token);
+            $booking = $bookingRepo->create($customer_id, $tour_id, $token, $name);
             $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
             $booking->token = $token;
+        } else {
+            Log::warning('BookingCreate: booking already exists: name updated', [$name]);
+            $booking->name = $name;
+            $booking->save();
         }
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
+    public function update(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'token' => 'required'
+        ]);
+        $booking = Booking::where('token', $request->token)->first();
+        $booking->name = $request->name;
+        $booking->save();
+
+        return response()->json(['success' => true, 'booking' => $booking]);
+    }
     /**
      * gatherDetails: GET json data for a token for the booking summary
      *

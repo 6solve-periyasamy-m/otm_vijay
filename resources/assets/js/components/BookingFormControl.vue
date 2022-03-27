@@ -1,5 +1,5 @@
 <template>
-    <div class="controls">
+    <div class="controls">{{bookings}}
         <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
         <div v-if="showControl">
             <div class="booking-form--control">
@@ -9,7 +9,7 @@
             <div v-if="showForms && activeTokens">
                 <select v-model="activateBooking" @change="activate">
                   <option default value="" placeholder="Load Tour">Select a booking to load form</option>
-                  <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}} {{booking.token}}</option>
+                  <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}} {{booking.name}}</option>
                 </select>
             </div>
         </div>
@@ -36,7 +36,7 @@ export default {
   },
   created() {
     const that=this
-    bus.$on('setBookingToken', (current_token) => {
+    bus.$on('', (current_token) => {
         console.log('CONTROL', current_token)
         that.booking_token = current_token
         that.findBookings(current_token)
@@ -44,7 +44,8 @@ export default {
         localStorage.active_token = that.booking_token
         that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
     })
-    bus.$on('restoreBooking', () => {
+    bus.$on('controlLoadBookings', () => {
+      that.findBookings()
     })
   },
   mounted() {

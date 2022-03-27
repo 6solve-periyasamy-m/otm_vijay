@@ -155,6 +155,7 @@ class BookingCustomerController extends ApiController
             'date_of_birth' => $request->date_of_birth,
             'mobile_number' => $request->mobile_number,
             'other_phone_number' => $request->other_phone_number,
+            'country_id' => $request->country_id,
             'gender' => $request->gender,
             'address_line_1' => $request->address_line_1
         ];
@@ -163,6 +164,7 @@ class BookingCustomerController extends ApiController
         // if the customer exists, update the addresses
         if (isset($customer) && isset($customer->email_address)) {
             if ($isLead) {
+                Log::debug('Updating address', [$customer]);
                 $addressIds = $this->update_addresses($request, $customer);
                 // MAR record may have been created
                 if ($addressIds['home_address_id']) {
@@ -177,6 +179,7 @@ class BookingCustomerController extends ApiController
             $customerData['email_address'] = $request->email_address;
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
+                Log::debug('Creating address');
                 $addressIds = $this->create_addresses($request);
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
                 $customerData['billing_address_id'] = $addressIds['billing_address_id'];
@@ -325,6 +328,7 @@ class BookingCustomerController extends ApiController
             'same_adress' => $request->same_address
         ];
         $home_address = $addressRepo->create($address_record);
+        Log::debug('creating address', [$home_address]);
         if (isset($home_address) && isset($home_address->id)) {
             $home_address_id = $home_address->id;
         } else {

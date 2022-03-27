@@ -98,6 +98,7 @@ Route::prefix('booking')->group(function () {
     // create Booking Order
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
     Route::post('/create-booking', [BookingController::class, 'create']);
+    Route::post('/name/update', [BookingController::class, 'update']);
     Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
     
     Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
