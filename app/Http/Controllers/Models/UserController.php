@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Log;
 use Storage;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -42,8 +43,8 @@ class UserController extends Controller
             if (!empty($user->avatar)) {
                 try {
                     Storage::delete($user->avatar);
-                } catch (\Throwable $e) {
-                    \Log::error($e);
+                } catch (Throwable $e) {
+                    Log::error($e);
                 }
             }
             $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');
@@ -107,8 +108,8 @@ class UserController extends Controller
             if (!empty($user->avatar)) {
                 try {
                     Storage::delete($user->avatar);
-                } catch (\Throwable $e) {
-                    \Log::error($e);
+                } catch (Throwable $e) {
+                    Log::error($e);
                 }
             }
             $user->avatar = $request->file('avatar')->storePublicly('uploads/images/users');

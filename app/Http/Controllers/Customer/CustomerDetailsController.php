@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Repository\CustomerAuthenticationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use Log;
 use Storage;
+use Throwable;
 
 class CustomerDetailsController extends Controller
 {
@@ -92,8 +94,8 @@ class CustomerDetailsController extends Controller
             if (!empty($customer->profile_picture)) {
                 try {
                     Storage::delete($customer->profile_picture);
-                } catch (\Throwable $e) {
-                    \Log::error($e);
+                } catch (Throwable $e) {
+                    Log::error($e);
                 }
             }
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');

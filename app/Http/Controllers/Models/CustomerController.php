@@ -12,7 +12,9 @@ use App\Models\Customer;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Log;
 use Storage;
+use Throwable;
 
 class CustomerController extends Controller
 {
@@ -162,8 +164,8 @@ class CustomerController extends Controller
             if (!empty($customer->profile_picture)) {
                 try {
                     Storage::delete($customer->profile_picture);
-                } catch (\Throwable $e) {
-                    \Log::error($e);
+                } catch (Throwable $e) {
+                    Log::error($e);
                 }
             }
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
