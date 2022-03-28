@@ -4,9 +4,55 @@
 
 @push('header-stack')
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#reports').DataTable({fixedHeader: true,});
-        });
+        $(document).ready(function () { $('#reports').DataTable({fixedHeader: true,}); });
+        function showOrderedOnReport() {
+            let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
+            if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
+                alert('Both the year and quarter must be numbers'); return;
+            }
+            let route = "{{ route('reports.atol.ordered', ['year' => 'year', 'quarter'=>'quarter',]) }}"
+            window.location = route.replace('year', year).replace('quarter', quarter);
+        }
+        function showDepartedInReport() {
+            let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
+            if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
+                alert('Both the year and quarter must be numbers'); return;
+            }
+            let route = "{{ route('reports.atol.departed-in', ['year' => 'year', 'quarter'=>'quarter',]) }}"
+            window.location = route.replace('year', year).replace('quarter', quarter);
+        }
+        function showDepartedAfterReport() {
+            let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
+            if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
+                alert('Both the year and quarter must be numbers'); return;
+            }
+            let route = "{{ route('reports.atol.departs-after', ['year' => 'year', 'quarter'=>'quarter',]) }}"
+            window.location = route.replace('year', year).replace('quarter', quarter);
+        }
+        function showOrderedOnCertificates() {
+            let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
+            if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
+                alert('Both the year and quarter must be numbers'); return;
+            }
+            let route = "{{ route('reports.atol.certificate.ordered', ['year' => 'year', 'quarter'=>'quarter',]) }}"
+            window.location = route.replace('year', year).replace('quarter', quarter);
+        }
+        function showDepartedInCertificates() {
+            let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
+            if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
+                alert('Both the year and quarter must be numbers'); return;
+            }
+            let route = "{{ route('reports.atol.certificate.departed-in', ['year' => 'year', 'quarter'=>'quarter',]) }}"
+            window.location = route.replace('year', year).replace('quarter', quarter);
+        }
+        function showDepartedAfterCertificates() {
+            let year = $('#year-input').val(); let quarter = $('#quarter-input').val();
+            if (isNaN(year) || isNaN(quarter) || year === "" || quarter === "") {
+                alert('Both the year and quarter must be numbers'); return;
+            }
+            let route = "{{ route('reports.atol.certificate.departs-after', ['year' => 'year', 'quarter'=>'quarter',]) }}"
+            window.location = route.replace('year', year).replace('quarter', quarter);
+        }
     </script>
 @endpush
 
@@ -109,6 +155,29 @@
                 @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="heading pt-md-4 pb-md-3 pt-3">
+        <h2 class="fw-bold">ATOL Reporting</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                @include('partials.fields.text', ['name'=>'Year','field'=>'year','width'=>6])
+                @include('partials.fields.text', ['name'=>'Quarter','field'=>'quarter','width'=>6])
+                <hr class="splitter">
+                <div class="row">
+                    <button class="btn m-2 btn-primary col-3" onclick="showOrderedOnReport()"><i class="icon-plus"></i>Show Ordered On Report</button>
+                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedInReport()"><i class="icon-plus"></i>Show Departed In Report</button>
+                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedAfterReport()"><i class="icon-plus"></i>Show Departed After Report</button>
+                </div>
+                <hr class="splitter">
+                <div class="row">
+                    <button class="btn m-2 btn-primary col-3" onclick="showOrderedOnCertificates()"><i class="icon-plus"></i>Export Ordered On Certificates</button>
+                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedInCertificates()"><i class="icon-plus"></i>Export Departed In Certificates</button>
+                    <button class="btn m-2 btn-primary col-3" onclick="showDepartedAfterCertificates()"><i class="icon-plus"></i>Export Departed After Certificates</button>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
