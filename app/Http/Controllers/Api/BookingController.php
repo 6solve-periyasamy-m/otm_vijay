@@ -102,12 +102,12 @@ class BookingController extends ApiController
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
         if (!$booking) {
-            $booking = $bookingRepo->create($customer_id, $tour_id, $token, $name);
+            $booking = $bookingRepo->create($customer_id, $tour_id, $token, $fullname);
             $booking->customer_id = (new BookingTravellerRepository)->create($booking->id, $customer_id);
             $booking->token = $token;
             $booking->name = $fullname;
         } else {
-            Log::warning('BookingCreate: booking already exists: name updated', [$name]);
+            Log::warning('BookingCreate: booking already exists: name updated', [$fullname]);
             $booking->save();
         }
         return response()->json(["success" => true, 'booking' => $booking]);

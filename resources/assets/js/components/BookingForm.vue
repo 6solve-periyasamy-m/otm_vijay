@@ -16,7 +16,7 @@
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
-                        <div v-if="tour && bookingToken">
+                        <div v-if="tour && bookingToken && leadTraveller">
                             <booking-form-additional :tour="tour"></booking-form-additional>
                             <booking-form-flights :tour="tour"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
@@ -73,7 +73,7 @@ export default {
     created() {
         let that = this
 
-        this.debug && console.log('1) BookingForm created for tour:', this.tour)
+        this.debug && console.log('1) BookingForm created '+that.bookingToken,' for tour: ', this.tour)
         bus.$emit('debugOverride', this.debug)
 
         bus.$on('initialiseForm', () => {
@@ -101,13 +101,27 @@ export default {
         bus.$on('resetBookingToken', () => {
             that.resetToken()
         })
+        bus.$on('retrieveUserData', token => {
+            that.retrieveUserdata(token)
+        }) 
 
         that.bookingToken = getCookie(that.tokenName)
-        this.debug && console.log('Cookie read:', that.bookingToken)
-
+        this.debug && console.log('BOOKINGFORM Cookie read:', that.bookingToken)
+        this.retrieveUserdata(that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
+//alert('BOOKINGFORM loading booking for '+that.bookingToken)
             this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
-            axios.get(`/api/booking/token/${that.bookingToken}`)
+            this.retrieveUserdata(that.bookingToken)
+        } else {
+            //console.log('BookingForm: no booking token set, resetting...')
+            //that.resetToken()
+            alert('BOOKING FORM NO TOKEN YET: you must consent')
+        }
+    },
+    methods: {
+        retrieveUserdata(token) {
+            let that = this
+            axios.get(`/api/booking/token/${token}`)
             .then(response => {
                 if (response.data.success) {
                     const data = response.data
@@ -118,28 +132,25 @@ export default {
                     }
                     that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
-
-                    bus.$emit('setBookingToken', data.booking.token)
-
-                    // TODO: are these events really needed?
-                    bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                    bus.$emit('homeAddressLoaded', data.customer.home_address)
-                    bus.$emit('billingAddressLoaded', data.customer.billing_address)
-                } else {
-                    // the token is not registered
-                    console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                    that.resetToken()
+                    // alert('setting token')
+                    if (token === data.booking.token) {
+                        bus.$emit('setBookingToken', data.booking.token)
+                        // TODO: are these events really needed?
+                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                        bus.$emit('homeAddressLoaded', data.customer.home_address)
+                        bus.$emit('billingAddressLoaded', data.customer.billing_address)
+                    } else {
+                        // the token is not registered
+                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
+                        // alert('No BookingForm yet'+that.bookingToken)
+                        //that.resetToken()
+                    }
                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
             })
-        } else {
-            console.log('BookingForm: no booking token set, resetting...')
-            that.resetToken()
-        }
-    },
-    methods: {
+        },
         isset(obj) {
             if (typeof obj !== 'undefined' && obj !== null) {
                 return Object.keys(obj).length > 0
@@ -158,17 +169,22 @@ export default {
         },
         // todo integrate with login - list and activate tokens
         resetToken() {
+            
             let that = this
+            
+            const token = getCookie(this.tokenName)
+            // alert('reset Token ' + token)
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
             that.debug && console.log('bookingToken reset ', that.bookingToken)
+
             bus.$emit('setBookingToken', that.bookingToken)
         },
-        resetForm() {
-            this.resetToken()
-            window.history.go()
-        },
+        // resetForm() {
+        //     this.resetToken()
+        //     window.history.go()
+        // },
         changeTheme(theme) {
             const bookingForm = document.querySelector('#booking-form')
             bookingForm.classList.remove('cool-theme')
