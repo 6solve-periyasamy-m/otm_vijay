@@ -209,24 +209,60 @@ class TourRepository implements TourRepositoryInterface
         $newTour = $oldTour->replicate();
         $newTour->save();
         foreach ($oldTour->accommodationInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type == 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();
+            foreach ($inventoryTour->upgrades as $upgrade) {
+                $newUpgrade = $upgrade->replicate();
+                $newUpgrade->base_id = $newInventoryTour->id;
+                $clonedInventoryUpgrade = $upgrade->upgrade->replicate();
+                $clonedInventoryUpgrade->tour_id = $newTour->id;
+                $clonedInventoryUpgrade->save();
+                $newUpgrade->upgrade_id = $clonedInventoryUpgrade->id;
+            }
         }
         foreach ($oldTour->activityInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type == 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();
+            foreach ($inventoryTour->upgrades as $upgrade) {
+                $newUpgrade = $upgrade->replicate();
+                $newUpgrade->base_id = $newInventoryTour->id;
+                $clonedInventoryUpgrade = $upgrade->upgrade->replicate();
+                $clonedInventoryUpgrade->tour_id = $newTour->id;
+                $clonedInventoryUpgrade->save();
+                $newUpgrade->upgrade_id = $clonedInventoryUpgrade->id;
+            }
         }
         foreach ($oldTour->flightInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type == 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();
+            foreach ($inventoryTour->upgrades as $upgrade) {
+                $newUpgrade = $upgrade->replicate();
+                $newUpgrade->base_id = $newInventoryTour->id;
+                $clonedInventoryUpgrade = $upgrade->upgrade->replicate();
+                $clonedInventoryUpgrade->tour_id = $newTour->id;
+                $clonedInventoryUpgrade->save();
+                $newUpgrade->upgrade_id = $clonedInventoryUpgrade->id;
+            }
         }
         foreach ($oldTour->transportInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type == 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();
+            foreach ($inventoryTour->upgrades as $upgrade) {
+                $newUpgrade = $upgrade->replicate();
+                $newUpgrade->base_id = $newInventoryTour->id;
+                $clonedInventoryUpgrade = $upgrade->upgrade->replicate();
+                $clonedInventoryUpgrade->tour_id = $newTour->id;
+                $clonedInventoryUpgrade->save();
+                $newUpgrade->upgrade_id = $clonedInventoryUpgrade->id;
+            }
         }
         foreach ($oldTour->merchandise as $inventoryTour) {
             $newInventoryTour = $inventoryTour->replicate();
