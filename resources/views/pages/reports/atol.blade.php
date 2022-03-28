@@ -13,6 +13,17 @@
 @section('content')
     <div class="card">
         <div class="card-body">
+            <a class="btn btn-primary float-end" href="{{ $csv }}" style="margin-right: 5px">
+                <i class="icon-list"></i>
+                <span>Export to CSV</span>
+            </a>
+            <a class="btn btn-info float-end" href="{{ $xlsx }}" style="margin-right: 5px">
+                <i class="icon-chart"></i>
+                <span>Export to XLSX</span>
+            </a>
+        </div>
+    </div><div class="card">
+        <div class="card-body">
             <div class="row">
                 <div class="col-3">Passengers: {{ $data->passengers }}</div>
                 <div class="col-3">Revenue (Gross Invoice Value): {{ StringFormatter::formatCurrency($data->revenue) }}</div>

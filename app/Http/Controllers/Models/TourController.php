@@ -59,7 +59,7 @@ class TourController extends Controller
     }
 
     public function exportAtol(Tour $tour) {
-        $asset = OrderRepository::generateAllAtolCertificates($tour);
+        $asset = OrderRepository::generateAllAtolCertificates($tour->orders, $tour->name);
         if (!isset($asset)) {
             return back()->withErrors(['msg' => 'Something failed whilst trying to set this up, please try again later']);
         }
