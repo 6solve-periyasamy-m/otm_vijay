@@ -65,7 +65,7 @@
         <th scope="col">Notes</th>
     </tr>
     </thead>
-    @foreach(\App\Repository\FlightComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(11, 59, 59)) as $inventory)
+    @foreach(\App\Repository\FlightComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(23, 59, 59)) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->flight_number }}</td>
             <td>{{ $inventory->travelClass }}</td>
