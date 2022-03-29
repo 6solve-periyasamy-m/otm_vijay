@@ -72,6 +72,12 @@
                         </tbody>
                     </table>
                 </div>
+                <hr class="splitter">
+                <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference,]) }}" method="post">
+                    @csrf
+                    @include('partials.fields.textarea', ['name' => 'Order Notes', 'field' => 'notes', 'value' => $order->external_notes, 'rows' => 5])
+                    @include('partials.fields.submit')
+                </form>
             </div>
         </div>
     </div>

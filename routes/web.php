@@ -727,7 +727,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
     Route::middleware('auth:customer')->group(function () {
         Route::post('/logout', [CustomerLoginController::class, 'logout'])->name('logout');
-        Route::get('/atol', [CustomerPortalController::class, 'showAtol'])->name('atol');
+        Route::get('/atol/{reference}', [CustomerPortalController::class, 'showAtol'])->name('atol');
         Route::get('/portal', [CustomerPortalController::class, 'show'])->name('portal');
         Route::get('/details', [CustomerDetailsController::class, 'edit'])->name('edit');
         Route::post('/details', [CustomerDetailsController::class, 'update'])->name('update');
@@ -739,6 +739,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/itinerary/{reference?}', [CustomerTourController::class, 'showItinerary'])->name('itinerary');
         Route::get('/extras/{reference?}', [CustomerTourController::class, 'showExtras'])->name('extras');
         Route::get('/extras/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'purchaseExtra'])->name('extras.purchase');
+        Route::get('/order/notes/update/{reference}', [CustomerTourController::class, 'updateNotes'])->name('notes.update');
     });
     Route::prefix('password')->name('password.')->group(function() {
         Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');

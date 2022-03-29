@@ -14,6 +14,7 @@ use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
 use App\Repository\OrderRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class CustomerTourController extends Controller
 {
@@ -97,5 +98,19 @@ class CustomerTourController extends Controller
             'extra' => Merchandise::find($componentId),
             default => null,
         };
+    }
+
+    public function updateNotes(Request $request, string $reference)
+    {
+        $customer = CustomerAuthenticationRepository::getCustomer();
+        if (!isset($customer)) abort(404);
+        $order = OrderRepository::getOrderFromBookingReference($reference);
+        if (!isset($order)) abort(404);
+        if (!OrderRepository::isOrderCustomer($order, $customer)) abort(404);
+        $order->update([
+            'external_notes' => $request->input('notes'),
+        ]);
+        $order->save();
+        return redirect()->route('customer.itinerary', ['reference' => $reference,]);
     }
 }
