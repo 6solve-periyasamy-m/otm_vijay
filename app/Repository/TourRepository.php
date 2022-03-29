@@ -80,7 +80,7 @@ class TourRepository implements TourRepositoryInterface
         $data = [];
         foreach ($tourInventory->accommodationInventory->accommodation->inventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->check_out->lte($tour->date_to->setTime(11, 59, 59))) {
+            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->check_out->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }
@@ -97,7 +97,7 @@ class TourRepository implements TourRepositoryInterface
         $data = [];
         foreach ($tourInventory->activityInventory->activity->activityInventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->starts_at->gte($tour->date_from->setTime(0,0,0)) && $inventory->ends_at->lte($tour->date_to->setTime(11, 59, 59))) {
+            if ($inventory->starts_at->gte($tour->date_from->setTime(0,0,0)) && $inventory->ends_at->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }
@@ -114,7 +114,7 @@ class TourRepository implements TourRepositoryInterface
         $data = [];
         foreach ($tourInventory->flightInventory->flight->flightInventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(11, 59, 59))) {
+            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }
@@ -131,7 +131,7 @@ class TourRepository implements TourRepositoryInterface
         $data = [];
         foreach ($tourInventory->transportInventory->transport->transportInventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->departs_at->gte($tour->date_from->setTime(0,0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(11, 59, 59))) {
+            if ($inventory->departs_at->gte($tour->date_from->setTime(0,0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }
