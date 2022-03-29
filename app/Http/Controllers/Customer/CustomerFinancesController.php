@@ -35,7 +35,7 @@ class CustomerFinancesController extends Controller
         if (!isset($order)) {
             abort(404);
         }
-        if (OrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
+        if (!OrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
             abort(404);
         }
         return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
