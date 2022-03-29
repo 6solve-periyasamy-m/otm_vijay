@@ -11,6 +11,9 @@ use App\Repository\CustomerDashboardRepository;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use Log;
+use Storage;
+use Throwable;
 
 class CustomerDetailsController extends Controller
 {
@@ -100,6 +103,13 @@ class CustomerDetailsController extends Controller
         ]);
         $customer->billingAddress->save();
         if ($request->has('profile_picture') && $request->file('profile_picture') != null) {
+            if (!empty($customer->profile_picture)) {
+                try {
+                    Storage::delete($customer->profile_picture);
+                } catch (Throwable $e) {
+                    Log::error($e);
+                }
+            }
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         if ($request->has('new_password') && !empty($request->input('new_password'))) {

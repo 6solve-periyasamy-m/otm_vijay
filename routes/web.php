@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Customer\CustomerDetailsController;
@@ -716,6 +717,22 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/tour-stock/{extension}', [ReportController::class, 'exportTourStockReport'])->name('reports.tour-stock.export');
         Route::get('/payments', [ReportController::class, 'getPaymentsReport'])->name('reports.payment');
         Route::get('/payments/{extension}', [ReportController::class, 'exportPaymentsReport'])->name('reports.payment.export');
+        Route::prefix('atol')->name('reports.atol.')->group(function () {
+            Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
+            Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');
+            Route::get('/departs-after/{year}/{quarter}', [AtolController::class, 'getDepartingAfterQuarterReport'])->name('departs-after');
+            Route::prefix('export')->name('export.')->group(function () {
+                Route::get('/ordered/{year}/{quarter}/{extension?}', [AtolController::class, 'exportOrderedInQuarterReport'])->name('ordered');
+                Route::get('/departed-in/{year}/{quarter}/{extension?}', [AtolController::class, 'exportDepartingInQuarterReport'])->name('departed-in');
+                Route::get('/departs-after/{year}/{quarter}/{extension?}', [AtolController::class, 'exportDepartingAfterQuarterReport'])->name('departs-after');
+            });
+            Route::prefix('certificates')->name('certificate.')->group(function () {
+                Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'exportOrderedInQuarterCertificates'])->name('ordered');
+                Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'exportDepartsInQuarterCertificates'])->name('departed-in');
+                Route::get('/departs-after/{year}/{quarter}', [AtolController::class, 'exportDepartsAfterQuarterCertificates'])->name('departs-after');
+            });
+
+        });
     });
 });
 
@@ -757,4 +774,9 @@ Route::prefix('payment')->name('payment.')->group(function () {
             Route::get('cancelled', [StripeController::class, 'cancelled'])->name('cancelled');
         });
     });
+});
+
+Route::get('/atol-report', function () {
+    return view('pages.reports.atol',
+        ['data' => \App\Repository\ReportRepository::getOrdersDepartingInQuarterReport(2022, 2)]);
 });
