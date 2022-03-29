@@ -258,7 +258,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4">
-                            <label class="col-md-12 mb-0">Country</label>
+                            <label class="col-md-12 mb-0">Country of Issue</label>
                             <div class="col-md-12">
                                 <input type="text" name="passport_country" id="passport_country-input" value="{{ $customer->passport_country_of_issue ?? '' }}"
                                     class="form-control ps-0 form-control-line">
