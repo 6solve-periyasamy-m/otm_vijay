@@ -121,7 +121,7 @@ class CustomerDetailsController extends Controller
         event(new CustomerEditedEvent($customer));
         return redirect()->route('customer.edit');
     }
-    public function updateOther(Customer $customer, Request $request)
+    public function updateOther(Request $request, Customer $customer)
     {
         if (!isset($customer)) abort(404);
         if (!CustomerDashboardRepository::canEditCustomer(CustomerAuthenticationRepository::getCustomer(), $customer)) abort(404);
