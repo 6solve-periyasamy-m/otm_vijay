@@ -61,7 +61,7 @@
     'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'H:i'),
     'width' => 4,
 ])
-@include('partials.fields.date', ['name' => 'Year Begins on', 'field' => 'year_start', 'value' => \App\Repository\SettingsRepository::getOrDefault('system.year.start', '2022-04-01'), 'width' => 4])
+@include('partials.fields.date', ['name' => 'Financial Year Start Date', 'field' => 'year_start', 'value' => \App\Repository\SettingsRepository::getOrDefault('system.year.start', '2022-04-01'), 'width' => 4])
 <hr class="splitter"/>
 @include('partials.fields.submit')
 <hr class="splitter"/>
