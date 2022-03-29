@@ -738,7 +738,8 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/finances/invoice/{reference}', [CustomerFinancesController::class, 'showInvoice'])->name('invoice');
         Route::get('/itinerary/{reference?}', [CustomerTourController::class, 'showItinerary'])->name('itinerary');
         Route::get('/extras/{reference?}', [CustomerTourController::class, 'showExtras'])->name('extras');
-        Route::get('/extras/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'purchaseExtra'])->name('extras.purchase');
+        Route::get('/extras/purchase/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'purchaseExtra'])->name('extras.purchase');
+        Route::get('/extras/apply/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'addExtra'])->name('extras.apply');
         Route::get('/order/notes/update/{reference}', [CustomerTourController::class, 'updateNotes'])->name('notes.update');
     });
     Route::prefix('password')->name('password.')->group(function() {

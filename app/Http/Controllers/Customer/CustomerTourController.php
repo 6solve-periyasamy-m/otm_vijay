@@ -13,6 +13,7 @@ use App\Models\TransportInventoryTour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
 use App\Repository\OrderRepository;
+use App\Repository\SettingsRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -86,6 +87,30 @@ class CustomerTourController extends Controller
         return StripeGateway::checkout(
             [['name' => $tourComponent->__toString(), 'cost' => $tourComponent->tour_sales_price, 'quantity' => 1]],
                 $order, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $data);
+    }
+
+    public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
+    {
+        $order = OrderRepository::getOrderFromBookingReference($reference);
+        if (!isset($order)) abort(404);
+        $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
+        if (!isset($customer)) abort(404);
+        if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
+            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()) abort(404);
+        }
+        $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
+        if (!isset($orderCustomer)) abort(404);
+
+        $tourComponent = $this->getComponent($componentType, $componentId);
+        if (!isset($tourComponent)) abort(404);
+
+        if (!(SettingsRepository::getOrDefault('payment.required', true))) abort(404);
+
+        if ($tourComponent->available_stock <= 0) abort(404);
+
+        $tourComponent->addToOrder($orderCustomer);
+
+        return redirect()->route('customer.extras', ['reference' => $reference,]);
     }
 
     private function getComponent(string $componentType, int $componentId): ?Model

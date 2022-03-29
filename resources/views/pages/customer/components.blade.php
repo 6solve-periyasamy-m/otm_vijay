@@ -474,7 +474,7 @@
                                         Owned
                                     @else
                                         @if(!(\App\Repository\SettingsRepository::getOrDefault('payment.required', true)))
-                                        <a href="{{ route('customer.extras.purchase',
+                                        <a href="{{ route('customer.extras.apply',
                                             ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                              'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
                                            class="btn btn-success d-inline ms-1">+</a>
