@@ -10,18 +10,19 @@
                     <p>To make your booking using this form it is necessary to collect basic personal information 
                         and for you to easily retrieve this information. 
                         This is achieved using a secure browser session (locked with https:). 
-                        As you may have to collect information from other travellers, and may close this browser session
-                        you will retain access to this form via the browser cookie/local storage system.</p>
+                        As you may need to collect information from other travellers and may close this browser session
+                        you will retain access to this form and your data via the browser cookie/local storage system.</p>
                     <p>You can use the Clear Forms option in controls at any time to remove this information.
-                        If you then want to retrieve access to your bookings, when you enter your email address
-                        we will ask permission to send you an email with a one-time link to reconnect you 
+                        If you then want to retrieve access to your bookings, when you re-enter your email address
+                        we will (ask permission to send you an email with a one-time link to) reconnect you 
                         to your booking information.</p>
                     <p>The email will contain a link that will return you to this booking form and another link to clear all booking.
                         information from the system.</p>
-                    <p>You can opt-out of this simply by finishing your booking, paying your deposit and your data is then transferred to
-                        the ordering system, or you can contact us to make your booking over the the phone.</p>
-                    <p>If you wish to use our easy online booking form, please confirm your agreement with the above by ticking the box and pressing CONFIRM.</p> 
-                    <label for="cookieAgreement">I agree</label>
+                    <p>You can opt-out of this simply by finishing your booking, paying your deposit and clearing your data, 
+                        or you can contact us to make your booking over the the phone.</p>
+                    <p>If you wish to use our easy online booking form, please confirm your agreement with the above by ticking 
+                        the box and pressing CONFIRM.</p> 
+                    <label for="cookieAgreement">I agree </label>
                     <input type="checkbox" v-model="cookieAgreement">
                     <button :disabled="!cookieAgreement" @click="cookieAgreed" class="btn btn-small btn-warning">CONFIRM</button>
                 </div>
@@ -59,8 +60,8 @@
                             <label for="password">Enter your password</label>
                             <input type="password" v-model="password">
                             <button @click="loginUser" class="btn btn-primary">
-                                    <font-awesome-icon icon="check" /> Login
-                                </button>
+                                <font-awesome-icon icon="check" /> Login
+                            </button>
                         </div>
                     </div>
                     <div v-if="bookingToken && !show_traveller">
@@ -479,10 +480,11 @@ export default {
             // this.debug && console.log(this.email_address, valid)
             this.email_invalid = !valid
             if (this.email && this.email_address !== this.email) {
-                alert('you can not change your email address in this form, contact support');
+                alert('You can not change your email address in this form, if you need to do that, please contact support');
                 this.email_address = this.email
+            } else {
+                this.retrieveUser()
             }
-            this.retrieveUser()
         },
         retrieveUser() {
             // if the cookie does not retrieve an active order
@@ -499,12 +501,12 @@ export default {
                         if (that.activeUser) {
                             that.bookingToken = response.data.token
                             that.show_traveller = true
-console.log('active user', that.activeUser)
+                            console.log('active user', that.activeUser)
                             that.setCustomer(customer)
-                            alert('You have active booking forms')
                             bus.$emit('setBookingToken', that.bookingToken)
                             bus.$emit('retrieveUserData', that.bookingToken)
-                            bus.$emit('controlLoadBookings')                     
+                            bus.$emit('controlLoadBookings')
+                            alert('Your active booking data is available')                 
                         } else {
                             that.noUser = true
                         }
