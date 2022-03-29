@@ -243,14 +243,14 @@
                                     class="form-control ps-0 form-control-line" autocomplete="family-name">
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Gender</label>
                             <div class="col-md-12">
                                 <input type="text" name="gender" id="gender-input" value="{{ $customer->gender ?? '' }}"
                                        class="form-control ps-0 form-control-line" autocomplete="sex">
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Number</label>
                             <div class="col-md-12">
                                 <input type="text" name="passport_number" id="passport_number-input" value="{{ $customer->passport_number ?? '' }}"
@@ -258,6 +258,20 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4">
+                            <label class="col-md-12 mb-0">Country</label>
+                            <div class="col-md-12">
+                                <input type="text" name="passport_country" id="passport_country-input" value="{{ $customer->passport_country_of_issue ?? '' }}"
+                                    class="form-control ps-0 form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="col-md-12 mb-0">Issue Date</label>
+                            <div class="col-md-12">
+                                <input type="date" name="passport_issue_date" id="passport_issue_date-input" value="{{ $customer->passport_issue_date->format('Y-m-d') ?? '' }}"
+                                    class="form-control ps-0 form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Expiry Date</label>
                             <div class="col-md-12">
                                 <input type="date" name="passport_expiry_date" id="passport_expiry_date-input" value="{{ $customer->passport_expiry_date->format('Y-m-d') ?? '' }}"
