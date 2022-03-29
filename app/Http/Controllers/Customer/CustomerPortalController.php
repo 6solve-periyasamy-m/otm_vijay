@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\OrderRepository;
 use Auth;
 
 class CustomerPortalController extends Controller
@@ -15,9 +16,14 @@ class CustomerPortalController extends Controller
         return view('pages.customer.portal', ['customer' => CustomerAuthenticationRepository::getCustomer(),]);
     }
 
-    public function showAtol()
+    public function showAtol(string $reference)
     {
-        return view('pages.customer.atol', ['customer' => CustomerAuthenticationRepository::getCustomer(),]);
+        $customer = CustomerAuthenticationRepository::getCustomer();
+        if (!isset($customer)) abort(404);
+        $order = OrderRepository::getOrderFromBookingReference($reference);
+        if (!isset($order)) abort(404);
+        if (!OrderRepository::isOrderCustomer($order, $customer)) abort(404);
+        return OrderRepository::showAtolCertificate($order);
     }
 
 

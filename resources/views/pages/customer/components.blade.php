@@ -162,6 +162,9 @@
                     @endforeach
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
+                @if ($orderCustomer->order->has_atol_certificate)
+                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-5 invoice btn btn-secondary">ATOL Certificate</a>
+                @endif
             </div>
         </form>
     </div>
