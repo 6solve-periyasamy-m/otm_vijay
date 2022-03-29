@@ -61,7 +61,7 @@
     'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'H:i'),
     'width' => 4,
 ])
-@include('partials.fields.date', ['name' => 'Year Begins on', 'field' => 'year_start', 'value' => \App\Repository\SettingsRepository::getOrDefault('system.year.start', '2022-04-01'), 'width' => 4])
+@include('partials.fields.date', ['name' => 'Financial Year Start Date', 'field' => 'year_start', 'value' => \App\Repository\SettingsRepository::getOrDefault('system.year.start', '2022-04-01'), 'width' => 4])
 <hr class="splitter"/>
 @include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.facebook', ''), 'width' => 4])
 @include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.twitter', ''), 'width' => 4])
