@@ -29,7 +29,7 @@
             </div>
             <div class="p-3 dp-down">
                 <img class="setting-logo dp-button" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}" onclick="window.location = '{{ route('customer.portal') }}'">
-                <div class="drop-content">
+                <div class="dp-content">
                     <a href="#" onclick="event.preventDefault();logout();"><i class="icon-login"></i>&nbsp;Logout</a>
                 </div>
             </div>
