@@ -104,7 +104,7 @@ class CustomerTourController extends Controller
         $tourComponent = $this->getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
 
-        if (!(SettingsRepository::getOrDefault('payment.required', true))) abort(404);
+        if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
 
         if ($tourComponent->available_stock <= 0) abort(404);
 

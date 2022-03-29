@@ -9,7 +9,7 @@
         function onOrderChange(selector) {
             window.location = route + '/' + $(selector).val();
         }
-        @if(\App\Repository\SettingsRepository::getOrDefault('payment.required', true))
+        @if(\App\Repository\SettingsRepository::getBoolean('payment.required', true))
             function applyAccommodationUpgrade(selector, btn) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
                 let component_id = $(btn).closest('tr').attr('component');
@@ -473,16 +473,16 @@
                                     @if($orderComponent['owned'])
                                         Owned
                                     @else
-                                        @if(!(\App\Repository\SettingsRepository::getOrDefault('payment.required', true)))
+                                        @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
                                         <a href="{{ route('customer.extras.apply',
                                             ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                              'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
-                                           class="btn btn-success d-inline ms-1">+</a>
+                                           class="btn btn-success ms-1">+</a>
                                         @endif
                                         <a href="{{ route('customer.extras.purchase',
                                             ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                              'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
-                                           class="btn btn-primary d-inline ms-1">$</a>
+                                           class="btn btn-primary ms-1">$</a>
                                     @endif
                                 </td>
                             </tr>

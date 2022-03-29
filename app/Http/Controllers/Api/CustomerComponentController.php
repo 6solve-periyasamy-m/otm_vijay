@@ -99,7 +99,7 @@ class CustomerComponentController extends Controller
     
     private function applyUpgrade($parentClass, $upgradeClass, $repository, $componentId, $upgradeId): JsonResponse
     {
-        if (!(SettingsRepository::getOrDefault('payment.required', true))) abort(404);
+        if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
 
         $orderComponent = app($parentClass)->find($componentId);
 

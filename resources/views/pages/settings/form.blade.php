@@ -24,8 +24,8 @@
 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
 <hr class="splitter"/>
 @include('partials.fields.selector.default',
-    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Stripe Key', 'field' => 'stripe_key', 'value' => \App\Repository\SettingsRepository::getOrDefault('billing.stripe.key', ''), 'width' => 6])
+    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies',])
+@include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => \App\Repository\SettingsRepository::getBoolean('payment.required', true),])
 <hr class="splitter"/>
 @include('partials.fields.dropdown', [
     'name' => 'Date Format',
