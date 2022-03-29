@@ -5,6 +5,10 @@
 
 @push('header-stack')
     <script type="text/javascript">
+        const route = "{{ route('customer.extras') }}"
+        function onOrderChange(selector) {
+            window.location = route + '/' + $(selector).val();
+        }
         @if(\App\Repository\SettingsRepository::getOrDefault('payment.required', true))
             function applyAccommodationUpgrade(selector, btn) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
@@ -152,16 +156,21 @@
         <form class="form-horizontal mx-2">
             <div class="form-group d-flex align-items-center">
                 <p class="mb-0  heading">Select Order</p>
-                <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
+                <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $order)
-                    <option value='{{ $order->booking_reference }}'>{{ $order->booking_reference }}</option>
+                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
-                <a href="#" class="invoice btn btn-primary">Invoice</a>
+                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
             </div>
         </form>
     </div>
     <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
+            </div>
+        </div>
         {{-- Accommodation --}}
         <div class="card">
             <div class="card-body">

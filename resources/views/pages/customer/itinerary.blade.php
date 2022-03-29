@@ -18,16 +18,17 @@
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $selector)
-                        <option value='{{ $selector->booking_reference }}' @if($order->id == $selector->id) selected @endif>{{ $selector->tour->name }} ({{ $selector->booking_reference }})</option>
+                        <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected @endif>{{ $selector->booking_reference }} - {{ $selector->tour->name }}</option>
                     @endforeach
                 </select>
+                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
             </div>
         </form>
     </div>
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-                <p class="heading">Your Itinerary for {{ $order->tour->name }}</p>
+                <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
                 <div class="col-12">
                     <table class="table">
                         <thead>

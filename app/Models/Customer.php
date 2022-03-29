@@ -99,7 +99,7 @@ class Customer extends Authenticatable
 
     public function orders()
     {
-        return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'id');
+        return $this->belongsToMany(Order::class, OrderCustomer::class, 'customer_id', 'order_id');
     }
 
     public function routeNotificationForMail($notification = null)
