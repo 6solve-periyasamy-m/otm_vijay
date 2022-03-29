@@ -38,7 +38,7 @@
                 <span><i class="icon-envelope"></i> {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', '') }}</span>
                 <span><i class="icon-call-end"></i> {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', '') }}</span>                
             </div>
-        </div>        
+        </div>
     </nav>
 </header>
 
