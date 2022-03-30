@@ -20,47 +20,45 @@ class AccommodationGroupTableSeeder extends Seeder
       DB::table('accommodation_groups')->insert(
       array (
             array (
-            'id' => 100, 'name' => 'Single',
+            'id' => 1, 'name' => 'Single',
             ),array(
-            'id' => 1, 'name' => 'Couple 1', 
+            'id' => 2, 'name' => 'Couple 1', 
             ),array(
-            'id' => 2, 'name' => 'Couple 2', 
+            'id' => 3, 'name' => 'Couple 2', 
             ),array(
-            'id' => 3, 'name' => 'Couple 3', 
+            'id' => 4, 'name' => 'Couple 3', 
             ),array(
-            'id' => 4, 'name' => 'Couple 4', 
+            'id' => 5, 'name' => 'Couple 4', 
             ),array(
-            'id' => 5, 'name' => 'Couple 5', 
+            'id' => 6, 'name' => 'Couple 5', 
             ),array(
-            'id' => 6, 'name' => 'Couple 6', 
+            'id' => 7, 'name' => 'Couple 6', 
             ),array(
-            'id' => 7, 'name' => 'Couple 7', 
+            'id' => 8, 'name' => 'Couple 7', 
             ),array(
-            'id' => 8, 'name' => 'Couple 8', 
+            'id' => 9, 'name' => 'Couple 8', 
             ),array(
-            'id' => 9, 'name' => 'Couple 9',
+            'id' => 10, 'name' => 'Couple 9',
             ),array(
-            'id' => 10, 'name' => 'Couple 10',
+            'id' => 11, 'name' => 'Couple 10',
             ),array(
-            'id' => 11, 'name' => 'Friends 1',
+            'id' => 12, 'name' => 'Friends 1',
             ),array(
-            'id' => 12, 'name' => 'Friends 2',
+            'id' => 13, 'name' => 'Friends 2',
             ),array(
-            'id' => 13, 'name' => 'Friends 3',
+            'id' => 14, 'name' => 'Friends 3',
             ),array(
-            'id' => 14, 'name' => 'Friends 4',
+            'id' => 15, 'name' => 'Friends 4',
             ),array(
-            'id' => 15, 'name' => 'Friends 5',
+            'id' => 16, 'name' => 'Friends 5',
             ),array(
-            'id' => 16, 'name' => 'Friends 6',
+            'id' => 17, 'name' => 'Friends 6',
             ),array(
-            'id' => 17, 'name' => 'Friends 7',
+            'id' => 18, 'name' => 'Friends 7',
             ),array(
-            'id' => 18, 'name' => 'Friends 8',
+            'id' => 19, 'name' => 'Friends 8',
             ),array(
-            'id' => 19, 'name' => 'Friends 9',
-            ),array(
-            'id' => 20, 'name' => 'Friends 10',
+            'id' => 20, 'name' => 'Friends 9',
             ),array(
             'id' => 21, 'name' => 'Family 1',
             ),array(

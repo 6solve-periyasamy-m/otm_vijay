@@ -20,7 +20,7 @@ interface BookingRepositoryInterface {
     public function __construct();
     public function findBookingByToken($token);
     public static function findBooking($token);
-    public function create($customer_id, $tour_id, $token);
+    public function create($customer_id, $tour_id, $token, $name);
     public function setStatusDepositCheckout(Booking $booking);
     public static function convertBookingToOrder(Booking $booking): Order;
 }
@@ -48,7 +48,7 @@ class BookingRepository implements BookingRepositoryInterface
             $booking->customer->billing_address = Address::find($booking->customer->billing_address_id);
             return $booking;
         }
-        Log::warning('BookingRepository::findBookingByToken: token not found', [$token]);
+        Log::warning('BookingRepository::findBookingByToken: token was not found', [$token]);
 
         return null;
     }
@@ -63,7 +63,7 @@ class BookingRepository implements BookingRepositoryInterface
     {
         try {
             $booking = Booking::where('token', $token)->first();
-            Log::debug('BookingRepository::static findBooking', [$booking]);
+            // Log::debug('BookingRepository::static findBooking', [$booking]);
             return $booking;
         } catch (Exception $e) {
             Log::error("error finding booking for $token", $e->getMessage());
@@ -80,11 +80,12 @@ class BookingRepository implements BookingRepositoryInterface
      * @param STRING $token
      * @return Booking
      */
-    public function create($customer_id, $tour_id, $token)
+    public function create($customer_id, $tour_id, $token, $name)
     {
         $this->model->customer_id = $customer_id;
         $this->model->tour_id = $tour_id;
-        $this->model->token = $token;
+        $this->model->token =$token;
+        $this->model->name = $name;
         $this->model->status = 'New';
 
         $booking = $this->model->save();

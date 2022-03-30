@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 
-use App\Models\Booking;
-use App\Models\Customer;
+use Carbon\Carbon;
 use App\Models\Address;
+use App\Models\Booking;
+
+use App\Models\Customer;
 
 use Illuminate\Http\Request;
-
 use App\Models\BookingTraveller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
@@ -35,8 +36,13 @@ class BookingCustomerController extends ApiController
     {
         $customerRepo = new CustomerRepository();
         $isRegistered = $customerRepo->isRegistered($email);
+        if ($isRegistered) {
+            $customer = Customer::where('email_address', $email)->first();
+            $booking = Booking::where('customer_id', $customer->id)->first();
+            return response()->json(["success" => true, "existing" => $isRegistered, "customer" => $customer, "token" => $booking->token]);
+        }   
 
-        return response()->json(["success" => true, "existing" => $isRegistered]);
+        return response()->json(["success" => false]);
     }
 
     /**
@@ -155,6 +161,7 @@ class BookingCustomerController extends ApiController
             'date_of_birth' => $request->date_of_birth,
             'mobile_number' => $request->mobile_number,
             'other_phone_number' => $request->other_phone_number,
+            'country_id' => $request->country_id,
             'gender' => $request->gender,
             'address_line_1' => $request->address_line_1
         ];
@@ -163,6 +170,7 @@ class BookingCustomerController extends ApiController
         // if the customer exists, update the addresses
         if (isset($customer) && isset($customer->email_address)) {
             if ($isLead) {
+                Log::debug('Updating address', [$customer]);
                 $addressIds = $this->update_addresses($request, $customer);
                 // MAR record may have been created
                 if ($addressIds['home_address_id']) {
@@ -177,6 +185,7 @@ class BookingCustomerController extends ApiController
             $customerData['email_address'] = $request->email_address;
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
+                Log::debug('Creating address');
                 $addressIds = $this->create_addresses($request);
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
                 $customerData['billing_address_id'] = $addressIds['billing_address_id'];
@@ -325,6 +334,7 @@ class BookingCustomerController extends ApiController
             'same_adress' => $request->same_address
         ];
         $home_address = $addressRepo->create($address_record);
+        Log::debug('creating address', [$home_address]);
         if (isset($home_address) && isset($home_address->id)) {
             $home_address_id = $home_address->id;
         } else {
@@ -390,7 +400,7 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
-    private function createUpdateBookingTraveller($token, $customer) 
+    private function updateBookingTraveller($token, $customer) 
     {
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
@@ -412,8 +422,9 @@ class BookingCustomerController extends ApiController
      */
     public function leadTraveller(Request $request)
     {
+        Log::debug('BookingCustomerController:leadTraveller', [$request->booking_token]);
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
-        $this->createUpdateBookingTraveller($request->booking_token, $customer);
+        $this->updateBookingTraveller($request->booking_token, $customer);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }
@@ -428,7 +439,7 @@ class BookingCustomerController extends ApiController
     {
         $this->logging == 'customers' && Log::debug('BookingTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
-        $this->createUpdateBookingTraveller($request->booking_token, $customer);
+        $this->updateBookingTraveller($request->booking_token, $customer);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }

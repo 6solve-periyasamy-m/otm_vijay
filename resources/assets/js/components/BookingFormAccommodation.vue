@@ -132,12 +132,6 @@ export default {
         },
         setAccommodation() {
             let that = this
-            // booking the accommodation options in the booking_accommodations table
-            this.travellers.map(t => {
-                if (t.room_type_id === 1) {
-                    t.group = 0;
-                }
-            })
             
             this.debug>1 && console.log('BookingFormAccommodation: setAccommodation', this.booking_token, this.travellers)
             axios.post(`/api/booking/accommodation/reserve`, {
@@ -148,7 +142,7 @@ export default {
                     that.showAccommodation = false
                     that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
                     // TODO: do something with response?
-                    bus.$emit('recalculate')
+                    bus.$emit('recalculatePayment')
                 })
                 .catch(error => console.log(error))
         },
@@ -222,7 +216,7 @@ export default {
                            Vue.set(that.travellers[index], 'group', booking.group_id)
                        }
                     })
-                    bus.$emit('recalculate')
+                    bus.$emit('recalculatePayment')
                     that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
                 })
                 .catch((error) => console.log(error));
