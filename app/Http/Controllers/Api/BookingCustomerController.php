@@ -287,7 +287,8 @@ class BookingCustomerController extends ApiController
             'same_adress' => $request->same_address
         ];
         $home_address = $addressRepo->create($address_record);
-        Log::debug('creating address', [$home_address]);
+        $this->logging && Log::debug('creating address', [$home_address]);
+
         if (isset($home_address) && isset($home_address->id)) {
             $home_address_id = $home_address->id;
         } else {
@@ -331,6 +332,12 @@ class BookingCustomerController extends ApiController
         ];
     }
 
+    /**
+     * updateLoginToken
+     *
+     * @param Request $request email and login_token
+     * @return JSON customer
+     */
     public function updateLoginToken(Request $request) 
     {
         $email = $request->email;
@@ -367,11 +374,11 @@ class BookingCustomerController extends ApiController
     }
 
     /**
-     * leadTraveller - save the leadTraveller data
-     * does not appear to be used???
+     * leadTraveller - save the leadTraveller data: 
+     * hands request to storeOrUpdateCustomer (which validates request)
      *
      * @param Request $request
-     * @return array of what was saved in customer and orderCustomer
+     * @return JSON customer 
      */
     public function leadTraveller(Request $request)
     {
@@ -398,10 +405,10 @@ class BookingCustomerController extends ApiController
     }
 
     /**
-     * loadTravellers
+     * loadTravellers for a booking
      *
      * @param STRING $token
-     * @return JSON 
+     * @return JSON travellers
      */
     public function loadTravellers($token) {
         $bookingRepo = new BookingRepository();
@@ -420,6 +427,12 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true, 'travellers' => $travellers]);
     }
 
+    /**
+     * removeBookingTraveller - deletes the bookingTraveller record
+     *
+     * @param Request $request
+     * @return Success
+     */
     public function removeBookingTraveller(Request $request)
     {
         $request->validate([
