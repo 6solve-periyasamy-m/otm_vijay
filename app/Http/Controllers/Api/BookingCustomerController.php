@@ -30,7 +30,7 @@ class BookingCustomerController extends ApiController
      * checkActiveUser: is the email address registered already?
      *
      * @param String $email
-     * @return Boolean $isRegistered
+     * @return Boolean existing (is active user), customer and token (frontend can check)
      */
     public function checkActiveUser($email)
     {
@@ -43,53 +43,6 @@ class BookingCustomerController extends ApiController
         }   
 
         return response()->json(["success" => false]);
-    }
-
-    /**
-     * returns a random salt hash for use with an email
-     *
-     * @param [type] $email
-     * @return void
-     */
-    public function salt($email)
-    {
-        $t = intval(time() % 65535);
-        $raw = sprintf('%s%d', $email, $t);
-        $auth = Hash::make($raw);
-        $this->authRequests[$email] = $auth;
-
-        return response()->json(["success" => true, "auth" => $auth]);
-    } 
-
-    // interesting idea, but replace with regular user login
-    // by adding a callback URL to it.
-    public function authenticate(Request $request)
-    {
-        // ignore auth label
-        $token = substr($request->header('Authorization'), 6);
-        $decoded = base64_decode($token);
-        $decoded = base64_decode($decoded);
-        $parts = explode(':', $decoded);
-
-        $email = $parts[2];
-        $password = $parts[1];
-        $isalt = $parts[0];
-        Log::info('active authRequests', $this->authRequests);
-        $salt = $this->authRequests[$email]; 
-        unset($this->authRequests[$email]);
-
-        if ($isalt !== $salt) {
-            return response()->json(["success" => false]);
-        }
-
-        $authorized = false;
-        $customer = new Customer();
-        $customer->where('email_address', $email)
-            ->where('password', Hash::make($password))
-            ->first();
-        $authorized = $customer->count() === 1;
-
-        return response()->json(["success" => true, "authorized" => $authorized]);
     }
 
     /**
