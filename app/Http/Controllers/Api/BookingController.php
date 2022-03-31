@@ -43,7 +43,6 @@ class BookingController extends ApiController
         $customer = Customer::find($booking->customer_id);
         $customer->home_address = Address::find($customer->home_address_id);
         $customer->billing_address = Address::find($customer->billing_address_id);
-        // Log::debug('getBooking: customer', [$customer, $booking]);
         if (isset($booking)) {
             return response()->json(['success' => true, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
         }
@@ -70,7 +69,7 @@ class BookingController extends ApiController
         ->orderBy('bookings.tour_id', 'desc')
         ->orderBy('bookings.created_at', 'desc')
         ->get();
-        Log::debug('Booking Collected: ', [$bookings]);
+        $this->logging && Log::debug('Booking Collected: ', [$bookings]);
 
         return response()->json(['success' => true, 'bookings' => $bookings]);
    }
@@ -96,7 +95,6 @@ class BookingController extends ApiController
         $tour_id = $request->tour_id;
         $token = $request->token;
         $fullname = $request->fullname;
-        // Log::debug('booking create', [$customer_id, $tour_id, $token, $name]);
 
         // check if a booking is active
         $bookingRepo = new BookingRepository();
@@ -113,6 +111,12 @@ class BookingController extends ApiController
         return response()->json(["success" => true, 'booking' => $booking]);
     }
 
+    /**
+     * update booking name
+     *
+     * @param Request $request
+     * @return JSON Booking
+     */
     public function update(Request $request)
     {
         $request->validate([
@@ -125,11 +129,12 @@ class BookingController extends ApiController
 
         return response()->json(['success' => true, 'booking' => $booking]);
     }
+
     /**
-     * gatherDetails: GET json data for a token for the booking summary
-     *
+     * gatherDetails: gather all details related to the booking token
+     * 
      * @param STRING $token
-     * @return JSON response
+     * @return JSON booking containing all comoponents
      */
     public function gatherDetails($token)
     {
@@ -175,7 +180,7 @@ class BookingController extends ApiController
      * @Param Request OBJECT 
      *    $tour INT the ID of the tour being booked
      *    $token STRING Booking unique token (browser cookie) for validation
-     * @return JSON response
+     * @return JSON deposit
      */
     public function calculateDeposit(Request $request)
     {
@@ -198,10 +203,10 @@ class BookingController extends ApiController
         $data = $this->getCustomerAndBooking($token);
         $deposit = $tour->deposit * $data['travellers'];
         if ($deposit) {
-                return response()->json(['success' => true, 'deposit' => $deposit]);
+            return response()->json(['success' => true, 'deposit' => $deposit]);
         } else {
-                Log::debug('Deposit is ' . $deposit);
-                throw new Exception('Deposit must be a positive value!');
+            Log::debug('calculateDeposit: Deposit is ' . $deposit);
+            throw new Exception('Deposit must be a positive value!');
         }
     }
 

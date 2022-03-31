@@ -17,13 +17,12 @@ use App\Models\OrderCustomer;
 class CustomerController extends ApiController
 {
     protected $logging = false;
+
     /** 
-     * getCustomerByToken - being used by FLIGHTS so fixed by using the booking token
-     * TODO: refactor
-     * WAS using the login_token to retrieve customer but login_token is not active in the booking form (cookies being used instead)
+     * getCustomerByToken 
      * 
      * @param $token
-     * @return $customer or NULL if token no longer valid
+     * @return JSON $customer or NULL if token no longer valid
      */
     public function getCustomerByToken($token = null)
     {
@@ -53,19 +52,20 @@ class CustomerController extends ApiController
         if (isset($customer->billing_address_id)) {
             $customer->billing_address = $addressRepo->get($customer->billing_address_id);
         }
-        // Log::debug('********** getCustomer', [$customer]);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
     /**
-     * may be adapted to return booking tokens from email?
+     * getTokenLink: check is deprecated
      *
      * @param Request $request
-     * @return void
+     * @return JSON 
      */
     public function getTokenLink(Request $request)
     {
+        Log::warning('CustomerController::getTokenLink call should be deprecated');
+
         $email = $request->email;
         if (empty($email)) {
             return response()->json(['success' => false]);
@@ -80,33 +80,21 @@ class CustomerController extends ApiController
         return response()->json(["success" => true])->cookie("login_token", $customer->login_token, 60);
     }
 
-    // /**
-    //  * getTravellers for this order: could be adapted to use the bookings
-    //  * Route: /api/booking/tourparty
-    //  * @param Request $request
-    //  * @return JSON
-    //  */
-    // public function getTravellers(Request $request) {
-    //     if (empty($request->order_id)) {
-    //         Log::error('CustomerController::getTravellers: ERROR: requires an order_id');
-    //         return null;
-    //     }
-    //     $customer = new Customer();
-    //     $customers = $customer
-    //         ->select('orders.id as order_id', 'order_customers.id as order_customer_id', 'order_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
-    //         ->join('order_customers', 'order_customers.customer_id', 'customers.id')
-    //         ->join('orders', 'orders.id', 'order_customers.order_id')
-    //         ->where('orders.id', $request->order_id)->get();
-        
-    //         return $customers->toJson();
-    // }
-
+    /**
+     * findCustomerByEmail
+     *
+     * @param Request $request
+     * @return JSON Customer
+     */
     public function findCustomerByEmail(Request $request) {
         $email_address = $request->email_address;
         $customers = new Customer();
         $customer = $customers->where('email_address', $email_address)->get();
         if(!$customer->count()) {
             return response()->json(['success' => false]);
+        }
+        if ($customer->count() > 1) {
+            Log::warning('CustomerController API::findCustomerByEmail found more than one email address for '.$email_address);
         }
 
         return response()->json(['success' => true, 'customer' => $customer[0]]);

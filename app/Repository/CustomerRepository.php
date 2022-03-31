@@ -11,6 +11,8 @@ interface CustomerRepositoryInterface
     public function isRegistered($email);
     public function create(array $customer);
     public function update(array $customer);
+    public function get($customer_id);
+    public static function lookup($customer_id);
 }
 
 class CustomerRepository implements CustomerRepositoryInterface
@@ -64,7 +66,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
         foreach ($this->fields as $field) {
             if (isset($customer[$field]) && $customer[$field] !== $this->model->$field) {
-                // $this->model->$field = $customer[$field];
                 $customerRecord->$field = $customer[$field];
                 $this->logging && Log::debug('check model', [$field, $customer[$field], $this->model->$field]);
             } else {

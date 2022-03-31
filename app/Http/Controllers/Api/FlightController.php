@@ -32,29 +32,6 @@ class FlightController extends ApiController
         return response()->json(["success" => true, "data" => $flights->toArray()]);
     }
 
-    // NB: limitedvalue: replaces getFlightsFromTour which was incorect and not used
-    // same as above??
-    public function getFlightInventoryData()
-    {
-die('getFlightInventoryData');
-        $inventory = new FlightInventory();
-        $records = $inventory->get();
-        $result = $records->map(function ($flightInventory) {
-            return [
-                "id" => $flightInventory->id,
-                "flight_id" => $flightInventory->flight->id,
-                "check_in" => $flightInventory->check_in,
-                "departs_at" => $flightInventory->departs_at,
-                "arrives_at" => $flightInventory->arrives_at,
-                "class" => $flightInventory->travelClass->name,
-                "airline" => $flightInventory->flight->airline->name,
-                "departure_airport" => $flightInventory->flight->departureAirport->name,
-                "arrival_airport" => $flightInventory->flight->arrivalAirport->name,
-            ];
-        })->toArray();
-        return response()->json(["success" => true, "data" => $result]);
-    }
-
     /**
      * getFlightInventoriesForTour
      *
@@ -119,11 +96,10 @@ die('getFlightInventoryData');
      *
      * @param [type] $order_id
      * @param string $type
-     * @return void
+     * @return JSON $flightBookings
      */
     public function loadFlightsForBooking($booking_token, $type = 'Both')
     {
-
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($booking_token);
         if (isset($booking->id)) {
@@ -202,7 +178,7 @@ die('getFlightInventoryData');
     }
 
     /**
-     * bookFlightDetails  WIP (convert to booking tables)
+     * bookFlightDetails 
      * save flight details for a pax tour flight
      * 1. create / update orders_customers
      * 2. create customer_order_details (audit)

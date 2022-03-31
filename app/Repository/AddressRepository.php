@@ -10,6 +10,7 @@ interface AddressRepositoryInterface
     public function __construct();
     public function get($address_id);
     public function create(Array $address);
+    public function update(array $address);
 }
 
 class AddressRepository implements AddressRepositoryInterface
