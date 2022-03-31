@@ -178,7 +178,7 @@ export default {
         getAccommodationGroups() {
           const that = this
           axios.get('/api/booking/accommodation/groups')
-              .then(response => that.groups = response.data.groups)
+              .then(response => that.groups = response.data.groups.filter(g => g.name !== 'Single'))
               .catch(error => console.log('error getting groups', error))
         },
         getAccommodationOptions() {
