@@ -81,8 +81,6 @@ class AccommodationRepository implements AccommodationRepositoryInterface
             ->join('room_types', 'accommodation_inventories.room_type_id', 'room_types.id')
             ->join('board_types', 'accommodation_inventories.board_type_id', 'board_types.id')
             ->where('accommodation_inventory_tours.tour_id', $tour->id);
-
-
         $result = $query->get();
 
         $this->debug && Log::debug('getAccommodationInventoryForTour', [$result]);

@@ -109,13 +109,11 @@ export default {
         this.debug && console.log('BOOKINGFORM Cookie read:', that.bookingToken)
         this.retrieveUserdata(that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
-//alert('BOOKINGFORM loading booking for '+that.bookingToken)
             this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
             this.retrieveUserdata(that.bookingToken)
         } else {
-            //console.log('BookingForm: no booking token set, resetting...')
-            //that.resetToken()
-            alert('BOOKING FORM NO TOKEN YET: you must consent')
+            // If booking form has no token may mean consent for cookies is granted but cookies are not permitted?
+            alert('Booking form can not be created, we need your consent to store cookies or please make your booking by phone')
         }
     },
     methods: {

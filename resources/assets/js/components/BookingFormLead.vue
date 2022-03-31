@@ -73,6 +73,7 @@
                         </div>
                     </div>
                 </div>
+                
                 {{debug ? 'DEBUG MODE: Order retrieved by cookie: bookingToken: '+ bookingToken : ''}}
                 <div class="card-body" v-if="show_traveller">
                     <div class="container">
@@ -281,427 +282,414 @@
 
 <script>
 import axios from 'axios'
-//import { isThisQuarter } from 'date-fns'
 import { bus } from '../bus'
-//import ValidationErrors from './ValidationErrors.vue'
 import dates from '../utilities'
+// TODO: incorporate a better way to show validation errors
+// import ValidationErrors from './ValidationErrors.vue'
 export default {
-    props: ['booked', 'tour'],
+    props: ["booked", "tour"],
     data() {
         return {
             debug: false,
             bookingToken: null,
-            moduleName: 'leadTraveller',
+            moduleName: "leadTraveller",
             countries: [],
-            email: '',
-            password: '',
+            email: "",
+            password: "",
             auth: false,
             activeUser: false,
             noUser: false,
             getPassword: false,
             show_traveller: false,
-            loginLink: '',
+            loginLink: "",
             activeBookings: 0,
-            title: '',
-            first_name: '',
-            last_name: '',
-            middle_names: '',
-            full_name: '',
-            email_address: '',
-            mobile_number: '',
-            address_line_1: '',
-            address_line_2: '',
-            address_line_3: '',
-            country: '',
+            title: "",
+            first_name: "",
+            last_name: "",
+            middle_names: "",
+            full_name: "",
+            email_address: "",
+            mobile_number: "",
+            address_line_1: "",
+            address_line_2: "",
+            address_line_3: "",
+            country: "",
             country_id: 0,
             countries: [],
-            region: '',
-            town: '',
-            postcode: '',
-            billing_address_line_1: '',
-            billing_address_line_2: '',
-            billing_address_line_3: '',
-            billing_country: '',
-            billing_region: '',
-            billing_town: '',
-            billing_postcode: '',
+            region: "",
+            town: "",
+            postcode: "",
+            billing_address_line_1: "",
+            billing_address_line_2: "",
+            billing_address_line_3: "",
+            billing_country: "",
+            billing_region: "",
+            billing_town: "",
+            billing_postcode: "",
             billing_country_id: 0,
-            mobile_number: '',
-            other_phone_number: '',
-            other_phone_number_input: '',
-            other_phone_number_type: '',
-            date_of_birth: '',
-            gender: '',
+            mobile_number: "",
+            other_phone_number: "",
+            other_phone_number_input: "",
+            other_phone_number_type: "",
+            date_of_birth: "",
+            gender: "",
             same_address: false,
             email_invalid: false,
-            email_validation: 'Please enter a valid email address',
+            email_validation: "Please enter a valid email address",
             mobile_number_invalid: false,
-            mobile_number_validation: 'Please enter a valid phone number',
+            mobile_number_validation: "Please enter a valid phone number",
             other_number_invalid: false,
-            other_number_validation: 'Please enter a valid phone number',
+            other_number_validation: "Please enter a valid phone number",
             fields: [
-                'title', 'first_name', 'middle_names', 'last_name',
-                'date_of_birth', 'gender', 'email_address',
-                'mobile_number', 'other_phone_number', 'other_phone_numnber_type',
-                'same_address'
+                "title",
+                "first_name",
+                "middle_names",
+                "last_name",
+                "date_of_birth",
+                "gender",
+                "email_address",
+                "mobile_number",
+                "other_phone_number",
+                "other_phone_numnber_type",
+                "same_address"
             ],
             billingAddressFields: [
-                'name', 'billing_address_line_1', 'billing_address_line_2', 'billing_address_line_3',
-                'billing_town', 'billing_region', 'billing_country_id', 'billing_postcode',
+                "name",
+                "billing_address_line_1",
+                "billing_address_line_2",
+                "billing_address_line_3",
+                "billing_town",
+                "billing_region",
+                "billing_country_id",
+                "billing_postcode",
             ],
             homeAddressFields: [
-                'name', 'address_line_1', 'address_line_2', 'address_line_3',
-                'town', 'region', 'country_id', 'postcode'
+                "name",
+                "address_line_1",
+                "address_line_2",
+                "address_line_3",
+                "town",
+                "region",
+                "country_id",
+                "postcode"
             ],
-            validationErrors: '',
+            validationErrors: "",
             cookieAgreement: false
-        }
+        };
     },
     async created() {
-        let that = this
-        bus.$on('setBookingToken', token => {
-            that.bookingToken = token
-            let tokens
-            if (localStorage.tokens == undefined) {
-                tokens = new Array()
-            } else {
-                tokens = JSON.parse(localStorage.tokens)
-            }
-            that.debug && console.log(`^^^^^^ ${that.moduleName} created: booking ${that.bookingToken} : tokens`, tokens)
+        let that = this;
+        bus.$on("setBookingToken", token => {
+            that.bookingToken = token;
+            // this looks irrelevant: retest without it
+            // let tokens
+            // if (localStorage.tokens == undefined) {
+            //     tokens = new Array()
+            // } else {
+            //     tokens = JSON.parse(localStorage.tokens)
+            // }
+            // that.debug && console.log(`${that.moduleName} created: booking ${that.bookingToken} : tokens`, tokens)
             // tokens.push(that.bookingToken)
             // localStorage.tokens = JSON.stringify(tokens)
             // localStorage.active_token = that.bookingToken
-        })
-        bus.$on('leadTravellerLoaded', (customer) => {
-            that.setCustomer(customer)
-            that.email = that.email_address
-            that.date_of_birth = dates.isoString(customer.date_of_birth)
-            bus.$emit('setLeadTraveller', customer)
-        })
-        bus.$on('homeAddressLoaded', home_address => {
-            that.debug>1 && console.log('BookingFormLead: home address:', home_address)
-            that.address_line_1 = home_address.address_line_1
-            that.address_line_2 = home_address.address_line_2
-            that.address_line_3 = home_address.address_line_3
-            that.town = home_address.town
-            that.region = home_address.region
-            that.postcode = home_address.postcode
-            that.country_id = home_address.country_id
-        })
-        bus.$on('billingAddressLoaded', billing_address => {
-            that.billing_address_line_1 = billing_address.address_line_1
-            that.billing_address_line_2 = billing_address.address_line_2
-            that.billing_address_line_3 = billing_address.address_line_3
-            that.billing_town = billing_address.town
-            that.billing_region = billing_address.region
-            that.billing_postcode = billing_address.postcode
-            that.billing_country_id = billing_address.country_id
-        })
-        that.debug>1 && console.log(`${this.moduleName} created`)
+        });
+        bus.$on("leadTravellerLoaded", (customer) => {
+            that.setCustomer(customer);
+            that.email = that.email_address;
+            that.date_of_birth = dates.isoString(customer.date_of_birth);
+            bus.$emit("setLeadTraveller", customer);
+        });
+        bus.$on("homeAddressLoaded", home_address => {
+            that.debug > 1 && console.log("BookingFormLead: home address:", home_address);
+            that.address_line_1 = home_address.address_line_1;
+            that.address_line_2 = home_address.address_line_2;
+            that.address_line_3 = home_address.address_line_3;
+            that.town = home_address.town;
+            that.region = home_address.region;
+            that.postcode = home_address.postcode;
+            that.country_id = home_address.country_id;
+        });
+        bus.$on("billingAddressLoaded", billing_address => {
+            that.billing_address_line_1 = billing_address.address_line_1;
+            that.billing_address_line_2 = billing_address.address_line_2;
+            that.billing_address_line_3 = billing_address.address_line_3;
+            that.billing_town = billing_address.town;
+            that.billing_region = billing_address.region;
+            that.billing_postcode = billing_address.postcode;
+            that.billing_country_id = billing_address.country_id;
+        });
+        that.debug > 1 && console.log(`${this.moduleName} created`);
     },
     mounted() {
-        let that = this
-        this.validationErrors = ''
-        bus.$on('debugOverride', (debug) => that.debug = debug)
+        let that = this;
+        this.validationErrors = "";
+        bus.$on("debugOverride", (debug) => that.debug = debug);
         if (that.tour != null) {
-            this.loginLink = `/login?cb=${that.tour.url}`
+            this.loginLink = `/login?cb=${that.tour.url}`;
         }
-        this.activeBookings = ''
-        this.loadCountries()
-        that.debug>1 && console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`)
+        this.activeBookings = "";
+        this.loadCountries();
+        that.debug > 1 && console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`);
     },
     computed: {
-        otherNumberType: function() {
-            if (typeof this.other_phone_number_type.name == 'undefined') {
-                return 'Additional Phone Number'
+        otherNumberType: function () {
+            if (typeof this.other_phone_number_type.name == "undefined") {
+                return "Additional Phone Number";
             }
-            return 'Other ' + this.other_phone_number_type.name + ' number'
+            return "Other " + this.other_phone_number_type.name + " number";
         },
-        validForm: function() {
-            return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth
+        validForm: function () {
+            return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
         }
     },
     methods: {
         cookieAgreed() {
             if (this.cookieAgreement) {
-                bus.$emit('resetBookingToken')
+                bus.$emit("resetBookingToken");
             }
         },
         base64(arg) {
-            return Buffer.from(`${arg}`, 'utf8').toString('base64')
+            return Buffer.from(`${arg}`, "utf8").toString("base64");
         },
-        /** 
+        /**
          * the lead booker has a customer account which can be retrieved by login/password
          * a salt token is requested from the server to encrypt login credentials
          * NB: this is a PoC currently, not very secure
          * TODO: Route to login using Laravel (not JS)
          */
         loginUser() {
-            let that = this
-            const username = this.email
-            const password = this.password
-            const t = new Date()
-            alert('TEST: login user');
+            let that = this;
+            const username = this.email;
+            const password = this.password;
+            const t = new Date();
+            alert("TEST: login user");
             // request a salt value from the server which is then used in the encryption
             axios.get(`/api/booking/auth/token/${username}`)
                 .then(response => {
-                    const salt = response.data.auth
-                    let token = this.base64(`${salt}:${password}`)
-                    const url = '/api/booking/authenticate/user'
-                    const data = this.email
-                    axios.post(url, data, {
-                            headers: {
-                                'Authorization': `Basic ${token}`
-                            },
-                        })
-                        .then(response => {
-                            that.auth = false
-                            that.debug>1 && console.log('BookingFormLead: authorised', response)
-                            if (response.authorised) {
-                                that.auth = true
-                            }
-                        })
-                        .catch(error => {
-                            console.log('auth error', error)
-                        })
+                const salt = response.data.auth;
+                let token = this.base64(`${salt}:${password}`);
+                const url = "/api/booking/authenticate/user";
+                const data = this.email;
+                axios.post(url, data, {
+                    headers: {
+                        "Authorization": `Basic ${token}`
+                    },
                 })
+                    .then(response => {
+                    that.auth = false;
+                    that.debug > 1 && console.log("BookingFormLead: authorised", response);
+                    if (response.authorised) {
+                        that.auth = true;
+                    }
+                })
+                    .catch(error => {
+                    console.log("auth error", error);
+                });
+            })
                 .catch(error => {
-                    console.log('can not obtain token');
-                    return;
-                })
-
+                console.log("can not obtain token");
+                return;
+            });
         },
         validEmail() {
             if (!this.email_address.length) {
-                return false
+                return false;
             }
-            const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-            const valid = valid_email.test(this.email_address)
+            const valid_email = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            const valid = valid_email.test(this.email_address);
             // this.debug && console.log(this.email_address, valid)
-            this.email_invalid = !valid
+            this.email_invalid = !valid;
             if (this.email && this.email_address !== this.email) {
-                alert('You can not change your email address in this form, if you need to do that, please contact support');
-                this.email_address = this.email
-            } else {
-                this.retrieveUser()
+                alert("You can not change your email address in this form, if you need to do that, please contact support");
+                this.email_address = this.email;
+            }
+            else {
+                this.retrieveUser();
             }
         },
         retrieveUser() {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
-            let that = this
+            let that = this;
             // is it a registered user?
             if (!this.auth) {
-                this.debug>1 && console.log('BookingFormLead: checking for auth user');
+                this.debug > 1 && console.log("BookingFormLead: checking for auth user");
                 axios.get(`/api/booking/email/registered/${this.email_address}`)
                     .then(response => {
-                        that.debug>1 && console.log('BookingFormLead: email registered? response', response)
-                        that.activeUser = response.data.existing
-                        const customer = response.data.customer
-                        if (that.activeUser) {
-                            that.bookingToken = response.data.token
-                            that.show_traveller = true
-                            console.log('active user', that.activeUser)
-                            that.setCustomer(customer)
-                            bus.$emit('setBookingToken', that.bookingToken)
-                            bus.$emit('retrieveUserData', that.bookingToken)
-                            bus.$emit('controlLoadBookings')
-                            alert('Your active booking data is available')                 
-                        } else {
-                            that.noUser = true
-                        }
-                    })
-                    .catch(error => console.log(error));
-            } else {
-                alert('You have been authenticated')
-                this.debug>1 && console.log('BookingFormLead: Authenticated user', that.customer)
-            }
-        },
-        retrieveBookingToken() {
-alert('LEAD retrieve booking token')
-            let that = this
-            axios.post('/api/booking/recover/token', this.email)
-                .then(response => {
-                    that.debug>3 && console.log('BookingFomrLead: retrieveBookingToken: ', response);
-                    if (response.data.success) {
-                        bus.$emit('setBookingToken', response.data.token)
-                        alert('token retrieved for ' + that.email, response.data.token, that.bookingToken)
-                    } else {
-                        that.noUser = true
+                    that.debug > 1 && console.log("BookingFormLead: email registered? response", response);
+                    that.activeUser = response.data.existing;
+                    const customer = response.data.customer;
+                    if (that.activeUser) {
+                        that.bookingToken = response.data.token;
+                        that.show_traveller = true;
+                        console.log("active user", that.activeUser);
+                        that.setCustomer(customer);
+                        bus.$emit("setBookingToken", that.bookingToken);
+                        bus.$emit("retrieveUserData", that.bookingToken);
+                        bus.$emit("controlLoadBookings");
+                        alert("Your active booking data is available, please check your details and Save Traveller");
+                    }
+                    else {
+                        that.noUser = true;
                     }
                 })
-                .catch(error => {
-                    console.log(error);
-                })
-            // TODO: Booking recovery by email
-            /*
-            axios.get(`/api/booking/findOrderByEmail/${this.email}`)
-            .then(response => {
-                const data = response.data.data
-                console.log('BookingFormLead: find order by email, data', data)
-                if (data) {
-                    bus.$emit('setBookingToken', data[0].token, data[0].order_id)
-                    alert('You have one active order retrieved.  Refresh browser')
-                    
-                } else {
-                    alert('You do not have an active order.  Please enter your details.')
-                    this.show_traveller = true
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
-            */
+                    .catch(error => console.log(error));
+            }
+            else {
+                alert("You have been authenticated");
+                this.debug > 1 && console.log("BookingFormLead: Authenticated user", that.customer);
+            }
         },
         setCustomer(customer) {
-            let that = this
-            console.log('setting customer data', dates.isoString(customer.date_of_birth))
-            this.fields.forEach(function(key, value) {
+            let that = this;
+            this.fields.forEach(function (key, value) {
                 if (customer[key]) {
-                    that[key] = customer[key]
+                    that[key] = customer[key];
                 }
-            })
+            });
             if (customer.homeAddressFields) {
                 customer.homeAddressFields.map(field => {
-                    field = customer.homeAddressFields.field
-                })
+                    field = customer.homeAddressFields.field;
+                });
             }
             if (customer.businessAddressFields) {
                 customer.businessAddressFields.map(field => {
-                    field = customer.businessAddressFields.field
-                })
+                    field = customer.businessAddressFields.field;
+                });
             }
-            that.full_name = customer.first_name + ' ' + customer.last_name
-            that.date_of_birth = dates.isoString(customer.date_of_birth)
+            that.full_name = customer.first_name + " " + customer.last_name;
+            that.date_of_birth = dates.isoString(customer.date_of_birth);
         },
         toggleTraveller() {
-            this.show_traveller = !this.show_traveller
+            this.show_traveller = !this.show_traveller;
         },
         toggleSameAddress() {
-            this.same_address = !this.same_address
+            this.same_address = !this.same_address;
         },
         validPhone(e) {
-            const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/
-            const field = e.srcElement.name
+            const valid_uk = /^\s*((?:[+](?:\s?\d)(?:[-\s]?\d)|0)?(?:\s?\d)(?:[-\s]?\d){9}|[(](?:\s?\d)(?:[-\s]?\d)+\s*[)](?:[-\s]?\d)+)\s*$/;
+            const field = e.srcElement.name;
             switch (field) {
-                case 'mobile_number':
-                    this.mobile_number_invalid = false
+                case "mobile_number":
+                    this.mobile_number_invalid = false;
                     if (!valid_uk.test(this.mobile_number)) {
-                        this.mobile_number_invalid = true
-                        return false
+                        this.mobile_number_invalid = true;
+                        return false;
                     }
-                    break
-                case 'other_phone_number':
-                    this.other_phone_number_invalid = false
+                    break;
+                case "other_phone_number":
+                    this.other_phone_number_invalid = false;
                     if (!valid_uk.test(this.other_phone_number)) {
-                        this.other_phone_number_invalid = true
-                        return false
+                        this.other_phone_number_invalid = true;
+                        return false;
                     }
-                    break
+                    break;
                 default:
-                    alert(field + ' not handled in switch')
+                    alert(field + " not handled in switch");
             }
-            return true
+            return true;
         },
         createBooking(customer_id, tour_id) {
-            console.log('create booking', customer_id, tour_id, this.full_name)
-            axios.post('/api/booking/create-booking', {
-                    customer_id: customer_id,
-                    tour_id: tour_id,
-                    token: this.bookingToken,
-                    fullname: this.full_name
-                })
+            let that = this;
+            axios.post("/api/booking/create-booking", {
+                customer_id: customer_id,
+                tour_id: tour_id,
+                token: this.bookingToken,
+                fullname: this.full_name
+            })
                 .then(response => {
-                    // console.log('createBooking response', response)
-                    const booking = response.data.booking
-                    // set the booking in each module
-                    alert('Lead creatingBooking with existing token')
-                    bus.$emit('setBookingToken', booking.token)
-                    bus.$emit('bookingCreated', booking)
-                })
+                const booking = response.data.booking;
+                // set the booking in each module
+                that.debug && console.log("Lead creatingBooking", booking);
+                bus.$emit("setBookingToken", booking.token);
+                bus.$emit("bookingCreated", booking);
+            })
                 .catch(error => {
-                    console.log('error createBooking', error)
-                })
+                console.log("error createBooking", error);
+            });
         },
-
         loadCountries() {
-            let that = this
-            axios.get('/api/booking/countries')
+            let that = this;
+            axios.get("/api/booking/countries")
                 .then(response => {
-                    if (response.data.success) {
-                        that.countries = response.data.countries
-                    } else {
-                        that.countries = { id: 1, name: "United Kingdom", code: "UK", currency: "GBP" }
-                        console.log('BookingFormLead: Country list: ', response)
-                    }
-                })
+                if (response.data.success) {
+                    that.countries = response.data.countries;
+                }
+                else {
+                    that.countries = { id: 1, name: "United Kingdom", code: "UK", currency: "GBP" };
+                    console.log("BookingFormLead: Country list: ", response);
+                }
+            })
                 .catch(error => {
-                    console.log(error)
-                })
+                console.log(error);
+            });
         },
-
         storeTraveller() {
-            let that = this
-
-            that.debug && console.log('BOOKING: storeTraveller', this.email_address)
-            /*
-            TODO: do we create a booking and attach the customer to it when we have created it?
-            if (typeof this.order_id == 'undefined' || this.order_id == null || this.order_id == 0) {
-                alert('About to store new Lead Traveller, check order code')
-                await bus.$emit('createOrder')
-                alert('Check one order code created')
-            }
-            */
-            axios.post('/api/booking/lead-traveller', {
-                    bookingToken: this.bookingToken,
-                    title: this.title,
-                    first_name: this.first_name,
-                    middle_names: this.middle_names,
-                    last_name: this.last_name,
-                    email_address: this.email_address,
-                    mobile_number: this.mobile_number,
-                    other_phone_number: this.other_phone_number,
-                    other_phone_number_type: this.other_phone_number_type,
-                    date_of_birth: this.date_of_birth,
-                    gender: this.gender,
-                    address_line_1: this.address_line_1,
-                    address_line_2: this.address_line_2,
-                    address_line_3: this.address_line_3,
-                    country_id: this.country_id,
-                    region: this.region,
-                    town: this.town,
-                    postcode: this.postcode,
-                    same_address: this.same_address,
-                    billing_address_line_1: this.billing_address_line_1,
-                    billing_address_line_2: this.billing_address_line_2,
-                    billing_address_line_3: this.billing_address_line_3,
-                    billing_country_id: this.billing_country_id,
-                    billing_region: this.billing_region,
-                    billing_town: this.billing_town,
-                    billing_postcode: this.billing_postcode,
-                    tour: this.tour
-                })
+            let that = this;
+            that.debug && console.log("BOOKING: storeTraveller", this.email_address);
+            axios.post("/api/booking/lead-traveller", {
+                bookingToken: this.bookingToken,
+                title: this.title,
+                first_name: this.first_name,
+                middle_names: this.middle_names,
+                last_name: this.last_name,
+                email_address: this.email_address,
+                mobile_number: this.mobile_number,
+                other_phone_number: this.other_phone_number,
+                other_phone_number_type: this.other_phone_number_type,
+                date_of_birth: this.date_of_birth,
+                gender: this.gender,
+                address_line_1: this.address_line_1,
+                address_line_2: this.address_line_2,
+                address_line_3: this.address_line_3,
+                country_id: this.country_id,
+                region: this.region,
+                town: this.town,
+                postcode: this.postcode,
+                same_address: this.same_address,
+                billing_address_line_1: this.billing_address_line_1,
+                billing_address_line_2: this.billing_address_line_2,
+                billing_address_line_3: this.billing_address_line_3,
+                billing_country_id: this.billing_country_id,
+                billing_region: this.billing_region,
+                billing_town: this.billing_town,
+                billing_postcode: this.billing_postcode,
+                tour: this.tour
+            })
                 .then(response => {
-                    that.debug && console.log('**** Lead Traveller customerStored, reponse', response)
-                    const customer = response.data.customer
-                    // that.login_token = customer.login_token
-                    that.full_name = customer.first_name + ' ' + customer.last_name
-                    that.show_traveller = false
-                    that.validationErrors = null
-                    that.createBooking(customer.id, that.tour.id)
-                    bus.$emit('setLeadTraveller', customer)
-                })
+                that.debug && console.log("**** Lead Traveller customerStored, reponse", response);
+                const customer = response.data.customer;
+                that.full_name = customer.first_name + " " + customer.last_name;
+                that.show_traveller = false;
+                that.validationErrors = null;
+                that.createBooking(customer.id, that.tour.id);
+                bus.$emit("setLeadTraveller", customer);
+            })
                 .catch(e => {
-                    console.log('*** BookingFormLead.storeTraveller() error', e)
-                    // that.errors.push(e.response.data.errors)
-                    that.validationErrors = e.response.data.errors
-                })
+                console.log("BookingFormLead.storeTraveller() error", e);
+                that.validationErrors = e.response.data.errors;
+            });
         }
-    }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
+.cookie_consent {
+    opacity: 1;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 1s;
+}
+@keyframes fadeInOpacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 .inset {
     margin-left: 0.25rem;
     padding-left: 2rem;

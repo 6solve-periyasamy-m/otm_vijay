@@ -162,17 +162,6 @@ class BookingCustomerController extends ApiController
     // but ensure that a minimal address (type) exists for the customer
     private function create_minimal_address($customerData, $type)
     {
-        /*
-        if (empty($customerData)) {
-            return;
-        }
-        if ($type == 'home' && $customerData['home_address_id'] !== null) {
-            return;
-        }
-        if ($type == 'billing' && $customerData['billing_address_id'] !== null) {
-            return;
-        }
-        */
         // do not update an address that already exists
         $address = new Address();
         if (isset($customerData['id']) && $address->where('customer_id', $customerData['id'])->count()) {
@@ -452,4 +441,3 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true]);
     }
 }
-

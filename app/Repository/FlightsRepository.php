@@ -25,6 +25,12 @@ class FlightsRepository implements FlightsRepositoryInterface
         $this->model = new Flight();
     }
 
+    /**
+     * getFlights
+     *
+     * @param [type] $tour_id
+     * @return Flight collection
+     */
     public function getFlights($tour_id) 
     {
 
@@ -38,6 +44,14 @@ class FlightsRepository implements FlightsRepositoryInterface
         return $flights;
     }
 
+    /**
+     * return a collection of flights for a specific tour
+     *
+     * @param [type] $tour_id
+     * @param [type] $flight_type
+     * @param string $tour_component_type
+     * @return Flight collection
+     */
     public function flightsAvailableForTour($tour_id, $flight_type, $tour_component_type = 'Included')
     {
         $flights = Flight::join('airlines', 'airline_id', 'airlines.id')

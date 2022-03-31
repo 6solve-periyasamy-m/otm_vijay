@@ -36,6 +36,12 @@ class BookingRepository implements BookingRepositoryInterface
         $this->debug = false;
     }
 
+    /**
+     * findBookingByToken
+     *
+     * @param [type] $token
+     * @return booking
+     */
     public function findBookingByToken($token)
     {
 
