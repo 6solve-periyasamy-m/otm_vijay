@@ -51,6 +51,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
             if ($component->tour_component_type  !== "Upgrade") {
+                if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->activityInventory->activity->name;

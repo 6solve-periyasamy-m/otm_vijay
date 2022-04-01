@@ -21,13 +21,40 @@
                     </center>
                 </div>
             </div>
+            @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                <div class="card other-profile" onclick="window.location = '{{ route('customer.edit') }}';">
+                    <div class="card-body profile-card">
+                        <center class="mt-4">
+                            <h4 class="card-title mt-2">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
+                            <h6 class="card-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
+                        </center>
+                    </div>
+                </div>
+            @endif
+            @foreach($editable as $editee)
+                @if($editee->id === $customer->id) @continue @endif
+                <div class="card other-profile" onclick="window.location = '{{ route('customer.edit.other', ['customer' => $editee,]) }}';">
+                    <div class="card-body profile-card">
+                        <center class="mt-4">
+                            <h4 class="card-title mt-2">{{ $editee->first_name }} {{ $editee->last_name }}</h4>
+                            <h6 class="card-subtitle">{{ $editee->email_address }}</h6>
+                        </center>
+                    </div>
+                </div>
+            @endforeach
         </div>
         <!-- Column -->
         <!-- Column -->
         <div class="col-lg-9 col-xxl-10 col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form class="form-horizontal form-material mx-2 row" action="{{ route('customer.update') }}" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal form-material mx-2 row"
+                          @if (!isset($other))
+                          action="{{ route('customer.update') }}"
+                          @else
+                          action="{{ route('customer.update.other', ['customer' => $customer,]) }}"
+                          @endif
+                          method="post" enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="profile_picture" id="profile_picture" style="display: none;" onchange="form.submit()">
                         <hr class="splitter">
@@ -216,14 +243,14 @@
                                     class="form-control ps-0 form-control-line" autocomplete="family-name">
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Gender</label>
                             <div class="col-md-12">
                                 <input type="text" name="gender" id="gender-input" value="{{ $customer->gender ?? '' }}"
                                        class="form-control ps-0 form-control-line" autocomplete="sex">
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Number</label>
                             <div class="col-md-12">
                                 <input type="text" name="passport_number" id="passport_number-input" value="{{ $customer->passport_number ?? '' }}"
@@ -231,6 +258,20 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4">
+                            <label class="col-md-12 mb-0">Country of Issue</label>
+                            <div class="col-md-12">
+                                <input type="text" name="passport_country" id="passport_country-input" value="{{ $customer->passport_country_of_issue ?? '' }}"
+                                    class="form-control ps-0 form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="col-md-12 mb-0">Issue Date</label>
+                            <div class="col-md-12">
+                                <input type="date" name="passport_issue_date" id="passport_issue_date-input" value="{{ $customer->passport_issue_date->format('Y-m-d') ?? '' }}"
+                                    class="form-control ps-0 form-control-line">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Expiry Date</label>
                             <div class="col-md-12">
                                 <input type="date" name="passport_expiry_date" id="passport_expiry_date-input" value="{{ $customer->passport_expiry_date->format('Y-m-d') ?? '' }}"
@@ -247,6 +288,7 @@
                         @include('partials.fields.selector.default',
                             ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $customer->hat_size_id ?? 0, 'route' => 'hat-size', 'width' => 6])
                         <hr class="splitter">
+                        @if(!isset($other))
                         <div class="form-group">
                             <h4 class="col-md-12 mb-0">Change your password</h4>
                         </div>
@@ -270,6 +312,7 @@
                             </div>
                         </div>
                         <hr class="splitter">
+                        @endif
                         <div class="form-group">
                             <div class="col-sm-12 d-flex">
                                 <button type="submit" class="btn btn-success mx-auto mx-md-0 text-white">

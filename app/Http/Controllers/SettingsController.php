@@ -57,7 +57,11 @@ class SettingsController extends Controller
             'billing.stripe.key' => $request->input('stripe_key'),
             'system.format.date' => $request->input('date_format'),
             'system.format.time' => $request->input('time_format'),
+            'social.facebook' => $request->input('social_facebook'),
+            'social.twitter' => $request->input('social_twitter'),
+            'social.instagram' => $request->input('social_instagram'),
             'system.year.start' => $request->input('year_start'),
+            'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
             SettingsRepository::set('company.logo', $this->saveImage($request->file('company_logo')));

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\StockRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,8 +35,32 @@ class Merchandise extends Model
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
+    public function orderMerchandise()
+    {
+        return $this->hasMany(OrderMerchandise::class, 'merchandise_id');
+    }
+
     public function __toString()
     {
         return "{$this->name}";
+    }
+
+    public function addToOrder(OrderCustomer $orderCustomer)
+    {
+        return OrderMerchandise::create([
+            'order_customer_id' => $orderCustomer->id,
+            'merchandise_id' => $this->id,
+            'cost' => $this->tour_sales_price,
+        ]);
+    }
+
+    public function getUsedStockAttribute()
+    {
+        return StockRepository::getExtraStock($this);
+    }
+
+    public function getAvailableStockAttribute()
+    {
+        return $this->stock - $this->used_stock;
     }
 }
