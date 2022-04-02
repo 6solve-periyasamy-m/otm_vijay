@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Repository\CustomerAuthenticationRepository;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
@@ -12,6 +13,7 @@ class CustomerRegisterController extends Controller
 {
     public function show()
     {
+        if (CustomerAuthenticationRepository::getCustomer() !== null) return redirect()->route('customer.portal');
         return view('pages.customer.auth.register');
     }
 

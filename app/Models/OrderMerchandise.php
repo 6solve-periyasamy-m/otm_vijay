@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class OrderMerchandise extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['merchandise_id',];
+    protected $fillable = ['merchandise_id','order_customer_id', 'cost'];
     public $additional_attributes = ['details','tour_component_type','tour_sales_price','cost'];
 
     public function orderCustomer()

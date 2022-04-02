@@ -24,8 +24,8 @@
 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
 <hr class="splitter"/>
 @include('partials.fields.selector.default',
-    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Stripe Key', 'field' => 'stripe_key', 'value' => \App\Repository\SettingsRepository::getOrDefault('billing.stripe.key', ''), 'width' => 6])
+    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies',])
+@include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => \App\Repository\SettingsRepository::getBoolean('payment.required', true),])
 <hr class="splitter"/>
 @include('partials.fields.dropdown', [
     'name' => 'Date Format',
@@ -47,7 +47,7 @@
         'F jS Y' => 'January 31st 2021 (Time)'
     ],
     'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'd/m/Y'),
-    'width' => 6,
+    'width' => 4,
 ])
 @include('partials.fields.dropdown', [
     'name' => 'Time Format',
@@ -59,8 +59,13 @@
         'h:i:s A'=> '02:30:45 PM'
     ],
     'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'H:i'),
-    'width' => 6,
+    'width' => 4,
 ])
+@include('partials.fields.date', ['name' => 'Financial Year Start Date', 'field' => 'year_start', 'value' => \App\Repository\SettingsRepository::getOrDefault('system.year.start', '2022-04-01'), 'width' => 4])
+<hr class="splitter"/>
+@include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.facebook', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.twitter', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.instagram', ''), 'width' => 4])
 <hr class="splitter"/>
 @include('partials.fields.submit')
 <hr class="splitter"/>

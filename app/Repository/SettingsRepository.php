@@ -28,6 +28,12 @@ class SettingsRepository implements SettingsRepositoryInterface
         return isset($setting) ? $setting->value : $default;
     }
 
+    public static function getBoolean($key, $default = false)
+    {
+        $setting = Setting::find($key);
+        return isset($setting) ? $setting->value == 1 : $default;
+    }
+
     public static function set($key, $value)
     {
         $setting = Setting::find($key);

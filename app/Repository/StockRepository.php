@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Models\AccommodationInventory;
 use App\Models\ActivityInventory;
 use App\Models\FlightInventory;
+use App\Models\Merchandise;
 use App\Models\Tour;
 use App\Models\TransportInventory;
 
@@ -86,6 +87,15 @@ class StockRepository
         $used = 0;
         foreach ($tour->orders as $order) {
             if (!$order->cancelled) $used += $order->orderCustomers()->count();
+        }
+        return $used;
+    }
+
+    public static function getExtraStock(Merchandise $merchandise): int
+    {
+        $used = 0;
+        foreach ($merchandise->orderMerchandise as $orderMerchandise) {
+            if (!$orderMerchandise->isCancelled()) $used++;
         }
         return $used;
     }
