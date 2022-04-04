@@ -170,7 +170,7 @@ class PermissionsRepository
                 'group' => 'Orders',
                 'order' => 1,
             ],
-            'OrderCustomerAdjustment' => [
+            'Order\Adjustment\OrderCustomerAdjustment' => [
                 'name' => 'Customer Adjustment',
                 'group' => 'Orders',
                 'order' => 2,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Adjustment;
 
 use App\Models\Order\OrderCustomer;
 use Eloquent;

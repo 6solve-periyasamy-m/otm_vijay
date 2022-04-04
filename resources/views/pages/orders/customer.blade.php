@@ -235,7 +235,7 @@ $(document).ready( function () {
             @endif
         </div>
         <div class="col-12">
-            @can('create', \App\Models\OrderCustomerAdjustment::class)
+            @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
             <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-success mb-1">
                 <i class="icon-plus"></i>
                 Add Adjustment
@@ -600,7 +600,7 @@ $(document).ready( function () {
     <div class="card-body">
         <div class="card-title">
             <h4 class="fw-bold">Customer Adjustments</h4>
-            @can('create', \App\Models\OrderCustomerAdjustment::class)
+            @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
             <div class="pb-3 text-end">
                 <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" class="btn btn-success text-white">
                     <i class="icon-plus"></i>
@@ -625,14 +625,14 @@ $(document).ready( function () {
                         <td>{{ $adjustment->reason }}</td>
                         <td>{{ StringFormatter::formatDate($adjustment->date) }}</td>
                         <td class="actions">
-                            @can('update', \App\Models\OrderCustomerAdjustment::class)
+                            @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                 <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
                             @endcan
-                            @can('delete', \App\Models\OrderCustomerAdjustment::class)
+                            @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                 <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                 <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                     @csrf

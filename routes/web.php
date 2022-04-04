@@ -192,15 +192,15 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
 
                     Route::prefix('adjustment')->group(function () {
-                        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:OrderCustomerAdjustment,read');
-                        Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create')->middleware('bouncer:OrderCustomerAdjustment,create');
-                        Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order-customer-adjustments.store')->middleware('bouncer:OrderCustomerAdjustment,create');
+                        Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,read');
+                        Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,create');
+                        Route::post('/create', [OrderCustomerAdjustmentController::class, 'store'])->name('order-customer-adjustments.store')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,create');
 
                         Route::prefix('{orderCustomerAdjustment}')->group(function () {
-                            Route::get('/', [OrderCustomerAdjustmentController::class, 'view'])->name('order-customer-adjustments.view')->middleware('bouncer:OrderCustomerAdjustment,read');
-                            Route::get('/update', [OrderCustomerAdjustmentController::class, 'edit'])->name('order-customer-adjustments.edit')->middleware('bouncer:OrderCustomerAdjustment,update');
-                            Route::post('/update', [OrderCustomerAdjustmentController::class, 'update'])->name('order-customer-adjustments.update')->middleware('bouncer:OrderCustomerAdjustment,update');
-                            Route::post('/delete', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete')->middleware('bouncer:OrderCustomerAdjustment,delete');
+                            Route::get('/', [OrderCustomerAdjustmentController::class, 'view'])->name('order-customer-adjustments.view')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,read');
+                            Route::get('/update', [OrderCustomerAdjustmentController::class, 'edit'])->name('order-customer-adjustments.edit')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,update');
+                            Route::post('/update', [OrderCustomerAdjustmentController::class, 'update'])->name('order-customer-adjustments.update')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,update');
+                            Route::post('/delete', [OrderCustomerAdjustmentController::class, 'destroy'])->name('order-customer-adjustments.delete')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,delete');
                         });
                     });
                 });

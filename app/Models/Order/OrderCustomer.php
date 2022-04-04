@@ -4,8 +4,8 @@ namespace App\Models\Order;
 
 use App\Models\Customer;
 use App\Models\Group;
+use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\OrderActivity;
-use App\Models\OrderCustomerAdjustment;
 use App\Models\OrderCustomerGroup;
 use App\Models\OrderFlight;
 use App\Models\OrderMerchandise;

@@ -6,9 +6,9 @@ use App\Events\Order\Customer\Adjustment\CustomerAdjustmentCreatedEvent;
 use App\Events\Order\Customer\Adjustment\CustomerAdjustmentEditedEvent;
 use App\Events\Order\Customer\Adjustment\CustomerAdjustmentRemovedEvent;
 use App\Http\Controllers\Controller;
+use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\OrderCustomerAdjustment;
 use Illuminate\Http\Request;
 
 class OrderCustomerAdjustmentController extends Controller

@@ -393,14 +393,14 @@
                                     <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
-                                        @can('update', \App\Models\OrderCustomerAdjustment::class)
+                                        @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                         <a href="{{ route('order-customer-adjustments.edit', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\OrderCustomerAdjustment::class)
+                                        @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                         <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                         <form action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                             @csrf
