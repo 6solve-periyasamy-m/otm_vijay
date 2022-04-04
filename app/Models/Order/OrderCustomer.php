@@ -48,6 +48,7 @@ use Illuminate\Support\Collection;
  * @property-read bool $has_occupancy Whether the customer has occupancy set correctly
  * @property-read bool $has_surcharge Whether the customer should be charged for single occupancy
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
+ * @property-read bool $cancelled Whether the customer is cancelled
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
  * @property-read Group|null $primary_group The primary group of the customer
@@ -149,7 +150,7 @@ class OrderCustomer extends Model
         return GroupRepository::getOrderCustomerAccommodation($this);
     }
 
-    public function isCancelled(): bool
+    public function getCancelledAttribute(): bool
     {
         return $this->order->cancelled;
     }

@@ -44,7 +44,7 @@ class OrderTransport extends Model
         return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 
-    public function isCancelled(): bool
+    public function getCancelledAttribute(): bool
     {
         return $this->orderCustomers->order->cancelled;
     }

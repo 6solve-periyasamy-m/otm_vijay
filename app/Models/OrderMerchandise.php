@@ -23,7 +23,7 @@ class OrderMerchandise extends Model
         return $this->belongsTo(Merchandise::class, 'merchandise_id');
     }
 
-    public function isCancelled(): bool
+    public function getCancelledAttribute(): bool
     {
         return $this->orderCustomer->order->cancelled;
     }

@@ -44,7 +44,7 @@ class OrderAccommodation extends Model
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
 
-    public function isCancelled(): bool
+    public function getCancelledAttribute(): bool
     {
         // TODO: Fix when cross-order room sharing implemented
         foreach ($this->group->orderCustomers as $orderCustomer) {

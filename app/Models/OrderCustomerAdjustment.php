@@ -26,7 +26,7 @@ class OrderCustomerAdjustment extends Model
 
 
 
-    public function isCancelled(): bool
+    public function getCancelledAttribute(): bool
     {
         return $this->orderCustomer->order->cancelled;
     }
