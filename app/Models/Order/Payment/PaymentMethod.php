@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Payment;
 
+use App\Models\SimpleModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

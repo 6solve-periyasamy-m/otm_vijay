@@ -5,7 +5,7 @@ namespace App\Transforms;
 use App\Models\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\PaymentMethod;
+use App\Models\Order\Payment\PaymentMethod;
 use App\Models\Quote;
 
 interface OrderTransformsInterface

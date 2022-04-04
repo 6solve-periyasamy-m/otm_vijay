@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Models\Order\Payment\PaymentIntention;
-use App\Models\PaymentMethod;
+use App\Models\Order\Payment\PaymentMethod;
 use App\Repository\OrderRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\WebhookClient\Models\WebhookCall;

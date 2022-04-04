@@ -15,7 +15,6 @@ use App\Models\OrderActivity;
 use App\Models\OrderFlight;
 use App\Models\OrderMerchandise;
 use App\Models\OrderTransport;
-use App\Models\PaymentMethod;
 use App\Models\TransportInventoryTour;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
