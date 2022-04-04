@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Log;
+use Throwable;
 
 /**
   Data field should be in the structure as follows:
@@ -51,8 +52,8 @@ class PaymentIntention extends Model
     public static function build(Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
     {
         do {
-            $key = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32/strlen($x)) )),1,32);
-        } while(self::fetch($key) != null);
+            $key = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
+        } while (self::fetch($key) != null);
         return PaymentIntention::create([
             'id' => $key,
             'reference' => $reference,
@@ -60,6 +61,11 @@ class PaymentIntention extends Model
             'data' => $data,
             'type' => $type,
         ]);
+    }
+
+    public static function fetch(string $id): ?PaymentIntention
+    {
+        return PaymentIntention::where('id', '=', $id)->first();
     }
 
     public function makePayment(float $amount, PaymentMethod $method, $created): Payment
@@ -73,11 +79,6 @@ class PaymentIntention extends Model
         ]);
     }
 
-    public static function fetch(string $id): ?PaymentIntention
-    {
-        return PaymentIntention::where('id', '=', $id)->first();
-    }
-
     public function process(): bool
     {
         if (!isset($this->data)) return true;
@@ -85,10 +86,15 @@ class PaymentIntention extends Model
         $order = OrderRepository::getOrderFromBookingReference($this->reference);
         if (!isset($order)) return false;
 
-        try { DB::beginTransaction(); } catch (\Throwable $e) { Log::error($e); return false; }
+        try {
+            DB::beginTransaction();
+        } catch (Throwable $e) {
+            Log::error($e);
+            return false;
+        }
 
         if (array_key_exists('additions', $this->data)) {
-            foreach ($this->data['additions'] as $key =>  $datum) {
+            foreach ($this->data['additions'] as $key => $datum) {
                 $owner = $this->getOwner($datum['component'], $order, $datum['customer']);
                 if (!isset($owner)) return $this->handleError('Owner not found on addition');
                 $component = $this->findTourComponent($datum['component'], $datum['id']);
@@ -118,9 +124,57 @@ class PaymentIntention extends Model
                 $orderComponent->delete();
             }
         }
-        try { DB::commit(); } catch (\Throwable $e) { Log::error($e); return false; }
+        try {
+            DB::commit();
+        } catch (Throwable $e) {
+            Log::error($e);
+            return false;
+        }
 
         return true;
+    }
+
+    private function getOwner(string $componentType, Order $order, int $id)
+    {
+        return $componentType == 'accommodation' ?
+            Group::find($id) :
+            OrderCustomer::where('order_id', '=', $order->id)->where('customer_id', '=', $id)->first();
+    }
+
+    private function handleError(string $info = ''): bool
+    {
+        Log::error('Malformed Payment Intention: ' . $this->id . '. ' . $info);
+        try {
+            DB::rollBack();
+        } catch (Throwable $e) {
+            Log::error($e);
+            return false;
+        }
+        return false;
+    }
+
+    private function findTourComponent(string $componentType, int $id)
+    {
+        switch ($componentType) {
+            case 'accommodation':
+                $model = AccommodationInventoryTour::class;
+                break;
+            case 'activity':
+                $model = ActivityInventoryTour::class;
+                break;
+            case 'flight':
+                $model = FlightInventoryTour::class;
+                break;
+            case 'transport':
+                $model = TransportInventoryTour::class;
+                break;
+            case 'extra':
+                $model = Merchandise::class;
+                break;
+            default:
+                return null;
+        }
+        return app($model)->find($id);
     }
 
     private function findOrderComponent(Model $owner, string $componentType, int $id)
@@ -155,43 +209,5 @@ class PaymentIntention extends Model
                 return null;
         }
         return app($model)->where($customer, '=', $owner->id)->where($field, '=', $id)->first();
-    }
-
-    private function findTourComponent(string $componentType, int $id)
-    {
-        switch ($componentType) {
-            case 'accommodation':
-                $model = AccommodationInventoryTour::class;
-                break;
-            case 'activity':
-                $model = ActivityInventoryTour::class;
-                break;
-            case 'flight':
-                $model = FlightInventoryTour::class;
-                break;
-            case 'transport':
-                $model = TransportInventoryTour::class;
-                break;
-            case 'extra':
-                $model = Merchandise::class;
-                break;
-            default:
-                return null;
-        }
-        return app($model)->find($id);
-    }
-
-    private function getOwner(string $componentType, Order $order, int $id)
-    {
-        return $componentType == 'accommodation' ?
-            Group::find($id) :
-            OrderCustomer::where('order_id', '=', $order->id)->where('customer_id', '=', $id)->first();
-    }
-
-    private function handleError(string $info = ''): bool
-    {
-        Log::error('Malformed Payment Intention: ' . $this->id . '. ' . $info);
-        try { DB::rollBack(); } catch (\Throwable $e) { Log::error($e); return false; }
-        return false;
     }
 }
