@@ -24,46 +24,46 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $tour_id
  * @property int|null $lead_booker_id
- * @property string|null $booking_reference
- * @property string|null $deposit
- * @property Carbon $ordered_on
- * @property bool $cancelled
- * @property string|null $internal_notes
- * @property string|null $external_notes
- * @property string|null $invoice_footer
+ * @property string|null $booking_reference Unique reference for the booking
+ * @property string|null $deposit The expected deposit amount
+ * @property Carbon $ordered_on When the order was placed
+ * @property bool $cancelled Is the order cancelled?
+ * @property string|null $internal_notes The notes shown only to the operator
+ * @property string|null $external_notes The notes visible to the customer
+ * @property string|null $invoice_footer The footer to be printed on the invoice
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property string|null $token
- * @property-read Collection|ManualAdjustment[] $adjustments
- * @property-read int|null $adjustments_count
- * @property-read Collection|Customer[] $customers
- * @property-read int|null $customers_count
- * @property-read float $calculated_deposit
- * @property-read float $cost
- * @property-read int $customer_count
- * @property-read string $customer_names
- * @property-read float $deposit_percentage
- * @property-read bool $has_atol
- * @property-read string $lead_booker_name
- * @property-read float $paid
- * @property-read float $remaining
- * @property-read float $remaining_installment
- * @property-read float $remaining_percentage
- * @property-read string $status
- * @property-read float $total
- * @property-read Collection|OrderInstallment[] $installments
- * @property-read int|null $installments_count
- * @property-read Collection|Invoice[] $invoices
- * @property-read int|null $invoices_count
- * @property-read OrderCustomer|null $leadBooker
- * @property-read Collection|OrderCustomer[] $orderCustomers
- * @property-read int|null $order_customers_count
- * @property-read Collection|Payment[] $payments
- * @property-read int|null $payments_count
- * @property-read Collection|PaymentReminder[] $reminders
- * @property-read int|null $reminders_count
- * @property-read Tour $tour
+ * @property string|null $token The token used during the booking process
+ * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
+ * @property-read int|null $adjustments_count The amount of manual adjustments on the order
+ * @property-read Collection|Customer[] $customers The customers associated with this order
+ * @property-read int|null $customers_count The amount of customers associated with this order
+ * @property-read float $calculated_deposit The calculated deposit based on customer count
+ * @property-read float $cost The cost of the order before adjustments
+ * @property-read int $customer_count The amount of customers on the order
+ * @property-read string $customer_names String list of all customer full names
+ * @property-read float $deposit_percentage What percentage of the total cost is the deposit
+ * @property-read bool $has_atol Whether this order has an ATOL certificate
+ * @property-read string $lead_booker_name Full name of the lead booker
+ * @property-read float $paid The total amount paid for the order
+ * @property-read float $remaining Remaining amount left to be paid
+ * @property-read float $remaining_installment Remaining cost on the due installment
+ * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
+ * @property-read string $status The string version of the order status
+ * @property-read float $total The total cost of the order
+ * @property-read Collection|OrderInstallment[] $installments The installments for the order
+ * @property-read int|null $installments_count The amount of installments for the order
+ * @property-read Collection|Invoice[] $invoices The invoices for the order
+ * @property-read int|null $invoices_count The amount of invoices for the order
+ * @property-read OrderCustomer|null $leadBooker The lead booker for the order
+ * @property-read Collection|OrderCustomer[] $orderCustomers The order customers
+ * @property-read int|null $order_customers_count The amount of order customers
+ * @property-read Collection|Payment[] $payments The payments for the order
+ * @property-read int|null $payments_count The amount of payments for the order
+ * @property-read Collection|PaymentReminder[] $reminders The reminders that have been sent for the order
+ * @property-read int|null $reminders_count The amount of reminders that have been sent for the order
+ * @property-read Tour $tour The tour that the order was made in relation to
  * @method static OrderFactory factory(...$parameters)
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
