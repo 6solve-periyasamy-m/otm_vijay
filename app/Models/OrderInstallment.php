@@ -6,22 +6,22 @@ use App\Models\Order\Order;
 use App\Repository\OrderRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderInstallment extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['amount', 'due_on',];
-    protected $additional_attributes = ['paid', 'cancelled'];
+    protected $casts = ['due_on' => 'date'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['due_on' => 'required|date', 'amount' => 'required|numeric',];
     }
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
