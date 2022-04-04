@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Payment;
 
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\PaymentReminder
+ * App\Models\Order\Payment\PaymentReminder
  *
  * @property int $id
  * @property int $order_id

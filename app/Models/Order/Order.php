@@ -7,7 +7,7 @@ use App\Models\Helper\OrderStatus;
 use App\Models\Invoice;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
-use App\Models\PaymentReminder;
+use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour;
 use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
