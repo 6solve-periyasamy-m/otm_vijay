@@ -44,19 +44,19 @@
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
-                    {{ StringFormatter::formatCurrency($order->total) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before cancellation)
+                    {{ StringFormatter::formatCurrency($order->total) }} ({{ StringFormatter::formatCurrency($order->cost) }} before cancellation)
                 @else
-                    {{ StringFormatter::formatCurrency($order->getCost() + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->getCost()) }} before adjustments)
+                    {{ StringFormatter::formatCurrency($order->cost + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->cost) }} before adjustments)
                 @endif
             </h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getPaid()) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->paid) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->getRemaining()) }}</h6>
+            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->remaining) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
@@ -83,7 +83,7 @@
                 <i class="icon-globe"></i>
                 View Tour
             </a>
-            @if($order->has_atol_certificate && !$order->cancelled)
+            @if($order->has_atol && !$order->cancelled)
             <a href="{{ route('orders.atol', ['order' => $order,]) }}" class="btn btn-secondary">
                 <i class="icon-plane"></i>
                 ATOL Certificate

@@ -7,7 +7,11 @@ use App\Repository\SettingsRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class Order extends Model
 {
@@ -17,7 +21,7 @@ class Order extends Model
     protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'quote_id' => 'nullable|exists:quotes,id',
@@ -26,7 +30,7 @@ class Order extends Model
         ];
     }
 
-    public static function generateBookingReference(Order $order)
+    public static function generateBookingReference(Order $order): string
     {
         return SettingsRepository::get('booking.prefix')
             . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
@@ -35,113 +39,59 @@ class Order extends Model
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
 
-    public function quote()
+    public function quote(): HasOne
     {
         return $this->hasOne(Quote::class);
     }
 
-    public function tour()
+    public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
-    public function orderStatus()
+    public function orderStatus(): HasOne
     {
         return $this->hasOne(OrderStatus::class);
     }
 
-    public function orderCustomers()
+    public function orderCustomers(): HasMany
     {
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
-    public function payments()
+    public function payments(): HasMany
     {
         return $this->hasMany(Payment::class, 'order_id');
     }
 
-    public function leadBooker()
+    public function leadBooker(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'lead_booker_id');
     }
 
-    public function adjustments()
+    public function adjustments(): HasMany
     {
         return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 
-    public function reminders()
+    public function reminders(): HasMany
     {
         return $this->hasMany(PaymentReminder::class, 'order_id');
     }
 
-    public function getStatus()
-    {
-        return self::getStatusArray(OrderRepository::getOrderStatus($this));
-    }
-
-    public function invoices()
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class, 'order_id');
     }
 
-    public static function getStatusArray(int $status): array
-    {
-        switch ($status) {
-            case -3:
-                return ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',];
-            case -2:
-                return ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',];
-            case -1:
-                return ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',];
-            case 0:
-                return ['status' => trans('custom.order.status.full'), 'color' => 'success'];
-            case 1:
-                return ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'];
-            case 2:
-                return ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'];
-            case 3:
-                return ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'];
-            case 4:
-                return ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'];
-            default:
-                return ['status' => 'Status Unknown', 'color' => 'dark'];
-        }
-    }
-
-    public function getCustomerCount(): int
-    {
-        return $this->orderCustomers->count();
-    }
-
-    public function getCost()
-    {
-        return OrderRepository::getCost($this);
-    }
-
-    public function getCostBreakdown(): array
-    {
-        return OrderRepository::getCostBreakdown($this);
-    }
-
-    public function getPaid()
-    {
-        return OrderRepository::getTotalPaid($this);
-    }
-
-    public function getAdjustmentValue()
+    public function getAdjustmentValue(): float
     {
         return OrderRepository::getTotalAdjustedValue($this);
     }
 
-    public function installments()
+    public function installments(): HasMany
     {
         return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
-    }
-
-    public function getRemaining(): float
-    {
-        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
     }
 
     public function getNextInstallment(): array
@@ -154,7 +104,8 @@ class Order extends Model
         return OrderRepository::getOrderAdditionals($this);
     }
 
-    public function customers() {
+    public function customers(): Collection
+    {
         return OrderRepository::getCustomersForOrder($this);
     }
 
@@ -168,44 +119,73 @@ class Order extends Model
         return $this->getStatus()['status'];
     }
 
+    public function getStatus(): array
+    {
+        return self::getStatusArray(OrderRepository::getOrderStatus($this));
+    }
+
+    public static function getStatusArray(int $status): array
+    {
+        return match ($status) {
+            -3 => ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',],
+            -2 => ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',],
+            -1 => ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',],
+            0 => ['status' => trans('custom.order.status.full'), 'color' => 'success'],
+            1 => ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'],
+            2 => ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'],
+            3 => ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'],
+            4 => ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'],
+            default => ['status' => 'Status Unknown', 'color' => 'dark'],
+        };
+    }
+
     public function getPaidAttribute(): float
     {
-        return $this->getPaid();
+        return OrderRepository::getTotalPaid($this);
     }
 
     public function getTotalAttribute(): float
     {
-        return $this->cancelled ? $this->paid : $this->getCost();
+        return $this->cancelled ? $this->paid : $this->cost;
+    }
+
+    public function getCostAttribute(): float
+    {
+        return OrderRepository::getCost($this);
     }
 
     public function getRemainingAttribute(): float
     {
-        return $this->getRemaining();
+        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
     }
 
     public function getRemainingInstallmentAttribute(): float
     {
-        $cost = $this->getCost() - $this->calculated_deposit;
-        foreach ($this->installments as $installment)
-        {
-            $cost -= ($installment->amount) * $this->getCustomerCount();
+        $cost = $this->cost - $this->calculated_deposit;
+        foreach ($this->installments as $installment) {
+            $cost -= ($installment->amount) * $this->customer_count;
         }
         return $cost;
     }
 
+    public function getCustomerCountAttribute(): int
+    {
+        return $this->orderCustomers->count();
+    }
+
     public function getDepositPercentageAttribute(): float
     {
-        return $this->getCost() == 0 ? 0 : round(($this->calculated_deposit / $this->getCost()) * 100, 2);
+        return $this->cost == 0 ? 0 : round(($this->calculated_deposit / $this->cost) * 100, 2);
     }
 
     public function getRemainingPercentageAttribute(): float
     {
-        return $this->getCost() == 0 ? 0 : round(($this->remaining_installment / $this->getCost()) * 100, 2);
+        return $this->cost == 0 ? 0 : round(($this->remaining_installment / $this->cost) * 100, 2);
     }
 
     public function getCalculatedDepositAttribute(): float
     {
-        return $this->deposit * $this->getCustomerCount();
+        return $this->deposit * $this->customer_count;
     }
 
     public function getCustomerNamesAttribute(): string
@@ -217,12 +197,12 @@ class Order extends Model
         return substr($names, 0, -2);
     }
 
-    public function groups()
+    public function groups(): array
     {
         return OrderRepository::getOrderGroups($this);
     }
 
-    public function getHasAtolCertificateAttribute(): bool
+    public function getHasAtolAttribute(): bool
     {
         return OrderRepository::hasFlight($this);
     }

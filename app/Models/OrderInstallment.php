@@ -37,11 +37,11 @@ class OrderInstallment extends Model
 
     public function getPercentageAttribute(): float
     {
-        return $this->order->getCost() == 0 ? 100 : round((($this->amount * $this->order->getCustomerCount()) / $this->order->getCost()) * 100, 2);
+        return $this->order->cost == 0 ? 100 : round((($this->amount * $this->order->customer_count) / $this->order->cost) * 100, 2);
     }
 
     public function getCalculatedAmountAttribute(): float
     {
-        return $this->amount * $this->order->getCustomerCount();
+        return $this->amount * $this->order->customer_count;
     }
 }

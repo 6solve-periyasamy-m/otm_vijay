@@ -50,7 +50,7 @@ class ReportRepository
             $row->booking_reference = $order->booking_reference;
             $row->lb_first_name = $order->leadBooker->customer->first_name;
             $row->lb_last_name = $order->leadBooker->customer->last_name;
-            $row->customer_count = $order->getCustomerCount();
+            $row->customer_count = $order->customer_count;
             $row->tour_name = $order->tour->name;
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
@@ -127,9 +127,9 @@ class ReportRepository
         $remaining = 0;
         $orderList = [];
         foreach ($orders as $order) {
-            if (!$order->has_atol_certificate) continue;
+            if (!$order->has_atol) continue;
             if (!$order->cancelled) {
-                $passengers += $order->getCustomerCount();
+                $passengers += $order->customer_count;
             }
             $revenue += $order->total;
             $paid += $order->paid;
