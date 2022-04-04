@@ -39,19 +39,9 @@ class Order extends Model
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
 
-    public function quote(): HasOne
-    {
-        return $this->hasOne(Quote::class);
-    }
-
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
-    }
-
-    public function orderStatus(): HasOne
-    {
-        return $this->hasOne(OrderStatus::class);
     }
 
     public function orderCustomers(): HasMany
