@@ -7,7 +7,7 @@ use App\Models\AccommodationInventoryTour;
 use App\Models\ActivityInventoryTour;
 use App\Models\FlightInventoryTour;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\TransportInventoryTour;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\ActivityTransforms;

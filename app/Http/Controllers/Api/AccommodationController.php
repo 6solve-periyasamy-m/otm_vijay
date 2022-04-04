@@ -10,7 +10,7 @@ use App\Models\BoardType;
 use App\Models\Customer;
 use App\Models\CustomerOrderDetail;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\Tour;
 use App\Repository\ActionsRepository;
 use App\Repository\CustomerOrderDetailRepository;

@@ -7,7 +7,7 @@ use App\Events\Order\Customer\OrderCustomerEditedEvent;
 use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 

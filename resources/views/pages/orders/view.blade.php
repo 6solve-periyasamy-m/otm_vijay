@@ -113,7 +113,7 @@
 </div>
 <div class="card" id="section-1">
     <div class="card-body">
-        @can('create', \App\Models\OrderCustomer::class)
+        @can('create', \App\Models\Order\OrderCustomer::class)
         <div class="py-2 mb-3 text-end">            
             <a href="{{ route('order-customers.create', ['order' => $order, ]) }}" class="btn btn-primary text-white">
                 <i class="icon-plus"></i>
@@ -127,7 +127,7 @@
                 <div class="otm-card">
                     <p>{{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : ' Additional Customer'}}</p>
                     <h6 class="fw-bold">
-                        @can('read', \App\Models\OrderCustomer::class)
+                        @can('read', \App\Models\Order\OrderCustomer::class)
                         <a href="{{ route('order-customers.view', ['order' => $order, 'orderCustomer' => $ordersCustomer, ]) }}" class="link-info">
                             {{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                         </a>

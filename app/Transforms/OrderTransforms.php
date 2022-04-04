@@ -4,7 +4,7 @@ namespace App\Transforms;
 
 use App\Models\Customer;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\PaymentMethod;
 use App\Models\Quote;
 

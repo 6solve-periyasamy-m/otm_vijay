@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\CustomerAuthenticationRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

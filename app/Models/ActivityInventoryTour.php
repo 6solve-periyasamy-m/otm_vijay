@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Repository\AccommodationComponentRepository;
+use App\Models\Order\OrderCustomer;
 use App\Repository\ActivityComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

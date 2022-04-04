@@ -11,7 +11,7 @@ use App\Models\CustomerOrderDetail;
 use App\Models\Flight;
 use App\Models\FlightInventoryTour;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\Tour;
 use App\Repository\ActionsRepository;
 use App\Repository\CustomerOrderDetailRepository;

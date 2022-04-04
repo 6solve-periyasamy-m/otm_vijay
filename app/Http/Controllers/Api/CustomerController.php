@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\Customer;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 

@@ -6,7 +6,7 @@ use App\Models\Airline;
 use App\Models\Airport;
 use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Repository\TourRepository;
 use StringFormatter;
 

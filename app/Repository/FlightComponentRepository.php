@@ -6,11 +6,10 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventoryTourUpgrade;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\Tour;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 interface FlightComponentRepositoryInterface
 {

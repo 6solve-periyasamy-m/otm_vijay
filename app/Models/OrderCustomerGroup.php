@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\OrderCustomer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;

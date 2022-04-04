@@ -3,12 +3,11 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
-use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
+use App\Models\Order\OrderCustomer;
 use App\Models\OrderAccommodation;
-use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Models\Tour;
 use Carbon\Carbon;

@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Invoice;
 use App\Models\ManualAdjustment;
-use App\Models\OrderCustomer;
 use App\Models\OrderInstallment;
 use App\Models\Payment;
 use App\Models\PaymentReminder;
@@ -26,7 +25,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use function trans;
 
 /**
  * App\Models\Order

@@ -1,8 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
-use App\Models\Order\Order;
+use App\Models\Customer;
+use App\Models\Group;
+use App\Models\OrderActivity;
+use App\Models\OrderCustomerAdjustment;
+use App\Models\OrderCustomerGroup;
+use App\Models\OrderFlight;
+use App\Models\OrderMerchandise;
+use App\Models\OrderTransport;
 use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

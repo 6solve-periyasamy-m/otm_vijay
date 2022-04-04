@@ -3,7 +3,7 @@
 namespace App\Transforms;
 
 use App\Models\Operator;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\TransportInventory;
 use App\Models\TransportInventoryTour;
 use App\Models\TransportType;

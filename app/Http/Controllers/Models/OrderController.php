@@ -9,7 +9,7 @@ use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Http\Request;

@@ -7,7 +7,7 @@ use App\Events\Order\Customer\Adjustment\CustomerAdjustmentEditedEvent;
 use App\Events\Order\Customer\Adjustment\CustomerAdjustmentRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\OrderCustomerAdjustment;
 use Illuminate\Http\Request;
 

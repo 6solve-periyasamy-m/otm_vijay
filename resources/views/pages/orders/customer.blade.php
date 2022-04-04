@@ -241,13 +241,13 @@ $(document).ready( function () {
                 Add Adjustment
             </a>
             @endcan
-            @can('update', \App\Models\OrderCustomer::class)
+            @can('update', \App\Models\Order\OrderCustomer::class)
             <a href="{{ route('order-customers.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-amber mb-1">
                 <i class="icon-note"></i>
                 Edit Order Customer
             </a>
             @endcan
-            @can('delete', \App\Models\OrderCustomer::class)
+            @can('delete', \App\Models\Order\OrderCustomer::class)
                 @if($orderCustomer->id !== $orderCustomer->order->lead_booker_id)
                     <a href="#" onclick="$('#customer-delete').submit()" class="btn btn-danger mb-1"><i class="icon-trash"></i>Remove Customer</a>
                     <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" method="post" id="customer-delete">

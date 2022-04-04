@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Mail\TemplatedMailable;
 use App\Models\Order\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\Payment;
 use Auth;
 use Exception;

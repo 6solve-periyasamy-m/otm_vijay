@@ -180,16 +180,16 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
 
             Route::prefix('customer')->group(function () {
-                Route::get('/', [OrderCustomerModelController::class, 'index'])->name('order-customers.all')->middleware('bouncer:OrderCustomer,read');
-                Route::get('/create', [OrderCustomerModelController::class, 'create'])->name('order-customers.create')->middleware('bouncer:OrderCustomer,create');
-                Route::post('/create', [OrderCustomerModelController::class, 'store'])->name('order-customers.store')->middleware('bouncer:OrderCustomer,create');
+                Route::get('/', [OrderCustomerModelController::class, 'index'])->name('order-customers.all')->middleware('bouncer:Order\OrderCustomer,read');
+                Route::get('/create', [OrderCustomerModelController::class, 'create'])->name('order-customers.create')->middleware('bouncer:Order\OrderCustomer,create');
+                Route::post('/create', [OrderCustomerModelController::class, 'store'])->name('order-customers.store')->middleware('bouncer:Order\OrderCustomer,create');
 
                 Route::prefix('{orderCustomer}')->group(function () {
                     // This is staying in the OrderCustomerController, as moving it out breaks it somehow
-                    Route::get('/', [OrderCustomerController::class, 'show'])->name("order-customers.view")->middleware('bouncer:OrderCustomer,read');
-                    Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:OrderCustomer,update');
-                    Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update')->middleware('bouncer:OrderCustomer,update');
-                    Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:OrderCustomer,delete');
+                    Route::get('/', [OrderCustomerController::class, 'show'])->name("order-customers.view")->middleware('bouncer:Order\OrderCustomer,read');
+                    Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:Order\OrderCustomer,update');
+                    Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
+                    Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
 
                     Route::prefix('adjustment')->group(function () {
                         Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:OrderCustomerAdjustment,read');
@@ -233,11 +233,11 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
 
         Route::prefix('component')->group(function () {
-            Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete')->middleware('bouncer:OrderCustomer,update');
-            Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete')->middleware('bouncer:OrderCustomer,update');
-            Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete')->middleware('bouncer:OrderCustomer,update');
-            Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete')->middleware('bouncer:OrderCustomer,update');
-            Route::post('merchandise/{id}/delete', [OrderComponentController::class, 'deleteMerchandise'])->name('orderMerchandiseDelete')->middleware('bouncer:OrderCustomer,update');
+            Route::post('accommodation/{id}/delete', [OrderComponentController::class, 'deleteAccommodation'])->name('orderAccommodationDelete')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::post('activity/{id}/delete', [OrderComponentController::class, 'deleteActivity'])->name('orderActivityDelete')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete')->middleware('bouncer:Order\OrderCustomer,update');
+            Route::post('merchandise/{id}/delete', [OrderComponentController::class, 'deleteMerchandise'])->name('orderMerchandiseDelete')->middleware('bouncer:Order\OrderCustomer,update');
         });
     });
 

@@ -2,13 +2,11 @@
 
 namespace App\Transforms;
 
-use App\Models\Accommodation;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 use App\Models\BoardType;
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 use App\Models\RoomType;
-use App\Repository\AccommodationComponentRepository;
 use App\Repository\Facades\StringFormatter;
 use App\Repository\TourRepository;
 
