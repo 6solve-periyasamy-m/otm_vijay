@@ -4,14 +4,89 @@ namespace App\Models;
 
 use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
+use Database\Factories\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\Order
+ *
+ * @property int $id
+ * @property int $tour_id
+ * @property int|null $lead_booker_id
+ * @property string|null $booking_reference
+ * @property string|null $deposit
+ * @property Carbon $ordered_on
+ * @property bool $cancelled
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
+ * @property string|null $invoice_footer
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property string|null $token
+ * @property-read Collection|ManualAdjustment[] $adjustments
+ * @property-read int|null $adjustments_count
+ * @property-read Collection|Customer[] $customers
+ * @property-read int|null $customers_count
+ * @property-read float $calculated_deposit
+ * @property-read float $cost
+ * @property-read int $customer_count
+ * @property-read string $customer_names
+ * @property-read float $deposit_percentage
+ * @property-read bool $has_atol
+ * @property-read string $lead_booker_name
+ * @property-read float $paid
+ * @property-read float $remaining
+ * @property-read float $remaining_installment
+ * @property-read float $remaining_percentage
+ * @property-read string $status
+ * @property-read float $total
+ * @property-read Collection|OrderInstallment[] $installments
+ * @property-read int|null $installments_count
+ * @property-read Collection|Invoice[] $invoices
+ * @property-read int|null $invoices_count
+ * @property-read OrderCustomer|null $leadBooker
+ * @property-read Collection|OrderCustomer[] $orderCustomers
+ * @property-read int|null $order_customers_count
+ * @property-read Collection|Payment[] $payments
+ * @property-read int|null $payments_count
+ * @property-read Collection|PaymentReminder[] $reminders
+ * @property-read int|null $reminders_count
+ * @property-read Tour $tour
+ * @method static OrderFactory factory(...$parameters)
+ * @method static Builder|Order newModelQuery()
+ * @method static Builder|Order newQuery()
+ * @method static QueryBuilder|Order onlyTrashed()
+ * @method static Builder|Order query()
+ * @method static Builder|Order whereBookingReference($value)
+ * @method static Builder|Order whereCancelled($value)
+ * @method static Builder|Order whereCreatedAt($value)
+ * @method static Builder|Order whereDeletedAt($value)
+ * @method static Builder|Order whereDeposit($value)
+ * @method static Builder|Order whereExternalNotes($value)
+ * @method static Builder|Order whereId($value)
+ * @method static Builder|Order whereInternalNotes($value)
+ * @method static Builder|Order whereInvoiceFooter($value)
+ * @method static Builder|Order whereLeadBookerId($value)
+ * @method static Builder|Order whereOrderedOn($value)
+ * @method static Builder|Order whereToken($value)
+ * @method static Builder|Order whereTourId($value)
+ * @method static Builder|Order whereUpdatedAt($value)
+ * @method static QueryBuilder|Order withTrashed()
+ * @method static QueryBuilder|Order withoutTrashed()
+ * @mixin Eloquent
+ */
 class Order extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
