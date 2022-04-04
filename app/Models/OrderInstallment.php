@@ -4,11 +4,45 @@ namespace App\Models;
 
 use App\Models\Order\Order;
 use App\Repository\OrderRepository;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\OrderInstallment
+ *
+ * @property int $id
+ * @property int $order_id
+ * @property float $amount
+ * @property Carbon|null $due_on
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read float $calculated_amount Calculated installment amount based on customer count
+ * @property-read bool $cancelled Is the order cancelled?
+ * @property-read bool $paid Is the installment paid?
+ * @property-read float $percentage Percentage of the order amount
+ * @property-read Order $order Related order
+ * @method static Builder|OrderInstallment newModelQuery()
+ * @method static Builder|OrderInstallment newQuery()
+ * @method static QueryBuilder|OrderInstallment onlyTrashed()
+ * @method static Builder|OrderInstallment query()
+ * @method static Builder|OrderInstallment whereAmount($value)
+ * @method static Builder|OrderInstallment whereCreatedAt($value)
+ * @method static Builder|OrderInstallment whereDeletedAt($value)
+ * @method static Builder|OrderInstallment whereDueOn($value)
+ * @method static Builder|OrderInstallment whereId($value)
+ * @method static Builder|OrderInstallment whereOrderId($value)
+ * @method static Builder|OrderInstallment whereUpdatedAt($value)
+ * @method static QueryBuilder|OrderInstallment withTrashed()
+ * @method static QueryBuilder|OrderInstallment withoutTrashed()
+ * @mixin Eloquent
+ */
 class OrderInstallment extends Model
 {
     use HasFactory, SoftDeletes;
