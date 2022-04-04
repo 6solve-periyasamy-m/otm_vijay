@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Payment;
 
+use App\Models\Customer;
 use App\Models\Order\Order;
+use App\Models\PaymentMethod;
 use Database\Factories\PaymentFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

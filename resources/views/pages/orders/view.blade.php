@@ -161,7 +161,7 @@
                         <h4 class="fw-bold">Payments</h4>
                     </div>
                     <div class="pb-3 text-end">
-                        @can('create', \App\Models\Payment::class)
+                        @can('create', \App\Models\Order\Payment\Payment::class)
                         <a href="{{ route('payments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
                             <i class="icon-plus"></i>
                             New Payment
@@ -191,14 +191,14 @@
                                     <td>{{ StringFormatter::formatCurrency($payment->amount) }}</td>
                                     <td>{{ StringFormatter::formatDateTime($payment->paid_on) }}</td>
                                     <td class="actions">
-                                        @can('update', \App\Models\Payment::class)
+                                        @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\Payment::class)
+                                        @can('delete', \App\Models\Order\Payment\Payment::class)
                                             <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}" method="post" id="payment-{{$payment->id}}-delete">
                                                 @csrf

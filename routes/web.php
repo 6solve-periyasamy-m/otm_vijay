@@ -207,15 +207,15 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
 
             Route::prefix('payments')->group(function () {
-                Route::get('/', [PaymentController::class, 'index'])->name('payments.all')->middleware('bouncer:Payment,read');
-                Route::get('/create', [PaymentController::class, 'create'])->name('payments.create')->middleware('bouncer:Payment,create');
-                Route::post('/create', [PaymentController::class, 'store'])->name('payments.store')->middleware('bouncer:Payment,create');
+                Route::get('/', [PaymentController::class, 'index'])->name('payments.all')->middleware('bouncer:Order\Payment\Payment,read');
+                Route::get('/create', [PaymentController::class, 'create'])->name('payments.create')->middleware('bouncer:Order\Payment\Payment,create');
+                Route::post('/create', [PaymentController::class, 'store'])->name('payments.store')->middleware('bouncer:Order\Payment\Payment,create');
 
                 Route::prefix('{payment}')->group(function () {
-                    Route::get('/', [PaymentController::class, 'view'])->name('payments.view')->middleware('bouncer:Payment,read');
-                    Route::get('/update', [PaymentController::class, 'edit'])->name('payments.edit')->middleware('bouncer:Payment,update');
-                    Route::post('/update', [PaymentController::class, 'update'])->name('payments.update')->middleware('bouncer:Payment,update');
-                    Route::post('/delete', [PaymentController::class, 'destroy'])->name('payments.delete')->middleware('bouncer:Payment,delete');
+                    Route::get('/', [PaymentController::class, 'view'])->name('payments.view')->middleware('bouncer:Order\Payment\Payment,read');
+                    Route::get('/update', [PaymentController::class, 'edit'])->name('payments.edit')->middleware('bouncer:Order\Payment\Payment,update');
+                    Route::post('/update', [PaymentController::class, 'update'])->name('payments.update')->middleware('bouncer:Order\Payment\Payment,update');
+                    Route::post('/delete', [PaymentController::class, 'destroy'])->name('payments.delete')->middleware('bouncer:Order\Payment\Payment,delete');
                 });
 
                 Route::prefix('payment-methods')->group(function () {

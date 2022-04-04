@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Order\Payment\Payment;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use DB;

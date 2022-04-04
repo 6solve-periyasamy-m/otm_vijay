@@ -149,7 +149,7 @@ class PermissionsRepository
                 'group' => 'Orders',
                 'order' => 0,
             ],
-            'Payment' => [
+            'Order\Payment\Payment' => [
                 'name' => 'Payment',
                 'group' => 'Orders',
                 'order' => 1,
