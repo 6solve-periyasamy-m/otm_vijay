@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Order\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ManualAdjustment extends Model
@@ -14,12 +15,12 @@ class ManualAdjustment extends Model
     protected $fillable = ['order_id', 'amount', 'reason', 'date',];
     protected $casts = ['date' => 'date'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['date' => 'required|date', 'amount' => 'required|numeric',];
     }
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
