@@ -173,7 +173,7 @@ $order = $invoice->order;
                         </tr>
                     </thead>
                     <tbody>
-                        @if (empty($invoice->adjustments['billables']))
+                        @if (empty($invoice->payments['billables']))
                             <tr>
                                 <td colspan="3" class="center-text">No Payments recorded.</td>
                             </tr>

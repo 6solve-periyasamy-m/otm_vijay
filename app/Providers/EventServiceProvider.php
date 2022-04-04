@@ -122,7 +122,7 @@ class EventServiceProvider extends ServiceProvider
             InvoiceUpdateListener::class,
             SendOrderChangedEmail::class,
         ],
-        'stripe-webhooks::checkout.session.completed' => [
+        'stripe-webhooks::charge.succeeded' => [
             CheckoutSuccessfulListener::class,
         ]
     ];

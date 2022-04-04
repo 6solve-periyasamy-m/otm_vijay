@@ -136,7 +136,7 @@ class Order extends Model
 
     public function installments()
     {
-        return $this->hasMany(OrderInstallment::class, 'order_id');
+        return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
     }
 
     public function getRemaining(): float
@@ -175,7 +175,7 @@ class Order extends Model
 
     public function getTotalAttribute(): float
     {
-        return $this->getCost();
+        return $this->cancelled ? $this->paid : $this->getCost();
     }
 
     public function getRemainingAttribute(): float
@@ -225,5 +225,10 @@ class Order extends Model
     public function getHasAtolCertificateAttribute(): bool
     {
         return OrderRepository::hasFlight($this);
+    }
+
+    public function getAvailableAdditionals(): array
+    {
+        return OrderRepository::getAllAdditionals($this);
     }
 }

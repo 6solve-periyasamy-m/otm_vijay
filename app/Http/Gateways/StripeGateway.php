@@ -2,12 +2,14 @@
 
 namespace App\Http\Gateways;
 
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\PaymentIntention;
 use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway
 {
-    public static function checkout(array $items, Order $order, string $paymentType, int $customerId)
+    public static function checkout(array $items, Order $order, string $paymentType, int $customerId, ?array $intentionData = null)
     {
         $lineItems = [];
         foreach ($items as $item) {
@@ -17,18 +19,22 @@ class StripeGateway extends Gateway
                     'product_data' => [
                         'name' => $item['name'],
                     ],
-                    'unit_amount' => $item['cost'] * 100,
+                    'unit_amount' => round($item['cost'] * 100),
                 ],
                 'quantity' => $item['quantity'],
             ];
         }
+        $intention = PaymentIntention::build(Customer::find($customerId), $order->booking_reference, $paymentType, $intentionData);
         $session = Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',
+            'payment_intent_data' => [
+                'metadata' => [
+                    'intention_id' => $intention->id,
+                ],
+            ],
             'metadata' => [
-                'payment_type' => $paymentType,
-                'booking_reference' => $order->booking_reference,
-                'customer_id' => $customerId,
+                'intention_id' => $intention->id,
             ],
             'success_url' => route('payment.gateway.stripe.success'),
             'cancel_url' => route('payment.gateway.stripe.cancelled'),

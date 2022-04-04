@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Gateways\StripeGateway;
 use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\ActivityInventoryTourUpgrade;
@@ -16,6 +17,7 @@ use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
 use App\Repository\OrderRepository;
+use App\Repository\SettingsRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

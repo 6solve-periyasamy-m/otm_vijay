@@ -30,29 +30,19 @@
                     <span>Your Finance</span>
                 </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" onclick="window.location = '{{ route('customer.extras') }}'">
                 <div class="menu-text">
                     <span class="icon-diamond menu-icon"></span>
                     <span>Your Extras</span>
                 </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" onclick="window.location = '{{ route('customer.itinerary') }}'">
                 <div class="menu-text">
-                    <span class="icon-globe menu-icon"  onclick="window.location = '{{ route('customer.itinerary') }}'"></span>
+                    <span class="icon-globe menu-icon"></span>
                     <span>Your Tours</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
-
-@section('footer-script')
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.donut-menu .menu-item').click(function() {
-            alert();
-        })
-    });
-</script>
 @endsection

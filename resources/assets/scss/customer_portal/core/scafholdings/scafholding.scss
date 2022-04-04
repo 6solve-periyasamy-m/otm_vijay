@@ -45,6 +45,11 @@ a.link {
     }
 }
 
+.other-profile:hover {
+    transition: 100ms;
+    filter: brightness(90%);
+}
+
 
 
 /*******************

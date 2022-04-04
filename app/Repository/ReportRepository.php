@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Helpers\QuarterHelper;
 use App\Models\Order;
 use App\Models\Tour;
+use Illuminate\Support\Collection;
 
 class ReportRepository
 {
@@ -50,9 +52,9 @@ class ReportRepository
             $row->lb_last_name = $order->leadBooker->customer->last_name;
             $row->customer_count = $order->getCustomerCount();
             $row->tour_name = $order->tour->name;
-            $row->total_order_value = $order->getCost();
-            $row->balance_outstanding = $order->getRemaining();
-            $row->balance_paid = $order->getPaid();
+            $row->total_order_value = $order->total;
+            $row->balance_outstanding = $order->remaining;
+            $row->balance_paid = $order->paid;
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }
@@ -100,5 +102,46 @@ class ReportRepository
             }
         }
         return $data;
+    }
+
+    public static function getOrdersPlacedInQuarterReport(int $year, int $quarter): Collection
+    {
+        return self::generateAtolReport(QuarterHelper::getOrdersPlacedInQuarter($year, $quarter));
+    }
+
+    public static function getOrdersDepartingInQuarterReport(int $year, int $quarter): Collection
+    {
+        return self::generateAtolReport(QuarterHelper::getOrdersFromToursInQuarter($year, $quarter));
+    }
+
+    public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
+    {
+        return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
+    }
+
+    public static function generateAtolReport(Collection $orders): Collection
+    {
+        $passengers = 0;
+        $revenue = 0;
+        $paid = 0;
+        $remaining = 0;
+        $orderList = [];
+        foreach ($orders as $order) {
+            if (!$order->has_atol_certificate) continue;
+            if (!$order->cancelled) {
+                $passengers += $order->getCustomerCount();
+            }
+            $revenue += $order->total;
+            $paid += $order->paid;
+            $remaining += $order->remaining;
+            $orderList[] = $order;
+        }
+        $collection = collect();
+        $collection->passengers = $passengers;
+        $collection->revenue = $revenue;
+        $collection->paid = $paid;
+        $collection->remaining = $remaining;
+        $collection->orders = $orderList;
+        return $collection;
     }
 }
