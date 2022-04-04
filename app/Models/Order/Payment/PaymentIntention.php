@@ -1,10 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Payment;
 
+use App\Models\AccommodationInventoryTour;
+use App\Models\ActivityInventoryTour;
+use App\Models\Customer;
+use App\Models\FlightInventoryTour;
+use App\Models\Group;
+use App\Models\Merchandise;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Order\Payment\Payment;
+use App\Models\OrderAccommodation;
+use App\Models\OrderActivity;
+use App\Models\OrderFlight;
+use App\Models\OrderMerchandise;
+use App\Models\OrderTransport;
+use App\Models\PaymentMethod;
+use App\Models\TransportInventoryTour;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use DB;
@@ -13,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 use Throwable;
+use function app;
 
 /*
   Data field should be in the structure as follows:
