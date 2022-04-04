@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Order;
 use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

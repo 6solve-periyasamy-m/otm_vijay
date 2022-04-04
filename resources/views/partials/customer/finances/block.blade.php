@@ -1,6 +1,6 @@
 @php
 /**
- * @var \App\Models\Order $order
+ * @var \App\Models\Order\Order $order
  */
 @endphp
 <div class="order order-{{ $order->booking_reference }}">

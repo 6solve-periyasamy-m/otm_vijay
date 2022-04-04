@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\OrderActivity;
-use App\Repository\OrderRepository;
+use App\Models\Order\Order;
 use Illuminate\Http\Request;
 
 class OrderSystemController extends Controller

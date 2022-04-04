@@ -9,11 +9,11 @@ use App\Http\Controllers\Customer\CustomerForgotPasswordController;
 use App\Http\Controllers\Customer\CustomerLoginController;
 use App\Http\Controllers\Customer\CustomerPortalController;
 use App\Http\Controllers\Customer\CustomerRegisterController;
+use App\Http\Controllers\Customer\CustomerResetPasswordController;
 use App\Http\Controllers\Customer\CustomerTourController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Models\AccommodationController;
 use App\Http\Controllers\Models\AccommodationInventoryController;
-use App\Http\Controllers\Customer\CustomerResetPasswordController;
 use App\Http\Controllers\Models\AccommodationInventoryTourController;
 use App\Http\Controllers\Models\ActivityController;
 use App\Http\Controllers\Models\ActivityInventoryController;
@@ -61,7 +61,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
@@ -143,26 +143,26 @@ Route::prefix('admin')->group(function () {
 Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     Route::prefix('orders')->group(function () {
-        Route::get('/', [OrderSystemController::class, 'index'])->name("orders.all")->middleware('bouncer:Order,read');
-        Route::get('/create', [OrderController::class, 'create'])->name('orders.create')->middleware('bouncer:Order,create');
-        Route::post('/create', [OrderController::class, 'store'])->name('orders.store')->middleware('bouncer:Order,create');
+        Route::get('/', [OrderSystemController::class, 'index'])->name("orders.all")->middleware('bouncer:Order\Order,read');
+        Route::get('/create', [OrderController::class, 'create'])->name('orders.create')->middleware('bouncer:Order\Order,create');
+        Route::post('/create', [OrderController::class, 'store'])->name('orders.store')->middleware('bouncer:Order\Order,create');
 
         Route::prefix('{order}')->group(function () {
-            Route::get('/', [OrderSystemController::class, 'show'])->name("orders.view")->middleware('bouncer:Order,read');
-            Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit')->middleware('bouncer:Order,update');
-            Route::post('/update/', [OrderController::class, 'update'])->name('orders.update')->middleware('bouncer:Order,update');
-            Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order,delete');
-            Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order,delete');
-            Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order,read');
-            Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order,read');
-            Route::get('/occupancy', function (Order $order) { return view('pages.occupancy.manager', array_merge(OrderRepository::exportRoomingData($order), ['order' => $order,])); })->name('orders.occupancy')->middleware('bouncer:Order,update');
+            Route::get('/', [OrderSystemController::class, 'show'])->name("orders.view")->middleware('bouncer:Order\Order,read');
+            Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit')->middleware('bouncer:Order\Order,update');
+            Route::post('/update/', [OrderController::class, 'update'])->name('orders.update')->middleware('bouncer:Order\Order,update');
+            Route::post('/delete/', [OrderController::class, 'destroy'])->name('orders.delete')->middleware('bouncer:Order\Order,delete');
+            Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order\Order,delete');
+            Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
+            Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
+            Route::get('/occupancy', function (Order $order) { return view('pages.occupancy.manager', array_merge(OrderRepository::exportRoomingData($order), ['order' => $order,])); })->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
             Route::prefix('installments')->group(function () {
-                Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order,update');
-                Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order,update');
+                Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order\Order,update');
+                Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order\Order,update');
                 Route::prefix('{orderInstallment}')->group(function () {
-                    Route::get('/update', [OrderInstallmentController::class, 'edit'])->name('order-installments.edit')->middleware('bouncer:Order,update');
-                    Route::post('/update', [OrderInstallmentController::class, 'update'])->name('order-installments.update')->middleware('bouncer:Order,update');
-                    Route::post('/delete', [OrderInstallmentController::class, 'destroy'])->name('order-installments.delete')->middleware('bouncer:Order,update');
+                    Route::get('/update', [OrderInstallmentController::class, 'edit'])->name('order-installments.edit')->middleware('bouncer:Order\Order,update');
+                    Route::post('/update', [OrderInstallmentController::class, 'update'])->name('order-installments.update')->middleware('bouncer:Order\Order,update');
+                    Route::post('/delete', [OrderInstallmentController::class, 'destroy'])->name('order-installments.delete')->middleware('bouncer:Order\Order,update');
                 });
             });
 

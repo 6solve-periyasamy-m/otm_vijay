@@ -3,13 +3,13 @@
 namespace App\Repository;
 
 use App\Mail\TemplatedMailable;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\OrderCustomer;
 use App\Models\Payment;
 use Auth;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
-use Exception;
 use Log;
 
 class MailRepository

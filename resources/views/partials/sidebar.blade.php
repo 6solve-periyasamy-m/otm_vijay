@@ -103,7 +103,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Order')
+        @can('read', 'App\Models\Order\Order')
         <li>
             @if(strpos(Request::path(), 'orders') !== false)
             <a href="{{ route('orders.all') }}" class="nav-link active">

@@ -6,19 +6,18 @@ use App\Http\Controllers\ApiController;
 use App\Models\AccommodationInventoryTour;
 use App\Models\ActivityInventoryTour;
 use App\Models\FlightInventoryTour;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\OrderCustomer;
 use App\Models\TransportInventoryTour;
+use App\Transforms\AccommodationTransforms;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
+use App\Transforms\FlightTransforms;
+use App\Transforms\LocationsTransforms;
 use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
-use App\Transforms\FlightTransforms;
 use Illuminate\Http\Request;
-use App\Transforms\AccommodationTransforms;
-use App\Transforms\LocationsTransforms;
-use Log;
 
 class SelectController extends ApiController
 {

@@ -12,7 +12,7 @@ use App\Models\Address;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Operator;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
 use App\Models\OrderCustomer;

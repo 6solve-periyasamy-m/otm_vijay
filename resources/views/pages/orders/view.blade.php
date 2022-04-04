@@ -1,6 +1,6 @@
 @php
 /**
- * @param \App\Models\Order $order;
+ * @param \App\Models\Order\Order $order;
  */
 @endphp
 
@@ -89,7 +89,7 @@
                 ATOL Certificate
             </a>
             @endif
-            @can('delete', \App\Models\Order::class)
+            @can('delete', \App\Models\Order\Order::class)
                 @if($order->cancelled)
                     <a href="#" onclick="$('#order-restore').submit()" class="btn btn-warning"><i class="icon-trash"></i>Restore Order</a>
                     <form action="{{ route('orders.restore', ['order' => $order,]) }}" method="post" id="order-restore">

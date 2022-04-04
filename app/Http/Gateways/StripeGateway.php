@@ -3,7 +3,7 @@
 namespace App\Http\Gateways;
 
 use App\Models\Customer;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\PaymentIntention;
 use Stripe\Checkout\Session;
 

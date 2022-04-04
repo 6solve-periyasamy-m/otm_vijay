@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Helpers\QuarterHelper;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\Tour;
 use Illuminate\Support\Collection;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Gateways;
 
-use App\Models\Order;
+use App\Models\Order\Order;
 use Illuminate\Http\Request;
 
 abstract class Gateway

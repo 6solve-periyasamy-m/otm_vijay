@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Log;
-
-use Illuminate\Http\Request;
-use App\Models\Order;
-use App\Models\Tour;
 use App\Models\Event;
+use App\Models\Order\Order;
+use App\Models\Tour;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {

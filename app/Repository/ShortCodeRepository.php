@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\OrderCustomer;
 use App\Models\Payment;
 use Faker\Factory as Faker;

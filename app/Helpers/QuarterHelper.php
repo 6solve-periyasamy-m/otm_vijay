@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\Tour;
 use App\Repository\SettingsRepository;
 use Carbon\Carbon;

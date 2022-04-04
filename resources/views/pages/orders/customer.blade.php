@@ -152,7 +152,7 @@ $(document).ready( function () {
             <h6 class="badge badge-{{ $orderCustomer->order->getStatus()['color'] }} fw-bold">{{ $orderCustomer->order->getStatus()['status'] }}</h6>
         </div>
         <div class="col-12">
-            @can('update', \App\Models\Order::class)
+            @can('update', \App\Models\Order\Order::class)
                 <a href="{{ route('orders.edit', ['order' => $orderCustomer->order,]) }}" class="btn btn-success">
                     <i class="icon-note"></i>
                     Edit Order

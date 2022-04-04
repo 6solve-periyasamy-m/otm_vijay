@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Order;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use DB;

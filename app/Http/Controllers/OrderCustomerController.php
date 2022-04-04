@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\OrderCustomer;
+use App\Models\Order\Order;
 use App\Models\OrderAccommodation;
 use App\Models\OrderActivity;
+use App\Models\OrderCustomer;
 use App\Models\OrderFlight;
 use App\Models\OrderTransport;
 

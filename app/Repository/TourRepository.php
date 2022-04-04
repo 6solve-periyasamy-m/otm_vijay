@@ -8,12 +8,9 @@ use App\Models\ActivityInventoryTour;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventoryTourUpgrade;
-use App\Models\Order;
-use App\Models\OrderCustomer;
 use App\Models\Tour;
 use App\Models\TransportInventoryTour;
 use App\Models\TransportInventoryTourUpgrade;
-use Illuminate\Support\Facades\DB;
 
 interface TourRepositoryInterface {
     public static function getTourDetails($id);

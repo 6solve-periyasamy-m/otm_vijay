@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Airport;
+use App\Models\Flight;
+use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
+use App\Models\Order\Order;
+use App\Models\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
-use App\Models\Tour;
-use App\Models\Flight;
-use App\Models\Airport;
-use App\Models\Order;
-use App\Models\CustomerOrderDetail;
-use App\Models\FlightInventory;
-use App\Models\OrderCustomer;
 
 class FlightController extends ApiController
 {

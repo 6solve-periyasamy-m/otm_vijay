@@ -8,7 +8,7 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\OrderCustomer;
 use App\Models\Tour;
 use App\Repository\OrderRepository;

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Customer;
+use App\Models\Order\Order;
+use App\Models\OrderCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
-use App\Models\Order;
-use App\Models\Customer;
-use App\Models\OrderCustomer;
 
 class CustomerController extends ApiController
 {

@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 use App\Exceptions\RoomingFailedException;
+use App\Http\Controllers\ApiController;
+use App\Models\Accommodation;
+use App\Models\AccommodationInventory;
+use App\Models\AccommodationInventoryTour;
+use App\Models\BoardType;
+use App\Models\Customer;
+use App\Models\CustomerOrderDetail;
+use App\Models\Order\Order;
+use App\Models\OrderCustomer;
+use App\Models\Tour;
+use App\Repository\ActionsRepository;
+use App\Repository\CustomerOrderDetailRepository;
 use App\Repository\OrderRepository;
 use App\Repository\TourRepository;
 use Exception;
-use App\Models\Tour;
-
-use App\Models\Order;
-use App\Models\Customer;
-use App\Models\BoardType;
 use Illuminate\Http\Request;
-use App\Models\Accommodation;
-use App\Models\OrderCustomer;
-use App\Models\CustomerOrderDetail;
 use Illuminate\Support\Facades\Log;
-use App\Repository\ActionsRepository;
-use App\Models\AccommodationInventory;
-use App\Http\Controllers\ApiController;
-use App\Models\AccommodationInventoryTour;
-use App\Repository\CustomerOrderDetailRepository;
 
 class AccommodationController extends ApiController
 {

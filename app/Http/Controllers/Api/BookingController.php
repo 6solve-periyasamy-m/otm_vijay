@@ -6,20 +6,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Customer;
+use App\Models\CustomerOrderDetail;
+use App\Models\Flight;
+use App\Models\FlightInventoryTour;
+use App\Models\Order\Order;
+use App\Models\OrderCustomer;
+use App\Models\Tour;
+use App\Repository\ActionsRepository;
+use App\Repository\CustomerOrderDetailRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-
-use App\Repository\ActionsRepository;
-use App\Models\Tour;
-use App\Models\Order;
-use App\Models\Flight;
-use App\Models\Customer;
-use App\Models\OrderCustomer;
-use App\Models\CustomerOrderDetail;
-use App\Models\FlightInventory;
-use App\Models\FlightInventoryTour;
-use App\Repository\CustomerOrderDetailRepository;
 
 class BookingController extends ApiController
 {

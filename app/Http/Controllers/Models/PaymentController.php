@@ -6,7 +6,7 @@ use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Events\Order\Payment\PaymentEditedEvent;
 use App\Events\Order\Payment\PaymentRemovedEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 

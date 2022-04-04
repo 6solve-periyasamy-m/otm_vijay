@@ -1,7 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
+use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\ManualAdjustment;
+use App\Models\OrderCustomer;
+use App\Models\OrderInstallment;
+use App\Models\Payment;
+use App\Models\PaymentReminder;
+use App\Models\Tour;
 use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
 use Database\Factories\OrderFactory;
@@ -17,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use function trans;
 
 /**
  * App\Models\Order
