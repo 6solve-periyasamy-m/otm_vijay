@@ -8,11 +8,13 @@ use App\Models\Order\Payment\Payment;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use DB;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 use Throwable;
 
-/**
+/*
   Data field should be in the structure as follows:
   [
    'additions' => [
@@ -39,6 +41,26 @@ use Throwable;
       ]
    ],
   ]
+ */
+/**
+ * App\Models\PaymentIntention
+ *
+ * @property string $id
+ * @property int $customer_id Customer who made the payment intention
+ * @property string $type Payment type
+ * @property string $reference Order reference or Booking token
+ * @property array|null $data Data to be processed once the intention is confirmed
+ * @property bool $processed Has the intention been processed
+ * @method static Builder|PaymentIntention newModelQuery()
+ * @method static Builder|PaymentIntention newQuery()
+ * @method static Builder|PaymentIntention query()
+ * @method static Builder|PaymentIntention whereCustomerId($value)
+ * @method static Builder|PaymentIntention whereData($value)
+ * @method static Builder|PaymentIntention whereId($value)
+ * @method static Builder|PaymentIntention whereProcessed($value)
+ * @method static Builder|PaymentIntention whereReference($value)
+ * @method static Builder|PaymentIntention whereType($value)
+ * @mixin Eloquent
  */
 class PaymentIntention extends Model
 {
