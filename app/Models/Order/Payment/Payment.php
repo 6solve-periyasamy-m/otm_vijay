@@ -22,7 +22,7 @@ use Illuminate\Validation\Rule;
  * @property int $order_id
  * @property int $payment_method_id
  * @property int|null $customer_id
- * @property string $amount
+ * @property float $amount
  * @property Carbon $paid_on Date when payment was made
  * @property string $payment_type Payment Type. Should be Deposit/Installment/Refund
  * @property Carbon|null $deleted_at

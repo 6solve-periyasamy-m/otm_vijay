@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $order_customer_id
- * @property string $amount
+ * @property float $amount
  * @property string $reason
  * @property Carbon $date Date the adjustment was made. This is separate from created_at/updated_at, as it may be done retrospectively.
  * @property Carbon|null $deleted_at

@@ -32,7 +32,7 @@ use Illuminate\Support\Carbon;
  * @property int $tour_id
  * @property int|null $lead_booker_id
  * @property string|null $booking_reference Unique reference for the booking
- * @property string|null $deposit The expected deposit amount
+ * @property float|null $deposit The expected deposit amount
  * @property Carbon $ordered_on When the order was placed
  * @property bool $cancelled Is the order cancelled?
  * @property string|null $internal_notes The notes shown only to the operator

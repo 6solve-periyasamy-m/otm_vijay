@@ -33,8 +33,8 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int|null $order_id
  * @property int|null $customer_id
- * @property string|null $tour_cost Cost for included components for the customer
- * @property string|null $single_occupancy_surcharge Single occupancy surcharge for the customer
+ * @property float|null $tour_cost Cost for included components for the customer
+ * @property float|null $single_occupancy_surcharge Single occupancy surcharge for the customer
  * @property string|null $travel_insurer Travel insurer for the customer
  * @property string|null $policy_number Policy number for the order
  * @property SupportCarbon|null $created_at
