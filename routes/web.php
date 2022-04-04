@@ -167,15 +167,15 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
 
             Route::prefix('adjustments')->group(function () {
-                Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all')->middleware('bouncer:ManualAdjustment,read');
-                Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create')->middleware('bouncer:ManualAdjustment,create');
-                Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual-adjustments.store')->middleware('bouncer:ManualAdjustment,create');
+                Route::get('/', [ManualAdjustmentController::class, 'index'])->name('manual-adjustments.all')->middleware('bouncer:Order\Adjustment\ManualAdjustment,read');
+                Route::get('/create', [ManualAdjustmentController::class, 'create'])->name('manual-adjustments.create')->middleware('bouncer:Order\Adjustment\ManualAdjustment,create');
+                Route::post('/create', [ManualAdjustmentController::class, 'store'])->name('manual-adjustments.store')->middleware('bouncer:Order\Adjustment\ManualAdjustment,create');
 
                 Route::prefix('{manualAdjustment}')->group(function () {
-                    Route::get('/', [ManualAdjustmentController::class, 'view'])->name('manual-adjustments.view')->middleware('bouncer:ManualAdjustment,read');
-                    Route::get('/update', [ManualAdjustmentController::class, 'edit'])->name('manual-adjustments.edit')->middleware('bouncer:ManualAdjustment,update');
-                    Route::post('/update', [ManualAdjustmentController::class, 'update'])->name('manual-adjustments.update')->middleware('bouncer:ManualAdjustment,update');
-                    Route::post('/delete', [ManualAdjustmentController::class, 'destroy'])->name('manual-adjustments.delete')->middleware('bouncer:ManualAdjustment,delete');
+                    Route::get('/', [ManualAdjustmentController::class, 'view'])->name('manual-adjustments.view')->middleware('bouncer:Order\Adjustment\ManualAdjustment,read');
+                    Route::get('/update', [ManualAdjustmentController::class, 'edit'])->name('manual-adjustments.edit')->middleware('bouncer:Order\Adjustment\ManualAdjustment,update');
+                    Route::post('/update', [ManualAdjustmentController::class, 'update'])->name('manual-adjustments.update')->middleware('bouncer:Order\Adjustment\ManualAdjustment,update');
+                    Route::post('/delete', [ManualAdjustmentController::class, 'destroy'])->name('manual-adjustments.delete')->middleware('bouncer:Order\Adjustment\ManualAdjustment,delete');
                 });
             });
 

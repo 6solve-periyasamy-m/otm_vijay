@@ -325,7 +325,7 @@
                     <div class="card-title">
                         <h4 class="fw-bold">Order Adjustments</h4>
                     </div>
-                    @can('create', \App\Models\ManualAdjustment::class)
+                    @can('create', \App\Models\Order\Adjustment\ManualAdjustment::class)
                     <div class="pb-3 text-end">
                         <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}" class="btn btn-success text-white">
                             <i class="icon-plus"></i>
@@ -347,14 +347,14 @@
                                     <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
-                                        @can('update', \App\Models\ManualAdjustment::class)
+                                        @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                             <a href="{{ route('manual-adjustments.edit', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\ManualAdjustment::class)
+                                        @can('delete', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                             <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}" method="post" id="madjustment-{{$adjustment->id}}-delete">
                                                 @csrf

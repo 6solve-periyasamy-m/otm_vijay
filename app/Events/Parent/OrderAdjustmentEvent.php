@@ -2,7 +2,7 @@
 
 namespace App\Events\Parent;
 
-use App\Models\ManualAdjustment;
+use App\Models\Order\Adjustment\ManualAdjustment;
 
 abstract class OrderAdjustmentEvent extends OrderEvent
 {

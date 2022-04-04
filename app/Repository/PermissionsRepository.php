@@ -154,7 +154,7 @@ class PermissionsRepository
                 'group' => 'Orders',
                 'order' => 1,
             ],
-            'ManualAdjustment' => [
+            'Order\Adjustment\ManualAdjustment' => [
                 'name' => 'Manual Adjustment',
                 'group' => 'Orders',
                 'order' => 2,
