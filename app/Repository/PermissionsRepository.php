@@ -144,7 +144,7 @@ class PermissionsRepository
                 'order' => 3,
             ],
             // Orders
-            'Order' => [
+            'Order\Order' => [
                 'name' => 'Order',
                 'group' => 'Orders',
                 'order' => 0,
@@ -165,7 +165,7 @@ class PermissionsRepository
                 'group' => 'Orders',
                 'order' => 0,
             ],
-            'OrderCustomer' => [
+            'Order\OrderCustomer' => [
                 'name' => 'Order Customer',
                 'group' => 'Orders',
                 'order' => 1,
