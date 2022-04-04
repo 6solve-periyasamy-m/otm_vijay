@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Invoice;
 use App\Models\ManualAdjustment;
-use App\Models\OrderInstallment;
 use App\Models\Payment;
 use App\Models\PaymentReminder;
 use App\Models\Tour;

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Order\Order;
+use App\Models\Order\OrderInstallment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
