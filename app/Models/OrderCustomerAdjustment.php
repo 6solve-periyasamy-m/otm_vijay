@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Order\OrderCustomer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderCustomerAdjustment extends Model
@@ -14,17 +15,15 @@ class OrderCustomerAdjustment extends Model
     protected $fillable = ['order_customer_id', 'amount', 'reason', 'date'];
     protected $casts = ['date' => 'datetime'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['date' => 'required|date', 'amount' => 'required|numeric',];
     }
 
-    public function orderCustomer()
+    public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
-
-
 
     public function getCancelledAttribute(): bool
     {
