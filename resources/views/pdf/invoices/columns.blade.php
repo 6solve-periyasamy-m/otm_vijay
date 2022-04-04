@@ -1,6 +1,6 @@
 @php
 /**
- * @var App\Models\Invoice $invoice
+ * @var \App\Models\Order\Invoice $invoice
  * @var \App\Models\Order\Order $order
  */
 $order = $invoice->order;

@@ -4,7 +4,6 @@ namespace App\Models\Order;
 
 use App\Models\Customer;
 use App\Models\Helper\OrderStatus;
-use App\Models\Invoice;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
