@@ -7,6 +7,10 @@ use App\Models\Order\OrderCustomer;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\CustomerAuthenticationRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,9 +25,7 @@ class Customer extends Authenticatable
     use Notifiable;
     use Billable;
 
-    protected $guard = 'customer';
-
-    public $additional_attributes = ['customer_full_name', 'full_name'];
+    protected string $guard = 'customer';
 
     protected $fillable = ['title', 'first_name', 'middle_names', 'last_name', 'date_of_birth', 'mobile_number', 'other_phone_number', 'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone', 'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date','passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id', 'billing_address_id',];
 
@@ -31,7 +33,7 @@ class Customer extends Authenticatable
 
     protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'title' => 'required',
@@ -43,7 +45,7 @@ class Customer extends Authenticatable
         ];
     }
 
-    public function getUpdateValidationRules()
+    public function getUpdateValidationRules(): array
     {
         return [
             'title' => 'required',
@@ -59,52 +61,52 @@ class Customer extends Authenticatable
         ];
     }
 
-    public function getFullName()
-    {
-        return $this->first_name . ' ' . $this->last_name;
-    }
-
-    public function getCustomerFullNameAttribute()
+    public function getCustomerFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
     }
 
     public function getFullNameAttribute(): string
     {
-        return $this->getFullName();
+        return "{$this->first_name} {$this->last_name}";
     }
 
-    public function homeAddress()
+    public function homeAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'home_address_id');
     }
 
-    public function billingAddress()
+    public function billingAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
     }
 
-    public function tShirtSize()
+    public function tShirtSize(): BelongsTo
     {
         return $this->belongsTo(TShirtSize::class, 't_shirt_size_id');
     }
 
-    public function hatSize()
+    public function hatSize(): BelongsTo
     {
         return $this->belongsTo(HatSize::class, 'hat_size_id');
     }
 
-    public function orderCustomers()
+    public function orderCustomers(): HasMany
     {
         return $this->hasMany(OrderCustomer::class, 'customer_id');
     }
 
-    public function orders()
+    public function orders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class, OrderCustomer::class, 'customer_id', 'order_id');
     }
 
-    public function routeNotificationForMail($notification = null)
+    public function leadingOrders(): HasManyThrough
+    {
+        return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'lead_booker_id');
+    }
+
+    public function routeNotificationForMail($notification = null): array
     {
         return [$this->email_address => $this->full_name,];
     }
@@ -119,7 +121,7 @@ class Customer extends Authenticatable
         return $this->email_address;
     }
 
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(CustomerApiToken::class, 'customer_id');
     }
@@ -142,10 +144,5 @@ class Customer extends Authenticatable
     public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
     {
         CustomerAuthenticationRepository::purgeUserTokens($this, $limit);
-    }
-
-    public function leadingOrders()
-    {
-        return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'lead_booker_id');
     }
 }
