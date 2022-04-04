@@ -548,7 +548,7 @@
                         <th scope="row"><a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a></th>
                         <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
                         <td>{{ sizeof($order->orderCustomers) }}</td>
-                        <td><h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status']  }}</h6></td>
+                        <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
                         <td class="actions">
                             <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>

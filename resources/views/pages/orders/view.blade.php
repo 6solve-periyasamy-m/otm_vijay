@@ -38,7 +38,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
-            <h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status'] }}</h6>
+            <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
         </div>                
         <div class="col-12 col-xl-6">
             <p>Order Value</p>

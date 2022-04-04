@@ -55,7 +55,7 @@ class ReportRepository
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
-            $row->orderStatus = $order->getStatus();
+            $row->orderStatus = $order->status->description();
             $data[$order->id] = $row;
         }
         return $data;

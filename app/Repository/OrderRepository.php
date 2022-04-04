@@ -6,6 +6,7 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Exceptions\RoomingFailedException;
 use App\Models\Customer;
 use App\Models\Group;
+use App\Models\Helper\OrderStatus;
 use App\Models\Invoice;
 use App\Models\Merchandise;
 use App\Models\Order\Order;
@@ -345,9 +346,9 @@ class OrderRepository
     /**
      * Get the current status of the order
      * @param Order $order
-     * @return int Status code for order
+     * @return OrderStatus Status code for order
      */
-    public static function getOrderStatus(Order $order): int
+    public static function getOrderStatus(Order $order): OrderStatus
     {
         $paidAmount = self::getPayments($order)['amount'];
         $cost = self::getCost($order);
@@ -355,27 +356,27 @@ class OrderRepository
         $total = $cost + $adjustments;
         if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
-                return -3;
+                return OrderStatus::CANCELLED_FULL_REFUND;
             } else if ($paidAmount <= $order->calculated_deposit) {
-                return -2;
+                return OrderStatus::CANCELLED_DEPOSIT_HELD;
             } else {
-                return -1;
+                return OrderStatus::CANCELLED_REFUND_REQUIRED;
             }
         } else {
             foreach ($order->orderCustomers as $orderCustomer) {
-                if (!$orderCustomer->has_occupancy) return 4;
+                if (!$orderCustomer->has_occupancy) return OrderStatus::OCCUPANCY_NOT_SET;
             }
             if ($total > $paidAmount) {
                 $next = self::getNextPaymentDetails($order);
                 if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
-                    return 2;
+                    return OrderStatus::PAYMENT_OVERDUE;
                 } else {
-                    return 1;
+                    return OrderStatus::BALANCE_OUTSTANDING;
                 }
             } elseif ($total < $paidAmount) {
-                return 3;
+                return OrderStatus::OVERPAID;
             } else {
-                return 0;
+                return OrderStatus::PAID_IN_FULL;
             }
         }
     }

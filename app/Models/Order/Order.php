@@ -3,6 +3,7 @@
 namespace App\Models\Order;
 
 use App\Models\Customer;
+use App\Models\Helper\OrderStatus;
 use App\Models\Invoice;
 use App\Models\ManualAdjustment;
 use App\Models\OrderCustomer;
@@ -59,7 +60,7 @@ use function trans;
  * @property-read float $remaining Remaining amount left to be paid
  * @property-read float $remaining_installment Remaining cost on the due installment
  * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
- * @property-read string $status The string version of the order status
+ * @property-read OrderStatus $status The status of the order
  * @property-read float $total The total cost of the order
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
  * @property-read int|null $installments_count The amount of installments for the order
@@ -188,29 +189,9 @@ class Order extends Model
         return $this->leadBooker->customer_name;
     }
 
-    public function getStatusAttribute(): string
+    public function getStatusAttribute(): OrderStatus
     {
-        return $this->getStatus()['status'];
-    }
-
-    public function getStatus(): array
-    {
-        return self::getStatusArray(OrderRepository::getOrderStatus($this));
-    }
-
-    public static function getStatusArray(int $status): array
-    {
-        return match ($status) {
-            -3 => ['status' => trans('custom.order.status.cancelled.full'), 'color' => 'secondary',],
-            -2 => ['status' => trans('custom.order.status.cancelled.deposit'), 'color' => 'secondary',],
-            -1 => ['status' => trans('custom.order.status.cancelled.required'), 'color' => 'secondary',],
-            0 => ['status' => trans('custom.order.status.full'), 'color' => 'success'],
-            1 => ['status' => trans('custom.order.status.outstanding'), 'color' => 'warning'],
-            2 => ['status' => trans('custom.order.status.overdue'), 'color' => 'danger'],
-            3 => ['status' => trans('custom.order.status.overpaid'), 'color' => 'info'],
-            4 => ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'],
-            default => ['status' => 'Status Unknown', 'color' => 'dark'],
-        };
+        return OrderRepository::getOrderStatus($this);
     }
 
     public function getPaidAttribute(): float

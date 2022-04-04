@@ -149,7 +149,7 @@ $(document).ready( function () {
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
-            <h6 class="badge badge-{{ $orderCustomer->order->getStatus()['color'] }} fw-bold">{{ $orderCustomer->order->getStatus()['status'] }}</h6>
+            <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6>
         </div>
         <div class="col-12">
             @can('update', \App\Models\Order\Order::class)
