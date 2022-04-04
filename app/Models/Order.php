@@ -17,8 +17,9 @@ class Order extends Model
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
-    protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
+
+    protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
 
     public static function getValidationRules(): array
     {
@@ -83,6 +84,11 @@ class Order extends Model
         return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
     }
 
+    public function customers(): HasManyThrough
+    {
+        return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
+    }
+
     public function getNextInstallment(): array
     {
         return OrderRepository::getNextPaymentDetails($this);
@@ -91,11 +97,6 @@ class Order extends Model
     public function getAdditionals(): array
     {
         return OrderRepository::getOrderAdditionals($this);
-    }
-
-    public function customers(): HasManyThrough
-    {
-        return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
     public function getLeadBookerNameAttribute(): string
