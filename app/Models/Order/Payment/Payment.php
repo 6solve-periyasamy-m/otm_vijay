@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 /**
- * App\Models\Payment
+ * App\Models\Order\Payment\Payment
  *
  * @property int $id
  * @property int $order_id

@@ -26,7 +26,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Order
+ * App\Models\Order\Order
  *
  * @property int $id
  * @property int $tour_id

@@ -13,7 +13,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\OrderCustomerAdjustment
+ * App\Models\Order\Adjustment\OrderCustomerAdjustment
  *
  * @property int $id
  * @property int $order_customer_id

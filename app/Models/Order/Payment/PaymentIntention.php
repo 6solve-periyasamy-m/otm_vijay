@@ -55,7 +55,7 @@ use function app;
   ]
  */
 /**
- * App\Models\PaymentIntention
+ * App\Models\Order\Payment\PaymentIntention
  *
  * @property string $id
  * @property int $customer_id Customer who made the payment intention

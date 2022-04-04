@@ -11,7 +11,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\PaymentMethod
+ * App\Models\Order\Payment\PaymentMethod
  *
  * @property int $id
  * @property string $name
