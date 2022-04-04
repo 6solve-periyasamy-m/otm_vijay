@@ -169,7 +169,7 @@ class PaymentIntention extends Model
         return true;
     }
 
-    private function getOwner(string $componentType, Order $order, int $id)
+    private function getOwner(string $componentType, Order $order, int $id): Group|OrderCustomer|null
     {
         return $componentType == 'accommodation' ?
             Group::find($id) :
