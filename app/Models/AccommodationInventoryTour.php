@@ -69,9 +69,9 @@ class AccommodationInventoryTour extends Model
         return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
-    public function getTourNameAttribute()
+    public function getTourNameAttribute(): string
     {
-        return $this->tour->name;
+        return $this->tour?->name ?? 'Tour Deleted';
     }
 
     public function inventory()
