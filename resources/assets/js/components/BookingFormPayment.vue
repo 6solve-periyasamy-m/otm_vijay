@@ -17,10 +17,10 @@
                                 {{traveller.customer.first_name}} {{traveller.customer.last_name}}
                             </div>
                         </div>
-                        <div v-if="booking.accommodation != undefined">
+                        <div v-if="booking.accommodations != undefined">
                             <h3>Accommodations</h3>
                             <div class="block accommodations" v-for="accommodation in booking.accommodations" :key="accommodation.accmoodation_inventory_tour_id">
-                              {{accommodation.customer_id}} {{accommodation.accommodation_name}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
+                              {{accommodation.first_name}} {{accommodation.last_name}} {{accommodation.group_id ? accommodation.group_name : ''}} {{accommodation.room_type_name}} {{accommodation.board_type_name}}
                             </div>
                         </div>
                         <div v-if="booking.flights != undefined">
@@ -212,7 +212,7 @@ export default {
             that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             that.countTravellers()
         })
-        bus.$on('recalculate', () => {
+        bus.$on('recalculatePayment', () => {
             this.debug && console.log('Recalculat payment event')
             that.loadBooking(that.booking_token)
             that.calcPrice()

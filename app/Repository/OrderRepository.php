@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Exceptions\RoomingFailedException;
+use App\Models\AccommodationInventoryTour;
+use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
+use App\Models\FlightInventoryTour;
 use App\Models\Group;
 use App\Models\Merchandise;
 use App\Models\Order;
@@ -19,10 +22,13 @@ use App\Models\PaymentReminder;
 use App\Models\Invoice;
 use App\Models\RoomType;
 use App\Models\Tour;
+use App\Models\TransportInventoryTour;
 use App\Repository\Facades\StringFormatter;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\ArrayShape;
 use Log;
 use mikehaertl\pdftk\Pdf;
 use Storage;
@@ -623,6 +629,14 @@ class OrderRepository
         return false;
     }
 
+    public static function getOrderCustomer(Order $order, Customer $customer): ?OrderCustomer
+    {
+        foreach ($order->orderCustomers as $orderCustomer) {
+            if ($orderCustomer->customer_id == $customer->id) return $orderCustomer;
+        }
+        return null;
+    }
+
     public static function getCustomersForOrder(Order $order)
     {
         $customers = [];
@@ -837,12 +851,12 @@ class OrderRepository
         return self::generateAtolCertificate($order)->send();
     }
 
-    public static function generateAllAtolCertificates(Tour $tour): ?string
+    public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
     {
         Storage::makeDirectory('uploads/atol');
         while (true) {
             try {
-                $filename = str_replace(' ', '_', strtolower($tour->name)) . '-' . now()->unix();
+                $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
                 $directory = 'public/' . $filename;
                 if (Storage::exists($directory)) continue;
                 Storage::makeDirectory($directory);
@@ -851,11 +865,14 @@ class OrderRepository
                 continue;
             }
         }
-        foreach ($tour->orders as $order) {
+        foreach ($orders as $order) {
             if ($order->cancelled) continue;
             if (!$order->has_atol_certificate) continue;
             $atol = self::generateAtolCertificate($order);
-            $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
+            $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
+            if (!$saved) {
+                dd($atol->getError());
+            }
         }
         $zip = new ZipArchive();
         if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
@@ -866,7 +883,7 @@ class OrderRepository
             $zip->close();
             Storage::deleteDirectory($directory);
             return asset('uploads/atol/' . $filename . '.zip');
-        }
+        } else
         return null;
     }
 
@@ -933,5 +950,273 @@ class OrderRepository
             return false;
         }
         return true;
+    }
+
+    #[ArrayShape(['accommodation' => "array", 'activities' => "array", 'flights' => "array", 'transports' => "array"])]
+    public static function getAvailableForExtras(OrderCustomer $orderCustomer): array
+    {
+        $tour = $orderCustomer->order->tour;
+        $data = ['accommodation' => [], 'activities' => [], 'flights' => [], 'transports' => []];
+        $owned = self::getOwnedTourComponents($orderCustomer);
+        $roomTypeId = $orderCustomer?->primary_group->room_type_id ?? 0;
+        foreach ($tour->accommodationInventoryTours as $tourInventory) {
+            $inventory = $tourInventory->inventory;
+            if ($inventory->room_type_id !== $roomTypeId) continue;
+            if ($tourInventory->tour_component_type == 'Upgrade') continue;
+            $subData = ['id' => $tourInventory->id,
+                        'description' => $inventory->customer_display,
+                        'owned' => in_array($tourInventory->id, $owned['accommodation']),
+                        'upgrades' => [],
+                        'change' => $tourInventory->tour_component_type == 'Add-on',
+                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+            $upgraded = false;
+            foreach ($tourInventory->upgrades as $upgrade) {
+                $owns = in_array($tourInventory->id, $owned['accommodation']);
+                if ($owns) $upgraded = true;
+                $subData['upgrades'][] =
+                    ['id' => $upgrade->upgrade_id,
+                    'description' => $upgrade->description,
+                    'owned' => $owns,
+                    'change' => true,
+                    'cost' => $upgrade->upgrade->tour_sales_price,];
+            }
+            $subData['upgraded'] = $upgraded;
+            $data['accommodation'][] = $subData;
+        }
+        foreach ($tour->activityInventoryTours as $tourInventory) {
+            $inventory = $tourInventory->inventory;
+            if ($tourInventory->tour_component_type == 'Upgrade') continue;
+            $subData = ['id' => $tourInventory->id,
+                        'description' => $inventory->__toString(),
+                        'owned' => in_array($tourInventory->id, $owned['activities']),
+                        'upgrades' => [], 'change' => true,
+                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+            $upgraded = false;
+            foreach ($tourInventory->upgrades as $upgrade) {
+                $owns = in_array($tourInventory->id, $owned['activities']);
+                if ($owns) $upgraded = true;
+                $subData['upgrades'][] =
+                    ['id' => $upgrade->upgrade_id,
+                        'description' => $upgrade->description,
+                        'owned' => $owns,
+                        'change' => true,
+                        'cost' => $upgrade->upgrade->tour_sales_price,];
+            }
+            $subData['upgraded'] = $upgraded;
+            $data['activities'][] = $subData;
+        }
+        foreach ($tour->flightInventoryTours as $tourInventory) {
+            $inventory = $tourInventory->inventory;
+            if ($tourInventory->tour_component_type == 'Upgrade') continue;
+            $subData = ['id' => $tourInventory->id, 'description' => $inventory->__toString(),
+                        'owned' => in_array($tourInventory->id, $owned['flights']),
+                        'upgrades' => [],
+                        'change' => $tourInventory->tour_component_type == 'Add-on',
+                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+            $upgraded = false;
+            foreach ($tourInventory->upgrades as $upgrade) {
+                $owns = in_array($tourInventory->id, $owned['flights']);
+                if ($owns) $upgraded = true;
+                $subData['upgrades'][] =
+                    ['id' => $upgrade->upgrade_id,
+                        'description' => $upgrade->description,
+                        'owned' => $owns,
+                        'change' => true,
+                        'cost' => $upgrade->upgrade->tour_sales_price,];
+            }
+            $subData['upgraded'] = $upgraded;
+            $data['flights'][] = $subData;
+        }
+        foreach ($tour->transportInventoryTours as $tourInventory) {
+            $inventory = $tourInventory->inventory;
+            if ($tourInventory->tour_component_type == 'Upgrade') continue; // Upgrades are handled from their parent
+            $subData = ['id' => $tourInventory->id, 'description' => $inventory->__toString(),
+                        'owned' => in_array($tourInventory->id, $owned['transports']),
+                        'upgrades' => [],
+                        'change' => $tourInventory->tour_component_type == 'Add-on',
+                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+            $upgraded = false;
+            foreach ($tourInventory->upgrades as $upgrade) {
+                $owns = in_array($tourInventory->id, $owned['transports']);
+                if ($owns) $upgraded = true;
+                $subData['upgrades'][] =
+                    ['id' => $upgrade->upgrade_id,
+                        'description' => $upgrade->description,
+                        'owned' => $owns,
+                        'change' => true,
+                        'cost' => $upgrade->upgrade->tour_sales_price,];
+            }
+            $subData['upgraded'] = $upgraded;
+            $data['transports'][] = $subData;
+        }
+        return $data;
+    }
+
+    /**
+     * @param OrderCustomer $orderCustomer
+     * @return array
+     */
+    #[ArrayShape(['accommodation' => "array", 'activities' => "array", 'flights' => "array", 'transports' => "array"])]
+    private static function getOwnedTourComponents(OrderCustomer $orderCustomer): array
+    {
+        $data = ['accommodation' => [], 'activities' => [], 'flights' => [], 'transports' => []];
+        foreach ($orderCustomer->orderAccommodation() as $orderComponent) {
+            $data['accommodation'][] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
+                $data['accommodation'][] = $orderComponent->tourComponent->parent()->id;
+        }
+        foreach ($orderCustomer->orderActivities as $orderComponent) {
+            $data['activities'][] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
+                $data['activities'][] = $orderComponent->tourComponent->parent()->id;
+        }
+        foreach ($orderCustomer->orderFlights as $orderComponent) {
+            $data['flights'][] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
+                $data['flights'][] = $orderComponent->tourComponent->parent()->id;
+        }
+        foreach ($orderCustomer->orderTransports as $orderComponent) {
+            $data['transports'][] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
+                $data['activities'][] = $orderComponent->tourComponent->parent()->id;
+        }
+        return [
+            'accommodation' => array_unique($data['accommodation']),
+            'activities' => array_unique($data['activities']),
+            'flights' => array_unique($data['flights']),
+            'transports' => array_unique($data['transports']),
+        ];
+    }
+
+    public static function getAllAdditionals(Order $order): array
+    {
+        $data = [];
+        foreach ($order->tour->merchandise as $tourComponent) {
+            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), ];
+        }
+        foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
+            }
+        }
+        foreach ($order->tour->activityInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),];
+            }
+        }
+        foreach ($order->tour->flightInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
+            }
+        }
+        foreach ($order->tour->transportInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'transport', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),];
+            }
+        }
+        usort($data, function ($previous, $next) { return $previous['date'] <=> $next['date']; });
+        return $data;
+    }
+
+    public static function getOrderCustomerAdditionals(OrderCustomer $orderCustomer)
+    {
+        $order = $orderCustomer->order;
+        $owned = self::getOwnedComponentsAndUpgradedIncluded($orderCustomer);
+        $data = [];
+        foreach ($order->tour->merchandise as $tourComponent) {
+            $owns = in_array($tourComponent->id, $owned['extras']);
+            if ($tourComponent->available_stock <= 0 && !$owned) continue;
+            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owns,];
+        }
+        foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type == 'Add-on') {
+                $inventory = $tourComponent->inventory;
+                $owns = in_array($tourComponent->id, $owned['accommodation']);
+                if ($tourComponent->available_stock <= 0 && !$owned) continue;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => $owns];
+            }
+        }
+        foreach ($order->tour->activityInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type !== 'Upgrade') {
+                $inventory = $tourComponent->inventory;
+                if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),'owned' => false,];
+            }
+        }
+        foreach ($order->tour->flightInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type  !== 'Upgrade') {
+                $inventory = $tourComponent->inventory;
+                if (in_array($tourComponent->id, $owned['flights'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => false,];
+            }
+        }
+        foreach ($order->tour->transportInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type !== 'Upgrade') {
+                $inventory = $tourComponent->inventory;
+                if (in_array($tourComponent->id, $owned['transport'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'transport', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),'owned' => false,];
+            }
+        }
+        return $data;
+    }
+
+    public static function getOwnedComponentsAndUpgradedIncluded(OrderCustomer $orderCustomer)
+    {
+        $data = [];
+        $subData = [];
+        foreach ($orderCustomer->orderAccommodation() as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['accommodation'] = array_unique($subData);
+        $subData = [];
+        foreach ($orderCustomer->orderActivities as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['activities'] = array_unique($subData);
+        $subData = [];
+        foreach ($orderCustomer->orderFlights as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['flights'] = array_unique($subData);
+        $subData = [];
+        foreach ($orderCustomer->orderTransports as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['transport'] = array_unique($subData);
+        $subData = [];
+        foreach ($orderCustomer->orderMerchandise as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+        }
+        $data['extras'] = array_unique($subData);
+        return $data;
     }
 }

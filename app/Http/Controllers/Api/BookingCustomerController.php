@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 
-use App\Models\Booking;
-use App\Models\Customer;
+use Carbon\Carbon;
 use App\Models\Address;
+use App\Models\Booking;
+
+use App\Models\Customer;
 
 use Illuminate\Http\Request;
-
 use App\Models\BookingTraveller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
@@ -29,61 +30,19 @@ class BookingCustomerController extends ApiController
      * checkActiveUser: is the email address registered already?
      *
      * @param String $email
-     * @return Boolean $isRegistered
+     * @return Boolean existing (is active user), customer and token (frontend can check)
      */
     public function checkActiveUser($email)
     {
         $customerRepo = new CustomerRepository();
         $isRegistered = $customerRepo->isRegistered($email);
+        if ($isRegistered) {
+            $customer = Customer::where('email_address', $email)->first();
+            $booking = Booking::where('customer_id', $customer->id)->first();
+            return response()->json(["success" => true, "existing" => $isRegistered, "customer" => $customer, "token" => $booking->token]);
+        }   
 
-        return response()->json(["success" => true, "existing" => $isRegistered]);
-    }
-
-    /**
-     * returns a random salt hash for use with an email
-     *
-     * @param [type] $email
-     * @return void
-     */
-    public function salt($email)
-    {
-        $t = intval(time() % 65535);
-        $raw = sprintf('%s%d', $email, $t);
-        $auth = Hash::make($raw);
-        $this->authRequests[$email] = $auth;
-
-        return response()->json(["success" => true, "auth" => $auth]);
-    } 
-
-    // interesting idea, but replace with regular user login
-    // by adding a callback URL to it.
-    public function authenticate(Request $request)
-    {
-        // ignore auth label
-        $token = substr($request->header('Authorization'), 6);
-        $decoded = base64_decode($token);
-        $decoded = base64_decode($decoded);
-        $parts = explode(':', $decoded);
-
-        $email = $parts[2];
-        $password = $parts[1];
-        $isalt = $parts[0];
-        Log::info('active authRequests', $this->authRequests);
-        $salt = $this->authRequests[$email]; 
-        unset($this->authRequests[$email]);
-
-        if ($isalt !== $salt) {
-            return response()->json(["success" => false]);
-        }
-
-        $authorized = false;
-        $customer = new Customer();
-        $customer->where('email_address', $email)
-            ->where('password', Hash::make($password))
-            ->first();
-        $authorized = $customer->count() === 1;
-
-        return response()->json(["success" => true, "authorized" => $authorized]);
+        return response()->json(["success" => false]);
     }
 
     /**
@@ -155,6 +114,7 @@ class BookingCustomerController extends ApiController
             'date_of_birth' => $request->date_of_birth,
             'mobile_number' => $request->mobile_number,
             'other_phone_number' => $request->other_phone_number,
+            'country_id' => $request->country_id,
             'gender' => $request->gender,
             'address_line_1' => $request->address_line_1
         ];
@@ -163,6 +123,7 @@ class BookingCustomerController extends ApiController
         // if the customer exists, update the addresses
         if (isset($customer) && isset($customer->email_address)) {
             if ($isLead) {
+                Log::debug('Updating address', [$customer]);
                 $addressIds = $this->update_addresses($request, $customer);
                 // MAR record may have been created
                 if ($addressIds['home_address_id']) {
@@ -177,6 +138,7 @@ class BookingCustomerController extends ApiController
             $customerData['email_address'] = $request->email_address;
             if ($isLead) {
                 // a new lead customer record creates the booking record and address records
+                Log::debug('Creating address');
                 $addressIds = $this->create_addresses($request);
                 $customerData['home_address_id'] = $addressIds['home_address_id'];
                 $customerData['billing_address_id'] = $addressIds['billing_address_id'];
@@ -200,17 +162,6 @@ class BookingCustomerController extends ApiController
     // but ensure that a minimal address (type) exists for the customer
     private function create_minimal_address($customerData, $type)
     {
-        /*
-        if (empty($customerData)) {
-            return;
-        }
-        if ($type == 'home' && $customerData['home_address_id'] !== null) {
-            return;
-        }
-        if ($type == 'billing' && $customerData['billing_address_id'] !== null) {
-            return;
-        }
-        */
         // do not update an address that already exists
         $address = new Address();
         if (isset($customerData['id']) && $address->where('customer_id', $customerData['id'])->count()) {
@@ -325,6 +276,8 @@ class BookingCustomerController extends ApiController
             'same_adress' => $request->same_address
         ];
         $home_address = $addressRepo->create($address_record);
+        $this->logging && Log::debug('creating address', [$home_address]);
+
         if (isset($home_address) && isset($home_address->id)) {
             $home_address_id = $home_address->id;
         } else {
@@ -368,6 +321,12 @@ class BookingCustomerController extends ApiController
         ];
     }
 
+    /**
+     * updateLoginToken
+     *
+     * @param Request $request email and login_token
+     * @return JSON customer
+     */
     public function updateLoginToken(Request $request) 
     {
         $email = $request->email;
@@ -390,7 +349,7 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
-    private function createUpdateBookingTraveller($token, $customer) 
+    private function updateBookingTraveller($token, $customer) 
     {
         $bookingRepo = new BookingRepository();
         $booking = $bookingRepo->findBookingByToken($token);
@@ -404,16 +363,17 @@ class BookingCustomerController extends ApiController
     }
 
     /**
-     * leadTraveller - save the leadTraveller data
-     * does not appear to be used???
+     * leadTraveller - save the leadTraveller data: 
+     * hands request to storeOrUpdateCustomer (which validates request)
      *
      * @param Request $request
-     * @return array of what was saved in customer and orderCustomer
+     * @return JSON customer 
      */
     public function leadTraveller(Request $request)
     {
+        Log::debug('BookingCustomerController:leadTraveller', [$request->booking_token]);
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, true);
-        $this->createUpdateBookingTraveller($request->booking_token, $customer);
+        $this->updateBookingTraveller($request->booking_token, $customer);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }
@@ -428,16 +388,16 @@ class BookingCustomerController extends ApiController
     {
         $this->logging == 'customers' && Log::debug('BookingTraveller', $request->toArray());
         $customer = $this->storeOrUpdateCustomer($request, $request->booking_token, false);
-        $this->createUpdateBookingTraveller($request->booking_token, $customer);
+        $this->updateBookingTraveller($request->booking_token, $customer);
 
         return response()->json(['success' => true, 'customer' => $customer]);
     }
 
     /**
-     * loadTravellers
+     * loadTravellers for a booking
      *
      * @param STRING $token
-     * @return JSON 
+     * @return JSON travellers
      */
     public function loadTravellers($token) {
         $bookingRepo = new BookingRepository();
@@ -456,6 +416,12 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true, 'travellers' => $travellers]);
     }
 
+    /**
+     * removeBookingTraveller - deletes the bookingTraveller record
+     *
+     * @param Request $request
+     * @return Success
+     */
     public function removeBookingTraveller(Request $request)
     {
         $request->validate([
@@ -475,4 +441,3 @@ class BookingCustomerController extends ApiController
         return response()->json(['success' => true]);
     }
 }
-

@@ -29,6 +29,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
                 if (isset($order)) {
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::firstOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);
+                    $intention->process();
                     $intention->processed = true;
                     $intention->save();
                     event(new PaymentCreatedEvent($payment));

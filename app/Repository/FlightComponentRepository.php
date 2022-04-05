@@ -47,6 +47,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         $components = [];
         foreach ($tour->flightInventoryTours as $component) {
             if ($component->tour_component_type !== "Upgrade") {
+                if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->flightInventory->flight_number;

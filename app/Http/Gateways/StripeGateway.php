@@ -8,7 +8,7 @@ use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway
 {
-    public static function checkout(array $items, string $reference, string $paymentType, int $customerId)
+    public static function checkout(array $items, string $reference, string $paymentType, int $customerId, ?array $intentionData = null)
     {
         $lineItems = [];
         foreach ($items as $item) {
@@ -18,12 +18,12 @@ class StripeGateway extends Gateway
                     'product_data' => [
                         'name' => $item['name'],
                     ],
-                    'unit_amount' => $item['cost'] * 100,
+                    'unit_amount' => round($item['cost'] * 100),
                 ],
                 'quantity' => $item['quantity'],
             ];
         }
-        $intention = PaymentIntention::build(Customer::find($customerId), $reference, $paymentType);
+        $intention = PaymentIntention::build(Customer::find($customerId), $reference, $paymentType, $intentionData);
         $session = Session::create([
             'line_items' => $lineItems,
             'mode' => 'payment',

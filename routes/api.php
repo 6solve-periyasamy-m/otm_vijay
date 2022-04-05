@@ -4,8 +4,6 @@
 | API Routes
 |--------------------------------------------------------------------------
 */
-
-use App\Http\Controllers\BespokeReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -24,8 +22,9 @@ use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\BookingCustomerController;
-
+use App\Http\Controllers\Api\CustomerComponentController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\BespokeReportController;
 use App\Repository\OrderRepository;
 
 /**
@@ -53,19 +52,15 @@ Route::prefix('booking')->group(function () {
     Route::get('/accommodation/inventory/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
     Route::get('/accommodation/tour/{tour}', [AccommodationController::class, 'getAccommodationInventoryForTour']);
     Route::post('/accommodation/reserve', [AccommodationController::class, 'postAccommodationReservation']);
-    //Route::post('/accommodation/{tour}/{orders_customer}/{reference}/{accommodation_inventory}/{order}', [AccommodationController::class, 'postAccommodationBooking']);
     Route::post('/accommodation/reset', [AccommodationController::class, 'deleteAccommodationReservation']);
     Route::post('/accommodation/delete', [AccommodationController::class, 'deleteAccommodationReservation']);
+
     // accommodation rooms
     //Route::get('/accommodation/options/{tour}', [AccommodationController::class, 'getAccommodationOptions']);
     Route::get('/accommodation/booking/{token}/tour/{tour}', [AccommodationController::class, 'getAccommodationBooking']);
     Route::get('/accommodation/rooms/tour/{tour}', [AccommodationController::class, 'loadRoomsForTour']);
     // Route::post('/booking/get/accommodation', [AccommodationController::class, 'getAccommodationBooking']);
     Route::get('/tour/price/{tour_id}', [TourController::class, 'getTourPrice']);
-    // Events
-    Route::get('/events', [TourController::class, 'getEvents']);
-    Route::get('/tours/{event_id}', [TourController::class, 'getTours']);
-    Route::get('/tour/{id}', [TourController::class, 'getTour']);
 
     // Airlines
     Route::get('/airlines', [AirlinesController::class, 'getAirlines']);
@@ -102,10 +97,17 @@ Route::prefix('booking')->group(function () {
     // create Booking Order
     Route::get('/auth/token/{email}', [BookingCustomerController::class, 'salt']);
     Route::post('/create-booking', [BookingController::class, 'create']);
+    Route::post('/name/update', [BookingController::class, 'update']);
     Route::post('/deposit/calculate', [BookingController::class, 'calculateDeposit']);
     
     Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
 
+
+    // Events (not currently supported, protect with middleware: public tours are obtained by tour name only)
+    Route::get('/events', [TourController::class, 'getEvents']);
+    Route::get('/tours/{event_id?}', [TourController::class, 'getTours']);
+    Route::get('/tour/{id}', [TourController::class, 'getTour']);
+    
     // Route::post('/set-login-token', [BookingCustomerController::class, 'updateLoginToken']);
     // Route::post('/create-order', [BookingController::class, 'createOrder']);
 
@@ -149,16 +151,41 @@ Route::middleware('auth:api')->group(function() {
     });   
 });
 
-Route::middleware('api.token.both')->name('api.')->group(function () {
+Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {
         Route::post('countries', [SelectController::class, 'getCountries'])->name('countries.select');
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
         Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
+        Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
+        Route::post('available-accommodation/{orderCustomer}', [SelectController::class, 'getAvailableAccommodation'])->name('available-accommodation.select');
+        Route::post('available-activities/{orderCustomer}', [SelectController::class, 'getAvailableActivities'])->name('available-activities.select');
+        Route::post('available-flights/{orderCustomer}', [SelectController::class, 'getAvailableFlights'])->name('available-flights.select');
+        Route::post('available-transports/{orderCustomer}', [SelectController::class, 'getAvailableTransport'])->name('available-transports.select');
         Route::prefix('selected')->group(function () {
             Route::post('country/{id}', [SelectController::class, 'getSelectedCountry'])->name('countries.selected');
             Route::post('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
             Route::post('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
         });
+    });
+
+    Route::prefix('orders')->name('order.')->group(function() {
+        Route::prefix('addons')->name('addon.')->group(function () {
+            Route::prefix('add')->name('add.')->group(function () {
+                Route::post('/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('accommodation');
+                Route::post('/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('activity');
+                Route::post('/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('flight');
+                Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('transport');
+                Route::post('/merchandise/add', [TourComponentController::class, 'addMerchandiseAddon'])->name('merchandise');
+            });
+        });
+        Route::post('accommodation/upgrade', [CustomerComponentController::class, 'applyAccommodationUpgrade'])->name('customer.accommodation.upgrade');
+        Route::post('accommodation/upgrade/buy', [CustomerComponentController::class, 'purchaseAccommodationUpgrade'])->name('customer.accommodation.upgrade.purchase');
+        Route::post('activity/upgrade', [CustomerComponentController::class, 'applyActivityUpgrade'])->name('customer.activity.upgrade');
+        Route::post('activity/upgrade/buy', [CustomerComponentController::class, 'purchaseActivityUpgrade'])->name('customer.activity.upgrade.purchase');
+        Route::post('flight/upgrade', [CustomerComponentController::class, 'applyFlightUpgrade'])->name('customer.flight.upgrade');
+        Route::post('flight/upgrade/buy', [CustomerComponentController::class, 'purchaseFlightUpgrade'])->name('customer.flight.upgrade.purchase');
+        Route::post('transport/upgrade', [CustomerComponentController::class, 'applyTransportUpgrade'])->name('customer.transport.upgrade');
+        Route::post('transport/upgrade/buy', [CustomerComponentController::class, 'purchaseTransportUpgrade'])->name('customer.transport.upgrade.purchase');
     });
 });
 
@@ -187,11 +214,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('customer', [SelectController::class, 'getCustomers'])->name('customers.select');
         Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
-        Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
-        Route::post('available-accommodation/{orderCustomer}', [SelectController::class, 'getAvailableAccommodation'])->name('available-accommodation.select');
-        Route::post('available-activities/{orderCustomer}', [SelectController::class, 'getAvailableActivities'])->name('available-activities.select');
-        Route::post('available-flights/{orderCustomer}', [SelectController::class, 'getAvailableFlights'])->name('available-flights.select');
-        Route::post('available-transports/{orderCustomer}', [SelectController::class, 'getAvailableTransport'])->name('available-transports.select');
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
@@ -267,13 +289,6 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
 
     Route::prefix('orders')->name('order.')->group(function() {
         Route::prefix('addons')->name('addon.')->group(function () {
-            Route::prefix('add')->name('add.')->group(function () {
-                Route::post('/accommodation/add', [TourComponentController::class, 'addAccommodationAddon'])->name('accommodation');
-                Route::post('/activity/add', [TourComponentController::class, 'addActivityAddon'])->name('activity');
-                Route::post('/flight/add', [TourComponentController::class, 'addFlightAddon'])->name('flight');
-                Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('transport');
-                Route::post('/merchandise/add', [TourComponentController::class, 'addMerchandiseAddon'])->name('merchandise');
-            });
             Route::prefix('available')->name('get.')->group(function () {
                 Route::get('/accommodation/{oCustomerId}', [TourComponentController::class, 'getAvailableAccommodationAddons'])->name('accommodation');
                 Route::get('/activities/{oCustomerId}', [TourComponentController::class, 'getAvailableActivityAddons'])->name('activity');

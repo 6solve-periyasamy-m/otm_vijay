@@ -10,6 +10,7 @@ interface AddressRepositoryInterface
     public function __construct();
     public function get($address_id);
     public function create(Array $address);
+    public function update(array $address);
 }
 
 class AddressRepository implements AddressRepositoryInterface
@@ -47,7 +48,7 @@ class AddressRepository implements AddressRepositoryInterface
             $this->model->save();
             return $this->model;
         } catch (\Exception $e) {
-            Log::error("!!! Can not save an address, data: ", [$address]);
+            Log::error("!!! Can not save an address ".$e->getMessage().", data: ", [$address]);
         }
         return null;
     }

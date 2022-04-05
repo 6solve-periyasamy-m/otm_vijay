@@ -45,7 +45,7 @@ if (busEventLogging) {
         console.log('Event Bus: setBookingToken event monitor ', token);
     })
     bus.$on('bookingCreated', booking => {
-        console.log('Event Bus: booking created by lead traveller', booking)
+        console.log('Event Bus: bookingCreated by lead traveller', booking)
     })
     bus.$on('click', function(id) {
         console.log('Event Bus: added traveller', id)

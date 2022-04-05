@@ -58,6 +58,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $components = [];
         foreach ($tour->accommodationInventoryTours as $component) {
             if ($component->tour_component_type  !== "Upgrade") {
+                if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
                 $components[$component->id]['name'] = $component->accommodationInventory->accommodation->name;
@@ -102,7 +103,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
-        $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
         $query->whereRaw("DATE(`accommodation_inventories`.`check_in`) = '{$inventory->check_in->format('Y-m-d')}'");
         $query->where('accommodation_inventories.room_type_id', '=', $roomType->id);
         $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
@@ -184,7 +184,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
 
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
-        $query->where('accommodation_inventories.accommodation_id', '=', $accommodation->id);
         $query->whereRaw("DATE(`accommodation_inventories`.`check_in`) = '{$inventory->check_in->format('Y-m-d')}'");
         $query->where('accommodation_inventory_tours.tour_id', '=', $inventoryTour->tour_id);
         $query->where('accommodation_inventory_tours.tour_component_type', '=', 'Included');

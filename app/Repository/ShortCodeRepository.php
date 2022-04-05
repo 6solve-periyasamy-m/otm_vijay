@@ -37,7 +37,7 @@ class ShortCodeRepository
             'TOUR_SURCHARGE' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $tour->single_occupancy_surcharge),
             'LATEST_INVOICE' => route('customer.invoice', ['reference' => (!isset($order) ? 'reference' : $order->booking_reference),]),
             'PORTAL_LINK' => route('customer.portal'),
-            'ATOL_LINK' => route('customer.atol'),
+            'ATOL_LINK' => route('customer.atol', ['reference' => (!isset($order) ? 'reference' : $order->booking_reference),]),
             'DETAILS_LINK' => route('customer.edit'),
         ];
 

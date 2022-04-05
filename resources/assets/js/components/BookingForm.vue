@@ -4,7 +4,11 @@
             <div class="col-md-12">
                 <div class="card card-default card-container">
                     <div class="card-header bookingform-header">
-                        <div> OTM Booking Form pre-release version 0.90</div>
+                        <div class="bookingform-header__title">
+                            {{agencyName}} 
+                            <label for="booking_name">Booking for </label>
+                            <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" @change="updateBookingName" />
+                        </div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
                     <bookingform-header :event="event" :tour="tour"></bookingform-header>
@@ -12,7 +16,7 @@
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
-                        <div v-if="tour && bookingToken">
+                        <div v-if="tour && bookingToken && leadTraveller">
                             <booking-form-additional :tour="tour"></booking-form-additional>
                             <booking-form-flights :tour="tour"></booking-form-flights>
                             <booking-form-accommodation :tour="tour"></booking-form-accommodation>
@@ -32,6 +36,7 @@
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
 import { setCookie, getCookie, deleteCookie } from '../cookies'
+import axios from 'axios'
 
 export default {
     props: {
@@ -45,6 +50,8 @@ export default {
         return {
             debug: false,
             formInfo: false,
+            bookingName: '',
+            agencyName: 'OTM',
             bookingId: '',
             leadTraveller: null,
             home_address: {},
@@ -66,12 +73,14 @@ export default {
     created() {
         let that = this
 
-        this.debug && console.log('1) BookingForm created for tour:', this.tour)
+        this.debug && console.log('1) BookingForm created '+that.bookingToken,' for tour: ', this.tour)
         bus.$emit('debugOverride', this.debug)
+
         bus.$on('initialiseForm', () => {
             this.resetToken()
             window.location.reload(true)
         })
+
         bus.$on('removeBookingCookie', token => {
             deleteCookie(that.tokenName)
             alert('Booking form clearance')
@@ -80,16 +89,37 @@ export default {
         bus.$on('setLeadTraveller', customer => {
             that.leadTraveller = customer
         })
+
         bus.$on('TermsAgreed', function(state) {
           that.termsaccepted = state
         })
 
-        that.bookingToken = getCookie(that.tokenName)
-        this.debug && console.log('Cookie read:', that.bookingToken)
+        bus.$on('bookingCreated', booking => {
+            that.bookingName = booking.name
+        })
 
+        bus.$on('resetBookingToken', () => {
+            that.resetToken()
+        })
+        bus.$on('retrieveUserData', token => {
+            that.retrieveUserdata(token)
+        }) 
+
+        that.bookingToken = getCookie(that.tokenName)
+        this.debug && console.log('BOOKINGFORM Cookie read:', that.bookingToken)
+        this.retrieveUserdata(that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
-            axios.get(`/api/booking/token/${that.bookingToken}`)
+            this.retrieveUserdata(that.bookingToken)
+        } else {
+            // If booking form has no token may mean consent for cookies is granted but cookies are not permitted?
+            alert('Booking form can not be created, we need your consent to store cookies or please make your booking by phone')
+        }
+    },
+    methods: {
+        retrieveUserdata(token) {
+            let that = this
+            axios.get(`/api/booking/token/${token}`)
             .then(response => {
                 if (response.data.success) {
                     const data = response.data
@@ -98,47 +128,61 @@ export default {
                         alert('error loading booking!')
                         return
                     }
+                    that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
-
-                    bus.$emit('setBookingToken', data.booking.token)
-
-                    // TODO: are these events really needed?
-                    bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                    bus.$emit('homeAddressLoaded', data.customer.home_address)
-                    bus.$emit('billingAddressLoaded', data.customer.billing_address)
-                } else {
-                    // the token is not registered
-                    console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                    that.resetToken()
+                    // alert('setting token')
+                    if (token === data.booking.token) {
+                        bus.$emit('setBookingToken', data.booking.token)
+                        // TODO: are these events really needed?
+                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                        bus.$emit('homeAddressLoaded', data.customer.home_address)
+                        bus.$emit('billingAddressLoaded', data.customer.billing_address)
+                    } else {
+                        // the token is not registered
+                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
+                        // alert('No BookingForm yet'+that.bookingToken)
+                        //that.resetToken()
+                    }
                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
             })
-        } else {
-            console.log('BookingForm: no booking token set, resetting...')
-            that.resetToken()
-        }
-    },
-    methods: {
+        },
         isset(obj) {
             if (typeof obj !== 'undefined' && obj !== null) {
                 return Object.keys(obj).length > 0
             }
         },
+        updateBookingName() {
+            const name = this.bookingName
+            const token = this.bookingToken
+            console.log('update', name)
+            axios.post('/api/booking/name/update', {name: name, token: token})
+                .then(response => {
+                    console.log('updateBookingName response', response)
+                    bus.$emit('controlLoadBookings')
+                })
+                .catch(error => console.log(error))
+        },
         // todo integrate with login - list and activate tokens
         resetToken() {
+            
             let that = this
+            
+            const token = getCookie(this.tokenName)
+            // alert('reset Token ' + token)
             that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
             setCookie(that.tokenName, that.bookingToken)
             that.bookingToken = getCookie(that.tokenName);
             that.debug && console.log('bookingToken reset ', that.bookingToken)
+
             bus.$emit('setBookingToken', that.bookingToken)
         },
-        resetForm() {
-            this.resetToken()
-            window.history.go()
-        },
+        // resetForm() {
+        //     this.resetToken()
+        //     window.history.go()
+        // },
         changeTheme(theme) {
             const bookingForm = document.querySelector('#booking-form')
             bookingForm.classList.remove('cool-theme')
@@ -194,6 +238,11 @@ button.btn-themed.action {
   gap: 2rem;
   flex-direction: row;
   align-content: space-between;
+  input {
+      border: none;
+      padding: 0;
+      font-size: small;
+  }
 }
 .card-container {
   width: 100%;

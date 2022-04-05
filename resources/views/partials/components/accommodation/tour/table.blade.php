@@ -54,7 +54,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Repository\AccommodationComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(11, 59, 59)) as $inventory)
+    @foreach(\App\Repository\AccommodationComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(23, 59, 59)) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
             <td>{{ $inventory->component->address }}</td>

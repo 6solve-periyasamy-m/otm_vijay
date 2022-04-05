@@ -64,6 +64,13 @@ class BookingTravellerRepository implements BookingTravellerRepositoryInterface
     {
         return $a->id;
     }
+
+    /**
+     * getIds
+     *
+     * @param [type] $booking_id
+     * @return Array $ids
+     */
     public function getIds($booking_id)
     {
         $customers = $this->getGroup($booking_id);
@@ -74,6 +81,14 @@ class BookingTravellerRepository implements BookingTravellerRepositoryInterface
 
     }   
 
+    /**
+     * create
+     *
+     * @param integer $booking_id
+     * @param integer $customer_id
+     *
+     * @return Booking
+     */
     public function create($booking_id, $customer_id)
     {
         if ($this->find($booking_id, $customer_id)) {
@@ -86,6 +101,13 @@ class BookingTravellerRepository implements BookingTravellerRepositoryInterface
         return $this->current;
     }
 
+    /**
+     * remove
+     *
+     * @param [type] $booking_id
+     * @param [type] $customer_id
+     * @return Booking
+     */
     public function remove($booking_id, $customer_id)
     {
         return $this->model->where('booking_id', $booking_id)->where('customer_id', $customer_id)->delete();

@@ -12,6 +12,9 @@ use App\Models\Customer;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Log;
+use Storage;
+use Throwable;
 
 class CustomerController extends Controller
 {
@@ -158,6 +161,13 @@ class CustomerController extends Controller
             $customer->billingAddress->save();
         }
         if ($request->has('profile_picture') && $request->file('profile_picture') != null) {
+            if (!empty($customer->profile_picture)) {
+                try {
+                    Storage::delete($customer->profile_picture);
+                } catch (Throwable $e) {
+                    Log::error($e);
+                }
+            }
             $customer->profile_picture = $request->file('profile_picture')->storePublicly('uploads/images/customers');
         }
         $customer->save();
