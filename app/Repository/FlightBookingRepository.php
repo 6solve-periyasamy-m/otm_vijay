@@ -6,7 +6,6 @@ use App\Models\Action;
 use App\Models\Booking;
 
 use App\Models\BookingFlight;
-use App\Models\BookingFlights;
 use Illuminate\Support\Facades\Log;
 
 interface FlightBookingRepositoryInterface {
@@ -21,11 +20,10 @@ class FlightBookingRepository implements FlightBookingRepositoryInterface
 
     public function __construct()
     {
-        $this->model = new BookingFlights();
+        $this->model = new BookingFlight();
     }
     public function getFlightBookings($booking_id, $type = 'Both', $tour_component_type = 'Included')
     {
-        // $booking = new Booking();
         $flightBooking = $this->model
             ->select('bookings.id as booking_id', 
                 'bookings.customer_id',
