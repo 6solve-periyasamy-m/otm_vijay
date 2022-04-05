@@ -69,9 +69,9 @@ class TransportInventoryTour extends Model
             ' (' . $inventory->travelClass->name . ')';
     }
 
-    public function getTourNameAttribute()
+    public function getTourNameAttribute(): string
     {
-        return $this->tour->name;
+        return $this->tour?->name ?? 'Tour Deleted';
     }
 
     public function inventory()

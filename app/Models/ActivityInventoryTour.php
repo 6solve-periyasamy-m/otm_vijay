@@ -67,9 +67,9 @@ class ActivityInventoryTour extends Model
         return $component->name . ' (' . StringFormatter::formatDateTime($inventory->starts_at) . ' to ' . StringFormatter::formatDateTime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
     }
 
-    public function getTourNameAttribute()
+    public function getTourNameAttribute(): string
     {
-        return $this->tour->name;
+        return $this->tour?->name ?? 'Tour Deleted';
     }
 
     public function inventory()
