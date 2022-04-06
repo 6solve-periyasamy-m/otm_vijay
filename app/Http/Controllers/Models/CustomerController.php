@@ -46,7 +46,6 @@ class CustomerController extends Controller
             'mobile_number' => $request->input('mobile_number'),
             'other_phone_number' => $request->input('other_phone_number'),
             'email_address' => $request->input('email_address'),
-            'password' => Hash::make($request->input('password')),
             'gender' => $request->input('gender'),
             'emergency_contact_name' => $request->input('emergency_contact_name'),
             'emergency_contact_relationship' => $request->input('emergency_contact_relationship'),
@@ -63,6 +62,9 @@ class CustomerController extends Controller
             'notes' => $request->input('notes'),
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
+        if (!empty($request->input('password'))) {
+            $customer->password = Hash::make($request->input('password'));
+        }
         $homeAddress = Address::create([
             'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',
             'address_parent_id' => AddressParent::getParentId('customer'),
@@ -119,7 +121,6 @@ class CustomerController extends Controller
             'mobile_number' => $request->input('mobile_number'),
             'other_phone_number' => $request->input('other_phone_number'),
             'email_address' => $request->input('email_address'),
-            'password' => Hash::make($request->input('password')),
             'gender' => $request->input('gender'),
             'emergency_contact_name' => $request->input('emergency_contact_name'),
             'emergency_contact_relationship' => $request->input('emergency_contact_relationship'),
@@ -136,6 +137,9 @@ class CustomerController extends Controller
             'notes' => $request->input('notes'),
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
+        if (!empty($request->input('password'))) {
+            $customer->password = Hash::make($request->input('password'));
+        }
         $customer->homeAddress->update([
             'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',
             'address_line_1' => $request->input('home_address_line_1'),
