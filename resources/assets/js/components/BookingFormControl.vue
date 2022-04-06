@@ -1,17 +1,11 @@
 <template>
     <div class="controls">{{debug ? bookings : null}}
-        <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
-        <div v-if="showControl">
-            <div class="booking-form--control">
-                <button class="btn btn-sm btn-primary" @click="clearForm">Clear form</button>
-                <button v-show="login && activeTokens.length" class="btn btn-sm btn-primary" @click="controlForms">Show forms</button>
-            </div>
-            <div v-if="showForms && activeTokens">
-                <select v-model="activateBooking" @change="activate">
-                  <option default value="" placeholder="Load Tour">Select a booking to load form</option>
-                  <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}} {{booking.name}}</option>
-                </select>
-            </div>
+        <div class="booking-form--control">
+            <select  v-if="activeTokens" v-model="activateBooking" @change="activate">
+              <option value="" disabled>Select a booking to load form</option>
+              <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}} {{booking.name}}</option>
+            </select>
+            <button class="btn btn-sm btn-primary" @click="clearForm">Clear form</button>
         </div>
     </div>
 </template>
@@ -161,5 +155,8 @@ alert('control init form??')
 }
 </script>
 <style scoped lang="scss">
+.controls {
+  display: flex;
+}
 </style>
 

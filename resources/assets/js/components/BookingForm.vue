@@ -3,15 +3,14 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default card-container">
-                    <div class="card-header bookingform-header">
-                        <div class="bookingform-header__title">
-                            {{agencyName}} 
-                            <label for="booking_name">Booking for </label>
+                    <div class="card-header">
+                        <div class="bookingform-header__controls">
+                            <label for="booking_name">{{company}} booking for </label>
                             <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" @change="updateBookingName" />
                         </div>
                         <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
-                    <bookingform-header :event="event" :tour="tour"></bookingform-header>
+                    <bookingform-header :company="company" :logo="logo" :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
                         <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
                         <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
@@ -37,13 +36,16 @@ import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
 import { setCookie, getCookie, deleteCookie } from '../cookies'
 import axios from 'axios'
+import { stringify } from 'querystring'
 
 export default {
     props: {
         auth_user: Object,
         tour: Object,
         event: Object,
-        name: String
+        name: String,
+        company: String,
+        logo: String
     },
     components: { BookingFormTour },
     data() {
@@ -51,7 +53,7 @@ export default {
             debug: false,
             formInfo: false,
             bookingName: '',
-            agencyName: 'OTM',
+            agencyName: this.company,
             bookingId: '',
             leadTraveller: null,
             home_address: {},
