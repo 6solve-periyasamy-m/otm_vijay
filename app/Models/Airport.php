@@ -4,13 +4,48 @@ namespace App\Models;
 
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 
+/**
+ * App\Models\Airport
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $address_id
+ * @property string|null $iata_code
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Address $address
+ * @property-read Collection|Flight[] $flight
+ * @property-read int|null $flight_count
+ * @property-read Collection|FlightInventory[] $flightInventory
+ * @property-read int|null $flight_inventory_count
+ * @method static Builder|Airport newModelQuery()
+ * @method static Builder|Airport newQuery()
+ * @method static QueryBuilder|Airport onlyTrashed()
+ * @method static Builder|Airport query()
+ * @method static Builder|Airport whereAddressId($value)
+ * @method static Builder|Airport whereCreatedAt($value)
+ * @method static Builder|Airport whereDeletedAt($value)
+ * @method static Builder|Airport whereIataCode($value)
+ * @method static Builder|Airport whereId($value)
+ * @method static Builder|Airport whereName($value)
+ * @method static Builder|Airport whereUpdatedAt($value)
+ * @method static QueryBuilder|Airport withTrashed()
+ * @method static QueryBuilder|Airport withoutTrashed()
+ * @mixin Eloquent
+ */
 class Airport extends Model
 {
     use SoftDeletes;
