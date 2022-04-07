@@ -8,33 +8,34 @@ use App\Models\Order\OrderCustomer;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Group extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    use CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['pivot', 'rooms'];
+    protected array $cascadeDeletes = ['pivot', 'rooms'];
     protected $fillable = ['room_type_id','name'];
 
-    public function orderCustomers()
+    public function orderCustomers(): BelongsToMany
     {
         return $this->belongsToMany(OrderCustomer::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 
-    public function pivot()
+    public function pivot(): HasMany
     {
         return $this->hasMany(OrderCustomerGroup::class, 'group_id');
     }
 
-    public function rooms()
+    public function rooms(): HasMany
     {
         return $this->hasMany(OrderAccommodation::class, 'group_id');
     }
 
-    public function roomType()
+    public function roomType(): BelongsTo
     {
         return $this->belongsTo(RoomType::class, 'room_type_id');
     }

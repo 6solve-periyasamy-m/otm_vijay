@@ -4,22 +4,23 @@ namespace App\Models;
 
 use App\Models\Order\OrderCustomer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderCustomerGroup extends Pivot
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
     protected $fillable = ['group_id', 'order_customer_id'];
     public $timestamps = false;
 
-    public function group()
+    public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class, 'group_id');
     }
 
-    public function orderCustomer()
+    public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }

@@ -232,7 +232,7 @@ class Customer extends Authenticatable
         $this->notify(new CustomerResetPassword($token));
     }
 
-    public function getEmailForPasswordReset()
+    public function getEmailForPasswordReset(): ?string
     {
         return $this->email_address;
     }
