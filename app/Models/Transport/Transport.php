@@ -4,8 +4,6 @@ namespace App\Models\Transport;
 
 use App\Models\Address;
 use App\Models\Currency;
-use App\Models\Operator;
-use App\Models\TransportType;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

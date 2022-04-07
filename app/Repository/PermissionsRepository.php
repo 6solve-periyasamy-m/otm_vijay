@@ -133,12 +133,12 @@ class PermissionsRepository
                 'group' => 'Transport',
                 'order' => 1,
             ],
-            'Operator' => [
+            'Transport\Operator' => [
                 'name' => 'Operator',
                 'group' => 'Transport',
                 'order' => 2,
             ],
-            'TransportType' => [
+            'Transport\TransportType' => [
                 'name' => 'Transport Type',
                 'group' => 'Transport',
                 'order' => 3,

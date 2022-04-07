@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Transport;
 
 use App\Models\Helper\SimpleModel;
-use App\Models\Transport\Transport;
 use Database\Factories\OperatorFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

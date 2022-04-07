@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Operator;
+use App\Models\Transport\Operator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OperatorFactory extends Factory

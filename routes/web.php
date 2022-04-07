@@ -312,26 +312,26 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
         });
         Route::prefix('operators')->group(function () {
-            Route::get('/', [OperatorController::class, 'index'])->name('operators.all')->middleware('bouncer:Operator,read');
-            Route::get('/create', [OperatorController::class, 'create'])->name('operators.create')->middleware('bouncer:Operator,create');
-            Route::post('/create', [OperatorController::class, 'store'])->name('operators.store')->middleware('bouncer:Operator,create');
+            Route::get('/', [OperatorController::class, 'index'])->name('operators.all')->middleware('bouncer:Transport\Operator,read');
+            Route::get('/create', [OperatorController::class, 'create'])->name('operators.create')->middleware('bouncer:Transport\Operator,create');
+            Route::post('/create', [OperatorController::class, 'store'])->name('operators.store')->middleware('bouncer:Transport\Operator,create');
             Route::prefix('{operator}')->group(function () {
-                Route::get('/', [OperatorController::class, 'view'])->name('operators.view')->middleware('bouncer:Operator,read');
-                Route::get('/update', [OperatorController::class, 'edit'])->name('operators.edit')->middleware('bouncer:Operator,update');
-                Route::post('/update', [OperatorController::class, 'update'])->name('operators.update')->middleware('bouncer:Operator,update');
-                Route::post('/delete', [OperatorController::class, 'destroy'])->name('operators.delete')->middleware('bouncer:Operator,delete');
+                Route::get('/', [OperatorController::class, 'view'])->name('operators.view')->middleware('bouncer:Transport\Operator,read');
+                Route::get('/update', [OperatorController::class, 'edit'])->name('operators.edit')->middleware('bouncer:Transport\Operator,update');
+                Route::post('/update', [OperatorController::class, 'update'])->name('operators.update')->middleware('bouncer:Transport\Operator,update');
+                Route::post('/delete', [OperatorController::class, 'destroy'])->name('operators.delete')->middleware('bouncer:Transport\Operator,delete');
 
             });
         });
         Route::prefix('transport-types')->group(function () {
-            Route::get('/', [TransportTypeController::class, 'index'])->name('transport-types.all')->middleware('bouncer:Operator,read');
-            Route::get('/create', [TransportTypeController::class, 'create'])->name('transport-types.create')->middleware('bouncer:Operator,create');
-            Route::post('/create', [TransportTypeController::class, 'store'])->name('transport-types.store')->middleware('bouncer:Operator,create');
+            Route::get('/', [TransportTypeController::class, 'index'])->name('transport-types.all')->middleware('bouncer:Transport\TransportType,read');
+            Route::get('/create', [TransportTypeController::class, 'create'])->name('transport-types.create')->middleware('bouncer:Transport\TransportType,create');
+            Route::post('/create', [TransportTypeController::class, 'store'])->name('transport-types.store')->middleware('bouncer:Transport\TransportType,create');
             Route::prefix('{transportType}')->group(function () {
-                Route::get('/', [TransportTypeController::class, 'view'])->name('transport-types.view')->middleware('bouncer:TransportType,read');
-                Route::get('/update', [TransportTypeController::class, 'edit'])->name('transport-types.edit')->middleware('bouncer:TransportType,update');
-                Route::post('/update', [TransportTypeController::class, 'update'])->name('transport-types.update')->middleware('bouncer:TransportType,update');
-                Route::post('/delete', [TransportTypeController::class, 'destroy'])->name('transport-types.delete')->middleware('bouncer:TransportType,delete');
+                Route::get('/', [TransportTypeController::class, 'view'])->name('transport-types.view')->middleware('bouncer:Transport\TransportType,read');
+                Route::get('/update', [TransportTypeController::class, 'edit'])->name('transport-types.edit')->middleware('bouncer:Transport\TransportType,update');
+                Route::post('/update', [TransportTypeController::class, 'update'])->name('transport-types.update')->middleware('bouncer:Transport\TransportType,update');
+                Route::post('/delete', [TransportTypeController::class, 'destroy'])->name('transport-types.delete')->middleware('bouncer:Transport\TransportType,delete');
             });
         });
     });
