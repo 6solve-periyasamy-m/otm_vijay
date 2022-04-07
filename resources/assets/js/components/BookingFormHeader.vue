@@ -3,7 +3,7 @@
     <div class="row">
         <div class="bookingform-header">
             <div class="py-2 bookingform-header__logo">
-                <img class="logo" :src="logoPath" :alt="logoPath"/>
+                <img class="small-logo logo" :src="logoPath" :alt="logoPath"/>
             </div>
             <div class="bookingform-header__title">
                 <h1 class="bookingform-header__title--main">{{company}} Booking Form</h1>
@@ -43,7 +43,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.small-logo {
+    width: 150px;
+    height: auto;
+}
 .img-fluid {
     width: 50vw;
     height: auto;
