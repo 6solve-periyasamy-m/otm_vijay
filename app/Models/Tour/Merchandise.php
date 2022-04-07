@@ -5,13 +5,58 @@ namespace App\Models\Tour;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
 use App\Repository\StockRepository;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
+/**
+ * App\Models\Tour\Merchandise
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $tour_component_type
+ * @property int $tour_id
+ * @property string|null $image_url
+ * @property int $stock
+ * @property float $purchase_price
+ * @property float $tour_sales_price
+ * @property string|null $notes
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read int $available_stock
+ * @property-read int $used_stock
+ * @property-read Collection|OrderMerchandise[] $orderMerchandise
+ * @property-read int|null $order_merchandise_count
+ * @property-read Tour $tour
+ * @method static Builder|Merchandise newModelQuery()
+ * @method static Builder|Merchandise newQuery()
+ * @method static QueryBuilder|Merchandise onlyTrashed()
+ * @method static Builder|Merchandise query()
+ * @method static Builder|Merchandise whereCreatedAt($value)
+ * @method static Builder|Merchandise whereDeletedAt($value)
+ * @method static Builder|Merchandise whereId($value)
+ * @method static Builder|Merchandise whereImageUrl($value)
+ * @method static Builder|Merchandise whereName($value)
+ * @method static Builder|Merchandise whereNotes($value)
+ * @method static Builder|Merchandise wherePurchasePrice($value)
+ * @method static Builder|Merchandise whereStock($value)
+ * @method static Builder|Merchandise whereTourComponentType($value)
+ * @method static Builder|Merchandise whereTourId($value)
+ * @method static Builder|Merchandise whereTourSalesPrice($value)
+ * @method static Builder|Merchandise whereUpdatedAt($value)
+ * @method static QueryBuilder|Merchandise withTrashed()
+ * @method static QueryBuilder|Merchandise withoutTrashed()
+ * @mixin Eloquent
+ */
 class Merchandise extends Model
 {
     use HasFactory, SoftDeletes;
