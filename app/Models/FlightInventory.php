@@ -5,15 +5,18 @@ namespace App\Models;
 use App\Repository\StockRepository;
 use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FlightInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['flight_for_tour','used_stock','used_on_tour_count'];
-    protected $cascadeDeletes = ['flightInventoryTour'];
+    protected array $cascadeDeletes = ['flightInventoryTour'];
     protected $fillable = ['flight_id', 'travel_class_id', 'flight_number', 'check_in', 'departs_at', 'arrives_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected $casts = [
         'check_in' => 'datetime',
@@ -21,7 +24,7 @@ class FlightInventory extends Model
         'arrives_at' => 'datetime',
     ];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'travel_class_id' => 'required|exists:travel_classes,id',
@@ -35,52 +38,52 @@ class FlightInventory extends Model
         ];
     }
 
-    public static function findByTour($tour_id)
+    public static function findByTour($tour_id): Collection|array
     {
         return FlightInventory::with(['tour' => function ($q) use ($tour_id) {
             $q->where('tour_id', $tour_id);
         }])->get();
     }
 
-    public function flight()
+    public function flight(): BelongsTo
     {
-        return $this->belongsTo(Flight::class);
+        return $this->belongsTo(Flight::class, 'flight_id');
     }
 
-    public function travelClass()
+    public function component(): BelongsTo
     {
-        return $this->belongsTo(TravelClass::class);
+        return $this->belongsTo(Flight::class, 'flight_id');
     }
 
-    public function component_type()
+    public function travelClass(): BelongsTo
     {
-        return $this->hasOneThrough(TourComponentType::class, FlightInventoryTour::class, 'flight_inventory_id', 'id', 'id');
+        return $this->belongsTo(TravelClass::class, 'travel_class_id');
     }
 
-    public function tour()
+    public function flightInventoryTour(): HasMany
     {
-        return $this->belongsToMany(Tour::class, 'flight_inventory_tour')->withPivot('sales_price', 'flight_type');
+        return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
     }
 
-    public function flightInventoryTour()
+    public function tourComponents(): HasMany
     {
-        return $this->hasMany(FlightInventoryTour::class);
+        return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
     }
 
-    public function departureAirport()
+    public function departureAirport(): HasOneThrough
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'departure_airport_id', 'id');
     }
 
-    public function arrivalAirport()
+    public function arrivalAirport(): HasOneThrough
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'arrival_airport_id', 'id');
     }
 
-    public function getFlightForTourAttribute()
+    public function getFlightForTourAttribute(): string
     {
-        $departure_airport = $this->getDepartureAirport()->name; //Airport::getAirportById($this->flight->departure_airport_id);
-        $arrival_airport = $this->getArrivalAirport()->name; //Airport::getAirportById($this->flight->arrival_airport_id);
+        $departure_airport = $this->departureAirport->name;
+        $arrival_airport = $this->arrivalAirport->name;
 
         $departure_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->departs_at)->format('d/m/Y H:i');
         $arrival_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->arrives_at)->format('d/m/Y H:i');
@@ -90,46 +93,17 @@ class FlightInventory extends Model
         return "{$this->flight->airline->name}｜Departs from: {$departure_airport} - Arrives at: {$arrival_airport}｜Departs: {$departure_date} - Arrives: {$arrival_date}{$travel_class}";
     }
 
-    public function getDepartureAirport()
-    {
-        return Airport::findOrFail($this->flight->departure_airport_id);
-    }
-
-    public function getArrivalAirport()
-    {
-        return Airport::findOrFail($this->flight->arrival_airport_id);
-    }
-
-    // public function getFlightDetails()
-    // {
-    //     return "{$this->flight->airline->name} | Departs from: {$this->getDepartureAirport()->location->name} - Arrives at: {$this->getArrivalAirport()->location->name} ";
-    // }
-
-    public function getUsedStock(): int
+    public function getUsedStockAttribute(): int
     {
         return StockRepository::getFlightStock($this);
     }
 
-    public function getUsedStockAttribute()
-    {
-        return $this->getUsedStock();
-    }
-
-    public function getUsedOnTourCountAttribute()
+    public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
     }
 
-    public function component() {
-        return $this->flight();
-    }
-
-    public function tourComponents()
-    {
-        return $this->flightInventoryTour();
-    }
-
-    public function __toString()
+    public function __toString(): string
     {
         return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . \StringFormatter::formatDateTime($this->departs_at) . " to " . \StringFormatter::formatDateTime($this->arrives_at) . ")";
     }

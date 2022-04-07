@@ -2,24 +2,23 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Flight extends Model
 {
-    use HasFactory;
-    use SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['flight_details'];
-    protected $cascadeDeletes = ['flightInventory'];
+    protected array $cascadeDeletes = ['flightInventory'];
     protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from','image_url'];
     protected $casts = ['available_from' => 'date',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'airline_id' => 'required|exists:airlines,id',
@@ -30,41 +29,37 @@ class Flight extends Model
         ];
     }
 
-    public function flightInventory()
+    public function flightInventory(): HasMany
     {
-        return $this->hasMany(FlightInventory::class);
+        return $this->hasMany(FlightInventory::class, 'flight_id');
     }
 
-    public function arrivalAirport()
+    public function arrivalAirport(): BelongsTo
     {
-        return $this->belongsTo(Airport::class, 'arrival_airport_id', 'id');
+        return $this->belongsTo(Airport::class, 'arrival_airport_id');
     }
 
-    public function departureAirport()
+    public function departureAirport(): BelongsTo
     {
-        return $this->belongsTo(Airport::class, 'departure_airport_id', 'id');
+        return $this->belongsTo(Airport::class, 'departure_airport_id');
     }
 
-    public function airline()
+    public function airline(): BelongsTo
     {
-        return $this->belongsTo(Airline::class);
+        return $this->belongsTo(Airline::class, 'airline_id');
     }
 
-    public function getFlightDetailsAttribute()
+    public function currency(): BelongsTo
     {
-        $departs = Carbon::parse($this->departure_date)->format('d/m/Y');
-        $arrives = Carbon::parse($this->arrival_date)->format('d/m/Y');
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
 
+    public function getFlightDetailsAttribute(): string
+    {
         return "{$this->airline->name} | Departs from: {$this->departureAirport->address->name} - Arrives at: {$this->arrivalAirport->address->name}";
-        //return "{$this->airline->name} | Departs {$departs} from: {$this->departureAirport->location->name} - Arrives {$arrives} at: {$this->arrivalAirport->location->name} ";
     }
 
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
-
-    public static function firstOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes)
+    public static function firstOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes): Flight
     {
         $flight = self::where('airline_id', '=', $airline->id)
             ->where('departure_airport_id', '=', $departure->id)
@@ -83,7 +78,7 @@ class Flight extends Model
         return $flight;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "{$this->airline} ({$this->departureAirport} to {$this->arrivalAirport})";
     }

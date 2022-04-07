@@ -8,20 +8,20 @@ use App\Repository\FlightComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use StringFormatter;
 
 class FlightInventoryTour extends Model
 {
-    public $additional_attributes = ['flight_inventory_for_tour','tour_name'];
-    use HasFactory;
-    use SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['tour_id', 'flight_inventory_id', 'tour_component_type', 'flight_type', 'tour_sales_price',];
-    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
+    protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'tour_component_type' => [
@@ -37,40 +37,43 @@ class FlightInventoryTour extends Model
         ];
     }
 
-    public function flightInventory()
+    public function flightInventory(): BelongsTo
     {
-        return $this->belongsTo(FlightInventory::class);
+        return $this->belongsTo(FlightInventory::class, 'flight_inventory_id');
     }
 
-    public function getFlightInventoryForTourAttribute()
+    public function inventory(): BelongsTo
     {
-        return "{$this->flight_type} {$this->flight->flight_number}";
+        return $this->belongsTo(FlightInventory::class, 'flight_inventory_id');
     }
 
-    public function orders()
+    public function orders(): HasMany
     {
         return $this->hasMany(OrderFlight::class, 'flight_inventory_tour_id');
     }
 
-    public function upgrades() {
+    public function upgrades(): HasMany
+    {
         return $this->hasMany(FlightInventoryTourUpgrade::class, 'base_id');
     }
 
     // Only used for Cascading Soft Deletes
-    public function upgradeParents()
+    public function upgradeParents(): HasMany
     {
         return $this->hasMany(FlightInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent() {
+    public function parent(): FlightInventoryTour
+    {
         return FlightComponentRepository::getParentComponent($this);
     }
-    public function tour()
+
+    public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $inventory = $this->flightInventory;
         $component = $inventory->flight;
@@ -84,9 +87,21 @@ class FlightInventoryTour extends Model
         return $this->tour?->name ?? 'Tour Deleted';
     }
 
-    public function inventory()
+    public function getAtolStringAttribute(): string
     {
-        return $this->flightInventory();
+        return "{$this->flight_type} - {$this->inventory->flight->departureAirport} | " .
+            StringFormatter::formatDate($this->inventory->departs_at) .
+            " | {$this->inventory->flight->arrivalAirport} | {$this->inventory->flight->airline}";
+    }
+
+    public function getFlightInventoryForTourAttribute(): string
+    {
+        return "{$this->flight_type} {$this->flight->flight_number}";
+    }
+
+    public function getAvailableStockAttribute(): int
+    {
+        return $this->inventory->stock - $this->inventory->used_stock;
     }
 
     public function getUpgradeKeyMap(): array
@@ -100,13 +115,6 @@ class FlightInventoryTour extends Model
             $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
-    }
-
-    public function getAtolStringAttribute(): string
-    {
-        return "{$this->flight_type} - {$this->inventory->flight->departureAirport} | " .
-            StringFormatter::formatDate($this->inventory->departs_at) .
-            " | {$this->inventory->flight->arrivalAirport} | {$this->inventory->flight->airline}";
     }
 
     public function getCustomerUpgradeKeyMap(): array
@@ -127,17 +135,12 @@ class FlightInventoryTour extends Model
         return $keys;
     }
 
-    public function addToOrder(OrderCustomer $orderCustomer)
+    public function addToOrder(OrderCustomer $orderCustomer): OrderFlight
     {
         return OrderFlight::create([
             'order_customer_id' => $orderCustomer->id,
             'flight_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price,
         ]);
-    }
-
-    public function getAvailableStockAttribute()
-    {
-        return $this->inventory->stock - $this->inventory->used_stock;
     }
 }
