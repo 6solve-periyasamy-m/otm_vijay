@@ -8,18 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TicketType extends SimpleModel
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:ticket_types,name',];
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

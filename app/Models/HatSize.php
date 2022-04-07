@@ -13,13 +13,8 @@ class HatSize extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:hat_sizes,name',];
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

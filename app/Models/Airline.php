@@ -12,13 +12,8 @@ class Airline extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:airlines,name',];
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

@@ -12,21 +12,8 @@ class BoardType extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:board_types,name',];
-    }
-
-    public static function firstOrCreate(string $name) {
-        $type = self::where('name', '=', $name)->first();
-        if (!isset($type)) {
-            $type = self::create(['name' => $name,]);
-        }
-        return $type;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

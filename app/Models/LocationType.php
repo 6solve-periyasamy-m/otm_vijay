@@ -12,7 +12,7 @@ class LocationType extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:location_types,name',];
     }

@@ -16,9 +16,4 @@ class TransportType extends SimpleModel
     {
         return ['name' => 'required|unique:transport_types,name',];
     }
-
-    public function __toString()
-    {
-        return $this->name;
-    }
 }
