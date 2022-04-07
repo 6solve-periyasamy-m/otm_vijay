@@ -4,7 +4,7 @@ namespace App\Models\Transport;
 
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\TransportComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;

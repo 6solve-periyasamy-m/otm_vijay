@@ -9,7 +9,7 @@ use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

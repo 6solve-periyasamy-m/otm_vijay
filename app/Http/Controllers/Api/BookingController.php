@@ -12,7 +12,7 @@ use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\ActionsRepository;
 use App\Repository\CustomerOrderDetailRepository;
 use Illuminate\Http\Request;

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Merchandise;
-use App\Models\Tour;
+use App\Models\Tour\Merchandise;
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 

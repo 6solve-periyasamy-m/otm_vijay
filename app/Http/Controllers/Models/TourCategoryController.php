@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\TourCategory;
+use App\Models\Tour\TourCategory;
 use Illuminate\Http\Request;
 
 class TourCategoryController extends Controller

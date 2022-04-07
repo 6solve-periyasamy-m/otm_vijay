@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 
 class ActivityController extends ApiController

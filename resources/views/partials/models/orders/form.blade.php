@@ -27,7 +27,7 @@
     @endpush
 @endif
 
-@can('create', \App\Models\Tour::class)
+@can('create', \App\Models\Tour\Tour::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
              'route' => 'tours', 'createRoute' => route('tours.create'),])

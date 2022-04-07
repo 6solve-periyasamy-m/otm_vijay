@@ -64,7 +64,7 @@
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
             <div class="col-12">
-                @can('update', \App\Models\Tour::class)
+                @can('update', \App\Models\Tour\Tour::class)
                 <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
                     <i class="icon-note"></i>
                     <span>Edit Tour</span>
@@ -504,14 +504,14 @@
                         <td>{{ $merchandise->tour_sales_price }}</td>
                         <td>{{ $merchandise->notes }}</td>
                         <td class="actions">
-                            @can('update', \App\Models\Merchandise::class)
+                            @can('update', \App\Models\Tour\Merchandise::class)
                                 <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                             <i class="icon-trash"></i>
                                         </span>
                             @endcan
-                            @can('delete', \App\Models\Merchandise::class)
+                            @can('delete', \App\Models\Tour\Merchandise::class)
                                 <a href="#" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                 <form action="{{ route('merchandise.delete', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" method="post" id="merchandise-{{$merchandise->id}}-delete">
                                     @csrf

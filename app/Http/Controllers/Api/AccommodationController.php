@@ -11,7 +11,7 @@ use App\Models\Customer\Customer;
 use App\Models\CustomerOrderDetail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\ActionsRepository;
 use App\Repository\CustomerOrderDetailRepository;
 use App\Repository\OrderRepository;

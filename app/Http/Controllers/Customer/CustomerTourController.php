@@ -8,7 +8,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Merchandise;
+use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;

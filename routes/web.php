@@ -62,7 +62,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
 use App\Models\Order\Order;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -443,19 +443,19 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     });
 
     Route::prefix('tours')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'index'])->name('tours.all')->middleware('bouncer:Tour,read');
-        Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create')->middleware('bouncer:Tour,create');
-        Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store')->middleware('bouncer:Tour,create');
+        Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'index'])->name('tours.all')->middleware('bouncer:Tour\Tour,read');
+        Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create')->middleware('bouncer:Tour\Tour,create');
+        Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store')->middleware('bouncer:Tour\Tour,create');
         Route::prefix('{tour}')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view')->middleware('bouncer:Tour,read');
-            Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour,update');
-            Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour,update');
-            Route::get('/duplicate', [\App\Http\Controllers\Models\TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour,create');
-            Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour,delete');
-            Route::get('/atol', [\App\Http\Controllers\Models\TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour,read');
+            Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view')->middleware('bouncer:Tour\Tour,read');
+            Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour\Tour,update');
+            Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour\Tour,update');
+            Route::get('/duplicate', [\App\Http\Controllers\Models\TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour\Tour,create');
+            Route::post('/delete', [\App\Http\Controllers\Models\TourController::class, 'destroy'])->name('tours.delete')->middleware('bouncer:Tour\Tour,delete');
+            Route::get('/atol', [\App\Http\Controllers\Models\TourController::class, 'exportAtol'])->name('tours.atol')->middleware('bouncer:Tour\Tour,read');
             Route::get('/add', function (Tour $tour) {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
-            })->name('tours.add')->middleware('bouncer:Tour,update');
+            })->name('tours.add')->middleware('bouncer:Tour\Tour,update');
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {
                     Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,create');
@@ -539,13 +539,13 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 });
             });
             Route::prefix('payment-installments')->group(function () {
-                Route::get('/create', [PaymentInstallmentController::class, 'create'])->name('payment-installments.create')->middleware('bouncer:Tour,update');
-                Route::post('/create', [PaymentInstallmentController::class, 'store'])->name('payment-installments.store')->middleware('bouncer:Tour,update');
+                Route::get('/create', [PaymentInstallmentController::class, 'create'])->name('payment-installments.create')->middleware('bouncer:Tour\Tour,update');
+                Route::post('/create', [PaymentInstallmentController::class, 'store'])->name('payment-installments.store')->middleware('bouncer:Tour\Tour,update');
                 Route::prefix('{paymentInstallment}')->group(function () {
-                    Route::get('/', [PaymentInstallmentController::class, 'view'])->name('payment-installments.view')->middleware('bouncer:Tour,read');
-                    Route::get('/update', [PaymentInstallmentController::class, 'edit'])->name('payment-installments.edit')->middleware('bouncer:Tour,update');
-                    Route::post('/update', [PaymentInstallmentController::class, 'update'])->name('payment-installments.update')->middleware('bouncer:Tour,update');
-                    Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour,update');
+                    Route::get('/', [PaymentInstallmentController::class, 'view'])->name('payment-installments.view')->middleware('bouncer:Tour\Tour,read');
+                    Route::get('/update', [PaymentInstallmentController::class, 'edit'])->name('payment-installments.edit')->middleware('bouncer:Tour\Tour,update');
+                    Route::post('/update', [PaymentInstallmentController::class, 'update'])->name('payment-installments.update')->middleware('bouncer:Tour\Tour,update');
+                    Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour\Tour,update');
                 });
             });
             Route::prefix('merchandise')->group(function () {
@@ -561,15 +561,15 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
         });
         Route::prefix('tour-categories')->group(function () {
-            Route::get('/', [TourCategoryController::class, 'index'])->name('tour-categories.all')->middleware('bouncer:TourCategory,read');
-            Route::get('/create', [TourCategoryController::class, 'create'])->name('tour-categories.create')->middleware('bouncer:TourCategory,create');
-            Route::post('/create', [TourCategoryController::class, 'store'])->name('tour-categories.store')->middleware('bouncer:TourCategory,create');
+            Route::get('/', [TourCategoryController::class, 'index'])->name('tour-categories.all')->middleware('bouncer:Tour\TourCategory,read');
+            Route::get('/create', [TourCategoryController::class, 'create'])->name('tour-categories.create')->middleware('bouncer:Tour\TourCategory,create');
+            Route::post('/create', [TourCategoryController::class, 'store'])->name('tour-categories.store')->middleware('bouncer:Tour\TourCategory,create');
 
             Route::prefix('{tourCategory}')->group(function () {
-                Route::get('/', [TourCategoryController::class, 'view'])->name('tour-categories.view')->middleware('bouncer:TourCategory,read');
-                Route::get('/update', [TourCategoryController::class, 'edit'])->name('tour-categories.edit')->middleware('bouncer:TourCategory,update');
-                Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:TourCategory,update');
-                Route::post('/delete', [TourCategoryController::class, 'destroy'])->name('tour-categories.delete')->middleware('bouncer:TourCategory,delete');
+                Route::get('/', [TourCategoryController::class, 'view'])->name('tour-categories.view')->middleware('bouncer:Tour\TourCategory,read');
+                Route::get('/update', [TourCategoryController::class, 'edit'])->name('tour-categories.edit')->middleware('bouncer:Tour\TourCategory,update');
+                Route::post('/update', [TourCategoryController::class, 'update'])->name('tour-categories.update')->middleware('bouncer:Tour\TourCategory,update');
+                Route::post('/delete', [TourCategoryController::class, 'destroy'])->name('tour-categories.delete')->middleware('bouncer:Tour\TourCategory,delete');
             });
         });
     });
@@ -615,14 +615,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     })->name('dash');
 
     Route::prefix('events')->group(function () {
-        Route::get('/', [EventController::class, 'index'])->name('events.all')->middleware('bouncer:Event,read');
-        Route::get('/create', [EventController::class, 'create'])->name('events.create')->middleware('bouncer:Event,create');
-        Route::post('/create', [EventController::class, 'store'])->name('events.store')->middleware('bouncer:Event,create');
+        Route::get('/', [EventController::class, 'index'])->name('events.all')->middleware('bouncer:Tour\Event,read');
+        Route::get('/create', [EventController::class, 'create'])->name('events.create')->middleware('bouncer:Tour\Event,create');
+        Route::post('/create', [EventController::class, 'store'])->name('events.store')->middleware('bouncer:Tour\Event,create');
         Route::prefix('{event}')->group(function () {
-            Route::get('/', [EventController::class, 'view'])->name('events.view')->middleware('bouncer:Event,read');
-            Route::get('/update', [EventController::class, 'edit'])->name('events.edit')->middleware('bouncer:Event,update');
-            Route::post('/update', [EventController::class, 'update'])->name('events.update')->middleware('bouncer:Event,update');
-            Route::post('/delete', [EventController::class, 'destroy'])->name('events.delete')->middleware('bouncer:Event,delete');
+            Route::get('/', [EventController::class, 'view'])->name('events.view')->middleware('bouncer:Tour\Event,read');
+            Route::get('/update', [EventController::class, 'edit'])->name('events.edit')->middleware('bouncer:Tour\Event,update');
+            Route::post('/update', [EventController::class, 'update'])->name('events.update')->middleware('bouncer:Tour\Event,update');
+            Route::post('/delete', [EventController::class, 'destroy'])->name('events.delete')->middleware('bouncer:Tour\Event,delete');
         });
     });
 

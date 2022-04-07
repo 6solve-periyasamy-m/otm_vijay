@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Activity\ActivityInventory;
-use App\Models\Event;
 use App\Models\Flight\FlightInventory;
-use App\Models\Tour;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
 use App\Models\TourComponentType;
 use App\Models\Transport\TransportInventory;
 

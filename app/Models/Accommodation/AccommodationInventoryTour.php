@@ -4,7 +4,7 @@ namespace App\Models\Accommodation;
 
 use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\AccommodationComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;

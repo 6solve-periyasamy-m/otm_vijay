@@ -8,7 +8,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Carbon\Carbon;
 
 interface ActivityComponentRepositoryInterface

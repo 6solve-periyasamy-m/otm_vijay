@@ -2,8 +2,8 @@
 
 namespace App\Models\Order\Component;
 
-use App\Models\Merchandise;
 use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Merchandise;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

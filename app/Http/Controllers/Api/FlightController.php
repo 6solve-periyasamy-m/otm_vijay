@@ -8,7 +8,7 @@ use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

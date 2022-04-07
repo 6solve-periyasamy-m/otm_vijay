@@ -4,7 +4,7 @@ namespace App\Models\Activity;
 
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\ActivityComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;

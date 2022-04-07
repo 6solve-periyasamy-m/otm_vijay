@@ -13,7 +13,7 @@
                 @endif
             </a>
         </li>
-        @can('read', 'App\Models\Tour')
+        @can('read', 'App\Models\Tour\Tour')
         <li>
             @if(strpos(Request::path(), 'tours') !== false)
             <a href="{{ route('tours.all') }}" class="nav-link active">

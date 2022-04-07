@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
-use App\Models\Event;
-use App\Models\Tour;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
 
 class TourController extends ApiController
 {

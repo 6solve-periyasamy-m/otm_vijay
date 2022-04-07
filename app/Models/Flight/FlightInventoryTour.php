@@ -4,7 +4,7 @@ namespace App\Models\Flight;
 
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\FlightComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;

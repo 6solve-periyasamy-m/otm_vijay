@@ -5,8 +5,8 @@ namespace App\Repository;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Flight\FlightInventory;
-use App\Models\Merchandise;
-use App\Models\Tour;
+use App\Models\Tour\Merchandise;
+use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 
 class StockRepository

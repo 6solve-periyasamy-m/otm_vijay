@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity\ActivityInventoryTour;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 
 class ActivityInventoryTourController extends Controller

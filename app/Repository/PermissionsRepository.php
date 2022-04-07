@@ -10,26 +10,26 @@ use Silber\Bouncer\Database\Role;
 
 class PermissionsRepository
 {
-    public static function getAvailablePermissionClasses()
+    public static function getAvailablePermissionClasses(): array
     {
         return array_keys(self::getAvailablePermissionSets());
     }
 
-    public static function getAvailablePermissionSets()
+    public static function getAvailablePermissionSets(): array
     {
         return [
             // Tours
-            'Tour' => [
+            'Tour\Tour' => [
                 'name' => 'Tour',
                 'group' => 'Tour and Components',
                 'order' => 0,
             ],
-            'Event' => [
+            'Tour\Event' => [
                 'name' => 'Event',
                 'group' => 'Tour and Components',
                 'order' => 1,
             ],
-            'TourCategory' => [
+            'Tour\TourCategory' => [
                 'name' => 'Category',
                 'group' => 'Tour and Components',
                 'order' => 2,
@@ -54,7 +54,7 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 6,
             ],
-            'Merchandise' => [
+            'Tour\Merchandise' => [
                 'name' => 'Merchandise',
                 'group' => 'Tour and Components',
                 'order' => 7,

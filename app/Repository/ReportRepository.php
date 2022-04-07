@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Helpers\QuarterHelper;
 use App\Models\Order\Order;
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Illuminate\Support\Collection;
 
 class ReportRepository

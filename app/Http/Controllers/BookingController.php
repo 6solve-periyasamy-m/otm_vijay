@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Event;
 use App\Models\Order\Order;
-use App\Models\Tour;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
