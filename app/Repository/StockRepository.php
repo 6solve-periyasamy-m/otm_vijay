@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Accommodation\AccommodationInventory;
-use App\Models\ActivityInventory;
+use App\Models\Activity\ActivityInventory;
 use App\Models\FlightInventory;
 use App\Models\Merchandise;
 use App\Models\Tour;

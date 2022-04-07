@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
-use App\Models\ActivityInventoryTourUpgrade;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;

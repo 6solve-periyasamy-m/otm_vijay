@@ -3,7 +3,7 @@
     $(document).ready(function () {
         activityTable = $('.activity-inventory-table').DataTable({fixedHeader: true,select: { style: "multi+shift" },});
     });
-    @can('create', \App\Models\ActivityInventoryTour::class)
+    @can('create', \App\Models\Activity\ActivityInventoryTour::class)
     function getSelectedActivityInventory() {
         let ids = [];
         activityTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -25,7 +25,7 @@
     }
     @endcan
 </script>
-@can('create', \App\Models\ActivityInventoryTour::class)
+@can('create', \App\Models\Activity\ActivityInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select activity-component-type-select">
         <option value="Included" selected>Included</option>

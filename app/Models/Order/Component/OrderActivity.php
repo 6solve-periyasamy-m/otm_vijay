@@ -2,9 +2,9 @@
 
 namespace App\Models\Order\Component;
 
-use App\Models\Activity;
-use App\Models\ActivityInventory;
-use App\Models\ActivityInventoryTour;
+use App\Models\Activity\Activity;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Order\OrderCustomer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

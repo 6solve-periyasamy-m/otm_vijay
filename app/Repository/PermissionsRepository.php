@@ -39,7 +39,7 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 3,
             ],
-            'ActivityInventoryTour' => [
+            'Activity\ActivityInventoryTour' => [
                 'name' => 'Activity Tour',
                 'group' => 'Tour and Components',
                 'order' => 4,
@@ -81,7 +81,7 @@ class PermissionsRepository
                 'order' => 3,
             ],
             // Activities
-            'Activity' => [
+            'Activity\Activity' => [
                 'name' => 'Activity',
                 'group' => 'Activity',
                 'order' => 0,
@@ -91,7 +91,7 @@ class PermissionsRepository
                 'group' => 'Activity',
                 'order' => 2,
             ],
-            'ActivityInventory' => [
+            'Activity\ActivityInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Activity',
                 'order' => 1,

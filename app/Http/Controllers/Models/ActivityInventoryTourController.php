@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Tour;
 use Illuminate\Http\Request;
 

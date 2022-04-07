@@ -398,23 +398,23 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     });
 
     Route::prefix('activities')->group(function () {
-        Route::get('/', [ActivityController::class, 'index'])->name('activities.all')->middleware('bouncer:Activity,read');
-        Route::get('/create', [ActivityController::class, 'create'])->name('activities.create')->middleware('bouncer:Activity,create');
-        Route::post('/create', [ActivityController::class, 'store'])->name('activities.store')->middleware('bouncer:Activity,create');
+        Route::get('/', [ActivityController::class, 'index'])->name('activities.all')->middleware('bouncer:Activity\Activity,read');
+        Route::get('/create', [ActivityController::class, 'create'])->name('activities.create')->middleware('bouncer:Activity\Activity,create');
+        Route::post('/create', [ActivityController::class, 'store'])->name('activities.store')->middleware('bouncer:Activity\Activity,create');
         Route::prefix('{activity}')->group(function () {
-            Route::get('/', [ActivityController::class, 'view'])->name('activities.view')->middleware('bouncer:Activity,read');
-            Route::get('/update', [ActivityController::class, 'edit'])->name('activities.edit')->middleware('bouncer:Activity,update');
-            Route::post('/update', [ActivityController::class, 'update'])->name('activities.update')->middleware('bouncer:Activity,update');
-            Route::post('/delete', [ActivityController::class, 'destroy'])->name('activities.delete')->middleware('bouncer:Activity,delete');
+            Route::get('/', [ActivityController::class, 'view'])->name('activities.view')->middleware('bouncer:Activity\Activity,read');
+            Route::get('/update', [ActivityController::class, 'edit'])->name('activities.edit')->middleware('bouncer:Activity\Activity,update');
+            Route::post('/update', [ActivityController::class, 'update'])->name('activities.update')->middleware('bouncer:Activity\Activity,update');
+            Route::post('/delete', [ActivityController::class, 'destroy'])->name('activities.delete')->middleware('bouncer:Activity\Activity,delete');
             Route::prefix('inventory')->group(function () {
-                Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:ActivityInventory,create');
-                Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:ActivityInventory,create');
+                Route::get('/create', [ActivityInventoryController::class, 'create'])->name('activity-inventories.create')->middleware('bouncer:Activity\ActivityInventory,create');
+                Route::post('/create', [ActivityInventoryController::class, 'store'])->name('activity-inventories.store')->middleware('bouncer:Activity\ActivityInventory,create');
                 Route::prefix('{activityInventory}')->group(function () {
-                    Route::get('/', [ActivityInventoryController::class, 'view'])->name('activity-inventories.view')->middleware('bouncer:ActivityInventory,read');
-                    Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:ActivityInventory,update');
-                    Route::post('/update', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update')->middleware('bouncer:ActivityInventory,update');
-                    Route::post('/delete', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete')->middleware('bouncer:ActivityInventory,delete');
-                    Route::get('/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate')->middleware('bouncer:ActivityInventory,create');
+                    Route::get('/', [ActivityInventoryController::class, 'view'])->name('activity-inventories.view')->middleware('bouncer:Activity\ActivityInventory,read');
+                    Route::get('/update', [ActivityInventoryController::class, 'edit'])->name('activity-inventories.edit')->middleware('bouncer:Activity\ActivityInventory,update');
+                    Route::post('/update', [ActivityInventoryController::class, 'update'])->name('activity-inventories.update')->middleware('bouncer:Activity\ActivityInventory,update');
+                    Route::post('/delete', [ActivityInventoryController::class, 'destroy'])->name('activity-inventories.delete')->middleware('bouncer:Activity\ActivityInventory,delete');
+                    Route::get('/duplicate', [ActivityInventoryController::class, 'duplicate'])->name('activity-inventories.duplicate')->middleware('bouncer:Activity\ActivityInventory,create');
                 });
             });
         });
@@ -478,22 +478,22 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     });
                 });
                 Route::prefix('activity')->group(function () {
-                    Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create')->middleware('bouncer:ActivityInventoryTour,create');
-                    Route::post('/create', [ActivityInventoryTourController::class, 'store'])->name('activity-inventory-tours.store')->middleware('bouncer:ActivityInventoryTour,create');
+                    Route::get('/create', [ActivityInventoryTourController::class, 'create'])->name('activity-inventory-tours.create')->middleware('bouncer:Activity\ActivityInventoryTour,create');
+                    Route::post('/create', [ActivityInventoryTourController::class, 'store'])->name('activity-inventory-tours.store')->middleware('bouncer:Activity\ActivityInventoryTour,create');
                     Route::prefix('{activityInventoryTour}')->group(function () {
-                        Route::get('/', [ActivityInventoryTourController::class, 'view'])->name('activity-inventory-tours.view')->middleware('bouncer:ActivityInventoryTour,read');
-                        Route::get('/update', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit')->middleware('bouncer:ActivityInventoryTour,update');
-                        Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update')->middleware('bouncer:ActivityInventoryTour,update');
-                        Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete')->middleware('bouncer:ActivityInventoryTour,delete');
+                        Route::get('/', [ActivityInventoryTourController::class, 'view'])->name('activity-inventory-tours.view')->middleware('bouncer:Activity\ActivityInventoryTour,read');
+                        Route::get('/update', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit')->middleware('bouncer:Activity\ActivityInventoryTour,update');
+                        Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update')->middleware('bouncer:Activity\ActivityInventoryTour,update');
+                        Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete')->middleware('bouncer:Activity\ActivityInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
-                        Route::get('/', [UpgradeController::class, 'viewActivityUpgrade'])->name('activity-upgrade.view')->middleware('bouncer:ActivityInventoryTour,read');
-                        Route::get('/create', [UpgradeController::class, 'createActivityUpgrade'])->name('activity-upgrade.create')->middleware('bouncer:ActivityInventoryTour,create');
-                        Route::post('/store', [UpgradeController::class, 'storeActivityUpgrade'])->name('activity-upgrade.store')->middleware('bouncer:ActivityInventoryTour,create');
+                        Route::get('/', [UpgradeController::class, 'viewActivityUpgrade'])->name('activity-upgrade.view')->middleware('bouncer:Activity\ActivityInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createActivityUpgrade'])->name('activity-upgrade.create')->middleware('bouncer:Activity\ActivityInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeActivityUpgrade'])->name('activity-upgrade.store')->middleware('bouncer:Activity\ActivityInventoryTour,create');
                         Route::prefix('{upgrade}')->group(function () {
-                            Route::get('/update', [UpgradeController::class, 'editActivityUpgrade'])->name('activity-upgrade.edit')->middleware('bouncer:ActivityInventoryTour,update');
-                            Route::post('/update', [UpgradeController::class, 'updateActivityUpgrade'])->name('activity-upgrade.update')->middleware('bouncer:ActivityInventoryTour,update');
-                            Route::post('/delete', [UpgradeController::class, 'deleteActivityUpgrade'])->name('activity-upgrade.delete')->middleware('bouncer:ActivityInventoryTour,delete');
+                            Route::get('/update', [UpgradeController::class, 'editActivityUpgrade'])->name('activity-upgrade.edit')->middleware('bouncer:Activity\ActivityInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateActivityUpgrade'])->name('activity-upgrade.update')->middleware('bouncer:Activity\ActivityInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteActivityUpgrade'])->name('activity-upgrade.delete')->middleware('bouncer:Activity\ActivityInventoryTour,delete');
                         });
                     });
                 });

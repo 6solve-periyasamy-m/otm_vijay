@@ -43,7 +43,7 @@
             </a>
         </li>
             @endcan
-        @can('read', 'App\Models\Activity')
+        @can('read', 'App\Models\Activity\Activity')
         <li>
             @if(strpos(Request::path(), 'activities') !== false)
             <a href="{{ route('activities.all') }}" class="nav-link active">

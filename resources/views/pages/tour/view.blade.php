@@ -219,7 +219,7 @@
                                         @endif
                                     </td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\ActivityInventoryTour::class)
+                                        @can('update', \App\Models\Activity\ActivityInventoryTour::class)
                                             @if($activity["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $activity["tour"]->tour_component_type == 'Upgrade' ? $activity["tour"]->parent() : $activity["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -236,7 +236,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\ActivityInventoryTour::class)
+                                        @can('delete', \App\Models\Activity\ActivityInventoryTour::class)
                                             <a href="#" onclick="$('#activity-{{$activity["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post" id="activity-{{$activity["tour"]->id}}-delete">
                                                 @csrf

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Activity;
 
+use App\Models\TicketType;
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Collection;

@@ -2,14 +2,13 @@
 
 namespace App\Imports;
 
-use App\Models\Activity;
+use App\Models\Activity\Activity;
 use App\Models\ActivityType;
 use App\Models\Address;
 use App\Models\AddressParent;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\LocationType;
-use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class ActivityImport implements ToModel
