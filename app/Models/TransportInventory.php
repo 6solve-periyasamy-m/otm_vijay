@@ -4,24 +4,27 @@ namespace App\Models;
 
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TransportInventory extends Model
 {
-    use HasFactory;
-    use SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['Transport_for_tour','used_stock','used_on_tour_count'];
     protected $fillable = ['transport_id', 'travel_class_id', 'departs_at', 'departure_time_confirmed', 'arrives_at', 'arrival_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
-    protected $cascadeDeletes = ['tourComponents'];
+    protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         "departs_at" => "datetime",
         "arrives_at" => "datetime"
     ];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'travel_class_id' => 'required|exists:travel_classes,id',
@@ -33,49 +36,49 @@ class TransportInventory extends Model
         ];
     }
 
-    public static function findByTour($tour_id)
+    public static function findByTour($tour_id): Collection|array
     {
         return TransportInventory::with(['tour' => function ($q) use ($tour_id) {
             $q->where('tour_id', $tour_id);
         }])->with('departureAddress', 'arrivalAddress')->get();
     }
 
-    public function transport()
+    public function transport(): BelongsTo
     {
-        return $this->belongsTo(Transport::class);
+        return $this->belongsTo(Transport::class, 'transport_id');
     }
 
-    public function tour()
+    public function component(): BelongsTo
+    {
+        return $this->belongsTo(Transport::class, 'transport_id');
+    }
+
+    public function tour(): BelongsToMany
     {
         return $this->belongsToMany(Tour::class, 'transport_inventory_tour')->withPivot('sales_price');
     }
 
-    public function departureAddress()
+    public function departureAddress(): HasOneThrough
     {
         return $this->hasOneThrough(Location::class, Transport::class, 'departure_location_id', 'id');
     }
 
-    public function arrivalAddress()
+    public function arrivalAddress(): HasOneThrough
     {
         return $this->hasOneThrough(Location::class, Transport::class, 'arrival_location_id', 'id');
     }
 
-    public function component_type()
+    public function travelClass(): BelongsTo
     {
-        return $this->hasOneThrough(TourComponentType::class, TransportInventoryTour::class, 'transport_inventory_id', 'id', 'id');
+        return $this->belongsTo(TravelClass::class, 'travel_class_id');
     }
 
-    public function travelClass()
-    {
-        return $this->belongsTo(TravelClass::class);
-    }
-
-    public function tourComponents()
+    public function tourComponents(): HasMany
     {
         return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
     }
 
-    public function getTransportForTourAttribute()
+    public function getTransportForTourAttribute(): string
     {
         if (empty($this->transport)) {
             return 'not yet set';
@@ -92,27 +95,17 @@ class TransportInventory extends Model
         //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}｜Travel Class: {$this->travelClass->name}";
     }
 
-    public function getUsedStock(): int
+    public function getUsedStockAttribute(): int
     {
         return StockRepository::getTransportStock($this);
     }
 
-
-    public function getUsedStockAttribute()
-    {
-        return $this->getUsedStock();
-    }
-
-    public function getUsedOnTourCountAttribute()
+    public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
     }
 
-    public function component() {
-        return $this->transport();
-    }
-
-    public function __toString()
+    public function __toString(): string
     {
         return "{$this->component} - {$this->travelClass} (" . \StringFormatter::formatDateTime($this->departs_at) . " to " . \StringFormatter::formatDateTime($this->arrives_at) . ")";
     }
