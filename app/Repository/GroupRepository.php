@@ -56,13 +56,13 @@ class GroupRepository
         return $groups;
     }
 
-    public static function getOrderCustomerAccommodation(OrderCustomer $orderCustomer): Collection
+    public static function getOrderCustomerAccommodation(OrderCustomer $orderCustomer): array
     {
         $accommodation = new Collection();
         foreach (self::getGroups($orderCustomer) as $group) {
             if (!isset($group)) continue;
             $accommodation = $accommodation->merge($group->rooms);
         }
-        return $accommodation;
+        return $accommodation->toArray();
     }
 }

@@ -20,12 +20,14 @@ use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Merchandise;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 use Log;
 use mikehaertl\pdftk\Pdf;
 use Storage;
+use StringFormatter;
 use Throwable;
 use ZipArchive;
 
@@ -34,35 +36,11 @@ class OrderRepository
     public static $addonId = "Add-on";
     public static $upgradeId = "Upgrade";
 
-    // Page Details
-
-    /**
-     * Returns a list of orders that have been filtered
-     * @param string $searchTerm Filter for searching the orders
-     * @param false $archived Whether to show soft-deleted orders or not
-     * @return Collection List of Orders, filtered using the filter
-     */
-    public static function getSearchOrders(string $searchTerm = "", bool $archived = false): Collection
+    public static function saveInvoice(Order $order): Invoice
     {
-        $query = DB::table('orders')
-            ->join('order_customers AS order_customers_details', 'order_customers_details.order_id', '=', 'orders.id')
-            ->join('order_customers AS lead_booker', 'orders.lead_booker_id', '=', 'lead_booker.id')
-            ->join('customers AS customer_details', 'order_customers_details.customer_id', '=', 'customer_details.id')
-            ->join('customers AS lead_booker_details', 'lead_booker.customer_id', '=', 'lead_booker_details.id')
-            ->join('tours', 'orders.tour_id', '=', 'tours.id')
-            ->where(function ($intQuery) use ($searchTerm) {
-                $intQuery->where('customer_details.first_name', 'like', '%' . $searchTerm . '%')
-                    ->OrWhere('customer_details.last_name', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('tours.name', 'like', '%' . $searchTerm . '%');
-            });
-        if (!$archived) $query->whereNull('orders.deleted_at');
-        $query->select('orders.id AS order_id', 'tours.name AS tour_title', 'lead_booker.id AS lead_booker_id',
-            'orders.booking_reference AS booking_reference', 'lead_booker_details.first_name AS lead_booker_first_name',
-            'lead_booker_details.last_name AS lead_booker_last_name', 'orders.ordered_on AS ordered_on', DB::raw('COUNT(order_customers_details.id) AS passenger_count'))
-            ->groupBy('orders.id', 'tours.name', 'lead_booker.id', 'booking_reference',
-                'lead_booker_details.first_name', 'lead_booker_details.last_name', 'orders.ordered_on')
-            ->orderBy('ordered_on', 'DESC');
-        return $query->get();
+        $invoice = self::generateInvoice($order);
+        $invoice->save();
+        return $invoice;
     }
 
     public static function generateInvoice(Order $order): Invoice
@@ -98,33 +76,6 @@ class OrderRepository
             'footer' => $order->invoice_footer,
             'total_cost' => $order->cost + $order->getAdjustmentValue(),
         ]);
-    }
-
-    public static function saveInvoice(Order $order)
-    {
-        $invoice = self::generateInvoice($order);
-        $invoice->save();
-        return $invoice;
-    }
-
-    public static function snapshotInstallments(Order $order)
-    {
-        $data = [['due' => 'With Order',
-            'description' => self::buildInstallmentString('Deposit', $order, $order->deposit, $order->calculated_deposit),
-            'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit,]];
-        foreach ($order->installments as $installment) {
-            $data[] = ['due' => $installment->due_on, 'description' => self::buildInstallmentString('Installment', $order, $installment->amount, $installment->calculated_amount),
-                'amount' => $installment->calculated_amount, 'paid' => $installment->paid,];
-        }
-        $data[] = ['due' => $order->tour->final_payment, 'description' => 'Remaining Balance: ' . \StringFormatter::formatCurrency($order->remaining_installment),
-            'amount' => $order->remaining_installment, 'paid' => $order->paid >= $order->cost, ];
-        return $data;
-    }
-
-    public static function buildInstallmentString(string $type, Order $order, float $amount, float $calculated): string
-    {
-        return $type . ': ' . $order->customer_count . ' Customer' . ($order->customer_count > 1 ? 's' : '') . ' x '
-            . \StringFormatter::formatCurrency($amount) . ' = ' . \StringFormatter::formatCurrency($calculated);
     }
 
     private static function processCustomerComponentsForInvoice(OrderCustomer $orderCustomer): array
@@ -202,6 +153,26 @@ class OrderRepository
             }
         }
         return ['total_cost' => $totalCost, 'name' => substr($name, 0, -2), 'billables' => $data,];
+    }
+
+    public static function snapshotInstallments(Order $order): array
+    {
+        $data = [['due' => 'With Order',
+            'description' => self::buildInstallmentString('Deposit', $order, $order->deposit, $order->calculated_deposit),
+            'amount' => $order->calculated_deposit, 'paid' => $order->paid >= $order->calculated_deposit,]];
+        foreach ($order->installments as $installment) {
+            $data[] = ['due' => $installment->due_on, 'description' => self::buildInstallmentString('Installment', $order, $installment->amount, $installment->calculated_amount),
+                'amount' => $installment->calculated_amount, 'paid' => $installment->paid,];
+        }
+        $data[] = ['due' => $order->tour->final_payment, 'description' => 'Remaining Balance: ' . StringFormatter::formatCurrency($order->remaining_installment),
+            'amount' => $order->remaining_installment, 'paid' => $order->paid >= $order->cost,];
+        return $data;
+    }
+
+    public static function buildInstallmentString(string $type, Order $order, float $amount, float $calculated): string
+    {
+        return $type . ': ' . $order->customer_count . ' Customer' . ($order->customer_count > 1 ? 's' : '') . ' x '
+            . StringFormatter::formatCurrency($amount) . ' = ' . StringFormatter::formatCurrency($calculated);
     }
 
     // Order Addons/Upgrades
@@ -302,48 +273,6 @@ class OrderRepository
     // Order/Customer Adjustments
 
     /**
-     * Get the sum of the Order Adjustments
-     * @param Order $order
-     * @return float The sum of the order adjustments
-     */
-    public static function getOrderAdjustmentTotal(Order $order): float
-    {
-        $value = 0;
-        foreach ($order->adjustments as $adjustment) {
-            $value += $adjustment->amount;
-        }
-        return $value;
-    }
-
-    /**
-     * Get the sum of the Customer Adjustments
-     * @param Order $order
-     * @return float The sum of the customer adjustments
-     */
-    public static function getCustomerAdjustmentTotal(Order $order): float
-    {
-        $total = 0;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            foreach ($orderCustomer->adjustments as $adjustment) {
-                $total += $adjustment->amount;
-            }
-        }
-        return $total;
-    }
-
-    /**
-     * Get the sum of the customer and order adjustments
-     * @param Order $order
-     * @return float Sum of the two adjustment values
-     */
-    public static function getTotalAdjustedValue(Order $order): float
-    {
-        return self::getCustomerAdjustmentTotal($order) + self::getOrderAdjustmentTotal($order);
-    }
-
-    // Order Costs
-
-    /**
      * Get the current status of the order
      * @param Order $order
      * @return OrderStatus Status code for order
@@ -382,6 +311,34 @@ class OrderRepository
     }
 
     /**
+     * Get details of all payments on an order
+     * @param Order $order
+     * @return array{payments:array, amount:float} List of payments, as well as the total amount paid
+     */
+    public static function getPayments(Order $order): array
+    {
+        $payments = [];
+        $amount = 0;
+        foreach ($order->payments as $payment) {
+            $payments[] = $payment;
+            $amount += $payment->amount;
+        }
+        return ['payments' => $payments, 'amount' => $amount,];
+    }
+
+    /**
+     * Get total cost amount for an order
+     * @param Order $order
+     * @return float The total cost of the order
+     */
+    public static function getCost(Order $order): float
+    {
+        return self::getCostBreakdown($order)['total'];
+    }
+
+    // Order Costs
+
+    /**
      * Get a breakdown of all the costs of the order
      * @param Order $order
      * @return array{customers:array,deposit:float,total:float}
@@ -417,55 +374,46 @@ class OrderRepository
     }
 
     /**
-     * Get the amount the order has left to pay
+     * Get the sum of the customer and order adjustments
      * @param Order $order
-     * @return float The remaining amount required on the order
+     * @return float Sum of the two adjustment values
      */
-    public static function getRemainingToPay(Order $order): float
+    public static function getTotalAdjustedValue(Order $order): float
     {
-        $cost = $order->cost;
-        $paid = $order->paid;
-        $adjustments = $order->getAdjustmentValue();
-        return ($cost + $adjustments) - $paid;
+        return self::getCustomerAdjustmentTotal($order) + self::getOrderAdjustmentTotal($order);
     }
 
     /**
-     * Get total cost amount for an order
+     * Get the sum of the Customer Adjustments
      * @param Order $order
-     * @return float The total cost of the order
+     * @return float The sum of the customer adjustments
      */
-    public static function getCost(Order $order): float
+    public static function getCustomerAdjustmentTotal(Order $order): float
     {
-        return self::getCostBreakdown($order)['total'];
+        $total = 0;
+        foreach ($order->orderCustomers as $orderCustomer) {
+            foreach ($orderCustomer->adjustments as $adjustment) {
+                $total += $adjustment->amount;
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * Get the sum of the Order Adjustments
+     * @param Order $order
+     * @return float The sum of the order adjustments
+     */
+    public static function getOrderAdjustmentTotal(Order $order): float
+    {
+        $value = 0;
+        foreach ($order->adjustments as $adjustment) {
+            $value += $adjustment->amount;
+        }
+        return $value;
     }
 
     // Order Payments
-
-    /**
-     * Get details of all payments on an order
-     * @param Order $order
-     * @return array{payments:array, amount:float} List of payments, as well as the total amount paid
-     */
-    public static function getPayments(Order $order): array
-    {
-        $payments = [];
-        $amount = 0;
-        foreach ($order->payments as $payment) {
-            $payments[] = $payment;
-            $amount += $payment->amount;
-        }
-        return ['payments' => $payments, 'amount' => $amount,];
-    }
-
-    /**
-     * Get the total value paid for an order
-     * @param Order $order
-     * @return float The amount paid by the customer
-     */
-    public static function getTotalPaid(Order $order): float
-    {
-        return self::getPayments($order)['amount'];
-    }
 
     /**
      * Get details about the next payment
@@ -492,6 +440,29 @@ class OrderRepository
             'due' => null,
             'installment' => null,
         ];
+    }
+
+    /**
+     * Get the total value paid for an order
+     * @param Order $order
+     * @return float The amount paid by the customer
+     */
+    public static function getTotalPaid(Order $order): float
+    {
+        return self::getPayments($order)['amount'];
+    }
+
+    /**
+     * Get the amount the order has left to pay
+     * @param Order $order
+     * @return float The remaining amount required on the order
+     */
+    public static function getRemainingToPay(Order $order): float
+    {
+        $cost = $order->cost;
+        $paid = $order->paid;
+        $adjustments = $order->getAdjustmentValue();
+        return ($cost + $adjustments) - $paid;
     }
 
     // Order Management Methods
@@ -631,7 +602,7 @@ class OrderRepository
         return null;
     }
 
-    public static function getCustomersForOrder(Order $order)
+    public static function getCustomersForOrder(Order $order): Collection
     {
         $customers = [];
         foreach ($order->orderCustomers as $orderCustomer) {
@@ -643,7 +614,7 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = ($order->getAdjustmentValue()*-1) + $order->paid - $order->calculated_deposit;
+        $paid = ($order->getAdjustmentValue() * -1) + $order->paid - $order->calculated_deposit;
         foreach ($order->installments as $orderInstallment) {
             $paid -= $orderInstallment->calculated_amount;
             if ($paid < 0) return false;
@@ -652,7 +623,7 @@ class OrderRepository
         return $paid >= 0;
     }
 
-    public static function getOrderGroups(Order $order)
+    public static function getOrderGroups(Order $order): array
     {
         $customers = $order->orderCustomers;
         $groupIds = [];
@@ -797,27 +768,7 @@ class OrderRepository
         return $ids;
     }
 
-    private static function generateAtolCertificate(Order $order): Pdf
-    {
-        $data = self::generateFlightList($order);
-        $protected = $data['normal'];
-        $excess = $data['excess'];
-        $pdf = new Pdf(\Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
-        $pdf->fillForm([
-            'companyName' => SettingsRepository::get('company.name'),
-            'issuerName' => SettingsRepository::get('atol.issuer'),
-            'issueDate' => \StringFormatter::formatDate($order->ordered_on),
-            'atolNumber' => SettingsRepository::get('atol.number'),
-            'reference' => $order->booking_reference,
-            'customerNames' => $order->customer_names,
-            'customerCount' => $order->customer_count,
-            'protected' => $protected,
-            'excess' => $excess,
-        ])->flatten();
-
-        return $pdf;
-    }
-    public static function assignDefaultRooming(OrderCustomer $orderCustomer)
+    public static function assignDefaultRooming(OrderCustomer $orderCustomer): bool
     {
         $singleRoom = null;
         foreach (AccommodationComponentRepository::getAvailableRoomTypes($orderCustomer->order->tour) as $roomType) {
@@ -840,45 +791,30 @@ class OrderRepository
         }
     }
 
-    public static function showAtolCertificate(Order $order)
+    public static function showAtolCertificate(Order $order): bool
     {
         return self::generateAtolCertificate($order)->send();
     }
 
-    public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
+    private static function generateAtolCertificate(Order $order): Pdf
     {
-        Storage::makeDirectory('uploads/atol');
-        while (true) {
-            try {
-                $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
-                $directory = 'public/' . $filename;
-                if (Storage::exists($directory)) continue;
-                Storage::makeDirectory($directory);
-                break;
-            } catch (\Exception $e) {
-                continue;
-            }
-        }
-        foreach ($orders as $order) {
-            if ($order->cancelled) continue;
-            if (!$order->has_atol) continue;
-            $atol = self::generateAtolCertificate($order);
-            $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
-            if (!$saved) {
-                dd($atol->getError());
-            }
-        }
-        $zip = new ZipArchive();
-        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
-            foreach (Storage::files($directory) as $file) {
-                $exploded = explode('/', $file);
-                $zip->addFile(Storage::path($file), trim(end($exploded)));
-            }
-            $zip->close();
-            Storage::deleteDirectory($directory);
-            return asset('uploads/atol/' . $filename . '.zip');
-        } else
-        return null;
+        $data = self::generateFlightList($order);
+        $protected = $data['normal'];
+        $excess = $data['excess'];
+        $pdf = new Pdf(Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
+        $pdf->fillForm([
+            'companyName' => SettingsRepository::get('company.name'),
+            'issuerName' => SettingsRepository::get('atol.issuer'),
+            'issueDate' => StringFormatter::formatDate($order->ordered_on),
+            'atolNumber' => SettingsRepository::get('atol.number'),
+            'reference' => $order->booking_reference,
+            'customerNames' => $order->customer_names,
+            'customerCount' => $order->customer_count,
+            'protected' => $protected,
+            'excess' => $excess,
+        ])->flatten();
+
+        return $pdf;
     }
 
     private static function generateFlightList(Order $order): array
@@ -901,8 +837,7 @@ class OrderRepository
             if ($excess > 0) {
                 $string .= $tourComponent->atol_string . "\n";
                 $excess--;
-            }
-            else {
+            } else {
                 $excessString .= $tourComponent->atol_string . "\n";
             }
         }
@@ -911,12 +846,47 @@ class OrderRepository
             if ($excess > 0) {
                 $string .= $tourComponent->atol_string . "\n";
                 $excess--;
-            }
-            else {
+            } else {
                 $excessString .= $tourComponent->atol_string . "\n";
             }
         }
         return ['normal' => $string, 'excess' => $excessString,];
+    }
+
+    public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
+    {
+        Storage::makeDirectory('uploads/atol');
+        while (true) {
+            try {
+                $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
+                $directory = 'public/' . $filename;
+                if (Storage::exists($directory)) continue;
+                Storage::makeDirectory($directory);
+                break;
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+        foreach ($orders as $order) {
+            if ($order->cancelled) continue;
+            if (!$order->has_atol) continue;
+            $atol = self::generateAtolCertificate($order);
+            $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
+            if (!$saved) {
+                dd($atol->getError());
+            }
+        }
+        $zip = new ZipArchive();
+        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
+            foreach (Storage::files($directory) as $file) {
+                $exploded = explode('/', $file);
+                $zip->addFile(Storage::path($file), trim(end($exploded)));
+            }
+            $zip->close();
+            Storage::deleteDirectory($directory);
+            return asset('uploads/atol/' . $filename . '.zip');
+        } else
+            return null;
     }
 
     public static function hasFlight(Order $order): bool
@@ -935,11 +905,11 @@ class OrderRepository
     {
         $owned = [];
         foreach ($orderCustomer->orderAccommodation() as $orderAccommodation) {
-            $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0,0,0);
+            $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0, 0, 0);
             $owned[$date->unix()] = $orderAccommodation;
         }
         foreach ($orderCustomer->order->tour->templates as $template) {
-            $date = $template->inventory->check_in->clone()->setTime(0,0,0);
+            $date = $template->inventory->check_in->clone()->setTime(0, 0, 0);
             if (array_key_exists($date->unix(), $owned)) continue;
             return false;
         }
@@ -958,21 +928,21 @@ class OrderRepository
             if ($inventory->room_type_id !== $roomTypeId) continue;
             if ($tourInventory->tour_component_type == 'Upgrade') continue;
             $subData = ['id' => $tourInventory->id,
-                        'description' => $inventory->customer_display,
-                        'owned' => in_array($tourInventory->id, $owned['accommodation']),
-                        'upgrades' => [],
-                        'change' => $tourInventory->tour_component_type == 'Add-on',
-                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+                'description' => $inventory->customer_display,
+                'owned' => in_array($tourInventory->id, $owned['accommodation']),
+                'upgrades' => [],
+                'change' => $tourInventory->tour_component_type == 'Add-on',
+                'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
             $upgraded = false;
             foreach ($tourInventory->upgrades as $upgrade) {
                 $owns = in_array($tourInventory->id, $owned['accommodation']);
                 if ($owns) $upgraded = true;
                 $subData['upgrades'][] =
                     ['id' => $upgrade->upgrade_id,
-                    'description' => $upgrade->description,
-                    'owned' => $owns,
-                    'change' => true,
-                    'cost' => $upgrade->upgrade->tour_sales_price,];
+                        'description' => $upgrade->description,
+                        'owned' => $owns,
+                        'change' => true,
+                        'cost' => $upgrade->upgrade->tour_sales_price,];
             }
             $subData['upgraded'] = $upgraded;
             $data['accommodation'][] = $subData;
@@ -981,10 +951,10 @@ class OrderRepository
             $inventory = $tourInventory->inventory;
             if ($tourInventory->tour_component_type == 'Upgrade') continue;
             $subData = ['id' => $tourInventory->id,
-                        'description' => $inventory->__toString(),
-                        'owned' => in_array($tourInventory->id, $owned['activities']),
-                        'upgrades' => [], 'change' => true,
-                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+                'description' => $inventory->__toString(),
+                'owned' => in_array($tourInventory->id, $owned['activities']),
+                'upgrades' => [], 'change' => true,
+                'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
             $upgraded = false;
             foreach ($tourInventory->upgrades as $upgrade) {
                 $owns = in_array($tourInventory->id, $owned['activities']);
@@ -1003,10 +973,10 @@ class OrderRepository
             $inventory = $tourInventory->inventory;
             if ($tourInventory->tour_component_type == 'Upgrade') continue;
             $subData = ['id' => $tourInventory->id, 'description' => $inventory->__toString(),
-                        'owned' => in_array($tourInventory->id, $owned['flights']),
-                        'upgrades' => [],
-                        'change' => $tourInventory->tour_component_type == 'Add-on',
-                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+                'owned' => in_array($tourInventory->id, $owned['flights']),
+                'upgrades' => [],
+                'change' => $tourInventory->tour_component_type == 'Add-on',
+                'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
             $upgraded = false;
             foreach ($tourInventory->upgrades as $upgrade) {
                 $owns = in_array($tourInventory->id, $owned['flights']);
@@ -1025,10 +995,10 @@ class OrderRepository
             $inventory = $tourInventory->inventory;
             if ($tourInventory->tour_component_type == 'Upgrade') continue; // Upgrades are handled from their parent
             $subData = ['id' => $tourInventory->id, 'description' => $inventory->__toString(),
-                        'owned' => in_array($tourInventory->id, $owned['transports']),
-                        'upgrades' => [],
-                        'change' => $tourInventory->tour_component_type == 'Add-on',
-                        'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
+                'owned' => in_array($tourInventory->id, $owned['transports']),
+                'upgrades' => [],
+                'change' => $tourInventory->tour_component_type == 'Add-on',
+                'cost' => ($tourInventory->tour_component_type == 'Add-on' ? $tourInventory->tour_sales_price : 0)];
             $upgraded = false;
             foreach ($tourInventory->upgrades as $upgrade) {
                 $owns = in_array($tourInventory->id, $owned['transports']);
@@ -1087,7 +1057,7 @@ class OrderRepository
         $data = [];
         foreach ($order->tour->merchandise as $tourComponent) {
             $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
-                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), ];
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(),];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
             if ($tourComponent->tour_component_type == 'Add-on') {
@@ -1117,11 +1087,13 @@ class OrderRepository
                     'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),];
             }
         }
-        usort($data, function ($previous, $next) { return $previous['date'] <=> $next['date']; });
+        usort($data, function ($previous, $next) {
+            return $previous['date'] <=> $next['date'];
+        });
         return $data;
     }
 
-    public static function getOrderCustomerAdditionals(OrderCustomer $orderCustomer)
+    public static function getOrderCustomerAdditionals(OrderCustomer $orderCustomer): array
     {
         $order = $orderCustomer->order;
         $owned = self::getOwnedComponentsAndUpgradedIncluded($orderCustomer);
@@ -1138,7 +1110,7 @@ class OrderRepository
                 $owns = in_array($tourComponent->id, $owned['accommodation']);
                 if ($tourComponent->available_stock <= 0 && !$owned) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => $owns];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(), 'owned' => $owns];
             }
         }
         foreach ($order->tour->activityInventoryTours as $tourComponent) {
@@ -1147,16 +1119,16 @@ class OrderRepository
                 if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
                 if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),'owned' => false,];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(), 'owned' => false,];
             }
         }
         foreach ($order->tour->flightInventoryTours as $tourComponent) {
-            if ($tourComponent->tour_component_type  !== 'Upgrade') {
+            if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['flights'])) continue; // Owned components will be shown elsewhere
                 if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),'owned' => false,];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(), 'owned' => false,];
             }
         }
         foreach ($order->tour->transportInventoryTours as $tourComponent) {
@@ -1165,13 +1137,13 @@ class OrderRepository
                 if (in_array($tourComponent->id, $owned['transport'])) continue; // Owned components will be shown elsewhere
                 if ($tourComponent->available_stock <= 0) continue;
                 $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'transport', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),'owned' => false,];
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(), 'owned' => false,];
             }
         }
         return $data;
     }
 
-    public static function getOwnedComponentsAndUpgradedIncluded(OrderCustomer $orderCustomer)
+    public static function getOwnedComponentsAndUpgradedIncluded(OrderCustomer $orderCustomer): array
     {
         $data = [];
         $subData = [];
