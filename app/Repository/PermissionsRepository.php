@@ -318,7 +318,8 @@ class PermissionsRepository
         return Role::where('name', '=', $role)->first();
     }
 
-    public static function revokeEverything(Role $role) {
+    public static function revokeEverything(Role $role)
+    {
         Bouncer::disallow($role)->everything();
     }
 }

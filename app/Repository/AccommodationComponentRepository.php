@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
-use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
@@ -35,7 +34,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->accommodationInventoryTours as $component) {
-            if ($component->tour_component_type  !== "Upgrade") {
+            if ($component->tour_component_type !== "Upgrade") {
                 if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
@@ -91,15 +90,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $query->first() == null ? null : AccommodationInventoryTour::find($query->first()->id);
     }
 
-    /**
-     * @param Tour $tour
-     * @return Collection
-     */
-    public static function getTemplateTourInventory(Tour $tour): Collection
-    {
-        return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
-    }
-
     public static function getAvailableRoomTypes(Tour $tour): array
     {
         $templates = self::getTemplateTourInventory($tour);
@@ -114,6 +104,15 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             }
         }
         return self::hydrateRoomTypes(array_unique($available));
+    }
+
+    /**
+     * @param Tour $tour
+     * @return Collection
+     */
+    public static function getTemplateTourInventory(Tour $tour): Collection
+    {
+        return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
     }
 
     public static function getAvailableRoomSizes(Tour $tour): array
@@ -142,17 +141,13 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $available;
     }
 
-    public static function getSizeList(Tour $tour): array
+    public static function hydrateRoomTypes(array $ids): array
     {
-        $availableSizes = self::getAvailableRoomSizes($tour);
-        $availableTypes = [];
-        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
-            foreach ($roomTypes as $type) {
-                if (in_array($type->maximum_occupancy, $availableSizes)) $availableTypes[] = $type->id;
-            }
+        $types = [];
+        foreach ($ids as $id) {
+            $types[] = RoomType::find($id);
         }
-        return self::hydrateRoomTypes(array_unique($availableTypes));
+        return $types;
     }
 
     public static function getRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
@@ -176,13 +171,17 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $available;
     }
 
-    public static function hydrateRoomTypes(array $ids): array
+    public static function getSizeList(Tour $tour): array
     {
-        $types = [];
-        foreach ($ids as $id) {
-            $types[] = RoomType::find($id);
+        $availableSizes = self::getAvailableRoomSizes($tour);
+        $availableTypes = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
+            foreach ($roomTypes as $type) {
+                if (in_array($type->maximum_occupancy, $availableSizes)) $availableTypes[] = $type->id;
+            }
         }
-        return $types;
+        return self::hydrateRoomTypes(array_unique($availableTypes));
     }
 
     public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array

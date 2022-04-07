@@ -18,42 +18,6 @@ class ReportFieldRepository
         };
     }
 
-    public static function convertFieldsToOutput(array $fields, int $lowest = -1): array
-    {
-        $output = [];
-        foreach ($fields as $depth => $data) {
-            if ($lowest < 0 || $depth <= $lowest) {
-                foreach ($data['fields'] as $key => $field) {
-                    $subData = collect();
-                    $subData->name = $key;
-                    $subData->class = $data['class'];
-                    $subData->depth = $depth;
-                    $subData->description = $field['name'];
-                    $subData->accessor = $field['method'];
-                    $subData->type = $data['type'];
-                    $subData->format = $field['format'] ?? 'string';
-                    $output[$key] = $subData;
-                }
-            }
-        }
-        return $output;
-    }
-
-    public static function getLowestDepth(array $used, array $available): array
-    {
-        $lowestDepth = -1;
-        $lowestClass = null;
-        $lowestType = null;
-        foreach ($available as $field => $data) {
-            if (in_array($field, $used) && $lowestDepth < $data->depth) {
-                $lowestDepth = $data->depth;
-                $lowestClass = $data->class;
-                $lowestType = $data->type;
-            }
-        }
-        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
-    }
-
     public static function getAccommodationFields(): array
     {
         return [
@@ -124,6 +88,66 @@ class ReportFieldRepository
                 ], self::getInventoryFooter()),
             ],
             2 => self::getTourInventoryFooter('AccommodationInventoryTour'),
+        ];
+    }
+
+    private static function getInventoryFooter(): array
+    {
+        return [
+            'fit_selectable' => [
+                'name' => 'FIT Selectable',
+                'method' => 'fit_selectable',
+                'format' => 'boolean',
+            ],
+            'total_stock' => [
+                'name' => 'Total Stock',
+                'method' => 'stock',
+            ],
+            'used_stock' => [
+                'name' => 'Used Stock',
+                'method' => 'used_stock',
+            ],
+            'purchase_price' => [
+                'name' => 'Purchase Price',
+                'method' => 'purchase_price',
+                'format' => 'currency',
+            ],
+            'sales_price' => [
+                'name' => 'Sales Price',
+                'method' => 'sales_price',
+                'format' => 'currency',
+            ],
+            'notes' => [
+                'name' => 'Notes',
+                'method' => 'notes',
+            ],
+            'tour_count' => [
+                'name' => 'Used on Tours',
+                'method' => 'used_on_tour_count',
+            ],
+        ];
+    }
+
+    private static function getTourInventoryFooter(string $class): array
+    {
+        return [
+            'class' => $class,
+            'type' => 'tour',
+            'fields' => [
+                'tour_name' => [
+                    'name' => 'Tour Name',
+                    'method' => 'tour_name'
+                ],
+                'tour_sales_price' => [
+                    'name' => 'Tour Sales Price',
+                    'method' => 'tour_sales_price',
+                    'format' => 'currency',
+                ],
+                'tour_component_type' => [
+                    'name' => 'Tour Component Type',
+                    'method' => 'tour_component_type',
+                ],
+            ]
         ];
     }
 
@@ -550,37 +574,6 @@ class ReportFieldRepository
         ];
     }
 
-    public static function getOrderPaymentFields(): array
-    {
-        return [
-            0 => self::getOrderFields(),
-            1 => [
-                'class' => 'Payment',
-                'type' => 'payment',
-                'fields' => [
-                    'payment_method' => [
-                        'name' => 'Payment Method',
-                        'method' => 'paymentMethod',
-                    ],
-                    'type' => [
-                        'name' => 'Payment Type',
-                        'method' => 'payment_type',
-                    ],
-                    'amount' => [
-                        'name' => 'Amount',
-                        'method' => 'amount',
-                        'format' => 'currency',
-                    ],
-                    'paid_on' => [
-                        'name' => 'Paid On',
-                        'method' => 'paid_on',
-                        'format' => 'datetime',
-                    ],
-                ],
-            ],
-        ];
-    }
-
     private static function getOrderFields(): array
     {
         return [
@@ -636,63 +629,70 @@ class ReportFieldRepository
         ];
     }
 
-    private static function getInventoryFooter(): array
+    public static function getOrderPaymentFields(): array
     {
         return [
-            'fit_selectable' => [
-                'name' => 'FIT Selectable',
-                'method' => 'fit_selectable',
-                'format' => 'boolean',
-            ],
-            'total_stock' => [
-                'name' => 'Total Stock',
-                'method' => 'stock',
-            ],
-            'used_stock' => [
-                'name' => 'Used Stock',
-                'method' => 'used_stock',
-            ],
-            'purchase_price' => [
-                'name' => 'Purchase Price',
-                'method' => 'purchase_price',
-                'format' => 'currency',
-            ],
-            'sales_price' => [
-                'name' => 'Sales Price',
-                'method' => 'sales_price',
-                'format' => 'currency',
-            ],
-            'notes' => [
-                'name' => 'Notes',
-                'method' => 'notes',
-            ],
-            'tour_count' => [
-                'name' => 'Used on Tours',
-                'method' => 'used_on_tour_count',
+            0 => self::getOrderFields(),
+            1 => [
+                'class' => 'Payment',
+                'type' => 'payment',
+                'fields' => [
+                    'payment_method' => [
+                        'name' => 'Payment Method',
+                        'method' => 'paymentMethod',
+                    ],
+                    'type' => [
+                        'name' => 'Payment Type',
+                        'method' => 'payment_type',
+                    ],
+                    'amount' => [
+                        'name' => 'Amount',
+                        'method' => 'amount',
+                        'format' => 'currency',
+                    ],
+                    'paid_on' => [
+                        'name' => 'Paid On',
+                        'method' => 'paid_on',
+                        'format' => 'datetime',
+                    ],
+                ],
             ],
         ];
     }
 
-    private static function getTourInventoryFooter(string $class): array
+    public static function convertFieldsToOutput(array $fields, int $lowest = -1): array
     {
-        return [
-            'class' => $class,
-            'type' => 'tour',
-            'fields' => [
-                'tour_name' => [
-                    'name' => 'Tour Name',
-                    'method' => 'tour_name'
-                ],
-                'tour_sales_price' => [
-                    'name' => 'Tour Sales Price',
-                    'method' => 'tour_sales_price',
-                    'format' => 'currency',
-                ],
-                'tour_component_type' => [
-                    'name' => 'Tour Component Type',
-                    'method' => 'tour_component_type',
-                ],
-            ]
-        ];
+        $output = [];
+        foreach ($fields as $depth => $data) {
+            if ($lowest < 0 || $depth <= $lowest) {
+                foreach ($data['fields'] as $key => $field) {
+                    $subData = collect();
+                    $subData->name = $key;
+                    $subData->class = $data['class'];
+                    $subData->depth = $depth;
+                    $subData->description = $field['name'];
+                    $subData->accessor = $field['method'];
+                    $subData->type = $data['type'];
+                    $subData->format = $field['format'] ?? 'string';
+                    $output[$key] = $subData;
+                }
+            }
+        }
+        return $output;
+    }
+
+    public static function getLowestDepth(array $used, array $available): array
+    {
+        $lowestDepth = -1;
+        $lowestClass = null;
+        $lowestType = null;
+        foreach ($available as $field => $data) {
+            if (in_array($field, $used) && $lowestDepth < $data->depth) {
+                $lowestDepth = $data->depth;
+                $lowestClass = $data->class;
+                $lowestType = $data->type;
+            }
+        }
+        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
     }
 }

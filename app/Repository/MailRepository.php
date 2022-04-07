@@ -15,6 +15,41 @@ use Log;
 class MailRepository
 {
     /**
+     * Get the mail details for editing
+     * @param string $mail The name of the mail
+     * @return array{template:string,shortcodes:array}|null The mail body and shortcodes, or null if not exists
+     */
+    public static function getMailTemplate(string $mail): ?array
+    {
+        $info = self::getMailInformation($mail);
+        if (!isset($info)) return null;
+        return ['template' => self::getTemplateFromSettings($info['template']),
+            'shortcodes' => ShortCodeRepository::getFromString($info['shortcodes']),
+            'subject' => self::getTemplateFromSettings($info['subject'])];
+    }
+
+    /**
+     * Get the basic information about a specific mailable
+     * @param string $mail The name of the mail
+     * @return array{template:string,shortcodes:string}|null The mail information, or null if not exists
+     */
+    public static function getMailInformation(string $mail): ?array
+    {
+        if (!self::doesTemplateExist($mail)) return null;
+        return ['template' => "email.{$mail}.template", 'shortcodes' => self::getAvailableMail()[$mail], 'subject' => "email.{$mail}.subject"];
+    }
+
+    /**
+     * Verify a specific mail exists
+     * @param string $mail The name of the mail
+     * @return bool Whether the mail exists
+     */
+    public static function doesTemplateExist(string $mail): bool
+    {
+        return array_key_exists($mail, self::getAvailableMail());
+    }
+
+    /**
      * Get a list of available mail
      * @return array
      */
@@ -34,38 +69,14 @@ class MailRepository
     }
 
     /**
-     * Verify a specific mail exists
-     * @param string $mail The name of the mail
-     * @return bool Whether the mail exists
+     * Get a template from the Settings Repository
+     * @param string $name The template to get
+     * @return string The template body
+     *
      */
-    public static function doesTemplateExist(string $mail): bool
+    private static function getTemplateFromSettings(string $name): string
     {
-        return array_key_exists($mail, self::getAvailableMail());
-    }
-
-    /**
-     * Get the basic information about a specific mailable
-     * @param string $mail The name of the mail
-     * @return array{template:string,shortcodes:string}|null The mail information, or null if not exists
-     */
-    public static function getMailInformation(string $mail): ?array
-    {
-        if (!self::doesTemplateExist($mail)) return null;
-        return ['template' => "email.{$mail}.template", 'shortcodes' => self::getAvailableMail()[$mail], 'subject' => "email.{$mail}.subject"];
-    }
-
-    /**
-     * Get the mail details for editing
-     * @param string $mail The name of the mail
-     * @return array{template:string,shortcodes:array}|null The mail body and shortcodes, or null if not exists
-     */
-    public static function getMailTemplate(string $mail): ?array
-    {
-        $info = self::getMailInformation($mail);
-        if (!isset($info)) return null;
-        return ['template' => self::getTemplateFromSettings($info['template']),
-                'shortcodes' => ShortCodeRepository::getFromString($info['shortcodes']),
-                'subject' => self::getTemplateFromSettings($info['subject'])];
+        return SettingsRepository::getOrDefault($name, 'This template has not been set up yet');
     }
 
     /**
@@ -117,29 +128,31 @@ class MailRepository
     }
 
     /**
-     * Generate a mail from an Order
+     * Generate a subject from a Payment
      * @param string $mail The mail to be generated
-     * @param Order|null $order The order to get details from
+     * @param Payment|null $payment The payment to get details from
      * @return string The body of the mail
      */
-    public static function generateOrderEmail(string $mail, ?Order $order): string
+    public static function generatePaymentSubject(string $mail, ?Payment $payment): string
     {
-        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['template']);
-        $shortcodes = ShortCodeRepository::getOrderShortCodes($order);
+        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['subject']);
+        $shortcodes = ShortCodeRepository::getPaymentShortCodes($payment);
         return self::replaceShortcodes($body, $shortcodes);
     }
 
     /**
-     * Generate a mail from an Order
-     * @param string $mail The mail to be generated
-     * @param OrderCustomer|null $orderCustomer The order to get details from
-     * @return string The body of the mail
+     * Replace shortcodes with correct values
+     * @param string $body The text to search
+     * @param array $shortcodes The shortcodes to replace
+     * @return string The body with shortcodes replaced
      */
-    public static function generateOrderCustomerEmail(string $mail, ?OrderCustomer $orderCustomer): string
+    private static function replaceShortcodes(string $body, array $shortcodes): string
     {
-        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['template']);
-        $shortcodes = ShortCodeRepository::getOrderCustomerShortCodes($orderCustomer);
-        return self::replaceShortcodes($body, $shortcodes);
+        $replacement = $body;
+        foreach ($shortcodes as $key => $value) {
+            $replacement = str_replace('[' . $key . ']', $value, $replacement);
+        }
+        return $replacement;
     }
 
     /**
@@ -156,18 +169,6 @@ class MailRepository
     }
 
     /**
-     * Generate a mail using only Settings for shortcodes
-     * @param string $mail The mail to be generated
-     * @return string The body of the mail
-     */
-    public static function generateSettingsEmail(string $mail): string
-    {
-        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['template']);
-        $shortcodes = ShortCodeRepository::getSettingShortCodes();
-        return self::replaceShortcodes($body, $shortcodes);
-    }
-
-    /**
      * Generate a subject from an Order
      * @param string $mail The mail to be generated
      * @param Order|null $order The order to get details from
@@ -176,6 +177,19 @@ class MailRepository
     public static function generateOrderSubject(string $mail, ?Order $order): string
     {
         $body = self::getTemplateFromSettings(self::getMailInformation($mail)['subject']);
+        $shortcodes = ShortCodeRepository::getOrderShortCodes($order);
+        return self::replaceShortcodes($body, $shortcodes);
+    }
+
+    /**
+     * Generate a mail from an Order
+     * @param string $mail The mail to be generated
+     * @param Order|null $order The order to get details from
+     * @return string The body of the mail
+     */
+    public static function generateOrderEmail(string $mail, ?Order $order): string
+    {
+        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['template']);
         $shortcodes = ShortCodeRepository::getOrderShortCodes($order);
         return self::replaceShortcodes($body, $shortcodes);
     }
@@ -194,15 +208,15 @@ class MailRepository
     }
 
     /**
-     * Generate a subject from a Payment
+     * Generate a mail from an Order
      * @param string $mail The mail to be generated
-     * @param Payment|null $payment The payment to get details from
+     * @param OrderCustomer|null $orderCustomer The order to get details from
      * @return string The body of the mail
      */
-    public static function generatePaymentSubject(string $mail, ?Payment $payment): string
+    public static function generateOrderCustomerEmail(string $mail, ?OrderCustomer $orderCustomer): string
     {
-        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['subject']);
-        $shortcodes = ShortCodeRepository::getPaymentShortCodes($payment);
+        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['template']);
+        $shortcodes = ShortCodeRepository::getOrderCustomerShortCodes($orderCustomer);
         return self::replaceShortcodes($body, $shortcodes);
     }
 
@@ -214,6 +228,18 @@ class MailRepository
     public static function generateSettingsSubject(string $mail): string
     {
         $body = self::getTemplateFromSettings(self::getMailInformation($mail)['subject']);
+        $shortcodes = ShortCodeRepository::getSettingShortCodes();
+        return self::replaceShortcodes($body, $shortcodes);
+    }
+
+    /**
+     * Generate a mail using only Settings for shortcodes
+     * @param string $mail The mail to be generated
+     * @return string The body of the mail
+     */
+    public static function generateSettingsEmail(string $mail): string
+    {
+        $body = self::getTemplateFromSettings(self::getMailInformation($mail)['template']);
         $shortcodes = ShortCodeRepository::getSettingShortCodes();
         return self::replaceShortcodes($body, $shortcodes);
     }
@@ -244,31 +270,5 @@ class MailRepository
         if (!isset($info)) return false;
         SettingsRepository::set($info['subject'], $subject);
         return true;
-    }
-
-    /**
-     * Replace shortcodes with correct values
-     * @param string $body The text to search
-     * @param array $shortcodes The shortcodes to replace
-     * @return string The body with shortcodes replaced
-     */
-    private static function replaceShortcodes(string $body, array $shortcodes): string
-    {
-        $replacement = $body;
-        foreach ($shortcodes as $key => $value) {
-            $replacement = str_replace('['.$key.']', $value, $replacement);
-        }
-        return $replacement;
-    }
-
-    /**
-     * Get a template from the Settings Repository
-     * @param string $name The template to get
-     * @return string The template body
-     *
-     */
-    private static function getTemplateFromSettings(string $name): string
-    {
-        return SettingsRepository::getOrDefault($name, 'This template has not been set up yet');
     }
 }

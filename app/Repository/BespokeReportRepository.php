@@ -85,6 +85,88 @@ class BespokeReportRepository
         return $data;
     }
 
+    private static function processAccommodation(array $used, array $available, bool $format): array
+    {
+        $rows = [];
+        foreach (OrderAccommodation::all() as $row) {
+            foreach ($row->group->orderCustomers as $objParent) {
+                $objGrandparent = $objParent->customer;
+                $data = [];
+                foreach ($available as $key => $info) {
+                    if (in_array($key, $used)) {
+                        $field = 'Not Set';
+                        if ($info->depth == 0) {
+                            $field = $objGrandparent->{$info->accessor};
+                        }
+                        if ($info->depth == 1) {
+                            $field = $objParent->{$info->accessor};
+                        }
+                        if ($info->depth == 2) {
+                            $field = $row->{$info->accessor};
+                        }
+                        if ($format) {
+                            $field = self::format($field, $info->format);
+                        }
+                        $data[] = $field;
+                    }
+                }
+                $rows[] = $data;
+            }
+        }
+
+        return $rows;
+    }
+
+    private static function format($data, string $format): ?string
+    {
+        switch ($format) {
+            case 'date':
+                $data = StringFormatter::formatDate($data);
+                break;
+            case 'datetime':
+                $data = StringFormatter::formatDateTime($data);
+                break;
+            case 'boolean':
+                $data = StringFormatter::formatBoolean($data);
+                break;
+            case 'currency':
+                $data = StringFormatter::formatCurrency($data);
+                break;
+            case 'asset':
+                $data = asset($data);
+                break;
+            default:
+                break;
+        }
+        return $data ?? 'Not Set';
+    }
+
+    private static function processLowest($row, $grandparent, $parent, array $used, array $available, bool $format = false): array
+    {
+        $data = [];
+        $objParent = $row->{$parent};
+        $objGrandparent = $objParent->{$grandparent};
+        foreach ($available as $key => $info) {
+            if (in_array($key, $used)) {
+                $field = 'Not Set';
+                if ($info->depth == 0) {
+                    $field = $objGrandparent->{$info->accessor};
+                }
+                if ($info->depth == 1) {
+                    $field = $objParent->{$info->accessor};
+                }
+                if ($info->depth == 2) {
+                    $field = $row->{$info->accessor};
+                }
+                if ($format) {
+                    $field = self::format($field, $info->format);
+                }
+                $data[] = $field;
+            }
+        }
+        return $data;
+    }
+
     private static function process($row, array $used, array $available, bool $format = false): array
     {
         $data = [];
@@ -120,87 +202,5 @@ class BespokeReportRepository
             }
         }
         return $data;
-    }
-
-    private static function processLowest($row, $grandparent, $parent, array $used, array $available, bool $format = false): array
-    {
-        $data = [];
-        $objParent = $row->{$parent};
-        $objGrandparent = $objParent->{$grandparent};
-        foreach ($available as $key => $info) {
-            if (in_array($key, $used)) {
-                $field = 'Not Set';
-                if ($info->depth == 0) {
-                    $field = $objGrandparent->{$info->accessor};
-                }
-                if ($info->depth == 1) {
-                    $field = $objParent->{$info->accessor};
-                }
-                if ($info->depth == 2) {
-                    $field = $row->{$info->accessor};
-                }
-                if ($format) {
-                    $field = self::format($field, $info->format);
-                }
-                $data[] = $field;
-            }
-        }
-        return $data;
-    }
-
-    private static function format($data, string $format): ?string
-    {
-        switch ($format) {
-            case 'date':
-                $data = StringFormatter::formatDate($data);
-                break;
-            case 'datetime':
-                $data = StringFormatter::formatDateTime($data);
-                break;
-            case 'boolean':
-                $data = StringFormatter::formatBoolean($data);
-                break;
-            case 'currency':
-                $data = StringFormatter::formatCurrency($data);
-                break;
-            case 'asset':
-                $data = asset($data);
-                break;
-            default:
-                break;
-        }
-        return $data ?? 'Not Set';
-    }
-
-    private static function processAccommodation(array $used, array $available, bool $format): array
-    {
-        $rows = [];
-        foreach (OrderAccommodation::all() as $row) {
-            foreach ($row->group->orderCustomers as $objParent) {
-                $objGrandparent = $objParent->customer;
-                $data = [];
-                foreach ($available as $key => $info) {
-                    if (in_array($key, $used)) {
-                        $field = 'Not Set';
-                        if ($info->depth == 0) {
-                            $field = $objGrandparent->{$info->accessor};
-                        }
-                        if ($info->depth == 1) {
-                            $field = $objParent->{$info->accessor};
-                        }
-                        if ($info->depth == 2) {
-                            $field = $row->{$info->accessor};
-                        }
-                        if ($format) {
-                            $field = self::format($field, $info->format);
-                        }
-                        $data[] = $field;
-                    }
-                }
-                $rows[] = $data;
-            }
-        }
-
-        return $rows;
     }
 }

@@ -10,6 +10,7 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 interface ActivityComponentRepositoryInterface
 {
@@ -26,7 +27,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
-            if ($component->tour_component_type  !== "Upgrade") {
+            if ($component->tour_component_type !== "Upgrade") {
                 if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
@@ -71,7 +72,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): \Illuminate\Support\Collection
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];
         foreach ($tour->activityInventoryTours as $inventoryTour) {

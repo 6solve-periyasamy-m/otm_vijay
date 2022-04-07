@@ -11,6 +11,17 @@ use StringFormatter as Formatter;
 class ShortCodeRepository
 {
 
+    public static function getFromString(string $key): ?array
+    {
+        return match ($key) {
+            'order' => self::getOrderShortCodes(),
+            'payment' => self::getPaymentShortCodes(),
+            'settings' => self::getSettingShortCodes(),
+            'order-customer' => self::getOrderCustomerShortCodes(),
+            default => null,
+        };
+    }
+
     public static function getOrderShortCodes(Order $order = null): array
     {
         $faker = Faker::create();
@@ -44,30 +55,6 @@ class ShortCodeRepository
         return array_merge($data, self::getSettingShortCodes());
     }
 
-    public static function getOrderCustomerShortCodes(OrderCustomer $orderCustomer = null): array
-    {
-        $faker = Faker::create();
-        $customer = $orderCustomer?->customer;
-        return array_merge([
-            'CUSTOMER_TITLE' => !isset($customer) ? $faker->title : $customer->title,
-            'CUSTOMER_FIRST_NAME' => !isset($customer) ? $faker->firstName : $customer->first_name,
-            'CUSTOMER_MIDDLE_NAMES' => !isset($customer) ? $faker->firstName : $customer->middle_names,
-            'CUSTOMER_LAST_NAME' => !isset($customer) ? $faker->lastName : $customer->last_name,
-            'CUSTOMER_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
-        ], self::getOrderShortCodes($orderCustomer?->order));
-    }
-
-    public static function getPaymentShortCodes(Payment $payment = null): array
-    {
-        $faker = Faker::create();
-        return array_merge([
-            'PAYMENT_AMOUNT' => Formatter::formatCurrency(!isset($payment) ? $faker->numberBetween(100, 1000) : $payment->amount),
-            'PAYMENT_DATE' => Formatter::formatDate(!isset($payment) ? $faker->date : $payment->paid_on),
-            'PAYMENT_METHOD' =>!isset($payment) ? 'Demo Payment Method' :  $payment->paymentMethod->name,
-            'PAYMENT_TYPE' => !isset($payment) ? 'Demo Payment Type' : $payment->payment_type
-        ], self::getOrderShortCodes($payment?->order));
-    }
-
     public static function getSettingShortCodes(): array
     {
         return [
@@ -88,14 +75,27 @@ class ShortCodeRepository
         ];
     }
 
-    public static function getFromString(string $key): ?array
+    public static function getPaymentShortCodes(Payment $payment = null): array
     {
-        return match ($key) {
-            'order' => self::getOrderShortCodes(),
-            'payment' => self::getPaymentShortCodes(),
-            'settings' => self::getSettingShortCodes(),
-            'order-customer' => self::getOrderCustomerShortCodes(),
-            default => null,
-        };
+        $faker = Faker::create();
+        return array_merge([
+            'PAYMENT_AMOUNT' => Formatter::formatCurrency(!isset($payment) ? $faker->numberBetween(100, 1000) : $payment->amount),
+            'PAYMENT_DATE' => Formatter::formatDate(!isset($payment) ? $faker->date : $payment->paid_on),
+            'PAYMENT_METHOD' => !isset($payment) ? 'Demo Payment Method' : $payment->paymentMethod->name,
+            'PAYMENT_TYPE' => !isset($payment) ? 'Demo Payment Type' : $payment->payment_type
+        ], self::getOrderShortCodes($payment?->order));
+    }
+
+    public static function getOrderCustomerShortCodes(OrderCustomer $orderCustomer = null): array
+    {
+        $faker = Faker::create();
+        $customer = $orderCustomer?->customer;
+        return array_merge([
+            'CUSTOMER_TITLE' => !isset($customer) ? $faker->title : $customer->title,
+            'CUSTOMER_FIRST_NAME' => !isset($customer) ? $faker->firstName : $customer->first_name,
+            'CUSTOMER_MIDDLE_NAMES' => !isset($customer) ? $faker->firstName : $customer->middle_names,
+            'CUSTOMER_LAST_NAME' => !isset($customer) ? $faker->lastName : $customer->last_name,
+            'CUSTOMER_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
+        ], self::getOrderShortCodes($orderCustomer?->order));
     }
 }

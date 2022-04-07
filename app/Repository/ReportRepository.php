@@ -65,7 +65,8 @@ class ReportRepository
      * Get a report of tour stock
      * @return array List of tours and their data
      */
-    public static function getTourStockReport(): array {
+    public static function getTourStockReport(): array
+    {
         $data = [];
         foreach (Tour::all() as $tour) {
             $row = collect();
@@ -75,7 +76,7 @@ class ReportRepository
             $row->booked = $tour->getUsedStock();
             $row->available = $tour->stock_control_active ? $tour->stock - $tour->getUsedStock() : 'Not Controlled';
             $row->percentage = $tour->stock_control_active ?
-                ($tour->stock == 0 ? 100 : round(($tour->getUsedStock() / $tour->stock)*100, 2)) . '%' : 'Not Controlled';
+                ($tour->stock == 0 ? 100 : round(($tour->getUsedStock() / $tour->stock) * 100, 2)) . '%' : 'Not Controlled';
             $data[] = $row;
         }
         return $data;
@@ -85,7 +86,8 @@ class ReportRepository
      * Get a report of all payments on the system
      * @return array
      */
-    public static function getPaymentReport(): array {
+    public static function getPaymentReport(): array
+    {
         $data = [];
         foreach (Order::with('payments', 'leadBooker', 'tour')->get() as $order) {
             foreach ($order->payments as $payment) {
@@ -107,16 +109,6 @@ class ReportRepository
     public static function getOrdersPlacedInQuarterReport(int $year, int $quarter): Collection
     {
         return self::generateAtolReport(QuarterHelper::getOrdersPlacedInQuarter($year, $quarter));
-    }
-
-    public static function getOrdersDepartingInQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersFromToursInQuarter($year, $quarter));
-    }
-
-    public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
-    {
-        return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
     }
 
     public static function generateAtolReport(Collection $orders): Collection
@@ -143,5 +135,15 @@ class ReportRepository
         $collection->remaining = $remaining;
         $collection->orders = $orderList;
         return $collection;
+    }
+
+    public static function getOrdersDepartingInQuarterReport(int $year, int $quarter): Collection
+    {
+        return self::generateAtolReport(QuarterHelper::getOrdersFromToursInQuarter($year, $quarter));
+    }
+
+    public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
+    {
+        return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
     }
 }
