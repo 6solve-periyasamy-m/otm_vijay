@@ -2,7 +2,7 @@
 
 namespace App\Models\Flight;
 
-use App\Models\Currency;
+use App\Models\Location\Currency;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

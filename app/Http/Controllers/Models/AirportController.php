@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Address;
-use App\Models\AddressParent;
 use App\Models\Flight\Airport;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 

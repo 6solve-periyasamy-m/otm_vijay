@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Models\AddressParent;
-use App\Models\Country;
 use App\Models\Customer;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
+use App\Models\Location\Country;
 use Carbon\Carbon;
-use App\Models\Address;
 use Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Str;

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\AddressParent;
+use App\Models\Location\AddressParent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 

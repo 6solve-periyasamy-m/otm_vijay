@@ -2,7 +2,7 @@
 
 namespace App\Models\Flight;
 
-use App\Models\Address;
+use App\Models\Location\Address;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

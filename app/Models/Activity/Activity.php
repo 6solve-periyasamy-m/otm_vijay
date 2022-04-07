@@ -2,8 +2,8 @@
 
 namespace App\Models\Activity;
 
-use App\Models\Address;
-use App\Models\Currency;
+use App\Models\Location\Address;
+use App\Models\Location\Currency;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

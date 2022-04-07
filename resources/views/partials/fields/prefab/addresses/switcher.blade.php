@@ -25,7 +25,7 @@
     @include('partials.fields.prefab.addresses.selector', ['value' => isset($address) ? $address->id : 0, ])
 </div>
 <div class="switcher-new">
-    @can('create', \App\Models\LocationType::class)
+    @can('create', \App\Models\Location\LocationType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $location_type_id ?? null,
                  'route' => 'location-types', 'createRoute' => route('location-types.create')])

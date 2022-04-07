@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Models\Address;
-use App\Models\AddressParent;
-use App\Models\Country;
 use App\Models\Flight\Airport;
-use App\Models\LocationType;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
+use App\Models\Location\Country;
+use App\Models\Location\LocationType;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class AirportImport implements ToModel

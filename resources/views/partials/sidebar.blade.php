@@ -88,7 +88,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Address')
+        @can('read', 'App\Models\Location\Address')
         <li>
             @if(strpos(Request::path(), 'addresses') !== false)
             <a href="{{ route('addresses.all') }}" class="nav-link active">

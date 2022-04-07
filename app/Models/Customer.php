@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Notifications\CustomerResetPassword;

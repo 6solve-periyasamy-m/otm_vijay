@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity\Activity;
-use App\Models\Address;
-use App\Models\AddressParent;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
