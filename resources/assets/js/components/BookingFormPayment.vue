@@ -213,7 +213,7 @@ export default {
             that.countTravellers()
         })
         bus.$on('recalculatePayment', () => {
-            this.debug && console.log('Recalculat payment event')
+            this.debug && console.log('Recalculate payment event')
             that.loadBooking(that.booking_token)
             that.calcPrice()
             that.calcTourPrice()

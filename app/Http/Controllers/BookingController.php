@@ -96,11 +96,11 @@ class BookingController extends Controller
     public function payDeposit(Request $request)
     {
 
-        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^([^\d]*)\d*(\.\d{2})?$/']);
+        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^([^\d]*)([\d,]*)(\.\d{2})?$/']);
         $amountCurrency = $request->amount;
 
         // extract the currency symbol, everything before the first digit as the currency symbol
-        $currencyRegex = '/^([^\d]*)\d*(\.\d{2})?$/';
+        $currencyRegex = '/^([^\d]*)([\d,]*)(\.\d{2})?$/';
         preg_match($currencyRegex, $amountCurrency, $matched);
         $currency = $matched[1];
         if ($currency !== '£') {
