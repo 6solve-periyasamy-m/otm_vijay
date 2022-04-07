@@ -6,32 +6,16 @@ class ReportFieldRepository
 {
     public static function getFieldsFromParent(string $parent): array
     {
-        switch ($parent) {
-            case 'accommodation':
-                $fields = ReportFieldRepository::getAccommodationFields();
-                break;
-            case 'activity':
-                $fields = ReportFieldRepository::getActivityFields();
-                break;
-            case 'flight':
-                $fields = ReportFieldRepository::getFlightFields();
-                break;
-            case 'transport':
-                $fields = ReportFieldRepository::getTransportFields();
-                break;
-            case 'customer':
-                $fields = ReportFieldRepository::getCustomerFields();
-                break;
-            case 'order-installment':
-                $fields = ReportFieldRepository::getOrderInstallmentFields();
-                break;
-            case 'payment':
-                $fields = ReportFieldRepository::getOrderPaymentFields();
-                break;
-            default:
-                $fields = [];
-        }
-        return $fields;
+        return match ($parent) {
+            'accommodation' => ReportFieldRepository::getAccommodationFields(),
+            'activity' => ReportFieldRepository::getActivityFields(),
+            'flight' => ReportFieldRepository::getFlightFields(),
+            'transport' => ReportFieldRepository::getTransportFields(),
+            'customer' => ReportFieldRepository::getCustomerFields(),
+            'order-installment' => ReportFieldRepository::getOrderInstallmentFields(),
+            'payment' => ReportFieldRepository::getOrderPaymentFields(),
+            default => [],
+        };
     }
 
     public static function convertFieldsToOutput(array $fields, int $lowest = -1): array

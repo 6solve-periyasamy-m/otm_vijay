@@ -108,17 +108,12 @@ class MailRepository
      */
     public static function generateEmail(string $mail, ?Model $model): ?TemplatedMailable
     {
-        switch (true) {
-            case $model instanceof Payment:
-            case !isset($model): // If using demo data, fill ALL available shortcodes for demonstration purposes
-                return new TemplatedMailable(self::generatePaymentSubject($mail, $model), self::generatePaymentEmail($mail, $model));
-            case $model instanceof Order:
-                return new TemplatedMailable(self::generateOrderSubject($mail, $model), self::generateOrderEmail($mail, $model));
-            case $model instanceof OrderCustomer:
-                return new TemplatedMailable(self::generateOrderCustomerSubject($mail, $model), self::generateOrderCustomerEmail($mail, $model));
-            default:
-                return new TemplatedMailable(self::generateSettingsSubject($mail), self::generateSettingsEmail($mail));
-        }
+        return match (true) {
+            $model instanceof Payment, !isset($model) => new TemplatedMailable(self::generatePaymentSubject($mail, $model), self::generatePaymentEmail($mail, $model)),
+            $model instanceof Order => new TemplatedMailable(self::generateOrderSubject($mail, $model), self::generateOrderEmail($mail, $model)),
+            $model instanceof OrderCustomer => new TemplatedMailable(self::generateOrderCustomerSubject($mail, $model), self::generateOrderCustomerEmail($mail, $model)),
+            default => new TemplatedMailable(self::generateSettingsSubject($mail), self::generateSettingsEmail($mail)),
+        };
     }
 
     /**

@@ -14,8 +14,8 @@ class ShortCodeRepository
     public static function getOrderShortCodes(Order $order = null): array
     {
         $faker = Faker::create();
-        $customer = isset($order) ? $order->leadBooker->customer : null;
-        $tour = isset($order) ? $order->tour : null;
+        $customer = $order?->leadBooker->customer;
+        $tour = $order?->tour;
         $nextPayment = isset($order) ? OrderRepository::getNextPaymentDetails($order) : null;
         $data = [
             'LEAD_TITLE' => !isset($order) ? $faker->title : $customer->title,
@@ -47,14 +47,14 @@ class ShortCodeRepository
     public static function getOrderCustomerShortCodes(OrderCustomer $orderCustomer = null): array
     {
         $faker = Faker::create();
-        $customer = isset($orderCustomer) ? $orderCustomer->customer : null;
+        $customer = $orderCustomer?->customer;
         return array_merge([
             'CUSTOMER_TITLE' => !isset($customer) ? $faker->title : $customer->title,
             'CUSTOMER_FIRST_NAME' => !isset($customer) ? $faker->firstName : $customer->first_name,
             'CUSTOMER_MIDDLE_NAMES' => !isset($customer) ? $faker->firstName : $customer->middle_names,
             'CUSTOMER_LAST_NAME' => !isset($customer) ? $faker->lastName : $customer->last_name,
             'CUSTOMER_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
-        ], self::getOrderShortCodes(isset($orderCustomer) ? $orderCustomer->order : null));
+        ], self::getOrderShortCodes($orderCustomer?->order));
     }
 
     public static function getPaymentShortCodes(Payment $payment = null): array
@@ -65,7 +65,7 @@ class ShortCodeRepository
             'PAYMENT_DATE' => Formatter::formatDate(!isset($payment) ? $faker->date : $payment->paid_on),
             'PAYMENT_METHOD' =>!isset($payment) ? 'Demo Payment Method' :  $payment->paymentMethod->name,
             'PAYMENT_TYPE' => !isset($payment) ? 'Demo Payment Type' : $payment->payment_type
-        ], self::getOrderShortCodes(isset($payment) ? $payment->order : null));
+        ], self::getOrderShortCodes($payment?->order));
     }
 
     public static function getSettingShortCodes(): array
@@ -90,17 +90,12 @@ class ShortCodeRepository
 
     public static function getFromString(string $key): ?array
     {
-        switch ($key) {
-            case 'order':
-                return self::getOrderShortCodes();
-            case 'payment':
-                return self::getPaymentShortCodes();
-            case 'settings':
-                return self::getSettingShortCodes();
-            case 'order-customer':
-                return self::getOrderCustomerShortCodes();
-            default:
-                return null;
-        }
+        return match ($key) {
+            'order' => self::getOrderShortCodes(),
+            'payment' => self::getPaymentShortCodes(),
+            'settings' => self::getSettingShortCodes(),
+            'order-customer' => self::getOrderCustomerShortCodes(),
+            default => null,
+        };
     }
 }

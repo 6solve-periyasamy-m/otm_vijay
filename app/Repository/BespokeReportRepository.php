@@ -172,7 +172,7 @@ class BespokeReportRepository
         return $data ?? 'Not Set';
     }
 
-    private static function processAccommodation(array $used, array $available, bool $format)
+    private static function processAccommodation(array $used, array $available, bool $format): array
     {
         $rows = [];
         foreach (OrderAccommodation::all() as $row) {
