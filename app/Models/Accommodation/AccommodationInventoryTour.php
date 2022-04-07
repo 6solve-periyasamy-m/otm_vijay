@@ -80,7 +80,7 @@ class AccommodationInventoryTour extends Model
 
     public function getTourNameAttribute(): string
     {
-        return $this->tour->name;
+        return $this->tour?->name ?? 'Tour Deleted';
     }
 
     public function getAvailableStockAttribute(): int
