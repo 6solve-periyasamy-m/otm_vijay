@@ -17,20 +17,21 @@ use App\Repository\TourRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
 class Tour extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    use CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes', 'invoice_footer', 'final_payment','terms'];
     protected $casts = ['date_from' => 'date', 'date_to' => 'date', 'final_payment' => 'date'];
-    protected $cascadeDeletes = ['accommodationInventoryTours','activityInventoryTours','flightInventoryTours','transportInventoryTours','merchandise','paymentInstallments'];
+    protected array $cascadeDeletes = ['accommodationInventoryTours','activityInventoryTours','flightInventoryTours','transportInventoryTours','merchandise','paymentInstallments'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'event_id' => 'nullable|exists:events,id',
@@ -47,87 +48,67 @@ class Tour extends Model
         ];
     }
 
-    public function event()
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
 
-    public function paymentSchedule()
-    {
-        return $this->hasMany(PaymentSchedule::class, 'payment_schedule');
-    }
-
-    public function flightInventory()
+    public function flightInventory(): BelongsToMany
     {
         return $this->belongsToMany(FlightInventory::class, 'flight_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
-    public function accommodationInventory()
+    public function accommodationInventory(): BelongsToMany
     {
         return $this->belongsToMany(AccommodationInventory::class, 'accommodation_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
-    public function activityInventory()
+    public function activityInventory(): BelongsToMany
     {
         return $this->belongsToMany(ActivityInventory::class, 'activity_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
-    public function transportInventory()
+    public function transportInventory(): BelongsToMany
     {
         return $this->belongsToMany(TransportInventory::class, 'transport_inventory_tours')->withPivot('sales_price', 'tour_component_type');
     }
 
-    public function paymentPlan()
-    {
-        return $this->belongsTo(PaymentPlan::class, 'payment_plan_id');
-    }
-
-    // public function flightInventory()
-    // {
-    //     return $this->belongsTo(FlightInventory::class);
-    // }
-
-    // public function activityInventoryTour()
-    // {
-    //     return $this->belongsToMany(ActivityInventoryTour::class)->withPivot('created_at', 'deleted_at');
-    // }
-
-    public function accommodationInventoryTours()
+    public function accommodationInventoryTours(): HasMany
     {
         return $this->hasMany(AccommodationInventoryTour::class, 'tour_id');
     }
 
-    public function activityInventoryTours()
+    public function activityInventoryTours(): HasMany
     {
         return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
     }
 
-    public function flightInventoryTours()
+    public function flightInventoryTours(): HasMany
     {
         return $this->hasMany(FlightInventoryTour::class, 'tour_id');
     }
 
-    public function transportInventoryTours()
+    public function transportInventoryTours(): HasMany
     {
         return $this->hasMany(TransportInventoryTour::class, 'tour_id');
     }
 
-    public function paymentInstallments()
+    public function paymentInstallments(): HasMany
     {
         return $this->hasMany(PaymentInstallment::class, 'tour_id');
     }
 
-    public function orders()
+    public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'tour_id');
     }
 
-    public function merchandise()
+    public function merchandise(): HasMany
     {
         return $this->hasMany(Merchandise::class, 'tour_id');
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
     }
@@ -137,21 +118,19 @@ class Tour extends Model
         return StockRepository::getTourStock($this);
     }
 
-    public function getRemainingInstallmentAttribute()
+    public function getRemainingInstallmentAttribute(): float
     {
         $cost = $this->base_price_per_person - $this->deposit;
-        foreach ($this->paymentInstallments as $installment) {
-            $cost -= $installment->cost;
-        }
+        $cost -= $this->paymentInstallments()->sum('amount');
         return $cost;
     }
 
-    public function getDepositPercentageAttribute()
+    public function getDepositPercentageAttribute(): float
     {
         return $this->base_price_per_person == 0 ? 0 : round(($this->deposit / $this->base_price_per_person) * 100, 2);
     }
 
-    public function getRemainingPercentageAttribute()
+    public function getRemainingPercentageAttribute(): float
     {
         return $this->base_price_per_person == 0 ? 0 : round(($this->remaining_installment / $this->base_price_per_person) * 100, 2);
     }
