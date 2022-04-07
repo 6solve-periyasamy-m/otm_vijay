@@ -373,26 +373,26 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
 
         Route::prefix('airlines')->group(function () {
-            Route::get('/', [AirlineController::class, 'index'])->name('airlines.all')->middleware('bouncer:Airline,read');
-            Route::get('/create', [AirlineController::class, 'create'])->name('airlines.create')->middleware('bouncer:Airline,create');
-            Route::post('/create', [AirlineController::class, 'store'])->name('airlines.store')->middleware('bouncer:Airline,create');
+            Route::get('/', [AirlineController::class, 'index'])->name('airlines.all')->middleware('bouncer:Flight\Airline,read');
+            Route::get('/create', [AirlineController::class, 'create'])->name('airlines.create')->middleware('bouncer:Flight\Airline,create');
+            Route::post('/create', [AirlineController::class, 'store'])->name('airlines.store')->middleware('bouncer:Flight\Airline,create');
             Route::prefix('{airline}')->group(function () {
-                Route::get('/', [AirlineController::class, 'view'])->name('airlines.view')->middleware('bouncer:Airline,read');
-                Route::get('/update', [AirlineController::class, 'edit'])->name('airlines.edit')->middleware('bouncer:Airline,update');
-                Route::post('/update', [AirlineController::class, 'update'])->name('airlines.update')->middleware('bouncer:Airline,update');
-                Route::post('/delete', [AirlineController::class, 'destroy'])->name('airlines.delete')->middleware('bouncer:Airline,delete');
+                Route::get('/', [AirlineController::class, 'view'])->name('airlines.view')->middleware('bouncer:Flight\Airline,read');
+                Route::get('/update', [AirlineController::class, 'edit'])->name('airlines.edit')->middleware('bouncer:Flight\Airline,update');
+                Route::post('/update', [AirlineController::class, 'update'])->name('airlines.update')->middleware('bouncer:Flight\Airline,update');
+                Route::post('/delete', [AirlineController::class, 'destroy'])->name('airlines.delete')->middleware('bouncer:Flight\Airline,delete');
             });
         });
 
         Route::prefix('airports')->group(function () {
-            Route::get('/', [AirportController::class, 'index'])->name('airports.all')->middleware('bouncer:Airport,read');
-            Route::get('/create', [AirportController::class, 'create'])->name('airports.create')->middleware('bouncer:Airport,create');
-            Route::post('/create', [AirportController::class, 'store'])->name('airports.store')->middleware('bouncer:Airport,create');
+            Route::get('/', [AirportController::class, 'index'])->name('airports.all')->middleware('bouncer:Flight\Airport,read');
+            Route::get('/create', [AirportController::class, 'create'])->name('airports.create')->middleware('bouncer:Flight\Airport,create');
+            Route::post('/create', [AirportController::class, 'store'])->name('airports.store')->middleware('bouncer:Flight\Airport,create');
             Route::prefix('{airport}')->group(function () {
-                Route::get('/', [AirportController::class, 'view'])->name('airports.view')->middleware('bouncer:Airport,read');
-                Route::get('/update', [AirportController::class, 'edit'])->name('airports.edit')->middleware('bouncer:Airport,update');
-                Route::post('/update', [AirportController::class, 'update'])->name('airports.update')->middleware('bouncer:Airport,update');
-                Route::post('/delete', [AirportController::class, 'destroy'])->name('airports.delete')->middleware('bouncer:Airport,delete');
+                Route::get('/', [AirportController::class, 'view'])->name('airports.view')->middleware('bouncer:Flight\Airport,read');
+                Route::get('/update', [AirportController::class, 'edit'])->name('airports.edit')->middleware('bouncer:Flight\Airport,update');
+                Route::post('/update', [AirportController::class, 'update'])->name('airports.update')->middleware('bouncer:Flight\Airport,update');
+                Route::post('/delete', [AirportController::class, 'destroy'])->name('airports.delete')->middleware('bouncer:Flight\Airport,delete');
             });
         });
     });

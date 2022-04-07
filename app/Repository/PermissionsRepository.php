@@ -112,12 +112,12 @@ class PermissionsRepository
                 'group' => 'Flight',
                 'order' => 1,
             ],
-            'Airport' => [
+            'Flight\Airport' => [
                 'name' => 'Airport',
                 'group' => 'Flight',
                 'order' => 2,
             ],
-            'Airline' => [
+            'Flight\Airline' => [
                 'name' => 'Airline',
                 'group' => 'Flight',
                 'order' => 3,

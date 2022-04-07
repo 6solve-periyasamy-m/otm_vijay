@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Airline;
+use App\Models\Flight\Airline;
 use Illuminate\Http\Request;
 
 class AirlineController extends Controller

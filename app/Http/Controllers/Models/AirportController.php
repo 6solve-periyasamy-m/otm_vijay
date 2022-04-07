@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\AddressParent;
-use App\Models\Airport;
+use App\Models\Flight\Airport;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 

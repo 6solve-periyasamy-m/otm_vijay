@@ -2,7 +2,7 @@
 
 namespace App\Models\Order\Component;
 
-use App\Models\Airport;
+use App\Models\Flight\Airport;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;

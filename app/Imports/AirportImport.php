@@ -4,8 +4,8 @@ namespace App\Imports;
 
 use App\Models\Address;
 use App\Models\AddressParent;
-use App\Models\Airport;
 use App\Models\Country;
+use App\Models\Flight\Airport;
 use App\Models\LocationType;
 use Maatwebsite\Excel\Concerns\ToModel;
 

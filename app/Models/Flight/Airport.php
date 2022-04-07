@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Flight;
 
-use App\Models\Flight\Flight;
-use App\Models\Flight\FlightInventory;
+use App\Models\Address;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

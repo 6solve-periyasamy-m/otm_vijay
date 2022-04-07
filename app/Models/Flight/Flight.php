@@ -2,8 +2,6 @@
 
 namespace App\Models\Flight;
 
-use App\Models\Airline;
-use App\Models\Airport;
 use App\Models\Currency;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
