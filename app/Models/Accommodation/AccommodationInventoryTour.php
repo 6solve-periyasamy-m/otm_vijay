@@ -20,8 +20,7 @@ class AccommodationInventoryTour extends Model
     use HasFactory, CascadeSoftDeletes, SoftDeletes;
 
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price','is_template'];
-    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
-    public $additional_attributes = ['tour_name',];
+    protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
 
     public static function getValidationRules(): array
     {
@@ -127,5 +126,4 @@ class AccommodationInventoryTour extends Model
         }
         return $keys;
     }
-
 }
