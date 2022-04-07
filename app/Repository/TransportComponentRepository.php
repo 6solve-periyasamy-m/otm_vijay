@@ -6,9 +6,9 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
-use App\Models\TransportInventoryTourUpgrade;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 use Carbon\Carbon;
 
 interface TransportComponentRepositoryInterface

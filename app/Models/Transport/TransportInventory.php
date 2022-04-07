@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Transport;
 
+use App\Models\Location;
+use App\Models\Tour;
+use App\Models\TravelClass;
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Collection;

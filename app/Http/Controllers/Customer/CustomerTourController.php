@@ -9,7 +9,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
 use App\Repository\OrderRepository;

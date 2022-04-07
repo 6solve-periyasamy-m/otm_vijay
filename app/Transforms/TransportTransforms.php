@@ -4,8 +4,8 @@ namespace App\Transforms;
 
 use App\Models\Operator;
 use App\Models\Order\OrderCustomer;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use App\Models\TransportType;
 use App\Models\TravelClass;
 use App\Repository\TourRepository;

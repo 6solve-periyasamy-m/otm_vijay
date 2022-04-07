@@ -20,9 +20,9 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\Payment;
 use App\Models\Quote;
-use App\Models\Transport;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\Transport;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use Illuminate\Database\Seeder;
 
 class OrderSystemSeeder extends Seeder

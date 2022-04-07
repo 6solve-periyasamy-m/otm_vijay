@@ -7,7 +7,7 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Flight\FlightInventory;
 use App\Models\Merchandise;
 use App\Models\Tour;
-use App\Models\TransportInventory;
+use App\Models\Transport\TransportInventory;
 
 class StockRepository
 {

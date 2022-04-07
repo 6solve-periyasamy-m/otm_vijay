@@ -6,7 +6,7 @@
             select: { style: "multi+shift" },
         });
     });
-    @can('create', \App\Models\TransportInventoryTour::class)
+    @can('create', \App\Models\Transport\TransportInventoryTour::class)
     function getSelectedTransportInventory() {
         let ids = [];
         transportTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -28,7 +28,7 @@
     }
     @endcan
 </script>
-@can('create', \App\Models\TransportInventoryTour::class)
+@can('create', \App\Models\Transport\TransportInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select transport-component-type-select">
         <option value="Included" selected>Included</option>

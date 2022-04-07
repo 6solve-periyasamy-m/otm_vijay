@@ -8,7 +8,7 @@ use App\Models\Event;
 use App\Models\Flight\FlightInventory;
 use App\Models\Tour;
 use App\Models\TourComponentType;
-use App\Models\TransportInventory;
+use App\Models\Transport\TransportInventory;
 
 class TourController extends Controller
 {

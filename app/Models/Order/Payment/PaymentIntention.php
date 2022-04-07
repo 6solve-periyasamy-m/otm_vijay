@@ -15,7 +15,7 @@ use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTour;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use DB;

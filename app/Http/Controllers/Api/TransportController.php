@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\Tour;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use Illuminate\Http\Request;
 
 class TransportController extends ApiController

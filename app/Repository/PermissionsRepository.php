@@ -49,7 +49,7 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 5,
             ],
-            'TransportInventoryTour' => [
+            'Transport\TransportInventoryTour' => [
                 'name' => 'Transport Tour',
                 'group' => 'Tour and Components',
                 'order' => 6,
@@ -123,12 +123,12 @@ class PermissionsRepository
                 'order' => 3,
             ],
             // Transports
-            'Transport' => [
+            'Transport\Transport' => [
                 'name' => 'Transport',
                 'group' => 'Transport',
                 'order' => 0,
             ],
-            'TransportInventory' => [
+            'Transport\TransportInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Transport',
                 'order' => 1,

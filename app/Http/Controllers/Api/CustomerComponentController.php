@@ -10,7 +10,7 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
-use App\Models\TransportInventoryTourUpgrade;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;

@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Transport;
 
-use App\Models\Order\Component\OrderTransport;
+use App\Models\Address;
+use App\Models\Currency;
+use App\Models\Operator;
+use App\Models\TransportType;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

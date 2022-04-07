@@ -73,7 +73,7 @@
             </a>
         </li>
                 @endcan
-        @can('read', 'App\Models\Transport')
+        @can('read', 'App\Models\Transport\Transport')
         <li>
             @if(strpos(Request::path(), 'transports') !== false)
             <a href="{{ route('transports.all') }}" class="nav-link active">

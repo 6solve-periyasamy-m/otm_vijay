@@ -3,9 +3,9 @@
 namespace App\Models\Order\Component;
 
 use App\Models\Order\OrderCustomer;
-use App\Models\Transport;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\Transport;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

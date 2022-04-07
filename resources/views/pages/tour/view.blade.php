@@ -343,7 +343,7 @@
                                         @endif
                                     </td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\TransportInventoryTour::class)
+                                        @can('update', \App\Models\Transport\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -360,7 +360,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\TransportInventoryTour::class)
+                                        @can('delete', \App\Models\Transport\TransportInventoryTour::class)
                                             <a href="#" onclick="$('#transport-{{$transport["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post" id="transport-{{$transport["tour"]->id}}-delete">
                                                 @csrf

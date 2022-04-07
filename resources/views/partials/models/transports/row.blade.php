@@ -9,7 +9,7 @@
     <td>{{ $is_domestic ? "Yes" : "No" }}</td>
     <td>{{ $notes }}</td>
     <td class="actions-3">
-        @can('create', \App\Models\Transport::class)
+        @can('create', \App\Models\Transport\Transport::class)
             <a href="{{route('transports.return', ['transport' => $transport,])}}" class="btn btn-outline-blue btn-sm mb-1">
                 <i class="icon-directions"></i>
             </a>
@@ -18,7 +18,7 @@
             <i class="icon-directions"></i>
         </span>
         @endcan
-        @can('update', \App\Models\Transport::class)
+        @can('update', \App\Models\Transport\Transport::class)
             <a href="{{route('transports.edit', ['transport' => $transport,])}}" class="btn btn-sm btn-outline-success mb-1">
                 <i class="icon-note"></i>
             </a>
@@ -27,7 +27,7 @@
             <i class="icon-note"></i>
         </span>
         @endcan
-        @can('delete', \App\Models\Transport::class)
+        @can('delete', \App\Models\Transport\Transport::class)
             <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                onclick="event.preventDefault();document.getElementById('transport-{{ $transport->id }}-delete').submit();">
                 <i class="icon-trash"></i>

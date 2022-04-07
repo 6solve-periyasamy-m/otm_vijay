@@ -290,24 +290,24 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     });
 
     Route::prefix('transports')->group(function () {
-        Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport,read');
-        Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport,create');
-        Route::post('/create', [TransportController::class, 'store'])->name('transports.store')->middleware('bouncer:Transport,create');
+        Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport\Transport,read');
+        Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport\Transport,create');
+        Route::post('/create', [TransportController::class, 'store'])->name('transports.store')->middleware('bouncer:Transport\Transport,create');
         Route::prefix('{transport}')->group(function () {
-            Route::get('/', [TransportController::class, 'view'])->name('transports.view')->middleware('bouncer:Transport,read');
-            Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport,update');
-            Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport,update');
-            Route::post('/delete', [TransportController::class, 'destroy'])->name('transports.delete')->middleware('bouncer:Transport,delete');
+            Route::get('/', [TransportController::class, 'view'])->name('transports.view')->middleware('bouncer:Transport\Transport,read');
+            Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport\Transport,update');
+            Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
+            Route::post('/delete', [TransportController::class, 'destroy'])->name('transports.delete')->middleware('bouncer:Transport\Transport,delete');
             Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
             Route::prefix('inventory')->group(function () {
-                Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:TransportInventory,create');
-                Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store')->middleware('bouncer:TransportInventory,create');
+                Route::get('/create', [TransportInventoryController::class, 'create'])->name('transport-inventories.create')->middleware('bouncer:Transport\TransportInventory,create');
+                Route::post('/create', [TransportInventoryController::class, 'store'])->name('transport-inventories.store')->middleware('bouncer:Transport\TransportInventory,create');
                 Route::prefix('{transportInventory}')->group(function () {
-                    Route::get('/', [TransportInventoryController::class, 'view'])->name('transport-inventories.view')->middleware('bouncer:TransportInventory,read');
-                    Route::get('/update', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit')->middleware('bouncer:TransportInventory,update');
-                    Route::post('/update', [TransportInventoryController::class, 'update'])->name('transport-inventories.update')->middleware('bouncer:TransportInventory,update');
-                    Route::post('/delete', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete')->middleware('bouncer:TransportInventory,delete');
-                    Route::get('/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate')->middleware('bouncer:TransportInventory,create');
+                    Route::get('/', [TransportInventoryController::class, 'view'])->name('transport-inventories.view')->middleware('bouncer:Transport\TransportInventory,read');
+                    Route::get('/update', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit')->middleware('bouncer:Transport\TransportInventory,update');
+                    Route::post('/update', [TransportInventoryController::class, 'update'])->name('transport-inventories.update')->middleware('bouncer:Transport\TransportInventory,update');
+                    Route::post('/delete', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete')->middleware('bouncer:Transport\TransportInventory,delete');
+                    Route::get('/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate')->middleware('bouncer:Transport\TransportInventory,create');
                 });
             });
         });
@@ -518,22 +518,22 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     });
                 });
                 Route::prefix('transport')->group(function () {
-                    Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create')->middleware('bouncer:TransportInventoryTour,create');
-                    Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store')->middleware('bouncer:TransportInventoryTour,create');
+                    Route::get('/create', [TransportInventoryTourController::class, 'create'])->name('transport-inventory-tours.create')->middleware('bouncer:Transport\TransportInventoryTour,create');
+                    Route::post('/create', [TransportInventoryTourController::class, 'store'])->name('transport-inventory-tours.store')->middleware('bouncer:Transport\TransportInventoryTour,create');
                     Route::prefix('{transportInventoryTour}')->group(function () {
-                        Route::get('/', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view')->middleware('bouncer:TransportInventoryTour,read');
-                        Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit')->middleware('bouncer:TransportInventoryTour,update');
-                        Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update')->middleware('bouncer:TransportInventoryTour,update');
-                        Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:TransportInventoryTour,delete=');
+                        Route::get('/', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view')->middleware('bouncer:Transport\TransportInventoryTour,read');
+                        Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit')->middleware('bouncer:Transport\TransportInventoryTour,update');
+                        Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update')->middleware('bouncer:Transport\TransportInventoryTour,update');
+                        Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:Transport\TransportInventoryTour,delete=');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
-                        Route::get('/', [UpgradeController::class, 'viewTransportUpgrade'])->name('transport-upgrade.view')->middleware('bouncer:TransportInventoryTour,read');
-                        Route::get('/create', [UpgradeController::class, 'createTransportUpgrade'])->name('transport-upgrade.create')->middleware('bouncer:TransportInventoryTour,create');
-                        Route::post('/store', [UpgradeController::class, 'storeTransportUpgrade'])->name('transport-upgrade.store')->middleware('bouncer:TransportInventoryTour,create');
+                        Route::get('/', [UpgradeController::class, 'viewTransportUpgrade'])->name('transport-upgrade.view')->middleware('bouncer:Transport\TransportInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createTransportUpgrade'])->name('transport-upgrade.create')->middleware('bouncer:Transport\TransportInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeTransportUpgrade'])->name('transport-upgrade.store')->middleware('bouncer:Transport\TransportInventoryTour,create');
                         Route::prefix('{upgrade}')->group(function () {
-                            Route::get('/update', [UpgradeController::class, 'editTransportUpgrade'])->name('transport-upgrade.edit')->middleware('bouncer:TransportInventoryTour,update');
-                            Route::post('/update', [UpgradeController::class, 'updateTransportUpgrade'])->name('transport-upgrade.update')->middleware('bouncer:TransportInventoryTour,update');
-                            Route::post('/delete', [UpgradeController::class, 'deleteTransportUpgrade'])->name('transport-upgrade.delete')->middleware('bouncer:TransportInventoryTour,delete');
+                            Route::get('/update', [UpgradeController::class, 'editTransportUpgrade'])->name('transport-upgrade.edit')->middleware('bouncer:Transport\TransportInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateTransportUpgrade'])->name('transport-upgrade.update')->middleware('bouncer:Transport\TransportInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteTransportUpgrade'])->name('transport-upgrade.delete')->middleware('bouncer:Transport\TransportInventoryTour,delete');
                         });
                     });
                 });

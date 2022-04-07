@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transport;
+use App\Models\Transport\Transport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 

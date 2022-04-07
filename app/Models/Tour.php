@@ -9,6 +9,8 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\StockRepository;
 use App\Repository\TourRepository;
