@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Component;
 
+use App\Models\Airport;
+use App\Models\Flight;
+use App\Models\FlightInventoryTour;
 use App\Models\Order\OrderCustomer;
 use App\Repository\FlightComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

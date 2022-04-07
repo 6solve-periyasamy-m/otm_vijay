@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
-use App\Models\OrderTransport;
 use App\Models\Tour;
 use App\Models\TransportInventory;
 use App\Models\TransportInventoryTour;

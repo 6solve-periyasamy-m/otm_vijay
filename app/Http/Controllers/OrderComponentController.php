@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationRemovedEvent;
 use App\Events\Order\Customer\Component\OrderCustomerComponentRemovedEvent;
-use App\Models\OrderAccommodation;
-use App\Models\OrderActivity;
-use App\Models\OrderFlight;
-use App\Models\OrderMerchandise;
-use App\Models\OrderTransport;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use Illuminate\Http\Request;
 
 class OrderComponentController extends Controller

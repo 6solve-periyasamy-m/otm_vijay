@@ -2,13 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AccommodationInventoryTourUpgrade;
 use App\Models\AddressParent;
-use App\Models\Customer;
-use App\Models\FlightInventoryTourUpgrade;
-use App\Models\OrderMerchandise;
 use Illuminate\Database\Seeder;
-use App\Models\Tour;
 use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder

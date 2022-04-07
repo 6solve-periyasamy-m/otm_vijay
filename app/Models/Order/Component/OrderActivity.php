@@ -1,26 +1,28 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Component;
 
+use App\Models\ActivityInventoryTour;
 use App\Models\Order\OrderCustomer;
-use App\Repository\TransportComponentRepository;
+use App\Repository\ActivityComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OrderTransport extends Model
+class OrderActivity extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'transport_inventory_tour_id','cost'];
+    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id','cost'];
     public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
     public static function findByOrderCustomer($orderCustomerId)
     {
-        $orderTransports = OrderTransport::where('order_customer_id', $orderCustomerId)->get();
+        $orderActivities = OrderActivity::where('order_customer_id', $orderCustomerId)->get();
 
-        return $orderTransports;
+
+        return $orderActivities;
     }
 
     // TODO: Deprecate
@@ -29,19 +31,19 @@ class OrderTransport extends Model
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
-    public function transport()
+    public function activity()
     {
-        return TransportComponentRepository::getComponentFromOrderComponent($this->id);
+        return ActivityComponentRepository::getComponentFromOrderComponent($this->id);
     }
 
-    public function transportInventory()
+    public function activityInventory()
     {
-        return TransportComponentRepository::getInventoryFromOrderComponent($this->id);
+        return ActivityComponentRepository::getInventoryFromOrderComponent($this->id);
     }
 
-    public function transportInventoryTour()
+    public function activityInventoryTour()
     {
-        return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
+        return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
     }
 
     public function getCancelledAttribute(): bool
@@ -51,7 +53,7 @@ class OrderTransport extends Model
 
     public function tourComponent()
     {
-        return $this->transportInventoryTour();
+        return $this->activityInventoryTour();
     }
 
     public function getDetailsAttribute()
@@ -74,8 +76,8 @@ class OrderTransport extends Model
         return $this->orderCustomers();
     }
 
-    public function swap(TransportInventoryTour $swap) {
-        $this->transport_inventory_tour_id = $swap->id;
+    public function swap(ActivityInventoryTour $swap) {
+        $this->activity_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
     }

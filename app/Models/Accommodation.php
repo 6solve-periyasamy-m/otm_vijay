@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Component\OrderAccommodation;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

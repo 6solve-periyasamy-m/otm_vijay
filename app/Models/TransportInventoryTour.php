@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Repository\TransportComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

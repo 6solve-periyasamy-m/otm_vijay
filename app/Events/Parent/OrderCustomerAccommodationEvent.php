@@ -2,8 +2,8 @@
 
 namespace App\Events\Parent;
 
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
-use App\Models\OrderAccommodation;
 
 abstract class OrderCustomerAccommodationEvent extends OrderCustomerEvent
 {

@@ -6,8 +6,8 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\FlightInventory;
 use App\Models\FlightInventoryTour;
 use App\Models\FlightInventoryTourUpgrade;
+use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
-use App\Models\OrderFlight;
 use App\Models\Tour;
 use Carbon\Carbon;
 

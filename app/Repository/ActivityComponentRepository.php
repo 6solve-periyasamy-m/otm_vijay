@@ -6,8 +6,8 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityInventoryTourUpgrade;
+use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
-use App\Models\OrderActivity;
 use App\Models\Tour;
 use Carbon\Carbon;
 

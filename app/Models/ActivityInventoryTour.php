@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Repository\ActivityComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

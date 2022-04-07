@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
 use App\Repository\StockRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

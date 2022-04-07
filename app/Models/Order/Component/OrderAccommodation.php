@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order\Component;
 
+use App\Models\AccommodationInventoryTour;
+use App\Models\Group;
 use App\Models\Order\OrderCustomer;
 use App\Repository\AccommodationComponentRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\AccommodationComponentRepository;
-use StringFormatter;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
+use StringFormatter;
 
 class AccommodationInventoryTour extends Model
 {

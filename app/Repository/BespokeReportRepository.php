@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-use App\Models\OrderAccommodation;
-use App\Models\OrderActivity;
-use App\Models\OrderFlight;
-use App\Models\OrderMerchandise;
-use App\Models\OrderTransport;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Report;
 use Illuminate\Validation\Rule;
 use StringFormatter;
