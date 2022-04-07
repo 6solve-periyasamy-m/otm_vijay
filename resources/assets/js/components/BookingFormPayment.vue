@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="booking-container">
     <div class="card">
         <div class="card-header">
             <h5 class="mb-1 dropdownbutt">
@@ -213,7 +213,7 @@ export default {
             that.countTravellers()
         })
         bus.$on('recalculatePayment', () => {
-            this.debug && console.log('Recalculat payment event')
+            this.debug && console.log('Recalculate payment event')
             that.loadBooking(that.booking_token)
             that.calcPrice()
             that.calcTourPrice()

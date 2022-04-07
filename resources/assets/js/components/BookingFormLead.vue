@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="booking-container">
         <div class="card card-options">
             <div class="card-header">
                 <div v-if="debug">
@@ -76,7 +76,7 @@
                 
                 {{debug ? 'DEBUG MODE: Order retrieved by cookie: bookingToken: '+ bookingToken : ''}}
                 <div class="card-body" v-if="show_traveller">
-                    <div class="container">
+                    <div class="booking-container">
                         <div class="card-options">
                             <div class="ept-form">
                                 <h4>Your Details</h4>

@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-default card-container">
-                    <div class="card-header">
+                    <div class="bookingform-header">
                         <div class="bookingform-header__controls">
                             <label for="booking_name">{{company}} booking for </label>
                             <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" @change="updateBookingName" />
@@ -25,7 +25,7 @@
                             <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
                         </div>
                     </div>
-                    <bookingform-footer></bookingform-footer>
+                    <bookingform-footer :logo="logo" :company="company" systemcurrency="GBP"></bookingform-footer>
                 </div>
             </div>
         </div>
