@@ -132,7 +132,7 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $included = "Base Components Include:\n";
-        if ($orderCustomer->hasSurcharge) {
+        if ($orderCustomer->has_surcharge) {
             $data[] = ['description' => 'Single Occupancy Surcharge', 'cost' => $orderCustomer->single_occupancy_surcharge,];
             $totalCost += $orderCustomer->single_occupancy_surcharge;
         }

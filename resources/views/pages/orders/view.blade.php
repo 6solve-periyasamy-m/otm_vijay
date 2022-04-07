@@ -233,7 +233,7 @@
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
                                 <td>{{ StringFormatter::formatCurrency($ordersCustomer->tour_cost) }}</td>
                             </tr>
-                            @if($ordersCustomer->hasSurcharge)
+                            @if($ordersCustomer->has_surcharge)
                                 <tr>
                                     <td>Single Occupancy Surcharge: {{ $ordersCustomer->customer->full_name }}</td>
                                     <td>{{ StringFormatter::formatCurrency($ordersCustomer->single_occupancy_surcharge) }}</td>
