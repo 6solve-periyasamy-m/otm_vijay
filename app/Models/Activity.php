@@ -5,18 +5,20 @@ namespace App\Models;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Testing\Fluent\Concerns\Has;
 
 
 class Activity extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
-    use HasFactory;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected $fillable = ['activity_type_id', 'address_id', 'name', 'description', 'currency_id', 'notes','image_url'];
-    protected $cascadeDeletes = ['activityInventory'];
+    protected array $cascadeDeletes = ['activityInventory'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'activity_type_id' => 'required|exists:activity_types,id',
@@ -25,27 +27,27 @@ class Activity extends Model
         ];
     }
 
-    public function activityInventory()
+    public function activityInventory(): HasMany
     {
-        return $this->hasMany(ActivityInventory::class);
+        return $this->hasMany(ActivityInventory::class, 'activity_id');
     }
 
-    public function address()
+    public function address(): BelongsTo
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
-    public function activityType()
+    public function activityType(): BelongsTo
     {
-        return $this->belongsTo(ActivityType::class);
+        return $this->belongsTo(ActivityType::class, 'activity_type_id');
     }
 
-    public function currency()
+    public function currency(): BelongsTo
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
 
         return "{$this->name} ({$this->activityType}) ({$this->address->region}, {$this->address->country})";

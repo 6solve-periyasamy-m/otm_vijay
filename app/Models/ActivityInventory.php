@@ -4,25 +4,26 @@ namespace App\Models;
 
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class ActivityInventory extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
-    use HasFactory;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    public $additional_attributes = ['Activity_for_tour','used_stock','used_on_tour_count'];
     protected $fillable = ['activity_id', 'ticket_type_id', 'starts_at', 'ends_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
-    protected $cascadeDeletes = ['tourComponents'];
+    protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'ticket_type_id' => 'required|exists:ticket_types,id',
@@ -34,39 +35,34 @@ class ActivityInventory extends Model
         ];
     }
 
-    public static function findByTour($tour_id)
+    public static function findByTour($tour_id): Collection|array
     {
         return ActivityInventory::with(['tour' => function ($q) use ($tour_id) {
             $q->where('tour_id', $tour_id);
         }])->get();
     }
 
-    public function activity()
+    public function activity(): BelongsTo
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(Activity::class, 'activity_id');
     }
 
-    public function ticketType()
+    public function component(): BelongsTo
     {
-        return $this->belongsTo(TicketType::class);
+        return $this->belongsTo(Activity::class, 'activity_id');
     }
 
-    public function component_type()
+    public function ticketType(): BelongsTo
     {
-        return $this->hasOneThrough(TourComponentType::class, ActivityInventoryTour::class, 'activity_inventory_id', 'id', 'id');
+        return $this->belongsTo(TicketType::class, 'ticket_type_id');
     }
 
-    public function tour()
-    {
-        return $this->belongsToMany(Tour::class, 'activity_inventory_tour')->withPivot('sales_price', 'tour_component_type');
-    }
-
-    public function tourComponents()
+    public function tourComponents(): HasMany
     {
         return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
     }
 
-    public function getActivityForTourAttribute()
+    public function getActivityForTourAttribute(): string
     {
         $starts_at = $this->starts_at->format('d/m/Y H:i');
         $ends_at = $this->ends_at->format('d/m/Y H:i');
@@ -74,26 +70,17 @@ class ActivityInventory extends Model
         return "{$this->activity->name}｜Activity Start: {$starts_at}｜Activity End: {$ends_at}｜Ticket Type: {$this->ticketType->name}";
     }
 
-    public function getUsedStock(): int
+    public function getUsedStockAttribute(): int
     {
         return StockRepository::getActivityStock($this);
     }
 
-    public function getUsedStockAttribute()
-    {
-        return $this->getUsedStock();
-    }
-
-    public function getUsedOnTourCountAttribute()
+    public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
     }
 
-    public function component() {
-        return $this->activity();
-    }
-
-    public function __toString()
+    public function __toString(): string
     {
         return "{$this->component} - {$this->ticketType} (" . \StringFormatter::formatDateTime($this->starts_at) . " to " . \StringFormatter::formatDateTime($this->ends_at) . ")";
     }

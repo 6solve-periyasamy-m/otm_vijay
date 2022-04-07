@@ -8,6 +8,8 @@ use App\Repository\ActivityComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use StringFormatter;
@@ -17,11 +19,10 @@ class ActivityInventoryTour extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
+    protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
-    public $additional_attributes = ['tour_name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'tour_component_type' => [
@@ -33,35 +34,43 @@ class ActivityInventoryTour extends Model
         ];
     }
 
-    public function activityInventory()
+    public function activityInventory(): BelongsTo
     {
-        return $this->belongsTo(ActivityInventory::class);
+        return $this->belongsTo(ActivityInventory::class, 'activity_inventory_id');
     }
 
-    public function orders()
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(ActivityInventory::class, 'activity_inventory_id');
+    }
+
+    public function orders(): HasMany
     {
         return $this->hasMany(OrderActivity::class, 'activity_inventory_tour_id');
     }
 
-    public function upgrades() {
+    public function upgrades(): HasMany
+    {
         return $this->hasMany(ActivityInventoryTourUpgrade::class, 'base_id');
     }
 
     // Only used for Cascading Soft Deletes
-    public function upgradeParents()
+    public function upgradeParents(): HasMany
     {
         return $this->hasMany(ActivityInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent() {
+    public function parent(): ActivityInventoryTour
+    {
         return ActivityComponentRepository::getParentComponent($this);
     }
 
-    public function tour() {
+    public function tour(): BelongsTo
+    {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $inventory = $this->activityInventory;
         $component = $inventory->activity;
@@ -73,9 +82,9 @@ class ActivityInventoryTour extends Model
         return $this->tour?->name ?? 'Tour Deleted';
     }
 
-    public function inventory()
+    public function getAvailableStockAttribute(): int
     {
-        return $this->activityInventory();
+        return $this->inventory->stock - $this->inventory->used_stock;
     }
 
     public function getUpgradeKeyMap(): array
@@ -110,17 +119,12 @@ class ActivityInventoryTour extends Model
         return $keys;
     }
 
-    public function addToOrder(OrderCustomer $orderCustomer)
+    public function addToOrder(OrderCustomer $orderCustomer): OrderActivity
     {
         return OrderActivity::create([
             'order_customer_id' => $orderCustomer->id,
             'activity_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price,
         ]);
-    }
-
-    public function getAvailableStockAttribute()
-    {
-        return $this->inventory->stock - $this->inventory->used_stock;
     }
 }
