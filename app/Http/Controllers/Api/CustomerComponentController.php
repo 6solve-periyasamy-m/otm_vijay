@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Gateways\StripeGateway;
-use App\Models\AccommodationInventoryTourUpgrade;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;

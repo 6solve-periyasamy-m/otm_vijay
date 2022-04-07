@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Order\Order;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\StockRepository;

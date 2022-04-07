@@ -34,7 +34,7 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 2,
             ],
-            'AccommodationInventoryTour' => [
+            'Accommodation\AccommodationInventoryTour' => [
                 'name' => 'Accommodation Tour',
                 'group' => 'Tour and Components',
                 'order' => 3,
@@ -60,12 +60,12 @@ class PermissionsRepository
                 'order' => 7,
             ],
             // Accommodations
-            'Accommodation' => [
+            'Accommodation\Accommodation' => [
                 'name' => 'Accommodation',
                 'group' => 'Accommodation',
                 'order' => 0,
             ],
-            'AccommodationInventory' => [
+            'Accommodation\AccommodationInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Accommodation',
                 'order' => 1,

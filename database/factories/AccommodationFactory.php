@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Accommodation;
+use App\Models\Accommodation\Accommodation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccommodationFactory extends Factory

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;

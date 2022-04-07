@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\ActivityInventoryTour;
 use App\Models\FlightInventoryTour;
 use App\Models\Order\Order;

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\ApiController;
-use App\Models\Accommodation;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\BoardType;
 use App\Models\Customer;
 use App\Models\CustomerOrderDetail;

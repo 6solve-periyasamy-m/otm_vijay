@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Accommodation;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity;
 use App\Models\ActivityInventory;
 use App\Models\ActivityInventoryTour;

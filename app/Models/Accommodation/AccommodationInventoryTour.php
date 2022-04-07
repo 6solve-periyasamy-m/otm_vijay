@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Accommodation;
 
+use App\Models\Group;
 use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Tour;
 use App\Repository\AccommodationComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

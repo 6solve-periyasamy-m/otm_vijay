@@ -3,7 +3,7 @@
     $(document).ready(function () {
         accommodationTable = $('.accommodation-inventory-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
     });
-    @can('create', \App\Models\AccommodationInventoryTour::class)
+    @can('create', \App\Models\Accommodation\AccommodationInventoryTour::class)
     function getSelectedAccommodationInventory() {
         let ids = [];
         accommodationTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -25,7 +25,7 @@
     }
     @endcan
 </script>
-@can('create', \App\Models\AccommodationInventoryTour::class)
+@can('create', \App\Models\Accommodation\AccommodationInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select accommodation-component-type-select">
         <option value="Included" selected>Included</option>

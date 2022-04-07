@@ -2,9 +2,9 @@
 
 namespace App\Models\Order\Component;
 
-use App\Models\Accommodation;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Group;
 use App\Models\Order\OrderCustomer;
 use Eloquent;

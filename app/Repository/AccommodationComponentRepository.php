@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
-use App\Models\AccommodationInventoryTourUpgrade;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
 use App\Models\RoomType;

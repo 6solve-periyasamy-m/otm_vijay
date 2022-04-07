@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\AccommodationInventory;
-use App\Models\TourComponentType;
+use App\Models\Accommodation\AccommodationInventory;
 use App\Models\ActivityInventory;
-use App\Models\FlightInventory;
-use App\Models\TransportInventory;
 use App\Models\Event;
+use App\Models\FlightInventory;
 use App\Models\Tour;
+use App\Models\TourComponentType;
+use App\Models\TransportInventory;
 
 class TourController extends Controller
 {

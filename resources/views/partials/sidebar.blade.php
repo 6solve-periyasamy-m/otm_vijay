@@ -28,7 +28,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Accommodation')
+        @can('read', 'App\Models\Accommodation\Accommodation')
         <li>
             @if(strpos(Request::path(), 'accommodation') !== false)
             <a href="{{ route('accommodations.all') }}" class="nav-link active">

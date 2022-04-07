@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Accommodation;
+use App\Models\Accommodation\Accommodation;
 use App\Models\Address;
 use App\Models\AddressParent;
 use App\Repository\LocationsRepository;

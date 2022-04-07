@@ -2,7 +2,7 @@
 
 namespace App\Models\Order\Payment;
 
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;

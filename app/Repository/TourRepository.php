@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\AccommodationInventoryTour;
-use App\Models\AccommodationInventoryTourUpgrade;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\ActivityInventoryTour;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\FlightInventoryTour;

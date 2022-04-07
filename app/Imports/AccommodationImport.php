@@ -2,13 +2,12 @@
 
 namespace App\Imports;
 
-use App\Models\Accommodation;
+use App\Models\Accommodation\Accommodation;
 use App\Models\Address;
 use App\Models\AddressParent;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\LocationType;
-use App\Repository\LocationsRepository;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 

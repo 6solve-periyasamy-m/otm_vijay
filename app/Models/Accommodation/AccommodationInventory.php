@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Accommodation;
 
+use App\Models\BoardType;
+use App\Models\RoomType;
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Collection;

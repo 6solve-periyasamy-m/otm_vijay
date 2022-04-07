@@ -242,25 +242,25 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     });
 
     Route::prefix('accommodation')->group(function () {
-        Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all')->middleware('bouncer:Accommodation,read');
-        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation,read');
-        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store')->middleware('bouncer:Accommodation,read');
+        Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all')->middleware('Bouncer:Accommodation\Accommodation,read');
+        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('Bouncer:Accommodation\Accommodation,read');
+        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store')->middleware('Bouncer:Accommodation\Accommodation,read');
 
         Route::prefix('{accommodation}')->group(function () {
-            Route::get('/', [AccommodationController::class, 'view'])->name('accommodations.view')->middleware('bouncer:Accommodation,read');
-            Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation,update');
-            Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation,update');
-            Route::post('/delete', [AccommodationController::class, 'destroy'])->name('accommodations.delete')->middleware('bouncer:Accommodation,delete');
+            Route::get('/', [AccommodationController::class, 'view'])->name('accommodations.view')->middleware('Bouncer:Accommodation\Accommodation,read');
+            Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('Bouncer:Accommodation\Accommodation,update');
+            Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('Bouncer:Accommodation\Accommodation,update');
+            Route::post('/delete', [AccommodationController::class, 'destroy'])->name('accommodations.delete')->middleware('Bouncer:Accommodation\Accommodation,delete');
 
             Route::prefix('inventory')->group(function () {
-                Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create')->middleware('bouncer:AccommodationInventory,create');
-                Route::post('/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store')->middleware('bouncer:AccommodationInventory,create');
+                Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create')->middleware('Bouncer:Accommodation\AccommodationInventory,create');
+                Route::post('/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store')->middleware('Bouncer:Accommodation\AccommodationInventory,create');
                 Route::prefix('{accommodationInventory}')->group(function () {
-                    Route::get('/view', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view')->middleware('bouncer:AccommodationInventory,read');
-                    Route::get('/update', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit')->middleware('bouncer:AccommodationInventory,update');
-                    Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:AccommodationInventory,update');
-                    Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:AccommodationInventory,delete');
-                    Route::get('/duplicate', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate')->middleware('bouncer:AccommodationInventory,create');
+                    Route::get('/view', [AccommodationInventoryController::class, 'view'])->name('accommodation-inventories.view')->middleware('Bouncer:Accommodation\AccommodationInventory,read');
+                    Route::get('/update', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit')->middleware('Bouncer:Accommodation\AccommodationInventory,update');
+                    Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('Bouncer:Accommodation\AccommodationInventory,update');
+                    Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('Bouncer:Accommodation\AccommodationInventory,delete');
+                    Route::get('/duplicate', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate')->middleware('Bouncer:Accommodation\AccommodationInventory,create');
                 });
 
             });
@@ -458,22 +458,22 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             })->name('tours.add')->middleware('bouncer:Tour,update');
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {
-                    Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('bouncer:AccommodationInventoryTour,create');
-                    Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store')->middleware('bouncer:AccommodationInventoryTour,create');
+                    Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,create');
+                    Route::post('/create', [AccommodationInventoryTourController::class, 'store'])->name('accommodation-inventory-tours.store')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,create');
                     Route::prefix('{accommodationInventoryTour}')->group(function () {
-                        Route::get('/', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view')->middleware('bouncer:AccommodationInventoryTour,read');
-                        Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit')->middleware('bouncer:AccommodationInventoryTour,update');
-                        Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('bouncer:AccommodationInventoryTour,update');
-                        Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('bouncer:AccommodationInventoryTour,delete');
+                        Route::get('/', [AccommodationInventoryTourController::class, 'view'])->name('accommodation-inventory-tours.view')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,read');
+                        Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,update');
+                        Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,update');
+                        Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
-                        Route::get('/', [UpgradeController::class, 'viewAccommodationUpgrade'])->name('accommodation-upgrade.view')->middleware('bouncer:AccommodationInventoryTour,read');
-                        Route::get('/create', [UpgradeController::class, 'createAccommodationUpgrade'])->name('accommodation-upgrade.create')->middleware('bouncer:AccommodationInventoryTour,create');
-                        Route::post('/store', [UpgradeController::class, 'storeAccommodationUpgrade'])->name('accommodation-upgrade.store')->middleware('bouncer:AccommodationInventoryTour,create');
+                        Route::get('/', [UpgradeController::class, 'viewAccommodationUpgrade'])->name('accommodation-upgrade.view')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createAccommodationUpgrade'])->name('accommodation-upgrade.create')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeAccommodationUpgrade'])->name('accommodation-upgrade.store')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,create');
                         Route::prefix('{upgrade}')->group(function () {
-                            Route::get('/update', [UpgradeController::class, 'editAccommodationUpgrade'])->name('accommodation-upgrade.edit')->middleware('bouncer:AccommodationInventoryTour,update');
-                            Route::post('/update', [UpgradeController::class, 'updateAccommodationUpgrade'])->name('accommodation-upgrade.update')->middleware('bouncer:AccommodationInventoryTour,update');
-                            Route::post('/delete', [UpgradeController::class, 'deleteAccommodationUpgrade'])->name('accommodation-upgrade.delete')->middleware('bouncer:AccommodationInventoryTour,delete');
+                            Route::get('/update', [UpgradeController::class, 'editAccommodationUpgrade'])->name('accommodation-upgrade.edit')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateAccommodationUpgrade'])->name('accommodation-upgrade.update')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteAccommodationUpgrade'])->name('accommodation-upgrade.delete')->middleware('Bouncer:Accommodation\AccommodationInventoryTour,delete');
                         });
                     });
                 });

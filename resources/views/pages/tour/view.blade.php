@@ -156,7 +156,7 @@
                                         @endif
                                     </td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\AccommodationInventoryTour::class)
+                                        @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             @if($accommodationEntry["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $accommodationEntry["tour"]->tour_component_type == 'Upgrade' ? $accommodationEntry["tour"]->parent() : $accommodationEntry["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -173,7 +173,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\AccommodationInventoryTour::class)
+                                        @can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             <a href="#" onclick="$('#accommodation-{{$accommodationEntry["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post" id="accommodation-{{$accommodationEntry["tour"]->id}}-delete">
                                                 @csrf
