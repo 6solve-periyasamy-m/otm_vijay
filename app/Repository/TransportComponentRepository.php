@@ -13,32 +13,10 @@ use Carbon\Carbon;
 
 interface TransportComponentRepositoryInterface
 {
-    public static function getComponentFromOrderComponent($orderComponentId);
-
-    public static function getInventoryFromOrderComponent($orderComponentId);
-
-    public static function getOrderComponentFromId($orderComponentId);
 }
 
 class TransportComponentRepository implements TransportComponentRepositoryInterface
 {
-    public static function getOrderComponentFromId($orderComponentId)
-    {
-        return OrderTransport::findOrFail($orderComponentId);
-    }
-
-    public static function getComponentFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderTransport::findOrFail($orderComponentId);
-        return $orderComponent->transportInventoryTour()->first()->transportInventory()->first()->transport();
-    }
-
-    public static function getInventoryFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderTransport::findOrFail($orderComponentId);
-        return $orderComponent->transportInventoryTour()->first()->transportInventory();
-    }
-
     public static function getAvailableAddons($tourId, $oCustomerId)
     {
         $tour = Tour::findOrFail($tourId);

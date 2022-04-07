@@ -13,12 +13,6 @@ use Carbon\Carbon;
 
 interface ActivityComponentRepositoryInterface
 {
-    public static function getComponentFromOrderComponent($orderComponentId);
-
-    public static function getInventoryFromOrderComponent($orderComponentId);
-
-    public static function getOrderComponentFromId($orderComponentId);
-
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
     public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
@@ -26,23 +20,6 @@ interface ActivityComponentRepositoryInterface
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
 {
-    public static function getOrderComponentFromId($orderComponentId)
-    {
-        return OrderActivity::findOrFail($orderComponentId);
-    }
-
-    public static function getComponentFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderActivity::findOrFail($orderComponentId);
-        return $orderComponent->activityInventoryTour()->first()->activityInventory()->first()->activity();
-    }
-
-    public static function getInventoryFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderActivity::findOrFail($orderComponentId);
-        return $orderComponent->activityInventoryTour()->first()->activityInventory();
-    }
-
     public static function getAvailableAddons($tourId, $oCustomerId = -1)
     {
         $tour = Tour::findOrFail($tourId);

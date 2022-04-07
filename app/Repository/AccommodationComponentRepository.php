@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
+use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
@@ -16,12 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 interface AccommodationComponentRepositoryInterface
 {
-    public static function getComponentFromOrderComponent($orderComponentId);
-
-    public static function getInventoryFromOrderComponent($orderComponentId);
-
-    public static function getOrderComponentFromId($orderComponentId);
-
     public static function getAvailableAddons($tourId, $oCustomerId = -1);
 
     public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
@@ -33,24 +28,8 @@ interface AccommodationComponentRepositoryInterface
 
 class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
 {
-    public static function getOrderComponentFromId($orderComponentId)
-    {
-        return OrderAccommodation::findOrFail($orderComponentId);
-    }
 
-    public static function getComponentFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
-    }
-
-    public static function getInventoryFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
-    }
-
-    public static function getAvailableAddons($tourId, $oCustomerId = -1)
+    public static function getAvailableAddons($tourId, $oCustomerId = -1): array
     {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);

@@ -13,32 +13,10 @@ use Carbon\Carbon;
 
 interface FlightComponentRepositoryInterface
 {
-    public static function getComponentFromOrderComponent($orderComponentId);
-
-    public static function getInventoryFromOrderComponent($orderComponentId);
-
-    public static function getOrderComponentFromId($orderComponentId);
 }
 
 class FlightComponentRepository implements FlightComponentRepositoryInterface
 {
-    public static function getOrderComponentFromId($orderComponentId)
-    {
-        return OrderFlight::findOrFail($orderComponentId);
-    }
-
-    public static function getComponentFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderFlight::findOrFail($orderComponentId);
-        return $orderComponent->flightInventoryTour()->first()->flightInventory()->first()->flight();
-    }
-
-    public static function getInventoryFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderFlight::findOrFail($orderComponentId);
-        return $orderComponent->flightInventoryTour()->first()->flightInventory();
-    }
-
     public static function getAvailableAddons($tourId, $oCustomerId)
     {
         $tour = Tour::findOrFail($tourId);
