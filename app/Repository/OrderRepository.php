@@ -429,7 +429,7 @@ class OrderRepository
             $paid -= $installment->calculated_amount;
             if ($paid < 0) {
                 return [
-                    'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
+                    'amount' => min($installment->calculated_amount, $paid * -1),
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
@@ -500,17 +500,17 @@ class OrderRepository
         }
         foreach ($order->tour->merchandise as $merchandise) {
             if ($merchandise->tour_component_type === "Included") {
-                $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id, 'cost' => $inventoryTour->tour_sales_price,]);
+                $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id, 'cost' => $merchandise->tour_sales_price,]);
                 $orderCustomer->orderMerchandise()->save($orderMerchandise);
-                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
+                event(new OrderCustomerComponentAddedEvent($orderMerchandise, false));
             }
         }
     }
 
     /**
      * Adds an Add-on Merchandise to an Order Customer
-     * @param $oCustomerId
-     * @param $merchandiseId
+     * @param int $oCustomerId
+     * @param int $merchandiseId
      * @return OrderMerchandise|null
      */
     public static function grantMerchandiseToCustomer(int $oCustomerId, int $merchandiseId): ?OrderMerchandise
@@ -534,7 +534,7 @@ class OrderRepository
         foreach (Order::all() as $order) {
             $nextPayment = self::getNextPaymentDetails($order);
             if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $days) continue;
-            $reminder = PaymentReminder::where('order_id', '=', $order->id)->andWhere('payment_installment_id', '=', $nextPayment['installment']->id)->andWhere('period', '=', $days)->first();
+            $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('payment_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
             if (isset($reminder)) continue;
             self::sendReminderEmail($order, $nextPayment['installment']->id, $days);
         }
@@ -554,9 +554,9 @@ class OrderRepository
             'period' => $days
         ]);
         if ($days < 0) {
-            MailRepository::sendMailable('payment-overdue', $order->leadBooker->email, $order);
+            MailRepository::sendMailable('payment-overdue', $order->leadBooker->customer->email_address, $order);
         } else {
-            MailRepository::sendMailable('payment-due', $order->leadBooker->email, $order);
+            MailRepository::sendMailable('payment-due', $order->leadBooker->customer->email_address, $order);
         }
     }
 
@@ -575,10 +575,9 @@ class OrderRepository
         }
     }
 
-    // TODO: REWORK
     public static function getOrderFromBookingReference(string $bookingReference): ?Order
     {
-        return Order::where('booking_reference', '=', $bookingReference)->first();
+        return Order::whereBookingReference($bookingReference);
     }
 
     public static function isLeadBooker(Order $order, Customer $customer): bool
@@ -863,7 +862,7 @@ class OrderRepository
                 if (Storage::exists($directory)) continue;
                 Storage::makeDirectory($directory);
                 break;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 continue;
             }
         }
@@ -905,7 +904,7 @@ class OrderRepository
     {
         $owned = [];
         foreach ($orderCustomer->orderAccommodation() as $orderAccommodation) {
-            $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0, 0, 0);
+            $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0, 0);
             $owned[$date->unix()] = $orderAccommodation;
         }
         foreach ($orderCustomer->order->tour->templates as $template) {
