@@ -59,22 +59,12 @@ export default {
         alert('CONTROL no booking yet')
         return
       }
-      // console.log('findBookings: current_token is set to ', current_token)
-      const tokens = JSON.parse(localStorage.getItem('tokens'))
-      // if (current_token == null && tokens && tokens.length) {
-      //   current_token = tokens[0];
-      // }
-      // // console.log('findBookings: current_token is set to ', current_token)      
-      tokens.map((t) => {
-        // console.log('locally stored token getting booking for',t)
-        this.getBookings(t)
-      })
-      // console.log('findBookings', this.bookings)
-      console.log('CONTROL current_token', current_token)
-      this.activeTokens = JSON.parse(localStorage.tokens)
-      const checkCurrent = this.activeTokens.filter(b => b.token==current_token)
-      console.log('CONTROL findBookings: check', this.activeTokens, checkCurrent)
-     
+      // const tokens = JSON.parse(localStorage.getItem('tokens'))
+      this.getBookings(current_token)
+      // this.activeTokens = JSON.parse(localStorage.tokens)
+      // const checkCurrent = this.activeTokens.filter(b => b.token==current_token)
+      // console.log('CONTROL current_token', current_token)
+      // console.log('CONTROL findBookings: check', this.activeTokens, checkCurrent)
     },
     restoreActive() {
         if (localStorage.active_token) {
@@ -84,27 +74,10 @@ export default {
     },
     controlForms(show = false) {
       this.showForms = !this.showForms
-      // console.log('controlForms', this.bookings)
-      // if (this.bookings.length === 0) {
-      //     this.restoreActive()
-      // } else
-      // if (localStorage.active_token !== this.bookingToken) {
-      //     // console.log('restoring cookie to active token')
-      //     this.restoreActive()
-      // }
-      // if (show == false) {
-      //   this.showForms = !this.showForms
-      // } else {
-      //   this.showForms = true
-      // }
     },
     // get bookings for this customer
     getBookings(token) {
       let that=this
-      // console.log('getBookings', token)
-      // if (localStorage.active_token !== token) {
-      //   token = localStorage.active_token
-      // }
       axios.get(`/api/booking/customer/bookings/${token}`)
         .then(response => {
           console.log('getBooking:',response.data)
@@ -118,7 +91,13 @@ export default {
             console.log('not setting token as no data for it', token);
           }
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log('**** getting bookings error: ', error.response)
+          console.log(error)
+          if (error.response === 429) {
+            alert('Too many requests - please refresh')
+          }
+        })
     },
     resetToken() {
       localStorage.active_token = this.activateBooking
@@ -155,8 +134,15 @@ alert('control init form??')
 }
 </script>
 <style scoped lang="scss">
-.controls {
+.card-header {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  input {
+      border: none;
+      padding: 0;
+      font-size: small;
+  }
 }
 </style>
 

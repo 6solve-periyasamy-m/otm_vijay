@@ -235,17 +235,6 @@ button.btn-themed.warm {
 button.btn-themed.action {
    background: #2c89f3;
 }
-.card-header {
-  display: flex;
-  gap: 2rem;
-  flex-direction: row;
-  align-content: space-between;
-  input {
-      border: none;
-      padding: 0;
-      font-size: small;
-  }
-}
 .card-container {
   width: 100%;
 }
