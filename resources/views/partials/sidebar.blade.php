@@ -133,7 +133,7 @@
             </a>
         </li>
         @endcan
-        @can('update', 'App\Models\Setting')
+        @can('update', 'App\Models\System\Setting')
             <li>
                 @if(strpos(Request::path(), 'settings') !== false)
                     <a href="{{ route('settings.edit') }}" class="nav-link active">
@@ -176,7 +176,7 @@
                 </a>
             </li>
         @endcan
-        @can('read', \App\Models\Report::class)
+        @can('read', \App\Models\System\Report::class)
             <li>
                 @if(strpos(Request::path(), 'reports') !== false)
                     <a href="{{ route('reports.bespoke.all') }}" class="nav-link active">

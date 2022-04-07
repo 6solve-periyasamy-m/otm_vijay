@@ -176,12 +176,12 @@ class PermissionsRepository
                 'order' => 2,
             ],
             // System
-            'Report' => [
+            'System\Report' => [
                 'name' => 'Report',
                 'group' => 'System',
                 'order' => 0,
             ],
-            'Setting' => [
+            'System\Setting' => [
                 'name' => 'Setting',
                 'group' => 'System',
                 'order' => 1,

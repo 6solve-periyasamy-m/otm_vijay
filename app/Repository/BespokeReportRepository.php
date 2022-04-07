@@ -7,7 +7,7 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
-use App\Models\Report;
+use App\Models\System\Report;
 use Illuminate\Validation\Rule;
 use StringFormatter;
 

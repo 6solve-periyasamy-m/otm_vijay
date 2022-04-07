@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            @can('update', \App\Models\Report::class)
+            @can('update', \App\Models\System\Report::class)
                 <a class="btn btn-warning float-end" href="{{ route('reports.bespoke.edit', ['report' => $report,]) }}">
                     <i class="icon-note"></i>
                     <span>Edit Report</span>

@@ -28,7 +28,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            @can('create', \App\Models\Report::class)
+            @can('create', \App\Models\System\Report::class)
             <a class="btn btn-success float-end" href="#" onclick="save()">
                 <i class="icon-plus"></i>
                 <span>Save Report</span>
