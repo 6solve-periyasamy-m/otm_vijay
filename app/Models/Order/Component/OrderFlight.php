@@ -3,9 +3,9 @@
 namespace App\Models\Order\Component;
 
 use App\Models\Airport;
-use App\Models\Flight;
-use App\Models\FlightInventory;
-use App\Models\FlightInventoryTour;
+use App\Models\Flight\Flight;
+use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\OrderCustomer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

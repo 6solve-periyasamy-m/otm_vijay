@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Activity\ActivityInventory;
-use App\Models\FlightInventory;
+use App\Models\Flight\FlightInventory;
 use App\Models\Merchandise;
 use App\Models\Tour;
 use App\Models\TransportInventory;

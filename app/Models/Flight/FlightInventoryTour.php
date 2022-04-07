@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Flight;
 
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
+use App\Models\Tour;
 use App\Repository\FlightComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

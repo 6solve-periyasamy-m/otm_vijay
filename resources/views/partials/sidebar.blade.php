@@ -58,7 +58,7 @@
             </a>
         </li>
                 @endcan
-        @can('read', 'App\Models\Flight')
+        @can('read', 'App\Models\Flight\Flight')
         <li>
             @if(strpos(Request::path(), 'flights') !== false)
             <a href="{{ route('flights.all') }}" class="nav-link active">

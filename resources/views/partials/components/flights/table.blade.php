@@ -3,7 +3,7 @@
     $(document).ready(function () { $('#flightInventory').DataTable({fixedHeader: true}); });
 </script>
 @endsection
-@can('create', \App\Models\FlightInventory::class)
+@can('create', \App\Models\Flight\FlightInventory::class)
 <div class="card">
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
@@ -50,7 +50,7 @@
                     <td>{{ StringFormatter::formatCurrency($flightInventory->sales_price) }}</td>
                     <td>{{ $flightInventory->notes }}</td>
                     <td class="actions-3">
-                        @can('create', \App\Models\FlightInventory::class)
+                        @can('create', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                                 <i class="icon-layers"></i>
                             </a>
@@ -59,7 +59,7 @@
                                 <i class="icon-layers"></i>
                             </span>
                         @endcan
-                        @can('update', \App\Models\FlightInventory::class)
+                        @can('update', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'flightInventory' => $flightInventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -69,7 +69,7 @@
                                 <i class="icon-note"></i>
                             </span>
                         @endcan
-                        @can('delete', \App\Models\FlightInventory::class)
+                        @can('delete', \App\Models\Flight\FlightInventory::class)
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                onclick="event.preventDefault();document.getElementById('flightInventory-{{ $flightInventory->id }}-delete').submit();">
                                 <i class="icon-trash"></i>

@@ -44,7 +44,7 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 4,
             ],
-            'FlightInventoryTour' => [
+            'Flight\FlightInventoryTour' => [
                 'name' => 'Flight Tour',
                 'group' => 'Tour and Components',
                 'order' => 5,
@@ -102,12 +102,12 @@ class PermissionsRepository
                 'order' => 3,
             ],
             // Flights
-            'Flight' => [
+            'Flight\Flight' => [
                 'name' => 'Flight',
                 'group' => 'Flight',
                 'order' => 0,
             ],
-            'FlightInventory' => [
+            'Flight\FlightInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Flight',
                 'order' => 1,

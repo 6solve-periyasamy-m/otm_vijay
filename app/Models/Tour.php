@@ -6,6 +6,8 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\StockRepository;

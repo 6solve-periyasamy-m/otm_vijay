@@ -5,7 +5,7 @@ namespace App\Models\Order\Payment;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer;
-use App\Models\FlightInventoryTour;
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Group;
 use App\Models\Merchandise;
 use App\Models\Order\Component\OrderAccommodation;

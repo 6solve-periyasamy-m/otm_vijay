@@ -10,7 +10,7 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Address;
 use App\Models\Customer;
-use App\Models\FlightInventoryTour;
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Operator;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;

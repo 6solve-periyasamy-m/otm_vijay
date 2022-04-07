@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Flight;
+use App\Models\Flight\Flight;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FlightFactory extends Factory

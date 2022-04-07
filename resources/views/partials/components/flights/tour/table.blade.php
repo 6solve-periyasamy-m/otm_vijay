@@ -6,7 +6,7 @@
             select: { style: "multi+shift" },
         });
     });
-    @can('create', \App\Models\FlightInventoryTour::class)
+    @can('create', \App\Models\Flight\FlightInventoryTour::class)
     function getSelectedFlightInventory() {
         let ids = [];
         flightTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -30,7 +30,7 @@
     }
     @endcan
 </script>
-@can('create', \App\Models\FlightInventoryTour::class)
+@can('create', \App\Models\Flight\FlightInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <div class="d-inline-flex col-12 col-xl-10">
         <select class="form-select flight-component-type-select">

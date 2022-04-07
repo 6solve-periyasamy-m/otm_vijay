@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Flight;
 
+use App\Models\Airline;
+use App\Models\Airport;
+use App\Models\Currency;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

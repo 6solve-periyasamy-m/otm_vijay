@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\Flight;
+use App\Models\Flight\Flight;
 
 interface FlightsRepositoryInterface {
     public function getFlights($tour_id);

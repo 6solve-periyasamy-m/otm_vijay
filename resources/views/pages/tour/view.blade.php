@@ -282,7 +282,7 @@
                                         @endif
                                     </td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\FlightInventoryTour::class)
+                                        @can('update', \App\Models\Flight\FlightInventoryTour::class)
                                             @if($flight["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $flight["tour"]->tour_component_type == 'Upgrade' ? $flight["tour"]->parent() : $flight["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -299,7 +299,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\FlightInventoryTour::class)
+                                        @can('delete', \App\Models\Flight\FlightInventoryTour::class)
                                             <a href="#" onclick="$('#flight-{{$flight["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post" id="flight-{{$flight["tour"]->id}}-delete">
                                                 @csrf

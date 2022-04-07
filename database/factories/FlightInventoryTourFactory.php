@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\FlightInventoryTour;
+use App\Models\Flight\FlightInventoryTour;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FlightInventoryTourFactory extends Factory

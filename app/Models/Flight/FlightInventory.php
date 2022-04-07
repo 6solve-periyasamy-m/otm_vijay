@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Flight;
 
+use App\Models\Airport;
+use App\Models\TravelClass;
 use App\Repository\StockRepository;
 use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

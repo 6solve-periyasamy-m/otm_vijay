@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Airport;
-use App\Models\Flight;
-use App\Models\FlightInventory;
-use App\Models\FlightInventoryTour;
+use App\Models\Flight\Flight;
+use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Tour;
 use Illuminate\Http\Request;

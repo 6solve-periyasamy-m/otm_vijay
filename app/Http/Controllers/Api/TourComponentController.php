@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
-use App\Models\FlightInventoryTourUpgrade;
+use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;

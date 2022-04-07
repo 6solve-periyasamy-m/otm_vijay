@@ -349,25 +349,25 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     });
 
     Route::prefix('flights')->group(function () {
-        Route::get('/', [FlightController::class, 'index'])->name('flights.all')->middleware('bouncer:Flight,read');
-        Route::get('/create', [FlightController::class, 'create'])->name('flights.create')->middleware('bouncer:Flight,create');
-        Route::post('/create', [FlightController::class, 'store'])->name('flights.store')->middleware('bouncer:Flight,create');
+        Route::get('/', [FlightController::class, 'index'])->name('flights.all')->middleware('bouncer:Flight\Flight,read');
+        Route::get('/create', [FlightController::class, 'create'])->name('flights.create')->middleware('bouncer:Flight\Flight,create');
+        Route::post('/create', [FlightController::class, 'store'])->name('flights.store')->middleware('bouncer:Flight\Flight,create');
         Route::prefix('{flight}')->group(function () {
-            Route::get('/', [FlightController::class, 'view'])->name('flights.view')->middleware('bouncer:Flight,read');
-            Route::get('/update', [FlightController::class, 'edit'])->name('flights.edit')->middleware('bouncer:Flight,update');
-            Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight,update');
-            Route::post('/delete', [FlightController::class, 'destroy'])->name('flights.delete')->middleware('bouncer:Flight,delete');
+            Route::get('/', [FlightController::class, 'view'])->name('flights.view')->middleware('bouncer:Flight\Flight,read');
+            Route::get('/update', [FlightController::class, 'edit'])->name('flights.edit')->middleware('bouncer:Flight\Flight,update');
+            Route::post('/update', [FlightController::class, 'update'])->name('flights.update')->middleware('bouncer:Flight\Flight,update');
+            Route::post('/delete', [FlightController::class, 'destroy'])->name('flights.delete')->middleware('bouncer:Flight\Flight,delete');
             Route::get('/replicate', [FlightController::class, 'createReturn'])->name('flights.return');
             Route::prefix('inventory')->group(function () {
-                Route::get('/', [FlightInventoryController::class, 'index'])->name('flight-inventories.all')->middleware('bouncer:FlightInventory,read');
-                Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:FlightInventory,create');
-                Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight-inventories.store')->middleware('bouncer:FlightInventory,create');
+                Route::get('/', [FlightInventoryController::class, 'index'])->name('flight-inventories.all')->middleware('bouncer:Flight\FlightInventory,read');
+                Route::get('/create', [FlightInventoryController::class, 'create'])->name('flight-inventories.create')->middleware('bouncer:Flight\FlightInventory,create');
+                Route::post('/create', [FlightInventoryController::class, 'store'])->name('flight-inventories.store')->middleware('bouncer:Flight\FlightInventory,create');
                 Route::prefix('{flightInventory}')->group(function () {
-                    Route::get('/', [FlightInventoryController::class, 'view'])->name('flight-inventories.view')->middleware('bouncer:FlightInventory,read');
-                    Route::get('/update', [FlightInventoryController::class, 'edit'])->name('flight-inventories.edit')->middleware('bouncer:FlightInventory,update');
-                    Route::post('/update', [FlightInventoryController::class, 'update'])->name('flight-inventories.update')->middleware('bouncer:FlightInventory,update');
-                    Route::post('/delete', [FlightInventoryController::class, 'destroy'])->name('flight-inventories.delete')->middleware('bouncer:FlightInventory,delete');
-                    Route::get('/duplicate', [FlightInventoryController::class, 'duplicate'])->name('flight-inventories.duplicate')->middleware('bouncer:FlightInventory,create');
+                    Route::get('/', [FlightInventoryController::class, 'view'])->name('flight-inventories.view')->middleware('bouncer:Flight\FlightInventory,read');
+                    Route::get('/update', [FlightInventoryController::class, 'edit'])->name('flight-inventories.edit')->middleware('bouncer:Flight\FlightInventory,update');
+                    Route::post('/update', [FlightInventoryController::class, 'update'])->name('flight-inventories.update')->middleware('bouncer:Flight\FlightInventory,update');
+                    Route::post('/delete', [FlightInventoryController::class, 'destroy'])->name('flight-inventories.delete')->middleware('bouncer:Flight\FlightInventory,delete');
+                    Route::get('/duplicate', [FlightInventoryController::class, 'duplicate'])->name('flight-inventories.duplicate')->middleware('bouncer:Flight\FlightInventory,create');
                 });
             });
         });
@@ -498,22 +498,22 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     });
                 });
                 Route::prefix('flight')->group(function () {
-                    Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create')->middleware('bouncer:FlightInventoryTour,create');
-                    Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store')->middleware('bouncer:FlightInventoryTour,create');
+                    Route::get('/create', [FlightInventoryTourController::class, 'create'])->name('flight-inventory-tours.create')->middleware('bouncer:Flight\FlightInventoryTour,create');
+                    Route::post('/create', [FlightInventoryTourController::class, 'store'])->name('flight-inventory-tours.store')->middleware('bouncer:Flight\FlightInventoryTour,create');
                     Route::prefix('{flightInventoryTour}')->group(function () {
-                        Route::get('/', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view')->middleware('bouncer:FlightInventoryTour,read');
-                        Route::get('/update', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit')->middleware('bouncer:FlightInventoryTour,update');
-                        Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update')->middleware('bouncer:FlightInventoryTour,update');
-                        Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete')->middleware('bouncer:FlightInventoryTour,delete');
+                        Route::get('/', [FlightInventoryTourController::class, 'view'])->name('flight-inventory-tours.view')->middleware('bouncer:Flight\FlightInventoryTour,read');
+                        Route::get('/update', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit')->middleware('bouncer:Flight\FlightInventoryTour,update');
+                        Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update')->middleware('bouncer:Flight\FlightInventoryTour,update');
+                        Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete')->middleware('bouncer:Flight\FlightInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
-                        Route::get('/', [UpgradeController::class, 'viewFlightUpgrade'])->name('flight-upgrade.view')->middleware('bouncer:FlightInventoryTour,read');
-                        Route::get('/create', [UpgradeController::class, 'createFlightUpgrade'])->name('flight-upgrade.create')->middleware('bouncer:FlightInventoryTour,create');
-                        Route::post('/store', [UpgradeController::class, 'storeFlightUpgrade'])->name('flight-upgrade.store')->middleware('bouncer:FlightInventoryTour,create');
+                        Route::get('/', [UpgradeController::class, 'viewFlightUpgrade'])->name('flight-upgrade.view')->middleware('bouncer:Flight\FlightInventoryTour,read');
+                        Route::get('/create', [UpgradeController::class, 'createFlightUpgrade'])->name('flight-upgrade.create')->middleware('bouncer:Flight\FlightInventoryTour,create');
+                        Route::post('/store', [UpgradeController::class, 'storeFlightUpgrade'])->name('flight-upgrade.store')->middleware('bouncer:Flight\FlightInventoryTour,create');
                         Route::prefix('{upgrade}')->group(function () {
-                            Route::get('/update', [UpgradeController::class, 'editFlightUpgrade'])->name('flight-upgrade.edit')->middleware('bouncer:FlightInventoryTour,update');
-                            Route::post('/update', [UpgradeController::class, 'updateFlightUpgrade'])->name('flight-upgrade.update')->middleware('bouncer:FlightInventoryTour,update');
-                            Route::post('/delete', [UpgradeController::class, 'deleteFlightUpgrade'])->name('flight-upgrade.delete')->middleware('bouncer:FlightInventoryTour,delete');
+                            Route::get('/update', [UpgradeController::class, 'editFlightUpgrade'])->name('flight-upgrade.edit')->middleware('bouncer:Flight\FlightInventoryTour,update');
+                            Route::post('/update', [UpgradeController::class, 'updateFlightUpgrade'])->name('flight-upgrade.update')->middleware('bouncer:Flight\FlightInventoryTour,update');
+                            Route::post('/delete', [UpgradeController::class, 'deleteFlightUpgrade'])->name('flight-upgrade.delete')->middleware('bouncer:Flight\FlightInventoryTour,delete');
                         });
                     });
                 });
