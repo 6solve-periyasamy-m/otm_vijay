@@ -3,9 +3,34 @@
 namespace App\Models\Location;
 
 use App\Models\Helper\SimpleModel;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\Location\AddressParent
+ *
+ * @property int $id
+ * @property string $name
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @method static Builder|AddressParent newModelQuery()
+ * @method static Builder|AddressParent newQuery()
+ * @method static QueryBuilder|AddressParent onlyTrashed()
+ * @method static Builder|AddressParent query()
+ * @method static Builder|AddressParent whereCreatedAt($value)
+ * @method static Builder|AddressParent whereDeletedAt($value)
+ * @method static Builder|AddressParent whereId($value)
+ * @method static Builder|AddressParent whereName($value)
+ * @method static Builder|AddressParent whereUpdatedAt($value)
+ * @method static QueryBuilder|AddressParent withTrashed()
+ * @method static QueryBuilder|AddressParent withoutTrashed()
+ * @mixin Eloquent
+ */
 class AddressParent extends SimpleModel
 {
     use HasFactory, SoftDeletes;
