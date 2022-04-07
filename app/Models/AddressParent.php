@@ -19,26 +19,15 @@ class AddressParent extends SimpleModel
         5 => 'Transport',
     ];
 
-    public static function getParentId(string $key)
+    public static function getParentId(string $key): int
     {
-        switch (strtolower($key)) {
-            case 'customer':
-                return 1;
-            case 'accommodation':
-                return 2;
-            case 'activity':
-                return 3;
-            case 'airport':
-                return 4;
-            case 'transport':
-                return 5;
-            default:
-                return 63;
-        }
-    }
-
-    public function __toString()
-    {
-        return $this->name;
+        return match (strtolower($key)) {
+            'customer' => 1,
+            'accommodation' => 2,
+            'activity' => 3,
+            'airport' => 4,
+            'transport' => 5,
+            default => 63,
+        };
     }
 }

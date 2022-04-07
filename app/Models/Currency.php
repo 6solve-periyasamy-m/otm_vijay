@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Currency extends Model
@@ -12,7 +13,7 @@ class Currency extends Model
 
     protected $fillable = ['code', 'name', 'symbol'];
 
-    public function countries()
+    public function countries(): BelongsToMany
     {
         return $this->belongsToMany(Country::class, 'country_currencies');
     }
