@@ -1,6 +1,8 @@
 <template>
     <div class="controls">{{debug ? bookings : null}}
-        <div class="booking-form--control">
+        <a class="controls-activation" @click="showControl=!showControl"> Controls </a>
+        <div class="booking-form--control" v-show="showControl">
+            
             <select  v-if="activeTokens" v-model="activateBooking" @change="activate">
               <option value="" disabled>Select a booking to load form</option>
               <option v-for="booking in bookings" :key="booking.token" :value="booking.token">{{booking.tour_name}} {{booking.name}}</option>
@@ -134,15 +136,9 @@ alert('control init form??')
 }
 </script>
 <style scoped lang="scss">
-.card-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  input {
-      border: none;
-      padding: 0;
-      font-size: small;
-  }
+.controls-activation {
+  margin-right: 1rem;
+  display: inline-block;
 }
 </style>
 

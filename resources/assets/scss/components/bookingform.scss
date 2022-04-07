@@ -114,6 +114,16 @@ h3 {
         }
     }
 }
+.card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    input {
+        border: none;
+        padding: 0;
+        font-size: small;
+    }
+  }
 .card-body {
     overflow: hidden;
     width: 100%;
