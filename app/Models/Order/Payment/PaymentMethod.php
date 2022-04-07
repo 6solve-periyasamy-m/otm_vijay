@@ -2,7 +2,7 @@
 
 namespace App\Models\Order\Payment;
 
-use App\Models\SimpleModel;
+use App\Models\Helper\SimpleModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

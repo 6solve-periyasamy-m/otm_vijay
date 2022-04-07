@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Helper\SimpleModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -11,7 +12,7 @@ class TransportType extends SimpleModel
 
     protected $fillable = ['name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:transport_types,name',];
     }

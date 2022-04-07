@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Helper\SimpleModel;
 use App\Models\Transport\Transport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
