@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Tour;
 use App\Models\Event;
 use App\Models\Order;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Gateways\StripeGateway;
@@ -60,6 +61,11 @@ class BookingController extends Controller
 
     public function tourBookingForm($url)
     {
+        // TODO: 
+        // get the config and pass the logo and company name to the view
+        $logoData = Setting::where('key', 'company.logo')->first();
+        $companyData = Setting::where('key', 'company.name')->first();
+
         $tour = Tour::where('booking_form_url', $url)->first();
         if (empty($tour)) {
             abort(404);
@@ -78,7 +84,10 @@ class BookingController extends Controller
         }
 
         if (isset($tour) && isset($event)) {
-            return view('pages.booking.tour.form')->with(['auth_user' => Auth::user(), 'tour' => $tour, 'event' => $event]);
+            return view('pages.booking.tour.form')->with(['auth_user' => Auth::user(), 
+                'company' => ['logo' => $logoData->value, 'name' => $companyData->value],
+                'tour' => $tour,
+                'event' => $event]);
         }
 
         abort(404);

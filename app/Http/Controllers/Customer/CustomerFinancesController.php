@@ -20,7 +20,7 @@ class CustomerFinancesController extends Controller
         $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric']);
         $order = OrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
         $amount = $request->input('amount');
-        if (!isset($order) || $order->leadBooker->customer->id != CustomerAuthenticationRepository::getCustomer()->id) {
+        if (!isset($order) || !OrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
             return back()->withErrors('Cannot make a payment for an invalid order');
         }
         if ($amount > $order->remaining) {

@@ -3,10 +3,10 @@
     <div class="row">
         <div class="bookingform-header">
             <div class="py-2 bookingform-header__logo">
-                <img class="logo" src="/images/octlogo.png"/>
+                <img class="small-logo logo" :src="logoPath" :alt="logoPath"/>
             </div>
             <div class="bookingform-header__title">
-                <h1 class="bookingform-header__title--main">Octopus Travel Matrix Booking Form</h1>
+                <h1 class="bookingform-header__title--main">{{company}} Booking Form</h1>
                 <h2 v-if="event != null">{{event.name}}</h2>
                 <h3 v-if="tour != null">{{tour.name}} <br/>from {{ startDate(event) }} To {{endDate(event) }}</h3>
             </div>
@@ -17,14 +17,20 @@
 <script>
 import dates from '../utilities'
 export default {
-    props: ['event', 'tour'],
+    props: ['event', 'tour', 'company', 'logo'],
     data() {
         return {
-            debug: false
+            debug: false,
+            logoPath: ''
         }
     },
     mounted() {
         this.debug && console.log('Booking form header Component mounted.')
+        if (this.logo.substr(0,1) !== '/') {
+            this.logoPath = `/${this.logo}`
+        } else {
+            this.logoPath = this.logo
+        }
     },
     methods: {
         startDate(event) {
@@ -37,7 +43,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.small-logo {
+    width: 150px;
+    height: auto;
+}
 .img-fluid {
     width: 50vw;
     height: auto;

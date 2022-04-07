@@ -105,7 +105,6 @@ class BookingCustomerController extends ApiController
             'home_address_id' => isset($customer) ? $customer->home_address_id : null,
             'billing_address_id' => isset($customer) ? $customer->billing_address_id : null,
             'email_address' => $request->email_address,
-            'password' => Hash::make($request->password),
             'gender' => $request->gender,
             'title' => $request->title,
             'first_name' => $request->first_name,
