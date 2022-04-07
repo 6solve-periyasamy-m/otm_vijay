@@ -419,25 +419,25 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
         });
         Route::prefix('activity-types')->group(function () {
-            Route::get('/', [ActivityTypeController::class, 'index'])->name('activity-types.all')->middleware('bouncer:ActivityType,read');
-            Route::get('/create', [ActivityTypeController::class, 'create'])->name('activity-types.create')->middleware('bouncer:ActivityType,create');
-            Route::post('/create', [ActivityTypeController::class, 'store'])->name('activity-types.store')->middleware('bouncer:ActivityType,create');
+            Route::get('/', [ActivityTypeController::class, 'index'])->name('activity-types.all')->middleware('bouncer:Activity\ActivityType,read');
+            Route::get('/create', [ActivityTypeController::class, 'create'])->name('activity-types.create')->middleware('bouncer:Activity\ActivityType,create');
+            Route::post('/create', [ActivityTypeController::class, 'store'])->name('activity-types.store')->middleware('bouncer:Activity\ActivityType,create');
             Route::prefix('{activityType}')->group(function () {
-                Route::get('/', [ActivityTypeController::class, 'view'])->name('activity-types.view')->middleware('bouncer:ActivityType,read');
-                Route::get('/update', [ActivityTypeController::class, 'edit'])->name('activity-types.edit')->middleware('bouncer:ActivityType,update');
-                Route::post('/update', [ActivityTypeController::class, 'update'])->name('activity-types.update')->middleware('bouncer:ActivityType,update');
-                Route::post('/delete', [ActivityTypeController::class, 'destroy'])->name('activity-types.delete')->middleware('bouncer:ActivityType,delete');
+                Route::get('/', [ActivityTypeController::class, 'view'])->name('activity-types.view')->middleware('bouncer:Activity\ActivityType,read');
+                Route::get('/update', [ActivityTypeController::class, 'edit'])->name('activity-types.edit')->middleware('bouncer:Activity\ActivityType,update');
+                Route::post('/update', [ActivityTypeController::class, 'update'])->name('activity-types.update')->middleware('bouncer:Activity\ActivityType,update');
+                Route::post('/delete', [ActivityTypeController::class, 'destroy'])->name('activity-types.delete')->middleware('bouncer:Activity\ActivityType,delete');
             });
         });
         Route::prefix('ticket-types')->group(function () {
-            Route::get('/', [TicketTypeController::class, 'index'])->name('ticket-types.all')->middleware('bouncer:TicketType,read');
-            Route::get('/create', [TicketTypeController::class, 'create'])->name('ticket-types.create')->middleware('bouncer:TicketType,create');
-            Route::post('/create', [TicketTypeController::class, 'store'])->name('ticket-types.store')->middleware('bouncer:TicketType,create');
+            Route::get('/', [TicketTypeController::class, 'index'])->name('ticket-types.all')->middleware('bouncer:Activity\TicketType,read');
+            Route::get('/create', [TicketTypeController::class, 'create'])->name('ticket-types.create')->middleware('bouncer:Activity\TicketType,create');
+            Route::post('/create', [TicketTypeController::class, 'store'])->name('ticket-types.store')->middleware('bouncer:Activity\TicketType,create');
             Route::prefix('{ticketType}')->group(function () {
-                Route::get('/', [TicketTypeController::class, 'view'])->name('ticket-types.view')->middleware('bouncer:TicketType,read');
-                Route::get('/update', [TicketTypeController::class, 'edit'])->name('ticket-types.edit')->middleware('bouncer:TicketType,update');
-                Route::post('/update', [TicketTypeController::class, 'update'])->name('ticket-types.update')->middleware('bouncer:TicketType,update');
-                Route::post('/delete', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete')->middleware('bouncer:TicketType,delete');
+                Route::get('/', [TicketTypeController::class, 'view'])->name('ticket-types.view')->middleware('bouncer:Activity\TicketType,read');
+                Route::get('/update', [TicketTypeController::class, 'edit'])->name('ticket-types.edit')->middleware('bouncer:Activity\TicketType,update');
+                Route::post('/update', [TicketTypeController::class, 'update'])->name('ticket-types.update')->middleware('bouncer:Activity\TicketType,update');
+                Route::post('/delete', [TicketTypeController::class, 'destroy'])->name('ticket-types.delete')->middleware('bouncer:Activity\TicketType,delete');
             });
         });
     });

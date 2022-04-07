@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Activity\Activity;
-use App\Models\ActivityType;
+use App\Models\Activity\ActivityType;
 use App\Models\Address;
 use App\Models\AddressParent;
 use App\Models\Country;

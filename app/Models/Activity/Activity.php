@@ -2,7 +2,6 @@
 
 namespace App\Models\Activity;
 
-use App\Models\ActivityType;
 use App\Models\Address;
 use App\Models\Currency;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

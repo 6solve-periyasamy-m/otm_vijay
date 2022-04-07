@@ -86,7 +86,7 @@ class PermissionsRepository
                 'group' => 'Activity',
                 'order' => 0,
             ],
-            'ActivityType' => [
+            'Activity\ActivityType' => [
                 'name' => 'Activity Type',
                 'group' => 'Activity',
                 'order' => 2,
@@ -96,7 +96,7 @@ class PermissionsRepository
                 'group' => 'Activity',
                 'order' => 1,
             ],
-            'TicketType' => [
+            'Activity\TicketType' => [
                 'name' => 'Ticket Type',
                 'group' => 'Activity',
                 'order' => 3,

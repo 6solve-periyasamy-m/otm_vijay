@@ -1,4 +1,4 @@
-@can('create', \App\Models\TicketType::class)
+@can('create', \App\Models\Activity\TicketType::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Ticket Type', 'field' => 'ticket_type_id', 'value' => $ticket_type_id ?? 0, 'route' => 'ticket-types',
              'createRoute' => route('ticket-types.create'),])

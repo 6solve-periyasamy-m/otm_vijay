@@ -4,9 +4,9 @@ namespace App\Transforms;
 
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
-use App\Models\ActivityType;
+use App\Models\Activity\ActivityType;
+use App\Models\Activity\TicketType;
 use App\Models\Order\OrderCustomer;
-use App\Models\TicketType;
 use App\Repository\TourRepository;
 use StringFormatter;
 

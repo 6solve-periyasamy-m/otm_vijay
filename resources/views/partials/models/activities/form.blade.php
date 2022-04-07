@@ -1,4 +1,4 @@
-@can('create', \App\Models\ActivityType::class)
+@can('create', \App\Models\Activity\ActivityType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Activity Type', 'field' => 'activity_type_id', 'value' => $activity_type_id ?? 0,
                  'route' => 'activity-types', 'createRoute' => route('activity-types.create'),])
