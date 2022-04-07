@@ -5,7 +5,7 @@ namespace App\Models\Order\Component;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\Group;
+use App\Models\Customer\Group;
 use App\Models\Order\OrderCustomer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

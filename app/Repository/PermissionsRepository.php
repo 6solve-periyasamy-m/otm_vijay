@@ -160,7 +160,7 @@ class PermissionsRepository
                 'order' => 2,
             ],
             // Customers
-            'Customer' => [
+            'Customer\Customer' => [
                 'name' => 'Customer',
                 'group' => 'Orders',
                 'order' => 0,

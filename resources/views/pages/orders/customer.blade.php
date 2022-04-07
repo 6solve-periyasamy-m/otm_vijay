@@ -255,7 +255,7 @@ $(document).ready( function () {
                     </form>
                 @endcan
             @endcan
-            @can('read', \App\Models\Customer::class)
+            @can('read', \App\Models\Customer\Customer::class)
                 <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}" class="btn btn-info mb-1" target="_blank">
                     <i class="icon-user"></i>
                     View Customer

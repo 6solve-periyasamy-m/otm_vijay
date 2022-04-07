@@ -6,7 +6,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\CustomerOrderDetail;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventoryTour;

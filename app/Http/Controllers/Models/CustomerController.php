@@ -6,7 +6,7 @@ use App\Events\Customer\CustomerCreatedEvent;
 use App\Events\Customer\CustomerEditedEvent;
 use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\LocationsRepository;

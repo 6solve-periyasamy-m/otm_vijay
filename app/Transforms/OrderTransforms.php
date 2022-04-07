@@ -2,7 +2,7 @@
 
 namespace App\Transforms;
 
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\PaymentMethod;

@@ -2,14 +2,14 @@
 
 namespace App\Models\Order;
 
-use App\Models\Customer;
-use App\Models\Group;
+use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
+use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
-use App\Models\OrderCustomerGroup;
 use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;

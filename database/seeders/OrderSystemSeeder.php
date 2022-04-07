@@ -8,7 +8,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Location\Address;
 use App\Models\Order\Component\OrderAccommodation;

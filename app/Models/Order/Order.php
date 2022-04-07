@@ -2,7 +2,7 @@
 
 namespace App\Models\Order;
 
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;

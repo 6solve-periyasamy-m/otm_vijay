@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise;
 use App\Models\Transport\TransportInventoryTour;

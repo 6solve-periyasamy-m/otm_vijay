@@ -118,7 +118,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Customer')
+        @can('read', 'App\Models\Customer\Customer')
         <li>
             @if(strpos(Request::path(), 'customers') !== false)
             <a href="{{ route('customers.all') }}" class="nav-link active">

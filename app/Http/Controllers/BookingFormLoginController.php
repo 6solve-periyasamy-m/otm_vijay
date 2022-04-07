@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 

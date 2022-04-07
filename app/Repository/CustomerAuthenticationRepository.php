@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Models\ApiToken;
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\CustomerApiToken;
 use App\Models\User;
 use Auth;

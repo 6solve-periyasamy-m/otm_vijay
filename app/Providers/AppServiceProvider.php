@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\Customer;
-use Illuminate\Support\ServiceProvider;
+use App\Models\Customer\Customer;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 use Stripe\Stripe;
 

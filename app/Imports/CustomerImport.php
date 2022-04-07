@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Models\Location\Country;

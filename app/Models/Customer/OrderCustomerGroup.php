@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Customer;
 
 use App\Models\Order\OrderCustomer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

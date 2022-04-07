@@ -37,7 +37,7 @@
            'route' => 'tours',])
 @endcan
 @if(!isset($update))
-@can('create', \App\Models\Customer::class)
+@can('create', \App\Models\Customer\Customer::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
              'route' => 'customers', 'createRoute' => route('customers.create'),])

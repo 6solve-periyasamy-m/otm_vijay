@@ -2,7 +2,7 @@
 
 namespace App\Models\Order\Payment;
 
-use App\Models\Customer;
+use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use Database\Factories\PaymentFactory;
 use Eloquent;

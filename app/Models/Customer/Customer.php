@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Customer;
 
+use App\Models\ApiToken;
+use App\Models\CustomerApiToken;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;

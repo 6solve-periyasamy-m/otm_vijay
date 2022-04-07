@@ -2,7 +2,7 @@
 
 namespace App\Models\Accommodation;
 
-use App\Models\Group;
+use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour;
 use App\Repository\AccommodationComponentRepository;
