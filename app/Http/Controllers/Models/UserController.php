@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\System\User;
 use App\Repository\PermissionsRepository;
 use App\Repository\UserRepository;
 use App\Transforms\PermissionTransforms;

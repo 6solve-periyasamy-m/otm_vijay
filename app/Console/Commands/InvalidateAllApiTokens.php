@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\ApiToken;
-use App\Models\User;
+use App\Models\System\ApiToken;
+use App\Models\System\User;
 use Illuminate\Console\Command;
 
 class InvalidateAllApiTokens extends Command

@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
-use App\Models\ApiToken;
 use App\Models\Customer\Customer;
-use App\Models\CustomerApiToken;
-use App\Models\User;
+use App\Models\System\ApiToken;
+use App\Models\System\CustomerApiToken;
+use App\Models\System\User;
 use Auth;
 use Bouncer;
 use Illuminate\Database\QueryException;

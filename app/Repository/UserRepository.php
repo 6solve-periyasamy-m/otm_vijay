@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\ApiToken;
-use App\Models\User;
+use App\Models\System\ApiToken;
+use App\Models\System\User;
 use Bouncer;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;

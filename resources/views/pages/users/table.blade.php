@@ -36,7 +36,7 @@
                         <th scope="col">Verified</th>
                         <th scope="col">Roles</th>
                         <th scope="col">Created</th>
-                        @can('update', \App\Models\User::class)
+                        @can('update', \App\Models\System\User::class)
                             <th scope="col">Actions</th>
                         @endcan
                     </tr>
@@ -48,13 +48,13 @@
                         <td>{{ StringFormatter::formatDateTime($user->email_verified_at) }}</td>
                         <td>{{ $user->roles->implode('title', ', ') }}</td>
                         <td>{{ StringFormatter::formatDateTime($user->created_at) }}</td>
-                        @can('update', \App\Models\User::class)
+                        @can('update', \App\Models\System\User::class)
                             @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel() || Auth::user()->id == $user->id)
                             <td>
                                 <a href="{{route('users.edit', ['user' => $user,])}}" class="btn btn-outline-success btn-sm mb-1">
                                     <i class="icon-note"></i>
                                 </a>
-                                @can('delete', \App\Models\User::class)
+                                @can('delete', \App\Models\System\User::class)
                                     @if(Auth::user()->id == $user->id)
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                             <i class="icon-trash"></i>
@@ -75,7 +75,7 @@
                                     <span class="btn btn-outline-dark btn-sm mb-1">
                                         <i class="icon-note"></i>
                                     </span>
-                                    @can('delete', \App\Models\User::class)
+                                    @can('delete', \App\Models\System\User::class)
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                             <i class="icon-trash"></i>
                                         </span>

@@ -2,11 +2,11 @@
 
 namespace App\Models\Customer;
 
-use App\Models\ApiToken;
-use App\Models\CustomerApiToken;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\System\ApiToken;
+use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\CustomerAuthenticationRepository;
 use Database\Factories\CustomerFactory;

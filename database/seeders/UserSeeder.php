@@ -2,13 +2,9 @@
 
 namespace Database\Seeders;
 use App\Models\Setting;
-use App\Models\Tour;
-use App\Models\User;
+use App\Models\System\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use \Silber\Bouncer\BouncerFacade as Bouncer;
-use Silber\Bouncer\Database\Role;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class UserSeeder extends Seeder
 {

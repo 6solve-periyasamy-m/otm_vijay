@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-use App\Models\User;
+use App\Models\System\User;
+use Bouncer;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
-use Bouncer;
 
 class PermissionsRepository
 {
@@ -186,7 +186,7 @@ class PermissionsRepository
                 'group' => 'System',
                 'order' => 1,
             ],
-            'User' => [
+            'System\User' => [
                 'name' => 'User',
                 'group' => 'System',
                 'order' => 2,
