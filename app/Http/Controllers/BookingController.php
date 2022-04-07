@@ -105,36 +105,37 @@ class BookingController extends Controller
     public function payDeposit(Request $request)
     {
 
-        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required| regex:/^([^\d]*)\d*(\.\d{2})?$/']);
-        $amountCurrency = $request->amount;
+        $request->validate(['token' => 'required|exists:bookings', 'amount' => 'required|regex:/^\d*\.?\d*$/', 'currencyamount' => 'required|regex:/^([^\d]*)[\d.]+\.?\d*$/']);
+        $currencyAmount = $request->currencyamount;
+        $amount = floatval($request->amount);
 
         // extract the currency symbol, everything before the first digit as the currency symbol
-        $currencyRegex = '/^([^\d]*)\d*(\.\d{2})?$/';
-        preg_match($currencyRegex, $amountCurrency, $matched);
+        $currencyRegex = '/^([^\d]*)([\d\,]*)(\.\d{2})?$/';
+        $amountRegex = '/^(\d*\.?\d*)$/';
+        // detect the currency symbol used
+        preg_match($currencyRegex, $currencyAmount, $matched);
         $currency = $matched[1];
-        if ($currency !== '£') {
-          Log::warning('BookingController::payDeposit() WARNING: unsupported currency detected:'.$currency); 
-        }
+        // check the amount is a (decimal optional) number
+        preg_match($amountRegex, $amount, $matched);
+
         $currencyLength = strlen($currency);
+        // // If testing a new currency, ensure the length of the currency string is resolving correctly
+        // // Log::debug('Check currency: '.$currencyAmount.' '.$currency. ' length='.$currencyLength);
+        // // NB: £ uses two bytes
+        $currency = substr($currencyAmount, 0, $currencyLength);
 
-        // If testing a new currency, ensure the length of the currency string is resolving correctly
-        // Log::debug('Check currency: '.$amountCurrency.' '.$currency. ' length='.$currencyLength);
-
-        // NB: £ uses two bytes
-        $currency = substr($amountCurrency, 0, $currencyLength);
         // accept £999.99 or 999.99
+        $checkamount = 0;
         if ($currency === '£') {
-          $amount = floatval(substr($request->amount, $currencyLength, strlen($request->amount) - $currencyLength ));
-        } else if (($currency !== '£') && fmod(floatval($request->amount), 1) === 0.00) {
-          $amount = floatval($request->amount);
-        // log incorrect amount formatting due to unexpected changed
-        } else if (($currency !== '£') && fmod(floatval($request->amount), 1) !== 0.00) {
-          Log::error('deposit received but not in £', [$request->amount]);
-          throw new Exception('Deposit received but value is not £');
-        } else {
-            Log::error('Deposit format incorrect, expect decimal value', [$request->amount]);
-          throw new Exception('Deposit received appears not valid');
+           $checkamount = floatval(substr($currencyAmount, $currencyLength, strlen($currencyAmount) - $currencyLength));
         }
+        if ($currency !== '£') {
+            Log::warning('BookingController::payDeposit() WARNING: unsupported currency detected:'.$currency); 
+        }
+        if ($checkamount !== $amount) {
+            Log::warning('BookingContorller::payDeposit() WARNING: currency '.$currency. ' amount '.$checkamount.' mismatched with amount '. $amount);
+        }
+  
         $bookingRepository = new BookingRepository();
         $booking = $bookingRepository->findBookingByToken($request->token);
         if (!$booking) {
@@ -143,7 +144,7 @@ class BookingController extends Controller
         $customer = CustomerRepository::lookup($booking->customer_id);
 
         if ($amount < 0.01) {
-            Log::debug('BookingController::payDeposit() currency values',[$currency, $amountCurrency, $currencyLength, $amount, $booking, $customer]); 
+            Log::debug('BookingController::payDeposit() currency values',[$currency, $currencyAmount, $currencyLength, $amount, $booking, $customer]); 
             throw new Exception('BookingController::payDeposit did not resolve to a deposit amount'); 
         }
 

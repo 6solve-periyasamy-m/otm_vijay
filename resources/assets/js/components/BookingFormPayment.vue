@@ -145,7 +145,8 @@
                     <form method="post" action="/booking/deposit/payment">
                       <input type="hidden" name="_token" :value="csrf_token" />
                       <input type="hidden" name="token" :value="booking_token" />
-                      <input type="text" name="amount" readonly :value="priceFormat(deposit * travellerCount)" />
+                      <input type="text" name="currencyamount" readonly :value="priceFormat(deposit * travellerCount)" />
+                      <input type="hidden" name="amount" readonly :value="deposit * travellerCount" />
                       <input type="submit" class="btn btn-primary" value="Pay Deposit" />
                     </form>
                 </div>
@@ -213,7 +214,7 @@ export default {
             that.countTravellers()
         })
         bus.$on('recalculatePayment', () => {
-            this.debug && console.log('Recalculat payment event')
+            this.debug && console.log('Recalculate payment event')
             that.loadBooking(that.booking_token)
             that.calcPrice()
             that.calcTourPrice()
@@ -237,7 +238,7 @@ export default {
         calculateSingleRooms() {
             let rooms = 0
             this.booking.accommodations.map(t => {
-                console.log(t)
+              this.debug>7 && console.log('calculate single rooms', t)
               if (t.room_type_id === 1) {
                 rooms++;
               }
