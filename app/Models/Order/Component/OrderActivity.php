@@ -53,7 +53,7 @@ class OrderActivity extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id','cost'];
+    protected $fillable = ['order_customer_id', 'activity_inventory_tour_id', 'cost'];
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {

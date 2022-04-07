@@ -43,7 +43,7 @@ class FlightInventoryTourUpgrade extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['upgrade_id','description'];
+    protected $fillable = ['upgrade_id', 'description'];
 
     public function base(): BelongsTo
     {

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\System\ApiToken;
 use App\Repository\UserRepository;
-use App\Rules\EmailCurrentOrUnique;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -99,6 +98,27 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected string $guard = 'web';
 
+    public static function getCreateValidationRules(): array
+    {
+        return [
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                'unique:users,email'
+            ],
+            'name' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ]
+        ];
+    }
+
     public function getUpdateValidationRules(): array
     {
         return [
@@ -112,27 +132,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'new_password' => [
                 'nullable',
                 'confirmed',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised()
-            ]
-        ];
-    }
-
-    public static function getCreateValidationRules(): array
-    {
-        return [
-            'email' => [
-                'required',
-                'email:rfc,dns',
-                'unique:users,email'
-            ],
-            'name' => 'required',
-            'password' => [
-                'required',
                 Password::min(8)
                     ->letters()
                     ->mixedCase()

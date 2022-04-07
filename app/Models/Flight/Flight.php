@@ -63,7 +63,7 @@ class Flight extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected array $cascadeDeletes = ['flightInventory'];
-    protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from','image_url'];
+    protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from', 'image_url'];
     protected $casts = ['available_from' => 'date',];
 
     public static function getValidationRules(): array
@@ -75,6 +75,25 @@ class Flight extends Model
             'available_from' => 'date',
             'image' => 'nullable|image',
         ];
+    }
+
+    public static function firstOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes): Flight
+    {
+        $flight = self::where('airline_id', '=', $airline->id)
+            ->where('departure_airport_id', '=', $departure->id)
+            ->where('arrival_airport_id', '=', $arrival->id)
+            ->where('is_domestic', '=', $isDomestic)->first();
+        if ($flight == null) {
+            $flight = Flight::create([
+                'airline_id' => $airline->id,
+                'departure_airport_id' => $departure->id,
+                'arrival_airport_id' => $arrival->id,
+                'is_domestic' => $isDomestic,
+                'currency_id' => $currency->id,
+                'notes' => $notes,
+            ]);
+        }
+        return $flight;
     }
 
     public function flightInventory(): HasMany
@@ -105,25 +124,6 @@ class Flight extends Model
     public function getFlightDetailsAttribute(): string
     {
         return "{$this->airline->name} | Departs from: {$this->departureAirport->address->name} - Arrives at: {$this->arrivalAirport->address->name}";
-    }
-
-    public static function firstOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes): Flight
-    {
-        $flight = self::where('airline_id', '=', $airline->id)
-            ->where('departure_airport_id', '=', $departure->id)
-            ->where('arrival_airport_id', '=', $arrival->id)
-            ->where('is_domestic', '=', $isDomestic)->first();
-        if ($flight == null) {
-            $flight = Flight::create([
-                'airline_id' => $airline->id,
-                'departure_airport_id' => $departure->id,
-                'arrival_airport_id' => $arrival->id,
-                'is_domestic' => $isDomestic,
-                'currency_id' => $currency->id,
-                'notes' => $notes,
-            ]);
-        }
-        return $flight;
     }
 
     public function __toString(): string

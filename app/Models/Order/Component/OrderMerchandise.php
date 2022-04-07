@@ -48,7 +48,8 @@ use Illuminate\Support\Carbon;
 class OrderMerchandise extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['merchandise_id','order_customer_id', 'cost'];
+
+    protected $fillable = ['merchandise_id', 'order_customer_id', 'cost'];
 
     public function orderCustomer(): BelongsTo
     {

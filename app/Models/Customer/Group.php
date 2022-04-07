@@ -53,7 +53,7 @@ class Group extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected array $cascadeDeletes = ['pivot', 'rooms'];
-    protected $fillable = ['room_type_id','name'];
+    protected $fillable = ['room_type_id', 'name'];
 
     public function orderCustomers(): BelongsToMany
     {

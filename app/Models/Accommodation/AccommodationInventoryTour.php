@@ -7,6 +7,7 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour\Tour;
 use App\Repository\AccommodationComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -59,13 +60,13 @@ use StringFormatter;
  * @method static Builder|AccommodationInventoryTour whereUpdatedAt($value)
  * @method static QueryBuilder|AccommodationInventoryTour withTrashed()
  * @method static QueryBuilder|AccommodationInventoryTour withoutTrashed()
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class AccommodationInventoryTour extends Model
 {
     use HasFactory, CascadeSoftDeletes, SoftDeletes;
 
-    protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price','is_template'];
+    protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price', 'is_template'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
 
     public static function getValidationRules(): array

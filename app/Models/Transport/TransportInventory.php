@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use StringFormatter;
 
 /**
  * App\Models\Transport\TransportInventory
@@ -150,6 +151,6 @@ class TransportInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->travelClass} (" . \StringFormatter::formatDateTime($this->departs_at) . " to " . \StringFormatter::formatDateTime($this->arrives_at) . ")";
+        return "{$this->component} - {$this->travelClass} (" . StringFormatter::formatDateTime($this->departs_at) . " to " . StringFormatter::formatDateTime($this->arrives_at) . ")";
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Location;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -50,7 +51,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Address whereUpdatedAt($value)
  * @method static QueryBuilder|Address withTrashed()
  * @method static QueryBuilder|Address withoutTrashed()
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Address extends Model
 {

@@ -38,6 +38,7 @@ use Illuminate\Support\Carbon;
 class TourCategory extends SimpleModel
 {
     use HasFactory, SoftDeletes;
+
     protected $fillable = ['name',];
 
     public static function getValidationRules(): array

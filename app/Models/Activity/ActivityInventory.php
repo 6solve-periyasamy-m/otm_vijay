@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use StringFormatter;
 
 
 /**
@@ -131,6 +132,6 @@ class ActivityInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->ticketType} (" . \StringFormatter::formatDateTime($this->starts_at) . " to " . \StringFormatter::formatDateTime($this->ends_at) . ")";
+        return "{$this->component} - {$this->ticketType} (" . StringFormatter::formatDateTime($this->starts_at) . " to " . StringFormatter::formatDateTime($this->ends_at) . ")";
     }
 }

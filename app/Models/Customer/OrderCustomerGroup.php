@@ -37,8 +37,8 @@ class OrderCustomerGroup extends Pivot
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['group_id', 'order_customer_id'];
     public $timestamps = false;
+    protected $fillable = ['group_id', 'order_customer_id'];
 
     public function group(): BelongsTo
     {

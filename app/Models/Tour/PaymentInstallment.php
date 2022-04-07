@@ -2,6 +2,7 @@
 
 namespace App\Models\Tour;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,14 +39,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PaymentInstallment whereUpdatedAt($value)
  * @method static QueryBuilder|PaymentInstallment withTrashed()
  * @method static QueryBuilder|PaymentInstallment withoutTrashed()
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class PaymentInstallment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['due_on', 'amount','is_percentage'];
-    protected $casts = ['due_on' => 'date','is_percentage' => 'boolean'];
+    protected $fillable = ['due_on', 'amount', 'is_percentage'];
+    protected $casts = ['due_on' => 'date', 'is_percentage' => 'boolean'];
 
     public static function getValidationRules(): array
     {
@@ -60,7 +61,7 @@ class PaymentInstallment extends Model
     public function getCostAttribute(): float
     {
         if ($this->is_percentage) {
-            return round($this->tour->base_price_per_person * ($this->amount/100), 2);
+            return round($this->tour->base_price_per_person * ($this->amount / 100), 2);
         } else {
             return $this->amount;
         }

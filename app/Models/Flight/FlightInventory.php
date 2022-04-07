@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use StringFormatter;
 
 /**
  * App\Models\Flight\FlightInventory
@@ -162,6 +163,6 @@ class FlightInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . \StringFormatter::formatDateTime($this->departs_at) . " to " . \StringFormatter::formatDateTime($this->arrives_at) . ")";
+        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . StringFormatter::formatDateTime($this->departs_at) . " to " . StringFormatter::formatDateTime($this->arrives_at) . ")";
     }
 }

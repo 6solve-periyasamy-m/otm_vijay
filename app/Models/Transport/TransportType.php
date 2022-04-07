@@ -3,6 +3,7 @@
 namespace App\Models\Transport;
 
 use App\Models\Helper\SimpleModel;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TransportType whereUpdatedAt($value)
  * @method static QueryBuilder|TransportType withTrashed()
  * @method static QueryBuilder|TransportType withoutTrashed()
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class TransportType extends SimpleModel
 {

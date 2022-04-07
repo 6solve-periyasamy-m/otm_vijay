@@ -68,7 +68,7 @@ class Transport extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes','image_url'];
+    protected $fillable = ['transport_type_id', 'operator_id', 'departure_address_id', 'arrival_address_id', 'name', 'description', 'currency_id', 'is_domestic', 'notes', 'image_url'];
     protected array $cascadeDeletes = ['transportInventory'];
 
     public static function getValidationRules(): array

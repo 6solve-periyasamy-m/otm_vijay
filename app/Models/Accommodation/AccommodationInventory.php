@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use StringFormatter;
 
 /**
  * App\Models\Accommodation\AccommodationInventory
@@ -144,11 +145,11 @@ class AccommodationInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->roomType} {$this->boardType} (" . \StringFormatter::formatDateTime($this->check_in) . " to " . \StringFormatter::formatDateTime($this->check_out) . ")";
+        return "{$this->component} - {$this->roomType} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
     }
 
     public function getCustomerDisplayAttribute(): string
     {
-        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . \StringFormatter::formatDateTime($this->check_in) . " to " . \StringFormatter::formatDateTime($this->check_out) . ")";
+        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
     }
 }

@@ -55,7 +55,7 @@ class OrderAccommodation extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id','cost','group_id'];
+    protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id', 'cost', 'group_id'];
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
@@ -96,7 +96,6 @@ class OrderAccommodation extends Model
         // Assume the order is cancelled if the group has no customers
         return true;
     }
-
 
 
     public function getDetailsAttribute(): string

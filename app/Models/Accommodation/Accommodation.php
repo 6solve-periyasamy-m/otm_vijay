@@ -57,7 +57,7 @@ class Accommodation extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id','image_url'];
+    protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id', 'image_url'];
     protected array $cascadeDeletes = ['inventory'];
     protected $casts = ['audit_date' => 'date',];
 
