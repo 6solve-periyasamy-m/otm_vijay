@@ -53,7 +53,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
+    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId): OrderAccommodation|null
     {
         $orderCustomer = OrderCustomer::find($oCustomerId);
         $group = $orderCustomer->primary_group;
@@ -68,7 +68,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $orderComponent;
     }
 
-    public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
+    public static function getParentComponent(AccommodationInventoryTour $inventoryTour): AccommodationInventoryTour
+    {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
@@ -77,7 +78,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     public static function getInventoryWithRoomType(AccommodationInventoryTour $inventoryTour, RoomType $roomType): ?AccommodationInventoryTour
     {
         $inventory = $inventoryTour->inventory;
-        $accommodation = $inventory->component;
 
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
@@ -199,7 +199,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {

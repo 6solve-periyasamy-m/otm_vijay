@@ -10,6 +10,7 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 interface TransportComponentRepositoryInterface
 {
@@ -17,7 +18,7 @@ interface TransportComponentRepositoryInterface
 
 class TransportComponentRepository implements TransportComponentRepositoryInterface
 {
-    public static function getAvailableAddons($tourId, $oCustomerId)
+    public static function getAvailableAddons($tourId, $oCustomerId): array
     {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
@@ -41,7 +42,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId)
+    public static function grantAddonToCustomer($oCustomerId, $transportInventoryTourId): OrderTransport
     {
         $orderComponent = OrderTransport::create([
             'order_customer_id' => $oCustomerId,
@@ -52,7 +53,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         return $orderComponent;
     }
 
-    public static function getParentComponent(TransportInventoryTour $inventoryTour)
+    public static function getParentComponent(TransportInventoryTour $inventoryTour): TransportInventoryTour
     {
         $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         if (!isset($upgrade)) return $inventoryTour;
@@ -68,7 +69,7 @@ class TransportComponentRepository implements TransportComponentRepositoryInterf
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];
         foreach ($tour->transportInventoryTours as $inventoryTour) {

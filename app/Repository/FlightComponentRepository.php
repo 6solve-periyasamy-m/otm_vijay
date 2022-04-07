@@ -10,6 +10,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 interface FlightComponentRepositoryInterface
 {
@@ -17,7 +18,7 @@ interface FlightComponentRepositoryInterface
 
 class FlightComponentRepository implements FlightComponentRepositoryInterface
 {
-    public static function getAvailableAddons($tourId, $oCustomerId)
+    public static function getAvailableAddons($tourId, $oCustomerId): array
     {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
@@ -41,7 +42,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $flightInventoryTourId)
+    public static function grantAddonToCustomer($oCustomerId, $flightInventoryTourId): OrderFlight
     {
         $orderComponent = OrderFlight::create([
             'order_customer_id' => $oCustomerId,
@@ -52,7 +53,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         return $orderComponent;
     }
 
-    public static function getParentComponent(FlightInventoryTour $inventoryTour)
+    public static function getParentComponent(FlightInventoryTour $inventoryTour): FlightInventoryTour
     {
         $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         if (!isset($upgrade)) return $inventoryTour;
@@ -68,7 +69,7 @@ class FlightComponentRepository implements FlightComponentRepositoryInterface
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];
         foreach ($tour->flightInventoryTours as $inventoryTour) {

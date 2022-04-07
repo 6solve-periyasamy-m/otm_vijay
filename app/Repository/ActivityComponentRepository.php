@@ -20,7 +20,7 @@ interface ActivityComponentRepositoryInterface
 
 class ActivityComponentRepository implements ActivityComponentRepositoryInterface
 {
-    public static function getAvailableAddons($tourId, $oCustomerId = -1)
+    public static function getAvailableAddons($tourId, $oCustomerId = -1): array
     {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
@@ -44,7 +44,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId)
+    public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId): OrderActivity
     {
         $orderComponent = OrderActivity::create([
             'order_customer_id' => $oCustomerId,
@@ -55,7 +55,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $orderComponent;
     }
 
-    public static function getParentComponent(ActivityInventoryTour $inventoryTour) {
+    public static function getParentComponent(ActivityInventoryTour $inventoryTour): ActivityInventoryTour
+    {
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
@@ -70,7 +71,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): \Illuminate\Support\Collection
     {
         $inventories = [];
         foreach ($tour->activityInventoryTours as $inventoryTour) {
