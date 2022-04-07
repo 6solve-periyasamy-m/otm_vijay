@@ -7,14 +7,57 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour;
 use App\Repository\TransportComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use StringFormatter;
 
+/**
+ * App\Models\Transport\TransportInventoryTour
+ *
+ * @property int $id
+ * @property int $tour_id
+ * @property int $transport_inventory_id
+ * @property string $tour_component_type
+ * @property float $tour_sales_price
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read int $available_stock
+ * @property-read string $tour_name
+ * @property-read TransportInventory $inventory
+ * @property-read Collection|OrderTransport[] $orders
+ * @property-read int|null $orders_count
+ * @property-read Tour $tour
+ * @property-read TransportInventory $transportInventory
+ * @property-read Collection|TransportInventoryTourUpgrade[] $upgradeParents
+ * @property-read int|null $upgrade_parents_count
+ * @property-read Collection|TransportInventoryTourUpgrade[] $upgrades
+ * @property-read int|null $upgrades_count
+ * @method static Builder|TransportInventoryTour newModelQuery()
+ * @method static Builder|TransportInventoryTour newQuery()
+ * @method static QueryBuilder|TransportInventoryTour onlyTrashed()
+ * @method static Builder|TransportInventoryTour query()
+ * @method static Builder|TransportInventoryTour whereCreatedAt($value)
+ * @method static Builder|TransportInventoryTour whereDeletedAt($value)
+ * @method static Builder|TransportInventoryTour whereId($value)
+ * @method static Builder|TransportInventoryTour whereTourComponentType($value)
+ * @method static Builder|TransportInventoryTour whereTourId($value)
+ * @method static Builder|TransportInventoryTour whereTourSalesPrice($value)
+ * @method static Builder|TransportInventoryTour whereTransportInventoryId($value)
+ * @method static Builder|TransportInventoryTour whereUpdatedAt($value)
+ * @method static QueryBuilder|TransportInventoryTour withTrashed()
+ * @method static QueryBuilder|TransportInventoryTour withoutTrashed()
+ * @mixin Eloquent
+ */
 class TransportInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
