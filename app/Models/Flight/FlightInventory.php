@@ -5,15 +5,71 @@ namespace App\Models\Flight;
 use App\Models\Airport;
 use App\Models\TravelClass;
 use App\Repository\StockRepository;
-use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\Flight\FlightInventory
+ *
+ * @property int $id
+ * @property int $flight_id
+ * @property int $travel_class_id
+ * @property Carbon|null $check_in
+ * @property Carbon|null $departs_at
+ * @property Carbon|null $arrives_at
+ * @property string $flight_number
+ * @property bool $fit_selectable
+ * @property int|null $stock
+ * @property float $purchase_price
+ * @property float $sales_price
+ * @property string|null $notes
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Airport|null $arrivalAirport
+ * @property-read Flight $component
+ * @property-read Airport|null $departureAirport
+ * @property-read Flight $flight
+ * @property-read Collection|FlightInventoryTour[] $flightInventoryTour
+ * @property-read int|null $flight_inventory_tour_count
+ * @property-read string $flight_for_tour
+ * @property-read int $used_on_tour_count
+ * @property-read int $used_stock How much stock has been sold
+ * @property-read Collection|FlightInventoryTour[] $tourComponents
+ * @property-read int|null $tour_components_count
+ * @property-read TravelClass $travelClass
+ * @method static Builder|FlightInventory newModelQuery()
+ * @method static Builder|FlightInventory newQuery()
+ * @method static QueryBuilder|FlightInventory onlyTrashed()
+ * @method static Builder|FlightInventory query()
+ * @method static Builder|FlightInventory whereArrivesAt($value)
+ * @method static Builder|FlightInventory whereCheckIn($value)
+ * @method static Builder|FlightInventory whereCreatedAt($value)
+ * @method static Builder|FlightInventory whereDeletedAt($value)
+ * @method static Builder|FlightInventory whereDepartsAt($value)
+ * @method static Builder|FlightInventory whereFitSelectable($value)
+ * @method static Builder|FlightInventory whereFlightId($value)
+ * @method static Builder|FlightInventory whereFlightNumber($value)
+ * @method static Builder|FlightInventory whereId($value)
+ * @method static Builder|FlightInventory whereNotes($value)
+ * @method static Builder|FlightInventory wherePurchasePrice($value)
+ * @method static Builder|FlightInventory whereSalesPrice($value)
+ * @method static Builder|FlightInventory whereStock($value)
+ * @method static Builder|FlightInventory whereTravelClassId($value)
+ * @method static Builder|FlightInventory whereUpdatedAt($value)
+ * @method static QueryBuilder|FlightInventory withTrashed()
+ * @method static QueryBuilder|FlightInventory withoutTrashed()
+ * @mixin Eloquent
+ */
 class FlightInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
