@@ -37,7 +37,6 @@ use Illuminate\Support\Carbon;
  * @property-read Address|null $arrivalAddress
  * @property-read Currency|null $currency
  * @property-read Address|null $departureAddress
- * @property-read string $inventory_relation
  * @property-read Operator $operator
  * @property-read Collection|TransportInventory[] $transportInventory
  * @property-read int|null $transport_inventory_count
@@ -106,15 +105,6 @@ class Transport extends Model
     public function arrivalAddress(): HasOne
     {
         return $this->hasOne(Address::class, 'id', 'arrival_address_id');
-    }
-
-    public function getInventoryRelationAttribute(): string
-    {
-        $operator = !is_null($this->operator) ? $this->operator->name : "Not Set";
-        $departureAddress = !is_null($this->departureAddress) ? $this->departureAddress->name : "Not Set";
-        $arrivalAddress = !is_null($this->arrivalAddress) ? $this->arrivalAddress->name : "None";
-
-        return "{$this->name} | Operator: {$operator} | Departs: {$departureAddress} | Arrives: {$arrivalAddress}";
     }
 
     public function currency(): BelongsTo

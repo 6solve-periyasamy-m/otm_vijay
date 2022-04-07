@@ -32,7 +32,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read Address $address
  * @property-read Currency|null $currency
- * @property-read string $inventory_relation String version of inventory relation (Legacy)
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
  * @property-read int|null $inventory_count
  * @method static Builder|Accommodation newModelQuery()
@@ -74,11 +73,6 @@ class Accommodation extends Model
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'address_id');
-    }
-
-    public function getInventoryRelationAttribute(): string
-    {
-        return "{$this->title} | {$this->address->name}";
     }
 
     public function inventory(): HasMany
