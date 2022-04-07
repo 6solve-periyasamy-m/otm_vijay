@@ -2,7 +2,6 @@
 
 namespace App\Models\Transport;
 
-use App\Models\Location;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\StockRepository;
@@ -131,13 +130,10 @@ class TransportInventory extends Model
             return 'not yet set';
         }
 
-        $departure_location = Location::getLocationById($this->transport->departure_location_id);
-        $arrival_location = Location::getLocationById($this->transport->arrival_location_id);
-
         $departs_at = $this->departs_at->format('d/m/Y H:i');
         $arrives_at = $this->arrives_at->format('d/m/Y H:i');
 
-        return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}";
+        return "{$this->transport->name}｜Departs from: {$this->transport->departureAddress->name} - Arrives at: {$this->transport->arrivalAddress->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}";
         // build server edit: remove transport travelClass
         //return "{$this->transport->name}｜Departs from: {$departure_location->name} - Arrives at: {$arrival_location->name}｜Departs: {$departs_at} - Arrives: {$arrives_at}｜Travel Class: {$this->travelClass->name}";
     }

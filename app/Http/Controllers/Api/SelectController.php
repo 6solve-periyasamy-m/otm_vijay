@@ -21,15 +21,6 @@ use Illuminate\Http\Request;
 
 class SelectController extends ApiController
 {
-    public function getLocations(Request $request) {
-        $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsTransforms::getAvailableSelectLocations($filter);
-    }
-
-    public function getRegions(Request $request) {
-        $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsTransforms::getAvailableSelectRegions($filter);
-    }
 
     public function getCountries(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
@@ -39,14 +30,6 @@ class SelectController extends ApiController
     public function getLocationTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return LocationsTransforms::getAvailableSelectLocationTypes($filter);
-    }
-
-    public function getSelectedLocation($id) {
-        return LocationsTransforms::getSelectedLocation($id);
-    }
-
-    public function getSelectedRegion($id) {
-        return LocationsTransforms::getSelectedRegion($id);
     }
 
     public function getSelectedCountry($id) {
