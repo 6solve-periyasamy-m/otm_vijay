@@ -7,14 +7,60 @@ use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour;
 use App\Repository\AccommodationComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use StringFormatter;
 
+/**
+ * App\Models\Accommodation\AccommodationInventoryTour
+ *
+ * @property int $id
+ * @property int $tour_id
+ * @property int $accommodation_inventory_id
+ * @property float $tour_sales_price
+ * @property bool $is_template
+ * @property string $tour_component_type
+ * @property string $booking_policy
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read AccommodationInventory $accommodationInventory
+ * @property-read int $available_stock How much stock is still available to be sold
+ * @property-read string $tour_name
+ * @property-read AccommodationInventory $inventory
+ * @property-read Collection|OrderAccommodation[] $orders
+ * @property-read int|null $orders_count
+ * @property-read Tour $tour
+ * @property-read Collection|AccommodationInventoryTourUpgrade[] $upgradeParents
+ * @property-read int|null $upgrade_parents_count
+ * @property-read Collection|AccommodationInventoryTourUpgrade[] $upgrades
+ * @property-read int|null $upgrades_count
+ * @method static Builder|AccommodationInventoryTour newModelQuery()
+ * @method static Builder|AccommodationInventoryTour newQuery()
+ * @method static QueryBuilder|AccommodationInventoryTour onlyTrashed()
+ * @method static Builder|AccommodationInventoryTour query()
+ * @method static Builder|AccommodationInventoryTour whereAccommodationInventoryId($value)
+ * @method static Builder|AccommodationInventoryTour whereBookingPolicy($value)
+ * @method static Builder|AccommodationInventoryTour whereCreatedAt($value)
+ * @method static Builder|AccommodationInventoryTour whereDeletedAt($value)
+ * @method static Builder|AccommodationInventoryTour whereId($value)
+ * @method static Builder|AccommodationInventoryTour whereIsTemplate($value)
+ * @method static Builder|AccommodationInventoryTour whereTourComponentType($value)
+ * @method static Builder|AccommodationInventoryTour whereTourId($value)
+ * @method static Builder|AccommodationInventoryTour whereTourSalesPrice($value)
+ * @method static Builder|AccommodationInventoryTour whereUpdatedAt($value)
+ * @method static QueryBuilder|AccommodationInventoryTour withTrashed()
+ * @method static QueryBuilder|AccommodationInventoryTour withoutTrashed()
+ * @mixin \Eloquent
+ */
 class AccommodationInventoryTour extends Model
 {
     use HasFactory, CascadeSoftDeletes, SoftDeletes;
