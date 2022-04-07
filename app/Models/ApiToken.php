@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApiToken extends Model
@@ -18,7 +19,7 @@ class ApiToken extends Model
     protected $primaryKey = 'token';
     protected $keyType = 'string';
 
-    public function hasExpired()
+    public function hasExpired(): bool
     {
         return now()->isAfter($this->expiry);
     }
@@ -29,7 +30,7 @@ class ApiToken extends Model
         $this->save();
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }

@@ -6,11 +6,13 @@ use App\Repository\UserRepository;
 use App\Rules\EmailCurrentOrUnique;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Silber\Bouncer\Database\Role;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -46,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    protected $guard = 'web';
+    protected string $guard = 'web';
 
     public function getUpdateValidationRules(): array
     {
@@ -92,17 +94,17 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(ApiToken::class, 'user_id');
     }
 
-    public function getCurrentToken()
+    public function getCurrentToken(): ApiToken
     {
         return UserRepository::getLatestToken($this);
     }
 
-    public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY)
+    public function generateToken(int $expiresIn = ApiToken::DEFAULT_EXPIRY): ApiToken
     {
         return UserRepository::generateUserToken($this, $expiresIn);
     }
@@ -117,7 +119,7 @@ class User extends Authenticatable implements MustVerifyEmail
         UserRepository::purgeUserTokens($this, $limit);
     }
 
-    public function getHighestRoleLevel()
+    public function getHighestRoleLevel(): int
     {
         $highest = 0;
         foreach ($this->roles as $role) {
@@ -126,7 +128,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $highest;
     }
 
-    public function getCurrentRole()
+    public function getCurrentRole(): Role
     {
         $highest = null;
         foreach ($this->roles as $role) {

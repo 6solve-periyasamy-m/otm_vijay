@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Customer\Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerApiToken extends Model
@@ -19,7 +20,7 @@ class CustomerApiToken extends Model
     protected $primaryKey = 'token';
     protected $keyType = 'string';
 
-    public function hasExpired()
+    public function hasExpired(): bool
     {
         return now()->isAfter($this->expiry);
     }
@@ -30,7 +31,7 @@ class CustomerApiToken extends Model
         $this->save();
     }
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
