@@ -7,6 +7,8 @@ use App\Models\Order\OrderCustomer;
 use App\Repository\StockRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +18,7 @@ class Merchandise extends Model
 
     protected $fillable = ['name','tour_component_type','stock','purchase_price','tour_sales_price','notes','image_url'];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'name',
@@ -32,22 +34,22 @@ class Merchandise extends Model
             'sales_price' => 'required|numeric',];
     }
 
-    public function tour()
+    public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
-    public function orderMerchandise()
+    public function orderMerchandise(): HasMany
     {
         return $this->hasMany(OrderMerchandise::class, 'merchandise_id');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "{$this->name}";
     }
 
-    public function addToOrder(OrderCustomer $orderCustomer)
+    public function addToOrder(OrderCustomer $orderCustomer): OrderMerchandise
     {
         return OrderMerchandise::create([
             'order_customer_id' => $orderCustomer->id,
@@ -56,12 +58,12 @@ class Merchandise extends Model
         ]);
     }
 
-    public function getUsedStockAttribute()
+    public function getUsedStockAttribute(): int
     {
         return StockRepository::getExtraStock($this);
     }
 
-    public function getAvailableStockAttribute()
+    public function getAvailableStockAttribute(): int
     {
         return $this->stock - $this->used_stock;
     }
