@@ -5,14 +5,63 @@ namespace App\Models\Activity;
 use App\Models\TicketType;
 use App\Repository\StockRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 
+/**
+ * App\Models\Activity\ActivityInventory
+ *
+ * @property int $id
+ * @property int $activity_id
+ * @property Carbon|null $starts_at
+ * @property Carbon|null $ends_at
+ * @property bool|null $fit_selectable
+ * @property int $ticket_type_id
+ * @property int $stock
+ * @property float $purchase_price
+ * @property float $sales_price
+ * @property string|null $notes
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Activity $activity
+ * @property-read Activity $component
+ * @property-read string $activity_for_tour
+ * @property-read int $used_on_tour_count
+ * @property-read int $used_stock How much stock is sold
+ * @property-read TicketType $ticketType
+ * @property-read Collection|ActivityInventoryTour[] $tourComponents
+ * @property-read int|null $tour_components_count
+ * @method static Builder|ActivityInventory newModelQuery()
+ * @method static Builder|ActivityInventory newQuery()
+ * @method static QueryBuilder|ActivityInventory onlyTrashed()
+ * @method static Builder|ActivityInventory query()
+ * @method static Builder|ActivityInventory whereActivityId($value)
+ * @method static Builder|ActivityInventory whereCreatedAt($value)
+ * @method static Builder|ActivityInventory whereDeletedAt($value)
+ * @method static Builder|ActivityInventory whereEndsAt($value)
+ * @method static Builder|ActivityInventory whereFitSelectable($value)
+ * @method static Builder|ActivityInventory whereId($value)
+ * @method static Builder|ActivityInventory whereNotes($value)
+ * @method static Builder|ActivityInventory wherePurchasePrice($value)
+ * @method static Builder|ActivityInventory whereSalesPrice($value)
+ * @method static Builder|ActivityInventory whereStartsAt($value)
+ * @method static Builder|ActivityInventory whereStock($value)
+ * @method static Builder|ActivityInventory whereTicketTypeId($value)
+ * @method static Builder|ActivityInventory whereUpdatedAt($value)
+ * @method static QueryBuilder|ActivityInventory withTrashed()
+ * @method static QueryBuilder|ActivityInventory withoutTrashed()
+ * @mixin Eloquent
+ */
 class ActivityInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
