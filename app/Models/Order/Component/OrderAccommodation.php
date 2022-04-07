@@ -2,48 +2,89 @@
 
 namespace App\Models\Order\Component;
 
+use App\Models\Accommodation;
+use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
 use App\Models\Group;
 use App\Models\Order\OrderCustomer;
-use App\Repository\AccommodationComponentRepository;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\Order\Component\OrderAccommodation
+ *
+ * @property int $id
+ * @property int $group_id
+ * @property int $accommodation_inventory_tour_id
+ * @property float $cost How much the component was sold for
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read AccommodationInventoryTour $accommodationInventoryTour
+ * @property-read AccommodationInventoryTour $tourComponent
+ * @property-read bool $cancelled Is the order cancelled
+ * @property-read string $details
+ * @property-read string $tour_component_type
+ * @property-read float $tour_sales_price
+ * @property-read Group $group
+ * @property-read OrderCustomer $orderCustomers
+ * @method static Builder|OrderAccommodation newModelQuery()
+ * @method static Builder|OrderAccommodation newQuery()
+ * @method static QueryBuilder|OrderAccommodation onlyTrashed()
+ * @method static Builder|OrderAccommodation query()
+ * @method static Builder|OrderAccommodation whereAccommodationInventoryTourId($value)
+ * @method static Builder|OrderAccommodation whereCost($value)
+ * @method static Builder|OrderAccommodation whereCreatedAt($value)
+ * @method static Builder|OrderAccommodation whereDeletedAt($value)
+ * @method static Builder|OrderAccommodation whereGroupId($value)
+ * @method static Builder|OrderAccommodation whereId($value)
+ * @method static Builder|OrderAccommodation whereUpdatedAt($value)
+ * @method static QueryBuilder|OrderAccommodation withTrashed()
+ * @method static QueryBuilder|OrderAccommodation withoutTrashed()
+ * @mixin Eloquent
+ */
 class OrderAccommodation extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id','cost','group_id'];
-    public $additional_attributes = ['details','tour_component_type','tour_sales_price'];
 
-    public static function findByOrderCustomer($orderCustomerId)
+    public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
-        $orderAccommodations = OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
-
-        return $orderAccommodations;
+        return OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
     }
 
-    // TODO: Deprecate
-    public function orderCustomers()
+    public function group(): BelongsTo
     {
-        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
+        return $this->belongsTo(Group::class, 'group_id');
     }
 
-    public function accommodation()
-    {
-        return AccommodationComponentRepository::getComponentFromOrderComponent($this->id);
-    }
-
-    public function accommodationInventory()
-    {
-        return AccommodationComponentRepository::getInventoryFromOrderComponent($this->id);
-    }
-
-    public function accommodationInventoryTour()
+    public function accommodationInventoryTour(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
+    }
+
+    public function tourComponent(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
+    }
+
+    public function accommodationInventory(): AccommodationInventory
+    {
+        return $this->accommodationInventoryTour->accommodationInventory;
+    }
+
+    public function accommodation(): Accommodation
+    {
+        return $this->accommodationInventoryTour->accommodationInventory->accommodation;
     }
 
     public function getCancelledAttribute(): bool
@@ -56,37 +97,25 @@ class OrderAccommodation extends Model
         return true;
     }
 
-    public function tourComponent()
-    {
-        return $this->accommodationInventoryTour();
-    }
 
-    public function getDetailsAttribute()
+
+    public function getDetailsAttribute(): string
     {
         return "{$this->tourComponent->inventory} - {$this->tourComponent->booking_policy}";
     }
 
-    public function getTourComponentTypeAttribute()
+    public function getTourComponentTypeAttribute(): string
     {
         return $this->tourComponent->tour_component_type;
     }
 
-    public function getTourSalesPriceAttribute()
+    public function getTourSalesPriceAttribute(): float
     {
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function orderCustomer()
+    public function swap(AccommodationInventoryTour $swap)
     {
-        return $this->orderCustomers();
-    }
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class, 'group_id');
-    }
-
-    public function swap(AccommodationInventoryTour $swap) {
         $this->accommodation_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
