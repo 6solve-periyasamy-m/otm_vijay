@@ -7,20 +7,21 @@ use App\Repository\AccommodationComponentRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use StringFormatter;
 
 class AccommodationInventoryTour extends Model
 {
-    use HasFactory;
-    use SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, CascadeSoftDeletes, SoftDeletes;
 
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price','is_template'];
     protected $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     public $additional_attributes = ['tour_name',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'tour_component_type' => [
@@ -32,52 +33,66 @@ class AccommodationInventoryTour extends Model
         ];
     }
 
-    public function accommodationInventory()
+    public function accommodationInventory(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventory::class, 'accommodation_inventory_id');
     }
 
-    public function orders()
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationInventory::class, 'accommodation_inventory_id');
+    }
+
+    public function orders(): HasMany
     {
         return $this->hasMany(OrderAccommodation::class, 'accommodation_inventory_tour_id');
     }
 
-    public function upgrades()
+    public function upgrades(): HasMany
     {
         return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'base_id');
     }
 
     // Only used for Cascading Soft Deletes
-    public function upgradeParents()
+    public function upgradeParents(): HasMany
     {
         return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent()
+    public function parent(): AccommodationInventoryTour
     {
         return AccommodationComponentRepository::getParentComponent($this);
     }
 
-    public function tour()
+    public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $inventory = $this->accommodationInventory;
         $component = $inventory->accommodation;
         return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
-    public function getTourNameAttribute()
+    public function getTourNameAttribute(): string
     {
         return $this->tour->name;
     }
 
-    public function inventory()
+    public function getAvailableStockAttribute(): int
     {
-        return $this->accommodationInventory();
+        return $this->inventory->stock - $this->inventory->used_stock;
+    }
+
+    public function addToOrder(Group $group): OrderAccommodation
+    {
+        return OrderAccommodation::create([
+            'group_id' => $group->id,
+            'accommodation_inventory_tour_id' => $this->id,
+            'cost' => $this->tour_sales_price,
+        ]);
     }
 
     public function getUpgradeKeyMap(): array
@@ -111,17 +126,4 @@ class AccommodationInventoryTour extends Model
         return $keys;
     }
 
-    public function addToOrder(Group $group)
-    {
-        return OrderAccommodation::create([
-            'group_id' => $group->id,
-            'accommodation_inventory_tour_id' => $this->id,
-            'cost' => $this->tour_sales_price,
-        ]);
-    }
-
-    public function getAvailableStockAttribute()
-    {
-        return $this->inventory->stock - $this->inventory->used_stock;
-    }
 }

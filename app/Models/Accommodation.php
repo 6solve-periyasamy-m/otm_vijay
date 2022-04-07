@@ -2,27 +2,23 @@
 
 namespace App\Models;
 
-use App\Models\Order\Component\OrderAccommodation;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-// use Jahondust\ModelLog\Traits\ModelLogging;
 
 
 class Accommodation extends Model
 {
-    //use ModelLogging;
-    use HasFactory;
-    use SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    public $additional_attributes = ['inventory_relation'];
     protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id','image_url'];
-    protected $cascadeDeletes = ['inventory'];
+    protected array $cascadeDeletes = ['inventory'];
     protected $casts = ['audit_date' => 'date',];
 
-    public static function getValidationRules()
+    public static function getValidationRules(): array
     {
         return [
             'name' => 'required',
@@ -32,39 +28,28 @@ class Accommodation extends Model
         ];
     }
 
-    public function orderAccommodation()
+    public function address(): BelongsTo
     {
-        return $this->belongsTo(OrderAccommodation::class);
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
-    public function address()
-    {
-        return $this->belongsTo(Address::class);
-    }
-
-    public function board_type()
-    {
-        return $this->belongsTo(BoardType::class);
-    }
-
-    public function getInventoryRelationAttribute()
+    public function getInventoryRelationAttribute(): string
     {
         return "{$this->title} | {$this->address->name}";
     }
 
-    public function inventory()
+    public function inventory(): HasMany
     {
         return $this->hasMany(AccommodationInventory::class, 'accommodation_id');
     }
 
-    public function currency()
+    public function currency(): BelongsTo
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-
         return "{$this->name} ({$this->address->region}, {$this->address->country})";
     }
 }
