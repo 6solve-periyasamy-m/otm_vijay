@@ -4,16 +4,64 @@ namespace App\Models;
 
 use App\Repository\UserRepository;
 use App\Rules\EmailCurrentOrUnique;
+use Database\Factories\UserFactory;
+use Eloquent;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Silber\Bouncer\Database\Ability;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Silber\Bouncer\Database\Role;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string|null $avatar
+ * @property Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property string|null $settings
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|Ability[] $abilities
+ * @property-read int|null $abilities_count
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read Collection|Role[] $roles
+ * @property-read int|null $roles_count
+ * @property-read Collection|ApiToken[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static UserFactory factory(...$parameters)
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User query()
+ * @method static Builder|User whereAvatar($value)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereEmailVerifiedAt($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereIs($role)
+ * @method static Builder|User whereIsAll($role)
+ * @method static Builder|User whereIsNot($role)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereRememberToken($value)
+ * @method static Builder|User whereSettings($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities;

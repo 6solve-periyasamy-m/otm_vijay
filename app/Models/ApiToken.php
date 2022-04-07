@@ -2,11 +2,38 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\ApiToken
+ *
+ * @property string $token
+ * @property int $user_id
+ * @property Carbon $expiry
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User $user
+ * @method static Builder|ApiToken newModelQuery()
+ * @method static Builder|ApiToken newQuery()
+ * @method static QueryBuilder|ApiToken onlyTrashed()
+ * @method static Builder|ApiToken query()
+ * @method static Builder|ApiToken whereCreatedAt($value)
+ * @method static Builder|ApiToken whereDeletedAt($value)
+ * @method static Builder|ApiToken whereExpiry($value)
+ * @method static Builder|ApiToken whereToken($value)
+ * @method static Builder|ApiToken whereUpdatedAt($value)
+ * @method static Builder|ApiToken whereUserId($value)
+ * @method static QueryBuilder|ApiToken withTrashed()
+ * @method static QueryBuilder|ApiToken withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ApiToken extends Model
 {
     use HasFactory, SoftDeletes;
