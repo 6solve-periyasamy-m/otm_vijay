@@ -43,8 +43,8 @@
                         <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>
-                        {{$flightInventory->stock - $flightInventory->getUsedStock()}}/{{ $flightInventory->stock }}<br/>
-                        ({{$flightInventory->getUsedStock()}} Sold)
+                        {{$flightInventory->stock - $flightInventory->used_stock}}/{{ $flightInventory->stock }}<br/>
+                        ({{$flightInventory->used_stock}} Sold)
                     </td>
                     <td>{{ StringFormatter::formatCurrency($flightInventory->purchase_price) }}</td>
                     <td>{{ StringFormatter::formatCurrency($flightInventory->sales_price) }}</td>

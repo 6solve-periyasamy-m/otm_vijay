@@ -39,8 +39,8 @@
                         <input type="checkbox" disabled @if($activityInventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>
-                        {{$activityInventory->stock - $activityInventory->getUsedStock()}}/{{ $activityInventory->stock }}<br/>
-                        ({{$activityInventory->getUsedStock()}} Sold)
+                        {{$activityInventory->stock - $activityInventory->used_stock}}/{{ $activityInventory->stock }}<br/>
+                        ({{$activityInventory->used_stock}} Sold)
                     </td>
                     <td>{{ StringFormatter::formatCurrency($activityInventory->purchase_price) }}</td>
                     <td>{{ StringFormatter::formatCurrency($activityInventory->sales_price) }}</td>
