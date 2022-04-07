@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\System;
+namespace App\Models;
 
+use App\Models\System\ApiToken;
 use App\Repository\UserRepository;
 use App\Rules\EmailCurrentOrUnique;
 use Database\Factories\UserFactory;

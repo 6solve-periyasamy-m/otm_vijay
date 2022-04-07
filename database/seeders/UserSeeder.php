@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 use App\Models\System\Setting;
-use App\Models\System\User;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 

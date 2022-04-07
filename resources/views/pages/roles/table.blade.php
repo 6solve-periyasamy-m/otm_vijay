@@ -26,7 +26,7 @@
                     <tr>
                         <th scope="col">Level</th>
                         <th scope="col">Name</th>
-                        @can('update', \App\Models\System\User::class)
+                        @can('update', \App\Models\User::class)
                             <th scope="col">Actions</th>
                         @endcan
                     </tr>
@@ -35,13 +35,13 @@
                     <tr>
                         <th scope="row">{{ $role->level }}</th>
                         <td>{{ $role->title }}</td>
-                        @can('update', \App\Models\System\User::class)
+                        @can('update', \App\Models\User::class)
                             @if(Auth::user()->getHighestRoleLevel() > $role->level)
                                 <td>
                                     <a href="{{route('roles.edit', ['role' => $role,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         <i class="icon-note"></i>
                                     </a>
-                                    @can('delete', \App\Models\System\User::class)
+                                    @can('delete', \App\Models\User::class)
                                     <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                        onclick="event.preventDefault();document.getElementById('role-{{ $role->id }}-delete').submit();">
                                         <i class="icon-trash"></i>
@@ -56,7 +56,7 @@
                                     <span class="btn btn-outline-dark btn-sm mb-1">
                                         <i class="icon-note"></i>
                                     </span>
-                                    @can('delete', \App\Models\System\User::class)
+                                    @can('delete', \App\Models\User::class)
                                         <span class="btn btn-outline-dark btn-sm mb-1">
                                             <i class="icon-trash"></i>
                                         </span>
