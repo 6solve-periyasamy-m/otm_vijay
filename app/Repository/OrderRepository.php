@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Exceptions\RoomingFailedException;
+use App\Models\Accommodation\RoomType;
 use App\Models\Customer;
 use App\Models\Group;
 use App\Models\Helper\OrderStatus;
@@ -18,7 +19,6 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\PaymentReminder;
-use App\Models\RoomType;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

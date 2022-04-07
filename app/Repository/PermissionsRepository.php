@@ -70,12 +70,12 @@ class PermissionsRepository
                 'group' => 'Accommodation',
                 'order' => 1,
             ],
-            'RoomType' => [
+            'Accommodation\RoomType' => [
                 'name' => 'Room Types',
                 'group' => 'Accommodation',
                 'order' => 2,
             ],
-            'BoardType' => [
+            'Accommodation\BoardType' => [
                 'name' => 'Board Types',
                 'group' => 'Accommodation',
                 'order' => 3,

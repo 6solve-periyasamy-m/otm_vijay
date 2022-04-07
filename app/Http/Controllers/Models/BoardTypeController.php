@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\BoardType;
+use App\Models\Accommodation\BoardType;
 use Illuminate\Http\Request;
 
 class BoardTypeController extends Controller

@@ -6,9 +6,9 @@ use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodation
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Accommodation\RoomType;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
-use App\Models\RoomType;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

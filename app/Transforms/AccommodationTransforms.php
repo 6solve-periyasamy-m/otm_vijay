@@ -4,9 +4,9 @@ namespace App\Transforms;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\BoardType;
+use App\Models\Accommodation\BoardType;
+use App\Models\Accommodation\RoomType;
 use App\Models\Order\OrderCustomer;
-use App\Models\RoomType;
 use App\Repository\Facades\StringFormatter;
 use App\Repository\TourRepository;
 

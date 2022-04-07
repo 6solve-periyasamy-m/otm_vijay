@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Accommodation\RoomType;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
 use Dyrynda\Database\Support\CascadeSoftDeletes;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Accommodation;
 
 use App\Models\Helper\SimpleModel;
 use Eloquent;

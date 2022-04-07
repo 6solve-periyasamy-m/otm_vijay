@@ -4,8 +4,8 @@ namespace App\Imports;
 
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
-use App\Models\BoardType;
-use App\Models\RoomType;
+use App\Models\Accommodation\BoardType;
+use App\Models\Accommodation\RoomType;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
