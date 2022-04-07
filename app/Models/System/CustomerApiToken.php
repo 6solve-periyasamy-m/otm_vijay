@@ -3,10 +3,13 @@
 namespace App\Models\System;
 
 use App\Models\Customer\Customer;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use function now;
 
@@ -20,19 +23,19 @@ use function now;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Customer $customer
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken newQuery()
- * @method static \Illuminate\Database\Query\Builder|CustomerApiToken onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken query()
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken whereCustomerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken whereExpiry($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken whereToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CustomerApiToken whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|CustomerApiToken withTrashed()
- * @method static \Illuminate\Database\Query\Builder|CustomerApiToken withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|CustomerApiToken newModelQuery()
+ * @method static Builder|CustomerApiToken newQuery()
+ * @method static QueryBuilder|CustomerApiToken onlyTrashed()
+ * @method static Builder|CustomerApiToken query()
+ * @method static Builder|CustomerApiToken whereCreatedAt($value)
+ * @method static Builder|CustomerApiToken whereCustomerId($value)
+ * @method static Builder|CustomerApiToken whereDeletedAt($value)
+ * @method static Builder|CustomerApiToken whereExpiry($value)
+ * @method static Builder|CustomerApiToken whereToken($value)
+ * @method static Builder|CustomerApiToken whereUpdatedAt($value)
+ * @method static QueryBuilder|CustomerApiToken withTrashed()
+ * @method static QueryBuilder|CustomerApiToken withoutTrashed()
+ * @mixin Eloquent
  */
 class CustomerApiToken extends Model
 {

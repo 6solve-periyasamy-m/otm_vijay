@@ -2,6 +2,7 @@
 
 namespace App\Models\System;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,7 @@ use function now;
  * @method static Builder|ApiToken whereUserId($value)
  * @method static QueryBuilder|ApiToken withTrashed()
  * @method static QueryBuilder|ApiToken withoutTrashed()
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ApiToken extends Model
 {
