@@ -123,4 +123,13 @@ class AccommodationInventoryTour extends Model
     {
         return $this->inventory->stock - $this->inventory->used_stock;
     }
+
+    public function getUsedTourStockAttribute(): int
+    {
+        $used = 0;
+        foreach ($this->orders as $orderComponent) {
+            if (!$orderComponent->isCancelled()) $used++;
+        }
+        return $used;
+    }
 }
