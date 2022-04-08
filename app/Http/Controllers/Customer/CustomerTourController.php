@@ -9,6 +9,8 @@ use App\Models\ActivityInventoryTour;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Merchandise;
+use App\Models\Order;
+use App\Models\OrderCustomer;
 use App\Models\TransportInventoryTour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
@@ -19,13 +21,17 @@ use Illuminate\Http\Request;
 
 class CustomerTourController extends Controller
 {
-    public function showItinerary(?string $reference = null)
+    public function showItinerary(?string $reference = null, ?Customer $customer = null)
     {
-        $customer = CustomerAuthenticationRepository::getCustomer();
+        $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (isset($reference)) {
             $order = OrderRepository::getOrderFromBookingReference($reference);
         } else {
             $order = $customer->orders()->orderByDesc('ordered_on')->first();
+        }
+        if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
+            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
+            if (isset($customer->email_address) && isset($customer->password)) abort(404);
         }
         if (!isset($order)) abort(404);
         $oCustomer = null;
@@ -37,16 +43,20 @@ class CustomerTourController extends Controller
         }
         if (!isset($oCustomer)) abort(404);
         return view('pages.customer.itinerary',
-            ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders]);
+            ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
     }
 
-    public function showExtras(?string $reference = null)
+    public function showExtras(?string $reference = null, ?Customer $customer = null)
     {
-        $customer = CustomerAuthenticationRepository::getCustomer();
+        $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (isset($reference)) {
             $order = OrderRepository::getOrderFromBookingReference($reference);
         } else {
             $order = $customer->orders()->orderByDesc('ordered_on')->first();
+        }
+        if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
+            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
+            if (isset($customer->email_address) && isset($customer->password)) abort(404);
         }
         if (!isset($order)) abort(404);
         $oCustomer = null;
@@ -57,7 +67,8 @@ class CustomerTourController extends Controller
             }
         }
         if (!isset($oCustomer)) abort(404);
-        return view('pages.customer.components', ['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'orderCustomer' => $oCustomer]);
+        return view('pages.customer.components',
+            ['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'orderCustomer' => $oCustomer, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
     }
 
     public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
@@ -67,7 +78,8 @@ class CustomerTourController extends Controller
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
-            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()) abort(404);
+            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
+            if (isset($customer->email_address) && isset($customer->password)) abort(404);
         }
         $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
         if (!isset($orderCustomer)) abort(404);
@@ -96,7 +108,7 @@ class CustomerTourController extends Controller
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
-            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()) abort(404);
+            if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
         }
         $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
         if (!isset($orderCustomer)) abort(404);
@@ -137,5 +149,16 @@ class CustomerTourController extends Controller
         ]);
         $order->save();
         return redirect()->route('customer.itinerary', ['reference' => $reference,]);
+    }
+
+    private function getOrderCustomers(Order $order, Customer $customer): array
+    {
+        $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
+        if ($order->lead_booker_id !== $orderCustomer->id) return [];
+        $data = [$orderCustomer,];
+        foreach ($order->orderCustomers as $oCustomer) {
+            if (!isset($oCustomer->customer->email_address) || !isset($oCustomer->customer->password)) $data[] = $oCustomer;
+        }
+        return $data;
     }
 }
