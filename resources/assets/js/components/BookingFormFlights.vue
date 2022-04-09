@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="booking-container">
         <div class="card card-options">
             <div class="card-header">
                 <h5 class="mb-1">
@@ -64,14 +64,12 @@
                             </div>
                         </div>
     
-                        <div class="row">
+                        <div class="row py-2">
                             <div class="col-sm-12">
                                 <button style="display: none;" class="btn btn-primary" @click="customFlights()">
                                                 Customise
                                             </button>
-                                <button class="btn btn-primary" @click="toggleFlights">
-                                                Close
-                                            </button>
+                                <button class="btn btn-primary" @click="toggleFlights">Close</button>
                             </div>
                         </div>
                         <div class="flight-customise" v-if="showCustomFlights">

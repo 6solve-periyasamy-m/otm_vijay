@@ -1,5 +1,5 @@
 <template>
-<div class="xcontainer">
+<div class="booking-container">
     <div class="card-options" v-if="!removed">
         <h3 v-if="developer">Additional Traveller Details for Order {{order_id}}</h3>
         <div class="ept-form additional" :id="form_id">

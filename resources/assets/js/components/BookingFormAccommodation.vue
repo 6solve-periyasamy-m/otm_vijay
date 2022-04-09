@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="booking-container">
         <div class="card card-options">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
@@ -40,8 +40,10 @@
                         </div>
                     </div>
                 </div>
-                <button @click="setAccommodation" class="btn btn-primary">Set Accommodation Options</button>
-                <button @click="resetAccommodation" class="btn btn-default">Reset Accommodation</button>
+                <div class="py-2">
+                    <button @click="setAccommodation" class="btn btn-primary">Set Accommodation Options</button>
+                    <button @click="resetAccommodation" class="btn btn-default">Reset Accommodation</button>
+                </div>
             </div>
         </div>
     </div>

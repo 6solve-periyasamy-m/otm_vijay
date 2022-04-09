@@ -20,7 +20,7 @@ export default {
   data() {
     return {
         debug: false,
-        showControl: true,
+        showControl: false,
         showForms: true,
         moduleName: 'BookingFormControl',
         bookingToken: null,

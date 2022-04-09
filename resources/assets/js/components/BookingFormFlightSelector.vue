@@ -14,7 +14,11 @@
             {{tour_flight_types[0]}} 
         </div>
         <div class="col-sm-10" v-if="tour_flights_filtered">
-            <select 
+            <div v-if="tour_flights_filtered.length == 0">
+                <p>No flights available</p>
+            </div>
+            <select
+                v-else
                 :disabled="!enabled"
                 @change="changeFlight"
                 v-model="flightId">
@@ -54,7 +58,7 @@ export default {
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-        console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
+        this.debug && console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
         this.debug && console.log('BFFS Mounted', this.traveler, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
     },
     created() {
@@ -64,8 +68,9 @@ export default {
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
-console.log('items in created: ',this.selected_item, this.identification, this.tour_flights, this.tour_flight_types, this.tour_flight_type);
-        // TODO: Looks wrong...
+        // 
+        // console.log('items in created: ',this.selected_item, this.identification, this.tour_flights, this.tour_flight_types, this.tour_flight_type);
+        // TODO: Check this in addons
         // BUG: this.selected_item is NULL on addons load?
         if (this.selected_item) {
             this.flightId = this.selected_item

@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="booking-container">
     <div class="card">
         <div class="card-header">
             <h5 class="mb-1 dropdownbutt">
