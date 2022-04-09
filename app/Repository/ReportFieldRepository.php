@@ -683,7 +683,7 @@ class ReportFieldRepository
                 'method' => 'notes',
             ],
             'tour_count' => [
-                'name' => 'Used on Tours',
+                'name' => 'How Many Tours',
                 'method' => 'used_on_tour_count',
             ],
         ];
@@ -708,6 +708,10 @@ class ReportFieldRepository
                     'name' => 'Tour Component Type',
                     'method' => 'tour_component_type',
                 ],
+                'used_tour_stock' => [
+                    'name' => 'Tour Component Stock Sold',
+                    'method' => 'used_tour_stock',
+                ]
             ]
         ];
     }
