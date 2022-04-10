@@ -80,6 +80,16 @@ Route::prefix('booking')->group(function () {
     Route::post('/flight', [FlightController::class, 'postFlightBooking']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
 
+    // Activities
+    // get all activities related to a booking
+    Route::get('/activities/booking/{token}', [ActivitiesController::class, 'getActivitiesForBooking']);
+    // get all activities for a customer and booking
+    Route::get('/activities/customer/{token}/{customer}', [ActivitiesController::class, 'getActivitiesForCustomer']);
+    // create an activity for a customer and booking
+    Route::post('/activity/book/{token}/{customer}/{activity}', [ActivitiesController::class, 'createBookingActivityForCustomer']);
+    // remove an activity for a customer and booking
+    Route::post('/activity/remove/{token}/{customer}/{activity}', [ActivitiesController::class, 'removeActivityBookingForCustomer']);
+
     // Booking summary for payment
     Route::get('/summary/{token}/gather', [BookingController::class, 'gatherDetails']);
 
