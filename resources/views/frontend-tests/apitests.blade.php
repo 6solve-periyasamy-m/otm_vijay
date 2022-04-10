@@ -1,7 +1,7 @@
 @extends ('layout.main')
 @section('content')
 @php
-$token = 'tf9t1kg7it6enlr85va8o';
+$token = 'cu5kyom5s6y61aagm4we';
 @endphp
 @endphp
 <div class="container-fluid page-testing" id="app">
@@ -37,7 +37,7 @@ $token = 'tf9t1kg7it6enlr85va8o';
 
                 <h2>Flights</h2>
                 <li>
-                    <a href="/api/booking/flights/tour/2" target="test">Get Flights for Tour 2</a>
+                    <a href="/api/booking/flights/tour/1" target="test">Get Flights for Tour 1</a>
                 </li>
                 <li>
                     <a href="/api/booking/flight/bookings/{{$token}}" target="test">Get Flights for a booking</a>
@@ -45,16 +45,26 @@ $token = 'tf9t1kg7it6enlr85va8o';
 
                 <h2>Activities</h2>
                 <li>
-                    <a href="/api/booking/activities/tour/2" target="test">Get Activities for Tour 2</a>
+                    <a href="/api/booking/activities/tour/1" target="test">Get Activities for Tour 1</a>
                 </li>
                 <li>
-                    <a href="/api/booking/activities/booking/{{$token}}/tour/2" target="test">Get Activities booked for Tour 2</a>
+                    <a href="/api/booking/activity-booking/booking/{{$token}}" target="test">Get Activities for booking</a>
                 </li>
+                <li>
+                    <a href="/api/booking/activity-booking/customer/{{$token}}/34" target="test">Get Activities booking and customer</a>
+                </li>
+
+                <!-- deprecate? 
+                <li>
+                    <a href="/api/booking/activities/booking/{{$token}}/tour/1" target="test">Get Activities booked for Tour 2</a>
+                </li>
+                -->
 
                 <h2>Transports</h2>
                 <li>
                     <a href="/api/booking/transports/tour/2" target="test">Get Transports for Tour 2</a>
                 </li>
+                <!-- deprecate? -->
                 <li>
                     <a href="/api/booking/transports/booking/9vunzlp51h7vrv2cva3qe/tour/2" target="test">Get Transports booked for Tour 2</a>
                 </li>

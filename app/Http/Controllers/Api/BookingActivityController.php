@@ -17,16 +17,16 @@ class BookingActivityController extends ApiController
      */
     public function getActivitiesForBooking($token)
     {
-        $bookingActivities = BookingActivity::join('booking_activities', 'booking_activities.booking_id', 'bookings.id')
-                ->where('booking_token', $token)->get();
+        $bookingActivities = BookingActivity::join('bookings', 'booking_activities.booking_id', 'bookings.id')
+                ->where('token', $token)->get();
 
         return response()->json(['success' => true, 'data' => $bookingActivities]);
     }
     public function getActivitiesForCustomer($token, Customer $customer)
     {
-        $bookingActivities = BookingActivity::join('booking_activities', 'booking_activities.booking_id', 'bookings.id')
-                ->where('booking_token', $token)
-                ->where('customer_id', $customer->id)->get();
+        $bookingActivities = BookingActivity::join('bookings', 'booking_activities.booking_id', 'bookings.id')
+                ->where('token', $token)
+                ->where('booking_activities.customer_id', $customer->id)->get();
 
         return response()->json(['success' => true, 'data' => $bookingActivities]);
     }

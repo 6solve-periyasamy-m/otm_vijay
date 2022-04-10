@@ -83,13 +83,13 @@ Route::prefix('booking')->group(function () {
 
     // Activities
     // get all activities related to a booking
-    Route::get('/activityBooking/booking/{token}', [BookingActivityController::class, 'getActivitiesForBooking']);
+    Route::get('/activity-booking/booking/{token}', [BookingActivityController::class, 'getActivitiesForBooking']);
     // get all activities for a customer and booking
-    Route::get('/activityBooking/customer/{token}/{customer}', [BookingActivityController::class, 'getActivitiesForCustomer']);
+    Route::get('/activity-booking/customer/{token}/{customer}', [BookingActivityController::class, 'getActivitiesForCustomer']);
     // create an activity for a customer and booking
-    Route::post('/activityBooking/book', [BookingActivityController::class, 'createBookingActivityForCustomer']);
+    Route::post('/activity-booking/book', [BookingActivityController::class, 'createBookingActivityForCustomer']);
     // remove an activity for a customer and booking
-    Route::post('/activityBooking/remove', [BookingActivityController::class, 'removeActivityBookingForCustomer']);
+    Route::post('/activity-booking/remove', [BookingActivityController::class, 'removeActivityBookingForCustomer']);
 
     // Booking summary for payment
     Route::get('/summary/{token}/gather', [BookingController::class, 'gatherDetails']);
