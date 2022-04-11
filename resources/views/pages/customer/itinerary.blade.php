@@ -28,7 +28,19 @@
             </div>
         </form>
     </div>
-    <div class="container-fluid">
+    <div class="col-2">
+        @foreach($editable as $editableOrderCustomer)
+            <div class="card other-profile" onclick="window.location = '{{ route('customer.itinerary', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
+                <div class="card-body profile-card">
+                    <center class="mt-4">
+                        <h4 class="card-title mt-2">{{ $editableOrderCustomer->customer->first_name }} {{ $editableOrderCustomer->customer->last_name }}</h4>
+                        <h6 class="card-subtitle">{{ $editableOrderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
+                    </center>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    <div class="col-10 container-fluid">
         <div class="card">
             <div class="card-body">
                 <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>

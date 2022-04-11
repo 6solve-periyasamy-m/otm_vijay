@@ -58,8 +58,8 @@
 @section('content')
     <div class="card">
         <div class="card-body col-12">
-            <div class="customers col-12 col-xl-9"></div>
-            <div class="col-12 col-xl-3">
+            <div class="customers col-12"></div>
+            <div class="col-12">
                 <select class="room-types">
                     @foreach($rooms as $data)
                         <option value="{{ $data['id'] }}" name="{{ $data['name'] }}" occupancy="{{ $data['size'] }}">{{ $data['name'] }} - Space: {{ $data['size'] }}</option>
