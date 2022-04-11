@@ -33,6 +33,12 @@ class OrderCustomerModelController extends Controller
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
+            'accommodation_notes' => $request->input('accommodation_notes'),
+            'activity_notes' => $request->input('activity_notes'),
+            'flight_notes' => $request->input('flight_notes'),
+            'transport_notes' => $request->input('transport_notes'),
         ]);
         $order->orderCustomers()->save($orderCustomer);
         OrderRepository::addIncludedToCustomer($orderCustomer);
@@ -55,6 +61,12 @@ class OrderCustomerModelController extends Controller
             'single_occupancy_surcharge' => $request->input('single_occupancy_surcharge'),
             'travel_insurer' => $request->input('travel_insurer'),
             'policy_number' => $request->input('policy_number'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
+            'accommodation_notes' => $request->input('accommodation_notes'),
+            'activity_notes' => $request->input('activity_notes'),
+            'flight_notes' => $request->input('flight_notes'),
+            'transport_notes' => $request->input('transport_notes'),
         ]);
         event(new OrderCustomerEditedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
