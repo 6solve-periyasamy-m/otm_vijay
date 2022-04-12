@@ -26,8 +26,22 @@
                     <div class="column-ticket-type">
                         Ticket type
                     </div>
+                    <div class="column-component-type">
+                        Tour Component type
+                    </div>
+                    <div class="column-action">
+                        Action
+                    </div>
                 </div>
-                <div class="listing" v-for="activity in activities" :key="activity.activity_inventory_tour_id">
+                <div class="options">
+                    <h5>Show</h5>
+                    <div>Upgrades <input type="checkbox" v-model="showUpgrade"></div>
+                    <div>Addons <input type="checkbox" v-model="showAddon"></div>
+                </div>
+                <div class="listing" v-for="(activity,index) in activities" 
+                    :key="activity.activity_inventory_tour_id" 
+                    :class="{controlBreak : activity.activity_id !== previous_activity_id}"
+                    v-show="activity.tour_component_type == 'Included' || activity.tour_component_type == 'Upgrade' && showUpgrade || activity.tour_component_type == 'Add-on' && showAddon">
                     <div class="column-starts-at">
                         {{startDate(activity)}}
                     </div>
@@ -42,7 +56,25 @@
                     <div class="column-ticket-type">
                         {{activity.ticket_type_name}}
                     </div>
+                    <div class="column-component-type">
+                        {{activity.tour_component_type}}
+                    </div>
+                    {{activity.inventory_tour_id}}
+                    <div class="column-action">
+                        <button v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
+                        <button v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
+                        <button v-if="activity" @click="bookActivity">Cancel</button>
+                    </div>
+                    <!-- <div class="column-select">
+                        <input type="checkbox" :name="`select-${activity.activity_inventory_tour_id}`" v-model="selected[activity.activity_inventory_tour_id]">
+                    </div> -->
+                    {{ previous_activity_id = activity.activity_id }}
+                    <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
+                <div>
+                    <button @click="bookActivity">Book Selected</button>
+                </div>
+               
             </div>
         </div>
     </div>
@@ -50,7 +82,6 @@
 <script>
 import dates from '../utilities'
 import { bus } from '../bus'
-import Vue from 'vue'
 import axios from 'axios'
 export default {
     props: ['tour'],
@@ -61,7 +92,11 @@ export default {
             moduleName: 'Activities',
             booking_token: null,
             travellers: [],
-            activities: []
+            activities: [],
+            selected: [],
+            previous_activity_id: 0,
+            showAddon: 0,
+            showUpgrade: 0
         }
     },
     async mounted() {
@@ -85,6 +120,21 @@ export default {
     computed: {
     },
     methods: {
+        included(id) {
+            console.log(this.activities)
+            if (this.activities[id].tour_component_type == 'Included') {
+                return 'checked'
+            }
+            return ''
+        },
+        bookActivity(activity) {
+            console.log('Booking Activities for id ', activity)
+            axios.post('/api/booking/activity/book/', activity)
+                .then(response => {
+                    console.log('booked', response)
+                })
+                .catch(error => console.log(error))
+        },
         startDate(event) {
             return dates.bookingTime(event.starts_at)
         },
@@ -102,16 +152,29 @@ export default {
                     that.activities = response.data.activities
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
         },
         loadActivityBooking() {
             this.debug>1 && console.log('loadActivityBooking')
+            axios.get(`/api/booking/activity-booking/${this.booking_token}`)
+                .then(response => {
+                    console.log('booking-activity response', response)
+                })
+                .catch(error => console.log(error))
         }
     }
 }
 </script>
 <style scoped lang="scss">
+    .options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .controlBreak {
+       border-top: 1px black solid;
+    }
     .listing {
         display: flex;
         flex-direction: row;
@@ -124,21 +187,24 @@ export default {
         width: 0.5rem;
     }
     .column-name {
-        width: 12rem;
+        width: 11rem;
 }
     .column-description {
-        width: 24rem;
+        width: 22rem;
     }
     .column-address, 
     .column-notes {
-        width: 12rem;
+        width: 11rem;
     }
     .column-starts-at, 
     .column-ends-at {
-        width: 10rem;
+        width: 8rem;
     }
     .column-ticket-type {
-        width: 8rem;
+        width: 5rem;
+    }
+    .column-component-type {
+        width: 5rem;
     }
     @media screen and (max-width: 992px) {
         .column-id {
