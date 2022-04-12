@@ -12,11 +12,7 @@ use App\Models\Transport\TransportInventoryTourUpgrade;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-interface TransportComponentRepositoryInterface
-{
-}
-
-class TransportComponentRepository implements TransportComponentRepositoryInterface
+class TransportComponentRepository
 {
     public static function getAvailableAddons($tourId, $oCustomerId): array
     {

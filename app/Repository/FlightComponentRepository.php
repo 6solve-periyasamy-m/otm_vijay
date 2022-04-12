@@ -12,11 +12,7 @@ use App\Models\Tour\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-interface FlightComponentRepositoryInterface
-{
-}
-
-class FlightComponentRepository implements FlightComponentRepositoryInterface
+class FlightComponentRepository
 {
     public static function getAvailableAddons($tourId, $oCustomerId): array
     {

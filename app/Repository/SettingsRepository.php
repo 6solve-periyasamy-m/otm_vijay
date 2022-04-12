@@ -4,34 +4,23 @@ namespace App\Repository;
 
 use App\Models\System\Setting;
 
-interface SettingsRepositoryInterface {
-    public static function get($key);
-    public static function getOrDefault($key, $default);
-    public static function set($key, $value);
-    public static function setIfNotExists($key, $value);
-    public static function update($key, $value);
-    public static function setAll($array);
-}
-
-class SettingsRepository implements SettingsRepositoryInterface
+class SettingsRepository
 {
 
     public static function get($key)
     {
         $setting = Setting::find($key);
-        return isset($setting) ? $setting->value : null;
+        return $setting?->value;
     }
 
     public static function getOrDefault($key, $default)
     {
-        $setting = Setting::find($key);
-        return isset($setting) ? $setting->value : $default;
+        return Setting::find($key)?->value ?? $default;
     }
 
     public static function getBoolean($key, $default = false)
     {
-        $setting = Setting::find($key);
-        return isset($setting) ? $setting->value == 1 : $default;
+        return Setting::find($key)?->value == 1 ?? $default;
     }
 
     public static function set($key, $value)

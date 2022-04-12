@@ -12,14 +12,7 @@ use App\Models\Tour\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-interface ActivityComponentRepositoryInterface
-{
-    public static function getAvailableAddons($tourId, $oCustomerId = -1);
-
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
-}
-
-class ActivityComponentRepository implements ActivityComponentRepositoryInterface
+class ActivityComponentRepository
 {
     public static function getAvailableAddons($tourId, $oCustomerId = -1): array
     {

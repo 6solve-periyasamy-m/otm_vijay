@@ -14,18 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-interface AccommodationComponentRepositoryInterface
-{
-    public static function getAvailableAddons($tourId, $oCustomerId = -1);
-
-    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
-
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
-
-    public static function getParentComponent(AccommodationInventoryTour $inventoryTour);
-}
-
-class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
+class AccommodationComponentRepository
 {
 
     public static function getAvailableAddons($tourId, $oCustomerId = -1): array
