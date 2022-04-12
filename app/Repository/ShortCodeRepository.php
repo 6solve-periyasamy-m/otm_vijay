@@ -29,26 +29,26 @@ class ShortCodeRepository
         $tour = $order?->tour;
         $nextPayment = isset($order) ? OrderRepository::getNextPaymentDetails($order) : null;
         $data = [
-            'LEAD_TITLE' => !isset($order) ? $faker->title : $customer->title,
-            'LEAD_FIRST_NAME' => !isset($order) ? $faker->firstName : $customer->first_name,
-            'LEAD_MIDDLE_NAMES' => !isset($order) ? $faker->firstName : $customer->middle_names,
-            'LEAD_LAST_NAME' => !isset($order) ? $faker->lastName : $customer->last_name,
-            'LEAD_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
-            'BOOKING_REFERENCE' => !isset($order) ? $faker->regexify('OTM[0-9]{12}[A-Z]{4}') : $order->booking_reference,
-            'ORDERED_ON' => Formatter::formatDate(!isset($order) ? $faker->date : $order->ordered_on),
-            'DEPOSIT' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $order->deposit),
-            'TOTAL_PAID' => Formatter::formatCurrency(!isset($order) ? $faker->numberBetween(100, 1000) : OrderRepository::getTotalPaid($order)),
-            'DUE_PAYMENT_AMOUNT' => Formatter::formatCurrency(!isset($order) ? $faker->numberBetween(100, 1000) : $nextPayment['amount']),
-            'DUE_PAYMENT_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $nextPayment['due']),
-            'TOUR_NAME' => !isset($order) ? implode(' ', $faker->words) : $tour->name,
-            'TOUR_DESCRIPTION' => !isset($order) ? $faker->sentence : $tour->description,
-            'TOUR_START' => Formatter::formatDate(!isset($order) ? $faker->date : $tour->date_from),
-            'TOUR_END' => Formatter::formatDate(!isset($order) ? $faker->date : $tour->date_to),
-            'TOUR_BASE_PER_PERSON' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $tour->base_price_per_person),
-            'TOUR_SURCHARGE' => Formatter::formatDate(!isset($order) ? $faker->numberBetween(100, 1000) : $tour->single_occupancy_surcharge),
-            'LATEST_INVOICE' => route('customer.invoice', ['reference' => (!isset($order) ? 'reference' : $order->booking_reference),]),
+            'LEAD_TITLE' => $customer?->title ?? $faker->title,
+            'LEAD_FIRST_NAME' => $customer->first_name ?? $faker->firstName,
+            'LEAD_MIDDLE_NAMES' => $customer->middle_names ?? $faker->name,
+            'LEAD_LAST_NAME' => $customer->last_name ?? $faker->lastName,
+            'LEAD_PASSPORT_EXPIRY_DATE' => Formatter::formatDate($customer->passport_expiry_date ?? $faker->date),
+            'BOOKING_REFERENCE' => $order?->booking_reference ?? $faker->regexify('OTM[0-9]{12}[A-Z]{4}'),
+            'ORDERED_ON' => Formatter::formatDate($order?->ordered_on ?? $faker->date),
+            'DEPOSIT' => Formatter::formatCurrency($order?->deposit ?? $faker->numberBetween(100, 1000)),
+            'TOTAL_PAID' => Formatter::formatCurrency($order?->paid ?? $faker->numberBetween(100, 1000)),
+            'DUE_PAYMENT_AMOUNT' => Formatter::formatCurrency(isset($order) ? $nextPayment['amount'] : $faker->numberBetween(100, 1000)),
+            'DUE_PAYMENT_DATE' => Formatter::formatDate(isset($order) ? $nextPayment['due'] : $faker->date),
+            'TOUR_NAME' => $tour?->name ?? implode(' ', $faker->words),
+            'TOUR_DESCRIPTION' => $tour?->description ?? $faker->sentence,
+            'TOUR_START' => Formatter::formatDate($tour?->date_from ?? $faker->date),
+            'TOUR_END' => Formatter::formatDate($tour?->date_to ?? $faker->date),
+            'TOUR_BASE_PER_PERSON' => Formatter::formatDate($tour?->base_price_per_person ?? $faker->numberBetween(100, 1000)),
+            'TOUR_SURCHARGE' => Formatter::formatDate($tour?->single_occupancy_surcharge ?? $faker->numberBetween(100, 1000)),
+            'LATEST_INVOICE' => route('customer.invoice', ['reference' => $order?->booking_reference ?? 'reference',]),
             'PORTAL_LINK' => route('customer.portal'),
-            'ATOL_LINK' => route('customer.atol', ['reference' => (!isset($order) ? 'reference' : $order->booking_reference),]),
+            'ATOL_LINK' => route('customer.atol', ['reference' => $order?->booking_reference ?? 'reference',]),
             'DETAILS_LINK' => route('customer.edit'),
         ];
 
@@ -79,10 +79,10 @@ class ShortCodeRepository
     {
         $faker = Faker::create();
         return array_merge([
-            'PAYMENT_AMOUNT' => Formatter::formatCurrency(!isset($payment) ? $faker->numberBetween(100, 1000) : $payment->amount),
-            'PAYMENT_DATE' => Formatter::formatDate(!isset($payment) ? $faker->date : $payment->paid_on),
-            'PAYMENT_METHOD' => !isset($payment) ? 'Demo Payment Method' : $payment->paymentMethod->name,
-            'PAYMENT_TYPE' => !isset($payment) ? 'Demo Payment Type' : $payment->payment_type
+            'PAYMENT_AMOUNT' => Formatter::formatCurrency($payment?->amount ?? $faker->numberBetween(100, 1000)),
+            'PAYMENT_DATE' => Formatter::formatDate($payment?->paid_on ?? $faker->date),
+            'PAYMENT_METHOD' => $payment?->paymentMethod->name ?? 'Demo Payment Method',
+            'PAYMENT_TYPE' => $payment?->payment_type ?? 'Demo Payment Type'
         ], self::getOrderShortCodes($payment?->order));
     }
 
@@ -91,11 +91,11 @@ class ShortCodeRepository
         $faker = Faker::create();
         $customer = $orderCustomer?->customer;
         return array_merge([
-            'CUSTOMER_TITLE' => !isset($customer) ? $faker->title : $customer->title,
-            'CUSTOMER_FIRST_NAME' => !isset($customer) ? $faker->firstName : $customer->first_name,
-            'CUSTOMER_MIDDLE_NAMES' => !isset($customer) ? $faker->firstName : $customer->middle_names,
-            'CUSTOMER_LAST_NAME' => !isset($customer) ? $faker->lastName : $customer->last_name,
-            'CUSTOMER_PASSPORT_EXPIRY_DATE' => Formatter::formatDate(!isset($order) ? $faker->date : $customer->passport_expiry_date),
+            'CUSTOMER_TITLE' => $customer?->title ?? $faker->title,
+            'CUSTOMER_FIRST_NAME' => $customer?->first_name ?? $faker->firstName,
+            'CUSTOMER_MIDDLE_NAMES' => $customer?->middle_names ?? $faker->firstName,
+            'CUSTOMER_LAST_NAME' => $customer?->last_name ?? $faker->lastName,
+            'CUSTOMER_PASSPORT_EXPIRY_DATE' => Formatter::formatDate($customer?->passport_expiry_date ?? $faker->date),
         ], self::getOrderShortCodes($orderCustomer?->order));
     }
 }
