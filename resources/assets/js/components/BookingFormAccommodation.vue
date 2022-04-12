@@ -106,7 +106,7 @@ export default {
             if (checks.every(c => c == true)) {
                 that.travellers.push(traveler)
             }
-            console.log('addedTraveller: loading booking', traveler)
+            that.debug && console.log('addedTraveller: loading booking', traveler)
             this.loadAccommodationBooking()
         })
         bus.$on("reloadTravelers", () => {

@@ -393,11 +393,11 @@ export default {
                 .then(response => {
                     that.debug>1 && console.log('BookingFormPrice get customer response:', response)
                     that.leadTraveller = response.data.customer
-                    console.log('BookingFormPayment: gathering summary data for ', token)
+                    that.debug && console.log('BookingFormPayment: gathering summary data for ', token)
                     axios.get(`/api/booking/summary/${token}/gather`)
                         .then(response => {
                             that.booking = response.data.booking
-                            console.log('BookingPrice:', that.booking)
+                            that.debug && console.log('BookingPrice:', that.booking)
                             that.calculateSingleRooms()
                             that.countTravellers()
                             that.calcPrice()
