@@ -288,6 +288,10 @@
                         @include('partials.fields.selector.default',
                             ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $customer->hat_size_id ?? 0, 'route' => 'hat-size', 'width' => 6])
                         <hr class="splitter">
+                        @include('partials.fields.textarea', ['name' => 'Dietary Requirements', 'field' => 'dietary_notes', 'value' => $customer->dietary_notes, 'rows' => 2])
+                        @include('partials.fields.textarea', ['name' => 'Mobility Requirements', 'field' => 'mobility_notes', 'value' => $customer->mobility_notes, 'rows' => 2])
+                        @include('partials.fields.textarea', ['name' => 'Other Notes', 'field' => 'other_notes', 'value' => $customer->external_notes, 'rows' => 2])
+                        <hr class="splitter">
                         @if(!isset($other))
                         <div class="form-group">
                             <h4 class="col-md-12 mb-0">Change your password</h4>

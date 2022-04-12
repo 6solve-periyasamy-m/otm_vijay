@@ -234,6 +234,30 @@ $(document).ready( function () {
             </div>
             @endif
         </div>
+        <div class="col-4">
+            <p>Dietary Requirements</p>
+            <h6 class="fw-bold">{{ $orderCustomer->customer->dietary_notes }}</h6>
+        </div>
+        <div class="col-4">
+            <p>Mobility Requirements</p>
+            <h6 class="fw-bold">{{ $orderCustomer->customer->mobility_notes }}</h6>
+        </div>
+        <div class="col-4">
+            <p>Internal Customer Notes</p>
+            <h6 class="fw-bold">{{ $orderCustomer->customer->internal_notes }}</h6>
+        </div>
+        <div class="col-4">
+            <p>External Customer Notes</p>
+            <h6 class="fw-bold">{{ $orderCustomer->customer->external_notes }}</h6>
+        </div>
+        <div class="col-4">
+            <p>Internal Order Customer Notes</p>
+            <h6 class="fw-bold">{{ $orderCustomer->internal_notes }}</h6>
+        </div>
+        <div class="col-4">
+            <p>External Order Customer Notes</p>
+            <h6 class="fw-bold">{{ $orderCustomer->external_notes }}</h6>
+        </div>
         <div class="col-12">
             @can('create', \App\Models\OrderCustomerAdjustment::class)
             <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-success mb-1">
@@ -363,6 +387,13 @@ $(document).ready( function () {
                             @endforeach
                         </table>
                 </div>
+                @if(!empty($orderCustomer->accommodation_notes))
+                    <hr class="splitter">
+                    <div class="col-12 mb-3">
+                        <h6 class="fw-bold">Accommodation Notes</h6>
+                        <p>{{ $orderCustomer->accommodation_notes }}</p>
+                    </div>
+                @endif
             </div>
             {{-- Activities Table --}}
             <div id="activities" role="tabpanel" class="tab-pane fade">
@@ -425,6 +456,13 @@ $(document).ready( function () {
                         @endforeach
                     </table>
                 </div>
+                @if(!empty($orderCustomer->activity_notes))
+                    <hr class="splitter">
+                    <div class="col-12 mb-3">
+                        <h6 class="fw-bold">Activity Notes</h6>
+                        <p>{{ $orderCustomer->activity_notes }}</p>
+                    </div>
+                @endif
             </div>
             {{-- Flights Table --}}
             <div id="flights" role="tabpanel" class="tab-pane fade">
@@ -487,6 +525,13 @@ $(document).ready( function () {
                         @endforeach
                     </table>
                 </div>
+                @if(!empty($orderCustomer->flight_notes))
+                    <hr class="splitter">
+                    <div class="col-12 mb-3">
+                        <h6 class="fw-bold">Flight Notes</h6>
+                        <p>{{ $orderCustomer->flight_notes }}</p>
+                    </div>
+                @endif
             </div>
             {{-- Transports Table --}}
             <div id="transports" role="tabpanel" class="tab-pane fade">
@@ -551,6 +596,13 @@ $(document).ready( function () {
                         @endforeach
                     </table>
                 </div>
+                @if(!empty($orderCustomer->transport_notes))
+                    <hr class="splitter">
+                    <div class="col-12 mb-3">
+                        <h6 class="fw-bold">Transport Notes</h6>
+                        <p>{{ $orderCustomer->transport_notes }}</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

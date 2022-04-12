@@ -43,7 +43,7 @@ class CustomerTourController extends Controller
         }
         if (!isset($oCustomer)) abort(404);
         return view('pages.customer.itinerary',
-            ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
+            ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'orderCustomer' => $oCustomer, 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
     }
 
     public function showExtras(?string $reference = null, ?Customer $customer = null)
@@ -137,17 +137,27 @@ class CustomerTourController extends Controller
         };
     }
 
-    public function updateNotes(Request $request, string $reference)
+    public function updateNotes(Request $request, string $reference, OrderCustomer $orderCustomer)
     {
         $customer = CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         $order = OrderRepository::getOrderFromBookingReference($reference);
         if (!isset($order)) abort(404);
         if (!OrderRepository::isOrderCustomer($order, $customer)) abort(404);
-        $order->update([
-            'external_notes' => $request->input('notes'),
+        if (OrderRepository::isLeadBooker($order, CustomerAuthenticationRepository::getCustomer())) {
+            $order->update([
+                'external_notes' => $request->input('order_notes'),
+            ]);
+            $order->save();
+        }
+        $orderCustomer->update([
+            'external_notes' => $request->input('order_customer_notes'),
+            'accommodation_notes' => $request->input('accommodation_notes'),
+            'activity_notes' => $request->input('activity_notes'),
+            'flight_notes' => $request->input('flight_notes'),
+            'transport_notes' => $request->input('transport_notes'),
         ]);
-        $order->save();
+        $orderCustomer->save();
         return redirect()->route('customer.itinerary', ['reference' => $reference,]);
     }
 
