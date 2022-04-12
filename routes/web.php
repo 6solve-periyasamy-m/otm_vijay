@@ -757,7 +757,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/extras/{reference?}/{customer?}', [CustomerTourController::class, 'showExtras'])->name('extras');
         Route::get('/extras/purchase/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'purchaseExtra'])->name('extras.purchase');
         Route::get('/extras/apply/{reference}/{componentType}/{componentId}/{customer?}', [CustomerTourController::class, 'addExtra'])->name('extras.apply');
-        Route::post('/order/notes/update/{reference}', [CustomerTourController::class, 'updateNotes'])->name('notes.update');
+        Route::post('/order/notes/update/{reference}/{orderCustomer}', [CustomerTourController::class, 'updateNotes'])->name('notes.update');
     });
     Route::prefix('password')->name('password.')->group(function() {
         Route::get('/reset', [CustomerForgotPasswordController::class, 'showLinkRequestForm'])->name('request');
