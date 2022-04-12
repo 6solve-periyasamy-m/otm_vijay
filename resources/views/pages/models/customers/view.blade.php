@@ -58,10 +58,22 @@
                         <p>Emergency Contact</p>
                         <h6 class="fw-bold">{{ $customer->emergency_contact_name }} ({{ $customer->emergency_contact_relationship }}),  <a href="tel:{{ $customer->emergency_contact_telephone }}">{{ $customer->emergency_contact_telephone }}</a></h6>
                     </div>
-                    <div class="col-12">
-                        <p>Notes</p>
-                        <h6 class="fw-bold">{{ $customer->notes }}</h6>
-                    </div>                    
+                    <div class="col-6">
+                        <p>Dietary Requirements</p>
+                        <h6 class="fw-bold">{{ $customer->dietary_notes }}</h6>
+                    </div>
+                    <div class="col-6">
+                        <p>Mobility Requirements</p>
+                        <h6 class="fw-bold">{{ $customer->mobility_notes }}</h6>
+                    </div>
+                    <div class="col-6">
+                        <p>Internal Notes</p>
+                        <h6 class="fw-bold">{{ $customer->internal_notes }}</h6>
+                    </div>
+                    <div class="col-6">
+                        <p>External Notes</p>
+                        <h6 class="fw-bold">{{ $customer->external_notes }}</h6>
+                    </div>
                     <div class="col-12">
                         <a href="{{ route('customers.edit', ['customer' => $customer,]) }}" class="btn btn-success">
                             <i class="icon-note"></i>

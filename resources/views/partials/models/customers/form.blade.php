@@ -61,6 +61,8 @@
 'route' => 'hat-size', 'createRoute' => route('hat-sizes.create'), 'width' => 4])
 @include('partials.fields.text', ['name' => 'Loyalty Number', 'field' => 'loyalty_number', 'value' => $loyalty_number ?? null, 'width' => 4])
 <hr class="splitter"/>
-
-@include('partials.fields.prefab.notes')
+@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $internal_notes ?? null, ])
+@include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $external_notes ?? null, ])
+@include('partials.fields.textarea', ['name' => 'Dietary Notes', 'field' => 'dietary_notes', 'value' => $dietary_notes ?? null, ])
+@include('partials.fields.textarea', ['name' => 'Mobility Notes', 'field' => 'mobility_notes', 'value' => $mobility_notes ?? null, ])
 @include('partials.fields.submit')
