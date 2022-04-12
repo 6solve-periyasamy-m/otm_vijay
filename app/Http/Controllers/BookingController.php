@@ -67,7 +67,7 @@ class BookingController extends Controller
         $companyData = Setting::where('key', 'company.name')->first();
 
         $tour = Tour::where('booking_form_url', $url)->first();
-        if (empty($tour)) {
+        if (empty($tour) || !$tour->is_active) {
             abort(404);
         }
         if ($tour->event_id) {
