@@ -141,7 +141,7 @@
                  </div>
                  <div v-if="agreement && deposit>0" class="deposit-amount">
                     <p>You have agreed to our Terms and Conditions.</p>
-                    <p>To book your tour, a deposit of {{priceFormat(deposit * travellerCount)}} is now payable.</p>
+                    <p>To book your tour, a deposit of {{priceFormat(deposit * countTravellers())}} is now payable.</p>
                     <form method="post" action="/booking/deposit/payment">
                       <input type="hidden" name="_token" :value="csrf_token" />
                       <input type="hidden" name="token" :value="booking_token" />
@@ -205,7 +205,7 @@ export default {
                 console.log('Payment ignored: ', token);
             }
         })
-         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
+        bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
             that.travellers = [];
             that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             that.travellers.push(that.leadTraveller)
@@ -213,8 +213,9 @@ export default {
             that.debug>2 && console.log("Payment : travellers loaded", travellers, this.travellers, that.travellers);
             that.countTravellers()
         })
-        bus.$on('recalculatePayment', () => {
-            this.debug && console.log('Recalculate payment event')
+        bus.$on('recalculatePayment', (travellers) => {
+            that.debug && console.log('Recalculate payment event', travellers)
+            that.travellers = travellers
             that.loadBooking(that.booking_token)
             that.calcPrice()
             that.calcTourPrice()
@@ -247,6 +248,7 @@ export default {
         },
         countTravellers() {
             this.travellerCount = this.travellers.length 
+            console.log('payment: countTravellers', this.travellerCount)
             return this.travellerCount
         },
         priceFormat(a) {

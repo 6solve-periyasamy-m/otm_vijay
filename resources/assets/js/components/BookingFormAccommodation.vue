@@ -106,6 +106,7 @@ export default {
             if (checks.every(c => c == true)) {
                 that.travellers.push(traveler)
             }
+            console.log('addedTraveller: loading booking', traveler)
             this.loadAccommodationBooking()
         })
         bus.$on("reloadTravelers", () => {
@@ -144,7 +145,7 @@ export default {
                     that.showAccommodation = false
                     that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
                     // TODO: do something with response?
-                    bus.$emit('recalculatePayment')
+                    bus.$emit('recalculatePayment', that.travellers)
                 })
                 .catch(error => console.log(error))
         },
@@ -218,7 +219,7 @@ export default {
                            Vue.set(that.travellers[index], 'group', booking.group_id)
                        }
                     })
-                    bus.$emit('recalculatePayment')
+                    bus.$emit('recalculatePayment', that.travellers)
                     that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
                 })
                 .catch((error) => console.log(error));
