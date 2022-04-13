@@ -18,6 +18,9 @@ class CreateBookingAccommodationsTable extends Migration
             $table->foreignId('booking_id')->constrained();
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('accommodation_inventory_tour_id')->constrained();
+            $table->foreignId('room_type_id')->constrained();
+            $table->integer('group_id')->nullable();
+            //$table->integer('group_id')->constrained();
             $table->timestamps();
         });
     }

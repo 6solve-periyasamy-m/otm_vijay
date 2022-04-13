@@ -1,282 +1,232 @@
 <template>
-    <div class="container">
+    <div class="booking-container">
         <div class="card card-options">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-1">
                     <button class="btn btn-link collapsed cardhead" @click="toggleAccommodation">Accommodation</button>
-                    <p>Accommodation options for your tour group including indication of single or shared rooms requirements.</p>
                 </h5>
+                <p class="caption">
+                    <font-awesome-icon icon="arrow-right" />
+                    Accommodation options for your tour group including single or shared rooms requirements. 
+                    Sharing is designated by selection of a group.
+                </p>
             </div>
             <div v-if="showAccommodation" class="card-body ept-form">
-                <h2>Accommodation options</h2>
-                <!-- {{travellers}} -->
-                <div class="accommodation_travellers"
-                    v-for="(traveller, index) in group"
-                    v-bind:key="index">
-                    <div class="accommodation_traveller">
-                        <div class="accommodation_traveller__name">
-                            {{traveller.first_name}} {{traveller.last_name}}
+                <div v-if="showRegistered">
+                    <h4>Accommodation Registered</h4>
+                    <div class="row">
+                       <div class="col">traveller name</div>
+                       <div class="col">room type</div>
+                       <div class="col">share group</div>
+                    </div>
+                    <div v-for="traveller in alltravellers" class="row">
+                        <input type="hidden" readonly :value="traveller.id">
+                        <div class="col">
+                            <input type="text" readonly :value="`${traveller.first_name} ${traveller.last_name}`">
                         </div>
-                        <div class="accommodation_booking-policy">
+                        <div class="col">
+                            <select v-model="traveller.room_type">
+                                <option default value="0">Select a room type</option>
+                                <option v-for="room in room_types" :value="room.id" :key="room.id">{{room.name}}</option>
+                            </select>
                         </div>
-                        <div class="accommodation_traveller__options--labels">
-                            <accommodation-room-selection
-                                :order_id="order_id"
-                                :tour="tour"
-                                :traveller="traveller"
-                                :group="group">
-                            </accommodation-room-selection>
+                        <div class="col">
+                            <span v-if="occupancy(traveller.room_type) > 1">
+                                <select v-model="traveller.group">
+                                    <option default value="0">Share group selection</option>
+                                    <option v-for="group in groups" :value="group.id" :key="group.id">{{group.name}}</option>
+                                </select>
+                            </span>
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-default" @click="reset">Reset</button>
-                <button class="btn btn-primary" @click="register">register</button>
-                <p>Set your preferred accommodation selections and register to save settings. Availability of your settings is confirmed when the booking is completed.</p>
+                <div class="py-2">
+                    <button @click="setAccommodation" class="btn btn-primary">Set Accommodation Options</button>
+                    <button @click="resetAccommodation" class="btn btn-default">Reset Accommodation</button>
+                </div>
             </div>
         </div>
     </div>
 </template>
-
 <script>
-import dates from "../utilities";
-import { bus } from "../bus";
-import Vue from "vue";
-import AccommodationRoomSelection from './AccommodationRoomSelection.vue'
-/**
- * accommodation is found related to the tour
- */
-function initialState() {
-    return {
-        debug: 3,
-        showAccommodation: false,
-        accommodations: [],
-        occupancy: [],
-        traveller: {},
-        group: [],
-        others: [],
-        room_selection: [],
-        room_share: [],
-        room_single: [],
-        isShare: [],
-        sharer: {},
-        type: {},
-    }
-}
+import { bus } from '../bus'
+import Vue from 'vue'
 export default {
-    components: { AccommodationRoomSelection },
-    props: ["tour", "order_id", "order_token", "travellers"],
+    props: ['tour'],
     data() {
-        return initialState();
+        return {
+            debug: false,
+            moduleName: 'Accommodation',
+            showAccommodation: false,
+            booking_token: null,
+            showRegistered: true,
+            accommodations: [],
+            leadTraveller: {},
+            travellers: [],
+            initTravelers: [],
+            room_types: ['Single', 'Twin', 'Double', 'Shared'],
+            room_type: {},
+            groups: []
+        }
     },
     created() {
-        this.debug>3 && console.log('Accommodation: this.tour=', this.tour, this.order_token, this.order_id, this.travellers)
-        this.group = this.others = this.travellers
-        this.setup()
+        const that = this
+        bus.$on('setBookingToken', (bookingData) => {
+            that.booking_token = bookingData
+            that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+        })
+        bus.$on('leadTravellerLoaded', t => {
+            that.leadTraveller = t
+            that.debug>2 && console.log('leadTravellerLoaded', t)
+            if (that.travellers == undefined || that.travellers.length == 0) {
+                that.travellers.unshift(t)
+            }
+        })
+        bus.$on('setLeadTraveller', customer => {
+            that.debug>4 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
+            that.leadTraveller = customer
+        })
+        bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
+            that.debug>2 && console.log("Accommodation: travellers loaded", travellers, that.leadTraveller, that.travellers);
+            if (init) {
+                that.travellers = [];
+            }
+            if (that.leadTraveller && that.travellers.length===0) {
+                that.travellers.unshift(that.leadTraveller)
+            }
+            travellers.map(traveller => that.travellers.push(traveller));
+            that.initTravelers = that.travellers
+            that.loadAccommodationBooking()            
+        })
+        bus.$on("AddedTraveler", traveler => {
+            let checks = that.travellers.map(t => {
+                //return t.id !== traveler.id - does not work for new travelers!
+                return t.first_name != traveler.first_name && t.last_name != traveler.last_name
+            })
+            if (checks.every(c => c == true)) {
+                that.travellers.push(traveler)
+            }
+            that.debug && console.log('addedTraveller: loading booking', traveler)
+            this.loadAccommodationBooking()
+        })
+        bus.$on("reloadTravelers", () => {
+            that.debug>4 && console.log('reloadTraveller (accommodation)')
+            this.loadAccommodationBooking()
+        })
+    },
+    computed: {
+        alltravellers: function() {
+            let that = this
+            const travellers = this.travellers
+            let checks = travellers.map(t => t.id != that.leadTraveller.id);
+            if (checks.every(c => c == true)) {
+                travellers.unshift(this.leadTraveller)
+            }
+            return travellers
+        }
+    },
+    mounted() {
+      this.getAccommodationOptions()
+      this.getAccommodationGroups()
     },
     methods: {
-        setup() {
-            let that = this
-            this.group.map(t => t.shared = false)
-            this.getAccommodationOptions()
-            bus.$on('setRoomSelection', function(traveller, room) {
-                console.log('setRoomSelection', traveller, room)
-                that.travellers.filter(t => t.id == traveller.id).map(t => t.room_selected = room)
-                const others = that.others.filter(t => t.id != traveller.id)
-                bus.$emit('setOthers', others, traveller)
-                that.others = others
-            })
-            bus.$on('setRoomShare', function(traveller, sharer, room) {
-                that.debug>2 && console.log('>>> setRoomShare for traveller', traveller.first_name, sharer.first_name)
-                if (typeof traveller.shares == 'undefined') {
-                    traveller.shares = []
-                }
-                if (typeof traveller.shares[traveller.id] == 'undefined') {
-                    traveller.shares[traveller.id] = []
-                }
-                traveller.shares[traveller.id].push(sharer)
-
-                if (typeof traveller.sharename == 'undefined') {
-                    traveller.sharename = []
-                }
-                if (typeof traveller.sharename[traveller.id] == 'undefined') {
-                    traveller.sharename[traveller.id] = []
-                }
-                traveller.sharename[traveller.id].push(`${sharer.first_name} ${sharer.last_name}`)
-                that.debug>2 && console.log('BFA: setRoomShare for ', room, traveller.id, traveller.first_name, sharer.first_name)
-                that.room_selection[traveller.id] = room
-                that.others = that.othertravellers(sharer.id)
-                const reducedGroup = that.group.filter(t => {
-                    return t.id != sharer.id
-                })
-                that.group = reducedGroup
-
-                that.$forceUpdate()
-            })
-            bus.$emit('loadOthers', that.group)
+        addTraveller(t) {
+            this.travellers.push(t)
         },
-        init() {
+        setAccommodation() {
             let that = this
-            // this.traveller.shares.length = 0
-            // this.traveller.length = 0
-            // this.group.length = 0
-            this.group = this.others = this.travellers
-            this.group.map(t => {
-                if (t != undefined) {
-                    this.debug>4 && console.log('init', t, t.sharename, t.shares)
-                    if (t.sharename != undefined) {
-                        t.sharename.map(s => s = []);
-                    }
-                    if (t.shares != undefined) {
-                        t.shares.map(s => s = []);
-                    }
-                    t.shared = false
-                }
-            })
             
-            // this.getAccommodationOptions()
-        },
-        reset() {
-            // this works well enough for now
-            // but we can not store/restore selections for edits
-            const href=window.location.href
-            window.location.assign(href)
-            return
-
-            // having problem with the array in the AccommodationRoomSelector 
-            // not reinitialising
-            // Object.assign(this.$data, initialState())
-            // this.init()
-            // bus.$emit('AccommodationRoomSelectorReset', this.group)
-            // this.showAccommodation = true
-            // this.$forceUpdate()
-            // this.setup()
-        },
-        register() {
-            console.log('register ... travellers', this.travellers)
-            this.travellers.map(traveller => {
-                const data = {}
-                data.shares = []
-                data.shared = []
-                if (traveller.shares != undefined) {
-                    const shares = traveller.shares.filter(s => s!=null).map(i => i.map(t => t.id))
-                    data.shares = shares[0]
-                }
-                if (traveller.sharename != undefined) {
-                    const id = traveller.id
-                    const sharename = traveller.sharename.filter(s => s!=null)
-                    data.shared = { id: id, sharename: sharename[0] }
-                }
-                data.customer_id = traveller.id
-                data.order_id = this.order_id
-                data.room = traveller.room_selected //this.room_selection[traveller.id]
-                console.log('register data', data)
-                axios.post('/api/booking/accommodation/reserve', {
-                    type: 'accommodation',
-                    traveller: data,
-                    tour: this.tour,
-                    reference: this.order_token
+            this.debug>1 && console.log('BookingFormAccommodation: setAccommodation', this.booking_token, this.travellers)
+            axios.post(`/api/booking/accommodation/reserve`, {
+                token : this.booking_token,
+                travellers :  this.travellers 
                 })
-                .then(response => console.log(response))
+                .then(response => {
+                    that.showAccommodation = false
+                    that.debug>3 && console.log('BookingFormAccommodation: accommodation reserve response', response)
+                    // TODO: do something with response?
+                    bus.$emit('recalculatePayment', that.travellers)
+                })
                 .catch(error => console.log(error))
-            })
+        },
+        resetTravellers() {
+            this.travellers = this.initTravelers
+            this.travellers.map(t => Vue.set(t, 'group', '0'))
+            this.travellers.map(t => Vue.set(t, 'room_type', '0'))
+        },
+        resetAccommodation() {
+            this.resetTravellers()
+            axios.post('/api/booking/accommodation/reset', {
+                token: this.booking_token,
+                travellers: this.travellers
+              })
+              .then(response => {
+                  this.travellers = this.initTravelers
+                  this.loadAccommodationBooking()
+              })
+              .catch(error => console.log(error))
+        },
+        occupancy(id) {
+          const item = this.room_types.filter(type => type.id === id);
+          const record = item.find(i => i.id === id)
+          if (record) {
+             return record.maximum_occupancy
+          } else {
+             return 1
+          }
         },
         toggleAccommodation() {
             this.showAccommodation = !this.showAccommodation
-            if (this.showAccommodation) {
-                this.others = this.travellers
-                this.getAccommodationOptions()
-            }
         },
-        countOthers(traveller) {
-            const others = this.othertravellers(traveller)
-            return others.length
+        getAccommodationGroups() {
+          const that = this
+          axios.get('/api/booking/accommodation/groups')
+              .then(response => that.groups = response.data.groups.filter(g => g.name !== 'Single'))
+              .catch(error => console.log('error getting groups', error))
         },
-        othertravellers(traveller_id) {
-            let group = this.others
-            this.others = group.filter(t => t.id != traveller_id)
-            return this.others
+        getAccommodationOptions() {
+            const that = this
+            const url = `/api/booking/accommodation/rooms/tour/${this.tour.id}`
+            axios.get(url)
+                .then(response => {
+                    that.debug && console.log('BookingFormAccommodation: getAccommodationOptions: response: ', response)
+                    that.room_types = response.data.rooms
+                    that.debug>1 && console.log('BookingFormAccommodation: getAccommodationOptions: roomtypes: ', that.room_types)
+                })
+                .catch(error => console.log(error))
         },
-        async getAccommodationOptions() {
+        loadAccommodationBooking() {
             const that = this;
-            const url = `/api/booking/accommodation/${this.tour.id}`
-            await axios.get(url)
-            .then((response) => {
-                this.debug>3 && console.log('getAccommodationOptions', response.data)
-                that.accommodations = response.data.accommodations
-                that.accommodations.map(
-                    (accommodation) => {
-                        that.occupancy[accommodation.accommodation_id] =
-                        accommodation.maximum_occupancy
-                });
-            })
-            .catch((error) => console.log(error))
+            let url = `/api/booking/accommodation/booking/${this.booking_token}/tour/${this.tour.id}`           
+            axios.get(url)
+                .then((response) => {
+                    that.debug>4 && console.log('/api/booking/accommodation/booking/',response.data)
+                    const bookings = response.data.bookings
+                    if (bookings == undefined || !bookings.length) {
+                      return
+                    }
+                    that.travellers = [], 
+
+                    that.resetTravellers()
+
+                    that.debug>5 && console.log('BookingFormAccommodations: travellers', that.travellers, bookings)
+                    bookings.map((booking, index) => {
+                       that.debug>7 && console.log('BookingFormAccommodations: booking data debug ', index, that.travellers, booking.room_type_id, booking.group_id)
+                       if (booking.room_type_id) {
+                           Vue.set(that.travellers[index], 'room_type', booking.room_type_id)
+                       }
+                       if (booking.group_id) {
+                           Vue.set(that.travellers[index], 'group', booking.group_id)
+                       }
+                    })
+                    bus.$emit('recalculatePayment', that.travellers)
+                    that.debug>5 && console.log('BookingFormAccommodation: travellers', that.travellers, bookings)
+                })
+                .catch((error) => console.log(error));
         },
     }
 }
 </script>
 <style scoped lang="scss">
-.accommodation_traveller {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: space-between;
-    &__name {
-        width: 18rem;
-        background: var(--light-grey);
-    }
-    &__options {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        &--share-with {
-            width: 20rem;
-            margin-left: 0;
-        }
-        &--single,
-        &--share {
-            width: 15rem;
-        }
-        &--labels {
-            display: flex;
-            flex-direction: row;
-            div {
-                width: 10rem;
-            }
-        }
-    }
-    @media screen and (min-width: 576px) {
-        margin-left: 2rem;
-        &__options {
-            align-items: flex-end;
-            &--single,
-            &--share {
-                width: 12rem;
-            }
-            &--labels {
-                display: flex;
-                flex-direction: row;
-                div {
-                    width: 12rem;
-                }
-            }
-        }
-    }
-    @media screen and (min-width: 768px) {
-        margin-left: 4rem;
-        &__options {
-            align-items: flex-end;
-            &--single,
-            &--share {
-                width: 15rem;
-            }
-            &--labels {
-                display: flex;
-                flex-direction: row;
-                div {
-                    width: 15rem;
-                }
-            }
-        }
-    }
-}
 </style>
+

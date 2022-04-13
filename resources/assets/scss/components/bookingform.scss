@@ -7,11 +7,77 @@
     --mid-grey: #aaa;
     --dark-grey: #888;
 }
+
+.booking-form.container-fluid {
+  padding: 0;
+}
+form-control:focus {
+  outline: 3px dashed;
+  }
+
+.booking-page {
+  padding: 0;
+}
+@media screen and (min-width: 600px) {
+ .booking-page {
+  padding: 0 0.25rem;
+ }
+}
+@media screen and (min-width: 768px) {
+  .booking-page {
+    padding: 0 1rem;
+  }
+}
+@media screen and (min-width: 992px) {
+  .booking-page {
+    padding: 0.5rem 1.5rem;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .booking-page {
+    padding: 1rem 2rem;
+  }
+}
+
+.booking-page {
+    .form-control:focus {
+        outline: 3px dashed;
+    }
+    min-width: calc(100vw - 2rem); 
+    min-height: calc(100vh - 2rem);
+    background: #A5C4CE;
+    background: -moz-radial-gradient(center, #A5C4CE 0%, #FFFFFF 100%, #4FB8C5 100%);
+    background: -webkit-radial-gradient(center, #A5C4CE 0%, #FFFFFF 100%, #4FB8C5 100%);
+    background: radial-gradient(ellipse at center, #A5C4CE 0%, #FFFFFF 100%, #4FB8C5 100%);
+    .btn {
+        border: 2px solid aliceblue;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        &:hover {
+            border: 2px dotted white;
+            box-shadow: -1px -1px 8px 4px rgba(0,0,5,0.76)
+        }
+        &.btn-primary {
+            color: white;
+            background-color: blue;
+        }
+        &.btn-link {
+            color: white;
+            background-color: green;
+        }
+    }
+    .dropdown-button {
+        p {
+            margin: 1rem 0 0;
+        }
+    }
+}
 select {
     max-width: max-content;
 }
 .logo {
-    width: 200px;
+    width: 96px;
     height: auto;
 }
 h1 {
@@ -23,26 +89,80 @@ h2 {
 h3 {
     font-size: 1.25rem;
 }
+.bookingheader-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 .bookingform-header {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: 1rem;
     &__logo {
-        margin-right: 1rem;
+        margin: 0.5rem 2rem 0 1rem;
     }
     &__title {
-        font-size: 1.25rem;
-        flex: 0 1 65%;
+        margin: 0.25rem 0 0;
+        font-size: 1rem;
+        flex: 0 1 85%;
         &--main {
-            font-size: 0.85em;
+            font-size: 0.9em;
         }
+    }
+    &__controls {
+        flex: 0 1 auto;
+        select {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+    &__summary {
+        font-size: small;
+    }
+}
+.bookingform-header {
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    input {
+        border: none;
+        padding: 0;
+        font-size: small;
     }
 }
 .card-body {
     overflow: hidden;
     width: 100%;
     padding: 0;
+    .card-info {
+        font-size: small;
+        font-style: italic;
+        color: grey;
+        padding: 0 1rem 0;
+        p {
+            padding: 0;
+            margin: 1rem 0 0;
+        }
+        input {
+            margin-bottom: 0.5rem;
+        }
+        button {
+            margin-left: 2rem;
+        }
+    }
 }
 .card-options {
     background: var(--card-background, #dcdcdc);
@@ -90,6 +210,7 @@ h3 {
         font-weight: 600;
     }
 }
+
 .has-dropdown {
     top: 0.5rem;
     width: 100%;
@@ -102,15 +223,18 @@ h3 {
         border: thin #ddd solid;
     }
 }
+
 .dropdown {
     border: thin #ddd solid;
-    margin-top: 1rem;
+    margin-top: 0;
     margin-bottom: 0.25rem;
     padding: 4px;
 }
+
 .dropdown-selection {
     padding: 6px;
 }
+
 input, .dropdown {
     border-radius: 0;
     border: thin #ddd solid;
@@ -119,9 +243,11 @@ input[pattern]:invalid,
 .invalid {
     color: red;
 }
+
 .maxwidth {
     width: 100%;
 }
+
 .field-separation {
     display: flex;
     flex-direction: column;
@@ -130,6 +256,7 @@ input[pattern]:invalid,
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
+
 .field-joining {
     max-height: 2rem;
     margin-top: 1rem;
@@ -138,6 +265,7 @@ input[pattern]:invalid,
 
 .caption {
     margin: 0 2rem;
+    font-size: 12px;
 }
 .spacer {
     margin-top: 2rem;
@@ -194,6 +322,7 @@ hr.light {
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
 .a-card {
     width: 100%;
     height: auto;
@@ -227,19 +356,23 @@ hr.light {
         box-shadow: 3px 3px 8px hsl(0, 0%, 80%);
     }
 }
+
+.bookingform-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .controls {
+      text-align: right;
+    }
+}
+
 .centered {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
-.btn-small {
-    width: 3rem;
-    height: 1rem;
-    padding: 0;
-    vertical-align: inherit;
-    font-size: 8px;
-}
+
 @media screen and (min-width: 576px) {
     .a-cards {
         display: flex;
@@ -261,4 +394,3 @@ hr.light {
         flex: 0 1 20%;
     }
 }
-

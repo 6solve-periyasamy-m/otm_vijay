@@ -30,3 +30,4 @@ class RoomType extends Model
         return $this->name . ' (Occupancy ' . $this->maximum_occupancy . ')';
     }
 }
+

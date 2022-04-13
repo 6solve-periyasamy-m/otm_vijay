@@ -61,11 +61,11 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
-use App\Models\Order;
 use App\Models\Tour;
-use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Models\Order;
+use App\Repository\OrderRepository;
 
 /*
 |--------------------------------------------------------------------------

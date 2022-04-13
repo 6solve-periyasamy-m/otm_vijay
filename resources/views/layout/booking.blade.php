@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- THIS LAYOUT IS FOR THE NEW FRONTEND -->
+<!-- THIS LAYOUT is ONLY for the BOOKING FORM -->
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -11,13 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
     <!-- Styles -->
-    <!-- <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
-    @yield('header-script')
+    <script src="/js/appbootstrap.js"></script>
+    @yield('head-script')
 </head>
 <body>
-    <div id="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
-        @if ($errors->any())
+    <div class="booking-page">
+        @if (!empty($errors) && $errors->any())
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ $error }}

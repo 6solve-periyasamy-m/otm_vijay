@@ -737,7 +737,7 @@ class OrderRepository
     /**
      * @throws RoomingFailedException
      */
-    private static function addRoomsToGroup(Order $order, Group $group)
+    public static function addRoomsToGroup(Order $order, Group $group)
     {
         $templates = AccommodationComponentRepository::getTemplateTourInventory($order->tour);
         $roomType = $group->roomType;

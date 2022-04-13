@@ -98,7 +98,7 @@ class CustomerTourController extends Controller
 
         return StripeGateway::checkout(
             [['name' => $tourComponent->__toString(), 'cost' => $tourComponent->tour_sales_price, 'quantity' => 1]],
-                $order, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $data);
+                $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $data);
     }
 
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
