@@ -53,8 +53,8 @@ if (busEventLogging) {
     bus.$on('leadTravellerLoaded', function(customer) {
         console.log('Event Bus: leadTravellerLoaded', customer)
     })
-    bus.$on('removeTraveler', function(id) {
-        console.log('Event Bus: remove traveller ',id)
+    bus.$on('removeTraveler', function(traveler) {
+        console.log('Event Bus: remove traveller ',traveler)
         //bus.$emit('reloadTravelers')
     })
     bus.$on('accommodationBookingsLoaded', function() {

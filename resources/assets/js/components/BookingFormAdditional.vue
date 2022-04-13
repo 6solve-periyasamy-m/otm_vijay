@@ -26,7 +26,7 @@
                         :traveller="item"
                         :form_id="item.id"
                     >
-                    <button v-if="item.id" class="btn btn-default btn-remove" slot="remove" @click="removeTraveler(item.id)">X {{debug?item.id:''}}</button>
+                    <button v-if="item.id" class="btn btn-default btn-remove" slot="remove" @click="removeTraveler(item)">X {{debug?item.id:''}}</button>
                     </booking-form-add-traveller>
                 </div>
                 <div class="controls">
@@ -92,6 +92,9 @@
                     }
                 })
             })
+            bus.$on('removeTraveler', traveler => {
+                that.removeTraveler(traveler)
+            })
         },
         mounted() {
             this.debug && console.log(`${this.moduleName} mounted`)
@@ -114,14 +117,14 @@
                 return this.travellerBookings.length + 1;   
                 // return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             },
-            removeTraveler(id) {
+            removeTraveler(traveler) {
                 let that = this
-                if (confirm(`Remove traveller?`) !== true) {
+                if (confirm(`Remove traveler?`) !== true) {
                     return
                 }
-                if (id) {
+                if (traveler.id) {
                     axios.post(`/api/booking/additional-traveller/remove`, {
-                        customer_id: id,
+                        customer_id: traveler.id,
                         booking_token: this.booking_token
                     })
                     .then(response => {
@@ -131,6 +134,8 @@
                             that.loadTravellerBookings()
                         }
                     })
+                } else {
+                    console.log('remove traveler could not remove', traveler)
                 }
             },
             toggleAdditional() {
