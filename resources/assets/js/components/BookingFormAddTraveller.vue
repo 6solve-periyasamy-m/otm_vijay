@@ -344,6 +344,7 @@ export default {
                         that.gender = customer.gender
                         that.validated = true
                         that.validationErrors = ''
+                        that.traveller = customer
                         bus.$emit('AddedTraveler', customer)
                     } else {
                         that.validationMessage = 'Something did not appear to work correctly, please try again'
@@ -358,7 +359,7 @@ export default {
         },
         removeTraveller() {
             const that = this
-            this.debug && console.log('BookingFormAddTraveller: removing ', this.traveller.id)
+            this.debug && console.log('BookingFormAddTraveller: removing ', this.traveller)
             if (!this.traveller.id) {
                 this.removed = true
                 return
@@ -369,10 +370,12 @@ export default {
             })
             .then(response => {
                 that.removed = true
+                console.log('removeTraveler', response, that.traveller)
+                bus.$emit('removeTraveler', that.traveller)
             })
             .catch(error => console.log('BookingFormAddTraveller: remove customer error', error))            
 
-            bus.$emit('removeTraveler', this.traveller.id)
+            
         }
     }
 }
