@@ -30,6 +30,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read Airport|null $arrivalAirport
  * @property-read Airport|null $departureAirport
+ * @property-read Flight $flight
+ * @property-read FlightInventory $flight_inventory
  * @property-read FlightInventoryTour|null $flightInventoryTour
  * @property-read FlightInventoryTour|null $tourComponent
  * @property-read string $atol_string
@@ -81,12 +83,12 @@ class OrderFlight extends Model
         return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
 
-    public function flightInventory(): FlightInventory
+    public function getFlightInventoryAttribute(): FlightInventory
     {
         return $this->flightInventoryTour->flightInventory;
     }
 
-    public function flight(): Flight
+    public function getFlightAttribute(): Flight
     {
         return $this->flightInventoryTour->flightInventory->flight;
     }

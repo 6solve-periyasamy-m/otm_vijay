@@ -31,6 +31,8 @@ use Illuminate\Support\Carbon;
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
  * @property-read OrderCustomer|null $orderCustomer
+ * @property-read Transport $transport
+ * @property-read TransportInventory $transport_inventory
  * @property-read TransportInventoryTour|null $transportInventoryTour
  * @property-read TransportInventoryTour|null $tourComponent
  * @method static Builder|OrderTransport newModelQuery()
@@ -76,12 +78,12 @@ class OrderTransport extends Model
         return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 
-    public function transportInventory(): TransportInventory
+    public function getTransportInventoryAttribute(): TransportInventory
     {
         return $this->transportInventoryTour->transportInventory;
     }
 
-    public function transport(): Transport
+    public function getTransportAttribute(): Transport
     {
         return $this->transportInventoryTour->transportInventory->transport;
     }

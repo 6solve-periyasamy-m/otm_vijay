@@ -26,6 +26,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Activity $activity
+ * @property-read ActivityInventory $activity_inventory
  * @property-read ActivityInventoryTour $activityInventoryTour
  * @property-read ActivityInventoryTour $tourComponent
  * @property-read bool $cancelled Is the order cancelled?
@@ -76,12 +78,12 @@ class OrderActivity extends Model
         return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
     }
 
-    public function activityInventory(): ActivityInventory
+    public function getActivityInventoryAttribute(): ActivityInventory
     {
         return $this->activityInventoryTour->activityInventory;
     }
 
-    public function activity(): Activity
+    public function getActivityAttribute(): Activity
     {
         return $this->activityInventoryTour->activityInventory->activity;
     }

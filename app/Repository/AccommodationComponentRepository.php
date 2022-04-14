@@ -14,49 +14,16 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-interface AccommodationComponentRepositoryInterface
+class AccommodationComponentRepository
 {
-    public static function getComponentFromOrderComponent($orderComponentId);
 
-    public static function getInventoryFromOrderComponent($orderComponentId);
-
-    public static function getOrderComponentFromId($orderComponentId);
-
-    public static function getAvailableAddons($tourId, $oCustomerId = -1);
-
-    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
-
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
-
-    public static function getParentComponent(AccommodationInventoryTour $inventoryTour);
-}
-
-class AccommodationComponentRepository implements AccommodationComponentRepositoryInterface
-{
-    public static function getOrderComponentFromId($orderComponentId)
-    {
-        return OrderAccommodation::findOrFail($orderComponentId);
-    }
-
-    public static function getComponentFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory()->first()->accommodation();
-    }
-
-    public static function getInventoryFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderAccommodation::findOrFail($orderComponentId);
-        return $orderComponent->accommodationInventoryTour()->first()->accommodationInventory();
-    }
-
-    public static function getAvailableAddons($tourId, $oCustomerId = -1)
+    public static function getAvailableAddons($tourId, $oCustomerId = -1): array
     {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->accommodationInventoryTours as $component) {
-            if ($component->tour_component_type  !== "Upgrade") {
+            if ($component->tour_component_type !== "Upgrade") {
                 if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
@@ -74,7 +41,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId)
+    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId): OrderAccommodation|null
     {
         $orderCustomer = OrderCustomer::find($oCustomerId);
         $group = $orderCustomer->primary_group;
@@ -89,7 +56,8 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $orderComponent;
     }
 
-    public static function getParentComponent(AccommodationInventoryTour $inventoryTour) {
+    public static function getParentComponent(AccommodationInventoryTour $inventoryTour): AccommodationInventoryTour
+    {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
@@ -98,7 +66,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
     public static function getInventoryWithRoomType(AccommodationInventoryTour $inventoryTour, RoomType $roomType): ?AccommodationInventoryTour
     {
         $inventory = $inventoryTour->inventory;
-        $accommodation = $inventory->component;
 
         $query = DB::table('accommodation_inventory_tours');
         $query->join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id');
@@ -110,15 +77,6 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         $query->select('accommodation_inventory_tours.id');
 
         return $query->first() == null ? null : AccommodationInventoryTour::find($query->first()->id);
-    }
-
-    /**
-     * @param Tour $tour
-     * @return Collection
-     */
-    public static function getTemplateTourInventory(Tour $tour): Collection
-    {
-        return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
     }
 
     public static function getAvailableRoomTypes(Tour $tour): array
@@ -135,6 +93,15 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             }
         }
         return self::hydrateRoomTypes(array_unique($available));
+    }
+
+    /**
+     * @param Tour $tour
+     * @return Collection
+     */
+    public static function getTemplateTourInventory(Tour $tour): Collection
+    {
+        return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
     }
 
     public static function getAvailableRoomSizes(Tour $tour): array
@@ -163,17 +130,13 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $available;
     }
 
-    public static function getSizeList(Tour $tour): array
+    public static function hydrateRoomTypes(array $ids): array
     {
-        $availableSizes = self::getAvailableRoomSizes($tour);
-        $availableTypes = [];
-        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
-            foreach ($roomTypes as $type) {
-                if (in_array($type->maximum_occupancy, $availableSizes)) $availableTypes[] = $type->id;
-            }
+        $types = [];
+        foreach ($ids as $id) {
+            $types[] = RoomType::find($id);
         }
-        return self::hydrateRoomTypes(array_unique($availableTypes));
+        return $types;
     }
 
     public static function getRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
@@ -197,13 +160,17 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return $available;
     }
 
-    public static function hydrateRoomTypes(array $ids): array
+    public static function getSizeList(Tour $tour): array
     {
-        $types = [];
-        foreach ($ids as $id) {
-            $types[] = RoomType::find($id);
+        $availableSizes = self::getAvailableRoomSizes($tour);
+        $availableTypes = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $roomTypes = self::hydrateRoomTypes(self::getRoomTypesForInventory($inventoryTour));
+            foreach ($roomTypes as $type) {
+                if (in_array($type->maximum_occupancy, $availableSizes)) $availableTypes[] = $type->id;
+            }
         }
-        return $types;
+        return self::hydrateRoomTypes(array_unique($availableTypes));
     }
 
     public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
@@ -220,7 +187,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
