@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 use App\Repository\BookingRepository;
 use App\Repository\ActivityRepository;
