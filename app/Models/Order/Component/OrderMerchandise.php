@@ -28,8 +28,8 @@ use Illuminate\Support\Carbon;
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
  * @property-read Merchandise $merchandise
- * @property-read Merchandise $tourComponent
  * @property-read OrderCustomer $orderCustomer
+ * @property-read Merchandise $tourComponent
  * @method static Builder|OrderMerchandise newModelQuery()
  * @method static Builder|OrderMerchandise newQuery()
  * @method static QueryBuilder|OrderMerchandise onlyTrashed()
@@ -50,6 +50,7 @@ class OrderMerchandise extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['merchandise_id', 'order_customer_id', 'cost'];
+    protected $casts = ['cost' => 'double',];
 
     public function orderCustomer(): BelongsTo
     {

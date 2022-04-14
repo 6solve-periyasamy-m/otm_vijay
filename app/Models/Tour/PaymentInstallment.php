@@ -46,7 +46,7 @@ class PaymentInstallment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['due_on', 'amount', 'is_percentage'];
-    protected $casts = ['due_on' => 'date', 'is_percentage' => 'boolean'];
+    protected $casts = ['due_on' => 'date', 'is_percentage' => 'boolean', 'amount' => 'double'];
 
     public static function getValidationRules(): array
     {

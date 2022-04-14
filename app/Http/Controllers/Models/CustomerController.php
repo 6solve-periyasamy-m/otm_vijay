@@ -59,7 +59,10 @@ class CustomerController extends Controller
             'passport_expiry_date' => $request->input('passport_expiry_date'),
             't_shirt_size_id' => $request->input('t_shirt_size_id'),
             'hat_size_id' => $request->input('hat_size_id'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
+            'dietary_notes' => $request->input('dietary_notes'),
+            'mobility_notes' => $request->input('mobility_notes'),
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
         if (!empty($request->input('password'))) {
@@ -134,7 +137,10 @@ class CustomerController extends Controller
             'passport_country_of_issue' => $request->input('passport_country_of_issue'),
             't_shirt_size_id' => $request->input('t_shirt_size_id'),
             'hat_size_id' => $request->input('hat_size_id'),
-            'notes' => $request->input('notes'),
+            'internal_notes' => $request->input('internal_notes'),
+            'external_notes' => $request->input('external_notes'),
+            'dietary_notes' => $request->input('dietary_notes'),
+            'mobility_notes' => $request->input('mobility_notes'),
             'loyalty_number' => $request->input('loyalty_number'),
         ]);
         if (!empty($request->input('password'))) {

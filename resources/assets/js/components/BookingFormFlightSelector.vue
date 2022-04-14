@@ -1,11 +1,11 @@
 <template>
-    <div class="row compress">
+    <div class="row">
         <div v-if="tour_flight_types.length > 1" class="col-sm-2">
             <select 
                 v-model="tour_flight_type" 
                 @change="filterFlights">
-                <option selected disabled value="">Select</option>
-                <option v-for="tour_flight_type in tour_flight_types" :key="tour_flight_type" :value="tour_flight_type">
+                <option selected disabled value="">Select...</option>
+                <option v-for="tour_flight_type in tour_flight_types" :key="tour_flight_type.flight_id" :value="tour_flight_type">
                    {{tour_flight_type}}
                 </option>
             </select>
@@ -14,14 +14,18 @@
             {{tour_flight_types[0]}} 
         </div>
         <div class="col-sm-10" v-if="tour_flights_filtered">
-            <select 
+            <div v-if="tour_flights_filtered.length == 0">
+                <p>No flights available</p>
+            </div>
+            <select
+                v-else
                 :disabled="!enabled"
                 @change="changeFlight"
                 v-model="flightId">
                 <option value="0" v-if="!flight_selected" selected>{{caption}}</option>
                 <option 
                     v-for="flight in tour_flights_filtered" 
-                    :key="flight.id" 
+                    :key="flight.flight_inventory_tour_id" 
                     :value="flight.flight_inventory_tour_id"
                 >
                     {{flightValue(flight)}}
@@ -35,7 +39,7 @@
 import dates from '../utilities'
 import { bus } from '../bus'
 export default {
-    props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
+    props: [ 'traveler', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item','token'],
     data() {
         return {
             debug: false,
@@ -47,14 +51,15 @@ export default {
             tour_flights_filtered: [],
             tour_flights: '',
             flight: {},
-            caption: 'Flight Select'
+            caption: 'Flight Select',
+            format: 'short'
         }
     },
     mounted() {
         let that = this
         bus.$on('debugOverride', (debug) => that.debug = debug)
-        console.log('BFFS: this.selected_item', this.selected_item)
-        this.debug && console.log('BFFS Mounted', this.traveller, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
+        this.debug && console.log('BFFS: flights ', this.flights, ', this.selected_item', this.selected_item)
+        this.debug && console.log('BFFS Mounted', this.traveler, this.tour, this.airports, this.flights, this.types, this.enabled, this.custom, this.token)
     },
     created() {
         let that = this
@@ -63,6 +68,9 @@ export default {
         this.tour_flight_types = this.types
         this.tour_airports = this.airports
         this.tour_flight_type = this.tour_flight_types[0].toLowerCase()
+        // 
+        // console.log('items in created: ',this.selected_item, this.identification, this.tour_flights, this.tour_flight_types, this.tour_flight_type);
+        // TODO: Check this in addons
         // BUG: this.selected_item is NULL on addons load?
         if (this.selected_item) {
             this.flightId = this.selected_item
@@ -73,11 +81,11 @@ export default {
                 console.log(that.tour_flights_filtered)
             })
         } else {
-            console.log('WARNING: selected_item not set?')
+            console.log('WARNING: selected_item not set?', this.selected_item)
         }
         this.filterFlights()
-        bus.$on('setCustomFlightsForTraveller', function(customtraveller, selected) {
-            console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveller, selected, that.flightId)
+        bus.$on('setCustomFlightsForTraveller', function(customtraveler, selected) {
+            console.log('BFFS EVENT ON setCustomFlightForTraveller ... setting customFlight for ', customtraveler, selected, that.flightId)
         })
          
     },
@@ -85,18 +93,18 @@ export default {
         changeFlight() {
             if (typeof this.flightId != 'undefined' && this.flightId != null && this.flightId != 0) {
                 this.caption = 'Remove selection'
-                this.debug>4 && console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveller, this.custom, this.token)
-                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveller, this.custom, this.token)
+                this.debug>4 && console.log(`emit set_${this.tour_flight_type}`,this.flightId, this.tour, this.traveler, this.custom, this.token)
+                bus.$emit(`set_${this.tour_flight_type}`, this.flightId, this.tour, this.traveler, this.custom, this.token)
             } else {
                 this.caption = 'You can select a custom flight'
             }
         },
         removeBooking(booking, flight_type) {
-            // props: [ 'traveller', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
+            // props: [ 'traveler', 'tour', 'airports', 'flights', 'types', 'enabled', 'custom', 'selected_item'],
             // /booking/flights/remove/flight/{order_id]/{order_customer_id}/{type}/{custom}/{inventory_tour_id}
             this.caption = 'Reselect'
             this.debug>4 && console.log('removing', booking, flight_type, this.tour)
-            bus.$emit('removeBooking', booking, flight_type, this.traveller);
+            bus.$emit('removeBooking', booking, flight_type, this.traveler);
         },
         filterFlights() {
             var that = this
@@ -106,12 +114,16 @@ export default {
             this.debug>4 && console.log('tour flights filtered', this.tour_flights_filtered)
         },
         flightValue(flight) {
-            if (typeof flight == 'undefined') {
+            if (typeof flight === 'undefined') {
                 alert('not a flight?', flight)
                 return ''
             }
-            // TODO: Nic, can you verify if 'airline_name' needs to be renamed?
-            return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
+            const showComponentType = true
+            if (this.format == 'long') {
+                return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.flight_number} ${flight.travel_class} ${showComponentType ? flight.tour_component_type + ' ' : ''}From ${this.airports[flight.departure_airport_id].name} To ${this.airports[flight.arrival_airport_id].name}`
+            } else {
+                return `${dates.makeDateFromString(flight.departs_at)} ${flight.airline_name} ${flight.travel_class} (${this.airports[flight.departure_airport_id].name} to ${this.airports[flight.arrival_airport_id].name})`
+            }
         },
         dmy(s) {
             return dates.makeDateFromString(s)

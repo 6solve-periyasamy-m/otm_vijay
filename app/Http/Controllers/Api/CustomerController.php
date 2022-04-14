@@ -3,91 +3,95 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Booking\Booking;
 use App\Models\Customer\Customer;
-use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
+use App\Repository\AddressRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CustomerController extends ApiController
 {
     protected $logging = false;
-    /** 
+
+    /**
      * getCustomerByToken
      * 
      * @param $token
-     * @return $customer or NULL if token no longer valid
+     * @return JSON $customer or NULL if token no longer valid
      */
-    public function getCustomerOrderByToken($token = null)
+    public function getCustomerByToken($token = null)
     {
         if (empty($token)) {
             Log::info('getCustomerOrderByToken: no token');
             return null;
         }
 
-        $orders = new Order();
-        $order = $orders->where('token', $token)->first();
-        if (isset($order)) {
-            if ($this->logging) Log::info('orders are ', $order->toArray());
-            $orderCustomer = new OrderCustomer();
-            $orderCustomers = $orderCustomer
-                ->select('customers.*', 'order_customers.*', 'order_customers.id as order_customer_id')
-                ->join('customers', 'order_customers.customer_id', 'customers.id')
-                ->where('order_id', $order->id)
-                ->whereNull('order_customers.deleted_at')
-                // order by isLead desc so lead is first
-                ->orderBy('order_customers.is_lead_booker', 'desc')
-                ->get();
-            if (count($orderCustomers)) {
-                $order->customer = $orderCustomers[0];
-                $order->customers = $orderCustomers;
-                $this->logging && Log::info('order data for customer retrieved ', $orderCustomers->toArray());
-                return response()->json(['success' => true, 'orders' => $order]);
-            } else {
-                return response()->json(['success' => false]);
-            }
-        } else {
-            $this->logging && Log::info('no order found for token: '. $token);
+        $home_address = null;
+        $billing_address = null;
+        $booking = Booking::where('token', $token)->first();
+        if (empty($booking)) {
+            Log::warning('CustomerController::getCustomerByToken: WARNING: no booking for token '.$token);
+            return null;
         }
-        return null;
-    }
 
-    public function getCustomerOrdersByEmail($email)
-    {
-        $customerOrders = OrderCustomer::select('orders.token', 'order_customers.order_id')
-            ->join('customers', 'order_customers.customer_id', 'customers.id')
-            ->join('orders', 'order_customers.order_id', 'orders.id')
-            ->where('customers.email_address', $email)
-            ->whereNull('order_customers.deleted_at')
-            ->get();
-        // Log::info('getOrderByEmail: ', $customerOrders->toArray());
-        return response()->json(['success' => true,
-            'data' => $customerOrders]);
-            // select * from `order_customers`
-            // inner join `customers` on `order_customers`.`customer_id` = `customers`.`id`
-            // inner join `orders` on `order_customers`.`order_id` = `orders`.`id`
-            // where `order_customer.customer_id` = ? and `customer`.`email_address` = ?
-            // deleted_at `order_customers` is null";
+        $customer = Customer::find($booking->customer_id);
+        if (empty($customer)) {
+            Log::warning('CustomerController::getCustomerByToken: WARNING: no customer for token '.$token);
+            return null;
+        }
+
+        $addressRepo = new AddressRepository();
+        if (isset($customer->home_address_id)) {
+            $customer->home_address = $addressRepo->get($customer->home_address_id);
+        }
+        if (isset($customer->billing_address_id)) {
+            $customer->billing_address = $addressRepo->get($customer->billing_address_id);
+        }
+
+        return response()->json(['success' => true, 'customer' => $customer]);
     }
 
     /**
-     * getTravellers for this order
+     * getTokenLink: check is deprecated
      *
      * @param Request $request
      * @return JSON
      */
-    public function getTravellers(Request $request) {
-        if (empty($request->order_id)) {
-            Log::debug('ERROR: getTravellers requires an order_id');
-            return null;
+    public function getTokenLink(Request $request)
+    {
+        Log::warning('CustomerController::getTokenLink call should be deprecated');
+
+        $email = $request->email;
+        if (empty($email)) {
+            return response()->json(['success' => false]);
         }
-        $customer = new Customer();
-        $customers = $customer
-            ->select('orders.id as order_id', 'order_customers.id as order_customer_id', 'order_customers.is_lead_booker', 'customers.id as customer_id', 'customers.first_name', 'customers.last_name')
-            ->join('order_customers', 'order_customers.customer_id', 'customers.id')
-            ->join('orders', 'orders.id', 'order_customers.order_id')
-            ->where('orders.id', $request->order_id)->get();
-        
-            return $customers->toJson();
+
+        $customer = Customer::where('email', $email)->first();
+        if (empty($customer->login_token)) {
+            $customer->login_token = sha1(time());
+            $customer->save();
+        }
+
+        return response()->json(["success" => true])->cookie("login_token", $customer->login_token, 60);
+    }
+
+    /**
+     * findCustomerByEmail
+     *
+     * @param Request $request
+     * @return JSON Customer
+     */
+    public function findCustomerByEmail(Request $request) {
+        $email_address = $request->email_address;
+        $customers = new Customer();
+        $customer = $customers->where('email_address', $email_address)->get();
+        if(!$customer->count()) {
+            return response()->json(['success' => false]);
+        }
+        if ($customer->count() > 1) {
+            Log::warning('CustomerController API::findCustomerByEmail found more than one email address for '.$email_address);
+        }
+
+        return response()->json(['success' => true, 'customer' => $customer[0]]);
     }
 }

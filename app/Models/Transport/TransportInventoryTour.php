@@ -33,6 +33,7 @@ use StringFormatter;
  * @property Carbon|null $deleted_at
  * @property-read int $available_stock
  * @property-read string $tour_name
+ * @property-read int $used_tour_stock
  * @property-read TransportInventory $inventory
  * @property-read Collection|OrderTransport[] $orders
  * @property-read int|null $orders_count
@@ -64,6 +65,7 @@ class TransportInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
+    protected $casts = ['tour_sales_price' => 'double'];
 
     public static function getValidationRules(): array
     {
@@ -172,11 +174,6 @@ class TransportInventoryTour extends Model
             'transport_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price,
         ]);
-    }
-
-    public function getAvailableStockAttribute()
-    {
-        return $this->inventory->stock - $this->inventory->used_stock;
     }
 
     public function getUsedTourStockAttribute(): int

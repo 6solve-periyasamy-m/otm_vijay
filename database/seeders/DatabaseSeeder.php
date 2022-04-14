@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(PaymentMethodsTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
+        $this->call(AccommodationGroupTableSeeder::class);
 
         if (config('app.debug')) {
             $this->call(LocationTypesTableSeeder::class);

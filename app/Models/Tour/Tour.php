@@ -118,7 +118,8 @@ class Tour extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes', 'invoice_footer', 'final_payment', 'terms'];
-    protected $casts = ['date_from' => 'date', 'date_to' => 'date', 'final_payment' => 'date'];
+    protected $casts = ['date_from' => 'date', 'date_to' => 'date', 'final_payment' => 'date', 'is_active' => 'boolean',
+        'base_price_per_person' => 'double','deposit' => 'double', 'margin' => 'double', 'stock_control_active' => 'boolean'];
     protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments'];
 
     public static function getValidationRules(): array

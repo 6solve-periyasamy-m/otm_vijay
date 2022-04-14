@@ -29,6 +29,6 @@ class CreateCustomerApiTokensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('api_tokens');
+        Schema::dropIfExists('customer_api_tokens');
     }
 }

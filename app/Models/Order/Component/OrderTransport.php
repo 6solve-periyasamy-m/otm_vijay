@@ -54,6 +54,7 @@ class OrderTransport extends Model
     use SoftDeletes;
 
     protected $fillable = ['order_customer_id', 'transport_inventory_tour_id', 'cost'];
+    protected $casts = ['cost' => 'double',];
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {

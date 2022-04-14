@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Facades\Log;
-
 use App\Http\Controllers\ApiController;
-use App\Models\PaymentSchedule;
+use App\Models\Booking\PaymentSchedule;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends ApiController
 {
 
     public function getPaymentSchedules()
     {
-        $schedules = PaymentSchedule::orderBy('title')->get();
+        $schedules = PaymentSchedule::orderBy('name')->get();
 
         return response()->json(["success" => true, "schedules" => $schedules->toArray()]);
     }

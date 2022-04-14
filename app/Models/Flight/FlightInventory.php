@@ -29,8 +29,8 @@ use StringFormatter;
  * @property string $flight_number
  * @property bool $fit_selectable
  * @property int|null $stock
- * @property float $purchase_price
- * @property float $sales_price
+ * @property float|null $purchase_price
+ * @property float|null $sales_price
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -80,6 +80,9 @@ class FlightInventory extends Model
         'check_in' => 'datetime',
         'departs_at' => 'datetime',
         'arrives_at' => 'datetime',
+        'fit_selectable' => 'boolean',
+        'purchase_price' => 'double',
+        'sales_price' => 'double',
     ];
 
     public static function getValidationRules(): array

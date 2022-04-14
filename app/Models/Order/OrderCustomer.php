@@ -38,6 +38,12 @@ use Illuminate\Support\Collection;
  * @property float|null $single_occupancy_surcharge Single occupancy surcharge for the customer
  * @property string|null $travel_insurer Travel insurer for the customer
  * @property string|null $policy_number Policy number for the order
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
+ * @property string|null $accommodation_notes
+ * @property string|null $activity_notes
+ * @property string|null $flight_notes
+ * @property string|null $transport_notes
  * @property SupportCarbon|null $created_at
  * @property SupportCarbon|null $updated_at
  * @property SupportCarbon|null $deleted_at
@@ -70,14 +76,20 @@ use Illuminate\Support\Collection;
  * @method static Builder|OrderCustomer newQuery()
  * @method static QueryBuilder|OrderCustomer onlyTrashed()
  * @method static Builder|OrderCustomer query()
+ * @method static Builder|OrderCustomer whereAccommodationNotes($value)
+ * @method static Builder|OrderCustomer whereActivityNotes($value)
  * @method static Builder|OrderCustomer whereCreatedAt($value)
  * @method static Builder|OrderCustomer whereCustomerId($value)
  * @method static Builder|OrderCustomer whereDeletedAt($value)
+ * @method static Builder|OrderCustomer whereExternalNotes($value)
+ * @method static Builder|OrderCustomer whereFlightNotes($value)
  * @method static Builder|OrderCustomer whereId($value)
+ * @method static Builder|OrderCustomer whereInternalNotes($value)
  * @method static Builder|OrderCustomer whereOrderId($value)
  * @method static Builder|OrderCustomer wherePolicyNumber($value)
  * @method static Builder|OrderCustomer whereSingleOccupancySurcharge($value)
  * @method static Builder|OrderCustomer whereTourCost($value)
+ * @method static Builder|OrderCustomer whereTransportNotes($value)
  * @method static Builder|OrderCustomer whereTravelInsurer($value)
  * @method static Builder|OrderCustomer whereUpdatedAt($value)
  * @method static QueryBuilder|OrderCustomer withTrashed()
@@ -89,8 +101,10 @@ class OrderCustomer extends Model
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',];
+    protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',
+        'internal_notes', 'external_notes', 'accommodation_notes', 'activity_notes', 'flight_notes', 'transport_notes',];
     protected array $cascadeDeletes = ['orderCustomerGroups', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
+    protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double',];
 
     public static function getValidationRules(): array
     {

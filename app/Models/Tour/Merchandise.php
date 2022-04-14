@@ -62,6 +62,7 @@ class Merchandise extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'tour_component_type', 'stock', 'purchase_price', 'tour_sales_price', 'notes', 'image_url'];
+    protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double'];
 
     public static function getValidationRules(): array
     {

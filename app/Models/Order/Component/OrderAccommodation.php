@@ -34,7 +34,6 @@ use Illuminate\Support\Carbon;
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
  * @property-read Group $group
- * @property-read OrderCustomer $orderCustomers
  * @method static Builder|OrderAccommodation newModelQuery()
  * @method static Builder|OrderAccommodation newQuery()
  * @method static QueryBuilder|OrderAccommodation onlyTrashed()
@@ -56,6 +55,7 @@ class OrderAccommodation extends Model
     use SoftDeletes;
 
     protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id', 'cost', 'group_id'];
+    protected $casts = ['cost' => 'double',];
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {

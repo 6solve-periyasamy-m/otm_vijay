@@ -77,7 +77,12 @@ class AccommodationInventory extends Model
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         'check_in' => 'datetime',
+        'check_in_time_confirmed' => 'boolean',
+        'check_out_time_confirmed' => 'boolean',
         'check_out' => 'datetime',
+        'fit_selectable' => 'boolean',
+        'purchase_price' => 'double',
+        'sales_price' => 'double',
     ];
 
     public static function getValidationRules(): array

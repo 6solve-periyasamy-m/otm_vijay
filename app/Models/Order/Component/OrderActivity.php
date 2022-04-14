@@ -54,6 +54,7 @@ class OrderActivity extends Model
     use SoftDeletes;
 
     protected $fillable = ['order_customer_id', 'activity_inventory_tour_id', 'cost'];
+    protected $casts = ['cost' => 'double',];
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
