@@ -5,8 +5,9 @@ namespace App\Repository;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Order\OrderCustomer;
-use DB;
 use Illuminate\Support\Collection;
+use DB;
+use Log;
 
 class GroupRepository
 {

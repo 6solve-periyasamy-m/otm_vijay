@@ -10,5 +10,11 @@
       'single_occupancy_surcharge' => $orderCustomer->single_occupancy_surcharge,
       'travel_insurer' => $orderCustomer->travel_insurer,
       'policy_number' => $orderCustomer->policy_number,
+      'internal_notes' => $orderCustomer->internal_notes,
+      'external_notes' => $orderCustomer->external_notes,
+      'accommodation_notes' => $orderCustomer->accommodation_notes,
+      'activity_notes' => $orderCustomer->activity_notes,
+      'flight_notes' => $orderCustomer->flight_notes,
+      'transport_notes' => $orderCustomer->transport_notes,
     ])
 @endsection

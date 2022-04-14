@@ -85,9 +85,16 @@
                     </table>
                 </div>
                 <hr class="splitter">
-                <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference,]) }}" method="post">
+                <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post">
                     @csrf
-                    @include('partials.fields.textarea', ['name' => 'Order Notes', 'field' => 'notes', 'value' => $order->external_notes, 'rows' => 5])
+                    @if(\App\Repository\OrderRepository::isLeadBooker($order, \App\Repository\CustomerAuthenticationRepository::getCustomer()))
+                    @include('partials.fields.textarea', ['name' => 'Order Notes', 'field' => 'order_notes', 'value' => $order->external_notes, 'rows' => 2])
+                    @endif
+                    @include('partials.fields.textarea', ['name' => 'Customer Specific Order Notes', 'field' => 'order_customer_notes', 'value' => $orderCustomer->external_notes, 'rows' => 2])
+                    @include('partials.fields.textarea', ['name' => 'Accommodation Notes', 'field' => 'accommodation_notes', 'value' => $orderCustomer->accommodation_notes, 'rows' => 2])
+                    @include('partials.fields.textarea', ['name' => 'Activity Notes', 'field' => 'activity_notes', 'value' => $orderCustomer->activity_notes, 'rows' => 2])
+                    @include('partials.fields.textarea', ['name' => 'Flight Notes', 'field' => 'flight_notes', 'value' => $orderCustomer->flight_notes, 'rows' => 2])
+                    @include('partials.fields.textarea', ['name' => 'Transport Notes', 'field' => 'transport_notes', 'value' => $orderCustomer->transport_notes, 'rows' => 2])
                     @include('partials.fields.submit')
                 </form>
             </div>
