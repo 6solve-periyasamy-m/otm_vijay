@@ -25,7 +25,7 @@ class GroupRepository
             if (!isset($group)) continue;
             $accommodation = $accommodation->merge($group->rooms);
         }
-        return $accommodation->toArray();
+        return $accommodation->all();
     }
 
     public static function getGroups(OrderCustomer $orderCustomer): array

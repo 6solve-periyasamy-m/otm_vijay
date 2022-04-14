@@ -577,7 +577,7 @@ class OrderRepository
 
     public static function getOrderFromBookingReference(string $bookingReference): ?Order
     {
-        return Order::whereBookingReference($bookingReference);
+        return Order::whereBookingReference($bookingReference)->first();
     }
 
     public static function isLeadBooker(Order $order, Customer $customer): bool
