@@ -468,9 +468,21 @@ class ReportFieldRepository
                         'name' => 'Hat Size',
                         'method' => 'hatSize',
                     ],
-                    'notes' => [
-                        'name' => 'Notes',
-                        'method' => 'notes',
+                    'internal_notes' => [
+                        'name' => 'Internal Notes',
+                        'method' => 'internal_notes',
+                    ],
+                    'external_notes' => [
+                        'name' => 'External Notes',
+                        'method' => 'external_notes',
+                    ],
+                    'dietary_notes' => [
+                        'name' => 'Dietary Notes',
+                        'method' => 'dietary_notes',
+                    ],
+                    'mobility_notes' => [
+                        'name' => 'Mobility Notes',
+                        'method' => 'mobility_notes',
                     ],
                 ],
             ],
@@ -513,6 +525,30 @@ class ReportFieldRepository
                         'name' => 'Is Lead Booker',
                         'method' => 'is_lead_booker',
                         'format' => 'boolean',
+                    ],
+                    'oc_internal_notes' => [
+                        'name' => 'Order Customer Internal Notes',
+                        'method' => 'internal_notes',
+                    ],
+                    'oc_external_notes' => [
+                        'name' => 'Order Customer External Notes',
+                        'method' => 'external_notes',
+                    ],
+                    'accommodation_notes' => [
+                        'name' => 'Accommodation Notes',
+                        'method' => 'accommodation_notes',
+                    ],
+                    'activity_notes' => [
+                        'name' => 'Activity Notes',
+                        'method' => 'activity_notes',
+                    ],
+                    'flight_notes' => [
+                        'name' => 'Flight Notes',
+                        'method' => 'flight_notes',
+                    ],
+                    'transport_notes' => [
+                        'name' => 'Transport Notes',
+                        'method' => 'transport_notes',
                     ],
                 ]
             ],
