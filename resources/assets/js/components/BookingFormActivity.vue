@@ -23,25 +23,50 @@
                     <div class="column-address">
                         Address 
                     </div>
-                    <div class="column-ticket-type">
-                        Ticket type
-                    </div>
                     <div class="column-component-type">
-                        Tour Component type
+                        Type
+                    </div>
+                    <div class="column-ticket-type">
+                        Details
                     </div>
                     <div class="column-action">
                         Action
                     </div>
                 </div>
-                <div class="options">
-                    <h5>Show</h5>
-                    <div>Upgrades <input type="checkbox" v-model="showUpgrade"></div>
-                    <div>Addons <input type="checkbox" v-model="showAddon"></div>
-                </div>
                 <div class="listing" v-for="(activity,index) in activities" 
                     :key="activity.activity_inventory_tour_id" 
                     :class="{controlBreak : activity.activity_id !== previous_activity_id}"
-                    v-show="activity.tour_component_type == 'Included' || activity.tour_component_type == 'Upgrade' && showUpgrade || activity.tour_component_type == 'Add-on' && showAddon">
+                    v-if="activity.tour_component_type != 'Add-on'">
+
+                    <div class="column-starts-at" :class="{blankIt: activity.tour_component_type == 'Upgrade'}">
+                        {{startDate(activity)}}
+                    </div>
+                    <div class="column-name" :class="{blankIt: activity.tour_component_type == 'Upgrade'}">
+                        {{ activity.name }}<br>{{ activity.description !== activity.name ? activity.description :''}} 
+                    </div>
+                    <div class="column-address" :class="{blankIt: activity.tour_component_type == 'Upgrade'}">
+                        {{ activity.address != undefined && activity.address.length ? activity.address : '-'}}
+                        <br>
+                        {{ activity.address_region != undefined && activity.address_region.length ? activity.address_region : ''}}
+                    </div>
+                    <div class="column-component-type emphasiseIt">
+                        {{activity.tour_component_type}}
+                    </div>
+                    <div class="column-ticket-type" :class="{emphasiseIt: activity.tour_component_type == 'Upgrade'}">
+                        {{activity.ticket_type_name =='Basic' ? '' : activity.ticket_type_name}}
+                    </div>
+                    <div class="column-action">
+                        <button v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
+                        <button v-if="activity.tour_component_type == 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
+                    </div>
+                    <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
+                    <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
+                </div>
+                <div class="divider"><h5>Optional Additional activities</h5></div>
+                <div class="listing" v-for="(activity,index) in activities" 
+                    :key="activity.activity_inventory_tour_id" 
+                    :class="{controlBreak : activity.activity_id !== previous_activity_id}"
+                    v-show="activity.tour_component_type == 'Add-on'">
                     <div class="column-starts-at">
                         {{startDate(activity)}}
                     </div>
@@ -53,24 +78,21 @@
                         <br>
                         {{ activity.address_region != undefined && activity.address_region.length ? activity.address_region : ''}}
                     </div>
-                    <div class="column-ticket-type">
-                        {{activity.ticket_type_name}}
-                    </div>
                     <div class="column-component-type">
                         {{activity.tour_component_type}}
                     </div>
-                    {{activity.inventory_tour_id}}
+                    <div class="column-ticket-type">
+                        {{activity.ticket_type_name}}
+                    </div>
                     <div class="column-action">
                         <button v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
                         <button v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
                         <button v-if="activity" @click="bookActivity">Cancel</button>
                     </div>
-                    <!-- <div class="column-select">
-                        <input type="checkbox" :name="`select-${activity.activity_inventory_tour_id}`" v-model="selected[activity.activity_inventory_tour_id]">
-                    </div> -->
-                    {{ previous_activity_id = activity.activity_id }}
+                    <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
+
                 <div>
                     <button @click="bookActivity">Book Selected</button>
                 </div>
@@ -95,6 +117,7 @@ export default {
             activities: [],
             selected: [],
             previous_activity_id: 0,
+            showOptions: false,
             showAddon: 0,
             showUpgrade: 0
         }
@@ -171,6 +194,16 @@ export default {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+    }
+    .emphasiseIt {
+        font-weight: bold;
+    }
+    .blankIt {
+        visibility: hidden;
+    }
+    .divider {
+        border-top: 2px black solid;
+        margin-top: 1rem;
     }
     .controlBreak {
        border-top: 1px black solid;
