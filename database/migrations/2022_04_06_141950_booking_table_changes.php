@@ -18,8 +18,6 @@ class BookingTableChanges extends Migration
         });
         Schema::table('booking_accommodations', function (Blueprint $table) {
             $table->dropConstrainedForeignId('accommodation_inventory_tour_id');
-            $table->foreignId('room_type_id')->constrained();
-            $table->integer('group_id')->nullable();
         });
     }
 
@@ -35,8 +33,6 @@ class BookingTableChanges extends Migration
         });
         Schema::table('booking_accommodations', function (Blueprint $table) {
             $table->foreignId('accommodation_inventory_tour_id')->constrained();
-            $table->dropConstrainedForeignId('room_type_id');
-            $table->dropColumn('group_id');
         });
     }
 }
