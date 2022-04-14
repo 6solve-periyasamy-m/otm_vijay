@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Booking;
+use App\Models\Booking\Booking;
 use App\Models\Customer\Customer;
 use App\Repository\AddressRepository;
 use Illuminate\Http\Request;

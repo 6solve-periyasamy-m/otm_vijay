@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\Payment\PaymentCreatedEvent;
-use App\Models\Booking;
+use App\Models\Booking\Booking;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
 use App\Repository\BookingRepository;

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\BookingFlight;
+use App\Models\Booking\BookingFlight;
 use Illuminate\Support\Facades\Log;
 
 interface FlightBookingRepositoryInterface {

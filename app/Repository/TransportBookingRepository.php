@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Models\Tour\Tour;
+use App\Models\Booking\Booking;
 use App\Models\Location\Address;
-use App\Models\Booking;
+use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 
 interface TransportBookingRepositoryInterface {

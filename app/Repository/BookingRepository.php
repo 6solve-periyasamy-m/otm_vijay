@@ -5,14 +5,13 @@ namespace App\Repository;
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\RoomingFailedException;
-use App\Models\AccommodationGroup;
+use App\Models\Booking\AccommodationGroup;
+use App\Models\Booking\Booking;
 use App\Models\Customer\Group;
+use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use Exception;
-
-use App\Models\Location\Address;
-use App\Models\Booking;
 use Illuminate\Support\Facades\Log;
 
 interface BookingRepositoryInterface {

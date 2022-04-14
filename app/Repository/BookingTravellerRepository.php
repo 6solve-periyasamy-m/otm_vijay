@@ -2,9 +2,8 @@
 
 namespace App\Repository;
 
+use App\Models\Booking\BookingTraveller;
 use Illuminate\Support\Facades\Log;
-use App\Models\Customer\Customer;
-use App\Models\BookingTraveller;
 
 interface BookingTravellerRepositoryInterface
 {

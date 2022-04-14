@@ -6,7 +6,7 @@ use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\ApiController;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\AccommodationGroup;
+use App\Models\Booking\AccommodationGroup;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\AccommodationRepository;

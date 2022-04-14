@@ -5,8 +5,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Booking;
-use App\Models\BookingTraveller;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Tour\Tour;

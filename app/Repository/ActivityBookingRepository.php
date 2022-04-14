@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Models\Booking;
 use App\Models\Activity\Activity;
-use App\Models\BookingActivities;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingActivities;
 use App\Models\Tour\Tour;
 
 interface ActivityBookingRepositoryInterface {

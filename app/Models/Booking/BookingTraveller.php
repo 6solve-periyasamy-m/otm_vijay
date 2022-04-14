@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Booking;
 
 use App\Models\Customer\Customer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Support\Carbon;
  * @property int $customer_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Booking $booking
+ * @property-read Booking $booking
  * @property-read Customer|null $customer
  * @method static Builder|BookingTraveller newModelQuery()
  * @method static Builder|BookingTraveller newQuery()
@@ -33,12 +34,12 @@ class BookingTraveller extends Model
 {
     use HasFactory;
 
-    public function booking()
+    public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class, 'booking_id');
     }
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer');
     }
