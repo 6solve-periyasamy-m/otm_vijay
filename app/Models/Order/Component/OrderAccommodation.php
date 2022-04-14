@@ -27,6 +27,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Accommodation $accommodation
+ * @property-read AccommodationInventory $accommodation_inventory
  * @property-read AccommodationInventoryTour $accommodationInventoryTour
  * @property-read AccommodationInventoryTour $tourComponent
  * @property-read bool $cancelled Is the order cancelled
@@ -48,6 +50,7 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|OrderAccommodation withTrashed()
  * @method static QueryBuilder|OrderAccommodation withoutTrashed()
  * @mixin Eloquent
+
  */
 class OrderAccommodation extends Model
 {
@@ -77,12 +80,12 @@ class OrderAccommodation extends Model
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
 
-    public function accommodationInventory(): AccommodationInventory
+    public function getAccommodationInventoryAttribute(): AccommodationInventory
     {
         return $this->accommodationInventoryTour->accommodationInventory;
     }
 
-    public function accommodation(): Accommodation
+    public function getAccommodationAttribute(): Accommodation
     {
         return $this->accommodationInventoryTour->accommodationInventory->accommodation;
     }
