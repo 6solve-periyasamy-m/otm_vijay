@@ -66,8 +66,6 @@ use App\Models\Tour\Tour;
 use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Models\Order;
-use App\Repository\OrderRepository;
 
 /*
 |--------------------------------------------------------------------------
