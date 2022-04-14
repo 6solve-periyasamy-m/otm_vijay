@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
-use Illuminate\Support\Facades\Log;
-
-use App\Models\Event;
-use App\Models\Tour;
 
 /**
  * tour may belong to an event or not.

@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
-
-use Carbon\Carbon;
-use App\Models\Address;
+use App\Http\Controllers\ApiController;
 use App\Models\Booking;
-
-use App\Models\Customer;
-
-use Illuminate\Http\Request;
 use App\Models\BookingTraveller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Customer\Customer;
+use App\Models\Location\Address;
 use App\Repository\AddressRepository;
 use App\Repository\BookingRepository;
-use App\Repository\CustomerRepository;
-use App\Http\Controllers\ApiController;
-use App\Repository\OrdersCustomerRepository;
 use App\Repository\BookingTravellerRepository;
+use App\Repository\CustomerRepository;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class BookingCustomerController extends ApiController
 {

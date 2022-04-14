@@ -4,35 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\ApiController;
-use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\Accommodation\BoardType;
-use App\Models\Customer\Customer;
-use App\Models\CustomerOrderDetail;
+use App\Models\AccommodationGroup;
 use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\ActionsRepository;
-use App\Repository\CustomerOrderDetailRepository;
-use App\Models\Order;
+use App\Repository\AccommodationRepository;
+use App\Repository\BookingRepository;
+use App\Repository\BookingTravellerRepository;
 use App\Repository\OrderRepository;
 use App\Repository\TourRepository;
-use Exception;
-use App\Models\Tour;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
-use App\Http\Controllers\ApiController;
-use App\Models\RoomType;
-use App\Models\AccommodationGroup;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
-
-use App\Repository\AccommodationRepository;
-use App\Repository\BookingTravellerRepository;
-use App\Repository\BookingRepository;
 
 class AccommodationController extends ApiController
 {

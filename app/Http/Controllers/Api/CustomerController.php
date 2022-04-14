@@ -3,19 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Booking;
 use App\Models\Customer\Customer;
-use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
+use App\Repository\AddressRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Cookie;
-
-use App\Models\Booking;
-use App\Models\Order;
-use App\Models\Customer;
-
-use App\Repository\AddressRepository;
-use App\Models\OrderCustomer;
 
 class CustomerController extends ApiController
 {

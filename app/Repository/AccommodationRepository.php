@@ -2,15 +2,15 @@
 
 namespace App\Repository;
 
+use App\Models\Accommodation\Accommodation;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Models\Booking;
-use App\Models\Accommodation;
 use App\Models\BookingAccommodation;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
 
 interface AccommodationRepositoryInterface {
     public function __construct();

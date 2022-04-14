@@ -78,7 +78,8 @@ class TransportInventory extends Model
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
         "departs_at" => "datetime",
-        "arrives_at" => "datetime"
+        "arrives_at" => "datetime",
+        "sales_price" => "double"
     ];
 
     public static function getValidationRules(): array

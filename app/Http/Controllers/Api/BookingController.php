@@ -5,35 +5,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Customer\Customer;
-use App\Models\CustomerOrderDetail;
-use App\Models\Flight\Flight;
-use App\Models\Flight\FlightInventoryTour;
-use App\Models\Order\Order;
-use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Tour;
-use App\Repository\ActionsRepository;
-use App\Repository\CustomerOrderDetailRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Exception;
-use App\Models\Tour;
 use App\Models\Booking;
-use App\Models\Address;
-use App\Models\Customer;
-use Illuminate\Http\Request;
-
 use App\Models\BookingTraveller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Repository\BookingRepository;
-use App\Repository\CustomerRepository;
-use App\Http\Controllers\ApiController;
+use App\Models\Customer\Customer;
+use App\Models\Location\Address;
+use App\Models\Tour\Tour;
 use App\Repository\AccommodationRepository;
-use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
+use App\Repository\BookingRepository;
 use App\Repository\BookingTravellerRepository;
+use App\Repository\CustomerRepository;
+use App\Repository\FlightBookingRepository;
 use App\Repository\TransportBookingRepository;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends ApiController
 {

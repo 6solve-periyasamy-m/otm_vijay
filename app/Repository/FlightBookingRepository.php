@@ -2,9 +2,6 @@
 
 namespace App\Repository;
 
-use App\Models\Action;
-use App\Models\Booking;
-
 use App\Models\BookingFlight;
 use Illuminate\Support\Facades\Log;
 

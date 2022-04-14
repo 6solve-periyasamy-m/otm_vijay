@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
-use App\Models\Tour;
-use App\Models\Address;
+use App\Models\Tour\Tour;
+use App\Models\Location\Address;
 use App\Models\Booking;
-use App\Models\Transport;
+use App\Models\Transport\Transport;
 
 interface TransportBookingRepositoryInterface {
     public function __construct();

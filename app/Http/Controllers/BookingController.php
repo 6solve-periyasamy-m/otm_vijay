@@ -8,12 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
-use App\Models\Tour;
-use App\Models\Event;
-use App\Models\Order;
-use App\Models\Setting;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\System\Setting;
 use App\Http\Gateways\StripeGateway;
 use Illuminate\Support\Facades\Auth;
 use App\Repository\BookingRepository;
