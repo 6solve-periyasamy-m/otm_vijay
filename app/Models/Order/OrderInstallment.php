@@ -47,7 +47,7 @@ class OrderInstallment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['amount', 'due_on',];
-    protected $casts = ['due_on' => 'date'];
+    protected $casts = ['due_on' => 'date', 'amount' => 'double',];
 
     public static function getValidationRules(): array
     {

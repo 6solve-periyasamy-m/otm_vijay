@@ -77,9 +77,11 @@ class TransportInventory extends Model
     protected $fillable = ['transport_id', 'travel_class_id', 'departs_at', 'departure_time_confirmed', 'arrives_at', 'arrival_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
-        "departs_at" => "datetime",
-        "arrives_at" => "datetime",
-        "sales_price" => "double"
+        'departs_at' => 'datetime',
+        'arrives_at' => 'datetime',
+        'sales_price' => 'double',
+        'fit_selectable' => 'boolean',
+        'purchase_price' => 'double',
     ];
 
     public static function getValidationRules(): array

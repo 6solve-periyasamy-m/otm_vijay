@@ -59,6 +59,7 @@ class OrderFlight extends Model
     use SoftDeletes;
 
     protected $fillable = ['order_customer_id', 'flight_inventory_tour_id', 'cost'];
+    protected $casts = ['cost' => 'double',];
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {

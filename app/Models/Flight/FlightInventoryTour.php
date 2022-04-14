@@ -27,16 +27,17 @@ use StringFormatter;
  * @property int $tour_id
  * @property int $flight_inventory_id
  * @property string $tour_component_type
- * @property string|null $tour_sales_price
- * @property string|null $flight_type Outbound or Inbound
+ * @property float|null $tour_sales_price
+ * @property string|null $flight_type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read FlightInventory $flightInventory
- * @property-read string $atol_string The string to be used in ATOL certificates
- * @property-read int $available_stock How much stock is available to be sold
+ * @property-read string $atol_string
+ * @property-read int $available_stock
  * @property-read string $flight_inventory_for_tour
  * @property-read string $tour_name
+ * @property-read int $used_tour_stock
  * @property-read FlightInventory $inventory
  * @property-read Collection|OrderFlight[] $orders
  * @property-read int|null $orders_count
@@ -68,6 +69,7 @@ class FlightInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'flight_inventory_id', 'tour_component_type', 'flight_type', 'tour_sales_price',];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
+    protected $casts = ['tour_sales_price' => 'double'];
 
     public static function getValidationRules(): array
     {
@@ -190,11 +192,6 @@ class FlightInventoryTour extends Model
             'flight_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price,
         ]);
-    }
-
-    public function getAvailableStockAttribute()
-    {
-        return $this->inventory->stock - $this->inventory->used_stock;
     }
 
     public function getUsedTourStockAttribute(): int

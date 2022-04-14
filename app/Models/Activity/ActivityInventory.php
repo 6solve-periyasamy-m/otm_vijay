@@ -71,6 +71,9 @@ class ActivityInventory extends Model
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
+        'fit_selectable' => 'boolean',
+        'purchase_price' => 'double',
+        'sales_price' => 'double',
     ];
 
     public static function getValidationRules(): array

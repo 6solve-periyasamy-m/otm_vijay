@@ -27,13 +27,14 @@ use StringFormatter;
  * @property int $tour_id
  * @property int $activity_inventory_id
  * @property string $tour_component_type
- * @property float $tour_sales_price
+ * @property float|null $tour_sales_price
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read ActivityInventory $activityInventory
  * @property-read int $available_stock
  * @property-read string $tour_name
+ * @property-read int $used_tour_stock
  * @property-read ActivityInventory $inventory
  * @property-read Collection|OrderActivity[] $orders
  * @property-read int|null $orders_count
@@ -64,6 +65,7 @@ class ActivityInventoryTour extends Model
 
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
+    protected $casts = ['tour_sales_price' => 'double'];
 
     public static function getValidationRules(): array
     {
@@ -169,11 +171,6 @@ class ActivityInventoryTour extends Model
             'activity_inventory_tour_id' => $this->id,
             'cost' => $this->tour_sales_price,
         ]);
-    }
-
-    public function getAvailableStockAttribute(): int
-    {
-        return $this->inventory->stock - $this->inventory->used_stock;
     }
 
     public function getUsedTourStockAttribute(): int

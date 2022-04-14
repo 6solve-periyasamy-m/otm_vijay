@@ -23,7 +23,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $airline_id
  * @property int|null $departure_airport_id
  * @property int|null $arrival_airport_id
- * @property int $is_domestic
+ * @property bool $is_domestic
  * @property string|null $image_url
  * @property string|null $notes
  * @property int|null $currency_id
@@ -64,7 +64,7 @@ class Flight extends Model
 
     protected array $cascadeDeletes = ['flightInventory'];
     protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from', 'image_url'];
-    protected $casts = ['available_from' => 'date',];
+    protected $casts = ['available_from' => 'date','is_domestic' => 'boolean'];
 
     public static function getValidationRules(): array
     {

@@ -17,14 +17,14 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $order_id
  * @property string $number Iteration of the invoice
- * @property string $generated When the invoice was generated
+ * @property Carbon $generated When the invoice was generated
  * @property array $customers
  * @property array $groups
  * @property array $adjustments
  * @property array $payments
  * @property array $installments
  * @property string|null $footer
- * @property string $total_cost
+ * @property float $total_cost
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -57,7 +57,7 @@ class Invoice extends Model
 {
     use SoftDeletes;
 
-    protected $casts = ['customers' => 'array', 'adjustments' => 'array', 'payments' => 'array', 'installments' => 'array', 'groups' => 'array',];
+    protected $casts = ['customers' => 'array', 'adjustments' => 'array', 'payments' => 'array', 'installments' => 'array', 'groups' => 'array', 'generated' => 'datetime', 'total_cost' => 'double'];
     protected $fillable = ['order_id', 'number', 'generated', 'customers', 'adjustments', 'payments', 'footer', 'total_cost', 'installments', 'groups',];
 
     public function order(): BelongsTo

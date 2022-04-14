@@ -45,7 +45,7 @@ class ManualAdjustment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['order_id', 'amount', 'reason', 'date',];
-    protected $casts = ['date' => 'date'];
+    protected $casts = ['date' => 'date', 'amount' => 'double',];
 
     public static function getValidationRules(): array
     {

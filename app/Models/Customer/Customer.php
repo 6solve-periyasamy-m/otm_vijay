@@ -63,7 +63,10 @@ use Laravel\Cashier\Subscription;
  * @property string $profile_picture Asset link to profile picture
  * @property int|null $t_shirt_size_id
  * @property int|null $hat_size_id
- * @property string|null $notes Internal notes related to the customer
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
+ * @property string|null $dietary_notes
+ * @property string|null $mobility_notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -98,22 +101,25 @@ use Laravel\Cashier\Subscription;
  * @method static Builder|Customer whereCreatedAt($value)
  * @method static Builder|Customer whereDateOfBirth($value)
  * @method static Builder|Customer whereDeletedAt($value)
+ * @method static Builder|Customer whereDietaryNotes($value)
  * @method static Builder|Customer whereEmailAddress($value)
  * @method static Builder|Customer whereEmailVerifiedAt($value)
  * @method static Builder|Customer whereEmergencyContactName($value)
  * @method static Builder|Customer whereEmergencyContactRelationship($value)
  * @method static Builder|Customer whereEmergencyContactTelephone($value)
+ * @method static Builder|Customer whereExternalNotes($value)
  * @method static Builder|Customer whereFirstName($value)
  * @method static Builder|Customer whereGender($value)
  * @method static Builder|Customer whereHatSizeId($value)
  * @method static Builder|Customer whereHomeAddressId($value)
  * @method static Builder|Customer whereId($value)
+ * @method static Builder|Customer whereInternalNotes($value)
  * @method static Builder|Customer whereLastName($value)
  * @method static Builder|Customer whereLoginToken($value)
  * @method static Builder|Customer whereLoyaltyNumber($value)
  * @method static Builder|Customer whereMiddleNames($value)
  * @method static Builder|Customer whereMobileNumber($value)
- * @method static Builder|Customer whereNotes($value)
+ * @method static Builder|Customer whereMobilityNotes($value)
  * @method static Builder|Customer whereOtherPhoneNumber($value)
  * @method static Builder|Customer wherePassportCountryOfIssue($value)
  * @method static Builder|Customer wherePassportExpiryDate($value)
