@@ -1,12 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Log;
+use Exception;
 
-use Illuminate\Http\Request;
-use App\Models\Order;
 use App\Models\Tour;
 use App\Models\Event;
+use App\Models\Order;
+use App\Models\Setting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Gateways\StripeGateway;
+use Illuminate\Support\Facades\Auth;
+use App\Repository\BookingRepository;
+use App\Repository\CustomerRepository;
 
 class BookingController extends Controller
 {
@@ -20,6 +26,9 @@ class BookingController extends Controller
      */
     public function bookingForm($token = null)
     {
+        
+        die('booking form by token deprecated');
+
         if ($token) {
             $orders = new Order;
             $order = $orders->where('token', $token)->first();
@@ -36,6 +45,8 @@ class BookingController extends Controller
 
     public function eventBookingForm($url) 
     {
+        die('booking form by event URL deprecated');
+
         $event = Event::where('booking_url', $url)->first();
         if (empty($event)) {
             abort(404);
@@ -50,24 +61,102 @@ class BookingController extends Controller
 
     public function tourBookingForm($url)
     {
+        // TODO: 
+        // get the config and pass the logo and company name to the view
+        $logoData = Setting::where('key', 'company.logo')->first();
+        $companyData = Setting::where('key', 'company.name')->first();
+
         $tour = Tour::where('booking_form_url', $url)->first();
-        if (empty($tour)) {
+        if (empty($tour) || !$tour->is_active) {
             abort(404);
         }
-        try {
-            $event = Event::findOrFail($tour->event_id);
-        } catch(\Exception $e) {
-            if (!config('app.setting.booking-selection')) {
-                abort(403);
+        if ($tour->event_id) {
+            try {
+                $event = Event::findOrFail($tour->event_id);
+            } catch (\Exception $e) {
+                if (!config('app.setting.booking-selection')) {
+                    abort(403);
+                }
+                return view('pages.booking.form');
             }
-            return view('pages.booking.form');
+        } else {
+            $event = null;
         }
 
         if (isset($tour) && isset($event)) {
-            return view('pages.booking.tour.form')->with(['tour' => $tour, 'event' => $event]);
+            return view('pages.booking.tour.form')->with(['auth_user' => Auth::user(), 
+                'company' => ['logo' => $logoData->value, 'name' => $companyData->value],
+                'tour' => $tour,
+                'event' => $event]);
         }
 
         abort(404);
+    }
+
+    /***
+     * payDeposit
+     * Booking Form contains a form for accepting deposit
+    *
+     * Request:
+     * $token    the booking token
+     * $amount   expected format should contain currency character e.g. £600.00 (NB: £ uses 2 bytes) 
+     *           but 600.00 should also work, as should $600.00 or EURO600 but log anything not £
+     */
+    public function payDeposit(Request $request)
+    {
+
+        $request->validate(['token' => 'required|exists:bookings', 
+            'amount' => 'required|regex:/^\d*\.?\d*$/', 
+            'currencyamount' => 'required|regex:/^([^\d]*?)(.*)$/']); 
+            // NB: currency amount only has to capture the currency symbol and can consider the rest as a string (number)
+            // the regex commented out following should work to separate £ 1,000,000 .00 but it returns an error
+            // 'currencyamount' => 'required|regex:/^([^\d]*?)([1-9]\d{0,2}(,\d{3})*)|0?(\.\d{1,2})$/']);
+        $currencyAmount = $request->currencyamount;
+        $amount = floatval($request->amount);
+
+        // extract the currency symbol, everything before the first digit as the currency symbol
+        $currencyRegex = '/^([^\d]*)([\d\,]*)(\.\d{2})?$/';
+        $amountRegex = '/^(\d*\.?\d*)$/';
+        // detect the currency symbol used
+        preg_match($currencyRegex, $currencyAmount, $matched);
+        $currency = $matched[1];
+        // check the amount is a (decimal optional) number
+        preg_match($amountRegex, $amount, $matched);
+
+        $currencyLength = strlen($currency);
+        // // If testing a new currency, ensure the length of the currency string is resolving correctly
+        // // Log::debug('Check currency: '.$currencyAmount.' '.$currency. ' length='.$currencyLength);
+        // // NB: £ uses two bytes
+        $currency = substr($currencyAmount, 0, $currencyLength);
+
+        // accept £999.99 or 999.99
+        $checkamount = 0;
+        if ($currency === '£') {
+           $checkamount = floatval(substr($currencyAmount, $currencyLength, strlen($currencyAmount) - $currencyLength));
+        }
+        if ($currency !== '£') {
+            Log::warning('BookingController::payDeposit() WARNING: unsupported currency detected:'.$currency); 
+        }
+        if ($checkamount !== $amount) {
+            Log::warning('BookingContorller::payDeposit() WARNING: currency '.$currency. ' amount '.$checkamount.' mismatched with amount '. $amount);
+        }
+  
+        $bookingRepository = new BookingRepository();
+        $booking = $bookingRepository->findBookingByToken($request->token);
+        if (!$booking) {
+          return response(['success' => false, 'error' => 'Non-existant booking']);
+        }
+        $customer = CustomerRepository::lookup($booking->customer_id);
+
+        if ($amount < 0.01) {
+            Log::debug('BookingController::payDeposit() currency values',[$currency, $currencyAmount, $currencyLength, $amount, $booking, $customer]); 
+            throw new Exception('BookingController::payDeposit did not resolve to a deposit amount'); 
+        }
+
+        $bookingRepository->setStatusDepositCheckout($booking);
+        Log::info('Booking: sending deposit request to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
+
+        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', $customer->id);
     }
 
     /**

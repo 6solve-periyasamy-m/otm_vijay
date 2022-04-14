@@ -1,17 +1,35 @@
 <template>
-    <div class="container">
+    <div class="booking-container">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-1">
-                    <button class="btn btn-link cardhead">
+                    <button @click="toggleTransports" class="btn btn-link cardhead">
                         Transportation
                     </button>
-                    <p>Form section for booking or confirming ground transport including options available to support activities</p>
                 </h5>
+                <p class="caption">
+                    <font-awesome-icon icon="arrow-right" />
+                    Form section for booking or confirming ground transport including options available to support activities
+                </p>
             </div>
-            <div class="card-body compress">
-                <div class="row">
-                    <div class="col-sm-12">
+            <div  v-if="activated" class="card-body">
+                <div class="transports">
+                    <div class="transport">
+                        <div class="listing headings">
+                            <div class="heading address_from"> When </div>
+                            <div class="heading name"> Name </div>
+                            <div class="heading address"> Address </div>
+                            <div class="heading tour_component_type"> Transport Type </div>
+                        </div>
+                        <div v-for="transport in transports">
+                            <div class="listing">
+                                <div class="address_from"> {{datetime(transport.departs_at)}} <br>{{transport.departure_address}} </div>
+                                <div class="name"> {{transport.name}} </div>
+                                <div class="address"> {{transport.address ? transport.address : ''}} 
+                                  <br>{{transport.address_region ? transport.address_region : '' }}</div>
+                                <div class="tour_component_type"> {{ transport.transport_type_name != undefined && transport.transport_type_name.length ? transport.transport_type_name : '-' }} </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -20,7 +38,6 @@
 </template>
 <script>
 import dates from '../utilities'
-import BookingFormFlightSelector from './BookingFormFlightSelector.vue'
 import { bus } from '../bus'
 import Vue from 'vue'
 /**
@@ -28,14 +45,78 @@ Transport definition
 
  */
 export default {
-    components: { BookingFormFlightSelector },
-    props: ['tour', 'order_id', 'order_token'],
+    props: ['tour'],
     data() {
         return {
             debug: false,
+            moduleName: 'transports',
             activated: false,
-            token: null
+            booking_token: null,
+            transports: []
+        }
+    },
+    created() {
+        let that = this
+        bus.$on('setBookingToken', (bookingData) => {
+            that.booking_token = bookingData
+            that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+        })
+    },
+    mounted() {
+        this.loadTransportsInventory()
+    },
+    methods: {
+        datetime(s) {
+            return dates.bookingTime(s)
+        },
+        toggleTransports() {
+            this.activated = !this.activated
+        },
+        loadTransportsInventory() {
+            let that = this
+            axios.get(`/api/booking/transports/tour/${this.tour.id}`)
+                .then(response => {
+                    console.log('Transports Inventory: ',response.data.transports)
+                    that.transports = response.data.transports
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        loadTransportsBooking() {
+            console.log('TransportsBooking')
         }
     }
 }
 </script>
+
+<style scoped lang="scss">
+    .listing {
+        display: flex;
+        flex-direction: row;
+    }
+    .listing div {
+        padding: 0.25rem;
+        margin: 1rem;
+    }
+    .listing.headings div {
+        text-align: left;
+    } 
+    .listing .name {
+        width: 12rem;
+    }
+    .listing .description,
+    .listing .address {
+        width: 24rem;
+    }
+    .listing .tour_component_type {
+        width: 8rem;
+    }
+    .listing .is_domestic {
+        width: 8rem;
+    }
+    .listing .address_from, 
+    .listing .address_to {
+        width: 10rem;
+    }
+</style>

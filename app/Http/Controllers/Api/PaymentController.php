@@ -12,7 +12,7 @@ class PaymentController extends ApiController
 
     public function getPaymentSchedules()
     {
-        $schedules = PaymentSchedule::orderBy('title')->get();
+        $schedules = PaymentSchedule::orderBy('name')->get();
 
         return response()->json(["success" => true, "schedules" => $schedules->toArray()]);
     }

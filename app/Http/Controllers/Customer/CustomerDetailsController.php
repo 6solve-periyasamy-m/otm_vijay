@@ -85,6 +85,9 @@ class CustomerDetailsController extends Controller
             'passport_expiry_date' => $request->input('passport_expiry_date'),
             't_shirt_size_id' => $request->input('t_shirt_size_id'),
             'hat_size_id' => $request->input('hat_size_id'),
+            'external_notes' => $request->input('other_notes'),
+            'dietary_notes' => $request->input('dietary_notes'),
+            'mobility_notes' => $request->input('mobility_notes'),
         ]);
         $customer->homeAddress->update([
             'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',
@@ -147,6 +150,9 @@ class CustomerDetailsController extends Controller
             'passport_expiry_date' => $request->input('passport_expiry_date'),
             't_shirt_size_id' => $request->input('t_shirt_size_id'),
             'hat_size_id' => $request->input('hat_size_id'),
+            'external_notes' => $request->input('other_notes'),
+            'dietary_notes' => $request->input('dietary_notes'),
+            'mobility_notes' => $request->input('mobility_notes'),
         ]);
         $customer->homeAddress->update([
             'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Home)',

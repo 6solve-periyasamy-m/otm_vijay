@@ -1,141 +1,190 @@
 <template>
-    <div class="container">
+    <div class="booking-form">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-default">
-                    <div class="card-header">
-                        OTM Booking Form version 0.4.2 PRERELEASE - Lead/Additionals/Flights/Accommodation
-                        <button class="btn btn-small btn-themed default" @click="changeTheme('')">None</button>
-                        <button class="btn btn-small btn-themed cool" @click="changeTheme('cool')">Cool</button>
-                        <button class="btn btn-small btn-themed warm" @click="changeTheme('warm')">Warm</button>
-                        <button class="btn btn-small btn-themed action" @click="changeTheme('action')">Action</button>
+                <div class="card card-default card-container">
+                    <div class="bookingform-header">
+                        <div class="bookingform-header__controls">
+                            <label for="booking_name">{{company}} booking for </label>
+                            <input type="text" name="booking_name" title="You can change the name of this form" v-model="bookingName" @change="updateBookingName" />
+                        </div>
+                        <bookingform-control :token_label="tokenName"></bookingform-control>
                     </div>
-                    <bookingform-header :event="event" :tour="tour"></bookingform-header>
+                    <bookingform-header :company="company" :logo="logo" :event="event" :tour="tour"></bookingform-header>
                     <div id="booking-form" class="card-body">
-                            <div v-if="selectOrder.length>1 && order_selected === null">
-                                <select v-for="(order, key) in selectOrder" v-bind:key="key" v-model="order_selected">
-                                    <option value="">Select an Order</option>
-                                    <option :value="key">{{order.id}}</option>
-                                </select>
-                            </div>
-                            <div v-else>
-                                    <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
-                                    <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
-                                    <booking-form-lead :form_info="formInfo" :order_id="order_id" :tour="tour" :booked="booked"></booking-form-lead>
-                                    <booking-form-additional :form_info="formInfo" :order_id="order_id" :tour="tour"></booking-form-additional>
-                                    <div v-if="tour && token">
-                                        <booking-form-flights :leadTraveller="leadTraveller" :travellers="travellers" :token="token" :tour="tour" :order_id="order_id"></booking-form-flights>
-                                        <booking-form-accommodation :travellers="travellers" :order_token="token" :tour="tour" :order_id="order_id"></booking-form-accommodation>
-                                        <booking-form-activity></booking-form-activity>
-                                        <booking-form-transport></booking-form-transport>
-                                        <booking-form-payment></booking-form-payment>
-                                        <booking-form-terms></booking-form-terms>
-                                    </div>
-                            </div>
-                            <bookingform-footer></bookingform-footer>
-
+                        <booking-form-tour v-if="event != null && tour == null" :event="event"></booking-form-tour>
+                        <booking-form-tour v-if="event == null && tour == null"></booking-form-tour>
+                        <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
+                        <div v-if="tour && bookingToken && leadTraveller">
+                            <booking-form-additional :tour="tour"></booking-form-additional>
+                            <booking-form-flights :tour="tour"></booking-form-flights>
+                            <booking-form-accommodation :tour="tour"></booking-form-accommodation>
+                            <booking-form-activity :tour="tour"></booking-form-activity>
+                            <booking-form-transport :tour="tour"></booking-form-transport>
+                            <booking-form-terms :tour="tour"></booking-form-terms>
+                            <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
+                        </div>
                     </div>
+                    <bookingform-footer :logo="logo" :company="company" systemcurrency="GBP"></bookingform-footer>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 <script>
 import BookingFormTour from './BookingFormTour.vue'
 import { bus } from '../bus'
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-function deleteCookie( name, path, domain ) {
-  if (getCookie(name) ) {
-    document.cookie = name + "=" +
-      ((path) ? ";path="+path:"")+
-      ((domain)?";domain="+domain:"") +
-      ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
-  }
-}
+import { setCookie, getCookie, deleteCookie } from '../cookies'
+import axios from 'axios'
+import { stringify } from 'querystring'
+
 export default {
-    props: ['tour', 'event', 'name'],
+    props: {
+        auth_user: Object,
+        tour: Object,
+        event: Object,
+        name: String,
+        company: String,
+        logo: String
+    },
     components: { BookingFormTour },
     data() {
         return {
             debug: false,
             formInfo: false,
-            token: '',
-            leadTraveller: {},
+            bookingName: '',
+            agencyName: this.company,
+            bookingId: '',
+            leadTraveller: null,
+            home_address: {},
+            billing_address: {},
             travellers: [],
             orders: [],
             order_id: 0,
             booked: {},
             selectOrder: [],
             order_selected: null,
-            bookingOrderToken: ''
+            bookingToken: '',
+            login: '',
+            password: '',
+            authenticated: false,
+            tokenName: 'OTM_booking_token',
+            termsaccepted: false
         }
     },
     created() {
         let that = this
-        this.debug && console.log('BookingForm created for tour:', this.tour, this.order_id, this.order_id.length)
+
+        this.debug && console.log('1) BookingForm created '+that.bookingToken,' for tour: ', this.tour)
         bus.$emit('debugOverride', this.debug)
 
-        that.bookingOrderToken = getCookie('OTM_booking_order_token')
-        this.debug && console.log('Cookie read:', that.bookingOrderToken)
-        if (typeof that.bookingOrderToken != 'undefined' && that.bookingOrderToken.length) {
-            this.debug>1 && console.log('BookingOrderToken cookie found', that.bookingOrderToken)
-            axios.get(`/api/booking/customer/${that.bookingOrderToken}`)
-                .then(response => {
-                    that.orderData = response.data.orders
-                    that.debug>2 && console.log('Found booking orders = ', that.orderData)
-                    if (typeof that.orderData === 'undefined' || that.orderData == null || that.orderData.length == 0) {
-                        deleteCookie('OTM_booking_order_token')
-                        that.order_id = null
-                        that.createOrderId();
-                        console.log('bft=',that.bookingOrderToken)
-                        //bus.$on('createOrder', that.createOrderId());
-                        alert('No orders found for your access code, please rebook or contact us.')
-                    } else {
-                        that.order_selected = that.orderData.id
-                        that.order_id = that.order_selected
-                        that.token = that.orderData.token
-                        that.debug>1 && 
-                            console.log('Booking '+that.token+' continuing with current order selected = ',
-                            'order_selected='+that.order_selected, 
-                            that.orderData)
-                        that.debug>3 && console.log('BookingForm emit setOrderToken', that.token)
-                        bus.$emit('setOrderToken', that.token, that.order_id)
-                        //bus.$emit('customerLoaded', that.orderData.customer, that.orderData.token)
-                        bus.$emit('leadTravellerLoaded', that.orderData.customer, that.orderData.token)
-                        bus.$emit('additionalTravellersLoaded', that.orderData.customers)
-                        that.leadTraveller = that.orderData.customer
-                        that.travellers = that.orderData.customers
-                    }
-                })
-                .catch(error => {
-                    console.log('get current customer', error)
-                })
+        bus.$on('initialiseForm', () => {
+            this.resetToken()
+            window.location.reload(true)
+        })
+
+        bus.$on('removeBookingCookie', token => {
+            deleteCookie(that.tokenName)
+            alert('Booking form clearance')
+        })
+
+        bus.$on('setLeadTraveller', customer => {
+            that.leadTraveller = customer
+        })
+
+        bus.$on('TermsAgreed', function(state) {
+          that.termsaccepted = state
+        })
+
+        bus.$on('bookingCreated', booking => {
+            that.bookingName = booking.name
+        })
+
+        bus.$on('resetBookingToken', () => {
+            that.resetToken()
+        })
+        bus.$on('retrieveUserData', token => {
+            that.retrieveUserdata(token)
+        }) 
+
+        that.bookingToken = getCookie(that.tokenName)
+        this.debug && console.log('BOOKINGFORM Cookie read:', that.bookingToken)
+        this.retrieveUserdata(that.bookingToken)
+        if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
+            this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
+            this.retrieveUserdata(that.bookingToken)
         } else {
-            that.order_id = null
-            that.createOrderId()
-            console.log('bookingOrderToken NOT detected CREATED ', that.bookingOrderToken)
+            // If booking form has no token may mean consent for cookies is granted but cookies are not permitted?
+            alert('Booking form can not be created, we need your consent to store cookies or please make your booking by phone')
         }
     },
-    mounted() {
-        let that = this
-
-    },
     methods: {
+        retrieveUserdata(token) {
+            let that = this
+            axios.get(`/api/booking/token/${token}`)
+            .then(response => {
+                if (response.data.success) {
+                    const data = response.data
+                    that.debug && console.log(`BookingForm: booking loaded `, data)
+                    if (data.success == false) {
+                        alert('error loading booking!')
+                        return
+                    }
+                    that.bookingName = data.booking.name
+                    that.leadTraveller = data.customer
+                    // alert('setting token')
+                    if (token === data.booking.token) {
+                        bus.$emit('setBookingToken', data.booking.token)
+                        // TODO: are these events really needed?
+                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                        bus.$emit('homeAddressLoaded', data.customer.home_address)
+                        bus.$emit('billingAddressLoaded', data.customer.billing_address)
+                    } else {
+                        // the token is not registered
+                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
+                        // alert('No BookingForm yet'+that.bookingToken)
+                        //that.resetToken()
+                    }
+                }
+            })
+            .catch(error => {
+                console.log('get current customer', error)
+            })
+        },
+        isset(obj) {
+            if (typeof obj !== 'undefined' && obj !== null) {
+                return Object.keys(obj).length > 0
+            }
+        },
+        updateBookingName() {
+            const name = this.bookingName
+            const token = this.bookingToken
+            console.log('update', name)
+            axios.post('/api/booking/name/update', {name: name, token: token})
+                .then(response => {
+                    console.log('updateBookingName response', response)
+                    bus.$emit('controlLoadBookings')
+                })
+                .catch(error => console.log(error))
+        },
+        // todo integrate with login - list and activate tokens
+        resetToken() {
+            
+            let that = this
+            
+            const token = getCookie(this.tokenName)
+            // alert('reset Token ' + token)
+            that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+            setCookie(that.tokenName, that.bookingToken)
+            that.bookingToken = getCookie(that.tokenName);
+            that.debug && console.log('bookingToken reset ', that.bookingToken)
+
+            bus.$emit('setBookingToken', that.bookingToken)
+        },
+        // resetForm() {
+        //     this.resetToken()
+        //     window.history.go()
+        // },
         changeTheme(theme) {
             const bookingForm = document.querySelector('#booking-form')
             bookingForm.classList.remove('cool-theme')
@@ -154,53 +203,39 @@ export default {
                 default: 
                     break;
             }
-        },
-        async createOrderId() {
-            let that = this
-            axios.post('/api/booking/create-order', {
-                tour: this.tour.id,
-                event: this.event.id
-            })
-            .then(response => {
-                that.debug && console.log('bookingForm - create order_id', response)
-                that.order_id = response.data.order.id
-                that.token = response.data.order.token
-                bus.$emit('setOrderToken', that.token, that.order_id)
-            })
-            .catch(err => {
-                console.log('error creating an order', e)
-            })
-        },
+        }
     }
 }
 </script>
-<style scoped>
-    .cool-theme {
-        --payment-button-color: #007bff;
-        --card-background: #c2e2c5;
-        --card-body-background: #72a7c2;
-        --booking-form-background: #e1e7c9;
-    }
-    .warm-theme {
-        --payment-button-color: #007bff;
-        --card-background: #ff7d7d;
-        --card-body-background: #fdde88;
-        --booking-form-background: #ff9c2b;
-    }
-    .action-theme {
-        --payment-button-color: #007bff;
-        --card-background: #ffaf04;
-        --card-body-background: #4281ff;
-        --booking-form-background: #ffffff;
-    }
-    button.btn-themed.cool {
-        background: #7efafa;
-    }
-    button.btn-themed.warm {
-        background: #f38181;
-    }
-    button.btn-themed.action {
-        background: #2c89f3;
-    }
-
+<style scoped lang="scss">
+.cool-theme {
+    --payment-button-color: #007bff;
+    --card-background: #c2e2c5;
+    --card-body-background: #72a7c2;
+    --booking-form-background: #e1e7c9;
+}
+.warm-theme {
+    --payment-button-color: #007bff;
+    --card-background: #ff7d7d;
+    --card-body-background: #fdde88;
+    --booking-form-background: #ff9c2b;
+}
+.action-theme {
+    --payment-button-color: #007bff;
+    --card-background: #ffaf04;
+    --card-body-background: #4281ff;
+    --booking-form-background: #ffffff;
+}
+button.btn-themed.cool {
+    background: #7efafa;
+}
+button.btn-themed.warm {
+    background: #f38181;
+}
+button.btn-themed.action {
+   background: #2c89f3;
+}
+.card-container {
+  width: 100%;
+}
 </style>
