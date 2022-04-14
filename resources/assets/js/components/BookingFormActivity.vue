@@ -56,8 +56,8 @@
                         {{activity.ticket_type_name =='Basic' ? '' : activity.ticket_type_name}}
                     </div>
                     <div class="column-action">
-                        <button v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
-                        <button v-if="activity.tour_component_type == 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
+                        <button v-if="!isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
+                        <button v-if="isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
                     </div>
                     <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
@@ -143,6 +143,12 @@ export default {
     computed: {
     },
     methods: {
+        // upgrades are either booked or not
+        // simple version is to query the database
+        isBooked(activity) {
+            const booked = activity.status == 'booked'
+            return booked
+        },
         included(id) {
             console.log(this.activities)
             if (this.activities[id].tour_component_type == 'Included') {
@@ -173,11 +179,21 @@ export default {
                 .then(response => {
                     that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
                     that.activities = response.data.activities
+                    that.loadBookingStatus(that.booking_token)
                 })
                 .catch(error => {
                     console.log(error)
                 })
         },
+        // load in an array of activity booking states: ie: booked: true/false
+        loadBookingStatus(token) {
+            axios.get(`/api/booking/activity/booking/status/${token}` )
+                .then(response => {
+                    console.log('booking activity response', response)
+                })
+                .catch(error => console.error(error))
+        },
+        // Looks wrong: when a traveller is added: we need to load activity books for them??
         loadActivityBooking() {
             this.debug>1 && console.log('loadActivityBooking')
             axios.get(`/api/booking/activity-booking/${this.booking_token}`)

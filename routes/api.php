@@ -5,28 +5,29 @@
 |--------------------------------------------------------------------------
 */
 use Illuminate\Http\Request;
+use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\TourController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ActivityController;
-use App\Http\Controllers\Api\BookingActivityController;
 use App\Http\Controllers\Api\AirlinesController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\Api\ActivitiesController;
 use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\ActivityBookingController;
+use App\Http\Controllers\Api\BookingActivityController;
 use App\Http\Controllers\Api\BookingCustomerController;
 use App\Http\Controllers\Api\CustomerComponentController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\BespokeReportController;
-use App\Repository\OrderRepository;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
@@ -40,7 +41,11 @@ Route::prefix('booking')->group(function () {
 
     // Activities
     Route::get('/activities/tour/{tour}', [ActivitiesController::class, 'getActivitiesInventoryForTour']);
+    // post as it passes in an object from Vue (not a Laravel model)
+    Route::get('/activity/booking/status/{token}', [ActivityBookingController::class, 'getActivityBookingStatus']);
+    // is this implememnted?
     Route::get('/activities/booking/{token}/tour/{tour}', [ActivitiesController::class, 'getActivitiesBooking']);
+
 //    Route::post('/activities/booking', [ActivitiesController::class, 'updateActivities']);
     Route::post('/activity/book', [ActivityBookingController::class, 'updateActivityBooking']);
 

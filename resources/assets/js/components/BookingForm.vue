@@ -121,34 +121,43 @@ export default {
     methods: {
         retrieveUserdata(token) {
             let that = this
-            axios.get(`/api/booking/token/${token}`)
+            axios.get(`/api/booking/token/${token}`, {
+                validateStatus: (status) => {
+                    console.log('Backend returns ', status)
+                    if (status == 429) {
+                        alert('Booking for got too busy!  Give me a minute and refresh the browser');
+                    }
+                    return status < 300;
+                }
+            })
             .then(response => {
                 if (response.data.success) {
                     const data = response.data
                     that.debug && console.log(`BookingForm: booking loaded `, data)
                     if (data.success == false) {
                         alert('error loading booking!')
-                        return
-                    }
-                    that.bookingName = data.booking.name
-                    that.leadTraveller = data.customer
-                    // alert('setting token')
-                    if (token === data.booking.token) {
-                        bus.$emit('setBookingToken', data.booking.token)
-                        // TODO: are these events really needed?
-                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                        bus.$emit('homeAddressLoaded', data.customer.home_address)
-                        bus.$emit('billingAddressLoaded', data.customer.billing_address)
                     } else {
-                        // the token is not registered
-                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                        // alert('No BookingForm yet'+that.bookingToken)
-                        //that.resetToken()
+                        that.bookingName = data.booking.name
+                        that.leadTraveller = data.customer
+                        // alert('setting token')
+                        if (token === data.booking.token) {
+                            bus.$emit('setBookingToken', data.booking.token)
+                            // TODO: are these events really needed?
+                            bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                            bus.$emit('homeAddressLoaded', data.customer.home_address)
+                            bus.$emit('billingAddressLoaded', data.customer.billing_address)
+                        } else {
+                            // the token is not registered
+                            console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
+                            // alert('No BookingForm yet'+that.bookingToken)
+                            //that.resetToken()
+                        }
                     }
                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
+                window.document.reload()
             })
         },
         isset(obj) {
