@@ -4,28 +4,22 @@ namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Exceptions\RoomingFailedException;
-use App\Models\AccommodationInventoryTour;
-use App\Models\ActivityInventoryTour;
-use App\Models\Customer;
-use App\Models\FlightInventoryTour;
-use App\Models\Group;
-use App\Models\Merchandise;
-use App\Models\Order;
-use App\Models\OrderAccommodation;
-use App\Models\OrderActivity;
-use App\Models\OrderCustomer;
-use App\Models\OrderFlight;
-use App\Models\OrderInstallment;
-use App\Models\OrderMerchandise;
-use App\Models\OrderTransport;
-use App\Models\PaymentReminder;
-use App\Models\Invoice;
-use App\Models\RoomType;
-use App\Models\Tour;
-use App\Models\TransportInventoryTour;
-use App\Repository\Facades\StringFormatter;
+use App\Models\Accommodation\RoomType;
+use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
+use App\Models\Helper\OrderStatus;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\Invoice;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Order\OrderInstallment;
+use App\Models\Order\Payment\PaymentReminder;
+use App\Models\Tour\Merchandise;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
@@ -102,7 +96,7 @@ class OrderRepository
             'groups' => $groups,
             'installments' => self::snapshotInstallments($order),
             'footer' => $order->invoice_footer,
-            'total_cost' => $order->getCost() + $order->getAdjustmentValue(),
+            'total_cost' => $order->cost + $order->getAdjustmentValue(),
         ]);
     }
 
@@ -123,13 +117,13 @@ class OrderRepository
                 'amount' => $installment->calculated_amount, 'paid' => $installment->paid,];
         }
         $data[] = ['due' => $order->tour->final_payment, 'description' => 'Remaining Balance: ' . \StringFormatter::formatCurrency($order->remaining_installment),
-            'amount' => $order->remaining_installment, 'paid' => $order->paid >= $order->getCost(), ];
+            'amount' => $order->remaining_installment, 'paid' => $order->paid >= $order->cost, ];
         return $data;
     }
 
     public static function buildInstallmentString(string $type, Order $order, float $amount, float $calculated): string
     {
-        return $type . ': ' . $order->getCustomerCount() . ' Customer' . ($order->getCustomerCount() > 1 ? 's' : '') . ' x '
+        return $type . ': ' . $order->customer_count . ' Customer' . ($order->customer_count > 1 ? 's' : '') . ' x '
             . \StringFormatter::formatCurrency($amount) . ' = ' . \StringFormatter::formatCurrency($calculated);
     }
 
@@ -138,7 +132,7 @@ class OrderRepository
         $data = [];
         $totalCost = 0;
         $included = "Base Components Include:\n";
-        if ($orderCustomer->hasSurcharge) {
+        if ($orderCustomer->has_surcharge) {
             $data[] = ['description' => 'Single Occupancy Surcharge', 'cost' => $orderCustomer->single_occupancy_surcharge,];
             $totalCost += $orderCustomer->single_occupancy_surcharge;
         }
@@ -352,9 +346,9 @@ class OrderRepository
     /**
      * Get the current status of the order
      * @param Order $order
-     * @return int Status code for order
+     * @return OrderStatus Status code for order
      */
-    public static function getOrderStatus(Order $order): int
+    public static function getOrderStatus(Order $order): OrderStatus
     {
         $paidAmount = self::getPayments($order)['amount'];
         $cost = self::getCost($order);
@@ -362,27 +356,27 @@ class OrderRepository
         $total = $cost + $adjustments;
         if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
-                return -3;
+                return OrderStatus::CANCELLED_FULL_REFUND;
             } else if ($paidAmount <= $order->calculated_deposit) {
-                return -2;
+                return OrderStatus::CANCELLED_DEPOSIT_HELD;
             } else {
-                return -1;
+                return OrderStatus::CANCELLED_REFUND_REQUIRED;
             }
         } else {
             foreach ($order->orderCustomers as $orderCustomer) {
-                if (!$orderCustomer->has_occupancy) return 4;
+                if (!$orderCustomer->has_occupancy) return OrderStatus::OCCUPANCY_NOT_SET;
             }
             if ($total > $paidAmount) {
                 $next = self::getNextPaymentDetails($order);
                 if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
-                    return 2;
+                    return OrderStatus::PAYMENT_OVERDUE;
                 } else {
-                    return 1;
+                    return OrderStatus::BALANCE_OUTSTANDING;
                 }
             } elseif ($total < $paidAmount) {
-                return 3;
+                return OrderStatus::OVERPAID;
             } else {
-                return 0;
+                return OrderStatus::PAID_IN_FULL;
             }
         }
     }
@@ -429,8 +423,8 @@ class OrderRepository
      */
     public static function getRemainingToPay(Order $order): float
     {
-        $cost = $order->getCost();
-        $paid = $order->getPaid();
+        $cost = $order->cost;
+        $paid = $order->paid;
         $adjustments = $order->getAdjustmentValue();
         return ($cost + $adjustments) - $paid;
     }
@@ -649,7 +643,7 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = ($order->getAdjustmentValue()*-1) + $order->getPaid() - $order->calculated_deposit;
+        $paid = ($order->getAdjustmentValue()*-1) + $order->paid - $order->calculated_deposit;
         foreach ($order->installments as $orderInstallment) {
             $paid -= $orderInstallment->calculated_amount;
             if ($paid < 0) return false;
@@ -816,7 +810,7 @@ class OrderRepository
             'atolNumber' => SettingsRepository::get('atol.number'),
             'reference' => $order->booking_reference,
             'customerNames' => $order->customer_names,
-            'customerCount' => $order->getCustomerCount(),
+            'customerCount' => $order->customer_count,
             'protected' => $protected,
             'excess' => $excess,
         ])->flatten();
@@ -867,7 +861,7 @@ class OrderRepository
         }
         foreach ($orders as $order) {
             if ($order->cancelled) continue;
-            if (!$order->has_atol_certificate) continue;
+            if (!$order->has_atol) continue;
             $atol = self::generateAtolCertificate($order);
             $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
             if (!$saved) {

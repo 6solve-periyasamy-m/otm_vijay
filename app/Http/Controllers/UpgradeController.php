@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccommodationInventoryTour;
-use App\Models\AccommodationInventoryTourUpgrade;
-use App\Models\ActivityInventoryTour;
-use App\Models\ActivityInventoryTourUpgrade;
-use App\Models\FlightInventoryTour;
-use App\Models\FlightInventoryTourUpgrade;
-use App\Models\Tour;
-use App\Models\TransportInventoryTour;
-use App\Models\TransportInventoryTourUpgrade;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 use Illuminate\Http\Request;
 
 class UpgradeController extends Controller

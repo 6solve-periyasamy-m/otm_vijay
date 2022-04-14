@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\HatSize;
+use App\Models\Customer\HatSize;
 use Illuminate\Http\Request;
 
 class HatSizeController extends Controller

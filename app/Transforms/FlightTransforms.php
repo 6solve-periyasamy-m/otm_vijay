@@ -2,11 +2,11 @@
 
 namespace App\Transforms;
 
-use App\Models\Airline;
-use App\Models\Airport;
-use App\Models\FlightInventory;
-use App\Models\FlightInventoryTour;
-use App\Models\OrderCustomer;
+use App\Models\Flight\Airline;
+use App\Models\Flight\Airport;
+use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Order\OrderCustomer;
 use App\Repository\TourRepository;
 use StringFormatter;
 

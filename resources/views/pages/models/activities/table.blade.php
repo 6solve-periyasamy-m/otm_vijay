@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-@can('create', \App\Models\Activity::class)
+@can('create', \App\Models\Activity\Activity::class)
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('activities.create') }}">

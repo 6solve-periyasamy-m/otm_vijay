@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Address;
-use App\Models\AddressParent;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller

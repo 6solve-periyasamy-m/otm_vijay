@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use App\Repository\TourRepository;
 use Illuminate\Console\Command;
 

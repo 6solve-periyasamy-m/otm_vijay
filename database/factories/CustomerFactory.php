@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Address;
-use App\Models\AddressParent;
-use App\Models\Customer;
-use App\Models\LocationType;
+use App\Models\Customer\Customer;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

@@ -3,14 +3,13 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Models\FlightInventory;
-use App\Models\FlightInventoryTour;
-use App\Models\FlightInventoryTourUpgrade;
-use App\Models\OrderCustomer;
-use App\Models\OrderFlight;
-use App\Models\Tour;
+use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Tour;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 interface FlightComponentRepositoryInterface
 {

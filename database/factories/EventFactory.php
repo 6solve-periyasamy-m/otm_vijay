@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
+use App\Models\Tour\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EventFactory extends Factory

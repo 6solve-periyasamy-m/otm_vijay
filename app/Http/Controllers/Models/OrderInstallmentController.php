@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\OrderInstallment;
-use App\Models\Order;
+use App\Models\Order\Order;
+use App\Models\Order\OrderInstallment;
 use Illuminate\Http\Request;
 
 class OrderInstallmentController extends Controller

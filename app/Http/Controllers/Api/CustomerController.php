@@ -3,23 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Booking\Booking;
+use App\Models\Customer\Customer;
+use App\Repository\AddressRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Cookie;
-
-use App\Models\Booking;
-use App\Models\Order;
-use App\Models\Customer;
-
-use App\Repository\AddressRepository;
-use App\Models\OrderCustomer;
 
 class CustomerController extends ApiController
 {
     protected $logging = false;
 
-    /** 
-     * getCustomerByToken 
+    /**
+     * getCustomerByToken
      * 
      * @param $token
      * @return JSON $customer or NULL if token no longer valid
@@ -38,7 +33,7 @@ class CustomerController extends ApiController
             Log::warning('CustomerController::getCustomerByToken: WARNING: no booking for token '.$token);
             return null;
         }
-         
+
         $customer = Customer::find($booking->customer_id);
         if (empty($customer)) {
             Log::warning('CustomerController::getCustomerByToken: WARNING: no customer for token '.$token);
@@ -60,7 +55,7 @@ class CustomerController extends ApiController
      * getTokenLink: check is deprecated
      *
      * @param Request $request
-     * @return JSON 
+     * @return JSON
      */
     public function getTokenLink(Request $request)
     {

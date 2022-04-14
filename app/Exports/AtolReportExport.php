@@ -2,10 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Report;
-use App\Repository\BespokeReportRepository;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromView;
 
 class AtolReportExport implements FromView

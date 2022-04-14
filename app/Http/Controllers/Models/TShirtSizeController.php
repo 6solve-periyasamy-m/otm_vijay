@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\TShirtSize;
+use App\Models\Customer\TShirtSize;
 use Illuminate\Http\Request;
 
 class TShirtSizeController extends Controller

@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use App\Models\AccommodationInventory;
-use App\Models\ActivityInventory;
-use App\Models\FlightInventory;
-use App\Models\Merchandise;
-use App\Models\Tour;
-use App\Models\TransportInventory;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Flight\FlightInventory;
+use App\Models\Tour\Merchandise;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventory;
 
 class StockRepository
 {
@@ -23,7 +23,7 @@ class StockRepository
         $used = 0;
         foreach ($inventory->tourComponents as $component) {
             foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->isCancelled()) $used++;
+                if (!$orderComponent->cancelled) $used++;
             }
         }
         return $used;
@@ -39,7 +39,7 @@ class StockRepository
         $used = 0;
         foreach ($inventory->tourComponents as $component) {
             foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->isCancelled()) $used++;
+                if (!$orderComponent->cancelled) $used++;
             }
         }
         return $used;
@@ -55,7 +55,7 @@ class StockRepository
         $used = 0;
         foreach ($inventory->flightInventoryTour as $component) {
             foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->isCancelled()) $used++;
+                if (!$orderComponent->cancelled) $used++;
             }
         }
         return $used;
@@ -71,7 +71,7 @@ class StockRepository
         $used = 0;
         foreach ($inventory->tourComponents as $component) {
             foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->isCancelled()) $used++;
+                if (!$orderComponent->cancelled) $used++;
             }
         }
         return $used;
@@ -95,7 +95,7 @@ class StockRepository
     {
         $used = 0;
         foreach ($merchandise->orderMerchandise as $orderMerchandise) {
-            if (!$orderMerchandise->isCancelled()) $used++;
+            if (!$orderMerchandise->cancelled) $used++;
         }
         return $used;
     }

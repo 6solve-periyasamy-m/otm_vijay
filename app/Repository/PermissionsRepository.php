@@ -3,185 +3,185 @@
 namespace App\Repository;
 
 use App\Models\User;
+use Bouncer;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
-use Bouncer;
 
 class PermissionsRepository
 {
-    public static function getAvailablePermissionClasses()
+    public static function getAvailablePermissionClasses(): array
     {
         return array_keys(self::getAvailablePermissionSets());
     }
 
-    public static function getAvailablePermissionSets()
+    public static function getAvailablePermissionSets(): array
     {
         return [
             // Tours
-            'Tour' => [
+            'Tour\Tour' => [
                 'name' => 'Tour',
                 'group' => 'Tour and Components',
                 'order' => 0,
             ],
-            'Event' => [
+            'Tour\Event' => [
                 'name' => 'Event',
                 'group' => 'Tour and Components',
                 'order' => 1,
             ],
-            'TourCategory' => [
+            'Tour\TourCategory' => [
                 'name' => 'Category',
                 'group' => 'Tour and Components',
                 'order' => 2,
             ],
-            'AccommodationInventoryTour' => [
+            'Accommodation\AccommodationInventoryTour' => [
                 'name' => 'Accommodation Tour',
                 'group' => 'Tour and Components',
                 'order' => 3,
             ],
-            'ActivityInventoryTour' => [
+            'Activity\ActivityInventoryTour' => [
                 'name' => 'Activity Tour',
                 'group' => 'Tour and Components',
                 'order' => 4,
             ],
-            'FlightInventoryTour' => [
+            'Flight\FlightInventoryTour' => [
                 'name' => 'Flight Tour',
                 'group' => 'Tour and Components',
                 'order' => 5,
             ],
-            'TransportInventoryTour' => [
+            'Transport\TransportInventoryTour' => [
                 'name' => 'Transport Tour',
                 'group' => 'Tour and Components',
                 'order' => 6,
             ],
-            'Merchandise' => [
+            'Tour\Merchandise' => [
                 'name' => 'Merchandise',
                 'group' => 'Tour and Components',
                 'order' => 7,
             ],
             // Accommodations
-            'Accommodation' => [
+            'Accommodation\Accommodation' => [
                 'name' => 'Accommodation',
                 'group' => 'Accommodation',
                 'order' => 0,
             ],
-            'AccommodationInventory' => [
+            'Accommodation\AccommodationInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Accommodation',
                 'order' => 1,
             ],
-            'RoomType' => [
+            'Accommodation\RoomType' => [
                 'name' => 'Room Types',
                 'group' => 'Accommodation',
                 'order' => 2,
             ],
-            'BoardType' => [
+            'Accommodation\BoardType' => [
                 'name' => 'Board Types',
                 'group' => 'Accommodation',
                 'order' => 3,
             ],
             // Activities
-            'Activity' => [
+            'Activity\Activity' => [
                 'name' => 'Activity',
                 'group' => 'Activity',
                 'order' => 0,
             ],
-            'ActivityType' => [
+            'Activity\ActivityType' => [
                 'name' => 'Activity Type',
                 'group' => 'Activity',
                 'order' => 2,
             ],
-            'ActivityInventory' => [
+            'Activity\ActivityInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Activity',
                 'order' => 1,
             ],
-            'TicketType' => [
+            'Activity\TicketType' => [
                 'name' => 'Ticket Type',
                 'group' => 'Activity',
                 'order' => 3,
             ],
             // Flights
-            'Flight' => [
+            'Flight\Flight' => [
                 'name' => 'Flight',
                 'group' => 'Flight',
                 'order' => 0,
             ],
-            'FlightInventory' => [
+            'Flight\FlightInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Flight',
                 'order' => 1,
             ],
-            'Airport' => [
+            'Flight\Airport' => [
                 'name' => 'Airport',
                 'group' => 'Flight',
                 'order' => 2,
             ],
-            'Airline' => [
+            'Flight\Airline' => [
                 'name' => 'Airline',
                 'group' => 'Flight',
                 'order' => 3,
             ],
             // Transports
-            'Transport' => [
+            'Transport\Transport' => [
                 'name' => 'Transport',
                 'group' => 'Transport',
                 'order' => 0,
             ],
-            'TransportInventory' => [
+            'Transport\TransportInventory' => [
                 'name' => 'Inventory',
                 'group' => 'Transport',
                 'order' => 1,
             ],
-            'Operator' => [
+            'Transport\Operator' => [
                 'name' => 'Operator',
                 'group' => 'Transport',
                 'order' => 2,
             ],
-            'TransportType' => [
+            'Transport\TransportType' => [
                 'name' => 'Transport Type',
                 'group' => 'Transport',
                 'order' => 3,
             ],
             // Orders
-            'Order' => [
+            'Order\Order' => [
                 'name' => 'Order',
                 'group' => 'Orders',
                 'order' => 0,
             ],
-            'Payment' => [
+            'Order\Payment\Payment' => [
                 'name' => 'Payment',
                 'group' => 'Orders',
                 'order' => 1,
             ],
-            'ManualAdjustment' => [
+            'Order\Adjustment\ManualAdjustment' => [
                 'name' => 'Manual Adjustment',
                 'group' => 'Orders',
                 'order' => 2,
             ],
             // Customers
-            'Customer' => [
+            'Customer\Customer' => [
                 'name' => 'Customer',
                 'group' => 'Orders',
                 'order' => 0,
             ],
-            'OrderCustomer' => [
+            'Order\OrderCustomer' => [
                 'name' => 'Order Customer',
                 'group' => 'Orders',
                 'order' => 1,
             ],
-            'OrderCustomerAdjustment' => [
+            'Order\Adjustment\OrderCustomerAdjustment' => [
                 'name' => 'Customer Adjustment',
                 'group' => 'Orders',
                 'order' => 2,
             ],
             // System
-            'Report' => [
+            'System\Report' => [
                 'name' => 'Report',
                 'group' => 'System',
                 'order' => 0,
             ],
-            'Setting' => [
+            'System\Setting' => [
                 'name' => 'Setting',
                 'group' => 'System',
                 'order' => 1,

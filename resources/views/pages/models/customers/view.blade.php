@@ -103,7 +103,7 @@
                         <td>{{ $orderCustomer->order->tour->name }}</td>
                         <td>{{ StringFormatter::formatDateTime($orderCustomer->order->ordered_on) }}</td>
                         <td>{{ StringFormatter::formatCurrency($orderCustomer->tour_cost) }}</td>
-                        <td><h6 class="badge badge-{{ $orderCustomer->order->getStatus()['color'] }} fw-bold">{{ $orderCustomer->order->getStatus()['status'] }}</h6></td>
+                        <td><h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6></td>
                     </tr>
                 @endforeach
             </table>

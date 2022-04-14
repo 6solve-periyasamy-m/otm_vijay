@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\ApiToken;
+use App\Models\System\ApiToken;
 use App\Models\User;
 use Bouncer;
 use Illuminate\Database\QueryException;

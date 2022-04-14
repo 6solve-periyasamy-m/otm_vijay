@@ -7,7 +7,7 @@ $(document).ready(function() {
 });
 </script>
 @endsection
-@can('create', \App\Models\TransportInventory::class)
+@can('create', \App\Models\Transport\TransportInventory::class)
 <div class="card">
     <div class="card-body">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
@@ -49,14 +49,14 @@ $(document).ready(function() {
                     <input type="checkbox" disabled @if($transportInventory->fit_selectable == 1) checked @endif>
                 </td>
                 <td>
-                    {{$transportInventory->stock - $transportInventory->getUsedStock()}}/{{ $transportInventory->stock }}<br/>
-                    ({{$transportInventory->getUsedStock()}} Sold)
+                    {{$transportInventory->stock - $transportInventory->used_stock}}/{{ $transportInventory->stock }}<br/>
+                    ({{$transportInventory->used_stock}} Sold)
                 </td>
                 <td>{{ StringFormatter::formatCurrency($transportInventory->purchase_price) }}</td>
                 <td>{{ StringFormatter::formatCurrency($transportInventory->sales_price) }}</td>
                 <td>{{ $transportInventory->notes }}</td>
                 <td class="actions-3">
-                    @can('create', \App\Models\TransportInventory::class)
+                    @can('create', \App\Models\Transport\TransportInventory::class)
                         <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                             <i class="icon-layers"></i>
                         </a>
@@ -65,7 +65,7 @@ $(document).ready(function() {
                             <i class="icon-layers"></i>
                         </span>
                     @endcan
-                    @can('update', \App\Models\TransportInventory::class)
+                    @can('update', \App\Models\Transport\TransportInventory::class)
                         <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'transportInventory' => $transportInventory,])}}"
                            class="btn btn-sm btn-outline-success mb-1">
                             <i class="icon-note"></i>
@@ -75,7 +75,7 @@ $(document).ready(function() {
                             <i class="icon-note"></i>
                         </span>
                     @endcan
-                    @can('delete', \App\Models\TransportInventory::class)
+                    @can('delete', \App\Models\Transport\TransportInventory::class)
                         <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                            onclick="event.preventDefault();document.getElementById('transportInventory-{{ $transportInventory->id }}-delete').submit();">
                             <i class="icon-trash"></i>

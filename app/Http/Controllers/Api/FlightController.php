@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
-use App\Models\Tour;
-use App\Models\Order;
-use App\Models\Flight;
-use App\Models\Airport;
-use App\Models\Booking;
-use App\Models\BookingFlight;
-
-use Illuminate\Http\Request;
-use App\Models\FlightInventory;
-use App\Models\FlightInventoryTour;
-use Illuminate\Support\Facades\Log;
-use App\Repository\FlightsRepository;
 use App\Http\Controllers\ApiController;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingFlight;
+use App\Models\Flight\Airport;
+use App\Models\Flight\Flight;
+use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Tour\Tour;
 use App\Repository\BookingRepository;
 use App\Repository\FlightBookingRepository;
+use App\Repository\FlightsRepository;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FlightController extends ApiController
 {
@@ -123,7 +121,7 @@ class FlightController extends ApiController
         $booking = $bookingFlight->where('booking_id', $booking->id)
             ->where('flight_inventory_id', $flightInventoryTour->flight_inventory_id)
             ->delete();
-        
+
         return $booking;
     }
 
@@ -178,7 +176,7 @@ class FlightController extends ApiController
     }
 
     /**
-     * bookFlightDetails 
+     * bookFlightDetails
      * save flight details for a pax tour flight
      * 1. create / update orders_customers
      * 2. create customer_order_details (audit)

@@ -53,7 +53,7 @@
                         <td>{{ StringFormatter::formatDateTime($order->ordered_on) }}</td>
                         <td>{{ $order->booking_reference }}</td>
                         <td>{{ $order->lead_booker_name }}</td>
-                        <td>{{ $order->cancelled ? 'Cancelled' : $order->getCustomerCount() }}</td>
+                        <td>{{ $order->cancelled ? 'Cancelled' : $order->customer_count }}</td>
                         <td>{{ $order->tour->name }}</td>
                         <td>{{ StringFormatter::formatCurrency($order->total) }}</td>
                         <td>{{ StringFormatter::formatCurrency($order->paid) }}</td>

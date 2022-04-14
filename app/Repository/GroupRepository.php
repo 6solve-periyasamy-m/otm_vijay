@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Models\Group;
-use App\Models\OrderCustomer;
-use App\Models\OrderCustomerGroup;
+use App\Models\Customer\Group;
+use App\Models\Customer\OrderCustomerGroup;
+use App\Models\Order\OrderCustomer;
 use Illuminate\Support\Collection;
 use DB;
 use Log;

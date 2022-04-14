@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Models\Airline;
-use App\Models\Airport;
-use App\Models\Currency;
-use App\Models\Flight;
-use App\Models\FlightInventory;
+use App\Models\Flight\Airline;
+use App\Models\Flight\Airport;
+use App\Models\Flight\Flight;
+use App\Models\Flight\FlightInventory;
+use App\Models\Location\Currency;
 use App\Models\TravelClass;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;

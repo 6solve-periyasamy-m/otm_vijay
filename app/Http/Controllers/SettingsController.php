@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Currency;
+use App\Models\Location\Currency;
 use App\Repository\SettingsRepository;
 use Illuminate\Http\Request;
 

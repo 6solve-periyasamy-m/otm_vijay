@@ -2,15 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Flight\Flight;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Database\Eloquent\Factories\Factory;
-
-use App\Models\Event;
-use App\Models\Tour;
-use App\Models\Flight;
-
 use Tests\TestCase;
 
 class BookingTest extends TestCase

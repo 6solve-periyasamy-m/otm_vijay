@@ -6,7 +6,7 @@
     <td>{{ StringFormatter::formatDate($available_from) }}</td>
     <td>{{ $notes }}</td>
     <td class="actions-3">
-        @can('create', \App\Models\Flight::class)
+        @can('create', \App\Models\Flight\Flight::class)
             <a href="{{route('flights.return', ['flight' => $flight,])}}" class="btn btn-outline-blue btn-sm mb-1">
                 <i class="icon-directions"></i>
             </a>
@@ -15,7 +15,7 @@
             <i class="icon-directions"></i>
         </span>
         @endcan
-        @can('update', \App\Models\Flight::class)
+        @can('update', \App\Models\Flight\Flight::class)
             <a href="{{route('flights.edit', ['flight' => $flight,])}}" class="btn btn-outline-success btn-sm mb-1">
                 <i class="icon-note"></i>
             </a>
@@ -24,7 +24,7 @@
             <i class="icon-note"></i>
         </span>
         @endcan
-        @can('delete', \App\Models\Flight::class)
+        @can('delete', \App\Models\Flight\Flight::class)
             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                onclick="event.preventDefault();document.getElementById('flight-{{ $flight->id }}-delete').submit();">
                 <i class="icon-trash"></i>

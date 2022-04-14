@@ -2,11 +2,10 @@
 
 namespace App\Repository;
 
-use App\Models\Tour;
-use App\Models\Booking;
-use App\Models\Activity;
-use App\Models\BookingActivities;
-use Illuminate\Support\Facades\Log;
+use App\Models\Activity\Activity;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingActivities;
+use App\Models\Tour\Tour;
 
 interface ActivityBookingRepositoryInterface {
     public function __construct();

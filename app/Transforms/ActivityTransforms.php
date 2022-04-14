@@ -2,12 +2,11 @@
 
 namespace App\Transforms;
 
-use App\Facades\StringFormatterFacade;
-use App\Models\ActivityInventory;
-use App\Models\ActivityInventoryTour;
-use App\Models\ActivityType;
-use App\Models\OrderCustomer;
-use App\Models\TicketType;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityType;
+use App\Models\Activity\TicketType;
+use App\Models\Order\OrderCustomer;
 use App\Repository\TourRepository;
 use StringFormatter;
 

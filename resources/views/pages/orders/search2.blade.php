@@ -49,8 +49,8 @@
                         <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
                         <td><a href="{{ route('orders.view', ['order' => $order->id]) }}" class="link-info"><u>{{ $order->booking_reference }}</u></a></td>
                         <td>{{ $order->tour->name }}</td>
-                        <td>{{ $order->getCustomerCount() }}</td>
-                        <td><h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status'] }}</h6></td>
+                        <td>{{ $order->customer_count }}</td>
+                        <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
                     </tr>
                 @endforeach
             </table>

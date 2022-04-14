@@ -3,14 +3,13 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Models\ActivityInventory;
-use App\Models\ActivityInventoryTour;
-use App\Models\ActivityInventoryTourUpgrade;
-use App\Models\OrderActivity;
-use App\Models\OrderCustomer;
-use App\Models\Tour;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Tour;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 interface ActivityComponentRepositoryInterface
 {

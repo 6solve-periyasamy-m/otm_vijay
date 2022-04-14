@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Operator;
+use App\Models\Transport\Operator;
 use Illuminate\Http\Request;
 
 class OperatorController extends Controller

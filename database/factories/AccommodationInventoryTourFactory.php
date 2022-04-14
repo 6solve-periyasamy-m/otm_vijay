@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccommodationInventoryTourFactory extends Factory

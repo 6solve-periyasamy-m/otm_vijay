@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\OrderFlight;
+use App\Models\Order\Component\OrderFlight;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFlightFactory extends Factory

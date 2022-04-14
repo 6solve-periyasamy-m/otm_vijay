@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityType;
+use App\Models\Activity\ActivityType;
 use Illuminate\Http\Request;
 
 class ActivityTypeController extends Controller

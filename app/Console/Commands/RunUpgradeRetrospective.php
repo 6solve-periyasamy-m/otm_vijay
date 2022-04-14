@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Tour;
-use App\Repository\LocationsRepository;
+use App\Models\Tour\Tour;
 use App\Repository\TourRepository;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class RunUpgradeRetrospective extends Command
 {

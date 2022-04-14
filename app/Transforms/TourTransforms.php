@@ -2,9 +2,9 @@
 
 namespace App\Transforms;
 
-use App\Models\Event;
-use App\Models\Tour;
-use App\Models\TourCategory;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
+use App\Models\Tour\TourCategory;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;

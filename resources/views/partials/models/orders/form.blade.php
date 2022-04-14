@@ -27,7 +27,7 @@
     @endpush
 @endif
 
-@can('create', \App\Models\Tour::class)
+@can('create', \App\Models\Tour\Tour::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Tour', 'field' => 'tour_id', 'value' => $tour_id ?? 0,
              'route' => 'tours', 'createRoute' => route('tours.create'),])
@@ -37,7 +37,7 @@
            'route' => 'tours',])
 @endcan
 @if(!isset($update))
-@can('create', \App\Models\Customer::class)
+@can('create', \App\Models\Customer\Customer::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Lead Booker', 'field' => 'lead_booker_id', 'value' => null,
              'route' => 'customers', 'createRoute' => route('customers.create'),])

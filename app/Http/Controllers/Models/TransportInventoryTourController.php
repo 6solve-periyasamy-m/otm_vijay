@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tour;
-use App\Models\TransportInventoryTour;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventoryTour;
 use Illuminate\Http\Request;
 
 class TransportInventoryTourController extends Controller

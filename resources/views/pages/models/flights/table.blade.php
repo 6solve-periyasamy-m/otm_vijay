@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@can('create', \App\Models\Flight::class)
+@can('create', \App\Models\Flight\Flight::class)
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('flights.create') }}">

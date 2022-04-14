@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\Setting;
+use App\Models\System\Setting;
 
 interface SettingsRepositoryInterface {
     public static function get($key);

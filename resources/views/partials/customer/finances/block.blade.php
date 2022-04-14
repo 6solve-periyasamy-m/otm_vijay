@@ -1,6 +1,6 @@
 @php
 /**
- * @var \App\Models\Order $order
+ * @var \App\Models\Order\Order $order
  */
 @endphp
 <div class="order order-{{ $order->booking_reference }}">
@@ -18,7 +18,7 @@
                         <label class="payment-label">Balance Outstanding</label>
                     </div>
                     <div class="col-md-4">
-                        <p class="payment-value" id="order_status">{{ $order->status }}</p>
+                        <p class="payment-value" id="order_status">{{ $order->status->description() }}</p>
                         <label class="payment-label">Order Status</label>
                     </div>
                 </div>

@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-@can('create', \App\Models\Transport::class)
+@can('create', \App\Models\Transport\Transport::class)
 <div class="card">
     <div class="card-body">
         <a class="btn btn-primary float-end" href="{{ route('transports.create') }}">

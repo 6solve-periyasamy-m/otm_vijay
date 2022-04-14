@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Gateways\StripeGateway;
-use App\Models\AccommodationInventoryTourUpgrade;
-use App\Models\ActivityInventoryTourUpgrade;
-use App\Models\FlightInventoryTourUpgrade;
-use App\Models\OrderAccommodation;
-use App\Models\OrderActivity;
-use App\Models\OrderFlight;
-use App\Models\OrderTransport;
-use App\Models\TransportInventoryTourUpgrade;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderTransport;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;

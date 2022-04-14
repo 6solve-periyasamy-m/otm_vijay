@@ -1,5 +1,5 @@
 @include('partials.fields.text', ['name' => 'Name', 'field' => ($prefix ?? "") . 'name', 'value' => $address?->name ?? null,])
-@can('create', \App\Models\LocationType::class)
+@can('create', \App\Models\Location\LocationType::class)
     @include('partials.fields.selector.adder',
                 ['name' => 'Location Type', 'field' => ($prefix ?? '') . 'location_type_id', 'value' => $address?->location_type_id ?? null,
                  'route' => 'location-types', 'createRoute' => route('location-types.create')])

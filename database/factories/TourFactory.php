@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Tour;
+use App\Models\Tour\Tour;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TourFactory extends Factory

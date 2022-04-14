@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\BespokeReportExport;
-use App\Exports\OrderReportExport;
-use App\Exports\PaymentReportExport;
-use App\Exports\TourStockReportExport;
-use App\Models\Report;
+use App\Models\System\Report;
 use App\Repository\BespokeReportRepository;
 use App\Repository\ReportFieldRepository;
 use App\Repository\ReportRepository;

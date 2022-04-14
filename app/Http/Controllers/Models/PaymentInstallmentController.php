@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\PaymentInstallment;
-use App\Models\Tour;
+use App\Models\Tour\PaymentInstallment;
+use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 
 class PaymentInstallmentController extends Controller

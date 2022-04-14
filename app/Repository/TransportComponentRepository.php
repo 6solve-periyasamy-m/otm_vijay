@@ -3,14 +3,13 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Models\OrderCustomer;
-use App\Models\OrderTransport;
-use App\Models\Tour;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
-use App\Models\TransportInventoryTourUpgrade;
+use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 interface TransportComponentRepositoryInterface
 {

@@ -1,6 +1,6 @@
 @include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
 @include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
-@can('create', \App\Models\Event::class)
+@can('create', \App\Models\Tour\Event::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
              'route' => 'events', 'createRoute' => route('events.create'), 'width' => 6,])
@@ -9,7 +9,7 @@
             ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
              'route' => 'events', 'width' => 6,])
 @endcan
-@can('create', \App\Models\TourCategory::class)
+@can('create', \App\Models\Tour\TourCategory::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
              'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 6,])

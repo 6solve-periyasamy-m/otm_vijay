@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
-use Illuminate\Support\Facades\Log;
-
-use App\Models\Event;
-use App\Models\Tour;
+use App\Models\Tour\Event;
+use App\Models\Tour\Tour;
 
 /**
  * tour may belong to an event or not.
@@ -18,7 +16,7 @@ class TourController extends ApiController
      *
      * @return JSON events
      */
-    public function getEvents() 
+    public function getEvents()
     {
         $events = Event::where('starts_at', '>', date('Y-m-d'))->get();
 
@@ -26,7 +24,7 @@ class TourController extends ApiController
     }
 
     /**
-     * getTour 
+     * getTour
      *
      * @param [type] $tour_id
      * @return JSON tour
@@ -42,12 +40,12 @@ class TourController extends ApiController
     }
 
     /**
-     * getTours 
+     * getTours
      *
      * @param OPTIONAL $event_id
      * @return JSON tours for a specific event after today, or all tours if no event specified
      */
-    public function getTours($event_id = null) 
+    public function getTours($event_id = null)
     {
         $today = date('Y-m-d');
         if ($event_id) {

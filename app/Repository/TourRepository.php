@@ -2,18 +2,15 @@
 
 namespace App\Repository;
 
-use App\Models\AccommodationInventoryTour;
-use App\Models\AccommodationInventoryTourUpgrade;
-use App\Models\ActivityInventoryTour;
-use App\Models\ActivityInventoryTourUpgrade;
-use App\Models\FlightInventoryTour;
-use App\Models\FlightInventoryTourUpgrade;
-use App\Models\Order;
-use App\Models\OrderCustomer;
-use App\Models\Tour;
-use App\Models\TransportInventoryTour;
-use App\Models\TransportInventoryTourUpgrade;
-use Illuminate\Support\Facades\DB;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventoryTour;
+use App\Models\Transport\TransportInventoryTourUpgrade;
 
 interface TourRepositoryInterface {
     public static function getTourDetails($id);

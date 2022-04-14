@@ -2,8 +2,6 @@
 
 namespace App\Transforms;
 
-use App\Models\HatSize;
-use App\Models\TShirtSize;
 use Illuminate\Database\Eloquent\Collection;
 
 interface PermissionTransformsInterface

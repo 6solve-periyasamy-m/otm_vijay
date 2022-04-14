@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use Illuminate\Support\Facades\Log;
-use App\Models\Address;
+use App\Models\Location\Address;
 
 interface AddressRepositoryInterface 
 {

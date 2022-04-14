@@ -2,9 +2,9 @@
 
 namespace App\Imports;
 
-use App\Models\Activity;
-use App\Models\ActivityInventory;
-use App\Models\TicketType;
+use App\Models\Activity\Activity;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\TicketType;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 

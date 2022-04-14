@@ -6,8 +6,8 @@ use App\Events\Order\Adjustment\AdjustmentCreatedEvent;
 use App\Events\Order\Adjustment\AdjustmentEditedEvent;
 use App\Events\Order\Adjustment\AdjustmentRemovedEvent;
 use App\Http\Controllers\Controller;
-use App\Models\ManualAdjustment;
-use App\Models\Order;
+use App\Models\Order\Adjustment\ManualAdjustment;
+use App\Models\Order\Order;
 use Illuminate\Http\Request;
 
 class ManualAdjustmentController extends Controller

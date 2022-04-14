@@ -81,14 +81,14 @@
                                     <td>{{ $upgrade->description }}</td>
                                     <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
-                                        @can('update', \App\Models\AccommodationInventoryTour::class)
+                                        @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             <a href="{{ route('accommodation-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                     <i class="icon-note"></i>
                                                 </span>
                                         @endcan
-                                        @can('delete', \App\Models\AccommodationInventoryTour::class)
+                                        @can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             <a href="#" onclick="$('#accommodation-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('accommodation-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="accommodation-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf
