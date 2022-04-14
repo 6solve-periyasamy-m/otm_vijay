@@ -7,12 +7,7 @@ use App\Models\Location\Country;
 use App\Models\Location\Currency;
 use Illuminate\Http\Request;
 
-interface LocationsRepositoryInterface
-{
-    public static function updateCountry($ccn3, $cca3, $commonName, $dialing_code, $currencies);
-}
-
-class LocationsRepository implements LocationsRepositoryInterface
+class LocationsRepository
 {
     public static function updateCountry($ccn3, $cca3, $commonName, $dialing_code, $currencies)
     {

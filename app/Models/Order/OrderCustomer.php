@@ -6,6 +6,7 @@ use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Order\Adjustment\OrderCustomerAdjustment;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
@@ -159,7 +160,10 @@ class OrderCustomer extends Model
         return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 
-    public function orderAccommodation(): Collection
+    /**
+     * @return OrderAccommodation[]
+     */
+    public function orderAccommodation(): array
     {
         return GroupRepository::getOrderCustomerAccommodation($this);
     }

@@ -72,6 +72,15 @@ class CustomerDashboardRepository
         return self::hydrateCustomers(array_unique($ids));
     }
 
+    private static function hydrateCustomers(array $ids): array
+    {
+        $data = [];
+        foreach ($ids as $id) {
+            $data[] = Customer::find($id);
+        }
+        return $data;
+    }
+
     public static function canEditCustomer(Customer $editor, Customer $edited): bool
     {
         if (!isset($edited->email_address) || !isset($edited->password)) {
@@ -82,14 +91,5 @@ class CustomerDashboardRepository
             }
         }
         return false;
-    }
-
-    private static function hydrateCustomers(array $ids): array
-    {
-        $data = [];
-        foreach ($ids as $id) {
-            $data[] = Customer::find($id);
-        }
-        return $data;
     }
 }

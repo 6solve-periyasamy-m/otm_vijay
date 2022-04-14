@@ -683,7 +683,7 @@ class ReportFieldRepository
                 'method' => 'notes',
             ],
             'tour_count' => [
-                'name' => 'How Many Tours',
+                'name' => 'Used on Tours',
                 'method' => 'used_on_tour_count',
             ],
         ];

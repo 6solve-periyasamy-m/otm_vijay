@@ -28,7 +28,7 @@ class CustomerAuthenticationRepository
     public static function getUserFromToken(string $token): User
     {
         $apiToken = CustomerApiToken::findOrFail($token);
-        return $apiToken->user;
+        return $apiToken->customer;
     }
 
     public static function generateUserToken(Customer $user, int $expiresIn = ApiToken::DEFAULT_EXPIRY): CustomerApiToken
@@ -42,7 +42,7 @@ class CustomerAuthenticationRepository
                 ]);
                 $user->tokens()->save($apiToken);
                 return $apiToken;
-            } catch (QueryException $ignored) {
+            } catch (QueryException) {
                 continue;
             }
         }

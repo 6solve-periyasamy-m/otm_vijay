@@ -8,20 +8,7 @@ use Bouncer;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 
-interface UserRepositoryInterface
-{
-    public static function getLatestToken(User $user): ApiToken;
-
-    public static function getUserFromToken(string $token): User;
-
-    public static function generateUserToken(User $user): ApiToken;
-
-    public static function purgeUserTokens(User $user, int $limit = ApiToken::DEFAULT_LIMIT): void;
-
-    public static function invalidateAllUserTokens(User $user): void;
-}
-
-class UserRepository implements UserRepositoryInterface
+class UserRepository
 {
 
     public static function getLatestToken(User $user): ApiToken

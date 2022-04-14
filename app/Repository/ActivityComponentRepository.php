@@ -10,46 +10,17 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
-interface ActivityComponentRepositoryInterface
+class ActivityComponentRepository
 {
-    public static function getComponentFromOrderComponent($orderComponentId);
-
-    public static function getInventoryFromOrderComponent($orderComponentId);
-
-    public static function getOrderComponentFromId($orderComponentId);
-
-    public static function getAvailableAddons($tourId, $oCustomerId = -1);
-
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null);
-}
-
-class ActivityComponentRepository implements ActivityComponentRepositoryInterface
-{
-    public static function getOrderComponentFromId($orderComponentId)
-    {
-        return OrderActivity::findOrFail($orderComponentId);
-    }
-
-    public static function getComponentFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderActivity::findOrFail($orderComponentId);
-        return $orderComponent->activityInventoryTour()->first()->activityInventory()->first()->activity();
-    }
-
-    public static function getInventoryFromOrderComponent($orderComponentId)
-    {
-        $orderComponent = OrderActivity::findOrFail($orderComponentId);
-        return $orderComponent->activityInventoryTour()->first()->activityInventory();
-    }
-
-    public static function getAvailableAddons($tourId, $oCustomerId = -1)
+    public static function getAvailableAddons($tourId, $oCustomerId = -1): array
     {
         $tour = Tour::findOrFail($tourId);
         $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
         $components = [];
         foreach ($tour->activityInventoryTours as $component) {
-            if ($component->tour_component_type  !== "Upgrade") {
+            if ($component->tour_component_type !== "Upgrade") {
                 if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];
                 $components[$component->id]['id'] = $component->id;
@@ -67,7 +38,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId)
+    public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId): OrderActivity
     {
         $orderComponent = OrderActivity::create([
             'order_customer_id' => $oCustomerId,
@@ -78,7 +49,8 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return $orderComponent;
     }
 
-    public static function getParentComponent(ActivityInventoryTour $inventoryTour) {
+    public static function getParentComponent(ActivityInventoryTour $inventoryTour): ActivityInventoryTour
+    {
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         if (!isset($upgrade)) return $inventoryTour;
         return $upgrade->base;
@@ -93,7 +65,7 @@ class ActivityComponentRepository implements ActivityComponentRepositoryInterfac
         return false;
     }
 
-    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null)
+    public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];
         foreach ($tour->activityInventoryTours as $inventoryTour) {

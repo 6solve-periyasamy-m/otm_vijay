@@ -1,5 +1,11 @@
 @extends('layout.customer')
 
+@php
+/**
+ * @var \App\Models\Order\OrderCustomer $orderCustomer
+ */
+@endphp
+
 @section('title', 'Your Extras')
 
 
@@ -211,9 +217,9 @@
                             </thead>
                             @foreach($orderCustomer->orderAccommodation() as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_out) }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->accommodation_inventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodation_inventory->check_out) }}</td>
                                     <td>{{ $orderComponent->accommodation->name }}</td>
-                                    <td>{{ $orderComponent->accommodationInventory->roomType->name }}, {{ $orderComponent->accommodationInventory->boardType->name }}</td>
+                                    <td>{{ $orderComponent->accommodation_inventory->roomType->name }}, {{ $orderComponent->accommodation_inventory->boardType->name }}</td>
                                     <td>{{ empty($orderComponent->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderComponent->group->getMembers($orderCustomer) }}</td>
                                     @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                         <td colspan="2">
@@ -276,9 +282,9 @@
                             </thead>
                             @foreach($orderCustomer->orderActivities as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activityInventory->ends_at) }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->activity_inventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activity_inventory->ends_at) }}</td>
                                     <td>{{ $orderComponent->activity->name }}</td>
-                                    <td>{{ $orderComponent->activityInventory->ticketType->name }}</td>
+                                    <td>{{ $orderComponent->activity_inventory->ticketType->name }}</td>
                                     @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                         <td colspan="2">
                                             {{ $orderComponent->tourComponent->tour_component_type }}
@@ -340,10 +346,10 @@
                             </thead>
                             @foreach($orderCustomer->orderFlights as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flightInventory->arrives_at) }}</td>
-                                    <td>{{ $orderComponent->flightInventory->flight_number }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->flight_inventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flight_inventory->arrives_at) }}</td>
+                                    <td>{{ $orderComponent->flight_inventory->flight_number }}</td>
                                     <td>{{ $orderComponent->flight->departureAirport->name }} to {{ $orderComponent->flight->arrivalAirport->name }}</td>
-                                    <td>{{ $orderComponent->flightInventory->travelClass->name }}</td>
+                                    <td>{{ $orderComponent->flight_inventory->travelClass->name }}</td>
                                     @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                         <td colspan="2">
                                             {{ $orderComponent->tourComponent->tour_component_type }}
@@ -406,11 +412,11 @@
                             </thead>
                             @foreach($orderCustomer->orderTransports as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transportInventory->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->transport_inventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transport_inventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->transport->name }}</td>
                                     <td>{{ $orderComponent->transport->transportType->name }}</td>
                                     <td>{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
-                                    <td>{{ $orderComponent->transportInventory->travelClass->name }}</td>
+                                    <td>{{ $orderComponent->transport_inventory->travelClass->name }}</td>
                                     @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                         <td colspan="2">
                                             {{ $orderComponent->tourComponent->tour_component_type }}

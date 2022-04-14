@@ -195,7 +195,7 @@ class PermissionsRepository
         ];
     }
 
-    public static function getGroupedPermissions(Role $role = null)
+    public static function getGroupedPermissions(Role $role = null): array
     {
         $permissions = [];
         foreach (self::getAvailablePermissionSets() as $class => $values) {
@@ -213,7 +213,7 @@ class PermissionsRepository
         return $permissions;
     }
 
-    public static function getPermissionStatus(Role $role, string $ability, string $class)
+    public static function getPermissionStatus(Role $role, string $ability, string $class): bool
     {
         return $role->can($ability, '\\App\\Models\\' . $class);
     }
@@ -233,7 +233,7 @@ class PermissionsRepository
         Bouncer::allow($role)->to($ability, '\\App\\Models\\' . $class);
     }
 
-    public static function canCurrentUser(string $action, string $class)
+    public static function canCurrentUser(string $action, string $class): bool
     {
         return Bouncer::can($action, '\\App\\Models\\' . $class);
     }
@@ -258,7 +258,7 @@ class PermissionsRepository
         return self::createRole(strtolower(str_replace(' ', '-', $title)), $title, $level);
     }
 
-    public static function createRole(string $name, string $title, int $level)
+    public static function createRole(string $name, string $title, int $level): Role
     {
         return Bouncer::role()->firstOrCreate([
             'name' => $name,
@@ -267,7 +267,7 @@ class PermissionsRepository
         ]);
     }
 
-    public static function updateRole(Role $role, string $title, int $level)
+    public static function updateRole(Role $role, string $title, int $level): Role
     {
         $role->name = strtolower(str_replace(' ', '-', $title));
         $role->title = $title;
@@ -281,7 +281,7 @@ class PermissionsRepository
         return Role::where('level', '<', self::getCurrentLevel())->get();
     }
 
-    public static function getCurrentLevel()
+    public static function getCurrentLevel(): int
     {
         if (!Auth::guard('web')->check()) return -1;
         return Auth::user()->getHighestRoleLevel();
@@ -295,7 +295,7 @@ class PermissionsRepository
     /**
      * @throws AuthorizationException
      */
-    public static function assignRole(User $user, string $newRole)
+    public static function assignRole(User $user, string $newRole): ?User
     {
         $role = self::getRoleFromName($newRole);
         if (isset($role)) {
@@ -318,7 +318,8 @@ class PermissionsRepository
         return Role::where('name', '=', $role)->first();
     }
 
-    public static function revokeEverything(Role $role) {
+    public static function revokeEverything(Role $role)
+    {
         Bouncer::disallow($role)->everything();
     }
 }
