@@ -26,7 +26,7 @@ class CustomerFinancesController extends Controller
         if ($amount > $order->remaining) {
             return back()->withErrors('Cannot pay more than you owe');
         }
-        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order, 'Installment', CustomerAuthenticationRepository::getCustomer()->id);
+        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id);
     }
 
     public function showInvoice(string $reference)

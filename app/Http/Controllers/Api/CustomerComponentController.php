@@ -75,7 +75,7 @@ class CustomerComponentController extends Controller
             $orderComponent->swap($upgrade->upgrade);
         }
         $gateway = StripeGateway::checkout([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
-            $orderComponent->orderCustomer->order, 'Installment', $orderComponent->orderCustomer->customer->id, $data);
+            $orderComponent->orderCustomer->order->booking_reference, 'Installment', $orderComponent->orderCustomer->customer->id, $data);
         return response()->json(['success' => true, 'location' => $gateway->headers->get('Location')]);
     }
 
@@ -161,7 +161,7 @@ class CustomerComponentController extends Controller
             ],],
         ];
         $gateway = StripeGateway::checkout([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
-            $orderComponent->orderCustomer->order, 'Installment', $orderComponent->orderCustomer->customer->id, $data);
+            $orderComponent->orderCustomer->order->booking_reference, 'Installment', $orderComponent->orderCustomer->customer->id, $data);
         return response()->json(['success' => true, 'location' => $gateway->headers->get('Location')]);
     }
 }
