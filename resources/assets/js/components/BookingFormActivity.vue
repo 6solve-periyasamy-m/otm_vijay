@@ -38,8 +38,10 @@
                     :class="{controlBreak : activity.activity_id !== previous_activity_id}"
                     v-if="activity.tour_component_type != 'Add-on'">
 
-                    <div class="column-starts-at" :class="{blankIt: activity.tour_component_type == 'Upgrade'}">
+                    <div class="column-starts-at">
                         {{startDate(activity)}}
+                        <br>to
+                        <br>{{endDate(activity)}}
                     </div>
                     <div class="column-name" :class="{blankIt: activity.tour_component_type == 'Upgrade'}">
                         {{ activity.name }}<br>{{ activity.description !== activity.name ? activity.description :''}} 
@@ -55,9 +57,12 @@
                     <div class="column-ticket-type" :class="{emphasiseIt: activity.tour_component_type == 'Upgrade'}">
                         {{activity.ticket_type_name =='Basic' ? '' : activity.ticket_type_name}}
                     </div>
+                    <div class="column-stock" v-if="activity.stock < 1">
+                        <h3 style="color: red">OUT OF STOCK</h3>
+                    </div>
                     <div class="column-action">
-                        <button v-if="!isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
-                        <button v-if="isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
+                        <button class="btn btn-primary btn-small" v-if="!isBooked(activity) && activity.tour_component_type === 'Upgrade' && activity.stock" @click="bookActivity(activity)">Book</button>
+                        <button class="btn btn-primary btn-small" v-if="isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
                     </div>
                     <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
@@ -85,16 +90,17 @@
                         {{activity.ticket_type_name}}
                     </div>
                     <div class="column-action">
-                        <button v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
-                        <button v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
-                        <button v-if="activity" @click="bookActivity">Cancel</button>
+                        <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
+                        <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
+                        <button class="btn btn-primary btn-small" v-if="activity" @click="bookActivity">Cancel</button>
                     </div>
                     <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
+                <pre>{{activities}}</pre>
 
                 <div>
-                    <button @click="bookActivity">Book Selected</button>
+                    <button class="btn btn-primary" @click="bookActivity">Book Selected</button>
                 </div>
                
             </div>
@@ -109,7 +115,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: false,
+            debug: 9,
             activated: false,
             moduleName: 'Activities',
             booking_token: null,
@@ -179,24 +185,25 @@ export default {
                 .then(response => {
                     that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
                     that.activities = response.data.activities
-                    that.loadBookingStatus(that.booking_token)
+                    that.loadBookingActivities(that.booking_token);
+                    //that.loadBookingStatus(that.booking_token)
                 })
                 .catch(error => {
                     console.log(error)
                 })
         },
-        // load in an array of activity booking states: ie: booked: true/false
-        loadBookingStatus(token) {
-            axios.get(`/api/booking/activity/booking/status/${token}` )
-                .then(response => {
-                    console.log('booking activity response', response)
-                })
-                .catch(error => console.error(error))
-        },
+        // // load in an array of activity booking states: ie: booked: true/false
+        // loadBookingStatus(token) {
+        //     axios.get(`/api/booking/activity/booking/status/${token}` )
+        //         .then(response => {
+        //             console.log('booking activity response', response)
+        //         })
+        //         .catch(error => console.error(error))
+        // },
         // Looks wrong: when a traveller is added: we need to load activity books for them??
-        loadActivityBooking() {
+        loadBookingActivities(token) {
             this.debug>1 && console.log('loadActivityBooking')
-            axios.get(`/api/booking/activity-booking/${this.booking_token}`)
+            axios.get(`/api/booking/activities/booking/${token}`)
                 .then(response => {
                     console.log('booking-activity response', response)
                 })

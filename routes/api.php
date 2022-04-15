@@ -41,13 +41,14 @@ Route::prefix('booking')->group(function () {
 
     // Activities
     Route::get('/activities/tour/{tour}', [ActivitiesController::class, 'getActivitiesInventoryForTour']);
-    // post as it passes in an object from Vue (not a Laravel model)
-    Route::get('/activity/booking/status/{token}', [ActivityBookingController::class, 'getActivityBookingStatus']);
-    // is this implememnted?
+
+    // Basic activities booking for Tour (old version)
     Route::get('/activities/booking/{token}/tour/{tour}', [ActivitiesController::class, 'getActivitiesBooking']);
 
-//    Route::post('/activities/booking', [ActivitiesController::class, 'updateActivities']);
-    Route::post('/activity/book', [ActivityBookingController::class, 'updateActivityBooking']);
+    // upgrades and addons for Booking Activities
+    Route::get('/activities/booking/{token}', [BookingActivityController::class, 'getActivitiesForBooking']);
+    Route::post('/activities/book', [BookingActivityController::class, 'createActivityBooking']);
+    
 
     // Transports
     Route::get('/transports/tour/{tour}', [TransportController::class, 'getTransportsInventoryForTour']);
