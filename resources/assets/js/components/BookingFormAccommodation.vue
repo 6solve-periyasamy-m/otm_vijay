@@ -88,10 +88,10 @@ export default {
             that.leadTraveller = customer
             const group = that.alltravellers
             const leadInGroup = group.find(t => t.id == that.leadTraveller.id)
-            console.log("Accommodation: check - new lead is in group?", leadInGroup, that.travellers)
+            that.debug>6 && console.log("Accommodation: check - new lead is in group?", leadInGroup, that.travellers)
             if (!leadInGroup) {
                 that.travellers = that.travellers.unshift(that.leadTraveller)
-                console.log('Accommodation: new Lead Traveller added: ', that.travellers)
+                that.debug>6 && console.log('Accommodation: new Lead Traveller added: ', that.travellers)
             }
         })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {

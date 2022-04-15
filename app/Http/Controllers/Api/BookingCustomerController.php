@@ -57,7 +57,6 @@ class BookingCustomerController extends ApiController
      */
     private function storeOrUpdateCustomer($request, $token, $isLead = false)
     {
-        Log::debug('validation with country code '. $request->country);
         // validation
         if ($isLead) {
             $validated = $request->validate([

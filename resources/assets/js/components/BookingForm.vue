@@ -17,13 +17,13 @@
                         <booking-form-lead :tour="tour" :booked="booked"></booking-form-lead>
                         <div v-if="tour && bookingToken">
                             <div v-show="bookingToken && leadTraveller">
-                            <booking-form-additional :tour="tour"></booking-form-additional>
-                            <booking-form-flights :tour="tour"></booking-form-flights>
-                            <booking-form-accommodation :tour="tour"></booking-form-accommodation>
-                            <booking-form-activity :tour="tour"></booking-form-activity>
-                            <booking-form-transport :tour="tour"></booking-form-transport>
-                            <booking-form-terms :tour="tour"></booking-form-terms>
-                            <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
+                                <booking-form-additional :tour="tour"></booking-form-additional>
+                                <booking-form-flights :tour="tour"></booking-form-flights>
+                                <booking-form-accommodation :tour="tour"></booking-form-accommodation>
+                                <booking-form-activity :tour="tour"></booking-form-activity>
+                                <booking-form-transport :tour="tour"></booking-form-transport>
+                                <booking-form-terms :tour="tour"></booking-form-terms>
+                                <booking-form-payment :tour="tour" v-show="termsaccepted"></booking-form-payment>
                             </div>
                         </div>
                     </div>
