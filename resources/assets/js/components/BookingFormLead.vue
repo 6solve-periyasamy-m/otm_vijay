@@ -2,9 +2,6 @@
     <div class="booking-container">
         <div class="card card-options">
             <div class="card-header">
-                <div v-if="debug">
-                    [Booking Token: {{bookingToken}}]
-                </div>
                 <div v-if="!bookingToken" class="cookie_consent">
                     <h2>Cookies and Personal Data</h2>
                     <p>To make your booking using this form it is necessary to collect basic personal information 
@@ -35,247 +32,246 @@
                             Lead Traveller details
                         </button>
                     </h5>
-        
-                    <div class="card-info" v-if="!show_traveller">
-                        <div v-if="!bookingToken && noUser">
-                            <p>
-                                <font-awesome-icon icon="arrow-right" /> If you have a booking in progress, try entering your email address
-                            </p>
-                            <input v-model="email" type="email" placeholder="Retrieve booking by email" />
-                            <div v-if="!getPassword">
-                                <button v-if="email && !activeUser" @click="retrieveUser()" class="btn btn-primary">
-                                        <font-awesome-icon icon="check" /> Check 
-                                </button>
-                            </div>
-                        </div>
-                        <div v-if="noUser">
-                            <p v-if="!email_address">Please enter the Lead Traveller details</p>
-                        </div>
-                        <div v-if="!noUser">
-                            <p v-if="email_address">Welcome {{first_name}}</p>
-                        </div>
-        
-                        <div v-if="!bookingToken && activeUser">
-                            <p>Active User</p>
-                            <label for="password">Enter your password</label>
-                            <input type="password" v-model="password">
-                            <button @click="loginUser" class="btn btn-primary">
-                                <font-awesome-icon icon="check" /> Login
+                </div>
+                <div class="card-info" v-if="!show_traveller">
+                    <div v-if="!bookingToken && noUser">
+                        <p>
+                            <font-awesome-icon icon="arrow-right" /> If you have a booking in progress, try entering your email address
+                        </p>
+                        <input v-model="email" type="email" placeholder="Retrieve booking by email" />
+                        <div v-if="!getPassword">
+                            <button v-if="email && !activeUser" @click="retrieveUser()" class="btn btn-primary">
+                                    <font-awesome-icon icon="check" /> Check 
                             </button>
                         </div>
                     </div>
-                    <div v-if="bookingToken && !show_traveller">
-                        <p class="caption">
-                            <font-awesome-icon icon="arrow-right" /> Please fill in all sections
-                        </p>
-                        <div v-if="!bookingToken">
-                            You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
-                        </div>
+                    <div v-if="noUser">
+                        <p v-if="!email_address">Please enter the Lead Traveller details</p>
+                    </div>
+                    <div v-if="!noUser">
+                        <p v-if="email_address">Welcome {{first_name}}</p>
+                    </div>
+                    <div v-if="!bookingToken && activeUser">
+                        <p>Active User</p>
+                        <label for="password">Enter your password</label>
+                        <input type="password" v-model="password">
+                        <button @click="loginUser" class="btn btn-primary">
+                            <font-awesome-icon icon="check" /> Login
+                        </button>
                     </div>
                 </div>
-                
+                <div v-if="bookingToken && !show_traveller">
+                    <p class="caption">
+                        <font-awesome-icon icon="arrow-right" /> Please fill in all sections
+                    </p>
+                    <div v-if="!bookingToken">
+                        You have {{activeBookings}} bookings active. To access bookings, you must <a :href="loginLink">login</a>.
+                    </div>
+                </div>
                 {{debug ? 'DEBUG MODE: Order retrieved by cookie: bookingToken: '+ bookingToken : ''}}
-                <div class="card-body" v-if="show_traveller">
-                    <div class="booking-container">
-                        <div class="card-options">
-                            <div class="ept-form">
-                                <h4>Your Details</h4>
-                                <div class="row">
-                                    <div class="col-md-3 form-group field-separation">
-                                        <select v-model="title" class="form-control form-select form-select-lg">
-                                                <option value="" default>Select a title</option>
-                                                <option value="Mr">Mr</option>
-                                                <option value="Ms">Ms</option>
-                                                <option value="Mrs">Mrs</option>
-                                                <option value="Miss">Miss</option>
-                                                <option value="Dr">Dr</option>
-                                                <option value="Prof">Prof</option>
-                                            </select>
-                                    </div>
-                                    <div class="col-md-3 form-group field-separation">
-                                        <label class="form-label" for="first_name" v-show="first_name">First name</label>
-                                        <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
-                                    </div>
-                                    <div class="col-md-3 form-group field-separation">
-                                        <label class="form-label" for="middle_names" v-show="middle_names">Middle name(s)</label>
-                                        <input type="text" v-model="middle_names" placeholder="Middle name" name="middle_names" class="form-control maxwidth" />
-                                    </div>
-                                    <div class="col-md-3 form-group field-separation">
-                                        <label class="form-label" for="last_name" v-show="last_name">Last name</label>
-                                        <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
-                                    </div>
+            </div>
+            <div class="card-body" v-if="show_traveller">
+                <div class="booking-container">
+                    <div class="card-options">
+                        <div class="ept-form">
+                            <h4>Your Details</h4>
+                            <div class="row">
+                                <div class="col-md-3 form-group field-separation">
+                                    <select v-model="title" class="form-control form-select form-select-lg">
+                                            <option value="" default>Select a title</option>
+                                            <option value="Mr">Mr</option>
+                                            <option value="Ms">Ms</option>
+                                            <option value="Mrs">Mrs</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Dr">Dr</option>
+                                            <option value="Prof">Prof</option>
+                                        </select>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-6 form-group field-separation">
-                                        <label class="form-label" for="email_address">Email address</label>
-                                        <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
-                                        <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
-                                        
-                                    </div>
-                                    <div class="col-sm-6 form-group field-separation">
-                                        <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
-                                        <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
-                                        <label v-if="mobile_number_invalid" :class="{invalid: mobile_number_invalid}">{{mobile_number_validation}}</label>
-                                    </div>
+                                <div class="col-md-3 form-group field-separation">
+                                    <label class="form-label" for="first_name" v-show="first_name">First name</label>
+                                    <input type="text" v-model="first_name" placeholder="First name" name="first_name" class="form-control maxwidth" />
                                 </div>
-        
-                                <div class="row">
-                                    <div class="col-sm-6 form-group field-separation has-dropdown">
-                                        <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
-                                                <option value="" disabled>Additional Phone</option>
-                                                <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
-                                                <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
-                                                <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
-                                                <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
-                                            </select>
-                                        <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
-                                        <label :class="{invalid: other_number_invalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
-                                        <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
-                                    </div>
+                                <div class="col-md-3 form-group field-separation">
+                                    <label class="form-label" for="middle_names" v-show="middle_names">Middle name(s)</label>
+                                    <input type="text" v-model="middle_names" placeholder="Middle name" name="middle_names" class="form-control maxwidth" />
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-6 form-group field-separation">
-                                        <label class="form-label" for="date_of_birth">Date of Birth</label>
-                                        <input type="date" v-model="date_of_birth" class="form-control" />
-                                    </div>
-                                    <div class="col-sm-6 form-group field-separation">
-                                        <label class="form-label" for="gender">Gender</label>
-                                        <select name="gender" v-model="gender" class="dropdown">
-                                                <option default disabled value="">Select Gender</option>
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                            </select>
-                                    </div>
-                                </div>
-                                <div class="row spacer">
-                                    <div class="col-sm-6">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <h4>Home/Home Address</h4>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 form-group field-separation">
-                                                <label class="form-label" for="adl1" v-show="address_line_1">Home Address line 1</label>
-                                                <input v-model="address_line_1" type="text" placeholder="Home Address Line 1" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 form-group field-separation">
-                                                <label class="form-label" for="adl1" v-show="address_line_2">Home Address line 2</label>
-                                                <input v-model="address_line_2" type="text" placeholder="Home Address Line 2" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 form-group field-separation">
-                                                <label class="form-label" for="adl1" v-show="address_line_3">Home Address line 3</label>
-                                                <input v-model="address_line_3" type="text" placeholder="Home Address Line 3" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="town" v-show="town">Town</label>
-                                                <input type="text" v-model="town" name="town" placeholder="Town" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="region" v-show="region">Region</label>
-                                                <input type="text" v-model="region" name="region" placeholder="Region" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="postcode" v-show="postcode">Postcode</label>
-                                                <input type="text" v-model="postcode" name="postcode" placeholder="Postcode" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="country">Country</label>
-                                                <select name="country" class="dropdown" v-model="country_id" :key="country.id">
-                                                        <option disabled value="">Select country</option>
-                                                        <option default value="67">United Kingdom</option>
-                                                        <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
-                                                    </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row spacer">
-                                    <div class="col-sm-12">
-                                        <input class="form-check-input inset" @click="toggleSameAddress" type="checkbox" v-model="same_address">
-                                        <label class="form-check-label inset" for="billing">
-                                                Billing is delivery address
-                                            </label>
-                                    </div>
-                                </div>
-                                <div class="row spacer" v-if="!same_address">
-                                    <div class="col-sm-6">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <h4>Billing Address</h4>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 form-group field-separation">
-                                                <label class="form-label" v-show="billing_address_line_1">Billing Address line 1</label>
-                                                <input type="text" v-model="billing_address_line_1" placeholder="Billing Address Line 1" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 form-group field-separation">
-                                                <label class="form-label" v-show="billing_address_line_2">Billing Address line 2</label>
-                                                <input type="text" v-model="billing_address_line_2" placeholder="Billing Address Line 2" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 form-group field-separation">
-                                                <label class="form-label" v-show="billing_address_line_3">Billing Address line 3</label>
-                                                <input type="text" v-model="billing_address_line_3" placeholder="Billing Address Line 3" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="billing_town" v-show="billing_town">Town</label>
-                                                <input type="text" v-model="billing_town" name="billing_town" placeholder="Town" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="billing_region" v-show="billing_region">Region</label>
-                                                <input type="text" v-model="billing_region" name="billing_region" placeholder="Region" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="billing_postcode" v-show="billing_postcode">Billing Postcode</label>
-                                                <input type="text" v-model="billing_postcode" name="billing_postcode" placeholder="Postcode" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8 form-group field-separation">
-                                                <label class="form-label" for="billing_country" v-show="billing_country">Billing Country</label>
-                                                <select name="billing_country" class="dropdown" v-model="billing_country" :key="billing_country.id">
-                                                        <option default disabled value="">Select country</option>
-                                                        <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
-                                                    </select>
-                                            </div>
-                                            <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
-                                            <input type="text" v-model="billing_country_id" name="billing_country" placeholder="Country" class="form-control">
-                                        </div>
-                                    </div>
+                                <div class="col-md-3 form-group field-separation">
+                                    <label class="form-label" for="last_name" v-show="last_name">Last name</label>
+                                    <input type="text" v-model="last_name" placeholder="Last name" name="last_name" class="form-control maxwidth" />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 form-group field-separation">
-                                    <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
+                                    <label class="form-label" for="email_address">Email address</label>
+                                    <input type="email" v-model="email_address" placeholder="Email address" @change="validEmail" name="email_address" class="form-control" />
+                                    <label v-if="email_invalid" :class="{invalid: email_invalid}">{{email_validation}}</label>
+                                    
                                 </div>
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="mobile_number" v-show="mobile_number">Mobile number</label>
+                                    <input type="text" v-model="mobile_number" placeholder="Mobile number" @change="validPhone" name="mobile_number" class="form-control" />
+                                    <label v-if="mobile_number_invalid" :class="{invalid: mobile_number_invalid}">{{mobile_number_validation}}</label>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-sm-6 form-group field-separation has-dropdown">
+                                    <select v-model="other_phone_number_type" name="additional_phone_number_select" class="dropdown">
+                                            <option value="" disabled>Additional Phone</option>
+                                            <option :value="{id: 'mobile', name: 'UK Mobile'}">UK Mobile</option>
+                                            <option :value="{id: 'home', name: 'UK Phone'}">UK Phone</option>
+                                            <option :value="{id: 'business', name: 'Business Phone'}">Business Phone</option>
+                                            <option :value="{id: 'other', name: 'Non UK Phone'}">Non UK Phone</option>
+                                        </select>
+                                    <input type="text" v-model="other_phone_number" @change="validPhone" :placeholder="otherNumberType" name="other_phone_number" class="form-control">
+                                    <label :class="{invalid: other_number_invalid}" v-if="other_number_invalid">{{other_number_validation}}</label>
+                                    <label class="valid" v-else>{{other_phone_number_type.name}} Number</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="date_of_birth">Date of Birth</label>
+                                    <input type="date" v-model="date_of_birth" class="form-control" />
+                                </div>
+                                <div class="col-sm-6 form-group field-separation">
+                                    <label class="form-label" for="gender">Gender</label>
+                                    <select name="gender" v-model="gender" class="dropdown">
+                                            <option default disabled value="">Select Gender</option>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="row spacer">
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h4>Home/Home Address</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 form-group field-separation">
+                                            <label class="form-label" for="adl1" v-show="address_line_1">Home Address line 1</label>
+                                            <input v-model="address_line_1" type="text" placeholder="Home Address Line 1" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 form-group field-separation">
+                                            <label class="form-label" for="adl1" v-show="address_line_2">Home Address line 2</label>
+                                            <input v-model="address_line_2" type="text" placeholder="Home Address Line 2" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 form-group field-separation">
+                                            <label class="form-label" for="adl1" v-show="address_line_3">Home Address line 3</label>
+                                            <input v-model="address_line_3" type="text" placeholder="Home Address Line 3" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="town" v-show="town">Town</label>
+                                            <input type="text" v-model="town" name="town" placeholder="Town" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="region" v-show="region">Region</label>
+                                            <input type="text" v-model="region" name="region" placeholder="Region" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="postcode" v-show="postcode">Postcode</label>
+                                            <input type="text" v-model="postcode" name="postcode" placeholder="Postcode" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="country">Country</label>
+                                            <select name="country" class="dropdown" v-model="country_id" :key="country.id" @change="validCountry">
+                                                <option disabled value="">Select country</option>
+                                                <option default value="67">United Kingdom</option>
+                                                <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
+                                            </select>
+                                            <div v-if="country_id==0">Please select a country</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row spacer">
+                                <div class="col-sm-12">
+                                    <input class="form-check-input inset" @click="toggleSameAddress" type="checkbox" v-model="same_address">
+                                    <label class="form-check-label inset" for="billing">
+                                            Billing is delivery address
+                                        </label>
+                                </div>
+                            </div>
+                            <div class="row spacer" v-if="!same_address">
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h4>Billing Address</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 form-group field-separation">
+                                            <label class="form-label" v-show="billing_address_line_1">Billing Address line 1</label>
+                                            <input type="text" v-model="billing_address_line_1" placeholder="Billing Address Line 1" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 form-group field-separation">
+                                            <label class="form-label" v-show="billing_address_line_2">Billing Address line 2</label>
+                                            <input type="text" v-model="billing_address_line_2" placeholder="Billing Address Line 2" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 form-group field-separation">
+                                            <label class="form-label" v-show="billing_address_line_3">Billing Address line 3</label>
+                                            <input type="text" v-model="billing_address_line_3" placeholder="Billing Address Line 3" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="billing_town" v-show="billing_town">Town</label>
+                                            <input type="text" v-model="billing_town" name="billing_town" placeholder="Town" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="billing_region" v-show="billing_region">Region</label>
+                                            <input type="text" v-model="billing_region" name="billing_region" placeholder="Region" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="billing_postcode" v-show="billing_postcode">Billing Postcode</label>
+                                            <input type="text" v-model="billing_postcode" name="billing_postcode" placeholder="Postcode" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8 form-group field-separation">
+                                            <label class="form-label" for="billing_country" v-show="billing_country">Billing Country</label>
+                                            <select name="billing_country" class="dropdown" v-model="billing_country" :key="billing_country.id">
+                                                <option default disabled value="">Select country</option>
+                                                <option v-for="c in countries" :name="c.name" :value="c.id">{{c.name}}</option>
+                                            </select>
+                                        </div>
+                                        <label class="form-label" for="billing_country" v-show="billing_country">Country</label>
+                                        <input type="text" v-model="billing_country_id" name="billing_country" placeholder="Country" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group field-separation">
+                                <button :disabled="!validForm" type="button" class="btn btn-primary" @click="storeTraveller">Save Traveller</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -439,7 +435,7 @@ export default {
             return "Other " + this.other_phone_number_type.name + " number";
         },
         validForm: function () {
-            return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth;
+            return this.first_name.length && this.last_name.length && !this.mobile_number_invalid && this.date_of_birth && this.country_id;
         }
     },
     methods: {
@@ -490,6 +486,11 @@ export default {
                 console.log("can not obtain token");
                 return;
             });
+        },
+        validCountry() {
+            if (this.country_id == 0) {
+                return false;
+            }
         },
         validEmail() {
             if (!this.email_address.length) {
@@ -656,16 +657,18 @@ export default {
                 billing_postcode: this.billing_postcode,
                 tour: this.tour
             })
-                .then(response => {
-                that.debug && console.log("**** Lead Traveller customerStored, reponse", response);
+            .then(response => {
+                that.debug && console.log("*** Lead Traveller customerStored, reponse", response);
                 const customer = response.data.customer;
                 that.full_name = customer.first_name + " " + customer.last_name;
                 that.show_traveller = false;
                 that.validationErrors = null;
                 that.createBooking(customer.id, that.tour.id);
+
+                that.debug && console.log('***** LeadTraveller emitting set with customer', customer)
                 bus.$emit("setLeadTraveller", customer);
             })
-                .catch(e => {
+            .catch(e => {
                 console.log("BookingFormLead.storeTraveller() error", e);
                 that.validationErrors = e.response.data.errors;
             });
@@ -675,6 +678,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+button[disabled] {
+    background: grey;
+    color: white;
+}
 .cookie_consent {
     opacity: 1;
     animation-name: fadeInOpacity;
