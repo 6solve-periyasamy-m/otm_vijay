@@ -53,14 +53,17 @@ class BookingActivityController extends ApiController
     public function createActivityBooking(Request $request)
     {
         $request->validate([
-            'booking_id' => 'required | int | exists:bookings, id',
-            'customer_id' => 'required | int | exists:customers, id',
+            'token' => 'required',
+            //'customers' => 'required',
             'tour_component_type' => 'string',
-            'activity_inventory_tour_id' => 'requried | int | exists:activity_inventory_tours, id'
+            'activity' => 'required'
         ]);
+
+        Log::debug('createActivityBooking', [$request->activity]);
+
         $inventories = new ActivityInventory();
         $inventory = $inventories->join('activity_inventory_tours', 'activity_inventory_tours.activity_inventory_id', 'activity_inventory_tours.id')
-                    ->where('activity_inventory_tour_id', $request->activity_inventory_tour_id)
+                    ->where('activity_inventory_tour_id', $request->activity->activity_inventory_tour_id)
                     ->first();
         Log::debug('createActivityBooking: check activity_inventory stock levels', [$inventory]);
         if ($inventory->stock<1) {
@@ -69,7 +72,7 @@ class BookingActivityController extends ApiController
 
         $bookingActivity = new BookingActivity();
         $bookingActivity->booking_id = $request->booking_id;
-        $bookingActivity->customer_id = $request->customer_id;
+        //$bookingActivity->customer_id = $request->customer_id;
         $bookingActivity->activity_inventory_tour_id = $request->activity_inventory_tour_id;
         $bookingActivity->save();
 

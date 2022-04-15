@@ -1,5 +1,5 @@
 <template>
-    <div class="booking-container">
+    <div class="booking-container">{{travellers}} {{leadTraveller}}
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-1">
@@ -61,7 +61,10 @@
                         <h3 style="color: red">OUT OF STOCK</h3>
                     </div>
                     <div class="column-action">
-                        <button class="btn btn-primary btn-small" v-if="!isBooked(activity) && activity.tour_component_type === 'Upgrade' && activity.stock" @click="bookActivity(activity)">Book</button>
+                        <button 
+                            v-if="!isBooked(activity) && activity.tour_component_type === 'Upgrade' && activity.stock" 
+                            class="btn btn-primary btn-small" 
+                            @click="bookActivityGroup(activity)">Book</button>
                         <button class="btn btn-primary btn-small" v-if="isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
                     </div>
                     <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
@@ -71,7 +74,7 @@
                 <div class="listing" v-for="(activity,index) in activities" 
                     :key="activity.activity_inventory_tour_id" 
                     :class="{controlBreak : activity.activity_id !== previous_activity_id}"
-                    v-show="activity.tour_component_type == 'Add-on'">
+                    v-if="activity.tour_component_type == 'Add-on'">
                     <div class="column-starts-at">
                         {{startDate(activity)}}
                     </div>
@@ -92,17 +95,15 @@
                     <div class="column-action">
                         <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
                         <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
-                        <button class="btn btn-primary btn-small" v-if="activity" @click="bookActivity">Cancel</button>
+                        <button class="btn btn-primary btn-small" v-if="activity" @click="cancelActivityGroup">Cancel</button>
                     </div>
                     <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
-                <pre>{{activities}}</pre>
-
                 <div>
-                    <button class="btn btn-primary" @click="bookActivity">Book Selected</button>
+                    <button class="btn btn-primary" @click="bookActivities">Book Selected</button>
                 </div>
-               
+               {{activities}}
             </div>
         </div>
     </div>
@@ -116,9 +117,11 @@ export default {
     data() {
         return {
             debug: 9,
+            singleTime: 0,
             activated: false,
             moduleName: 'Activities',
             booking_token: null,
+            leadTraveller: {},
             travellers: [],
             activities: [],
             selected: [],
@@ -136,19 +139,36 @@ export default {
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
+            that.loadLeadTraveller(that.booking_token)
         })
-        bus.$on('customerLoaded', (leadTraveller) => {
-            this.leadTraveller = leadTraveller
-        })
+        // bus.$on('customerLoaded', (leadTraveller) => {
+        //     that.leadTraveller = leadTraveller
+        // })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
-            this.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
-            travellers.map(traveller => this.travellers.push(traveller));
-            this.loadActivityBooking(this.travellers)
+            that.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
+            travellers.map(traveller => that.travellers.push(traveller));
+            that.loadActivityBooking(that.travellers)
         })
     },
-    computed: {
-    },
+
     methods: {
+        loadLeadTraveller(token) {
+            if (this.singleTime > 0) {
+                return
+            }
+            this.singleTime++
+            console.log("LOADING", singleTime)
+            let that = this
+            axios.get(`/api/booking/customer/${token}`)
+                .then(response => {
+                    console.log('Activity GET LEAD', response)
+                    that.leadTraveller = response.data.customer
+                    if (that.travellers.filter(t => t.id != that.leadTraveller.id)) {
+                        that.travellers.unshift(that.leadTraveller)
+                    }
+                })
+                .catch(error => console.log(error))
+        },
         // upgrades are either booked or not
         // simple version is to query the database
         isBooked(activity) {
@@ -162,13 +182,37 @@ export default {
             }
             return ''
         },
-        bookActivity(activity) {
-            console.log('Booking Activities for id ', activity)
-            axios.post('/api/booking/activity/book/', activity)
-                .then(response => {
-                    console.log('booked', response)
-                })
-                .catch(error => console.log(error))
+        // book all activities (final button)
+        bookActivities(activities) {
+            // may not be required
+        },
+        bookActivity(activity, customer) {
+            alert('bookActivity not yet implemented')
+        },
+        // TODO: this books all travellers, future version may book single travellers
+        bookActivityGroup(activity) {
+            console.log('Booking Activities for id ', activity, this.travellers)
+            axios.post('/api/booking/activity/book', { 
+                activity: activity,
+                customers: this.travellers,
+                token: this.booking_token
+            })
+            .then(response => {
+                console.log('booked', response)
+            })
+            .catch(error => console.log(error))
+        },
+        cancelActivityGroup(activity) {
+            console.log('Cancel activity booking for ', activity)
+            axios.post('/api/booking/activity/cancel', {
+                activity: activity,
+                customer: this.travellers,
+                token: this.booking_token
+            })
+            .then(response => {
+                console.log('booked', response)
+            })
+            .catch(error => console.log(error))
         },
         startDate(event) {
             return dates.bookingTime(event.starts_at)
@@ -201,9 +245,9 @@ export default {
         //         .catch(error => console.error(error))
         // },
         // Looks wrong: when a traveller is added: we need to load activity books for them??
-        loadBookingActivities(token) {
+        loadActivityBooking() {
             this.debug>1 && console.log('loadActivityBooking')
-            axios.get(`/api/booking/activities/booking/${token}`)
+            axios.get(`/api/booking/activities/booking/${this.booking_token}`)
                 .then(response => {
                     console.log('booking-activity response', response)
                 })
@@ -222,7 +266,7 @@ export default {
         font-weight: bold;
     }
     .blankIt {
-        visibility: hidden;
+        color: grey;
     }
     .divider {
         border-top: 2px black solid;
