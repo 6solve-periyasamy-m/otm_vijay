@@ -57,6 +57,7 @@ class BookingCustomerController extends ApiController
      */
     private function storeOrUpdateCustomer($request, $token, $isLead = false)
     {
+        Log::debug('validation with country code '. $request->country);
         // validation
         if ($isLead) {
             $validated = $request->validate([
@@ -70,7 +71,7 @@ class BookingCustomerController extends ApiController
                 'address_line_1' => 'required',
                 'address_line_2' => 'required',
                 'town' => 'required',
-                'country_id' => 'required',
+                'country_id' => 'required | integer | min:1',
                 'postcode' => 'required'
             ]);
             if (!$request->same_address) {

@@ -71,6 +71,7 @@ export default {
     },
     created() {
         const that = this
+        this.debug && console.log(`${that.moduleName} created`)
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
@@ -85,6 +86,13 @@ export default {
         bus.$on('setLeadTraveller', customer => {
             that.debug>4 && console.log(`${that.moduleName} set the Lead Traveller`, customer)
             that.leadTraveller = customer
+            const group = that.alltravellers
+            const leadInGroup = group.find(t => t.id == that.leadTraveller.id)
+            console.log("Accommodation: check - new lead is in group?", leadInGroup, that.travellers)
+            if (!leadInGroup) {
+                that.travellers = that.travellers.unshift(that.leadTraveller)
+                console.log('Accommodation: new Lead Traveller added: ', that.travellers)
+            }
         })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
             that.debug>2 && console.log("Accommodation: travellers loaded", travellers, that.leadTraveller, that.travellers);
