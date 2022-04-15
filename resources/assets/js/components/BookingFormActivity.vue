@@ -117,7 +117,6 @@ export default {
     data() {
         return {
             debug: 9,
-            singleTime: 0,
             activated: false,
             moduleName: 'Activities',
             booking_token: null,
@@ -130,9 +129,6 @@ export default {
             showAddon: 0,
             showUpgrade: 0
         }
-    },
-    async mounted() {
-        this.loadActivityInventory()
     },
     created() {
         let that = this
@@ -150,20 +146,21 @@ export default {
             that.loadActivityBooking(that.travellers)
         })
     },
+    mounted() {
+        this.loadActivityInventory()
+    },
 
     methods: {
         loadLeadTraveller(token) {
-            if (this.singleTime > 0) {
-                return
-            }
-            this.singleTime++
-            console.log("LOADING", singleTime)
             let that = this
             axios.get(`/api/booking/customer/${token}`)
                 .then(response => {
-                    console.log('Activity GET LEAD', response)
+                    console.log('Activity GET LEAD', response.data.customer)
                     that.leadTraveller = response.data.customer
-                    if (that.travellers.filter(t => t.id != that.leadTraveller.id)) {
+                    const loaded = that.travellers.filter(t => t.id == that.leadTraveller.id)
+                    console.log('loaded',loaded)
+                    if (that.travellers.length < 1 || !loaded || loaded.length == 0) {
+                        console.log('unshifting ', that.leadTraveller.id)
                         that.travellers.unshift(that.leadTraveller)
                     }
                 })
@@ -174,6 +171,15 @@ export default {
         isBooked(activity) {
             const booked = activity.status == 'booked'
             return booked
+        },
+        checkBooked(customer_id, booking_id) {
+            axios.get(`/api/booking/activity/find/booking/${booking_id}/${customer_id}`)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
         },
         included(id) {
             console.log(this.activities)
@@ -191,6 +197,7 @@ export default {
         },
         // TODO: this books all travellers, future version may book single travellers
         bookActivityGroup(activity) {
+            let that = this
             console.log('Booking Activities for id ', activity, this.travellers)
             axios.post('/api/booking/activity/book', { 
                 activity: activity,
@@ -199,6 +206,16 @@ export default {
             })
             .then(response => {
                 console.log('booked', response)
+                if (response.data.success) {
+                    const booking = response.data.booking
+                    that.activities.map((a,i) => {
+                        console.log('update activities: ', booking, a, i, that.activities[i].status)
+                        if (a.id == activity.id) {
+                            that.activities[i].status='booked'
+                        }
+                    })
+                }
+                console.log('booking is ', booking)
             })
             .catch(error => console.log(error))
         },

@@ -47,6 +47,7 @@ Route::prefix('booking')->group(function () {
 
     // upgrades and addons for Booking Activities
     Route::get('/activities/booking/{token}', [BookingActivityController::class, 'getActivitiesForBooking']);
+    Route::get('/activity/find/booking/{booking}/{customer}', [BookingActivityController::class, 'getActivityBooking']);
     Route::post('/activity/book', [BookingActivityController::class, 'createActivityBooking']);
     
 

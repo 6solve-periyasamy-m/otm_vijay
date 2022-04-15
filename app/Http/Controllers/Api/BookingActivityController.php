@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Booking;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\BookingActivity;
+use App\Models\ActivityInventory;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController;
 
@@ -40,6 +42,13 @@ class BookingActivityController extends ApiController
         return response()->json(['success' => true, 'data' => $bookingActivities]);
     }
 
+    public function getActivityBooking(Booking $booking, Customer $customer)
+    {
+        $bookingActivities = new BookingActivity();
+        $bookingActivity = $bookingActivities->where('booking_id', $booking->id)->where('customer_id', $customer->id)->first();
+
+        return $bookingActivity;
+    }
     /**
      * createActivityBooking
      *
@@ -54,29 +63,42 @@ class BookingActivityController extends ApiController
     {
         $request->validate([
             'token' => 'required',
-            //'customers' => 'required',
+            'customers' => 'required',
             'tour_component_type' => 'string',
             'activity' => 'required'
         ]);
 
-        Log::debug('createActivityBooking', [$request->activity]);
+        $activity = $request->activity;
+        $activity_inventory_tour_id = $activity['activity_inventory_tour_id'];
+        // Log::debug('createActivityBooking', [$activity_inventory_tour_id]);
 
         $inventories = new ActivityInventory();
-        $inventory = $inventories->join('activity_inventory_tours', 'activity_inventory_tours.activity_inventory_id', 'activity_inventory_tours.id')
-                    ->where('activity_inventory_tour_id', $request->activity->activity_inventory_tour_id)
+        $inventory = $inventories->join('activity_inventory_tours', 'activity_inventory_tours.activity_inventory_id', 'activity_inventories.id')
+                    ->where('activity_inventory_tours.id', $request->activity['activity_inventory_tour_id'])
                     ->first();
-        Log::debug('createActivityBooking: check activity_inventory stock levels', [$inventory]);
+        // Log::debug('createActivityBooking: check activity_inventory stock levels', [$inventory]);
         if ($inventory->stock<1) {
             return response()->json(['success' => false, 'message' => 'out of stock']);
         }
 
-        $bookingActivity = new BookingActivity();
-        $bookingActivity->booking_id = $request->booking_id;
-        //$bookingActivity->customer_id = $request->customer_id;
-        $bookingActivity->activity_inventory_tour_id = $request->activity_inventory_tour_id;
-        $bookingActivity->save();
+        $bookings = new Booking();
+        $booking = $bookings->where('token', $request->token)->first();
+        $booking_id = $booking->id;
 
-        return response->json(['success' => true]);
+        foreach($request->customers as $customerArray) {
+            $customer_id = $customerArray['id'];
+            $customer = Customer::find($customer_id);
+            // Log::debug('customer', [$customer_id]);
+            $bookingActivity = $this->getActivityBooking($booking, $customer);
+            if (!$bookingActivity) {
+                $bookingActivity->booking_id = $booking_id;
+                $bookingActivity->customer_id = $customer_id;
+            }
+            $bookingActivity->activity_inventory_tour_id = $activity_inventory_tour_id;
+            $bookingActivity->save();
+        }
+
+        return response()->json(['success' => true, 'booking' => $bookingActivity]);
     }
 
     /**
