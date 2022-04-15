@@ -1,5 +1,5 @@
 <template>
-    <div class="booking-container">{{travellers}} {{leadTraveller}}
+    <div class="booking-container">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-1">
@@ -61,11 +61,13 @@
                         <h3 style="color: red">OUT OF STOCK</h3>
                     </div>
                     <div class="column-action">
+                        <button class="btn btn-primary btn-small" 
+                            v-if="isBooked(activity) && activity.tour_component_type === 'Upgrade'" 
+                            @click="bookActivity(activity)">Cancel</button>
                         <button 
                             v-if="!isBooked(activity) && activity.tour_component_type === 'Upgrade' && activity.stock" 
                             class="btn btn-primary btn-small" 
                             @click="bookActivityGroup(activity)">Book</button>
-                        <button class="btn btn-primary btn-small" v-if="isBooked(activity) && activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Cancel</button>
                     </div>
                     <div v-show="false">{{ previous_activity_id = activity.activity_id }}</div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
@@ -208,14 +210,15 @@ export default {
                 console.log('booked', response)
                 if (response.data.success) {
                     const booking = response.data.booking
+                    const activity = that.activities.filter(a => a.activity_inventory_tour_id = booking.activity_inventory_tour_id);
+                    activity.status = 'booked';
                     that.activities.map((a,i) => {
-                        console.log('update activities: ', booking, a, i, that.activities[i].status)
-                        if (a.id == activity.id) {
+                        if (a.activity_inventory_tour_id == activity.activity_inventory_tour_id) {
                             that.activities[i].status='booked'
                         }
                     })
+                    console.log(that.activities)
                 }
-                console.log('booking is ', booking)
             })
             .catch(error => console.log(error))
         },
@@ -246,7 +249,7 @@ export default {
                 .then(response => {
                     that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
                     that.activities = response.data.activities
-                    that.loadBookingActivities(that.booking_token);
+                    that.loadActivityBookings();
                     //that.loadBookingStatus(that.booking_token)
                 })
                 .catch(error => {
