@@ -73,7 +73,7 @@
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
                 <div class="divider"><h5>Optional Additional activities</h5></div>
-                <div class="listing" v-for="(activity,index) in activities" 
+                <div class="listing" v-for="(activity,index) in addons" 
                     :key="activity.activity_inventory_tour_id" 
                     :class="{controlBreak : activity.activity_id !== previous_activity_id}"
                     v-if="activity.tour_component_type == 'Add-on'">
@@ -125,6 +125,7 @@ export default {
             leadTraveller: {},
             travellers: [],
             activities: [],
+            addons: [],
             selected: [],
             previous_activity_id: 0,
             showOptions: false,
@@ -248,8 +249,14 @@ export default {
             axios.get(`/api/booking/activities/tour/${this.tour.id}`)
                 .then(response => {
                     that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
+<<<<<<< Updated upstream
                     that.activities = response.data.activities
                     that.loadActivityBookings();
+=======
+                    that.activities = response.data.activities.filter(a => a.tour_component_type != 'Add-on');
+                    that.addons = response.data.activities.filter(a => a.tour_component_type == 'Add-on');
+                    that.loadBookingActivities(that.booking_token);
+>>>>>>> Stashed changes
                     //that.loadBookingStatus(that.booking_token)
                 })
                 .catch(error => {
