@@ -46,8 +46,11 @@ class BookingActivityController extends ApiController
     {
         $bookingActivities = new BookingActivity();
         $bookingActivity = $bookingActivities->where('booking_id', $booking->id)->where('customer_id', $customer->id)->first();
+        if ($bookingActivity) {
+            return $bookingActivity;
+        }
 
-        return $bookingActivity;
+        return $bookingActivities;
     }
     /**
      * createActivityBooking
@@ -83,6 +86,11 @@ class BookingActivityController extends ApiController
 
         $bookings = new Booking();
         $booking = $bookings->where('token', $request->token)->first();
+        if (!$booking) {
+            throw new Exception('Can not find booking for '.$request->token);
+        }
+        Log::debug('booking', [$booking]);
+
         $booking_id = $booking->id;
 
         foreach($request->customers as $customerArray) {
@@ -90,7 +98,8 @@ class BookingActivityController extends ApiController
             $customer = Customer::find($customer_id);
             // Log::debug('customer', [$customer_id]);
             $bookingActivity = $this->getActivityBooking($booking, $customer);
-            if (!$bookingActivity) {
+            Log::debug('booking_activity', [$bookingActivity]);
+            if (!isset($bookingActivity->booking_id)) {
                 $bookingActivity->booking_id = $booking_id;
                 $bookingActivity->customer_id = $customer_id;
             }
