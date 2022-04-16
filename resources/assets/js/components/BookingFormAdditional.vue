@@ -141,17 +141,20 @@
             toggleAdditional() {
                 this.showAdditional = !this.showAdditional
             },
-            async loadTravellerBookings(init = false) {
+           loadTravellerBookings(init = false) {
                 let that = this
                 this.debug && console.log(`ADDITIONAL: loading additional travellers for ${this.booking_token}`, that.leadTraveller)
-                await axios.get(`/api/booking/travellers/${this.booking_token}`)
+                axios.get(`/api/booking/travellers/${this.booking_token}`)
                     .then(response => {
                         if (response.data.success) {
                             const travellers = response.data.travellers
                             that.debug && console.log('ADDITIONAL: travellers', travellers, that.leadTraveller);
                             that.travellerBookings = travellers.filter(traveller => traveller.id !== that.leadTraveller.id)
-                            that.debug && console.log('ADDITIONAL: travellerBookings', that.travellerBookings);
-                            bus.$emit('AdditionalTravelersLoaded', that.travellerBookings, true)
+console.log('ADDITIONAL: travellerBookings', that.travellerBookings);
+if (that.travellerBookings.length) {
+        console.log('ADDITIONAL: travellerBookings loadedEvent!', that.travellerBookings);
+        bus.$emit('AdditionalTravelersLoaded', that.travellerBookings, true)
+}
                         }
                     })
                     .catch(error => {

@@ -26,8 +26,13 @@ class BookingActivityController extends ApiController
                 ->join('activities', 'activity_inventories.activity_id', 'activities.id')
                 ->leftJoin('activity_inventory_tour_upgrades', 'activity_inventories.id', 'activity_inventory_tour_upgrades.upgrade_id')
                 ->select(
+                    'booking_activities.id as booking_activity_id',
+                    'booking_activities.customer_id',
+                    'booking_activities.booking_id',
+                    'booking_activities.activity_inventory_tour_id',
                     'activity_inventory_tour_upgrades.base_id',
                     'activity_inventory_tour_upgrades.upgrade_id',
+                    'activity_inventory_tours.tour_component_type',
                     'activities.description',
                     'activities.image_url',
                     'activities.name',
@@ -35,17 +40,21 @@ class BookingActivityController extends ApiController
                     'activity_inventories.ends_at',
                     'activity_inventory_tour_upgrades.description as upgrade_description'
                 )
-                ->where('token', $token)
+                ->where('bookings.token', $token)
                 ->get();
-        Log::debug('bookingActivities:', [$bookingActivities]);
+        Log::debug('*** bookingActivities:', [$bookingActivities]);
 
-        return response()->json(['success' => true, 'data' => $bookingActivities]);
+        return response()->json(['success' => true, 'bookings' => $bookingActivities]);
     }
 
-    public function getActivityBooking(Booking $booking, Customer $customer)
+    public function getActivityBooking(Booking $booking, Customer $customer, int $activity_inventory_tour_id)
     {
         $bookingActivities = new BookingActivity();
-        $bookingActivity = $bookingActivities->where('booking_id', $booking->id)->where('customer_id', $customer->id)->first();
+        $bookingActivity = $bookingActivities
+            ->where('booking_id', $booking->id)
+            ->where('customer_id', $customer->id)
+            ->where('activity_inventory_tour_id', $activity_inventory_tour_id)
+            ->first();
         if ($bookingActivity) {
             return $bookingActivity;
         }
@@ -97,14 +106,14 @@ class BookingActivityController extends ApiController
             $customer_id = $customerArray['id'];
             $customer = Customer::find($customer_id);
             // Log::debug('customer', [$customer_id]);
-            $bookingActivity = $this->getActivityBooking($booking, $customer);
+            $bookingActivity = $this->getActivityBooking($booking, $customer, $activity_inventory_tour_id);
             Log::debug('booking_activity', [$bookingActivity]);
             if (!isset($bookingActivity->booking_id)) {
                 $bookingActivity->booking_id = $booking_id;
                 $bookingActivity->customer_id = $customer_id;
+                $bookingActivity->activity_inventory_tour_id = $activity_inventory_tour_id;
+                $bookingActivity->save();
             }
-            $bookingActivity->activity_inventory_tour_id = $activity_inventory_tour_id;
-            $bookingActivity->save();
         }
 
         return response()->json(['success' => true, 'booking' => $bookingActivity]);
