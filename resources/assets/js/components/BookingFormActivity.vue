@@ -249,14 +249,9 @@ export default {
             axios.get(`/api/booking/activities/tour/${this.tour.id}`)
                 .then(response => {
                     that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
-<<<<<<< Updated upstream
-                    that.activities = response.data.activities
-                    that.loadActivityBookings();
-=======
                     that.activities = response.data.activities.filter(a => a.tour_component_type != 'Add-on');
                     that.addons = response.data.activities.filter(a => a.tour_component_type == 'Add-on');
                     that.loadBookingActivities(that.booking_token);
->>>>>>> Stashed changes
                     //that.loadBookingStatus(that.booking_token)
                 })
                 .catch(error => {
