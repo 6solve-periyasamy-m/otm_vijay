@@ -86,13 +86,14 @@ class Address extends Model
 
     public function __toString(): string
     {
-        $addrString = $this->address_line_1;
-        if (isset($this->address_line_2)) $addrString .= ", " . $this->address_line_2;
-        if (isset($this->address_line_3)) $addrString .= ", " . $this->address_line_3;
-        if (isset($this->town)) $addrString .= ", " . $this->town;
-        if (isset($this->region)) $addrString .= ", " . $this->region;
-        if (isset($this->country)) $addrString .= ", " . $this->country->name;
-        if (isset($this->postcode)) $addrString .= ", " . $this->postcode;
-        return $addrString;
+        $address = "";
+        if (isset($this->address_line_1)) $address .= $this->address_line_1;
+        if (isset($this->address_line_2)) $address .= ", " . $this->address_line_2;
+        if (isset($this->address_line_3)) $address .= ", " . $this->address_line_3;
+        if (isset($this->town)) $address .= ", " . $this->town;
+        if (isset($this->region)) $address .= ", " . $this->region;
+        if (isset($this->country)) $address .= ", " . $this->country->name;
+        if (isset($this->postcode)) $address .= ", " . $this->postcode;
+        return empty($address) ? "Address details empty" : $address;
     }
 }
