@@ -90,9 +90,8 @@
                         {{activity.ticket_type_name}}
                     </div>
                     <div class="column-action">
-                        <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
-                        <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
-                        <button class="btn btn-primary btn-small" v-if="activity" @click="cancelActivityUpgrade">Cancel</button>
+                        <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Add-on'" @click="bookActivityAddon(activity)">Add on</button>
+                        <button class="btn btn-primary btn-small" v-if="activity" @click="cancelActivityAddon(activity)">Cancel</button>
                     </div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
@@ -202,45 +201,35 @@ export default {
                 token: this.booking_token
             })
             .then(response => {
-                console.log('booked', response)
                 if (response.data.success) {
                     const booking = response.data.booking
                     const baseId = response.data.base_id
-                    console.log('Booking data for each member of group', booking, 'base_id', baseId)
-                    // trigger actiity based on lead trveller
                     const activity = that.activities.filter(a => a.activity_inventory_tour_id === booking[0].activity_inventory_tour_id && a.tour_component_type === 'Upgrade')
-                    //console.log(booking[0], activity)
                     const allActivities = that.activities
                     allActivities.map((a,i) => {
-                        //console.log('checking: ', a, i)
                         if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                             a.status = 'booked'
                             that.activities.splice(i,1,a)
-                            //console.log('<<< booked status:', i, that.activities[i], that.activities)
                         }
                     })
                     allActivities.map((e,i) => {
-                        console.log('setting upgraded', e, baseId)
                         if (e.activity_inventory_tour_id == baseId) {
                             e.status = 'upgraded'
                             that.activities.splice(i,1,a)
                         }
                     })
-                    console.log(that.activities)
                 }
             })
             .catch(error => console.log(error))
         },
         cancelActivityUpgrade(activity) {
             let that = this
-            console.log('Cancel activity booking for ', activity)
             axios.post('/api/booking/activity/upgrade/cancel', {
                 activity: activity,
                 customers: this.travellers,
                 token: this.booking_token
             })
             .then(response => {
-                console.log('cancelling booked', response)
                 const allActivities = that.activities
                 const booking = response.data.booking
                 const baseId = response.data.base_id
@@ -248,17 +237,9 @@ export default {
                     if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                         a.status = "cancel"
                         that.activities.splice(i,1,a)
-                        console.log('>>> cancel status:', i, that.activities[i], that.activities)
                     }
                 })
-                // allActivities.map((e,i) => {
-                //     if (e.activity_inventory_id == baseId) {
-                //         a.status = ''
-                //         that.activities.splice(i,1,a)
-                //     }
-                // })
                 allActivities.map((e,i) => {
-                    console.log('setting upgraded', e, baseId)
                     if (e.activity_inventory_tour_id == baseId) {
                         e.status = ''
                         that.activities.splice(i,1,a)
