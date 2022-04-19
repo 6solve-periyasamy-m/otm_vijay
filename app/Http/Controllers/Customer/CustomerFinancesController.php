@@ -17,7 +17,7 @@ class CustomerFinancesController extends Controller
 
     public function makePayment(Request $request)
     {
-        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric']);
+        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric|min:0.3|max:999999.99']);
         $order = OrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
         $amount = $request->input('amount');
         if (!isset($order) || !OrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {

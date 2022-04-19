@@ -261,6 +261,18 @@
                     <div class="card-title">
                         <h4 class="fw-bold">Schedule</h4>
                     </div>
+                    <div class="pb-3 text-end">
+                        @can('update', \App\Models\Order::class)
+                            <a href="{{ route('order-installments.create', ['order' => $order, ]) }}" class="btn btn-success text-white mb-1">
+                                <i class="icon-plus"></i>
+                                New Installment
+                            </a>
+                            <a href="{{ route('order-installments.resync', ['order' => $order, ]) }}" class="btn btn-warning mb-1">
+                                <i class="icon-refresh"></i>
+                                Refresh from Tour
+                            </a>
+                        @endcan
+                    </div>
                     <div>
                         <table class="table table-striped" id="schedule-table">
                             <thead>
