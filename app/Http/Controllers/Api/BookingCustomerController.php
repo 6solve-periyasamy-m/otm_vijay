@@ -65,7 +65,7 @@ class BookingCustomerController extends ApiController
                 'address_line_1' => 'required',
                 'address_line_2' => 'required',
                 'town' => 'required',
-                'country_id' => 'required',
+                'country_id' => 'required | integer | exists:countries,id',
                 'postcode' => 'required'
             ]);
             if (!$request->same_address) {
