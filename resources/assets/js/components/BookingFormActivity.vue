@@ -194,7 +194,6 @@ export default {
         },
         bookActivityUpgrade(activity) {
             let that = this
-            console.log('Booking Activities for id ', activity, this.travellers)
             axios.post('/api/booking/activity/upgrade/book', { 
                 activity: activity,
                 customers: this.travellers,
@@ -234,9 +233,11 @@ export default {
                 const booking = response.data.booking
                 const baseId = response.data.base_id
                 allActivities.map((a,i) => {
-                    if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
+                    if (a.tour_component_type == 'Upgrade' 
+                        && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                         a.status = "cancel"
                         that.activities.splice(i,1,a)
+                        console.log('>>> cancel status:', i, that.activities[i], that.activities)
                     }
                 })
                 allActivities.map((e,i) => {
