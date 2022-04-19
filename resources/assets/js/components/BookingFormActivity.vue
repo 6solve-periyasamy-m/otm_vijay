@@ -62,7 +62,7 @@
                         <button
                             class="btn btn-primary btn-small" 
                             v-if="activity.status=='booked' && activity.tour_component_type === 'Upgrade'" 
-                            @click="cancelActivityGroup(activity)">Cancel</button>
+                            @click="cancelActivityUpgrade(activity)">Cancel</button>
                         <button
                             v-if="activity.status!='booked' && activity.tour_component_type === 'Upgrade' && activity.stock" 
                             class="btn btn-primary btn-small" 
@@ -92,7 +92,7 @@
                     <div class="column-action">
                         <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Upgrade'" @click="bookActivity(activity)">Book</button>
                         <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Add-on'" @click="bookActivity(activity)">Add on</button>
-                        <button class="btn btn-primary btn-small" v-if="activity" @click="cancelActivityGroup">Cancel</button>
+                        <button class="btn btn-primary btn-small" v-if="activity" @click="cancelActivityUpgrade">Cancel</button>
                     </div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
@@ -231,7 +231,7 @@ export default {
             })
             .catch(error => console.log(error))
         },
-        cancelActivityGroup(activity) {
+        cancelActivityUpgrade(activity) {
             let that = this
             console.log('Cancel activity booking for ', activity)
             axios.post('/api/booking/activity/upgrade/cancel', {
