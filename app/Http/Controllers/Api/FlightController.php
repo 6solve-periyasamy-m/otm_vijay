@@ -21,7 +21,7 @@ use App\Repository\FlightBookingRepository;
 
 class FlightController extends ApiController
 {
-    protected $debug = 'flights';
+    protected $debug = 'no_flights';
 
     public function getFlightInventories()
     {
@@ -43,7 +43,7 @@ class FlightController extends ApiController
     {
         $flightsRepository = new FlightsRepository();
         $flights = $flightsRepository->flightsAvailableForTour($tour_id, $flight_type);
-        $this->debug && Log::debug('getFlightsInventoriesForTour::', [$flights]);
+        $this->debug=='flights' && Log::debug('getFlightsInventoriesForTour::', [$flights]);
 
         return response()->json(["success" => true, "data" => $flights]);
     }
@@ -59,7 +59,7 @@ class FlightController extends ApiController
         // Returns a list of flights from an airport
         $flightsRepository = new FlightsRepository();
         $result = $flightsRepository->flightsDepartingAfterToday($airport);
-        $this->debug && Log::info('getFlightsFromAirport::', [$result]);
+        $this->debug=='flights' && Log::info('getFlightsFromAirport::', [$result]);
 
         return response()->json(["success" => true, "data" => $result]);
     }
@@ -105,7 +105,7 @@ class FlightController extends ApiController
         if (isset($booking->id)) {
             $flightBookingRepository = new FlightBookingRepository();
             $flightBookings = $flightBookingRepository->getFlightBookings($booking->id, $type);
-            $this->debug && Log::debug('loadFlightsForBooking: flight bookings', [$booking->id, $flightBookings]);
+            $this->debug=='flights' && Log::debug('loadFlightsForBooking: flight bookings', [$booking->id, $flightBookings]);
             return response()->json(["success" => true, "flightBookings" => $flightBookings]);
         } else {
             return response()->json(["success" => false, "message" => "no flight bookings"]);

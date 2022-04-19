@@ -33,8 +33,9 @@
                         Action
                     </div>
                 </div>
-                <div class="listing" v-for="(activity,index) in activities" 
-                    :key="activity.activity_inventory_tour_id">
+                <div class="listing" v-for="activity in activities" 
+                    :key="activity.activity_inventory_tour_id"
+                    :class="{greyed: activity.status == 'upgraded'}">
                     <div class="column-starts-at">
                         {{startDate(activity)}}
                         <br>to
@@ -65,7 +66,7 @@
                         <button
                             v-if="activity.status!='booked' && activity.tour_component_type === 'Upgrade' && activity.stock" 
                             class="btn btn-primary btn-small" 
-                            @click="bookActivityGroup(activity)">Book</button>
+                            @click="bookActivityUpgrade(activity)">Book</button>
                     </div>                    <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
                 <div class="divider"><h5>Optional Additional activities</h5></div>
@@ -192,10 +193,10 @@ export default {
         bookActivities() {
             console.log('book activities')
         },
-        bookActivityGroup(activity) {
+        bookActivityUpgrade(activity) {
             let that = this
             console.log('Booking Activities for id ', activity, this.travellers)
-            axios.post('/api/booking/activity/book', { 
+            axios.post('/api/booking/activity/upgrade/book', { 
                 activity: activity,
                 customers: this.travellers,
                 token: this.booking_token
@@ -204,15 +205,25 @@ export default {
                 console.log('booked', response)
                 if (response.data.success) {
                     const booking = response.data.booking
-                    const activity = that.activities.filter(a => a.activity_inventory_tour_id === booking.activity_inventory_tour_id && a.tour_component_type === 'Upgrade')
-                    console.log(booking, activity)
-
-                    that.activities.map((a,i) => {
-                        console.log('checking: ', a, i)
-                        if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking.activity_inventory_tour_id) {
-                            that.activities[i].status='booked'
-                            Vue.set(that.activities[i], 'status', 'booked')
-                            console.log('booked status:', i, that.activities[i])
+                    const baseId = response.data.base_id
+                    console.log('Booking data for each member of group', booking, 'base_id', baseId)
+                    // trigger actiity based on lead trveller
+                    const activity = that.activities.filter(a => a.activity_inventory_tour_id === booking[0].activity_inventory_tour_id && a.tour_component_type === 'Upgrade')
+                    //console.log(booking[0], activity)
+                    const allActivities = that.activities
+                    allActivities.map((a,i) => {
+                        //console.log('checking: ', a, i)
+                        if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
+                            a.status = 'booked'
+                            that.activities.splice(i,1,a)
+                            //console.log('<<< booked status:', i, that.activities[i], that.activities)
+                        }
+                    })
+                    allActivities.map((e,i) => {
+                        console.log('setting upgraded', e, baseId)
+                        if (e.activity_inventory_tour_id == baseId) {
+                            e.status = 'upgraded'
+                            that.activities.splice(i,1,a)
                         }
                     })
                     console.log(that.activities)
@@ -221,14 +232,38 @@ export default {
             .catch(error => console.log(error))
         },
         cancelActivityGroup(activity) {
+            let that = this
             console.log('Cancel activity booking for ', activity)
-            axios.post('/api/booking/activity/cancel', {
+            axios.post('/api/booking/activity/upgrade/cancel', {
                 activity: activity,
-                customer: this.travellers,
+                customers: this.travellers,
                 token: this.booking_token
             })
             .then(response => {
-                console.log('booked', response)
+                console.log('cancelling booked', response)
+                const allActivities = that.activities
+                const booking = response.data.booking
+                const baseId = response.data.base_id
+                allActivities.map((a,i) => {
+                    if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
+                        a.status = "cancel"
+                        that.activities.splice(i,1,a)
+                        console.log('>>> cancel status:', i, that.activities[i], that.activities)
+                    }
+                })
+                // allActivities.map((e,i) => {
+                //     if (e.activity_inventory_id == baseId) {
+                //         a.status = ''
+                //         that.activities.splice(i,1,a)
+                //     }
+                // })
+                allActivities.map((e,i) => {
+                    console.log('setting upgraded', e, baseId)
+                    if (e.activity_inventory_tour_id == baseId) {
+                        e.status = ''
+                        that.activities.splice(i,1,a)
+                    }
+                })
             })
             .catch(error => console.log(error))
         },
@@ -248,8 +283,10 @@ export default {
                     that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
                     that.activities = response.data.activities.filter(a => a.tour_component_type != 'Add-on');
                     that.addons = response.data.activities.filter(a => a.tour_component_type == 'Add-on');
-                    console.log('activity inventory loaded, now loading bookings')
-                    that.loadActivityBooking(that.booking_token)//that.loadBookingStatus(that.booking_token)
+                    that.loadActivityBooking(that.booking_token)
+                    //that.loadBookingStatus(that.booking_token)
+                    console.log('activity inventory loaded, now loading bookings',that.activities)
+                    
                 })
                 .catch(error => {
                     console.log(error)
@@ -272,17 +309,34 @@ export default {
                     //console.log('booking-activity response', response)
                     that.bookedActivities = response.data.bookings
                     console.log('parsed bookings', that.bookedActivities)
+                    console.log('bookedmap', that.bookedActivities.map(b => b.tour_component_type))
                     that.activities.map((a,i) => {
-                        const isMatched = that.bookedActivities.map(b => b.booking_id).includes(a.booking_id)
-                            && that.bookedActivities.map(b => b.activity_inventory_tour_id).includes(a.activity_inventory_tour_id)
-                            && that.bookedActivities.map(b => b.tour_component_type).includes(a.tour_component_type)
+                        const isMatched2 = that.bookedActivities.map(b => b.activity_inventory_tour_id).includes(a.activity_inventory_tour_id)
+                        const isMatched3 = that.bookedActivities.map(b => b.tour_component_type).includes(a.tour_component_type)
+                        const isMatched = isMatched2 && isMatched3
+                        console.log(a, that.bookedActivities, isMatched2, isMatched3)
                         if (isMatched) {
                             that.activities[i].status = 'booked'
                         } else {
                             that.activities[i].status = ''
                         }
+                        const base_id = that.bookedActivities.map(b => {
+                            if (b.base_id == a.activity_inventory_tour_id) {
+                                return b.base_id
+                            }
+                        })
+                       
+                        if (base_id) {
+                            console.log('CHECK ACTIVIITES for BASEID',  that.bookedActivities)
+                            console.log('base_id', base_id, 'aitid', a.activity_inventory_tour_id)
+                            that.activities.map(a => {
+                                if (a.activity_inventory_tour_id == base_id) {
+                                    a.status='upgraded'
+                                }
+                            })
+                        }
                     })
-                    console.log('updated activitybookings', that.activities)
+                    console.log('updated activitybookings', that.activities.map(a => a.status))
                 })
                 .catch(error => console.log(error))
         }
@@ -300,6 +354,10 @@ export default {
     }
     .blankIt {
         color: grey;
+    }
+    .listing.greyed {
+        display: none;
+        color: #ccc;
     }
     .divider {
         border-top: 2px black solid;

@@ -74,7 +74,7 @@ export default {
         // BUG: this.selected_item is NULL on addons load?
         if (this.selected_item) {
             this.flightId = this.selected_item
-            console.log('BFFS: setting flight id to prop ',this.selected_item)
+            this.debug && console.log('BFFS: setting flight id to prop ',this.selected_item)
             bus.$on('flightRemoved', (customer_detail_id) => {
                 console.log('BFFS: flight to remove', customer_detail_id)
                 this.flight_selected = 0
