@@ -69,6 +69,91 @@ class BookingActivityController extends ApiController
 
         return $bookingActivities;
     }
+
+    private function checkActivityInventory($activity_inventory_tour_id)
+    {
+        $inventories = new ActivityInventory();
+        $inventory = $inventories->join('activity_inventory_tours', 'activity_inventory_tours.activity_inventory_id', 'activity_inventories.id')
+                    ->where('activity_inventory_tours.id', $activity_inventory_tour_id)
+                    ->first();
+        if ($inventory->stock<1) {
+            return response()->json(['success' => false, 'message' => 'out of stock']);
+        }
+        return $inventory;
+    }
+
+    private function getBooking($token)
+    {
+        $bookings = new Booking();
+        $booking = $bookings->where('token', $token)->first();
+        if (!$booking) {
+            throw new Exception('Can not find booking for '.$token);
+        }
+        return $booking;
+    }
+
+    public function createActivityAddonBooking(Request $request)
+    {
+        Log::debug('Addon Booking request', [$request->token]);
+        $request->validate([
+            'token' => 'required',
+            'activity' => 'required',
+            'customers' => 'required'
+        ]);
+        $activity = $request->activity;
+        $activity_inventory_tour_id = $activity['activity_inventory_tour_id'];
+        $this->checkActivityInventory($activity_inventory_tour_id);
+        $booking = $this->getBooking($request->token);
+        $booking_id = $booking->id;
+
+        $bookings = [];
+        foreach($request->customers as $customerArray) {
+            $customer_id = $customerArray['id'];
+            $customer = Customer::find($customer_id);
+            // Log::debug('customer', [$customer_id]);
+            $bookingActivity = $this->getActivityBooking($booking, $customer, $activity_inventory_tour_id);
+            Log::debug('booking_activity', [$bookingActivity]);
+            if (!isset($bookingActivity->booking_id)) {
+                $bookingActivity->booking_id = $booking_id;
+                $bookingActivity->customer_id = $customer_id;
+                $bookingActivity->activity_inventory_tour_id = $activity_inventory_tour_id;
+                $bookingActivity->save();
+            }
+            $bookings[] = $bookingActivity;
+        }
+
+        return response()->json(['success' => true, 'booking' => $bookings]);
+
+    }
+    public function cancelActivityAddonBooking(Request $request)
+    {
+        $request->validate([
+            'activity' => 'required | array',
+            'token' => 'required',
+            'customers' => 'required | array'
+        ]);
+        // find the actiity booking for
+        // each customer_id in customers, booking_id from token
+        $bookings = Booking::where('token', $request->token)->first();
+        $activity = $request->activity;
+        $activity_inventory_tour_id = $activity['activity_inventory_tour_id'];
+       
+        $booking = [];
+        $bookingActivity = new BookingActivity();
+        foreach ($request->customers as $customer) {
+            $booking[] = $bookingActivity->where('customer_id', $customer['id'])
+                ->where('booking_id', $bookings->id)
+                ->where('activity_inventory_tour_id', $activity_inventory_tour_id)
+                ->first();
+            $bookingActivity->where('customer_id', $customer['id'])
+                ->where('booking_id', $bookings->id)
+                ->where('activity_inventory_tour_id', $activity_inventory_tour_id)
+                ->delete();
+        }
+        return response()->json(['success' => true, 'booking' => $booking]);
+ 
+    }
+
     /**
      * createActivityBooking
      *
@@ -91,24 +176,12 @@ class BookingActivityController extends ApiController
         $activity = $request->activity;
         $activity_inventory_tour_id = $activity['activity_inventory_tour_id'];
         // Log::debug('createActivityBooking', [$activity_inventory_tour_id]);
-
-        $inventories = new ActivityInventory();
-        $inventory = $inventories->join('activity_inventory_tours', 'activity_inventory_tours.activity_inventory_id', 'activity_inventories.id')
-                    ->where('activity_inventory_tours.id', $request->activity['activity_inventory_tour_id'])
-                    ->first();
+        $this->checkActivityInventory($activity_inventory_tour_id);
         // Log::debug('createActivityBooking: check activity_inventory stock levels', [$inventory]);
-        if ($inventory->stock<1) {
-            return response()->json(['success' => false, 'message' => 'out of stock']);
-        }
-
-        $bookings = new Booking();
-        $booking = $bookings->where('token', $request->token)->first();
-        if (!$booking) {
-            throw new Exception('Can not find booking for '.$request->token);
-        }
-        Log::debug('booking', [$booking]);
-
+        // Log::debug('booking', [$booking]);
+        $booking = $this->getBooking($request->token);
         $booking_id = $booking->id;
+
         $upgradeActivity = ActivityInventoryTourUpgrade::where('upgrade_id', $activity_inventory_tour_id)->first();
         $base_id = $upgradeActivity->base_id;
 
@@ -131,7 +204,7 @@ class BookingActivityController extends ApiController
         return response()->json(['success' => true, 'base_id' => $base_id, 'booking' => $bookings]);
     }
 
-    public function depreciated_bookActivityUpgradeBooking(Request $request)
+    public function bookActivityUpgradeBooking(Request $request)
     {
         $request->validate([
             'activity' => 'required | array',
@@ -200,7 +273,7 @@ class BookingActivityController extends ApiController
      * @param Request $request
      * @return void
      */
-    public function deleteActivityBooking(Request $request)
+    public function DEPRECATEDdeleteActivityBooking(Request $request)
     {
         $request->validate([
             'booking_id' => 'required | int | exists:bookings, id',

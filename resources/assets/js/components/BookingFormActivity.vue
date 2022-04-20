@@ -36,10 +36,11 @@
                 <div class="listing" v-for="activity in activities" 
                     :key="activity.activity_inventory_tour_id"
                     :class="{greyed: activity.status == 'upgraded'}">
+                    <div v-if="debug">Status {{activity.status}}</div>
                     <div class="column-starts-at">
                         {{startDate(activity)}}
-                        <br>to
-                        <br>{{endDate(activity)}}
+                        <br>
+                        {{endDate(activity)}}
                     </div>
                     <div class="column-name" :class="{blankIt: activity.tour_component_type == 'Upgrade'}">
                         {{ activity.name }}<br>{{ activity.description !== activity.name ? activity.description :''}} 
@@ -49,8 +50,10 @@
                         <br>
                         {{ activity.address_region != undefined && activity.address_region.length ? activity.address_region : ''}}
                     </div>
-                    <div class="column-component-type emphasiseIt">
-                        {{activity.tour_component_type}}
+
+                    <div class="column-component-note" v-if="activity.ticket_type_name == 'Basic'">Included</div>
+                    <div v-else class="column-component-type emphasiseIt">
+                        {{activity.status=='booked' ? activity.tour_component_type == 'Upgrade' ? 'Upgraded': '' : '' }}
                     </div>
                     <div class="column-ticket-type" :class="{emphasiseIt: activity.tour_component_type == 'Upgrade'}">
                         {{activity.ticket_type_name =='Basic' ? '' : activity.ticket_type_name}}
@@ -61,20 +64,26 @@
                     <div class="column-action">
                         <button
                             class="btn btn-primary btn-small" 
-                            v-if="activity.status=='booked' && activity.tour_component_type === 'Upgrade'" 
+                            v-if="activity.status == 'booked' 
+                            && activity.tour_component_type === 'Upgrade'" 
                             @click="cancelActivityUpgrade(activity)">Cancel</button>
                         <button
-                            v-if="activity.status!='booked' && activity.tour_component_type === 'Upgrade' && activity.stock" 
+                            v-if="activity.status!='booked' 
+                            && activity.tour_component_type === 'Upgrade' 
+                            && activity.stock>0" 
                             class="btn btn-primary btn-small" 
-                            @click="bookActivityUpgrade(activity)">Book</button>
+                            @click="bookActivityUpgrade(activity)">Upgrade</button>
                     </div>                    <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
+
                 <div class="divider"><h5>Optional Additional activities</h5></div>
+
                 <div class="listing" v-for="(activity,index) in addons" 
                     :key="activity.activity_inventory_tour_id">
+                    <div v-if="debug">Status {{activity.status}} <br> Type {{activity.tour_component_type}}</div>
                     <div class="column-starts-at">
-                        {{startDate(activity)}}
-                    </div>
+                        {{startDate(activity)}}<br>to {{endDate(activity)}}
+                     </div>
                     <div class="column-name">
                         {{ activity.name }}<br>{{ activity.description !== activity.name ? activity.description :''}} 
                     </div>
@@ -90,13 +99,22 @@
                         {{activity.ticket_type_name}}
                     </div>
                     <div class="column-action">
-                        <button class="btn btn-primary btn-small" v-if="activity.tour_component_type === 'Add-on'" @click="bookActivityAddon(activity)">Add on</button>
-                        <button class="btn btn-primary btn-small" v-if="activity" @click="cancelActivityAddon(activity)">Cancel</button>
+                        <button class="btn btn-primary btn-small" 
+                            v-if="activity.tour_component_type === 'Add-on'
+                                && activity.status != 'booked'"
+                            @click="bookActivityAddon(activity)">Add-on</button>
+                        <button class="btn btn-primary btn-small" 
+                            v-if="activity.tour_component_type === 'Add-on'
+                                && activity.status == 'booked'"
+                            @click="cancelActivityAddon(activity)">Cancel</button>
                     </div>
                     <!-- {{index}} {{selected}} {{activity.activity_inventory_tour_id}} {{selected[activity.activity_inventory_tour_id]}} -->
                 </div>
+                <div v-if="debug">
+                     {{addons}}
+                </div>
                 <div>
-                    <button class="btn btn-primary" @click="bookActivities">Book Selected</button>
+                    <button class="btn btn-primary" @click="bookActivities">Completed</button>
                 </div>
             </div>
         </div>
@@ -119,6 +137,7 @@ export default {
             activity: {},
             travellers: [],
             activities: [],
+            allActivities: [],
             addons: [],
             selected: [],
             previous_activity_id: 0,
@@ -167,30 +186,65 @@ export default {
         },
         // upgrades are either booked or not
         // simple version is to query the database
-        isBooked(activity) {
-            console.log('isBooked', activity)
-            const status = activity.status 
-            const bookingStatus = status == 'booked'
-            return bookingStatus
-        },
-        checkBooked(customer_id, booking_id) {
-            axios.get(`/api/booking/activity/find/booking/${booking_id}/${customer_id}`)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-            })
-        },
-        included(id) {
-            console.log(this.activities)
-            if (this.activities[id].tour_component_type == 'Included') {
-                return 'checked'
-            }
-            return ''
-        },
+        // isBooked(activity) {
+        //     console.log('isBooked', activity)
+        //     const status = activity.status 
+        //     const bookingStatus = status == 'booked'
+        //     return bookingStatus
+        // },
+        // checkBooked(customer_id, booking_id) {
+        //     axios.get(`/api/booking/activity/find/booking/${booking_id}/${customer_id}`)
+        //     .then(response => {
+        //         console.log(response)
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //     })
+        // },
+        // final submit button needs no action - just close it?
         bookActivities() {
             console.log('book activities')
+            this.activated = false
+        },
+        bookActivityAddon(activity) {
+            let that = this
+            axios.post('/api/booking/activity/addon/book', {
+                activity: activity,
+                customers: this.travellers,
+                token: this.booking_token
+            })
+            .then(response => {
+                    const booking = response.data.booking
+                    that.debug && console.log('booking addon, reponse', response)
+                    const activity = that.addons.filter(a => a.activity_inventory_tour_id === booking[0].activity_inventory_tour_id && a.tour_component_type === 'Add-on')
+                    const allActivities = that.activities
+                    allActivities.map((a,i) => {
+                        if (a.tour_component_type == 'Add-on' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
+                            a.status = 'booked'
+                            that.activities.splice(i,1,a)
+                        }
+                    })
+            })
+        },
+        cancelActivityAddon(activity) {
+            let that = this
+            axios.post('/api/booking/activity/addon/cancel', {
+                activity: activity,
+                customers: this.travellers,
+                token: this.booking_token
+            })
+            .then(response => {
+                const allActivities = that.addons
+                const booking = response.data.booking
+                allActivities.map((a,i) => {
+                    if (a.tour_component_type == 'Add-on' 
+                        && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
+                        a.status = ''
+                        that.activities.splice(i,1,a)
+                    }
+                })
+            })
+            .catch(error => console.log(error))
         },
         bookActivityUpgrade(activity) {
             let that = this
@@ -214,7 +268,7 @@ export default {
                     allActivities.map((e,i) => {
                         if (e.activity_inventory_tour_id == baseId) {
                             e.status = 'upgraded'
-                            that.activities.splice(i,1,a)
+                            that.activities.splice(i,1,e)
                         }
                     })
                 }
@@ -237,13 +291,12 @@ export default {
                         && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                         a.status = "cancel"
                         that.activities.splice(i,1,a)
-                        console.log('>>> cancel status:', i, that.activities[i], that.activities)
                     }
                 })
                 allActivities.map((e,i) => {
                     if (e.activity_inventory_tour_id == baseId) {
                         e.status = ''
-                        that.activities.splice(i,1,a)
+                        that.activities.splice(i,1,e)
                     }
                 })
             })
@@ -262,13 +315,16 @@ export default {
             let that = this
             axios.get(`/api/booking/activities/tour/${this.tour.id}`)
                 .then(response => {
-                    that.debug>3 && console.log('BookingFormActivity: Inventory: ',response)
-                    that.activities = response.data.activities.filter(a => a.tour_component_type != 'Add-on');
-                    that.addons = response.data.activities.filter(a => a.tour_component_type == 'Add-on');
+                    that.debug>3 && console.log('BookingFormActivity: Inventory response: ',response)
+                    that.allActivities = response.data.activities
+                    that.activities = that.allActivities.filter(a => a.tour_component_type != 'Add-on');
+                    that.addons = that.allActivities.filter(a => a.tour_component_type == 'Add-on');
                     that.loadActivityBooking(that.booking_token)
                     //that.loadBookingStatus(that.booking_token)
-                    console.log('activity inventory loaded, now loading bookings',that.activities)
-                    
+                    if (that.debug) {
+                        console.log('Loaded activities',that.activities)
+                        console.log('Loaded addons',that.addons)
+                    } 
                 })
                 .catch(error => {
                     console.log(error)
@@ -285,22 +341,22 @@ export default {
         // Looks wrong: when a traveller is added: we need to load activity books for them??
         loadActivityBooking(token) {
             let that = this
-            this.debug>1 && console.log('loadActivityBooking')
             axios.get(`/api/booking/activities/booking/${token}`)
                 .then(response => {
                     //console.log('booking-activity response', response)
                     that.bookedActivities = response.data.bookings
                     console.log('parsed bookings', that.bookedActivities)
                     console.log('bookedmap', that.bookedActivities.map(b => b.tour_component_type))
-                    that.activities.map((a,i) => {
+                    
+                    that.allActivities.map((a,i) => {
                         const isMatched2 = that.bookedActivities.map(b => b.activity_inventory_tour_id).includes(a.activity_inventory_tour_id)
                         const isMatched3 = that.bookedActivities.map(b => b.tour_component_type).includes(a.tour_component_type)
                         const isMatched = isMatched2 && isMatched3
-                        console.log(a, that.bookedActivities, isMatched2, isMatched3)
+                        console.log('check settings', a, that.bookedActivities, isMatched2, isMatched3)
                         if (isMatched) {
-                            that.activities[i].status = 'booked'
+                            that.allActivities[i].status = 'booked'
                         } else {
-                            that.activities[i].status = ''
+                            that.allActivities[i].status = ''
                         }
                         const base_id = that.bookedActivities.map(b => {
                             if (b.base_id == a.activity_inventory_tour_id) {
@@ -326,20 +382,31 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+    .btn.btn-large {
+        margin-bottom: 1.5rem;
+    }
+    .btn.btn-small {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        width: 100%;
+        display: block;
+    }
     .options {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
     }
-    .emphasiseIt {
-        font-weight: bold;
-    }
-    .blankIt {
-        color: grey;
+    .listing {
+        font-weight: 300;
     }
     .listing.greyed {
         display: none;
-        color: #ccc;
+    }
+    .listing.emphasiseIt {
+        font-weight: 700;
+    }
+    .blankIt {
+        color: #000;
     }
     .divider {
         border-top: 2px black solid;
@@ -378,6 +445,9 @@ export default {
     }
     .column-component-type {
         width: 5rem;
+    }
+    .column-component-note {
+        width: 8rem;
     }
     @media screen and (max-width: 992px) {
         .column-id {

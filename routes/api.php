@@ -55,7 +55,11 @@ Route::prefix('booking')->group(function () {
     //Route::post('/activity/book', [BookingActivityController::class, 'bookActivityBooking']);
     Route::post('/activity/upgrade/cancel', [BookingActivityController::class, 'cancelActivityUpgradeBooking']);
     
+    Route::post('/activity/addon/book', [BookingActivityController::class, 'createActivityAddonBooking']);
 
+    //Route::post('/activity/book', [BookingActivityController::class, 'bookActivityBooking']);
+    Route::post('/activity/addon/cancel', [BookingActivityController::class, 'cancelActivityAddonBooking']);
+    
     // Transports
     Route::get('/transports/tour/{tour}', [TransportController::class, 'getTransportsInventoryForTour']);
     Route::get('/transports/booking/{token}/tour/{tour}', [TransportController::class, 'getTransportsBooking']);
