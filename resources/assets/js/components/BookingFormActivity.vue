@@ -129,7 +129,7 @@ export default {
     props: ['tour'],
     data() {
         return {
-            debug: 9,
+            debug: false,
             activated: false,
             moduleName: 'Activities',
             booking_token: null,
