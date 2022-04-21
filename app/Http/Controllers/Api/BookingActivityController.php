@@ -121,6 +121,7 @@ class BookingActivityController extends ApiController
             }
             $bookings[] = $bookingActivity;
         }
+        Log::debug('booking Addon book', $bookings);
 
         return response()->json(['success' => true, 'booking' => $bookings]);
 
@@ -150,6 +151,8 @@ class BookingActivityController extends ApiController
                 ->where('activity_inventory_tour_id', $activity_inventory_tour_id)
                 ->delete();
         }
+        Log::debug('booking Addon Cancels', $booking);
+
         return response()->json(['success' => true, 'booking' => $booking]);
  
     }

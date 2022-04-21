@@ -114,7 +114,7 @@
                      {{addons}}
                 </div>
                 <div>
-                    <button class="btn btn-primary" @click="bookActivities">Completed</button>
+                    <button class="btn btn-primary" @click="completeActivities">Completed</button>
                 </div>
             </div>
         </div>
@@ -154,9 +154,6 @@ export default {
             that.debug && console.log(`>>>> ${that.moduleName} module: tour: ${that.tour.name}, booking ${that.booking_token}`)
             that.loadLeadTraveller(that.booking_token)
         })
-        // bus.$on('customerLoaded', (leadTraveller) => {
-        //     that.leadTraveller = leadTraveller
-        // })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
             that.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
             travellers.map(traveller => that.travellers.push(traveller));
@@ -167,7 +164,6 @@ export default {
     mounted() {
         this.loadActivityInventory()
     },
-
     methods: {
         loadLeadTraveller(token) {
             let that = this
@@ -184,26 +180,7 @@ export default {
                 })
                 .catch(error => console.log(error))
         },
-        // upgrades are either booked or not
-        // simple version is to query the database
-        // isBooked(activity) {
-        //     console.log('isBooked', activity)
-        //     const status = activity.status 
-        //     const bookingStatus = status == 'booked'
-        //     return bookingStatus
-        // },
-        // checkBooked(customer_id, booking_id) {
-        //     axios.get(`/api/booking/activity/find/booking/${booking_id}/${customer_id}`)
-        //     .then(response => {
-        //         console.log(response)
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //     })
-        // },
-        // final submit button needs no action - just close it?
-        bookActivities() {
-            console.log('book activities')
+        completeActivities() {
             this.activated = false
         },
         bookActivityAddon(activity) {
@@ -215,13 +192,12 @@ export default {
             })
             .then(response => {
                     const booking = response.data.booking
-                    that.debug && console.log('booking addon, reponse', response)
-                    const activity = that.addons.filter(a => a.activity_inventory_tour_id === booking[0].activity_inventory_tour_id && a.tour_component_type === 'Add-on')
-                    const allActivities = that.activities
-                    allActivities.map((a,i) => {
+                    that.debug>3 && console.log('booking addon, booking', booking)
+                    that.addons.map((a,i) => {
                         if (a.tour_component_type == 'Add-on' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                             a.status = 'booked'
-                            that.activities.splice(i,1,a)
+                            that.addons.splice(i,1,a)
+                            that.debug> 5 && console.log('splicing in booked status',a)
                         }
                     })
             })
@@ -234,13 +210,13 @@ export default {
                 token: this.booking_token
             })
             .then(response => {
-                const allActivities = that.addons
                 const booking = response.data.booking
-                allActivities.map((a,i) => {
+                that.debug>3 && console.log('booking addon cancel, bookings', booking)
+                that.addons.map((a,i) => {
                     if (a.tour_component_type == 'Add-on' 
                         && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                         a.status = ''
-                        that.activities.splice(i,1,a)
+                        that.addons.splice(i,1,a)
                     }
                 })
             })
@@ -257,15 +233,14 @@ export default {
                 if (response.data.success) {
                     const booking = response.data.booking
                     const baseId = response.data.base_id
-                    const activity = that.activities.filter(a => a.activity_inventory_tour_id === booking[0].activity_inventory_tour_id && a.tour_component_type === 'Upgrade')
-                    const allActivities = that.activities
-                    allActivities.map((a,i) => {
-                        if (a.tour_component_type == 'Upgrade' && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
+                    that.activities.map((a,i) => {
+                        if (a.tour_component_type == 'Upgrade' 
+                        && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                             a.status = 'booked'
                             that.activities.splice(i,1,a)
                         }
                     })
-                    allActivities.map((e,i) => {
+                    that.activities.map((e,i) => {
                         if (e.activity_inventory_tour_id == baseId) {
                             e.status = 'upgraded'
                             that.activities.splice(i,1,e)
@@ -283,17 +258,16 @@ export default {
                 token: this.booking_token
             })
             .then(response => {
-                const allActivities = that.activities
                 const booking = response.data.booking
                 const baseId = response.data.base_id
-                allActivities.map((a,i) => {
+                that.activities.map((a,i) => {
                     if (a.tour_component_type == 'Upgrade' 
                         && a.activity_inventory_tour_id == booking[0].activity_inventory_tour_id) {
                         a.status = "cancel"
                         that.activities.splice(i,1,a)
                     }
                 })
-                allActivities.map((e,i) => {
+                that.activities.map((e,i) => {
                     if (e.activity_inventory_tour_id == baseId) {
                         e.status = ''
                         that.activities.splice(i,1,e)
@@ -315,13 +289,12 @@ export default {
             let that = this
             axios.get(`/api/booking/activities/tour/${this.tour.id}`)
                 .then(response => {
-                    that.debug>3 && console.log('BookingFormActivity: Inventory response: ',response)
+                    that.debug>2 && console.log('BookingFormActivity: Inventory response: ',response)
                     that.allActivities = response.data.activities
                     that.activities = that.allActivities.filter(a => a.tour_component_type != 'Add-on');
                     that.addons = that.allActivities.filter(a => a.tour_component_type == 'Add-on');
                     that.loadActivityBooking(that.booking_token)
-                    //that.loadBookingStatus(that.booking_token)
-                    if (that.debug) {
+                    if (that.debug>4) {
                         console.log('Loaded activities',that.activities)
                         console.log('Loaded addons',that.addons)
                     } 
@@ -330,15 +303,6 @@ export default {
                     console.log(error)
                 })
         },
-        // // load in an array of activity booking states: ie: booked: true/false
-        // loadBookingStatus(token) {
-        //     axios.get(`/api/booking/activity/booking/status/${token}` )
-        //         .then(response => {
-        //             console.log('booking activity response', response)
-        //         })
-        //         .catch(error => console.error(error))
-        // },
-        // Looks wrong: when a traveller is added: we need to load activity books for them??
         loadActivityBooking(token) {
             let that = this
             axios.get(`/api/booking/activities/booking/${token}`)
@@ -363,7 +327,6 @@ export default {
                                 return b.base_id
                             }
                         })
-                       
                         if (base_id) {
                             console.log('CHECK ACTIVIITES for BASEID',  that.bookedActivities)
                             console.log('base_id', base_id, 'aitid', a.activity_inventory_tour_id)
