@@ -104,10 +104,11 @@ class BookingController extends Controller
      */
     public function payDeposit(Request $request)
     {
-
-        $request->validate(['token' => 'required|exists:bookings', 
-            'amount' => 'required|regex:/^\d*\.?\d*$/', 
-            'currencyamount' => 'required|regex:/^([^\d]*?)(.*)$/']); 
+        $request->validate(['token' => 'required|exists:bookings',
+            'tour_id' => 'required|exists:tours,id',
+            'customer_id' => 'required|exists:customers,id',
+            'amount' => 'required|regex:/^\d*\.?\d*$/',
+            'currencyamount' => 'required|regex:/^([^\d]*?)(.*)$/']);
             // NB: currency amount only has to capture the currency symbol and can consider the rest as a string (number)
             // the regex commented out following should work to separate £ 1,000,000 .00 but it returns an error
             // 'currencyamount' => 'required|regex:/^([^\d]*?)([1-9]\d{0,2}(,\d{3})*)|0?(\.\d{1,2})$/']);

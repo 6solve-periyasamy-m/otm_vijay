@@ -37,16 +37,19 @@ class BookingController extends ApiController
     {
         $booking = BookingRepository::findBooking($token);
         if (empty($booking)) {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, 'message' => 'no booking for '.$token]);
         }
 
         $customer = Customer::find($booking->customer_id);
+        if (empty($customer)) {
+            return response()->json(['success' => false, 'message' => 'booking customer did not exist']);
+        }
         $customer->home_address = Address::find($customer->home_address_id);
         $customer->billing_address = Address::find($customer->billing_address_id);
-        if (isset($booking)) {
+        if (isset($customer) && isset($booking)) {
             return response()->json(['success' => true, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
         }
-        return response()->json(['success' => false]);
+        return response()->json(['success' => false, 'message' => 'failed']);
     }
 
   /**
