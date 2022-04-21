@@ -52,7 +52,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: false,
+            debug: 3,
             formInfo: false,
             bookingName: '',
             agencyName: this.company,
@@ -71,7 +71,8 @@ export default {
             password: '',
             authenticated: false,
             tokenName: 'OTM_booking_token',
-            termsaccepted: false
+            termsaccepted: false,
+            bookingTour: {}
         }
     },
     created() {
@@ -134,18 +135,27 @@ export default {
                     }
                     that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
-                    // alert('setting token')
-                    if (token === data.booking.token) {
-                        bus.$emit('setBookingToken', data.booking.token)
-                        // TODO: are these events really needed?
-                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                        bus.$emit('homeAddressLoaded', data.customer.home_address)
-                        bus.$emit('billingAddressLoaded', data.customer.billing_address)
-                    } else {
-                        // the token is not registered
-                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                        // alert('No BookingForm yet'+that.bookingToken)
-                        //that.resetToken()
+                    that.bookingTour = data.tour
+                    const tour_id = that.tour_id
+                    const customer_id = data.booking.customer_id
+                    let booking_token = data.booking.token
+                    console.log('booking token loaded the tour, cf tour: ', data.tour, that.tour)
+                    if (that.tour.id != data.tour.id) {
+                        alert('You are booking booking another tour')
+                        axios.get(`/api/booking/check/tour/${customer_id}/${tour_id}`)
+                        .then(response => {
+                            // there is a booking active for this tour
+                            if (response.data.success) {
+                                booking_token = response.data.token
+                                bus.$emit('setBookingToken', booking_token)
+                                bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                                bus.$emit('homeAddressLoaded', data.customer.home_address)
+                                bus.$emit('billingAddressLoaded', data.customer.billing_address)
+                            } else {
+                                console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
+                                that.resetToken()
+                            }
+                        })
                     }
                 }
             })

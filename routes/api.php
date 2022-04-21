@@ -36,6 +36,7 @@ Route::prefix('booking')->group(function () {
     Route::get('/customer/bookings/{token}', [BookingController::class, 'collect']);
     Route::get('/token/{token}', [BookingController::class, 'get']);
     Route::post('/create', [BookingController::class, 'create']);
+    Route::get('/check/tour/{customer_id}/{tour_id}', [BookingController::class, 'check']);
 
     // Activities
     Route::get('/activities/tour/{tour}', [ActivitiesController::class, 'getActivitiesInventoryForTour']);

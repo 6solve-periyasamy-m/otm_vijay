@@ -38,10 +38,13 @@ export default {
         that.bookingToken = current_token
         setCookie(that.token_label, that.bookingToken)
         localStorage.active_token = that.bookingToken
-        const localTokens = JSON.parse(localStorage.tokens)
-        if (localTokens.indexOf(current_token) === -1) {
-          localTokens.push(that.bookingToken)
-          localStorage.tokens = JSON.stringify(localTokens)
+        // add current_token to the localStorage array of tokens
+        if (localStorage.tokens != undefined && localStorage.tokens.length > 0) {
+          const localTokens = JSON.parse(localStorage.tokens)
+          if (localTokens.indexOf(current_token) === -1) {
+            localTokens.push(current_token)
+            localStorage.tokens = JSON.stringify(localTokens)
+          }
         }
         that.debug && console.log(`>>>> ${that.moduleName} CONTROL module: booking ${that.bookingToken}`)
         that.findBookings(that.bookingToken)

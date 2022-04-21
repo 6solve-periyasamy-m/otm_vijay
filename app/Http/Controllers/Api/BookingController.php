@@ -52,6 +52,19 @@ class BookingController extends ApiController
         return response()->json(['success' => false, 'message' => 'failed']);
     }
 
+    public function check(Customer $customer, Tour $tour)
+    {
+        $booking = Booking::where('customer_id', $customer->id)
+            ->where('tour_id', $tour->id)
+            ->first();
+        if (isset($booking)) {
+            return response()->json(['succcess' => true, 'token' => $booking->token, 'customer' => $customer, 'tour' => $tour]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+        
+    }
+
   /**
    * collect booking references for this customer
    * NB: Customer must be logged in
@@ -168,6 +181,7 @@ class BookingController extends ApiController
         return response()->json([
             'success' => true, 
             'booking' => [
+                'tour' => $tour,
                 'customer' => $customer,
                 'travellers' => $travellers,
                 'flights' => ['outbound' => $flightsOutbound, 'inbound' => $flightsInbound],

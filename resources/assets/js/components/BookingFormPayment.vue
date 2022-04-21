@@ -169,7 +169,7 @@ export default {
     props: ['tour', 'systemCurrency'],
     data() {
         return {
-            debug: false,
+            debug: 2,
             moduleName: 'PaymentModule',
             currency: this.systemCurrency || 'GBP',
             booking_token: null,
@@ -196,7 +196,6 @@ export default {
     created() {
         let that = this
         this.csrf_token = csrf
-        this.tour_id = tour.id
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
             that.debug && console.log(`${that.moduleName} module, booking ${that.booking_token}`)
@@ -399,10 +398,12 @@ export default {
                     that.debug>1 && console.log('BookingFormPrice get customer response:', response)
                     that.leadTraveller = response.data.customer
                     that.customer_id = that.leadTraveller.id
+                    //that.tour_id = response.data.tour.id
                     that.debug && console.log('BookingFormPayment: gathering summary data for ', token)
                     axios.get(`/api/booking/summary/${token}/gather`)
                         .then(response => {
                             that.booking = response.data.booking
+                            that.tour_id =response.data.booking.tour_id
                             that.debug && console.log('BookingPrice:', that.booking)
                             that.calculateSingleRooms()
                             that.countTravellers()
