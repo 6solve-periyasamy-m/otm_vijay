@@ -8,7 +8,7 @@
                 <p class="caption">
                     <font-awesome-icon icon="arrow-right" />
                     Accommodation options for your tour group including single or shared rooms requirements. 
-                    Sharing is designated by selection of a group.
+                    Sharing is designated by selection of a group, selecting the same group as another traveller indicates that the room will be shared by the travellers in that group.
                 </p>
             </div>
             <div v-if="showAccommodation" class="card-body ept-form">

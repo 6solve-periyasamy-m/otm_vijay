@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
+//use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\AccommodationInventory;
 use App\Models\AccommodationInventoryTour;
@@ -86,7 +86,7 @@ class AccommodationComponentRepository implements AccommodationComponentReposito
             'share_with_user_id' => null,
             'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
         ]);
-        event(new OrderCustomerAccommodationAddedEvent($orderComponent));
+        //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $orderComponent;
     }
 

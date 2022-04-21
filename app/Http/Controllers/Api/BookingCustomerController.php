@@ -68,7 +68,6 @@ class BookingCustomerController extends ApiController
                 'mobile_number' => 'required',
                 'gender' => 'required',
                 'address_line_1' => 'required',
-                'address_line_2' => 'required',
                 'town' => 'required',
                 'country_id' => 'required | integer | exists:countries,id',
                 'postcode' => 'required'

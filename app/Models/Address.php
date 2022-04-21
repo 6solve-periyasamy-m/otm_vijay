@@ -40,13 +40,14 @@ class Address extends Model
 
     public function __toString()
     {
-        $addrString = $this->address_line_1;
+        $addrString = "";
+        if (isset($this->address_line_1)) $addrString .= $this->address_line_1;
         if (isset($this->address_line_2)) $addrString .= ", " . $this->address_line_2;
         if (isset($this->address_line_3)) $addrString .= ", " . $this->address_line_3;
         if (isset($this->town)) $addrString .= ", " . $this->town;
         if (isset($this->region)) $addrString .= ", " . $this->region;
         if (isset($this->country)) $addrString .= ", " . $this->country->name;
         if (isset($this->postcode)) $addrString .= ", " . $this->postcode;
-        return $addrString;
+        return empty($addrString) ? "Address details empty" : $addrString;
     }
 }

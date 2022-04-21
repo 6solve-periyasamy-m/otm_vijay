@@ -159,6 +159,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('installments')->group(function () {
                 Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order,update');
                 Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order,update');
+                Route::get('/resync', [OrderInstallmentController::class, 'resync'])->name('order-installments.resync')->middleware('bouncer:Order,update');
                 Route::prefix('{orderInstallment}')->group(function () {
                     Route::get('/update', [OrderInstallmentController::class, 'edit'])->name('order-installments.edit')->middleware('bouncer:Order,update');
                     Route::post('/update', [OrderInstallmentController::class, 'update'])->name('order-installments.update')->middleware('bouncer:Order,update');
