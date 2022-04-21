@@ -786,4 +786,5 @@ Route::get('/atol-report', function () {
 Route::prefix('/new-booking/{bookingUrl}')->group(function () {
     Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
     Route::post('/{token?}', [CustomerBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
+    Route::get('/{token}/summary', [CustomerBookingController::class, 'components'])->name('customer-booking.summary');
 });

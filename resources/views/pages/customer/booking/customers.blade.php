@@ -162,6 +162,6 @@
             </div>
         </div>
         <hr class="splitter">
-        <input class="btn btn-primary" type="submit" value="Check Booking Details">
+        <input class="btn btn-primary" type="submit" value="Confirm Lead Traveller">
     </form>
 @endsection

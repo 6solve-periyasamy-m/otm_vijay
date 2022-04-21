@@ -12,6 +12,7 @@ use App\Models\BookingTraveller;
 use App\Models\Customer;
 use App\Models\RoomType;
 use App\Models\Tour;
+use StringFormatter;
 
 class CustomerBookingRepository
 {
@@ -86,5 +87,71 @@ class CustomerBookingRepository
                 $booking->transports()->save($bookingComponent);
             }
         }
+    }
+
+    public static function generateSummary(Booking $booking): array
+    {
+        $tour = $booking->tour;
+        $summary = ['customers' => [], 'billing' => ['additionals' => 0, 'single_occupants' => 0, 'surcharge' => $tour->single_occupancy_surcharge, 'cost' => $tour->base_price_per_person, 'deposit' => $tour->deposit],];
+        $customerCount = 0;
+        foreach ($booking->travellers as $traveller) {
+            $customerCount++;
+            $customer = $traveller->customer;
+            $summary['customers'][$customer->id] = ['customer' => $customer, 'components' => ['accommodation' => [], 'activities' => [], 'flights' => [], 'transport' => [],]];
+            $summary['billing']['single_occupants'] = $summary['billing']['single_occupants'] + $traveller->is_single_occupant;
+            // Accommodation
+            foreach ($traveller->accommodation as $bookingComponent) {
+                $tourComponent = $bookingComponent->tourComponent;
+                $inventory = $tourComponent->inventory;
+                $summary['customers'][$bookingComponent->customer_id]['components']['accommodation'][] = [
+                    'time' => StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out),
+                    'description' => $inventory->component->name . ' (' . $inventory->roomType->name . ') (' . $inventory->boardType . ')',
+                    'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                ];
+                $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
+            }
+            // Activity
+            foreach ($traveller->activities as $bookingComponent) {
+                $tourComponent = $bookingComponent->tourComponent;
+                $inventory = $tourComponent->inventory;
+                $summary['customers'][$bookingComponent->customer_id]['components']['activities'][] = [
+                    'time' => StringFormatter::formatDateTime($inventory->starts_at) . ' to ' . StringFormatter::formatDateTime($inventory->ends_at),
+                    'description' => $inventory->component->name . ' (' . $inventory->component->address . ')' . ' (' . $inventory->ticketType . ')',
+                    'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                ];
+                $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
+            }
+            // Flights
+            foreach ($traveller->flights as $bookingComponent) {
+                $tourComponent = $bookingComponent->tourComponent;
+                $inventory = $tourComponent->inventory;
+                $summary['customers'][$bookingComponent->customer_id]['components']['flights'][] = [
+                    'time' => StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at),
+                    'description' => $inventory->component->departureAirport . ' to ' . $inventory->component->arrivalAirport . ' (' . $inventory->travelClass . ')',
+                    'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                ];
+                $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
+            }
+            // Transport
+            foreach ($traveller->transport as $bookingComponent) {
+                $tourComponent = $bookingComponent->tourComponent;
+                $inventory = $tourComponent->inventory;
+                $summary['customers'][$bookingComponent->customer_id]['components']['transport'][] = [
+                    'time' => StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at),
+                    'description' => $inventory->component->name . ' (' . $inventory->component->transportType . ') (' . $inventory->travelClass . ')',
+                    'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                ];
+                $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
+            }
+        }
+        $summary['billing']['customers'] = $customerCount;
+        $summary['billing']['total'] = ($tour->base_price_per_person * $customerCount) + ($summary['billing']['single_occupants'] * $summary['billing']['surcharge']) + $summary['billing']['additionals'];
+        $summary['billing']['today'] = $tour->deposit * $customerCount;
+
+        return $summary;
     }
 }

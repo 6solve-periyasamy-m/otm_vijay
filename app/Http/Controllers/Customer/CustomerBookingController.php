@@ -32,8 +32,9 @@ class CustomerBookingController extends Controller
         $request->validate($this->getLeadBookerValidation());
         $loggedIn = CustomerAuthenticationRepository::getCustomer();
         $customer = Customer::where('email_address', $request->lead_email_address)->first();
-        if ((isset($customer?->id) && !isset($loggedIn)) || (isset($customer) && $customer?->id !== $loggedIn?->id)) {
-            return back()->withErrors(['msg' => 'That email address already exists. If it is yours, please log in.']);
+        if ((isset($customer?->email_address) && isset($customer?->password))
+            && (!isset($loggedIn) || $customer?->id !== $loggedIn?->id)) {
+                return back()->withErrors(['msg' => 'That email address already exists. If it is yours, please log in.']);
         }
         if (!isset($customer)) {
             $customer = Customer::make([
@@ -64,7 +65,7 @@ class CustomerBookingController extends Controller
         $customer->billing_address_id = $billingAddress->id;
         $customer->save();
         $booking = CustomerBookingRepository::generateBooking($tour, $customer, RoomType::find(1), AccommodationGroup::find(1));
-        return redirect()->route('customer-booking.index', ['bookingUrl' => $bookingUrl, 'token' => $booking->token,]);
+        return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $booking->token,]);
     }
 
     public function components(string $bookingUrl, string $token)
@@ -73,6 +74,7 @@ class CustomerBookingController extends Controller
         if (!isset($tour) || !$tour->is_active) abort(404);
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
+        return view('pages.customer.booking.summary', array_merge(['tour' => $tour,], CustomerBookingRepository::generateSummary($booking)));
     }
 
     private function getTour(string $bookingUrl): ?Tour

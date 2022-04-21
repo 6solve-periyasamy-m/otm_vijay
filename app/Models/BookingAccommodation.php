@@ -25,4 +25,9 @@ class BookingAccommodation extends Model
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
+
+    public function roomType()
+    {
+        return $this->belongsTo(RoomType::class, 'room_type_id');
+    }
 }
