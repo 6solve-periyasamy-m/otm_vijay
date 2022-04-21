@@ -151,9 +151,11 @@ Route::middleware('auth:api')->group(function() {
     });   
 });
 
+Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
+
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {
-        Route::post('countries', [SelectController::class, 'getCountries'])->name('countries.select');
+
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
         Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
         Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');

@@ -9,6 +9,8 @@ class BookingTraveller extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['customer_id', 'booking_id'];
+
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id');

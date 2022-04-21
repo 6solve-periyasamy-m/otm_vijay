@@ -9,6 +9,8 @@ class BookingAccommodation extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['customer_id', 'room_type_id', 'group_id', 'accommodation_inventory_tour_id', 'booking_id'];
+
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id');

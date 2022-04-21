@@ -3,6 +3,7 @@
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\Customer\CustomerDetailsController;
 use App\Http\Controllers\Customer\CustomerFinancesController;
 use App\Http\Controllers\Customer\CustomerForgotPasswordController;
@@ -780,4 +781,9 @@ Route::prefix('payment')->name('payment.')->group(function () {
 Route::get('/atol-report', function () {
     return view('pages.reports.atol',
         ['data' => \App\Repository\ReportRepository::getOrdersDepartingInQuarterReport(2022, 2)]);
+});
+
+Route::prefix('/new-booking/{bookingUrl}')->group(function () {
+    Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
+    Route::post('/{token?}', [CustomerBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
 });
