@@ -4,6 +4,8 @@
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
@@ -152,6 +154,7 @@ Route::middleware('auth:api')->group(function() {
 });
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
+Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('api.booking.upgrade-activity');
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {

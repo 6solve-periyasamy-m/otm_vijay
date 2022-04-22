@@ -74,7 +74,7 @@ class CustomerBookingController extends Controller
         if (!isset($tour) || !$tour->is_active) abort(404);
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        return view('pages.customer.booking.summary', array_merge(['tour' => $tour,], CustomerBookingRepository::generateSummary($booking)));
+        return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token,], CustomerBookingRepository::generateSummary($booking)));
     }
 
     private function getTour(string $bookingUrl): ?Tour

@@ -131,16 +131,15 @@ class CustomerBookingRepository
     /**
      * @throws Throwable
      */
-    public static function upgradeBookingActivity(Booking $booking, ActivityInventoryTour $from, ActivityInventoryTourUpgrade $to): bool
+    public static function upgradeBookingActivity(Booking $booking, ActivityInventoryTour $from, ActivityInventoryTour $to): bool
     {
-        if (($booking->tour_id !== $from->tour_id) || ($booking->tour_id !== $to->upgrade->tour_id)) return false;
-        if (!ActivityComponentRepository::isOnUpgradeTree($from, $to)) return false;
+        if (($booking->tour_id !== $from->tour_id) || ($booking->tour_id !== $to->tour_id)) return false;
         try {
             DB::beginTransaction();
             DB::table('booking_activities')
                 ->where('booking_id', '=', $booking->id)
                 ->where('activity_inventory_tour_id', '=', $from->id)
-                ->update(['activity_inventory_tour_id' => $to->upgrade->id,]);
+                ->update(['activity_inventory_tour_id' => $to->id,]);
             DB::commit();
         } catch (Throwable $e) {
             Log::error($e);
@@ -179,6 +178,7 @@ class CustomerBookingRepository
                     'description' => $inventory->component->name . ' (' . $inventory->roomType->name . ') (' . $inventory->boardType . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                    'component' => $bookingComponent,
                 ];
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
@@ -191,6 +191,7 @@ class CustomerBookingRepository
                     'description' => $inventory->component->name . ' (' . $inventory->component->address . ')' . ' (' . $inventory->ticketType . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                    'component' => $bookingComponent,
                 ];
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
@@ -203,6 +204,7 @@ class CustomerBookingRepository
                     'description' => $inventory->component->departureAirport . ' to ' . $inventory->component->arrivalAirport . ' (' . $inventory->travelClass . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                    'component' => $bookingComponent,
                 ];
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
@@ -215,6 +217,7 @@ class CustomerBookingRepository
                     'description' => $inventory->component->name . ' (' . $inventory->component->transportType . ') (' . $inventory->travelClass . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
+                    'component' => $bookingComponent,
                 ];
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
