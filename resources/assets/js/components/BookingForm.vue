@@ -149,6 +149,7 @@ export default {
             })
             .catch(error => {
                 console.log('get current customer', error)
+                window.document.reload()
             })
         },
         isset(obj) {

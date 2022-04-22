@@ -5,9 +5,11 @@
 |--------------------------------------------------------------------------
 */
 use Illuminate\Http\Request;
+use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\TourController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\BookingController;
@@ -16,16 +18,16 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AirlinesController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\Api\ActivitiesController;
 use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\TourComponentController;
+use App\Http\Controllers\Api\ActivityBookingController;
+use App\Http\Controllers\Api\BookingActivityController;
 use App\Http\Controllers\Api\BookingCustomerController;
 use App\Http\Controllers\Api\CustomerComponentController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\BespokeReportController;
-use App\Repository\OrderRepository;
 
 /**
  * Booking form routes are PUBLIC (do not use api auth)
@@ -40,9 +42,25 @@ Route::prefix('booking')->group(function () {
 
     // Activities
     Route::get('/activities/tour/{tour}', [ActivitiesController::class, 'getActivitiesInventoryForTour']);
-    Route::get('/activities/booking/{token}/tour/{tour}', [ActivitiesController::class, 'getActivitiesBooking']);
-    Route::post('/activities/booking', [ActivitiesController::class, 'updateActivities']);
 
+    // Basic activities booking for Tour (old version)
+    Route::get('/activities/booking/{token}/tour/{tour}', [ActivitiesController::class, 'getActivitiesBooking']);
+
+    // upgrades and addons for Booking Activities
+    Route::get('/activities/booking/{token}', [BookingActivityController::class, 'getActivitiesForBooking']);
+    Route::get('/activity/find/booking/{booking}/{customer}', [BookingActivityController::class, 'getActivityBooking']);
+
+    // TODO - this function makes bookings::: check if it should be used instead of bookActvityBooking
+    Route::post('/activity/upgrade/book', [BookingActivityController::class, 'createActivityUpgradeBooking']);
+
+    //Route::post('/activity/book', [BookingActivityController::class, 'bookActivityBooking']);
+    Route::post('/activity/upgrade/cancel', [BookingActivityController::class, 'cancelActivityUpgradeBooking']);
+    
+    Route::post('/activity/addon/book', [BookingActivityController::class, 'createActivityAddonBooking']);
+
+    //Route::post('/activity/book', [BookingActivityController::class, 'bookActivityBooking']);
+    Route::post('/activity/addon/cancel', [BookingActivityController::class, 'cancelActivityAddonBooking']);
+    
     // Transports
     Route::get('/transports/tour/{tour}', [TransportController::class, 'getTransportsInventoryForTour']);
     Route::get('/transports/booking/{token}/tour/{tour}', [TransportController::class, 'getTransportsBooking']);
@@ -80,6 +98,18 @@ Route::prefix('booking')->group(function () {
 
     Route::post('/flight', [FlightController::class, 'postFlightBooking']);
     Route::post('/flights/remove/flight', [BookingController::class, 'removeFlightBooking']);
+
+    // Activities
+    // get all activities related to a booking
+    /* these appear to be not implemented
+    Route::get('/activity-booking/booking/{token}', [BookingActivityController::class, 'getActivitiesForBooking']);
+    // get all activities for a customer and booking
+    Route::get('/activity-booking/customer/{token}/{customer}', [BookingActivityController::class, 'getActivitiesForCustomer']);
+    // create an activity for a customer and booking
+    Route::post('/activity-booking/book', [BookingActivityController::class, 'createBookingActivityForCustomer']);
+    // remove an activity for a customer and booking
+    Route::post('/activity-booking/remove', [BookingActivityController::class, 'removeActivityBookingForCustomer']);
+    */
 
     // Booking summary for payment
     Route::get('/summary/{token}/gather', [BookingController::class, 'gatherDetails']);

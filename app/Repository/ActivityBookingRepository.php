@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Models\Tour;
 use App\Models\Booking;
 use App\Models\Activity;
-use App\Models\BookingActivities;
+use App\Models\BookingActivity;
 use Illuminate\Support\Facades\Log;
 
 interface ActivityBookingRepositoryInterface {
@@ -22,7 +22,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
 
     public function __construct()
     {
-        $this->model = new BookingActivities();
+        $this->model = new BookingActivity();
     }
 
     public function getBookings(Tour $tour = null)
