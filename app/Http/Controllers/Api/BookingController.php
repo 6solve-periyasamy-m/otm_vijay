@@ -182,7 +182,7 @@ class BookingController extends ApiController
         $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
         $activities = $activityBookingRepo->getBookingsForTour($booking);
         $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
-
+//dd($activities);
         return response()->json([
             'success' => true, 
             'booking' => [

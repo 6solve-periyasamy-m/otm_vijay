@@ -25,7 +25,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
         $this->model = new BookingActivity();
     }
 
-    public function getBookings(Tour $tour = null)
+    public function getBookings(Tour $tour, Booking $booking = null)
     {
         if (isset($tour)) {
             $activities = $this->model
@@ -35,17 +35,21 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.notes as activity_notes', 
                     'activity_inventory_tours.id as activity_inventory_tour_id', 
                     'activity_inventories.starts_at', 'activity_inventories.ends_at',
-                    // 'activity_inventories.sale_price', 'activity_inventories.purchase_price',
-                    // 'acitity_inventory_tours.tour_sale_price',
-                    'ticket_types.name as ticket_type_name')
+                    'activity_inventories.sales_price', //'activity_inventories.purchase_price',
+                    'activity_inventory_tours.tour_sales_price',
+                    'ticket_types.name as ticket_type_name',
+                    'booking_activities.activity_inventory_tour_id')
                 ->join('activity_inventory_tours', 'booking_activities.activity_inventory_tour_id', 'activity_inventory_tours.id')
                 ->join('activity_inventories', 'activity_inventory_tours.activity_inventory_id', 'activity_inventories.id')
                 ->join('activities', 'activity_inventories.activity_id', 'activities.id')
                 ->join('ticket_types', 'activity_inventories.ticket_type_id', 'ticket_types.id')
-                ->where('tour_id', $tour->id)
+                ->where('tour_id', $tour->id);
+            $activities = $activities->where('booking_activities.booking_id', $booking->id)
                 ->whereNull('activities.deleted_at')
                 ->whereNull('activity_inventories.deleted_at')
                 ->whereNull('activity_inventory_tours.deleted_at')
+                ->orderBy('booking_activities.activity_inventory_tour_id')
+                ->groupBy('booking_activities.activity_inventory_tour_id')
                 ->get();
         } else {
             $activities = $this->model->get();
@@ -63,6 +67,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 ->join('activity_inventories', 'activities.id', 'activity_inventories.activity_id')
                 ->join('activity_inventory_tours', 'activity_inventories.id', 'activity_inventory_tours.activity_inventory_id')
                 ->join('ticket_types', 'activity_inventories.ticket_type_id', 'ticket_types.id')
+                //->join('booking_activities', 'booking_activities.activity_inventory_tour_id', 'activity_inventory_tours.id')
                 ->select(
                     'activities.name as activities_name',
                     'activities.description',
@@ -72,6 +77,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.sales_price', 'activity_inventories.purchase_price',
                     'activity_inventory_tours.tour_sales_price',
                     'ticket_types.name as ticket_type_name')
+                    //'booking_activities.activity_inventory_tour_id as booking_activity_inventory_tour_id')
                 ->where('tour_id', $tour->id)
                 ->whereNull('activities.deleted_at')
                 ->whereNull('activity_inventories.deleted_at')
@@ -80,6 +86,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 $activitiesQuery = $activitiesQuery->where('activity_inventory_tours.tour_component_type', $tour_component_type);
             }
             $activities = $activitiesQuery->get();
+                // ->get();
         } else {
             $activities = $this->model->get();
         }
@@ -101,9 +108,9 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
         $activitiesBooking = $this->getActivities($booking->tour, 'Included');
 
         // when activity bookings are recorded, test this query
-        // $activitiesBooking = $this->getBookings($booking->tour);
+        $activitiesBooked = $this->getBookings($booking->tour, $booking);
 
-        return $activitiesBooking;
+        return ['included' => $activitiesBooking, 'booked' => $activitiesBooked];
     }
 
     public function create($booking)

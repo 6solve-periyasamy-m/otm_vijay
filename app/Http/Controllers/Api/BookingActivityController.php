@@ -39,13 +39,14 @@ class BookingActivityController extends ApiController
                     'activities.description',
                     'activities.image_url',
                     'activities.name',
+                    'activity_inventories.sales_price',
                     'activity_inventories.starts_at',
                     'activity_inventories.ends_at',
                     'activity_inventory_tour_upgrades.description as upgrade_description'
                 )
                 ->where('bookings.token', $token)
                 ->get();
-        Log::debug('***>>>> bookingActivities:', [$bookingActivities]);
+        Log::debug('***>>>> bookingActivities:', [$token, $bookingActivities]);
 
         // foreach($bookingActivities as $bookingActivity) {
         //     $upgradeActivity = ActivityInventoryTourUpgrade::where('upgrade_id', $bookingActivity->upgrade_id)->first();

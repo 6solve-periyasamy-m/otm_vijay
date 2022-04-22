@@ -33,6 +33,7 @@ class ActivityRepository implements ActivityRepositoryInterface
             'activity_inventory_tours.id as activity_inventory_tour_id',
             'activity_inventory_tours.tour_component_type', 
             'activities.*',
+            'activity_inventories.sales_price',
             'activity_inventories.starts_at', 'activity_inventories.ends_at',
             'activities.id as activity_id',
             'addresses.name as address',

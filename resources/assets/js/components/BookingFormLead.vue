@@ -501,7 +501,7 @@ export default {
                         if (booking) {
                             that.bookingToken = booking.token
                             console.log('.....found booking for this tour', booking.token)
-                            alert("Your active booking data is available, please check your details and Save Traveller")
+                            // alert("Your active booking data is available, please check your details and Save Traveller")
                             bus.$emit("setBookingToken", that.bookingToken)
                             // bus.$emit("retrieveUserData", that.bookingToken)
                             // bus.$emit("controlLoadBookings")
