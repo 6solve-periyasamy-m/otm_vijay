@@ -39,18 +39,13 @@ class BookingActivityController extends ApiController
                     'activities.description',
                     'activities.image_url',
                     'activities.name',
+                    'activity_inventories.sales_price',
                     'activity_inventories.starts_at',
                     'activity_inventories.ends_at',
                     'activity_inventory_tour_upgrades.description as upgrade_description'
                 )
                 ->where('bookings.token', $token)
                 ->get();
-        Log::debug('***>>>> bookingActivities:', [$bookingActivities]);
-
-        // foreach($bookingActivities as $bookingActivity) {
-        //     $upgradeActivity = ActivityInventoryTourUpgrade::where('upgrade_id', $bookingActivity->upgrade_id)->first();
-        //     $bookingActivity->base_id = $upgradeActivity->base_id;
-        // }
 
         return response()->json(['success' => true, 'bookings' => $bookingActivities]);
     }
@@ -112,7 +107,7 @@ class BookingActivityController extends ApiController
             $customer = Customer::find($customer_id);
             // Log::debug('customer', [$customer_id]);
             $bookingActivity = $this->getActivityBooking($booking, $customer, $activity_inventory_tour_id);
-            Log::debug('booking_activity', [$bookingActivity]);
+            //Log::debug('booking_activity', [$bookingActivity]);
             if (!isset($bookingActivity->booking_id)) {
                 $bookingActivity->booking_id = $booking_id;
                 $bookingActivity->customer_id = $customer_id;
@@ -121,7 +116,7 @@ class BookingActivityController extends ApiController
             }
             $bookings[] = $bookingActivity;
         }
-        Log::debug('booking Addon book', $bookings);
+        //Log::debug('booking Addon book', $bookings);
 
         return response()->json(['success' => true, 'booking' => $bookings]);
 
@@ -194,7 +189,7 @@ class BookingActivityController extends ApiController
             $customer = Customer::find($customer_id);
             // Log::debug('customer', [$customer_id]);
             $bookingActivity = $this->getActivityBooking($booking, $customer, $activity_inventory_tour_id);
-            Log::debug('booking_activity', [$bookingActivity]);
+            // Log::debug('booking_activity', [$bookingActivity]);
             if (!isset($bookingActivity->booking_id)) {
                 $bookingActivity->booking_id = $booking_id;
                 $bookingActivity->customer_id = $customer_id;
@@ -292,79 +287,5 @@ class BookingActivityController extends ApiController
         } catch (\Exception $e) {
             return response()->json(['success' => false]);
         }
-    }
-}
-
-class deprecatedstuffforactivitybooking {
-    /** TODO: check:  initial versions of the above */
-    public function getActivitiesForCustomer($token, Customer $customer)
-    {
-        $bookingActivities = BookingActivity::join('bookings', 'booking_activities.booking_id', 'bookings.id')
-                ->where('token', $token)
-                ->where('booking_activities.customer_id', $customer->id)->get();
-
-        return response()->json(['success' => true, 'data' => $bookingActivities]);
-    }
-
-    private function findBookingActivity(Request $request)
-    {
-        // get the booking
-        $booking = Booking::where('token', $request->token)->first();
-        $activity = Activity::where('id', $request->activity_id)->first();
-        $customer = Customer::where('id', $request->customer_id)->first();
-        // bookingActivity
-        $bookingActivity = null;
-        if ($booking && $activity && $customer) {
-            $bookingActivity = BookingActivity::where('bookings_id', $booking->id)
-                ->where('activities_id', $activity->id)
-                ->where('customer_id', $customer->id)
-                ->first();
-        }
-        return $bookingActivity;
-    }
-    /**
-     * createBookingActivityForCustomer
-     *
-     * @param Request $request [token, customer, activity]
-     * @return JSON response
-     */
-    public function createBookingActivityForCustomer(Request $request)
-    {
-        $request->validate([
-            'token' => $request->token,
-            'activity' => $request->activity,
-            'customer' => $request->customer
-        ]);
-
-        $booking = Booking::where('token', $request->token)->first();
-        $activity = Activity::where('id', $request->activity_id)->first();
-        $customer = Customer::where('id', $request->customer_id)->first();
-        $bookingActivity = $this->findBookingActivity($request);
-        if (empty($bookingActivity)) {
-            $bookingActivity = new BookingActivity();
-            $bookingActivity->booking_id = $booking->id;
-            $bookingActivity->customer_id = $customer->id;
-            $bookingActivity->activity_id = $activity->id;
-            $bookingActivity->save();
-        }
-
-        return response()->json(['success' => true, 'record' => $bookingActivity]);        
-    }
-
-    /**
-     * removeActivityBookingForCustomer
-     *
-     * @param Request $request [token, customer, activity]
-     * @return JSON response
-     */
-    public function removeActivityBookingForCustomer(Request $request)
-    {
-        $bookingActivity = $this->findBookingActivity($request);
-        if ($bookingActivity) {
-            $bookingActivity->delete();
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json(['success' => false, 'message' => 'not found']);
     }
 }

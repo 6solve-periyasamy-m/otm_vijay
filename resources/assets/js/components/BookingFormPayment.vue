@@ -32,8 +32,15 @@
                             </div>
                         </div>
                         <div v-if="booking.activities != undefined">
-                            <h3>Activities</h3>
-                            <div class="block activities" v-for="activity in booking.activities" :key="activity.id">
+                            <h3>Activities included</h3>
+                            <div class="block activities" v-for="activity in booking.activities['included']" :key="activity.id">
+                                {{activity.name}} {{activity.ticket_type_name}}
+                                Starts {{formatDate(activity.starts_at)}} Ends {{formatDate(activity.ends_at)}} 
+                                <br>
+                                {{activity.description}}
+                            </div>
+                            <h3>Add-on and Upgrades</h3>
+                            <div class="block activities" v-for="activity in booking.activities['booked']" :key="activity.id">
                                 {{activity.name}} {{activity.ticket_type_name}}
                                 Starts {{formatDate(activity.starts_at)}} Ends {{formatDate(activity.ends_at)}} 
                                 <br>
@@ -112,12 +119,21 @@
                         {{priceFormat(singleOccupancySurcharge)}} x {{singleRooms}} = {{priceFormat(singleRooms * singleOccupancySurcharge)}}
                     </div>
                 </div>
+                <div class="summary row" v-if="1 || activityCharges">
+                    <div class="price">
+                        Activities upgrades and addons
+                    </div>
+                    <div class="price_amount">
+                        {{priceFormat(activityCharges * travellerCount)}}
+                    </div>
+                </div>
+                
                 <div class="summary row">
                     <div class="price">
                         Total 
                     </div>
                     <div class="price_amount">
-                       {{priceFormat(totalPrice)}} 
+                       {{priceFormat(totalPrice + activityCharges * travellerCount)}} 
                     </div>
                 </div>
                 <div class="summary row">
@@ -190,7 +206,8 @@ export default {
             travellerCount: 0,
             singleRooms: 0,
             customer_id: null,
-            tour_id: null
+            tour_id: null,
+            activityCharges: 0
         }    
     },
     created() {
@@ -198,8 +215,9 @@ export default {
         this.csrf_token = csrf
         bus.$on('setBookingToken', (bookingData) => {
             that.booking_token = bookingData
-            that.debug && console.log(`${that.moduleName} module, booking ${that.booking_token}`)
+            that.debug>5 && console.log(`${that.moduleName} module, booking ${that.booking_token}`)
             that.loadBooking(that.booking_token)
+            that.getActivityBookings()
         })
         bus.$on("ReloadBooking", (token) => {
             that.debug>2 && console.log("Payment: booking reloaded", token);
@@ -218,18 +236,22 @@ export default {
             that.countTravellers()
         })
         bus.$on('recalculatePayment', (travellers) => {
-            that.debug && console.log('Recalculate payment event', travellers)
+            that.debug>1 && console.log('Recalculate payment event', travellers)
             that.travellers = travellers
             that.loadBooking(that.booking_token)
             that.calcPrice()
             that.calcTourPrice()
+        })
+        bus.$on('activityBooking', (bookings) => {
+            that.debug>2 && console.log('EVENT: Activity bookings', bookings)
+            that.calculateActivityBookings(bookings)
         })
         bus.$on("TermsAgreed", (agreed) => {
           this.agreement = agreed
         })
     },
     mounted() {
-        this.debug && console.log('BookingFormPayment form mounted travellers:', this.travellerCount);
+        this.debug>5 && console.log('BookingFormPayment form mounted travellers:', this.travellerCount);
     },
     computed: {
         calculateTourPrice: function() {
@@ -240,6 +262,23 @@ export default {
         }
     },
     methods: {
+        getActivityBookings() {
+            let that = this
+            axios.get(`/api/booking/activities/booking/${this.booking_token}`)
+                .then(response => {
+                    const bookings = response.data.bookings
+                    console.log('Prices - activities', that.booking_token, bookings)
+                    that.calculateActivityBookings(bookings)
+                })
+                .catch(error => console.log(error))
+        },
+        calculateActivityBookings(bookings) {
+            let total = 0
+            bookings.map((a,i) => {
+                total += parseFloat(a.sales_price)
+            })
+            this.activityCharges = total
+        },
         calculateSingleRooms() {
             let rooms = 0
             this.booking.accommodations.map(t => {

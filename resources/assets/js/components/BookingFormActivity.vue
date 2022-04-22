@@ -58,6 +58,9 @@
                     <div class="column-ticket-type" :class="{emphasiseIt: activity.tour_component_type == 'Upgrade'}">
                         {{activity.ticket_type_name =='Basic' ? '' : activity.ticket_type_name}}
                     </div>
+                    <div class="column-ticket-type" v-if="activity.tour_component_type == 'Upgrade'">
+                        {{activity.sales_price}}
+                    </div>
                     <div class="column-stock" v-if="activity.stock < 1">
                         <h3 style="color: red">OUT OF STOCK</h3>
                     </div>
@@ -98,6 +101,9 @@
                     <div class="column-ticket-type">
                         {{activity.ticket_type_name}}
                     </div>
+                    <div class="column-ticket-type">
+                        {{activity.sales_price}}
+                    </div>
                     <div class="column-action">
                         <button class="btn btn-primary btn-small" 
                             v-if="activity.tour_component_type === 'Add-on'
@@ -114,7 +120,7 @@
                      {{addons}}
                 </div>
                 <div>
-                    <button class="btn btn-primary" @click="completeActivities">Completed</button>
+                    <button class="btn btn-primary" @click="completeActivities">Complete</button>
                 </div>
             </div>
         </div>
@@ -155,10 +161,10 @@ export default {
             that.loadLeadTraveller(that.booking_token)
         })
         bus.$on("AdditionalTravelersLoaded", (travellers, init = false) => {
-            that.debug>2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
+            that.debug > 2 && console.log(`>>>> ${that.moduleName} module: travellers loaded: ${travellers}`);
             travellers.map(traveller => that.travellers.push(traveller));
-            console.log('AdditionalTravellerLoaded Event: loading activityBooking for ', that.travellers)
-            that.loadActivityBooking(that.travellers)
+            that.debug > 6 && console.log('AdditionalTravellerLoaded Event: loading activityBooking for ', that.travellers)
+            that.loadActivityBooking(that.booking_token)
         })
     },
     mounted() {
@@ -169,18 +175,33 @@ export default {
             let that = this
             axios.get(`/api/booking/customer/${token}`)
                 .then(response => {
-                    console.log('Activity GET LEAD', response.data.customer)
+                    that.debug > 4 && console.log('Activity GET LEAD', response.data.customer)
                     that.leadTraveller = response.data.customer
                     const loaded = that.travellers.filter(t => t.id == that.leadTraveller.id)
-                    console.log('loaded',loaded)
+                    that.debug > 3 && console.log('loaded',loaded)
                     if (that.travellers.length < 1 || !loaded || loaded.length == 0) {
-                        console.log('unshifting ', that.leadTraveller.id)
+                        that.debug > 6 && console.log('unshifting ', that.leadTraveller.id)
                         that.travellers.unshift(that.leadTraveller)
                     }
                 })
                 .catch(error => console.log(error))
         },
         completeActivities() {
+            let that = this
+            const bookings = []
+            console.log('activity booked summary')
+            that.activities.map(a => {
+                if (a.status == 'booked') {
+                    bookings.push(a)
+                }
+            })
+            console.log('addons booked summary')
+            that.addons.map(a => {
+                if (a.status == 'booked') {
+                    bookings.push(a)
+                }
+            })
+            bus.$emit('activityBooking', bookings)
             this.activated = false
         },
         bookActivityAddon(activity) {
@@ -309,14 +330,15 @@ export default {
                 .then(response => {
                     //console.log('booking-activity response', response)
                     that.bookedActivities = response.data.bookings
-                    console.log('parsed bookings', that.bookedActivities)
-                    console.log('bookedmap', that.bookedActivities.map(b => b.tour_component_type))
+                    that.debug > 4 && console.log('response', response)
+                    that.debug > 2 && console.log('bookedActivities', that.bookedActivities)
+                    that.debug > 3 && console.log('bookedmap', that.bookedActivities.map(b => b.tour_component_type))
                     
                     that.allActivities.map((a,i) => {
                         const isMatched2 = that.bookedActivities.map(b => b.activity_inventory_tour_id).includes(a.activity_inventory_tour_id)
                         const isMatched3 = that.bookedActivities.map(b => b.tour_component_type).includes(a.tour_component_type)
                         const isMatched = isMatched2 && isMatched3
-                        console.log('check settings', a, that.bookedActivities, isMatched2, isMatched3)
+                        that.debug > 6 && console.log('check settings', a, that.bookedActivities, isMatched2, isMatched3)
                         if (isMatched) {
                             that.allActivities[i].status = 'booked'
                         } else {
@@ -328,8 +350,8 @@ export default {
                             }
                         })
                         if (base_id) {
-                            console.log('CHECK ACTIVIITES for BASEID',  that.bookedActivities)
-                            console.log('base_id', base_id, 'aitid', a.activity_inventory_tour_id)
+                            that.debug > 6 && console.log('CHECK ACTIVIITES for BASEID',  that.bookedActivities)
+                            that.debug > 6 && console.log('base_id', base_id, 'aitid', a.activity_inventory_tour_id)
                             that.activities.map(a => {
                                 if (a.activity_inventory_tour_id == base_id) {
                                     a.status='upgraded'
@@ -337,7 +359,7 @@ export default {
                             })
                         }
                     })
-                    console.log('updated activitybookings', that.activities.map(a => a.status))
+                   that.debug > 2 && console.log('updated activitybookings', that.activities.map(a => a.status))
                 })
                 .catch(error => console.log(error))
         }

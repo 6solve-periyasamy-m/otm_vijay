@@ -182,7 +182,7 @@ class BookingController extends ApiController
         $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
         $activities = $activityBookingRepo->getBookingsForTour($booking);
         $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
-
+        //dd($activities);
         return response()->json([
             'success' => true, 
             'booking' => [
@@ -213,7 +213,7 @@ class BookingController extends ApiController
 
         $token = $request->token;
         $booking = Booking::where('token', $token)->first();
-Log::debug('calcDeposit: check booking for tour_id ', [$booking]);
+        // Log::debug('calcDeposit: check booking for tour_id ', [$booking]);
         $tour = Tour::find($request->tour['id']);
         if (!$tour) {
             return response()->json(['success' => false, 'error' => 'Non-existant tour']);
@@ -227,7 +227,7 @@ Log::debug('calcDeposit: check booking for tour_id ', [$booking]);
         if ($deposit) {
             return response()->json(['success' => true, 'deposit' => $deposit]);
         } else {
-            Log::debug('calculateDeposit: Deposit is ' . $deposit);
+            // Log::debug('calculateDeposit: Deposit is ' . $deposit);
             throw new Exception('Deposit must be a positive value!');
         }
     }
