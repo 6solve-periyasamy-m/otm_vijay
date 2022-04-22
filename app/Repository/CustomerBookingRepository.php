@@ -96,7 +96,26 @@ class CustomerBookingRepository
                 $booking->activities()->save($bookingComponent);
             }
         }
-        // Flights are Selected Later
+        // Flight
+        $inbound = $outbound = false;
+        foreach ($tour->flightInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type == 'Included') {
+                if ($inventoryTour->flight_type == 'Inbound') {
+                    if ($inbound) continue;
+                    $inbound = true;
+                }
+                if ($inventoryTour->flight_type == 'Outbound') {
+                    if ($outbound) continue;
+                    $outbound = true;
+                }
+                $bookingComponent = BookingFlight::make([
+                    'customer_id' => $traveller->customer_id,
+                    'flight_inventory_tour_id' => $inventoryTour->id,
+                    'flight_type' => $inventoryTour->flight_type,
+                ]);
+                $booking->flights()->save($bookingComponent);
+            }
+        }
         // Transport
         foreach ($tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type == 'Included') {
