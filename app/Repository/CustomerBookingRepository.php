@@ -15,6 +15,7 @@ use App\Models\BookingTraveller;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Merchandise;
+use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
@@ -180,6 +181,100 @@ class CustomerBookingRepository
         return true;
     }
 
+    public static function removeBookingActivityAddon(Booking $booking, ActivityInventoryTour $addon): bool
+    {
+        if ($booking->tour_id !== $addon->tour_id) return false;
+        if ($addon->tour_component_type !== 'Add-on') return false;
+        foreach ($booking->activities as $bookingComponent) {
+            if ($bookingComponent->tourComponent->id == $addon->id)
+                $bookingComponent->delete();
+        }
+        return true;
+    }
+
+    public static function removeBookingMerchandiseAddon(Booking $booking, Merchandise $addon): bool
+    {
+        if ($booking->tour_id !== $addon->tour_id) return false;
+        if ($addon->tour_component_type !== 'Add-on') return false;
+        foreach ($booking->merchandise as $bookingComponent) {
+            if ($bookingComponent->tourComponent->id == $addon->id)
+                $bookingComponent->delete();
+        }
+        return true;
+    }
+
+    public static function getBookingAdditionals(BookingTraveller $bookingTraveller): array
+    {
+        if (!isset($bookingTraveller)) return [];
+        $owned = self::getBookedComponentsAndUpgradedIncluded($bookingTraveller);
+        $data = [];
+        foreach ($bookingTraveller->booking->tour->merchandise as $tourComponent) {
+            $owns = in_array($tourComponent->id, $owned['extras']);
+            if ($tourComponent->available_stock <= 0 && !$owned) continue;
+            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
+                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owns,];
+        }
+        foreach ($bookingTraveller->booking->tour->activityInventoryTours as $tourComponent) {
+            if ($tourComponent->tour_component_type !== 'Upgrade') {
+                $inventory = $tourComponent->inventory;
+                if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
+                if ($tourComponent->available_stock <= 0) continue;
+                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
+                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),'owned' => false,];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Mostly the same in implementation to Order equivalent. Generates more data than is needed, as it is not worth
+     * stripping it out when it needs adding again later
+     * @param BookingTraveller $traveller
+     * @return array
+     */
+    public static function getBookedComponentsAndUpgradedIncluded(BookingTraveller $traveller): array
+    {
+        $data = [];
+        $subData = [];
+        foreach ($traveller->accommodation as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['accommodation'] = array_unique($subData);
+        $subData = [];
+        foreach ($traveller->activities as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['activities'] = array_unique($subData);
+        $subData = [];
+        foreach ($traveller->flights as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['flights'] = array_unique($subData);
+        $subData = [];
+        foreach ($traveller->transport as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
+                $subData[] = $orderComponent->tourComponent->parent()->id;
+            }
+        }
+        $data['transport'] = array_unique($subData);
+        $subData = [];
+        foreach ($traveller->merchandise as $orderComponent) {
+            $subData[] = $orderComponent->tourComponent->id;
+        }
+        $data['extras'] = array_unique($subData);
+        return $data;
+    }
+
     public static function generateSummary(Booking $booking): array
     {
         $tour = $booking->tour;
@@ -242,6 +337,12 @@ class CustomerBookingRepository
                 ];
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
+            foreach ($traveller->merchandise as $bookingComponent) {
+                $tourComponent = $bookingComponent->tourComponent;
+                $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
+            }
+            // Addons
+            $summary['customers'][$bookingComponent->customer_id]['addons'] = self::getBookingAdditionals($traveller);
         }
         $summary['billing']['customers'] = $customerCount;
         $summary['billing']['total'] = ($tour->base_price_per_person * $customerCount) + ($summary['billing']['single_occupants'] * $summary['billing']['surcharge']) + $summary['billing']['additionals'];

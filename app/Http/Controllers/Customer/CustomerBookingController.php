@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccommodationGroup;
+use App\Models\ActivityInventoryTour;
 use App\Models\AddressParent;
 use App\Models\Booking;
 use App\Models\Customer;
+use App\Models\Merchandise;
 use App\Models\RoomType;
 use App\Models\Tour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerBookingRepository;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
+use Log;
 
 class CustomerBookingController extends Controller
 {
@@ -75,6 +78,70 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token,], CustomerBookingRepository::generateSummary($booking)));
+    }
+
+    public function purchaseAddon(string $bookingUrl, string $token, string $id, string $type)
+    {
+        $tour = $this->getTour($bookingUrl);
+        if (!isset($tour) || !$tour->is_active) abort(404);
+        $booking = $this->getBooking($token);
+        if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
+        switch ($type) {
+            case 'activity':
+                $model = ActivityInventoryTour::find($id);
+                if (!isset($model)) abort(404);
+                $applied = CustomerBookingRepository::addBookingActivityAddon($booking, $model);
+                if (!$applied) {
+                    abort(404);
+                }
+                break;
+            case 'extra':
+                $model = Merchandise::find($id);
+                if (!isset($model)) abort(404);
+                $applied = CustomerBookingRepository::addBookingMerchandiseAddon($booking, $model);
+                if (!$applied) {
+                    abort(404);
+                }
+                break;
+            default: abort(404);
+        }
+        return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl,'token' => $token,]);
+    }
+
+    public function removeAddon(string $bookingUrl, string $token, string $id, string $type)
+    {
+        $tour = $this->getTour($bookingUrl);
+        if (!isset($tour) || !$tour->is_active) {
+            Log::info('Tour not Found');
+            abort(404);
+        }
+        $booking = $this->getBooking($token);
+        if (!isset($booking) || $booking->tour_id !== $tour->id) {
+            Log::info('Booking not Found or does not match');
+            abort(404);
+        }
+        switch ($type) {
+            case 'activity':
+                $model = ActivityInventoryTour::find($id);
+                if (!isset($model)) {
+                    Log::info('Model not Found');
+                    abort(404);
+                }
+                $applied = CustomerBookingRepository::removeBookingActivityAddon($booking, $model);
+                if (!$applied) {
+                    Log::info('Application Failed');
+                    abort(404);
+                }
+                break;
+            case 'extra':
+                $model = Merchandise::find($id);
+                if (!isset($model)) abort(404);
+                $applied = CustomerBookingRepository::removeBookingMerchandiseAddon($booking, $model);
+                if (!$applied) abort(404);
+                break;
+            default: abort(404);
+        }
+        return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl,'token' => $token,]);
     }
 
     private function getTour(string $bookingUrl): ?Tour

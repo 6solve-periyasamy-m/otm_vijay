@@ -23,6 +23,11 @@
 
 @section('booking-body')
     @foreach($customers as $customerData)
+        <hr class="splitter">
+        <div class="form-group col-md-12">
+            <h5 class="col-md-12 mb-0">Accommodation</h5>
+        </div>
+        <hr class="splitter">
         <table class="table table-striped text-center">
             <thead>
             <tr>
@@ -47,6 +52,11 @@
             @endforeach
             </tbody>
         </table>
+        <hr class="splitter">
+        <div class="form-group col-md-12">
+            <h5 class="col-md-12 mb-0">Activities</h5>
+        </div>
+        <hr class="splitter">
         <table class="table table-striped text-center">
             <thead>
             <tr>
@@ -70,7 +80,14 @@
                     @endif
                     <td>
                         @if(count($data['component']->tourComponent->getUpgradeKeyMap()) < 2)
-                            No Upgrades Available
+                            @if($data['component']->tourComponent->tour_component_type == 'Included')
+                                No Upgrades Available
+                            @else
+                                <a href="{{ route('customer-booking.remove-addon',
+                                        ['bookingUrl' => $tour->booking_form_url, 'token' => $token, 'type' => 'activity',
+                                         'id' => $data['component']->tourComponent->id,]) }}"
+                                   class="btn btn-danger ms-1">-</a>
+                            @endif
                         @else
                             @include('partials.fields.selector.adder-preset',
                                 ['field' => 'activity_' . $data['component']->id . '_upgrade', 'preselect' => false,
@@ -82,6 +99,11 @@
             @endforeach
             </tbody>
         </table>
+        <hr class="splitter">
+        <div class="form-group col-md-12">
+            <h5 class="col-md-12 mb-0">Flights</h5>
+        </div>
+        <hr class="splitter">
         <table class="table table-striped text-center">
             <thead>
             <tr>
@@ -106,6 +128,11 @@
             @endforeach
             </tbody>
         </table>
+        <hr class="splitter">
+        <div class="form-group col-md-12">
+            <h5 class="col-md-12 mb-0">Transport</h5>
+        </div>
+        <hr class="splitter">
         <table class="table table-striped text-center">
             <thead>
             <tr>
@@ -130,6 +157,51 @@
             @endforeach
             </tbody>
         </table>
+        <hr class="splitter">
+        <div class="form-group col-md-12">
+            <h5 class="col-md-12 mb-0">Add-ons and Extras</h5>
+        </div>
+        <table id="merchandise-table" class="table table-striped table-responsive-sm text-center">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Component Type</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            @foreach($customerData['addons'] as $bookingComponent)
+                <tr>
+                    <td>{{ $bookingComponent['name'] }}</td>
+                    @if($bookingComponent['type'] === 'Included')
+                        <td colspan="2">
+                            {{ $bookingComponent['type'] }}
+                        </td>
+                    @else
+                        <td>
+                            {{ $bookingComponent['type'] }}
+                        </td>
+                        <td>
+                            {{ StringFormatter::formatCurrency($bookingComponent['cost']) }}
+                        </td>
+                    @endif
+                    <td>
+                        @if($bookingComponent['owned'])
+                            <a href="{{ route('customer-booking.remove-addon',
+                                        ['bookingUrl' => $tour->booking_form_url, 'token' => $token, 'type' => $bookingComponent['component'],
+                                         'id' => $bookingComponent['id'],]) }}"
+                               class="btn btn-danger ms-1">-</a>
+                        @else
+                            <a href="{{ route('customer-booking.purchase-addon',
+                                        ['bookingUrl' => $tour->booking_form_url, 'token' => $token, 'type' => $bookingComponent['component'],
+                                         'id' => $bookingComponent['id'],]) }}"
+                               class="btn btn-success ms-1">+</a>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+        <hr class="splitter">
         @break
     @endforeach
     <hr class="splitter"/>
