@@ -13,7 +13,6 @@ interface ActivityBookingRepositoryInterface {
     public function getBookings(Tour $tour);
     public function getActivities(Tour $tour);
     public function getBookingsForTour(Booking $booking);
-    public function create($booking);
 }
 
 class ActivityBookingRepository implements ActivityBookingRepositoryInterface
