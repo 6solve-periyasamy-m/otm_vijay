@@ -52,7 +52,7 @@ export default {
     components: { BookingFormTour },
     data() {
         return {
-            debug: 3,
+            debug: false,
             formInfo: false,
             bookingName: '',
             agencyName: this.company,
@@ -115,7 +115,7 @@ export default {
         this.retrieveUserdata(that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
-            this.retrieveUserdata(that.bookingToken)
+            //this.retrieveUserdata(that.bookingToken)
         } else {
             // If booking form has no token may mean consent for cookies is granted but cookies are not permitted?
             alert('We need your consent to store cookies or please make your booking by phone')
@@ -124,6 +124,9 @@ export default {
     methods: {
         retrieveUserdata(token) {
             let that = this
+            if (token != localStorage.active_token) {
+                token = localStorage.active_token
+            }
             axios.get(`/api/booking/token/${token}`)
             .then(response => {
                 console.log('>>>>>> retrieve booking by token response', response)
@@ -139,19 +142,7 @@ export default {
                     that.bookingTour = data.tour
                     const customer_id = data.booking.customer_id
                     let booking_token = data.booking.token
-                    bus.$emit('retriveUser')
-                    // bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                    // bus.$emit('homeAddressLoaded', data.customer.home_address)
-                    // bus.$emit('billingAddressLoaded', data.customer.billing_address)
-
-                    const tour_id = that.tour_id
-                    console.log('booking token loaded the tour, cf tour: ', data.tour, that.tour)
-                    if (that.tour.id == data.tour.id) {
-                        bus.$emit('setBookingToken', booking_token)
-                    } else {
-                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                        that.resetToken()
-                    }
+                    bus.$emit('retriveUser', that.leadTraveller.email_address)
                 } else {
                     alert('no booking data found, create fresh booking')
                 }

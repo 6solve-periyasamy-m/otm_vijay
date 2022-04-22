@@ -10,6 +10,7 @@ use App\Models\Booking;
 use App\Models\Address;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 use App\Models\BookingTraveller;
 use Illuminate\Support\Facades\Log;
@@ -46,8 +47,11 @@ class BookingController extends ApiController
         }
         $customer->home_address = Address::find($customer->home_address_id);
         $customer->billing_address = Address::find($customer->billing_address_id);
+
+        $tour = Tour::find($booking->tour_id);
         if (isset($customer) && isset($booking)) {
-            return response()->json(['success' => true, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
+            $url = URL::to('/booking/'.$tour->booking_form_url);
+            return response()->json(['success' => true, 'booking_url' => $url, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
         }
         return response()->json(['success' => false, 'message' => 'failed']);
     }

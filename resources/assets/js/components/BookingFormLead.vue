@@ -286,7 +286,7 @@ export default {
     props: ["booked", "tour"],
     data() {
         return {
-            debug: 8,
+            debug: false,
             bookingToken: null,
             moduleName: "leadTraveller",
             countries: [],
@@ -389,8 +389,8 @@ export default {
             // localStorage.tokens = JSON.stringify(tokens)
             // localStorage.active_token = that.bookingToken
         });
-        bus.$on('retriveUser', () => {
-            that.retrieveUser()
+        bus.$on('retriveUser', (email) => {
+            that.retrieveUser(email)
         })
         bus.$on("leadTravellerLoaded", (customer) => {
             that.setCustomer(customer);
@@ -471,14 +471,17 @@ export default {
                 this.retrieveUser();
             }
         },
-        retrieveUser() {
+        retrieveUser(email = null) {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
             let that = this;
+            if (email == null) {
+                email = this.email_address
+            }
             // is it a registered user?
             if (!this.auth) {
                 this.debug > 1 && console.log("BookingFormLead: checking for auth user");
-                axios.get(`/api/booking/email/registered/${this.email_address}`)
+                axios.get(`/api/booking/email/registered/${email}`)
                 .then(response => {
                     that.debug > 1 && console.log("BookingFormLead: email registered? response", response);
                     that.activeUser = response.data.existing;

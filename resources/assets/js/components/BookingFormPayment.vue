@@ -146,7 +146,7 @@
                       <input type="hidden" name="_token" :value="csrf_token" />
                       <input type="hidden" name="token" :value="booking_token" />
                       <input type="hidden" name="customer_id" :value="customer_id" />
-                      <input type="hidden" name="tour_id" :value="tour_id" />
+                      <input type="hidden" name="tour_id" :value="tour.id" />
                       <input type="text" name="currencyamount" readonly :value="priceFormat(deposit * travellerCount)" />
                       <input type="hidden" name="amount" readonly :value="deposit * travellerCount" />
                       <input type="submit" class="btn btn-primary" value="Pay Deposit" />
@@ -169,7 +169,7 @@ export default {
     props: ['tour', 'systemCurrency'],
     data() {
         return {
-            debug: 2,
+            debug: false,
             moduleName: 'PaymentModule',
             currency: this.systemCurrency || 'GBP',
             booking_token: null,

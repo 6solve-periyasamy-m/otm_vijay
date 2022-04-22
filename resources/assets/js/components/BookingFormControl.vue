@@ -32,50 +32,52 @@ export default {
     }
   },
   created() {
-    const that=this
+    const that = this
     bus.$on('setBookingToken', (current_token) => {
         // alert('CONTROL event: setBookingToken to '+ current_token)
         that.bookingToken = current_token
-        setCookie(that.token_label, that.bookingToken)
-        localStorage.active_token = that.bookingToken
-        // add current_token to the localStorage array of tokens
-        if (localStorage.tokens != undefined && localStorage.tokens.length > 0) {
-          const localTokens = JSON.parse(localStorage.tokens)
-          if (localTokens.indexOf(current_token) === -1) {
-            localTokens.push(current_token)
-            localStorage.tokens = JSON.stringify(localTokens)
-          }
-        }
-        that.debug && console.log(`>>>> ${that.moduleName} CONTROL module: booking ${that.bookingToken}`)
-        that.findBookings(that.bookingToken)
+        // setCookie(that.token_label, that.bookingToken)
+        // localStorage.active_token = that.bookingToken        // add current_token to the localStorage array of tokens
+        // if (localStorage.tokens != undefined && localStorage.tokens.length > 0) {
+        //   const localTokens = JSON.parse(localStorage.tokens)
+        //   if (localTokens.indexOf(current_token) === -1) {
+        //     localTokens.push(current_token)
+        //     localStorage.tokens = JSON.stringify(localTokens)
+        //   }
+        // }
+        // that.debug && console.log(`>>>> ${that.moduleName} CONTROL module: booking ${that.bookingToken}`)
+        //that.findBookings(that.bookingToken)
+        that.getBookings(current_token)
         // window.location.reload()
     })
     bus.$on('controlLoadBookings', () => {
       that.controlForms(that.showForms)
     })
   },
-  mounted() {
-    //this.findBookings()
-  },
+  // mounted() {
+  //   //this.findBookings()
+  // },
   methods: {
-    findBookings(current_token = null) {
-
-      if (current_token == null && localStorage.getItem('tokens') == undefined || localStorage.getItem('tokens') == null) {
-        alert('CONTROL no booking yet')
-        return
-      }
-      // const tokens = JSON.parse(localStorage.getItem('tokens'))
-      this.getBookings(current_token)
-      // this.activeTokens = JSON.parse(localStorage.tokens)
-      // const checkCurrent = this.activeTokens.filter(b => b.token==current_token)
-      // console.log('CONTROL current_token', current_token)
-      // console.log('CONTROL findBookings: check', this.activeTokens, checkCurrent)
-    },
+    // findBookings(current_token = null) {
+    //   console.log('CONTROL: findBookings in localStorage: ',localStorage.getItem('tokens'))
+    //   if (current_token == null && localStorage.getItem('tokens') == undefined || localStorage.getItem('tokens') == null) {
+    //     return
+    //   }
+    //   // const tokens = JSON.parse(localStorage.getItem('tokens'))
+    //   this.getBookings(current_token)
+    //   // this.activeTokens = JSON.parse(localStorage.tokens)
+    //   // const checkCurrent = this.activeTokens.filter(b => b.token==current_token)
+    //   // console.log('CONTROL current_token', current_token)
+    //   // console.log('CONTROL findBookings: check', this.activeTokens, checkCurrent)
+    // },
     restoreActive() {
+        if (!localStorage.active_token) {
+          localStorage.active_token = this.bookingToken
+        } 
         if (localStorage.active_token) {
             this.getBookings(localStorage.active_token)
             setCookie(this.token_label, localStorage.active_token)
-        } 
+        }
     },
     controlForms(show = false) {
       this.showForms = !this.showForms
@@ -88,19 +90,20 @@ export default {
           console.log('getBooking:',response.data)
           if (response.data.success && response.data.bookings != null && response.data.bookings.length) {
             that.bookings = response.data.bookings
+            // load current bookings into localStore
             localStorage.setItem('tokens', JSON.stringify([]))
-
             console.log('recreating local', that.bookings)
             localStorage.setItem('tokens', JSON.stringify(that.bookings.map(b => b.token)))
+            localStorage.setItem('active_token', token)
+            //bus.$emit('setBookingToken', token)
           } else {
-            console.log('not setting token as no data for it', token);
+            console.log('not setting token as no data for it', token)
           }
         })
         .catch(error => {
           console.log('**** getting bookings error: ', error.response)
-          console.log(error)
           if (error.response === 429) {
-            alert('Too many requests - please refresh')
+            alert('System is busy - please wait a minute and refresh')
           }
         })
     },
@@ -118,11 +121,19 @@ export default {
       }
       setCookie(this.token_label, this.activateBooking)
       bus.$emit('setBookingToken',this.activateBooking)
-      window.location.reload(true)
+      // alert('which booking is activating'+this.activateBooking)
+      axios.get(`/api/booking/token/${this.activateBooking}`)
+      .then(response => {
+        console.log(response)
+        const booking_url = response.data.booking_url
+        window.location.href = `${booking_url}`
+      })
+      .catch(error => console.log(error))
+      // window.location.reload(true)
     },
     // initialise form
     async initForm() {
-alert('control init form??')
+        //alert('control init form??')
         bus.$emit('initialiseForm')
     },
     // remove cookie
