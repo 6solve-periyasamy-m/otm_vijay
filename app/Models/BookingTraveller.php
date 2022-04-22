@@ -42,6 +42,11 @@ class BookingTraveller extends Model
         return $this->hasManyThrough(BookingTransport::class, Booking::class, 'id', 'booking_id', 'booking_id');
     }
 
+    public function merchandise(): HasManyThrough
+    {
+        return $this->hasManyThrough(BookingMerchandise::class, Booking::class, 'id', 'booking_id', 'booking_id');
+    }
+
     public function getIsSingleOccupantAttribute(): bool
     {
         foreach ($this->accommodation as $bookingAccommodation) {

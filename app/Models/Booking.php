@@ -43,6 +43,11 @@ class Booking extends Model
         return $this->hasMany(BookingTransport::class, 'booking_id');
     }
 
+    public function merchandise()
+    {
+        return $this->hasMany(BookingMerchandise::class, 'booking_id');
+    }
+
     public function travellers()
     {
         return $this->hasMany(BookingTraveller::class, 'booking_id');

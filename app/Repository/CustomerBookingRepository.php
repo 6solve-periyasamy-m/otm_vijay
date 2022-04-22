@@ -9,10 +9,12 @@ use App\Models\Booking;
 use App\Models\BookingAccommodation;
 use App\Models\BookingActivities;
 use App\Models\BookingFlight;
+use App\Models\BookingMerchandise;
 use App\Models\BookingTransport;
 use App\Models\BookingTraveller;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
+use App\Models\Merchandise;
 use App\Models\RoomType;
 use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
@@ -96,7 +98,7 @@ class CustomerBookingRepository
                 $booking->activities()->save($bookingComponent);
             }
         }
-        // Flight
+        // Flight (Should only have one inbound and outbound, for now)
         $inbound = $outbound = false;
         foreach ($tour->flightInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type == 'Included') {
@@ -124,6 +126,15 @@ class CustomerBookingRepository
                     'transport_inventory_tour_id' => $inventoryTour->id,
                 ]);
                 $booking->transports()->save($bookingComponent);
+            }
+        }
+        foreach ($tour->merchandise as $inventoryTour) {
+            if ($inventoryTour->tour_component_type == 'Included') {
+                $bookingComponent = BookingMerchandise::make([
+                    'customer_id' => $traveller->customer_id,
+                    'merchandise_id' => $inventoryTour->id,
+                ]);
+                $booking->merchandise()->save($bookingComponent);
             }
         }
     }
@@ -155,6 +166,16 @@ class CustomerBookingRepository
         if ($addon->tour_component_type !== 'Add-on') return false;
         foreach ($booking->travellers as $traveller) {
             $booking->activities()->save(BookingActivities::make(['customer_id' => $traveller->customer->id,'activity_inventory_tour_id' => $addon->id,]));
+        }
+        return true;
+    }
+
+    public static function addBookingMerchandiseAddon(Booking $booking, Merchandise $addon): bool
+    {
+        if ($booking->tour_id !== $addon->tour_id) return false;
+        if ($addon->tour_component_type !== 'Add-on') return false;
+        foreach ($booking->travellers as $traveller) {
+            $booking->merchandise()->save(BookingMerchandise::make(['customer_id' => $traveller->customer->id,'merchandise_id' => $addon->id,]));
         }
         return true;
     }
