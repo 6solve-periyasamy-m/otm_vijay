@@ -118,7 +118,7 @@ export default {
             this.retrieveUserdata(that.bookingToken)
         } else {
             // If booking form has no token may mean consent for cookies is granted but cookies are not permitted?
-            alert('Booking form can not be created, we need your consent to store cookies or please make your booking by phone')
+            alert('We need your consent to store cookies or please make your booking by phone')
         }
     },
     methods: {
@@ -126,6 +126,7 @@ export default {
             let that = this
             axios.get(`/api/booking/token/${token}`)
             .then(response => {
+                console.log('>>>>>> retrieve booking by token response', response)
                 if (response.data.success) {
                     const data = response.data
                     that.debug && console.log(`BookingForm: booking loaded `, data)
@@ -136,27 +137,23 @@ export default {
                     that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
                     that.bookingTour = data.tour
-                    const tour_id = that.tour_id
                     const customer_id = data.booking.customer_id
                     let booking_token = data.booking.token
+                    bus.$emit('retriveUser')
+                    // bus.$emit('leadTravellerLoaded', that.leadTraveller)
+                    // bus.$emit('homeAddressLoaded', data.customer.home_address)
+                    // bus.$emit('billingAddressLoaded', data.customer.billing_address)
+
+                    const tour_id = that.tour_id
                     console.log('booking token loaded the tour, cf tour: ', data.tour, that.tour)
-                    if (that.tour.id != data.tour.id) {
-                        alert('You are booking booking another tour')
-                        axios.get(`/api/booking/check/tour/${customer_id}/${tour_id}`)
-                        .then(response => {
-                            // there is a booking active for this tour
-                            if (response.data.success) {
-                                booking_token = response.data.token
-                                bus.$emit('setBookingToken', booking_token)
-                                bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                                bus.$emit('homeAddressLoaded', data.customer.home_address)
-                                bus.$emit('billingAddressLoaded', data.customer.billing_address)
-                            } else {
-                                console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                                that.resetToken()
-                            }
-                        })
+                    if (that.tour.id == data.tour.id) {
+                        bus.$emit('setBookingToken', booking_token)
+                    } else {
+                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
+                        that.resetToken()
                     }
+                } else {
+                    alert('no booking data found, create fresh booking')
                 }
             })
             .catch(error => {

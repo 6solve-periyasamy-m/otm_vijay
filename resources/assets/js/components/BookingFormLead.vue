@@ -286,7 +286,7 @@ export default {
     props: ["booked", "tour"],
     data() {
         return {
-            debug: false,
+            debug: 8,
             bookingToken: null,
             moduleName: "leadTraveller",
             countries: [],
@@ -389,6 +389,9 @@ export default {
             // localStorage.tokens = JSON.stringify(tokens)
             // localStorage.active_token = that.bookingToken
         });
+        bus.$on('retriveUser', () => {
+            that.retrieveUser()
+        })
         bus.$on("leadTravellerLoaded", (customer) => {
             that.setCustomer(customer);
             that.email = that.email_address;
@@ -447,46 +450,6 @@ export default {
         base64(arg) {
             return Buffer.from(`${arg}`, "utf8").toString("base64");
         },
-        /**
-         * the lead booker has a customer account which can be retrieved by login/password
-         * a salt token is requested from the server to encrypt login credentials
-         * NB: this is a PoC currently, not very secure
-         * TODO: Route to login using Laravel (not JS)
-         */
-        loginUser() {
-            let that = this;
-            const username = this.email;
-            const password = this.password;
-            const t = new Date();
-            alert("TEST: login user");
-            // request a salt value from the server which is then used in the encryption
-            axios.get(`/api/booking/auth/token/${username}`)
-                .then(response => {
-                const salt = response.data.auth;
-                let token = this.base64(`${salt}:${password}`);
-                const url = "/api/booking/authenticate/user";
-                const data = this.email;
-                axios.post(url, data, {
-                    headers: {
-                        "Authorization": `Basic ${token}`
-                    },
-                })
-                    .then(response => {
-                    that.auth = false;
-                    that.debug > 1 && console.log("BookingFormLead: authorised", response);
-                    if (response.authorised) {
-                        that.auth = true;
-                    }
-                })
-                    .catch(error => {
-                    console.log("auth error", error);
-                });
-            })
-                .catch(error => {
-                console.log("can not obtain token");
-                return;
-            });
-        },
         validCountry() {
             if (this.country_id == 0) {
                 return false;
@@ -516,25 +479,39 @@ export default {
             if (!this.auth) {
                 this.debug > 1 && console.log("BookingFormLead: checking for auth user");
                 axios.get(`/api/booking/email/registered/${this.email_address}`)
-                    .then(response => {
+                .then(response => {
                     that.debug > 1 && console.log("BookingFormLead: email registered? response", response);
                     that.activeUser = response.data.existing;
                     const customer = response.data.customer;
                     if (that.activeUser) {
-                        that.bookingToken = response.data.token;
                         that.show_traveller = true;
-                        console.log("active user", that.activeUser);
-                        that.setCustomer(customer);
-                        bus.$emit("setBookingToken", that.bookingToken);
-                        bus.$emit("retrieveUserData", that.bookingToken);
-                        bus.$emit("controlLoadBookings");
-                        alert("Your active booking data is available, please check your details and Save Traveller");
-                    }
-                    else {
+                        that.setCustomer(customer)
+                        bus.$emit('leadTravellerLoaded', customer)
+                        bus.$emit('homeAddressLoaded', customer.homeAddress) //data.customer.home_address)
+                        bus.$emit('billingAddressLoaded', customer.billingAddress) //data.customer.billing_address)
+                        
+                        const bookings = response.data.bookings
+                        console.log('+++++ response data bookings = ', response.data.bookings)
+                        bookings.map(b => console.log(b))
+
+                        const booking = bookings.filter(b => b.tour_id == that.tour.id)[0]
+                        if (booking) {
+                            that.bookingToken = booking.token
+                            console.log('.....found booking for this tour', booking.token)
+                            alert("Your active booking data is available, please check your details and Save Traveller")
+                            bus.$emit("setBookingToken", that.bookingToken)
+                            // bus.$emit("retrieveUserData", that.bookingToken)
+                            // bus.$emit("controlLoadBookings")
+                        } else {
+                            console.log('.....booking found not for this tour ', that.tour ,bookings)
+                            // bus.$emit("retrieveUserData", response.data.bookings[0].token)
+                            alert('found your booking for another tour')
+                        }
+                    } else {
                         that.noUser = true;
                     }
                 })
-                    .catch(error => console.log(error));
+                .catch(error => console.log(error));
             }
             else {
                 alert("You have been authenticated");

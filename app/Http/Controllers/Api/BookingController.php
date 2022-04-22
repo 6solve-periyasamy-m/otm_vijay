@@ -58,6 +58,7 @@ class BookingController extends ApiController
             ->where('tour_id', $tour->id)
             ->first();
         if (isset($booking)) {
+            Log::debug('check found this', [$booking]);
             return response()->json(['succcess' => true, 'token' => $booking->token, 'customer' => $customer, 'tour' => $tour]);
         } else {
             return response()->json(['success' => false]);
@@ -208,7 +209,7 @@ class BookingController extends ApiController
 
         $token = $request->token;
         $booking = Booking::where('token', $token)->first();
-
+Log::debug('calcDeposit: check booking for tour_id ', [$booking]);
         $tour = Tour::find($request->tour['id']);
         if (!$tour) {
             return response()->json(['success' => false, 'error' => 'Non-existant tour']);
