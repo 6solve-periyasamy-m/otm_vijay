@@ -192,14 +192,12 @@ export default {
             console.log('activity booked summary')
             that.activities.map(a => {
                 if (a.status == 'booked') {
-                    console.log(a)
                     bookings.push(a)
                 }
             })
             console.log('addons booked summary')
             that.addons.map(a => {
                 if (a.status == 'booked') {
-                    console.log(a)
                     bookings.push(a)
                 }
             })
