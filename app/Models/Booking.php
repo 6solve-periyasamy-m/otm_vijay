@@ -28,7 +28,7 @@ class Booking extends Model
 
     public function activities()
     {
-        return $this->hasMany(BookingActivities::class, 'booking_id');
+        return $this->hasMany(BookingActivity::class, 'booking_id');
     }
 
     public function flights()

@@ -133,10 +133,6 @@ export default {
                 if (response.data.success) {
                     const data = response.data
                     that.debug && console.log(`BookingForm: booking loaded `, data)
-                    if (data.success == false) {
-                        alert('error loading booking!')
-                        return
-                    }
                     that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
                     that.bookingTour = data.tour
@@ -149,6 +145,7 @@ export default {
             })
             .catch(error => {
                 console.log('get current customer', error)
+                window.document.reload()
             })
         },
         isset(obj) {
