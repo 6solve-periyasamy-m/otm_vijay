@@ -326,7 +326,6 @@ export default {
         },
         loadActivityBooking(token) {
             let that = this
-            console.log('>>>> loadActivityBooking', token)
             axios.get(`/api/booking/activities/booking/${token}`)
                 .then(response => {
                     //console.log('booking-activity response', response)
