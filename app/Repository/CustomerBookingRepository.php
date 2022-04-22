@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Models\AccommodationGroup;
+use App\Models\ActivityInventoryTour;
+use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\Booking;
 use App\Models\BookingAccommodation;
 use App\Models\BookingActivities;
@@ -12,7 +14,10 @@ use App\Models\BookingTraveller;
 use App\Models\Customer;
 use App\Models\RoomType;
 use App\Models\Tour;
+use Illuminate\Support\Facades\DB;
+use Log;
 use StringFormatter;
+use Throwable;
 
 class CustomerBookingRepository
 {
@@ -87,6 +92,38 @@ class CustomerBookingRepository
                 $booking->transports()->save($bookingComponent);
             }
         }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public static function upgradeBookingActivity(Booking $booking, ActivityInventoryTour $from, ActivityInventoryTourUpgrade $to): bool
+    {
+        if (($booking->tour_id !== $from->tour_id) || ($booking->tour_id !== $to->upgrade->tour_id)) return false;
+        if (!ActivityComponentRepository::isOnUpgradeTree($from, $to)) return false;
+        try {
+            DB::beginTransaction();
+            DB::table('booking_activities')
+                ->where('booking_id', '=', $booking->id)
+                ->where('activity_inventory_tour_id', '=', $from->id)
+                ->update(['activity_inventory_tour_id' => $to->upgrade->id,]);
+            DB::commit();
+        } catch (Throwable $e) {
+            Log::error($e);
+            DB::rollBack();
+            return false;
+        }
+        return true;
+    }
+
+    public static function addBookingActivityAddon(Booking $booking, ActivityInventoryTour $addon): bool
+    {
+        if ($booking->tour_id !== $addon->tour_id) return false;
+        if ($addon->tour_component_type !== 'Add-on') return false;
+        foreach ($booking->travellers as $traveller) {
+            $booking->activities()->save(BookingActivities::make(['customer_id' => $traveller->customer->id,'activity_inventory_tour_id' => $addon->id,]));
+        }
+        return true;
     }
 
     public static function generateSummary(Booking $booking): array
