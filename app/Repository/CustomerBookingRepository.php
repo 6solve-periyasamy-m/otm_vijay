@@ -12,6 +12,7 @@ use App\Models\BookingFlight;
 use App\Models\BookingTransport;
 use App\Models\BookingTraveller;
 use App\Models\Customer;
+use App\Models\FlightInventoryTour;
 use App\Models\RoomType;
 use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +41,30 @@ class CustomerBookingRepository
         /** @var BookingTraveller $traveller */
         self::addIncludedToBookingTraveller($traveller, $roomType, $group);
         return $traveller;
+    }
+
+    public static function selectFlights(Booking $booking, FlightInventoryTour $outbound, FlightInventoryTour $inbound): bool
+    {
+        /** @var Tour $tour */
+        $tour = $booking->tour;
+        if ($outbound->tour_id !== $tour->id || $inbound->tour_id !== $tour->id) return false;
+        $booking->flights()->delete();
+        foreach ($booking->travellers as $traveller) {
+            $bookingComponent = BookingFlight::make([
+                'customer_id' => $traveller->customer_id,
+                'flight_inventory_tour_id' => $outbound->id,
+                'flight_type' => $outbound->flight_type,
+            ]);
+            $booking->flights()->save($bookingComponent);
+
+            $bookingComponent = BookingFlight::make([
+                'customer_id' => $traveller->customer_id,
+                'flight_inventory_tour_id' => $inbound->id,
+                'flight_type' => $inbound->flight_type,
+            ]);
+            $booking->flights()->save($bookingComponent);
+        }
+        return true;
     }
 
     public static function addIncludedToBookingTraveller(BookingTraveller $traveller, RoomType $roomType, AccommodationGroup $group)
@@ -71,17 +96,7 @@ class CustomerBookingRepository
                 $booking->activities()->save($bookingComponent);
             }
         }
-        // Flight
-        foreach ($tour->flightInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type == 'Included') {
-                $bookingComponent = BookingFlight::make([
-                    'customer_id' => $traveller->customer_id,
-                    'flight_inventory_tour_id' => $inventoryTour->id,
-                    'flight_type' => $inventoryTour->flight_type,
-                ]);
-                $booking->flights()->save($bookingComponent);
-            }
-        }
+        // Flights are Selected Later
         // Transport
         foreach ($tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type == 'Included') {
