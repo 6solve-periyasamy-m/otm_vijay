@@ -35,7 +35,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.notes as activity_notes', 
                     'activity_inventory_tours.id as activity_inventory_tour_id', 
                     'activity_inventories.starts_at', 'activity_inventories.ends_at',
-                    'activity_inventories.sales_price', //'activity_inventories.purchase_price',
+                    'activity_inventories.sales_price', 
                     'activity_inventory_tours.tour_sales_price',
                     'ticket_types.name as ticket_type_name',
                     'booking_activities.activity_inventory_tour_id')
@@ -67,7 +67,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 ->join('activity_inventories', 'activities.id', 'activity_inventories.activity_id')
                 ->join('activity_inventory_tours', 'activity_inventories.id', 'activity_inventory_tours.activity_inventory_id')
                 ->join('ticket_types', 'activity_inventories.ticket_type_id', 'ticket_types.id')
-                //->join('booking_activities', 'booking_activities.activity_inventory_tour_id', 'activity_inventory_tours.id')
                 ->select(
                     'activities.name as activities_name',
                     'activities.description',
@@ -77,7 +76,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.sales_price', 'activity_inventories.purchase_price',
                     'activity_inventory_tours.tour_sales_price',
                     'ticket_types.name as ticket_type_name')
-                    //'booking_activities.activity_inventory_tour_id as booking_activity_inventory_tour_id')
                 ->where('tour_id', $tour->id)
                 ->whereNull('activities.deleted_at')
                 ->whereNull('activity_inventories.deleted_at')
@@ -86,7 +84,6 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                 $activitiesQuery = $activitiesQuery->where('activity_inventory_tours.tour_component_type', $tour_component_type);
             }
             $activities = $activitiesQuery->get();
-                // ->get();
         } else {
             $activities = $this->model->get();
         }
@@ -111,10 +108,5 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
         $activitiesBooked = $this->getBookings($booking->tour, $booking);
 
         return ['included' => $activitiesBooking, 'booked' => $activitiesBooked];
-    }
-
-    public function create($booking)
-    {
-
     }
 }
