@@ -38,8 +38,17 @@ class BookingCustomerController extends ApiController
         $isRegistered = $customerRepo->isRegistered($email);
         if ($isRegistered) {
             $customer = Customer::where('email_address', $email)->first();
-            $booking = Booking::where('customer_id', $customer->id)->first();
-            return response()->json(["success" => true, "existing" => $isRegistered, "customer" => $customer, "token" => $booking->token]);
+            $homeAddress = Address::where('id', $customer->home_address_id)->first();
+            $billingAddress = Address::where('id', $customer->billing_address_id)->first();
+            if ($homeAddress) {
+                $customer->homeAddress = $homeAddress;
+            }
+            if ($billingAddress) {
+                $customer->billingAddress = $billingAddress;
+            }
+            $bookings = Booking::where('customer_id', $customer->id)->get();
+
+            return response()->json(["success" => true, "existing" => $isRegistered, "customer" => $customer, "bookings" => $bookings]);
         }   
 
         return response()->json(["success" => false]);

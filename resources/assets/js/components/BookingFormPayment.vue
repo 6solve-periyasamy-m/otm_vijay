@@ -145,6 +145,8 @@
                     <form method="post" action="/booking/deposit/payment">
                       <input type="hidden" name="_token" :value="csrf_token" />
                       <input type="hidden" name="token" :value="booking_token" />
+                      <input type="hidden" name="customer_id" :value="customer_id" />
+                      <input type="hidden" name="tour_id" :value="tour.id" />
                       <input type="text" name="currencyamount" readonly :value="priceFormat(deposit * travellerCount)" />
                       <input type="hidden" name="amount" readonly :value="deposit * travellerCount" />
                       <input type="submit" class="btn btn-primary" value="Pay Deposit" />
@@ -186,7 +188,9 @@ export default {
             singleRooms: 0,
             deposit: 0,
             travellerCount: 0,
-            singleRooms: 0
+            singleRooms: 0,
+            customer_id: null,
+            tour_id: null
         }    
     },
     created() {
@@ -393,10 +397,13 @@ export default {
                 .then(response => {
                     that.debug>1 && console.log('BookingFormPrice get customer response:', response)
                     that.leadTraveller = response.data.customer
+                    that.customer_id = that.leadTraveller.id
+                    //that.tour_id = response.data.tour.id
                     that.debug && console.log('BookingFormPayment: gathering summary data for ', token)
                     axios.get(`/api/booking/summary/${token}/gather`)
                         .then(response => {
                             that.booking = response.data.booking
+                            that.tour_id =response.data.booking.tour_id
                             that.debug && console.log('BookingPrice:', that.booking)
                             that.calculateSingleRooms()
                             that.countTravellers()
