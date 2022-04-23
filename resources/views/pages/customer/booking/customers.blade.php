@@ -22,14 +22,14 @@
             <label class="col-md-12 mb-0">Title</label>
             <div class="col-md-12">
                 <input type="text" name="lead_title" id="lead_title-input" value="{{ $customer?->title ?? '' }}"
-                       class="form-control ps-0 form-control-line" autocomplete="honorific-prefix">
+                       class="form-control ps-0 form-control-line" autocomplete="honorific-prefix" required>
             </div>
         </div>
         <div class="form-group col-md-3">
             <label class="col-md-12 mb-0">First Name</label>
             <div class="col-md-12">
                 <input type="text" name="lead_first_name" id="lead_first_name-input" value="{{ $customer?->first_name ?? '' }}"
-                       class="form-control ps-0 form-control-line" autocomplete="given-name">
+                       class="form-control ps-0 form-control-line" autocomplete="given-name" required>
             </div>
         </div>
         <div class="form-group col-md-4">
@@ -43,35 +43,35 @@
             <label class="col-md-12 mb-0">Last Name</label>
             <div class="col-md-12">
                 <input type="text" name="lead_last_name" id="lead_last_name-input" value="{{ $customer?->last_name ?? '' }}"
-                       class="form-control ps-0 form-control-line" autocomplete="family-name">
+                       class="form-control ps-0 form-control-line" autocomplete="family-name" required>
             </div>
         </div>
         <div class="form-group col-md-2">
             <label class="col-md-12 mb-0">Date of Birth</label>
             <div class="col-md-12">
                 <input type="date" name="lead_date_of_birth" id="lead_date_of_birth-input" value="{{ $customer?->date_of_birth?->format('Y-m-d') ?? '' }}"
-                       class="form-control ps-0 form-control-line" autocomplete="bday">
+                       class="form-control ps-0 form-control-line" autocomplete="bday" required>
             </div>
         </div>
         <div class="form-group col-md-4">
             <label class="col-md-12 mb-0">Email Address</label>
             <div class="col-md-12">
                 <input type="text" name="lead_email_address" id="lead_email_address-input" value="{{ $customer?->email_address ?? '' }}"
-                       class="form-control ps-0 form-control-line">
+                       class="form-control ps-0 form-control-line" required>
             </div>
         </div>
         <div class="form-group col-md-4">
             <label class="col-md-12 mb-0">Confirm Your Email</label>
             <div class="col-md-12">
                 <input type="text" name="lead_email_address_confirmation" id="lead_email_address_confirmation-input" value="{{ $customer?->email_address ?? '' }}"
-                       class="form-control ps-0 form-control-line">
+                       class="form-control ps-0 form-control-line" required>
             </div>
         </div>
         <div class="form-group col-md-2">
             <label class="col-md-12 mb-0">Mobile Number</label>
             <div class="col-md-12">
                 <input type="text" name="lead_mobile_number" id="lead_mobile_number-input" value="{{ $customer?->mobile_number ?? '' }}"
-                       class="form-control ps-0 form-control-line" autocomplete="tel">
+                       class="form-control ps-0 form-control-line" autocomplete="tel" required>
             </div>
         </div>
 
@@ -85,7 +85,7 @@
                 <label class="col-md-12 mb-0">Address Line 1</label>
                 <div class="col-md-12">
                     <input type="text" name="lead_home_address_line_1" id="lead_home_address_line_1-input" value="{{ $customer->homeAddress->address_line_1 ?? '' }}"
-                           class="form-control ps-0 form-control-line" autocomplete="address-line1">
+                           class="form-control ps-0 form-control-line" autocomplete="address-line1" required>
                 </div>
             </div>
             <div class="form-group col-md-12">
@@ -114,7 +114,7 @@
                 <label class="col-md-12 mb-0">Postcode</label>
                 <div class="col-md-12">
                     <input type="text" name="lead_home_postcode" id="lead_home_postcode-input" value="{{ $customer->homeAddress->postcode ?? '' }}"
-                           class="form-control ps-0 form-control-line" autocomplete="postcode">
+                           class="form-control ps-0 form-control-line" autocomplete="postcode" required>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@
                 <label class="col-md-12 mb-0">Address Line 1</label>
                 <div class="col-md-12">
                     <input type="text" name="lead_billing_address_line_1" id="lead_billing_address_line_1-input" value="{{ $customer->billingAddress->address_line_1 ?? '' }}"
-                           class="form-control ps-0 form-control-line" autocomplete="address-line1">
+                           class="form-control ps-0 form-control-line" autocomplete="address-line1" required>
                 </div>
             </div>
             <div class="form-group col-md-12">
@@ -157,11 +157,28 @@
                 <label class="col-md-12 mb-0">Postcode</label>
                 <div class="col-md-12">
                     <input type="text" name="lead_billing_postcode" id="lead_billing_postcode-input" value="{{ $customer->billingAddress->postcode ?? '' }}"
-                           class="form-control ps-0 form-control-line" autocomplete="postcode">
+                           class="form-control ps-0 form-control-line" autocomplete="postcode" required>
                 </div>
             </div>
         </div>
-        <hr class="splitter">
+        @php $additionals = 0; @endphp
+        @foreach($additionalTravellers as $traveller)
+            @if(!isset($traveller)) @continue @endif
+            @include('partials.customer.booking.traveller', ['number' => $additionals, 'customer' => $traveller,])
+            @php $additionals++; @endphp
+        @endforeach
+        <hr class="splitter customer-before">
         <input class="btn btn-primary" type="submit" value="Confirm Lead Traveller">
     </form>
+@endsection
+
+@section('footer-script')
+    <script type="text/javascript">
+        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'customer' => null,])`;
+        additional = {{ $additionals ?? 0 }};
+        function addCustomer() {
+            $('.customer-before').before(customerSection.replaceAll('%NUMBER%', additional));
+            additional++;
+        }
+    </script>
 @endsection

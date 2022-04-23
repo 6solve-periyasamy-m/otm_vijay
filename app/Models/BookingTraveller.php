@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class BookingTraveller extends Model
@@ -22,29 +23,29 @@ class BookingTraveller extends Model
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function accommodation(): HasManyThrough
+    public function accommodation(): HasMany
     {
-        return $this->hasManyThrough(BookingAccommodation::class, Booking::class, 'id', 'booking_id', 'booking_id');
+        return $this->hasMany(BookingAccommodation::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 
-    public function activities(): HasManyThrough
+    public function activities(): HasMany
     {
-        return $this->hasManyThrough(BookingActivities::class, Booking::class, 'id', 'booking_id', 'booking_id');
+        return $this->hasMany(BookingActivities::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 
-    public function flights(): HasManyThrough
+    public function flights(): HasMany
     {
-        return $this->hasManyThrough(BookingFlight::class, Booking::class, 'id', 'booking_id', 'booking_id');
+        return $this->hasMany(BookingFlight::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 
-    public function transport(): HasManyThrough
+    public function transport(): HasMany
     {
-        return $this->hasManyThrough(BookingTransport::class, Booking::class, 'id', 'booking_id', 'booking_id');
+        return $this->hasMany(BookingTransport::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 
-    public function merchandise(): HasManyThrough
+    public function merchandise(): HasMany
     {
-        return $this->hasManyThrough(BookingMerchandise::class, Booking::class, 'id', 'booking_id', 'booking_id');
+        return $this->hasMany(BookingMerchandise::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 
     public function getIsSingleOccupantAttribute(): bool

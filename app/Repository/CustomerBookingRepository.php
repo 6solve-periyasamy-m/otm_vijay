@@ -350,4 +350,16 @@ class CustomerBookingRepository
 
         return $summary;
     }
+
+    public static function getAdditionalTravellers(?Booking $booking): array
+    {
+        if (!isset($booking)) return [];
+        $customers = [];
+        foreach ($booking->travellers as $traveller) {
+            $customers[$traveller->customer_id] = $traveller->customer;
+        }
+        $customers[$booking->customer_id] = null;
+        return $customers;
+
+    }
 }
