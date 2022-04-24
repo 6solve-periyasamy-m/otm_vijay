@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\Booking;
 use App\Models\BookingActivities;
+use App\Models\Customer;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\CustomerBookingRepository;
 use Illuminate\Http\JsonResponse;
@@ -38,5 +39,17 @@ class CustomerBookingController extends Controller
             Log::error($e);
         }
         return response()->json(['success' => false, 'message' => 'Upgrade failed to apply, please try again later']);
+    }
+
+    public function removeCustomer(Request $request, string $token): JsonResponse
+    {
+        $booking = Booking::where('token', $token)->first();
+        if (!isset($booking)) return response()->json(['success' => false, 'message' => 'That booking does not exist']);
+        $customer = Customer::find($request->customer);
+        if (!isset($customer)) return response()->json(['success' => false, 'message' => 'That customer does not exist on that booking']);
+        if ($booking->customer_id == $customer->id) return response()->json(['success' => false, 'message' => 'Cannot remove Lead Booker from Order']);
+        $success = CustomerBookingRepository::removeCustomerFromBooking($booking, $customer);
+        if (!$success) return response()->json(['success' => false, 'message' => 'That customer does not exist on that booking']);
+        return response()->json(['success' => true, 'message' => 'Customer Removed Successfully']);
     }
 }

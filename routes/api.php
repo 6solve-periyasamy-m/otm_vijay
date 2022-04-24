@@ -155,6 +155,7 @@ Route::middleware('auth:api')->group(function() {
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('api.booking.upgrade-activity');
+Route::post('/php/booking/customer/remove/{token}', [CustomerBookingController::class, 'removeCustomer'])->name('api.booking.remove-customer');
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {

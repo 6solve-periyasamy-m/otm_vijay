@@ -28,7 +28,8 @@ class CustomerBookingController extends Controller
         if (!isset($tour) || !$tour->is_active) abort(404);
         $booking = $this->getBooking($token);
         $customer = isset($booking) ? $booking->customer : CustomerAuthenticationRepository::getCustomer();
-        return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),]);
+        return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'token' => $token,
+            'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),]);
     }
 
     public function storeCustomers(Request $request, string $bookingUrl, string $token = null)
@@ -40,7 +41,7 @@ class CustomerBookingController extends Controller
         $customer = Customer::where('email_address', $request->lead_email_address)->first();
         if ((isset($customer?->email_address) && isset($customer?->password))
             && (!isset($loggedIn) || $customer?->id !== $loggedIn?->id)) {
-                return back()->withErrors(['msg' => 'That email address already exists. If it is yours, please log in.']);
+            return back()->withErrors(['msg' => 'That email address already exists. If it is yours, please log in.']);
         }
         if (!isset($customer)) {
             $customer = Customer::make([
@@ -63,64 +64,66 @@ class CustomerBookingController extends Controller
                 'mobile_number' => $request->lead_mobile_number,
             ]);
         }
-        $homeAddress = LocationsRepository::storeAddress($customer->homeAddress, AddressParent::getParentId('customer'),$customer->first_name . ' ' . $customer->last_name, null,
-        $request->lead_home_address_line_1, $request->lead_home_address_line_2, '', $request->lead_home_town, $request->lead_home_region, $request->lead_home_country, $request->lead_home_postcode);
+        $homeAddress = LocationsRepository::storeAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->first_name . ' ' . $customer->last_name, null,
+            $request->lead_home_address_line_1, $request->lead_home_address_line_2, '', $request->lead_home_town, $request->lead_home_region, $request->lead_home_country, $request->lead_home_postcode);
 
-        $billingAddress = LocationsRepository::storeAddress($customer->billingAddress, AddressParent::getParentId('customer'),$customer->first_name . ' ' . $customer->last_name, null,
-        $request->lead_billing_address_line_1, $request->lead_billing_address_line_2, '', $request->lead_billing_town, $request->lead_billing_region, $request->lead_billing_country, $request->lead_billing_postcode);
+        $billingAddress = LocationsRepository::storeAddress($customer->billingAddress, AddressParent::getParentId('customer'), $customer->first_name . ' ' . $customer->last_name, null,
+            $request->lead_billing_address_line_1, $request->lead_billing_address_line_2, '', $request->lead_billing_town, $request->lead_billing_region, $request->lead_billing_country, $request->lead_billing_postcode);
 
         $customer->home_address_id = $homeAddress->id;
         $customer->billing_address_id = $billingAddress->id;
         $customer->save();
 
         $booking = CustomerBookingRepository::generateBooking($tour, $customer, RoomType::find(1), AccommodationGroup::find(1));
-        $errors = null;
-        foreach ($request->input('additional') as $additional) {
-            //dd($additional);
-            $customerErrors = $this->validateAdditional($additional);
-            if ($additional['id'] !== 0) {
-                $traveller = Customer::find($additional['id']);
-            }
-            if (!isset($traveller) && !empty($additional['email_address'])) {
-                $traveller = Customer::where('email_address', $additional['email_address']);
-            }
-            if (!isset($traveller)) {
-                $traveller = Customer::make([
-                    'title' => $additional['title'],
-                    'first_name' => $additional['first_name'],
-                    'middle_names' => $additional['middle_names'],
-                    'last_name' => $additional['last_name'],
-                    'date_of_birth' => $additional['date_of_birth'],
-                    'email_address' => $additional['email_address'],
-                    'mobile_number' => $additional['mobile_number'],
-                ]);
-            } else {
-                $traveller->update([
-                    'title' => $additional['title'],
-                    'first_name' => $additional['first_name'],
-                    'middle_names' => $additional['middle_names'],
-                    'last_name' => $additional['last_name'],
-                    'date_of_birth' => $additional['date_of_birth'],
-                    'email_address' => $additional['email_address'],
-                    'mobile_number' => $additional['mobile_number'],
-                ]);
-            }
-            if (!($customerErrors?->any())) {
-                if (!isset($traveller->home_address_id)) {
-                    $homeAddress = Address::create(['name' => "$traveller->first_name $traveller->last_name (Home Address)", 'address_parent_id' => AddressParent::getParentId('customer'),]);
-                    $traveller->home_address_id = $homeAddress->id;
+        if ($request->has('additional')) {
+            $errors = null;
+            foreach ($request->input('additional') as $additional) {
+                //dd($additional);
+                $customerErrors = $this->validateAdditional($additional);
+                if ($additional['id'] !== 0) {
+                    $traveller = Customer::find($additional['id']);
                 }
-                if (!isset($traveller->billing_address_id)) {
-                    $billingAddress = Address::create(['name' => "$traveller->first_name $traveller->last_name (Billing Address)", 'address_parent_id' => AddressParent::getParentId('customer'),]);
-                    $traveller->billing_address_id = $billingAddress->id;
+                if (!isset($traveller) && !empty($additional['email_address'])) {
+                    $traveller = Customer::where('email_address', $additional['email_address']);
                 }
-                $traveller->save();
-                CustomerBookingRepository::addCustomerToBooking($booking, $traveller, RoomType::find(1), AccommodationGroup::find(1));
+                if (!isset($traveller)) {
+                    $traveller = Customer::make([
+                        'title' => $additional['title'],
+                        'first_name' => $additional['first_name'],
+                        'middle_names' => $additional['middle_names'],
+                        'last_name' => $additional['last_name'],
+                        'date_of_birth' => $additional['date_of_birth'],
+                        'email_address' => $additional['email_address'],
+                        'mobile_number' => $additional['mobile_number'],
+                    ]);
+                } else {
+                    $traveller->update([
+                        'title' => $additional['title'],
+                        'first_name' => $additional['first_name'],
+                        'middle_names' => $additional['middle_names'],
+                        'last_name' => $additional['last_name'],
+                        'date_of_birth' => $additional['date_of_birth'],
+                        'email_address' => $additional['email_address'],
+                        'mobile_number' => $additional['mobile_number'],
+                    ]);
+                }
+                if (!($customerErrors?->any())) {
+                    if (!isset($traveller->home_address_id)) {
+                        $homeAddress = Address::create(['name' => "$traveller->first_name $traveller->last_name (Home Address)", 'address_parent_id' => AddressParent::getParentId('customer'),]);
+                        $traveller->home_address_id = $homeAddress->id;
+                    }
+                    if (!isset($traveller->billing_address_id)) {
+                        $billingAddress = Address::create(['name' => "$traveller->first_name $traveller->last_name (Billing Address)", 'address_parent_id' => AddressParent::getParentId('customer'),]);
+                        $traveller->billing_address_id = $billingAddress->id;
+                    }
+                    $traveller->save();
+                    CustomerBookingRepository::addCustomerToBooking($booking, $traveller, RoomType::find(1), AccommodationGroup::find(1));
+                }
+                $errors = isset($errors) && $customerErrors?->any() ? $customerErrors->merge($errors) : $customerErrors;
             }
-            $errors = isset($errors) && $customerErrors?->any() ? $customerErrors->merge($errors) : $customerErrors;
-        }
-        if (!empty($errors)) {
-            return redirect()->route('customer-booking.index',['bookingUrl' => $tour->booking_form_url, 'token' => $booking->token,])->withErrors($errors);
+            if (!empty($errors)) {
+                return redirect()->route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url, 'token' => $booking->token,])->withErrors($errors);
+            }
         }
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $booking->token,]);
     }

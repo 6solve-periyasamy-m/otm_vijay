@@ -10,13 +10,17 @@
 @section('title', 'Booking for ' . $tour->name)
 
 @section('booking-body')
-    @if(isset($customer))
-        <script>alert('Since you are logged into the dashboard, we have filled your details for you :)');</script>
-    @endif
-    <hr class="splitter">
-    <h2 class="col-md-12 mb-0">Lead Booker Details</h2>
-    <hr class="splitter">
-    <form class="form-horizontal form-material mx-2 row" method="post" action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url,]) }}">
+<form class="form-horizontal form-material mx-2 row" method="post" action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url,]) }}">
+    <div class="card">
+        <div class="card-body">
+        @if(isset($customer))
+            <script>alert('Since you are logged into the dashboard, we have filled your details for you :)');</script>
+        @endif
+        <h2 class="col-md-12 mb-0">Lead Booker Details</h2>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body row">
         @csrf
         <div class="form-group col-md-1">
             <label class="col-md-12 mb-0">Title</label>
@@ -161,17 +165,27 @@
                 </div>
             </div>
         </div>
-        <hr class="splitter">
-        <a class="btn btn-primary" onclick="event.preventDefault();addCustomer();">Add Customer</a>
+    </div>
+    </div>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="col-md-12 mb-0">Additional Traveller Details
+                <a class="btn btn-primary float-end" onclick="event.preventDefault();addCustomer();">Add Customer</a>
+                </h2>
+            </div>
+        </div>
         @php $additionals = 0; @endphp
         @foreach($additionalTravellers as $traveller)
             @if(!isset($traveller)) @continue @endif
             @include('partials.customer.booking.traveller', ['number' => $additionals, 'customer' => $traveller,])
             @php $additionals++; @endphp
         @endforeach
-        <hr class="splitter customer-before">
-        <input class="btn btn-primary" type="submit" value="Confirm Lead Traveller">
-    </form>
+        <div class="card customer-before">
+            <div class="card-body">
+                <input class="btn btn-success text-white float-end" type="submit" value="Confirm Lead Traveller">
+            </div>
+        </div>
+</form>
 @endsection
 
 @section('footer-script')
@@ -181,6 +195,35 @@
         function addCustomer() {
             $('.customer-before').before(customerSection.replaceAll('%NUMBER%', additional));
             additional++;
+        }
+        function removeCustomer(btn) {
+            let div = $(btn).parents('div.customer-section');
+            let customerId = parseInt(div.attr('customer'));
+            if (customerId === 0) {
+                div.remove();
+            }
+            @if(isset($token))
+            else {
+                $.post('{{ route('api.booking.remove-customer', ['token' => $token]) }}',
+                    {
+                        '_token': '{{ csrf_token() }}',
+                        'customer': customerId,
+                    })
+                    .done(function (xhr, textStatus, errorThrown) {
+                        if (xhr.success) {
+                            div.remove();
+                        }
+                        else {
+                            console.log(xhr);
+                            alert(xhr.message);
+                        }
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) {
+                        alert(xhr.responseText);
+                        location.reload();
+                    });
+            }
+            @endif
         }
     </script>
 @endsection

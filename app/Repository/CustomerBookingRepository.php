@@ -46,6 +46,19 @@ class CustomerBookingRepository
         return $traveller;
     }
 
+    public static function removeCustomerFromBooking(Booking $booking, Customer $customer): bool
+    {
+        $traveller = BookingTraveller::where('customer_id', $customer->id)->where('booking_id', $booking->id)->first();
+        if (!isset($traveller)) return false;
+        $traveller->merchandise()->delete();
+        $traveller->accommodation()->delete();
+        $traveller->activities()->delete();
+        $traveller->flights()->delete();
+        $traveller->transport()->delete();
+        $traveller->delete();
+        return true;
+    }
+
     public static function selectFlights(Booking $booking, FlightInventoryTour $outbound, FlightInventoryTour $inbound): bool
     {
         /** @var Tour $tour */

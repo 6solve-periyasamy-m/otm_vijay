@@ -22,6 +22,7 @@
 @endsection
 
 @section('booking-body')
+    <div class="card"><div class="card-body">
     @foreach($customers as $customerData)
         <hr class="splitter">
         <div class="form-group col-md-12">
@@ -210,4 +211,5 @@
     Single Occupancy Surcharge: {{ StringFormatter::formatCurrency($billing['surcharge']) }} x {{ $billing['single_occupants'] }} = {{ StringFormatter::formatCurrency($billing['surcharge'] * $billing['single_occupants']) }}<br/>
     Total Due: {{ StringFormatter::formatCurrency($billing['total']) }}<br/>
     Deposit: {{ StringFormatter::formatCurrency($billing['deposit']) }} x {{ $billing['customers'] }} = {{ StringFormatter::formatCurrency($billing['today']) }}<br/>
+    </div></div>
 @endsection
