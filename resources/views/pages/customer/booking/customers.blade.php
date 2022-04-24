@@ -189,6 +189,49 @@
                 </div>
             </div>
         </div>
+        {{-- Flight Selection --}}
+        <div class="card">
+            <div class="card-body">
+                <h2 class="col-md-12 mb-0">Flight Selection</h2>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body row">
+                <div class="row col-6">
+                    <hr class="splitter">
+                    <div class="form-group col-md-12">
+                        <h5 class="col-md-12 mb-0">Outbound Flight</h5>
+                    </div>
+                    <hr class="splitter">
+                    <div class="col-12">
+                        <select name="outbound" class="w-100">
+                            @foreach($flights['outbound'] as $flight)
+                                <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
+                                    {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row col-6">
+                    <hr class="splitter">
+                    <div class="form-group col-md-12">
+                        <h5 class="col-md-12 mb-0">Inbound Flight</h5>
+                    </div>
+                    <hr class="splitter">
+                    <div class="col-12">
+                        <select name="inbound" class="w-100" required>
+                            @foreach($flights['inbound'] as $flight)
+                                <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
+                                    {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Additional Traveller Details --}}
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Additional Traveller Details

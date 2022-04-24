@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Models\AccommodationGroup;
 use App\Models\ActivityInventoryTour;
-use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\Booking;
 use App\Models\BookingAccommodation;
 use App\Models\BookingActivities;
@@ -15,10 +14,10 @@ use App\Models\BookingTraveller;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Merchandise;
-use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\ArrayShape;
 use Log;
 use StringFormatter;
 use Throwable;
@@ -59,26 +58,68 @@ class CustomerBookingRepository
         return true;
     }
 
-    public static function selectFlights(Booking $booking, FlightInventoryTour $outbound, FlightInventoryTour $inbound): bool
+    #[ArrayShape(['outbound' => "array", 'inbound' => "array"])]
+    public static function getAvailableFlights(Tour $tour, ?Booking $booking = null): array
+    {
+        $selected = self::getSelectedFlights($booking);
+        $flights = ['outbound' => [], 'inbound' => [],];
+        foreach ($tour->flightInventoryTours as $flight) {
+            if ($flight->flight_type == 'Outbound') {
+                $flights['outbound'][] =
+                        ['id' => $flight->id,
+                         'details' => $flight->__toString(),
+                         'cost' => $flight->tour_component_type == 'Included' ? 0 : $flight->tour_sales_price,
+                         'selected' => $selected['outbound'] == $flight->id,];
+            } else if ($flight->flight_type == 'Inbound') {
+                $flights['inbound'][] =
+                        ['id' => $flight->id,
+                         'details' => $flight->__toString(),
+                         'cost' => $flight->tour_component_type == 'Included' ? 0 : $flight->tour_sales_price,
+                         'selected' => $selected['inbound'] == $flight->id,];
+            }
+        }
+        return $flights;
+    }
+
+    #[ArrayShape(['outbound' => "int", 'inbound' => "int"])]
+    public static function getSelectedFlights(?Booking $booking = null): array
+    {
+        $selected = ['outbound' => 0, 'inbound' => 0,];
+        if (!isset($booking)) return $selected;
+        // TODO: Rework when Per-Customer components
+        foreach ($booking->flights as $flight) {
+            if ($flight->tourComponent->flight_type == 'Outbound') {
+                $selected['outbound'] = $flight->flight_inventory_tour_id;
+            } else if ($flight->tourComponent->flight_type == 'Inbound') {
+                $selected['inbound'] = $flight->flight_inventory_tour_id;
+            }
+        }
+        return $selected;
+    }
+
+    public static function selectFlights(Booking $booking, ?FlightInventoryTour $outbound, ?FlightInventoryTour $inbound): bool
     {
         /** @var Tour $tour */
         $tour = $booking->tour;
         if ($outbound->tour_id !== $tour->id || $inbound->tour_id !== $tour->id) return false;
         $booking->flights()->delete();
         foreach ($booking->travellers as $traveller) {
-            $bookingComponent = BookingFlight::make([
-                'customer_id' => $traveller->customer_id,
-                'flight_inventory_tour_id' => $outbound->id,
-                'flight_type' => $outbound->flight_type,
-            ]);
-            $booking->flights()->save($bookingComponent);
-
-            $bookingComponent = BookingFlight::make([
-                'customer_id' => $traveller->customer_id,
-                'flight_inventory_tour_id' => $inbound->id,
-                'flight_type' => $inbound->flight_type,
-            ]);
-            $booking->flights()->save($bookingComponent);
+            if (isset($outbound)) {
+                $bookingComponent = BookingFlight::make([
+                    'customer_id' => $traveller->customer_id,
+                    'flight_inventory_tour_id' => $outbound->id,
+                    'flight_type' => $outbound->flight_type,
+                ]);
+                $booking->flights()->save($bookingComponent);
+            }
+            if (isset($inbound)) {
+                $bookingComponent = BookingFlight::make([
+                    'customer_id' => $traveller->customer_id,
+                    'flight_inventory_tour_id' => $inbound->id,
+                    'flight_type' => $inbound->flight_type,
+                ]);
+                $booking->flights()->save($bookingComponent);
+            }
         }
         return true;
     }
@@ -110,26 +151,6 @@ class CustomerBookingRepository
                     'activity_inventory_tour_id' => $inventoryTour->id,
                 ]);
                 $booking->activities()->save($bookingComponent);
-            }
-        }
-        // Flight (Should only have one inbound and outbound, for now)
-        $inbound = $outbound = false;
-        foreach ($tour->flightInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type == 'Included') {
-                if ($inventoryTour->flight_type == 'Inbound') {
-                    if ($inbound) continue;
-                    $inbound = true;
-                }
-                if ($inventoryTour->flight_type == 'Outbound') {
-                    if ($outbound) continue;
-                    $outbound = true;
-                }
-                $bookingComponent = BookingFlight::make([
-                    'customer_id' => $traveller->customer_id,
-                    'flight_inventory_tour_id' => $inventoryTour->id,
-                    'flight_type' => $inventoryTour->flight_type,
-                ]);
-                $booking->flights()->save($bookingComponent);
             }
         }
         // Transport

@@ -9,6 +9,7 @@ use App\Models\Address;
 use App\Models\AddressParent;
 use App\Models\Booking;
 use App\Models\Customer;
+use App\Models\FlightInventoryTour;
 use App\Models\Merchandise;
 use App\Models\RoomType;
 use App\Models\Tour;
@@ -29,7 +30,8 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         $customer = isset($booking) ? $booking->customer : CustomerAuthenticationRepository::getCustomer();
         return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'token' => $token,
-            'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),]);
+            'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),
+            'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),]);
     }
 
     public function storeCustomers(Request $request, string $bookingUrl, string $token = null)
@@ -75,6 +77,11 @@ class CustomerBookingController extends Controller
         $customer->save();
 
         $booking = CustomerBookingRepository::generateBooking($tour, $customer, RoomType::find(1), AccommodationGroup::find(1));
+        $outbound = FlightInventoryTour::find($request->outbound);
+        $inbound = FlightInventoryTour::find($request->inbound);
+        if ((isset($outbound) && $outbound->tour_id !== $tour->id) ||
+            (isset($inbound) && $inbound->tour_id !== $tour->id)) return back()->withErrors(['msg' => 'Those flights are not a part of this tour']);
+        CustomerBookingRepository::selectFlights($booking, $outbound, $inbound);
         if ($request->has('additional')) {
             $errors = null;
             foreach ($request->input('additional') as $additional) {
