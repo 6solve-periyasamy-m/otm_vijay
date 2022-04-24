@@ -75,12 +75,14 @@ class CustomerBookingController extends Controller
 
         $booking = CustomerBookingRepository::generateBooking($tour, $customer, RoomType::find(1), AccommodationGroup::find(1));
         $errors = null;
-        $travellers = [];
         foreach ($request->input('additional') as $additional) {
             //dd($additional);
             $customerErrors = $this->validateAdditional($additional);
             if ($additional['id'] !== 0) {
                 $traveller = Customer::find($additional['id']);
+            }
+            if (!isset($traveller) && !empty($additional['email_address'])) {
+                $traveller = Customer::where('email_address', $additional['email_address']);
             }
             if (!isset($traveller)) {
                 $traveller = Customer::make([
@@ -102,9 +104,6 @@ class CustomerBookingController extends Controller
                     'email_address' => $additional['email_address'],
                     'mobile_number' => $additional['mobile_number'],
                 ]);
-                if ($traveller?->home_address_id) {
-                    $homeAddress = Address::create(['name' => "$traveller->first_name $traveller->last_name (Home Address)", 'address_parent_id' => AddressParent::getParentId('customer'),]);
-                }
             }
             if (!($customerErrors?->any())) {
                 if (!isset($traveller->home_address_id)) {
@@ -118,11 +117,10 @@ class CustomerBookingController extends Controller
                 $traveller->save();
                 CustomerBookingRepository::addCustomerToBooking($booking, $traveller, RoomType::find(1), AccommodationGroup::find(1));
             }
-            $travellers[] = $traveller;
             $errors = isset($errors) && $customerErrors?->any() ? $customerErrors->merge($errors) : $customerErrors;
         }
         if (!empty($errors)) {
-            return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'additionalTravellers' => $travellers, 'errors' => $errors,]);
+            return redirect()->route('customer-booking.index',['bookingUrl' => $tour->booking_form_url, 'token' => $booking->token,])->withErrors($errors);
         }
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $booking->token,]);
     }
