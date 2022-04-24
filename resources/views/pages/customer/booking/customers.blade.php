@@ -145,9 +145,18 @@
                                    class="form-control ps-0 form-control-line" autocomplete="address-level1">
                         </div>
                     </div>
-                    @include('partials.fields.selector.default',
-                                    ['name' => 'Country', 'field' => 'lead_home_country',
-                                     'value' => $customer?->homeAddress?->country_id ?? null, 'route' => 'countries',])
+                    <div class="form-group col-md-12">
+                        <label class="col-md-12 mb-0">Country</label>
+                        <div class="col-md-12">
+                            <select name="lead_home_country" class="w-100">
+                                @foreach(\App\Models\Country::orderBy('name', 'asc')->get() as $country)
+                                    <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->homeAddress?->country_id == $country->id) selected @endif>
+                                        {{ $country->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Postcode</label>
                         <div class="col-md-12">
@@ -190,14 +199,23 @@
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Region</label>
                         <div class="col-md-12">
-                            <input type="text" name="lead_region" id="lead_region-input"
+                            <input type="text" name="lead_billing_region" id="lead_region-input"
                                    value="{{ $customer?->billingAddress?->region ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-level1">
                         </div>
                     </div>
-                    @include('partials.fields.selector.default',
-                                ['name' => 'Country', 'field' => 'lead_billing_country',
-                                 'value' => $customer?->billingAddress?->country_id ?? null, 'route' => 'countries',])
+                    <div class="form-group col-md-12">
+                        <label class="col-md-12 mb-0">Country</label>
+                        <div class="col-md-12">
+                            <select name="lead_billing_country" class="w-100">
+                                @foreach(\App\Models\Country::orderBy('name', 'asc')->get() as $country)
+                                    <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->billingAddress?->country_id == $country->id) selected @endif>
+                                        {{ $country->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Postcode</label>
                         <div class="col-md-12">
