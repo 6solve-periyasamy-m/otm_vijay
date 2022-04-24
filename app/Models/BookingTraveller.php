@@ -67,7 +67,7 @@ class BookingTraveller extends Model
         return $this->accommodation()->first()?->roomType;
     }
 
-    public function getGroupAttribute(): ?RoomType
+    public function getGroupAttribute(): ?AccommodationGroup
     {
         return $this->accommodation()->first()?->group;
     }

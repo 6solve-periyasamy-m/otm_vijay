@@ -22,6 +22,37 @@
 @endsection
 
 @section('booking-body')
+    <div class="card">
+        <div class="card-body">
+            <h2 class="col-md-12 mb-0">Travellers</h2>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            Group assignments may differ slightly if incorrect group sizes were provided.
+            <hr class="splitter">
+            <table class="table table-striped text-center">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Room Type</th>
+                    <th scope="col">Group</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($travellers as $traveller)
+                    <tr>
+                        <td>{{ $traveller->customer->full_name }}</td>
+                        <td>{{ $traveller->room_type }}</td>
+                        <td>{{ $traveller->group->name }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            <a href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url, 'token' => $token]) }}"
+               class="btn btn-info text-white float-end" onclick="return confirm('Warning: Editing order details will clear add-ons/upgrades. Continue?');">Edit Order Details</a>
+        </div>
+    </div>
     @foreach($customers as $customerData)
         <div class="card">
             <div class="card-body">

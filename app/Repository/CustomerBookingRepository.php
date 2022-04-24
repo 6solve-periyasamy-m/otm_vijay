@@ -334,9 +334,10 @@ class CustomerBookingRepository
     public static function generateSummary(Booking $booking): array
     {
         $tour = $booking->tour;
-        $summary = ['customers' => [], 'billing' => ['additionals' => 0, 'single_occupants' => 0, 'surcharge' => $tour->single_occupancy_surcharge, 'cost' => $tour->base_price_per_person, 'deposit' => $tour->deposit],];
+        $summary = ['customers' => [], 'travellers' => [], 'billing' => ['additionals' => 0, 'single_occupants' => 0, 'surcharge' => $tour->single_occupancy_surcharge, 'cost' => $tour->base_price_per_person, 'deposit' => $tour->deposit],];
         $customerCount = 0;
         foreach ($booking->travellers as $traveller) {
+            $summary['travellers'][] = $traveller;
             $customerCount++;
             $customer = $traveller->customer;
             $summary['customers'][$customer->id] = ['customer' => $customer, 'components' => ['accommodation' => [], 'activities' => [], 'flights' => [], 'transport' => [],]];

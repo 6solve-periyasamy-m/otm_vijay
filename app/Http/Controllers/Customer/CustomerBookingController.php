@@ -123,7 +123,7 @@ class CustomerBookingController extends Controller
                 $roomType = RoomType::find($additional['room_type']);
                 $groupId = $additional['group'];
                 do {
-                    if (key_exists($additional['group'], $rooming) && ($rooming[$groupId]['available'] < 1 || $rooming[$groupId]['room_type'] !== $roomType->id)) {
+                    if (key_exists($groupId, $rooming) && ($rooming[$groupId]['available'] < 1 || $rooming[$groupId]['room_type'] !== $roomType->id)) {
                         $groupId++;
                         continue;
                     }
@@ -131,7 +131,7 @@ class CustomerBookingController extends Controller
                 } while (true);
                 $group = AccommodationGroup::find($groupId);
 
-                if (key_exists($additional['group'], $rooming)) {
+                if (key_exists($groupId, $rooming)) {
                     $rooming[$groupId]['available'] = $rooming[$groupId]['available']--;
                 } else {
                     $rooming[$groupId] = ['id' => $roomType->id, 'room_type' => $roomType->id, 'available' => $roomType->maximum_occupancy--,];

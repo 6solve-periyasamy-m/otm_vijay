@@ -14,7 +14,7 @@
           action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url, 'token' => $token,]) }}">
         <div class="card">
             <div class="card-body">
-                @if(isset($customer))
+                @if(isset($customer) && !isset($token))
                     <script>alert('Since you are logged into the dashboard, we have filled your details for you :)');</script>
                 @endif
                 <h2 class="col-md-12 mb-0">Lead Booker Details</h2>
