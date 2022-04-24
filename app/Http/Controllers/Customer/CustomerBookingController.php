@@ -81,7 +81,7 @@ class CustomerBookingController extends Controller
         $customer->billing_address_id = $billingAddress->id;
         $customer->save();
 
-        $booking = CustomerBookingRepository::generateBooking($tour, $customer, $leadRoomType, $leadGroup);
+        $booking = CustomerBookingRepository::generateBooking($tour, $customer, $leadRoomType, $leadGroup, $token);
         $outbound = FlightInventoryTour::find($request->outbound);
         $inbound = FlightInventoryTour::find($request->inbound);
         if ((isset($outbound) && $outbound->tour_id !== $tour->id) ||

@@ -11,7 +11,7 @@
 
 @section('booking-body')
     <form class="form-horizontal form-material mx-2 row" method="post"
-          action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url,]) }}">
+          action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url, 'token' => $token,]) }}">
         <div class="card">
             <div class="card-body">
                 @if(isset($customer))

@@ -24,16 +24,38 @@ use Throwable;
 
 class CustomerBookingRepository
 {
-    public static function generateBooking(Tour $tour, Customer $customer, RoomType $roomType, AccommodationGroup $group): Booking
+    public static function generateBooking(Tour $tour, Customer $customer, RoomType $roomType, AccommodationGroup $group, ?string $token = null): Booking
     {
+        if (isset($token)) {
+            $booking = Booking::where('token', $token)->first();
+            if (isset($booking) && $booking->customer_id == $customer->id) {
+                $booking = self::clearBooking($booking);
+                $traveller = $booking->travellers()->save(BookingTraveller::make(['customer_id' => $customer->id,]));
+                /** @var BookingTraveller $traveller */
+                self::addIncludedToBookingTraveller($traveller, $roomType, $group);
+                return $booking;
+            }
+        }
+
         do {
             $token = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(64/strlen($x)) )),1,64);
             $booking = Booking::where('token', $token)->first();
         } while (isset($booking));
+
         $name = $customer->first_name . ' ' . $customer->last_name . ' [' . $tour->name . ']';
         $booking = Booking::create(['customer_id' => $customer->id, 'tour_id' => $tour->id, 'token' => $token, 'name' => $name,]);
         $traveller = $booking->travellers()->save(BookingTraveller::make(['customer_id' => $customer->id,]));
         self::addIncludedToBookingTraveller($traveller, $roomType, $group);
+        return $booking;
+    }
+
+    public static function clearBooking(Booking $booking): Booking
+    {
+        $booking->travellers()->delete();
+        $booking->accommodation()->delete();
+        $booking->activities()->delete();
+        $booking->flights()->delete();
+        $booking->transports()->delete();
         return $booking;
     }
 
