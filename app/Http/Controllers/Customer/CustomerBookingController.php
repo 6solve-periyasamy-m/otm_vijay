@@ -167,7 +167,7 @@ class CustomerBookingController extends Controller
         if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token,], CustomerBookingRepository::generateSummary($booking)));
+        return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token, 'booking' => $booking,], CustomerBookingRepository::generateSummary($booking)));
     }
 
     public function purchaseAddon(string $bookingUrl, string $token, string $id, string $type)

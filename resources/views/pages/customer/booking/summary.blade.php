@@ -119,6 +119,8 @@
                                 @if(count($data['component']->tourComponent->getUpgradeKeyMap()) < 2)
                                     @if($data['component']->tourComponent->tour_component_type == 'Included')
                                         No Upgrades Available
+                                    @elseif($data['component']->tourComponent->tour_component_type == 'Upgrade')
+                                        No Downgrades Available due to stock levels
                                     @else
                                         <a href="{{ route('customer-booking.remove-addon',
                                                 ['bookingUrl' => $tour->booking_form_url, 'token' => $token, 'type' => 'activity',
