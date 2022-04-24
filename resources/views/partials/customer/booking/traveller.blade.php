@@ -50,6 +50,26 @@
                        class="form-control ps-0 form-control-line" autocomplete="tel">
             </div>
         </div>
+        <div class="form-group col-md-6">
+            <label class="col-md-12 mb-0">Room Type</label>
+            <select name="additional[{{ $number }}][room_type]" class="w-100">
+                @foreach($rooms as $room)
+                    <option value="{{ $room->id }}">
+                        {{ $room }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="col-md-12 mb-0">Group</label>
+            <select name="additional[{{ $number }}][group]" class="w-100">
+                @foreach($groups as $group)
+                    <option value="{{ $group->id }}">
+                        {{ $group->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         <a class="btn btn-danger float-end text-white" href="" onclick="event.preventDefault();removeCustomer(this)">
             <i class="icon-trash"></i>
             Remove Customer

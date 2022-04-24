@@ -86,6 +86,26 @@
                                class="form-control ps-0 form-control-line" autocomplete="tel" required>
                     </div>
                 </div>
+                <div class="form-group col-md-6">
+                    <label class="col-md-12 mb-0">Room Type</label>
+                    <select name="lead_room_type" class="w-100">
+                        @foreach($rooms as $room)
+                            <option value="{{ $room->id }}">
+                                {{ $room }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-md-12 mb-0">Group</label>
+                    <select name="lead_group" class="w-100">
+                        @foreach($groups as $group)
+                            <option value="{{ $group->id }}">
+                                {{ $group->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
                 <div class="col-6">
                     <hr class="splitter">

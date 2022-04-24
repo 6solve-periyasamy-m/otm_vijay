@@ -13,13 +13,13 @@ use App\Models\FlightInventoryTour;
 use App\Models\Merchandise;
 use App\Models\RoomType;
 use App\Models\Tour;
+use App\Repository\AccommodationComponentRepository;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerBookingRepository;
 use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
-use Log;
 
 class CustomerBookingController extends Controller
 {
@@ -31,7 +31,9 @@ class CustomerBookingController extends Controller
         $customer = isset($booking) ? $booking->customer : CustomerAuthenticationRepository::getCustomer();
         return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'token' => $token,
             'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),
-            'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),]);
+            'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
+            'rooms' => AccommodationComponentRepository::getAvailableRoomTypes($tour),
+            'groups' => AccommodationGroup::all(),]);
     }
 
     public function storeCustomers(Request $request, string $bookingUrl, string $token = null)
@@ -66,6 +68,9 @@ class CustomerBookingController extends Controller
                 'mobile_number' => $request->lead_mobile_number,
             ]);
         }
+        $leadRoomType = RoomType::find($request->lead_room_type);
+        $leadGroup = AccommodationGroup::find($request->lead_group);
+        $rooming = [$leadGroup->id => ['id' => $leadRoomType->id, 'available' => $leadRoomType->maximum_occupancy--,]];
         $homeAddress = LocationsRepository::storeAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->first_name . ' ' . $customer->last_name, null,
             $request->lead_home_address_line_1, $request->lead_home_address_line_2, '', $request->lead_home_town, $request->lead_home_region, $request->lead_home_country, $request->lead_home_postcode);
 
@@ -76,12 +81,13 @@ class CustomerBookingController extends Controller
         $customer->billing_address_id = $billingAddress->id;
         $customer->save();
 
-        $booking = CustomerBookingRepository::generateBooking($tour, $customer, RoomType::find(1), AccommodationGroup::find(1));
+        $booking = CustomerBookingRepository::generateBooking($tour, $customer, $leadRoomType, $leadGroup);
         $outbound = FlightInventoryTour::find($request->outbound);
         $inbound = FlightInventoryTour::find($request->inbound);
         if ((isset($outbound) && $outbound->tour_id !== $tour->id) ||
             (isset($inbound) && $inbound->tour_id !== $tour->id)) return back()->withErrors(['msg' => 'Those flights are not a part of this tour']);
         CustomerBookingRepository::selectFlights($booking, $outbound, $inbound);
+
         if ($request->has('additional')) {
             $errors = null;
             foreach ($request->input('additional') as $additional) {
@@ -114,6 +120,22 @@ class CustomerBookingController extends Controller
                         'mobile_number' => $additional['mobile_number'],
                     ]);
                 }
+                $roomType = RoomType::find($additional['room_type']);
+                $groupId = $additional['group'];
+                do {
+                    if (key_exists($additional['group'], $rooming) && $additional['group'] < 1) {
+                        $groupId++;
+                        continue;
+                    }
+                    break;
+                } while (true);
+                $group = AccommodationGroup::find($groupId);
+
+                if (key_exists($additional['group'], $rooming)) {
+                    $rooming[$groupId]['available'] = $rooming[$groupId]['available']--;
+                } else {
+                    $rooming[$groupId] = ['id' => $roomType->id, 'available' => $roomType->maximum_occupancy--,];
+                }
                 if (!($customerErrors?->any())) {
                     if (!isset($traveller->home_address_id)) {
                         $homeAddress = Address::create(['name' => "$traveller->first_name $traveller->last_name (Home Address)", 'address_parent_id' => AddressParent::getParentId('customer'),]);
@@ -124,7 +146,7 @@ class CustomerBookingController extends Controller
                         $traveller->billing_address_id = $billingAddress->id;
                     }
                     $traveller->save();
-                    CustomerBookingRepository::addCustomerToBooking($booking, $traveller, RoomType::find(1), AccommodationGroup::find(1));
+                    CustomerBookingRepository::addCustomerToBooking($booking, $traveller, $roomType, $group);
                 }
                 $errors = isset($errors) && $customerErrors?->any() ? $customerErrors->merge($errors) : $customerErrors;
             }
