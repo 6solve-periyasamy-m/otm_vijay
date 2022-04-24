@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Gateways\StripeGateway;
 use App\Models\AccommodationGroup;
 use App\Models\ActivityInventoryTour;
 use App\Models\Address;
@@ -83,12 +84,6 @@ class CustomerBookingController extends Controller
         $customer->save();
 
         $booking = CustomerBookingRepository::generateBooking($tour, $customer, $leadRoomType, $leadGroup, $token);
-        $outbound = FlightInventoryTour::find($request->outbound);
-        $inbound = FlightInventoryTour::find($request->inbound);
-        if ((isset($outbound) && $outbound->tour_id !== $tour->id) ||
-            (isset($inbound) && $inbound->tour_id !== $tour->id)) return back()->withErrors(['msg' => 'Those flights are not a part of this tour']);
-        CustomerBookingRepository::selectFlights($booking, $outbound, $inbound);
-
         if ($request->has('additional')) {
             $errors = null;
             foreach ($request->input('additional') as $additional) {
@@ -155,6 +150,11 @@ class CustomerBookingController extends Controller
                 return redirect()->route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url, 'token' => $booking->token,])->withErrors($errors);
             }
         }
+        $outbound = FlightInventoryTour::find($request->outbound);
+        $inbound = FlightInventoryTour::find($request->inbound);
+        if ((isset($outbound) && $outbound->tour_id !== $tour->id) ||
+            (isset($inbound) && $inbound->tour_id !== $tour->id)) return back()->withErrors(['msg' => 'Those flights are not a part of this tour']);
+        CustomerBookingRepository::selectFlights($booking, $outbound, $inbound);
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $booking->token,]);
     }
 
@@ -225,6 +225,19 @@ class CustomerBookingController extends Controller
             default: abort(404);
         }
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl,'token' => $token,]);
+    }
+
+    public function payDeposit(Request $request, string $bookingUrl, string $token)
+    {
+        $tour = $this->getTour($bookingUrl);
+        if (!isset($tour) || !$tour->is_active) abort(404);
+        $booking = $this->getBooking($token);
+        if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
+        $values = CustomerBookingRepository::generateSummary($booking);
+        $min = $values['billing']['today'];
+        $max = $values['billing']['total'];
+        $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
+        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id);
     }
 
     private function getTour(string $bookingUrl): ?Tour

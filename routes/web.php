@@ -787,6 +787,7 @@ Route::prefix('/new-booking/{bookingUrl}')->group(function () {
     Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
     Route::post('/{token?}', [CustomerBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
     Route::get('/{token}/summary', [CustomerBookingController::class, 'components'])->name('customer-booking.summary');
+    Route::post('/{token}/pay', [CustomerBookingController::class, 'payDeposit'])->name('customer-booking.deposit');
     Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
     Route::get('/{token}/addon/remove/{id}/{type}', [CustomerBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
 });

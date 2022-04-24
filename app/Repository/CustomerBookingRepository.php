@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Events\Order\OrderCreatedEvent;
 use App\Models\AccommodationGroup;
 use App\Models\ActivityInventoryTour;
 use App\Models\Booking;
@@ -13,7 +14,14 @@ use App\Models\BookingTransport;
 use App\Models\BookingTraveller;
 use App\Models\Customer;
 use App\Models\FlightInventoryTour;
+use App\Models\Group;
 use App\Models\Merchandise;
+use App\Models\Order;
+use App\Models\OrderActivity;
+use App\Models\OrderCustomer;
+use App\Models\OrderFlight;
+use App\Models\OrderMerchandise;
+use App\Models\OrderTransport;
 use App\Models\RoomType;
 use App\Models\Tour;
 use Illuminate\Support\Facades\DB;
@@ -424,5 +432,88 @@ class CustomerBookingRepository
         $customers[$booking->customer_id] = null;
         return $customers;
 
+    }
+
+    public static function convertBookingToOrder(Booking $booking): Order
+    {
+        $tour = $booking->tour;
+        $order = Order::create([
+            'tour_id' => $booking->tour_id,
+            'ordered_on' => now(),
+            'deposit' => $tour->deposit,
+            'invoice_footer' => $tour->invoice_footer
+        ]);
+        $leadBooker = OrderCustomer::make([
+            'customer_id' => $booking->customer_id,
+            'tour_cost' => $tour->base_price_per_person,
+            'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
+        ]);
+
+        OrderRepository::cloneInstallments($order);
+
+        $customers = [];
+        $order->orderCustomers()->save($leadBooker);
+
+        $customers[$booking->customer_id] = $leadBooker;
+        $order->lead_booker_id = $leadBooker->id;
+        $order->booking_reference = Order::generateBookingReference($order);
+        $order->save();
+        event(new OrderCreatedEvent($order));
+        $leadTraveller = self::getLeadTraveller($booking);
+        self::buildComponents($order, $leadTraveller, $leadBooker);
+        $orderCustomers = [$leadBooker->customer_id => $leadBooker,];
+        foreach ($booking->travellers as $traveller) {
+            if ($traveller->id == $leadTraveller->id) continue;
+            $orderCustomer = self::buildComponents($order, $traveller);
+            $orderCustomers[$orderCustomer->customer_id] = $orderCustomer;
+        }
+        $groups = [];
+        foreach ($booking->accommodation as $accommodation) {
+            $group = key_exists($accommodation->group_id, $groups) ? $groups[$accommodation->group_id]
+                : Group::create(['name' => $accommodation->group->name, 'room_type_id' => $accommodation->room_type_id,]);
+            $groups[$accommodation->group_id] = $group;
+            $oCustomer = $orderCustomers[$accommodation->customer_id];
+            $groupRepo = new GroupRepository($group);
+            $groupRepo->addCustomerToGroup($oCustomer);
+            $groupRepo->addRoomToGroup($accommodation->tourComponent);
+        }
+        return $order;
+    }
+
+    private static function buildComponents(Order $order, BookingTraveller $traveller, ?OrderCustomer $orderCustomer = null): OrderCustomer
+    {
+        if (!isset($orderCustomer)) {
+            $orderCustomer = OrderCustomer::make([
+                'customer_id' => $traveller->customer_id,
+                'tour_cost' => $order->tour->base_price_per_person,
+                'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
+            ]);
+            $order->orderCustomers()->save($orderCustomer);
+        }
+        foreach ($traveller->activities as $bookingComponent) {
+            $orderCustomer->orderActivities()->save(OrderActivity::make([
+                'activity_inventory_tour_id' => $bookingComponent->tourComponent->id,
+                'cost' => $bookingComponent->tourComponent->tour_sales_price,
+            ]));
+        }
+        foreach ($traveller->flights as $bookingComponent) {
+            $orderCustomer->orderFlights()->save(OrderFlight::make([
+                'flight_inventory_tour_id' => $bookingComponent->tourComponent->id,
+                'cost' => $bookingComponent->tourComponent->tour_sales_price,
+            ]));
+        }
+        foreach ($traveller->transport as $bookingComponent) {
+            $orderCustomer->orderTransports()->save(OrderTransport::make([
+                'transport_inventory_tour_id' => $bookingComponent->tourComponent->id,
+                'cost' => $bookingComponent->tourComponent->tour_sales_price,
+            ]));
+        }
+        foreach ($traveller->merchandise as $bookingComponent) {
+            $orderCustomer->orderMerchandise()->save(OrderMerchandise::make([
+                'merchandise_id' => $bookingComponent->tourComponent->id,
+                'cost' => $bookingComponent->tourComponent->tour_sales_price,
+            ]));
+        }
+        return $orderCustomer;
     }
 }

@@ -262,11 +262,63 @@
     </div>
     <div class="card">
         <div class="card-body">
-    Base Cost: {{ StringFormatter::formatCurrency($billing['cost']) }} x {{ $billing['customers'] }} = {{ StringFormatter::formatCurrency($billing['cost'] * $billing['customers']) }}<br/>
-    Additional Costs (As Above): {{ StringFormatter::formatCurrency($billing['additionals']) }}<br/>
-    Single Occupancy Surcharge: {{ StringFormatter::formatCurrency($billing['surcharge']) }} x {{ $billing['single_occupants'] }} = {{ StringFormatter::formatCurrency($billing['surcharge'] * $billing['single_occupants']) }}<br/>
-    Total Due: {{ StringFormatter::formatCurrency($billing['total']) }}<br/>
-    Deposit: {{ StringFormatter::formatCurrency($billing['deposit']) }} x {{ $billing['customers'] }} = {{ StringFormatter::formatCurrency($billing['today']) }}<br/>
+            <table class="table table-striped text-center">
+                <thead>
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Cost</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Base Cost</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['cost']) }}</td>
+                    <td>{{ $billing['customers'] }}</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['cost'] * $billing['customers']) }}</td>
+                </tr>
+                @if($billing['additionals'] > 0)
+                <tr>
+                    <td>Additional Costs (As Above)</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['additionals'] / $billing['customers']) }}</td>
+                    <td>{{ $billing['customers'] }}</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['additionals']) }}</td>
+                </tr>
+                @endif
+                @if($billing['single_occupants'] > 0)
+                <tr>
+                    <td>Single Occupancy Surcharge</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['surcharge'])}}</td>
+                    <td>{{ $billing['single_occupants'] }}</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['surcharge'] * $billing['single_occupants']) }}</td>
+                </tr>
+                @endif
+                <tr>
+                    <td colspan="3">Total Cost</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['total']) }}</td>
+                </tr>
+                <tr>
+                    <td>Deposit (Due Today)</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['deposit']) }}</td>
+                    <td>{{ $billing['customers'] }}</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['today']) }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <hr class="splitter">
+            <form class="form-material" action="{{ route('customer-booking.deposit', ['bookingUrl' => $tour->booking_form_url, 'token' => $token]) }}" method="post">
+                {{ csrf_field() }}
+                <input type="hidden" name="booking_reference" id="form-booking-reference">
+                <div class="form-material row">
+                    <div class="form-group col-12 col-xl-10">
+                        <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay" value="{{ $billing['today'] }}" required/>
+                    </div>
+                    <div class="form-group col-12 col-xl-2">
+                        <input class="form-control form-control-line" type="submit" value="Make Payment">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
