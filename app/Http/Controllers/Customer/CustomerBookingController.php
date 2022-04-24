@@ -28,6 +28,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         $customer = isset($booking) ? $booking->customer : CustomerAuthenticationRepository::getCustomer();
         return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'token' => $token,
@@ -42,6 +43,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $request->validate($this->getLeadBookerValidation());
         $loggedIn = CustomerAuthenticationRepository::getCustomer();
         $customer = Customer::where('email_address', $request->lead_email_address)->first();
@@ -162,6 +164,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token,], CustomerBookingRepository::generateSummary($booking)));
@@ -171,6 +174,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
+        if ($tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         switch ($type) {
@@ -231,6 +235,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $values = CustomerBookingRepository::generateSummary($booking);

@@ -129,7 +129,7 @@
                                     @include('partials.fields.selector.adder-preset',
                                         ['field' => 'activity_' . $data['component']->id . '_upgrade', 'preselect' => false,
                                         'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $data['component']->id . '_upgrade-input", this)', 'target' => '',
-                                        'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($data['component']->tourComponent), 'options' => $data['component']->tourComponent->getUpgradeKeyMap(),])
+                                        'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($data['component']->tourComponent), 'options' => $data['component']->tourComponent->getUpgradeKeyMap($booking->travellers()->count()),])
                                 @endif
                             </td>
                         </tr>
