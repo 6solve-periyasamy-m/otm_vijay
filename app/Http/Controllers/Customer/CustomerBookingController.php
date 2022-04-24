@@ -166,24 +166,20 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) {
-            Log::info('Tour not Found');
             abort(404);
         }
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) {
-            Log::info('Booking not Found or does not match');
             abort(404);
         }
         switch ($type) {
             case 'activity':
                 $model = ActivityInventoryTour::find($id);
                 if (!isset($model)) {
-                    Log::info('Model not Found');
                     abort(404);
                 }
                 $applied = CustomerBookingRepository::removeBookingActivityAddon($booking, $model);
                 if (!$applied) {
-                    Log::info('Application Failed');
                     abort(404);
                 }
                 break;
