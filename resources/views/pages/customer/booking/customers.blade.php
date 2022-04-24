@@ -90,7 +90,7 @@
                     <label class="col-md-12 mb-0">Room Type</label>
                     <select name="lead_room_type" class="w-100">
                         @foreach($rooms as $room)
-                            <option value="{{ $room->id }}">
+                            <option value="{{ $room->id }}" @if(isset($leadTraveller) && $leadTraveller?->room_type?->id == $room->id) selected @endif>
                                 {{ $room }}
                             </option>
                         @endforeach
@@ -100,7 +100,7 @@
                     <label class="col-md-12 mb-0">Group</label>
                     <select name="lead_group" class="w-100">
                         @foreach($groups as $group)
-                            <option value="{{ $group->id }}">
+                            <option value="{{ $group->id }}" @if(isset($leadTraveller) && $leadTraveller?->group?->id == $group->id) selected @endif>
                                 {{ $group->name }}
                             </option>
                         @endforeach
@@ -117,7 +117,7 @@
                         <label class="col-md-12 mb-0">Address Line 1</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_address_line_1" id="lead_home_address_line_1-input"
-                                   value="{{ $customer->homeAddress->address_line_1 ?? '' }}"
+                                   value="{{ $customer?->homeAddress?->address_line_1 ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-line1" required>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                         <label class="col-md-12 mb-0">Address Line 2</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_address_line_2" id="lead_home_address_line_2-input"
-                                   value="{{ $customer->homeAddress->address_line_2 ?? '' }}"
+                                   value="{{ $customer?->homeAddress?->address_line_2 ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-line2">
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                         <label class="col-md-12 mb-0">Town</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_town" id="lead_home_town-input"
-                                   value="{{ $customer->homeAddress->town ?? '' }}"
+                                   value="{{ $customer?->homeAddress?->town ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-level2">
                         </div>
                     </div>
@@ -141,18 +141,18 @@
                         <label class="col-md-12 mb-0">Region</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_region" id="lead_region-input"
-                                   value="{{ $customer->homeAddress->region ?? '' }}"
+                                   value="{{ $customer?->homeAddress?->region ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-level1">
                         </div>
                     </div>
                     @include('partials.fields.selector.default',
                                     ['name' => 'Country', 'field' => 'lead_home_country',
-                                     'value' => $customer->homeAddress->country_id ?? null, 'route' => 'countries',])
+                                     'value' => $customer?->homeAddress?->country_id ?? null, 'route' => 'countries',])
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Postcode</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_postcode" id="lead_home_postcode-input"
-                                   value="{{ $customer->homeAddress->postcode ?? '' }}"
+                                   value="{{ $customer?->homeAddress?->postcode ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="postcode" required>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                         <label class="col-md-12 mb-0">Address Line 1</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_address_line_1" id="lead_billing_address_line_1-input"
-                                   value="{{ $customer->billingAddress->address_line_1 ?? '' }}"
+                                   value="{{ $customer?->billingAddress?->address_line_1 ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-line1" required>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                         <label class="col-md-12 mb-0">Address Line 2</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_address_line_2" id="lead_billing_address_line_2-input"
-                                   value="{{ $customer->billingAddress->address_line_2 ?? '' }}"
+                                   value="{{ $customer?->billingAddress?->address_line_2 ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-line2">
                         </div>
                     </div>
@@ -183,7 +183,7 @@
                         <label class="col-md-12 mb-0">Town</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_town" id="lead_billing_town-input"
-                                   value="{{ $customer->billingAddress->town ?? '' }}"
+                                   value="{{ $customer?->billingAddress?->town ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-level2">
                         </div>
                     </div>
@@ -191,18 +191,18 @@
                         <label class="col-md-12 mb-0">Region</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_region" id="lead_region-input"
-                                   value="{{ $customer->billingAddress->region ?? '' }}"
+                                   value="{{ $customer?->billingAddress?->region ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="address-level1">
                         </div>
                     </div>
                     @include('partials.fields.selector.default',
                                 ['name' => 'Country', 'field' => 'lead_billing_country',
-                                 'value' => $customer->billingAddress->country_id ?? null, 'route' => 'countries',])
+                                 'value' => $customer?->billingAddress?->country_id ?? null, 'route' => 'countries',])
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Postcode</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_postcode" id="lead_billing_postcode-input"
-                                   value="{{ $customer->billingAddress->postcode ?? '' }}"
+                                   value="{{ $customer?->billingAddress?->postcode ?? '' }}"
                                    class="form-control ps-0 form-control-line" autocomplete="postcode" required>
                         </div>
                     </div>
@@ -264,7 +264,7 @@
         @php $additionals = 0 @endphp
         @foreach($additionalTravellers as $traveller)
             @if(!isset($traveller)) @continue @endif
-            @include('partials.customer.booking.traveller', ['number' => $additionals, 'customer' => $traveller,])
+            @include('partials.customer.booking.traveller', ['number' => $additionals, 'traveller' => $traveller,])
             @php $additionals++ @endphp
         @endforeach
         <div class="card customer-before">
@@ -277,7 +277,7 @@
 
 @section('footer-script')
     <script type="text/javascript">
-        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'customer' => null,])`;
+        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null,])`;
         additional = {{ $additionals ?? 0 }};
 
         function addCustomer() {

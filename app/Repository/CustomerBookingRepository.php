@@ -408,12 +408,18 @@ class CustomerBookingRepository
         return $summary;
     }
 
+    public static function getLeadTraveller(?Booking $booking): ?BookingTraveller
+    {
+        if (!isset($booking)) return null;
+        return BookingTraveller::where('booking_id', $booking->id)->where('customer_id', $booking->customer_id)->first();
+    }
+
     public static function getAdditionalTravellers(?Booking $booking): array
     {
         if (!isset($booking)) return [];
         $customers = [];
         foreach ($booking->travellers as $traveller) {
-            $customers[$traveller->customer_id] = $traveller->customer;
+            $customers[$traveller->customer_id] = $traveller;
         }
         $customers[$booking->customer_id] = null;
         return $customers;

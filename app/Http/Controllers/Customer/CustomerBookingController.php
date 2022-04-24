@@ -30,6 +30,7 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         $customer = isset($booking) ? $booking->customer : CustomerAuthenticationRepository::getCustomer();
         return view('pages.customer.booking.customers', ['tour' => $tour, 'customer' => $customer, 'token' => $token,
+            'leadTraveller' => CustomerBookingRepository::getLeadTraveller($booking),
             'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),
             'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
             'rooms' => AccommodationComponentRepository::getAvailableRoomTypes($tour),
