@@ -70,7 +70,7 @@ class CustomerBookingController extends Controller
         }
         $leadRoomType = RoomType::find($request->lead_room_type);
         $leadGroup = AccommodationGroup::find($request->lead_group);
-        $rooming = [$leadGroup->id => ['id' => $leadRoomType->id, 'available' => $leadRoomType->maximum_occupancy--,]];
+        $rooming = [$leadGroup->id => ['id' => $leadRoomType->id, 'room_type' => $leadRoomType->id, 'available' => $leadRoomType->maximum_occupancy--,]];
         $homeAddress = LocationsRepository::storeAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->first_name . ' ' . $customer->last_name, null,
             $request->lead_home_address_line_1, $request->lead_home_address_line_2, '', $request->lead_home_town, $request->lead_home_region, $request->lead_home_country, $request->lead_home_postcode);
 
@@ -123,7 +123,7 @@ class CustomerBookingController extends Controller
                 $roomType = RoomType::find($additional['room_type']);
                 $groupId = $additional['group'];
                 do {
-                    if (key_exists($additional['group'], $rooming) && $additional['group'] < 1) {
+                    if (key_exists($additional['group'], $rooming) && ($rooming[$groupId]['available'] < 1 || $rooming[$groupId]['room_type'] !== $roomType->id)) {
                         $groupId++;
                         continue;
                     }
@@ -134,7 +134,7 @@ class CustomerBookingController extends Controller
                 if (key_exists($additional['group'], $rooming)) {
                     $rooming[$groupId]['available'] = $rooming[$groupId]['available']--;
                 } else {
-                    $rooming[$groupId] = ['id' => $roomType->id, 'available' => $roomType->maximum_occupancy--,];
+                    $rooming[$groupId] = ['id' => $roomType->id, 'room_type' => $roomType->id, 'available' => $roomType->maximum_occupancy--,];
                 }
                 if (!($customerErrors?->any())) {
                     if (!isset($traveller->home_address_id)) {

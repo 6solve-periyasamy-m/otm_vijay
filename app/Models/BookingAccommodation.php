@@ -30,4 +30,9 @@ class BookingAccommodation extends Model
     {
         return $this->belongsTo(RoomType::class, 'room_type_id');
     }
+
+    public function group()
+    {
+        return $this->belongsTo(AccommodationGroup::class, 'group_id');
+    }
 }

@@ -61,4 +61,14 @@ class BookingTraveller extends Model
         }
         return false;
     }
+
+    public function getRoomTypeAttribute(): ?RoomType
+    {
+        return $this->accommodation()->first()?->roomType;
+    }
+
+    public function getGroupAttribute(): ?RoomType
+    {
+        return $this->accommodation()->first()?->group;
+    }
 }
