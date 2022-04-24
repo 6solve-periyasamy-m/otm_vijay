@@ -161,6 +161,8 @@
                 </div>
             </div>
         </div>
+        <hr class="splitter">
+        <a class="btn btn-primary" onclick="event.preventDefault();addCustomer();">Add Customer</a>
         @php $additionals = 0; @endphp
         @foreach($additionalTravellers as $traveller)
             @if(!isset($traveller)) @continue @endif
