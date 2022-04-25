@@ -9,7 +9,7 @@ use App\Models\BoardType;
 use App\Models\OrderCustomer;
 use App\Models\RoomType;
 use App\Repository\AccommodationComponentRepository;
-use App\Repository\Facades\StringFormatter;
+use StringFormatter;
 use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {
