@@ -281,7 +281,7 @@ class CustomerBookingController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required',
-            'email_address' => 'nullable|confirmed|email',
+            'email_address' => 'nullable|email',
         ]);
         if ($validator->fails()) {
             return $validator->errors();
