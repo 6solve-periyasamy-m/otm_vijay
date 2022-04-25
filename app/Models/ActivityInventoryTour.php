@@ -96,6 +96,25 @@ class ActivityInventoryTour extends Model
         return $keys;
     }
 
+    public function getBookingUpgradeKeyMap(int $required = 1): array
+    {
+        $upgrades = $this->upgrades;
+        $included = $this;
+        $keys = [];
+        if (empty($upgrades->all())) {
+            $upgrades = $this->parent()->upgrades;
+            $included =  $this->parent();
+        }
+        $disabled = $included->available_stock <= $required-1;
+        $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency(0)), 'disabled' => $disabled,];
+
+        foreach ($upgrades as $upgrade) {
+            $disabled = $upgrade->upgrade->available_stock <= $required-1;
+            $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
+        }
+        return $keys;
+    }
+
     public function getCustomerUpgradeKeyMap(): array
     {
         $upgrades = $this->upgrades;

@@ -94,6 +94,8 @@
         </div>
         <div class="card">
             <div class="card-body">
+                If the Included Activity is Out of Stock you must select an Upgrade in order to proceed with your booking, the next available will be automatically selected, but you can select a different Upgrade from the dropdown.
+                <hr class="splitter">
                 <table class="table table-striped text-center">
                     <thead>
                     <tr>
@@ -120,7 +122,7 @@
                                     @if($data['component']->tourComponent->tour_component_type == 'Included')
                                         No Upgrades Available
                                     @elseif($data['component']->tourComponent->tour_component_type == 'Upgrade')
-                                        No Downgrades Available due to stock levels
+                                        No Downgrades Available
                                     @else
                                         <a href="{{ route('customer-booking.remove-addon',
                                                 ['bookingUrl' => $tour->booking_form_url, 'token' => $token, 'type' => 'activity',
@@ -128,10 +130,10 @@
                                            class="btn btn-danger ms-1">-</a>
                                     @endif
                                 @else
-                                    @include('partials.fields.selector.adder-preset',
+                                    @include('partials.fields.selector.adder-preset-booking',
                                         ['field' => 'activity_' . $data['component']->id . '_upgrade', 'preselect' => false,
                                         'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $data['component']->id . '_upgrade-input", this)', 'target' => '',
-                                        'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($data['component']->tourComponent), 'options' => $data['component']->tourComponent->getUpgradeKeyMap($booking->travellers()->count()),])
+                                        'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($data['component']->tourComponent), 'options' => $data['component']->tourComponent->getBookingUpgradeKeyMap($booking->travellers()->count()),])
                                 @endif
                             </td>
                         </tr>
