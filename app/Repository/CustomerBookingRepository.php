@@ -175,7 +175,6 @@ class CustomerBookingRepository
                 }
             }
             if ($found->tour_component_type == 'Included') {
-                $incr++;
                 $bookingComponent = BookingAccommodation::make([
                     'customer_id' => $traveller->customer_id,
                     'accommodation_inventory_tour_id' => $found->id,
