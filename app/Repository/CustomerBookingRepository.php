@@ -374,7 +374,7 @@ class CustomerBookingRepository
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['accommodation'][] = [
                     'time' => StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out),
-                    'description' => $inventory->component->name . ' (' . $inventory->roomType->name . ') (' . $inventory->boardType . ')',
+                    'description' => $inventory->component->name . ' (' . $inventory->component->address?->region . ', ' . $inventory->component->address?->country?->name . ') (' . $inventory->boardType . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
                     'component' => $bookingComponent,
