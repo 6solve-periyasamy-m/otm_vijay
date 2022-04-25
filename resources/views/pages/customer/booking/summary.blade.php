@@ -329,7 +329,7 @@
                         <input class="form-control form-control-line" type="button" value="How much do you want to pay today?" disabled>
                     </div>
                     <div class="form-group col-12 col-xl-7">
-                        <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay" value="{{ round($billing['today'], 2) }}" required/>
+                        <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay" value="{{ number_format($billing['today'], 2) }}" required/>
                     </div>
                     <div class="form-group col-12 col-xl-2">
                         <input class="form-control form-control-line" type="submit" value="Make Payment">
