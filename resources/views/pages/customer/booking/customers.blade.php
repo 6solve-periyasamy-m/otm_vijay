@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="col-md-12 mb-0">Room Type</label>
+                    <label class="col-md-12 mb-0">Ideal Room Type</label>
                     <select name="lead_room_type" class="w-100">
                         @foreach($rooms as $room)
                             <option value="{{ $room->id }}" @if(isset($leadTraveller) && $leadTraveller?->room_type?->id == $room->id) selected @endif>
@@ -97,7 +97,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="col-md-12 mb-0">Group</label>
+                    <label class="col-md-12 mb-0">Room Sharing Group</label>
                     <select name="lead_group" class="w-100">
                         @foreach($groups as $group)
                             <option value="{{ $group->id }}" @if(isset($leadTraveller) && $leadTraveller?->group?->id == $group->id) selected @endif>
