@@ -162,13 +162,13 @@ class CustomerBookingRepository
         /** @var Tour $tour */
         $tour = $booking->tour;
         // Accommodation
-        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            //if ($inventoryTour->available_stock <= 0) continue;
-            if ($inventoryTour->tour_component_type == 'Included') {
-                if ($inventoryTour->inventory->room_type_id !== $roomType->id) continue;
+        foreach (TourRepository::getTemplateData($tour) as $inventoryTour) {
+            $specific = AccommodationComponentRepository::getInventoryWithRoomType($inventoryTour, $roomType);
+            if ($specific->tour_component_type == 'Included') {
+                if ($specific->inventory->room_type_id !== $roomType->id) continue;
                 $bookingComponent = BookingAccommodation::make([
                     'customer_id' => $traveller->customer_id,
-                    'accommodation_inventory_tour_id' => $inventoryTour->id,
+                    'accommodation_inventory_tour_id' => $specific->id,
                     'room_type_id' => $roomType->id,
                     'group_id' => $group->id,
                 ]);
