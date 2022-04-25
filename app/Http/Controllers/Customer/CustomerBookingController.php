@@ -77,7 +77,6 @@ class CustomerBookingController extends Controller
         $leadRoomType = RoomType::find($request->lead_room_type);
         $leadGroup = AccommodationGroup::find($request->lead_group);
         $rooming = [$leadGroup->id => ['id' => $leadRoomType->id, 'room_type' => $leadRoomType->id, 'available' => $leadRoomType->maximum_occupancy--,]];
-        $groupingData = [$customer->id => ['room' => $leadRoomType, 'group' => $leadGroup]];
         $homeAddress = LocationsRepository::storeAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->first_name . ' ' . $customer->last_name, null,
             $request->lead_home_address_line_1, $request->lead_home_address_line_2, '', $request->lead_home_town, $request->lead_home_region, $request->lead_home_country, $request->lead_home_postcode);
 
@@ -87,12 +86,11 @@ class CustomerBookingController extends Controller
         $customer->home_address_id = $homeAddress->id;
         $customer->billing_address_id = $billingAddress->id;
         $customer->save();
-
+        $groupingData = [$customer->id => ['room' => $leadRoomType, 'group' => $leadGroup]];
         $booking = CustomerBookingRepository::generateBooking($tour, $customer, $leadRoomType, $leadGroup, $token);
         if ($request->has('additional')) {
             $errors = null;
             foreach ($request->input('additional') as $additional) {
-                //dd($additional);
                 $customerErrors = $this->validateAdditional($additional);
                 if ($additional['id'] !== 0) {
                     $traveller = Customer::find($additional['id']);

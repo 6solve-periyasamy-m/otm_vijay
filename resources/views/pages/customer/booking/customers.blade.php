@@ -287,7 +287,7 @@
         @endforeach
         <div class="card customer-before">
             <div class="card-body">
-                <input class="btn btn-success text-white float-end" type="submit" value="Confirm Lead Traveller">
+                <input class="btn btn-success text-white float-end" type="submit" value="Confirm Passenger Details">
             </div>
         </div>
     </form>
