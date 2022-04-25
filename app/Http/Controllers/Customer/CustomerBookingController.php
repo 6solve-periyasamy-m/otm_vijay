@@ -21,6 +21,8 @@ use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use Session;
+use URL;
 
 class CustomerBookingController extends Controller
 {
@@ -51,7 +53,8 @@ class CustomerBookingController extends Controller
         $customer = Customer::where('email_address', $request->lead_email_address)->first();
         if ((isset($customer?->email_address) && isset($customer?->password))
             && (!isset($loggedIn) || $customer?->id !== $loggedIn?->id)) {
-            return back()->withErrors(['msg' => 'That email address already exists. If it is yours, please log in.']);
+            Session::put('url.intended', URL::full());
+            return redirect()->route('customer.login');
         }
         if (!isset($customer)) {
             $customer = Customer::make([
