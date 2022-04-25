@@ -163,7 +163,7 @@ class CustomerBookingRepository
         $tour = $booking->tour;
         // Accommodation
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            if ($inventoryTour->available_stock <= 0) continue;
+            //if ($inventoryTour->available_stock <= 0) continue;
             if ($inventoryTour->tour_component_type == 'Included') {
                 if ($inventoryTour->inventory->room_type_id !== $roomType->id) continue;
                 $bookingComponent = BookingAccommodation::make([
