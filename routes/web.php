@@ -91,7 +91,7 @@ Route::get('/pdfmake', function () {
     return view('pdf.atol');
 });
 
-Route::prefix("/booking")->group(function () {
+Route::prefix("/vue-booking")->group(function () {
 
     // laravel route (not booking form)
     Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
@@ -783,7 +783,7 @@ Route::get('/atol-report', function () {
         ['data' => \App\Repository\ReportRepository::getOrdersDepartingInQuarterReport(2022, 2)]);
 });
 
-Route::prefix('/new-booking/{bookingUrl}')->group(function () {
+Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
     Route::post('/{token?}', [CustomerBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
     Route::get('/{token}/summary', [CustomerBookingController::class, 'components'])->name('customer-booking.summary');
