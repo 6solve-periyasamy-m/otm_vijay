@@ -17,7 +17,7 @@
             <div class="nav-item dp-down">
                 <a class="nav-item nav-link dp-button" href="#">
                     <span class='text-light'>{{ Auth::user()->name }}</span>
-                    <img src="{{ asset(Auth::user()->avatar) }}" class="img-thumbnail">
+                    <img src="{{ asset(Auth::user()->avatar_url) }}" class="img-thumbnail">
                 </a>
                 <div class="dp-content">
                     <a href="{{ route('users.edit', ['user' => Auth::user(),]) }}"><i class="icon-note"></i>&nbsp;Edit Account</a>

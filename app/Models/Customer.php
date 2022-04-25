@@ -4,6 +4,9 @@ namespace App\Models;
 
 use App\Notifications\CustomerResetPassword;
 use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\SettingsRepository;
+use Creativeorange\Gravatar\Exceptions\InvalidEmailException;
+use Gravatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -151,5 +154,11 @@ class Customer extends Authenticatable
     public function leadingOrders()
     {
         return $this->hasManyThrough(Order::class, OrderCustomer::class, 'customer_id', 'lead_booker_id');
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if (isset($this->profile_picture)) return asset($this->profile_picture);
+        return Gravatar::get($this->email_address);
     }
 }
