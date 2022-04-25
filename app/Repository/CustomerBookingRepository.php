@@ -163,13 +163,21 @@ class CustomerBookingRepository
         $tour = $booking->tour;
         // Accommodation
         foreach (TourRepository::getTemplateData($tour) as $template) {
-            $inventoryTour = $template['template'];
-            $specific = AccommodationComponentRepository::getInventoryWithRoomType($inventoryTour, $roomType);
-            if ($specific->tour_component_type == 'Included') {
-                if ($specific->inventory->room_type_id !== $roomType->id) continue;
+            $found = AccommodationComponentRepository::getInventoryWithRoomType($template['template'], $roomType);
+            if (!isset($found)) {
+                $types = AccommodationComponentRepository::hydrateRoomTypes(AccommodationComponentRepository::getRoomTypesForInventory($template['template']));
+                foreach ($types as $type) {
+                    if ($type->maximum_occupancy == $roomType->maximum_occupancy) {
+                        $found = AccommodationComponentRepository::getInventoryWithRoomType($template['template'], $type);
+                        break;
+                    }
+                }
+            }
+            if ($found->tour_component_type == 'Included') {
+                if ($found->inventory->room_type_id !== $roomType->id) continue;
                 $bookingComponent = BookingAccommodation::make([
                     'customer_id' => $traveller->customer_id,
-                    'accommodation_inventory_tour_id' => $specific->id,
+                    'accommodation_inventory_tour_id' => $found->id,
                     'room_type_id' => $roomType->id,
                     'group_id' => $group->id,
                 ]);
