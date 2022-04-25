@@ -162,7 +162,8 @@ class CustomerBookingRepository
         /** @var Tour $tour */
         $tour = $booking->tour;
         // Accommodation
-        foreach (TourRepository::getTemplateData($tour) as $inventoryTour) {
+        foreach (TourRepository::getTemplateData($tour) as $template) {
+            $inventoryTour = $template['template'];
             $specific = AccommodationComponentRepository::getInventoryWithRoomType($inventoryTour, $roomType);
             if ($specific->tour_component_type == 'Included') {
                 if ($specific->inventory->room_type_id !== $roomType->id) continue;
