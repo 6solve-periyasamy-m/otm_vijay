@@ -256,7 +256,7 @@ class CustomerBookingRepository
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
-        if ($addon->available_stock <= 0 + $booking->travellers()->count()) return false;
+        if ($addon->available_stock <= $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
             $booking->merchandise()->save(BookingMerchandise::make(['customer_id' => $traveller->customer->id,'merchandise_id' => $addon->id,]));
         }

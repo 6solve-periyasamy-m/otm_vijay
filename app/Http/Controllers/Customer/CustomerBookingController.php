@@ -174,7 +174,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
-        if ($tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         switch ($type) {
