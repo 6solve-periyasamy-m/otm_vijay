@@ -7,7 +7,7 @@ use App\Models\AccommodationGroup;
 use App\Models\ActivityInventoryTour;
 use App\Models\Booking;
 use App\Models\BookingAccommodation;
-use App\Models\BookingActivities;
+use App\Models\BookingActivity;
 use App\Models\BookingFlight;
 use App\Models\BookingMerchandise;
 use App\Models\BookingTransport;
@@ -181,14 +181,14 @@ class CustomerBookingRepository
                 if ($inventoryTour->available_stock <= 0) {
                     foreach ($inventoryTour->upgrades as $upgrade) {
                         if ($upgrade->upgrade->available_stock <= 0) continue;
-                        $bookingComponent = BookingActivities::make([
+                        $bookingComponent = BookingActivity::make([
                             'customer_id' => $traveller->customer_id,
                             'activity_inventory_tour_id' => $upgrade->upgrade->id,
                         ]);
                         break;
                     }
                 } else {
-                    $bookingComponent = BookingActivities::make([
+                    $bookingComponent = BookingActivity::make([
                         'customer_id' => $traveller->customer_id,
                         'activity_inventory_tour_id' => $inventoryTour->id,
                     ]);
@@ -247,7 +247,7 @@ class CustomerBookingRepository
         if ($addon->tour_component_type !== 'Add-on') return false;
         if ($addon->available_stock <= $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
-            $booking->activities()->save(BookingActivities::make(['customer_id' => $traveller->customer->id,'activity_inventory_tour_id' => $addon->id,]));
+            $booking->activities()->save(BookingActivity::make(['customer_id' => $traveller->customer->id,'activity_inventory_tour_id' => $addon->id,]));
         }
         return true;
     }
