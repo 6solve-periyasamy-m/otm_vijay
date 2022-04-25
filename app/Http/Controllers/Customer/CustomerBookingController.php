@@ -246,8 +246,8 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $values = CustomerBookingRepository::generateSummary($booking);
-        $min = $values['billing']['today'];
-        $max = $values['billing']['total'];
+        $min = max($values['billing']['today'],0.3);
+        $max = min($values['billing']['total'], 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
         return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id);
     }
