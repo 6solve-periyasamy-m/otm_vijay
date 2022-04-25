@@ -30,7 +30,7 @@ class BookingTraveller extends Model
 
     public function activities(): HasMany
     {
-        return $this->hasMany(BookingActivities::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+        return $this->hasMany(BookingActivity::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 
     public function flights(): HasMany

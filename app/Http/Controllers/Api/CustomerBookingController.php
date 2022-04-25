@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityInventoryTourUpgrade;
 use App\Models\Booking;
-use App\Models\BookingActivities;
+use App\Models\BookingActivity;
 use App\Models\Customer;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\CustomerBookingRepository;
@@ -20,7 +20,7 @@ class CustomerBookingController extends Controller
     {
         $booking = Booking::where('token', $token)->first();
         if (!isset($booking)) return response()->json(['success' => false, 'message' => 'That booking does not exist']);
-        $from = BookingActivities::find($request->input('component_id'));
+        $from = BookingActivity::find($request->input('component_id'));
         if (!isset($from) || $from->booking_id !== $booking->id) return response()->json(['success' => false, 'message' => 'That activity does not exist on that booking']);
         if ($request->input('upgrade_id') == 0) {
             $parent = $from->tourComponent->parent();
