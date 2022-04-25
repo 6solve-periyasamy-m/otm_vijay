@@ -169,6 +169,7 @@
                 let name = $(this).find('.name-input').val();
                 console.log(name);
                 $(this).children('.bed').each(function (index) {
+                    if ($(this).children().first().attr('customer') === undefined) return;
                     roomedCustomers.push($(this).children().first().attr('customer'));
                 });
                 roomingData.push({name: name, roomType: $(this).attr('typeid'), customers: roomedCustomers})

@@ -71,7 +71,8 @@ export default {
             password: '',
             authenticated: false,
             tokenName: 'OTM_booking_token',
-            termsaccepted: false
+            termsaccepted: false,
+            bookingTour: {}
         }
     },
     created() {
@@ -114,43 +115,37 @@ export default {
         this.retrieveUserdata(that.bookingToken)
         if (typeof that.bookingToken != 'undefined' && that.bookingToken.length) {
             this.debug && console.log('BookingForm: loading booking data with token:', that.bookingToken)
-            this.retrieveUserdata(that.bookingToken)
+            //this.retrieveUserdata(that.bookingToken)
         } else {
             // If booking form has no token may mean consent for cookies is granted but cookies are not permitted?
-            alert('Booking form can not be created, we need your consent to store cookies or please make your booking by phone')
+            alert('We need your consent to store cookies or please make your booking by phone')
         }
     },
     methods: {
         retrieveUserdata(token) {
             let that = this
+            if (token != localStorage.active_token) {
+                token = localStorage.active_token
+            }
             axios.get(`/api/booking/token/${token}`)
             .then(response => {
+                console.log('>>>>>> retrieve booking by token response', response)
                 if (response.data.success) {
                     const data = response.data
                     that.debug && console.log(`BookingForm: booking loaded `, data)
-                    if (data.success == false) {
-                        alert('error loading booking!')
-                        return
-                    }
                     that.bookingName = data.booking.name
                     that.leadTraveller = data.customer
-                    // alert('setting token')
-                    if (token === data.booking.token) {
-                        bus.$emit('setBookingToken', data.booking.token)
-                        // TODO: are these events really needed?
-                        bus.$emit('leadTravellerLoaded', that.leadTraveller)
-                        bus.$emit('homeAddressLoaded', data.customer.home_address)
-                        bus.$emit('billingAddressLoaded', data.customer.billing_address)
-                    } else {
-                        // the token is not registered
-                        console.log('BookingForm: no booking yet for that token, creating booking for ', that.bookingToken)
-                        // alert('No BookingForm yet'+that.bookingToken)
-                        //that.resetToken()
-                    }
+                    that.bookingTour = data.tour
+                    const customer_id = data.booking.customer_id
+                    let booking_token = data.booking.token
+                    bus.$emit('retriveUser', that.leadTraveller.email_address)
+                } else {
+                    alert('no booking data found, create fresh booking')
                 }
             })
             .catch(error => {
                 console.log('get current customer', error)
+                window.document.reload()
             })
         },
         isset(obj) {
