@@ -3,6 +3,7 @@
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Customer\CustomerBookingController;
 use App\Http\Controllers\Customer\CustomerDetailsController;
 use App\Http\Controllers\Customer\CustomerFinancesController;
 use App\Http\Controllers\Customer\CustomerForgotPasswordController;
@@ -90,7 +91,7 @@ Route::get('/pdfmake', function () {
     return view('pdf.atol');
 });
 
-Route::prefix("/booking")->group(function () {
+Route::prefix("/vue-booking")->group(function () {
 
     // laravel route (not booking form)
     Route::post('/deposit/payment', [BookingController::class, 'payDeposit']);
@@ -780,4 +781,13 @@ Route::prefix('payment')->name('payment.')->group(function () {
 Route::get('/atol-report', function () {
     return view('pages.reports.atol',
         ['data' => \App\Repository\ReportRepository::getOrdersDepartingInQuarterReport(2022, 2)]);
+});
+
+Route::prefix('/booking/{bookingUrl}')->group(function () {
+    Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
+    Route::post('/{token?}', [CustomerBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
+    Route::get('/{token}/summary', [CustomerBookingController::class, 'components'])->name('customer-booking.summary');
+    Route::post('/{token}/pay', [CustomerBookingController::class, 'payDeposit'])->name('customer-booking.deposit');
+    Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
+    Route::get('/{token}/addon/remove/{id}/{type}', [CustomerBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
 });
