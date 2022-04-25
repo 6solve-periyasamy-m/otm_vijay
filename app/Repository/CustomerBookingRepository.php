@@ -53,7 +53,7 @@ class CustomerBookingRepository
         $name = $customer->first_name . ' ' . $customer->last_name . ' [' . $tour->name . ']';
         $booking = Booking::create(['customer_id' => $customer->id, 'tour_id' => $tour->id, 'token' => $token, 'name' => $name,]);
         $traveller = $booking->travellers()->save(BookingTraveller::make(['customer_id' => $customer->id,]));
-        self::addIncludedToBookingTraveller($traveller, $roomType, $group);
+        //self::addIncludedToBookingTraveller($traveller, $roomType, $group);
         return $booking;
     }
 
@@ -71,7 +71,7 @@ class CustomerBookingRepository
     {
         $traveller = $booking->travellers()->save(BookingTraveller::make(['customer_id' => $customer->id,]));
         /** @var BookingTraveller $traveller */
-        self::addIncludedToBookingTraveller($traveller, $roomType, $group);
+        //self::addIncludedToBookingTraveller($traveller, $roomType, $group);
         return $traveller;
     }
 
@@ -178,9 +178,9 @@ class CustomerBookingRepository
         // Activity
         foreach ($tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type == 'Included') {
-                if ($inventoryTour->available_stock <= 0) {
+                if ($inventoryTour->available_stock < $traveller->booking->travellers()->count()) {
                     foreach ($inventoryTour->upgrades as $upgrade) {
-                        if ($upgrade->upgrade->available_stock <= 0) continue;
+                        if ($upgrade->upgrade->available_stock < $traveller->booking->travellers()->count()) continue;
                         $bookingComponent = BookingActivity::make([
                             'customer_id' => $traveller->customer_id,
                             'activity_inventory_tour_id' => $upgrade->upgrade->id,
@@ -225,7 +225,7 @@ class CustomerBookingRepository
     public static function upgradeBookingActivity(Booking $booking, ActivityInventoryTour $from, ActivityInventoryTour $to): bool
     {
         if (($booking->tour_id !== $from->tour_id) || ($booking->tour_id !== $to->tour_id)) return false;
-        if ($to->available_stock <= $booking->travellers()->count()) return false;
+        if ($to->available_stock < $booking->travellers()->count()) return false;
         try {
             DB::beginTransaction();
             DB::table('booking_activities')
@@ -245,7 +245,7 @@ class CustomerBookingRepository
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
-        if ($addon->available_stock <= $booking->travellers()->count()) return false;
+        if ($addon->available_stock < $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
             $booking->activities()->save(BookingActivity::make(['customer_id' => $traveller->customer->id,'activity_inventory_tour_id' => $addon->id,]));
         }
@@ -256,7 +256,7 @@ class CustomerBookingRepository
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
-        if ($addon->available_stock <= $booking->travellers()->count()) return false;
+        if ($addon->available_stock < $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
             $booking->merchandise()->save(BookingMerchandise::make(['customer_id' => $traveller->customer->id,'merchandise_id' => $addon->id,]));
         }

@@ -297,10 +297,16 @@
     <script type="text/javascript">
         const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null,])`;
         additional = {{ $additionals ?? 0 }};
+        available = {{ $available - $additionals - 1}};
 
         function addCustomer() {
+            if (available <= 0) {
+                alert('There is not enough stock for more customers');
+                return;
+            }
             $('.customer-before').before(customerSection.replaceAll('%NUMBER%', additional));
             additional++;
+            available--;
         }
 
         function removeCustomer(btn) {
@@ -330,6 +336,8 @@
                         });
                 }
             @endif
+            additional--;
+            available++;
         }
     </script>
 @endsection

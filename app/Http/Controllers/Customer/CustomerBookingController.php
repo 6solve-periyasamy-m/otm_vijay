@@ -36,14 +36,16 @@ class CustomerBookingController extends Controller
             'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),
             'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
             'rooms' => AccommodationComponentRepository::getAvailableRoomTypes($tour),
-            'groups' => AccommodationGroup::all(),]);
+            'groups' => AccommodationGroup::all(),
+            'available' => $tour->stock - $tour->getUsedStock()]);
     }
 
     public function storeCustomers(Request $request, string $bookingUrl, string $token = null)
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 1 + ($request->has('additional') ? sizeof($request->additional) : 0))
+            abort(404, 'That tour is out of stock');
         $request->validate($this->getLeadBookerValidation());
         $loggedIn = CustomerAuthenticationRepository::getCustomer();
         $customer = Customer::where('email_address', $request->lead_email_address)->first();
@@ -75,6 +77,7 @@ class CustomerBookingController extends Controller
         $leadRoomType = RoomType::find($request->lead_room_type);
         $leadGroup = AccommodationGroup::find($request->lead_group);
         $rooming = [$leadGroup->id => ['id' => $leadRoomType->id, 'room_type' => $leadRoomType->id, 'available' => $leadRoomType->maximum_occupancy--,]];
+        $groupingData = [$customer->id => ['room' => $leadRoomType, 'group' => $leadGroup]];
         $homeAddress = LocationsRepository::storeAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->first_name . ' ' . $customer->last_name, null,
             $request->lead_home_address_line_1, $request->lead_home_address_line_2, '', $request->lead_home_town, $request->lead_home_region, $request->lead_home_country, $request->lead_home_postcode);
 
@@ -95,7 +98,7 @@ class CustomerBookingController extends Controller
                     $traveller = Customer::find($additional['id']);
                 }
                 if (!isset($traveller) && !empty($additional['email_address'])) {
-                    $traveller = Customer::where('email_address', $additional['email_address']);
+                    $traveller = Customer::where('email_address', $additional['email_address'])->first();
                 }
                 if (!isset($traveller)) {
                     $traveller = Customer::make([
@@ -145,6 +148,7 @@ class CustomerBookingController extends Controller
                     }
                     $traveller->save();
                     CustomerBookingRepository::addCustomerToBooking($booking, $traveller, $roomType, $group);
+                    $groupingData[$traveller->id] = ['room' => $roomType, 'group' => $group,];
                 }
                 $errors = isset($errors) && $customerErrors?->any() ? $customerErrors->merge($errors) : $customerErrors;
             }
@@ -156,6 +160,9 @@ class CustomerBookingController extends Controller
         $inbound = FlightInventoryTour::find($request->inbound);
         if ((isset($outbound) && $outbound->tour_id !== $tour->id) ||
             (isset($inbound) && $inbound->tour_id !== $tour->id)) return back()->withErrors(['msg' => 'Those flights are not a part of this tour']);
+        foreach ($booking->travellers as $traveller) {
+            CustomerBookingRepository::addIncludedToBookingTraveller($traveller, $groupingData[$traveller->customer_id]['room'], $groupingData[$traveller->customer_id]['group']);
+        }
         CustomerBookingRepository::selectFlights($booking, $outbound, $inbound);
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $booking->token,]);
     }
@@ -164,9 +171,9 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= $booking->travellers()->count()) abort(404, 'That tour is out of stock');
         return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token, 'booking' => $booking,], CustomerBookingRepository::generateSummary($booking)));
     }
 
