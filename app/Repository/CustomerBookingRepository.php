@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\OrderCreatedEvent;
+use App\Exceptions\RoomingFailedException;
 use App\Models\AccommodationGroup;
 use App\Models\ActivityInventoryTour;
 use App\Models\Booking;
@@ -40,7 +41,7 @@ class CustomerBookingRepository
                 $booking = self::clearBooking($booking);
                 $traveller = $booking->travellers()->save(BookingTraveller::make(['customer_id' => $customer->id,]));
                 /** @var BookingTraveller $traveller */
-                self::addIncludedToBookingTraveller($traveller, $roomType, $group);
+                //self::addIncludedToBookingTraveller($traveller, $roomType, $group);
                 return $booking;
             }
         }
@@ -162,19 +163,19 @@ class CustomerBookingRepository
         /** @var Tour $tour */
         $tour = $booking->tour;
         // Accommodation
-        foreach (TourRepository::getTemplateData($tour) as $template) {
-            $found = AccommodationComponentRepository::getInventoryWithRoomType($template['template'], $roomType);
+        foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {
+            $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $roomType);
             if (!isset($found)) {
-                $types = AccommodationComponentRepository::hydrateRoomTypes(AccommodationComponentRepository::getRoomTypesForInventory($template['template']));
+                $types = AccommodationComponentRepository::hydrateRoomTypes(AccommodationComponentRepository::getRoomTypesForInventory($template));
                 foreach ($types as $type) {
                     if ($type->maximum_occupancy == $roomType->maximum_occupancy) {
-                        $found = AccommodationComponentRepository::getInventoryWithRoomType($template['template'], $type);
-                        break;
+                        $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $type);
+                        if ($found->tour_component_type == 'Included') break;
                     }
                 }
             }
             if ($found->tour_component_type == 'Included') {
-                if ($found->inventory->room_type_id !== $roomType->id) continue;
+                $incr++;
                 $bookingComponent = BookingAccommodation::make([
                     'customer_id' => $traveller->customer_id,
                     'accommodation_inventory_tour_id' => $found->id,
