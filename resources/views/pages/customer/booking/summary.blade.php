@@ -310,7 +310,15 @@
                 </tr>
                 </tbody>
             </table>
-            <hr class="splitter">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="col-md-12 mb-0">Make Payment</h2>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
             <form class="form-material" action="{{ route('customer-booking.deposit', ['bookingUrl' => $tour->booking_form_url, 'token' => $token]) }}" method="post">
                 {{ csrf_field() }}
                 <input type="hidden" name="booking_reference" id="form-booking-reference">
