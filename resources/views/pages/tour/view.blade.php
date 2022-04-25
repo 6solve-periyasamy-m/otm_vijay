@@ -29,7 +29,7 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>Booking URL</p>
-                <h6 class="fw-bold"><a target="_blank" href="{{ route('customer-booking.index', ['url' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['url' => $tour->booking_form_url,]) }}</a></h6>
+                <h6 class="fw-bold"><a target="_blank" href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a></h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
