@@ -114,7 +114,7 @@
                     </div>
                     <hr class="splitter">
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Address Line 1</label>
+                        <label class="col-md-12 mb-0">Home Address Line 1</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_address_line_1" id="lead_home_address_line_1-input"
                                    value="{{ $customer?->homeAddress?->address_line_1 ?? '' }}"
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Address Line 2</label>
+                        <label class="col-md-12 mb-0">Home Address Line 2</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_address_line_2" id="lead_home_address_line_2-input"
                                    value="{{ $customer?->homeAddress?->address_line_2 ?? '' }}"
@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Town</label>
+                        <label class="col-md-12 mb-0">Home Town</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_town" id="lead_home_town-input"
                                    value="{{ $customer?->homeAddress?->town ?? '' }}"
@@ -138,7 +138,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Region</label>
+                        <label class="col-md-12 mb-0">Home Region</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_region" id="lead_region-input"
                                    value="{{ $customer?->homeAddress?->region ?? '' }}"
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Country</label>
+                        <label class="col-md-12 mb-0">Home Country</label>
                         <div class="col-md-12">
                             <select name="lead_home_country" class="w-100">
                                 @foreach(\App\Models\Country::orderBy('name', 'asc')->get() as $country)
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Postcode</label>
+                        <label class="col-md-12 mb-0">Home Postcode</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_home_postcode" id="lead_home_postcode-input"
                                    value="{{ $customer?->homeAddress?->postcode ?? '' }}"
@@ -173,7 +173,7 @@
                     </div>
                     <hr class="splitter">
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Address Line 1</label>
+                        <label class="col-md-12 mb-0">Billing Address Line 1</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_address_line_1" id="lead_billing_address_line_1-input"
                                    value="{{ $customer?->billingAddress?->address_line_1 ?? '' }}"
@@ -181,7 +181,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Address Line 2</label>
+                        <label class="col-md-12 mb-0">Billing Address Line 2</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_address_line_2" id="lead_billing_address_line_2-input"
                                    value="{{ $customer?->billingAddress?->address_line_2 ?? '' }}"
@@ -189,7 +189,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Town</label>
+                        <label class="col-md-12 mb-0">Billing Town</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_town" id="lead_billing_town-input"
                                    value="{{ $customer?->billingAddress?->town ?? '' }}"
@@ -197,7 +197,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Region</label>
+                        <label class="col-md-12 mb-0">Billing Region</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_region" id="lead_region-input"
                                    value="{{ $customer?->billingAddress?->region ?? '' }}"
@@ -205,7 +205,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Country</label>
+                        <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
                             <select name="lead_billing_country" class="w-100">
                                 @foreach(\App\Models\Country::orderBy('name', 'asc')->get() as $country)
@@ -217,7 +217,7 @@
                         </div>
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Postcode</label>
+                        <label class="col-md-12 mb-0">Billing Postcode</label>
                         <div class="col-md-12">
                             <input type="text" name="lead_billing_postcode" id="lead_billing_postcode-input"
                                    value="{{ $customer?->billingAddress?->postcode ?? '' }}"
