@@ -133,7 +133,7 @@ class CustomerBookingRepository
     {
         /** @var Tour $tour */
         $tour = $booking->tour;
-        if ($outbound->tour_id !== $tour->id || $inbound->tour_id !== $tour->id) return false;
+        if ((isset($outbound) && $outbound?->tour_id !== $tour?->id) || (isset($inbound) && $inbound?->tour_id !== $tour?->id)) return false;
         $booking->flights()->delete();
         foreach ($booking->travellers as $traveller) {
             if (isset($outbound)) {

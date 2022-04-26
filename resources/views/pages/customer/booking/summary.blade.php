@@ -54,6 +54,7 @@
         </div>
     </div>
     @foreach($customers as $customerData)
+        @if(sizeof($customerData['components']['activities']) > 0)
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Accommodation</h2>
@@ -87,6 +88,8 @@
                 </table>
             </div>
         </div>
+        @endif
+        @if(sizeof($customerData['components']['activities']) > 0)
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Activities</h2>
@@ -142,6 +145,8 @@
                 </table>
             </div>
         </div>
+        @endif
+        @if(sizeof($customerData['components']['flights']) > 0)
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Flights</h2>
@@ -175,6 +180,8 @@
                 </table>
             </div>
         </div>
+        @endif
+        @if(sizeof($customerData['components']['transport']) > 0)
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Transport</h2>
@@ -208,6 +215,7 @@
                 </table>
             </div>
         </div>
+        @endif
         @if(sizeof($customerData['addons']) > 0)
         <div class="card">
             <div class="card-body">

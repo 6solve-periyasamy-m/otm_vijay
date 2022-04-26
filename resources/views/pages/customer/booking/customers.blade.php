@@ -228,6 +228,7 @@
             </div>
         </div>
         {{-- Flight Selection --}}
+        @if(!empty($flights['outbound']) || !empty($flights['inbound']))
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Flight Selection</h2>
@@ -269,6 +270,7 @@
                 </div>
             </div>
         </div>
+        @endif
         {{-- Additional Traveller Details --}}
         <div class="card">
             <div class="card-body">
