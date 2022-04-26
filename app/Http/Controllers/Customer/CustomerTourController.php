@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Models\AccommodationInventoryTour;
@@ -120,7 +122,11 @@ class CustomerTourController extends Controller
 
         if ($tourComponent->available_stock <= 0) abort(404);
 
-        $tourComponent->addToOrder($orderCustomer);
+        $orderComponent  = $tourComponent->addToOrder($orderCustomer);
+
+        if (!($tourComponent instanceof AccommodationInventoryTour)) {
+            event(new OrderCustomerComponentAddedEvent($orderComponent));
+        }
 
         return redirect()->route('customer.extras', ['reference' => $reference,]);
     }

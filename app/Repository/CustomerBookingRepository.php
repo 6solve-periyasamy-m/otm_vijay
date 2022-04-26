@@ -485,7 +485,7 @@ class CustomerBookingRepository
         $order->lead_booker_id = $leadBooker->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        event(new OrderCreatedEvent($order));
+        //event(new OrderCreatedEvent($order));
         $leadTraveller = self::getLeadTraveller($booking);
         self::buildComponents($order, $leadTraveller, $leadBooker);
         $orderCustomers = [$leadBooker->customer_id => $leadBooker,];

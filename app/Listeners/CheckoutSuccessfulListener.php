@@ -48,7 +48,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
                     $order->payments()->save($payment);
                     $intention->processed = true;
                     $intention->save();
-                    event(new PaymentCreatedEvent($payment));
+                    event(new OrderCreatedEvent($order));
                 }
             }
         }
