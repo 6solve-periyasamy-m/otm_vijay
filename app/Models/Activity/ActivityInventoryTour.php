@@ -132,15 +132,40 @@ class ActivityInventoryTour extends Model
         return $this->inventory->stock - $this->inventory->used_stock;
     }
 
-    public function getUpgradeKeyMap(): array
+    public function getUpgradeKeyMap(int $required = 1): array
     {
         $upgrades = $this->upgrades;
+        $included = $this;
         $keys = [];
-        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
-        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        if (empty($upgrades->all())) {
+            $upgrades = $this->parent()->upgrades;
+            $included =  $this->parent();
+        }
+        if ($included->available_stock > $required-1) {
+            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= 0) continue;
+            if ($upgrade->upgrade->available_stock <= $required-1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+        }
+        return $keys;
+    }
+
+    public function getBookingUpgradeKeyMap(int $required = 1): array
+    {
+        $upgrades = $this->upgrades;
+        $included = $this;
+        $keys = [];
+        if (empty($upgrades->all())) {
+            $upgrades = $this->parent()->upgrades;
+            $included =  $this->parent();
+        }
+        $disabled = $included->available_stock <= $required-1;
+        $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency(0)), 'disabled' => $disabled,];
+
+        foreach ($upgrades as $upgrade) {
+            $disabled = $upgrade->upgrade->available_stock <= $required-1;
+            $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
         }
         return $keys;
     }

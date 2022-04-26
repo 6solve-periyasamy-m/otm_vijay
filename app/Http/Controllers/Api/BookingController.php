@@ -35,16 +35,36 @@ class BookingController extends ApiController
     {
         $booking = BookingRepository::findBooking($token);
         if (empty($booking)) {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, 'message' => 'no booking for '.$token]);
         }
 
         $customer = Customer::find($booking->customer_id);
+        if (empty($customer)) {
+            return response()->json(['success' => false, 'message' => 'booking customer did not exist']);
+        }
         $customer->home_address = Address::find($customer->home_address_id);
         $customer->billing_address = Address::find($customer->billing_address_id);
-        if (isset($booking)) {
-            return response()->json(['success' => true, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
+
+        $tour = Tour::find($booking->tour_id);
+        if (isset($customer) && isset($booking)) {
+            $url = URL::to('/booking/'.$tour->booking_form_url);
+            return response()->json(['success' => true, 'booking_url' => $url, 'booking' => $booking, 'customer' => $customer, 'tour' => $booking->tour]);
         }
-        return response()->json(['success' => false]);
+        return response()->json(['success' => false, 'message' => 'failed']);
+    }
+
+    public function check(Customer $customer, Tour $tour)
+    {
+        $booking = Booking::where('customer_id', $customer->id)
+            ->where('tour_id', $tour->id)
+            ->first();
+        if (isset($booking)) {
+            Log::debug('check found this', [$booking]);
+            return response()->json(['succcess' => true, 'token' => $booking->token, 'customer' => $customer, 'tour' => $tour]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+
     }
 
   /**
@@ -159,10 +179,11 @@ class BookingController extends ApiController
         $accommodation = $accommodationRepo->getAccommodationBooking($booking, $travellerRepo->getIds($booking->id));
         $activities = $activityBookingRepo->getBookingsForTour($booking);
         $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
-
+        //dd($activities);
         return response()->json([
             'success' => true,
             'booking' => [
+                'tour' => $tour,
                 'customer' => $customer,
                 'travellers' => $travellers,
                 'flights' => ['outbound' => $flightsOutbound, 'inbound' => $flightsInbound],
@@ -189,7 +210,7 @@ class BookingController extends ApiController
 
         $token = $request->token;
         $booking = Booking::where('token', $token)->first();
-
+        // Log::debug('calcDeposit: check booking for tour_id ', [$booking]);
         $tour = Tour::find($request->tour['id']);
         if (!$tour) {
             return response()->json(['success' => false, 'error' => 'Non-existant tour']);
@@ -203,7 +224,7 @@ class BookingController extends ApiController
         if ($deposit) {
             return response()->json(['success' => true, 'deposit' => $deposit]);
         } else {
-            Log::debug('calculateDeposit: Deposit is ' . $deposit);
+            // Log::debug('calculateDeposit: Deposit is ' . $deposit);
             throw new Exception('Deposit must be a positive value!');
         }
     }

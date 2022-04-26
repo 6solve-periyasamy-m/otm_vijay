@@ -59,7 +59,7 @@ class ShortCodeRepository
     {
         return [
             'SETTING_COMPANY_NAME' => SettingsRepository::get('company.name'),
-            'SETTING_COMPANY_LOGO' => asset(SettingsRepository::get('company.logo')),
+            'SETTING_LOGO_URL' => asset(SettingsRepository::get('company.logo')),
             'SETTING_COMPANY_ADDRESS_LINE_1' => SettingsRepository::get('company.address.line_1'),
             'SETTING_COMPANY_ADDRESS_LINE_2' => SettingsRepository::get('company.address.line_2'),
             'SETTING_COMPANY_ADDRESS_CITY' => SettingsRepository::get('company.address.city'),

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationRemovedEvent;
+//use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationRemovedEvent;
 use App\Events\Order\Customer\Component\OrderCustomerComponentRemovedEvent;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
@@ -16,7 +16,7 @@ class OrderComponentController extends Controller
     public function deleteAccommodation(Request $request, $id) {
         $orderComponent = OrderAccommodation::findOrFail($id);
         $orderComponent->delete();
-        event(new OrderCustomerAccommodationRemovedEvent($orderComponent));
+        //event(new OrderCustomerAccommodationRemovedEvent($orderComponent));
         return redirect($request->has('redirect') ? $request->input('redirect') : route('/'));
     }
 

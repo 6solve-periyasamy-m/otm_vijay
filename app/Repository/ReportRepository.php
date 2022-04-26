@@ -44,7 +44,7 @@ class ReportRepository
     public static function getOrderReport(): array
     {
         $data = [];
-        foreach (Order::withTrashed()->get() as $order) {
+        foreach (Order::all() as $order) {
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;
@@ -72,11 +72,13 @@ class ReportRepository
             $row = collect();
             $row->name = $tour->name;
             $row->event = isset($tour->event) ? $tour->event->name : 'No Event';
+            $row->active = $tour->is_active;
             $row->stock = $tour->stock_control_active ? $tour->stock : 'Not Controlled';
             $row->booked = $tour->getUsedStock();
             $row->available = $tour->stock_control_active ? $tour->stock - $tour->getUsedStock() : 'Not Controlled';
             $row->percentage = $tour->stock_control_active ?
                 ($tour->stock == 0 ? 100 : round(($tour->getUsedStock() / $tour->stock) * 100, 2)) . '%' : 'Not Controlled';
+            $row->notes = $tour->notes;
             $data[] = $row;
         }
         return $data;

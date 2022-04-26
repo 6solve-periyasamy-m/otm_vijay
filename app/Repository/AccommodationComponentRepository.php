@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
+//use App\Events\Order\Customer\Component\Accommodation\OrderCustomerAccommodationAddedEvent;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
@@ -52,7 +52,7 @@ class AccommodationComponentRepository
             'share_with_user_id' => null,
             'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
         ]);
-        event(new OrderCustomerAccommodationAddedEvent($orderComponent));
+        //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $orderComponent;
     }
 

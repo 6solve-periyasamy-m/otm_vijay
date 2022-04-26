@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class BookingTableChanges extends Migration
+class MakeCustomerMobileNumberNullable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class BookingTableChanges extends Migration
      */
     public function up()
     {
-        Schema::table('bookings', function(Blueprint $table) {
-            $table->string('status',64)->nullable();
+        Schema::table('customers', function (Blueprint $table) {
+            $table->string('mobile_number', 25)->nullable()->change();
         });
     }
 
@@ -25,8 +25,6 @@ class BookingTableChanges extends Migration
      */
     public function down()
     {
-        Schema::table('bookings', function(Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        //
     }
 }

@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class ActivityController extends ApiController
 {
+    /**
+     * addActivityInventoryToTour
+     *
+     * @param Request $request [type, ids]
+     * @param Tour $tour
+     * @return response status
+     */
     public function addActivityInventoryToTour(Request $request, Tour $tour) {
         // TODO: Get actual enum values
         if ($request->has('type') && in_array($request->input('type'), ['Included', 'Add-on', 'Upgrade'])) {

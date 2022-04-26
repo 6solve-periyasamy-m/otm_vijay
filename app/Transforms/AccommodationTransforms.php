@@ -7,7 +7,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\OrderCustomer;
-use App\Repository\Facades\StringFormatter;
+use StringFormatter;
 use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {

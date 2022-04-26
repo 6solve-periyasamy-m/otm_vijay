@@ -529,14 +529,18 @@ class OrderRepository
     /**
      * Iterates through all orders, and if they have a due installment, sends an email reminder
      */
-    public static function sendAllOrderReminders(int $days)
+    public static function sendAllOrderReminders(int $days, int $minDays = -1000)
     {
         foreach (Order::all() as $order) {
             $nextPayment = self::getNextPaymentDetails($order);
-            if (!isset($nextPayment['installment']) || Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $days) continue;
-            $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('payment_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
+            if (!isset($nextPayment['installment']) ||
+                (Carbon::parse($nextPayment['due'])->diffInDays(now(), true) <= $days &&
+                 Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $minDays)) continue;
+            Log::info('Passed');
+            $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
             if (isset($reminder)) continue;
-            self::sendReminderEmail($order, $nextPayment['installment']->id, $days);
+            Log::info('Reminder Not Found');
+            self::sendReminderEmail($order, $nextPayment['installment'], $days);
         }
     }
 
@@ -550,7 +554,7 @@ class OrderRepository
     {
         PaymentReminder::create([
             'order_id' => $order->id,
-            'payment_installment_id' => $installment->id,
+            'order_installment_id' => $installment->id,
             'period' => $days
         ]);
         if ($days < 0) {

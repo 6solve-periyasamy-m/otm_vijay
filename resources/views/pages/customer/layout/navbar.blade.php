@@ -30,7 +30,11 @@
             <div class="p-3 dp-down">
                 <img class="setting-logo dp-button" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}" onclick="window.location = '{{ route('customer.portal') }}'">
                 <div class="dp-content">
+                    @if(\App\Repository\CustomerAuthenticationRepository::getCustomer() !== null)
                     <a href="#" onclick="event.preventDefault();logout();"><i class="icon-login"></i>&nbsp;Logout</a>
+                    @else
+                    <a href="{{ route('customer.login') }}"><i class="icon-login"></i>&nbsp;Login</a>
+                    @endif
                 </div>
             </div>
             <div class="p-3 pe-5 d-flex flex-column">

@@ -280,13 +280,14 @@
 import axios from 'axios'
 import { bus } from '../bus'
 import dates from '../utilities'
+import { setCookie, getCookie, deleteCookie } from '../cookies'
 // TODO: incorporate a better way to show validation errors
 // import ValidationErrors from './ValidationErrors.vue'
 export default {
     props: ["booked", "tour"],
     data() {
         return {
-            debug: false,
+            debug: 9,
             bookingToken: null,
             moduleName: "leadTraveller",
             countries: [],
@@ -376,22 +377,10 @@ export default {
     async created() {
         let that = this;
         bus.$on("setBookingToken", token => {
-            that.bookingToken = token;
-            // this looks irrelevant: retest without it
-            // let tokens
-            // if (localStorage.tokens == undefined) {
-            //     tokens = new Array()
-            // } else {
-            //     tokens = JSON.parse(localStorage.tokens)
-            // }
-            // that.debug && console.log(`${that.moduleName} created: booking ${that.bookingToken} : tokens`, tokens)
-            // tokens.push(that.bookingToken)
-            // localStorage.tokens = JSON.stringify(tokens)
-            // localStorage.active_token = that.bookingToken
+            console.log('....lead setting booking token to ', token)
+            that.bookingToken = token
+            this.newTour(token)
         });
-        bus.$on('retriveUser', (email) => {
-            that.retrieveUser(email)
-        })
         bus.$on("leadTravellerLoaded", (customer) => {
             that.setCustomer(customer);
             that.email = that.email_address;
@@ -427,7 +416,7 @@ export default {
             this.loginLink = `/login?cb=${that.tour.url}`;
         }
         this.activeBookings = "";
-        this.loadCountries();
+        this.loadCountries()
         that.debug > 1 && console.log(`${this.moduleName} mounted Tour: ${this.tour.name}`);
     },
     computed: {
@@ -442,6 +431,41 @@ export default {
         }
     },
     methods: {
+        newTour(token) {
+            let that = this
+            alert('newtour called with token '+token)
+            axios.get(`/api/booking/token/${token}`)
+            .then(response => {
+                if (!response.data.success) {
+                    alert('your token did not get a response '+token)
+                } else {
+                    console.log('token get response', response.data)
+                    const tour = response.data.tour
+                    const customer = response.data.customer
+                    if (tour.id != that.tour.id) {
+                        alert('tour is not the same')
+                        that.bookingToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+                        setCookie(that.tokenName, that.bookingToken)
+                        that.bookingToken = getCookie(that.tokenName)
+                        alert('booking a new tour', that.tour.name, that.tour_id, that.bookingToken)
+                        axios.post(`/api/booking/create`, {
+                            customer_id: customer.id,
+                            tour_id: that.tour.id,
+                            token: that.bookingToken,
+                            fullname: that.full_name
+                        })
+                        .then(response => {
+                            console.log('booking create response', response)
+                            // bus.$emit('setBookingToken', that.bookingToken)
+                        })
+                        .catch(error => console.log(error))
+                    } else {
+                        alert('continuing with same tour booking')
+                    }
+                }
+            })
+            .catch(error => console.log(error))
+        },
         cookieAgreed() {
             if (this.cookieAgreement) {
                 bus.$emit("resetBookingToken");
@@ -449,6 +473,46 @@ export default {
         },
         base64(arg) {
             return Buffer.from(`${arg}`, "utf8").toString("base64");
+        },
+        /**
+         * the lead booker has a customer account which can be retrieved by login/password
+         * a salt token is requested from the server to encrypt login credentials
+         * NB: this is a PoC currently, not very secure
+         * TODO: Route to login using Laravel (not JS)
+         */
+        loginUser() {
+            let that = this;
+            const username = this.email;
+            const password = this.password;
+            const t = new Date();
+            alert("TEST: login user");
+            // request a salt value from the server which is then used in the encryption
+            axios.get(`/api/booking/auth/token/${username}`)
+                .then(response => {
+                const salt = response.data.auth;
+                let token = this.base64(`${salt}:${password}`);
+                const url = "/api/booking/authenticate/user";
+                const data = this.email;
+                axios.post(url, data, {
+                    headers: {
+                        "Authorization": `Basic ${token}`
+                    },
+                })
+                    .then(response => {
+                    that.auth = false;
+                    that.debug > 1 && console.log("BookingFormLead: authorised", response);
+                    if (response.authorised) {
+                        that.auth = true;
+                    }
+                })
+                    .catch(error => {
+                    console.log("auth error", error);
+                });
+            })
+                .catch(error => {
+                console.log("can not obtain token");
+                return;
+            });
         },
         validCountry() {
             if (this.country_id == 0) {
@@ -471,46 +535,32 @@ export default {
                 this.retrieveUser();
             }
         },
-        retrieveUser(email = null) {
+        retrieveUser() {
             // if the cookie does not retrieve an active order
             // see if email address is registered (email a tokenised link)
-            let that = this;
-            if (email == null) {
-                email = this.email_address
-            }
+            let that = this
+
+            alert('retrieveUser()')
+
             // is it a registered user?
             if (!this.auth) {
                 this.debug > 1 && console.log("BookingFormLead: checking for auth user");
-                axios.get(`/api/booking/email/registered/${email}`)
+                axios.get(`/api/booking/email/registered/${this.email_address}`)
                 .then(response => {
                     that.debug > 1 && console.log("BookingFormLead: email registered? response", response);
                     that.activeUser = response.data.existing;
                     const customer = response.data.customer;
                     if (that.activeUser) {
-                        that.show_traveller = true;
+                        that.bookingToken = response.data.token
+                        that.show_traveller = true
+                        console.log("active user", that.activeUser)
                         that.setCustomer(customer)
-                        bus.$emit('leadTravellerLoaded', customer)
-                        bus.$emit('homeAddressLoaded', customer.homeAddress) //data.customer.home_address)
-                        bus.$emit('billingAddressLoaded', customer.billingAddress) //data.customer.billing_address)
-                        
-                        const bookings = response.data.bookings
-                        console.log('+++++ response data bookings = ', response.data.bookings)
-                        bookings.map(b => console.log(b))
-
-                        const booking = bookings.filter(b => b.tour_id == that.tour.id)[0]
-                        if (booking) {
-                            that.bookingToken = booking.token
-                            console.log('.....found booking for this tour', booking.token)
-                            // alert("Your active booking data is available, please check your details and Save Traveller")
-                            bus.$emit("setBookingToken", that.bookingToken)
-                            // bus.$emit("retrieveUserData", that.bookingToken)
-                            // bus.$emit("controlLoadBookings")
-                        } else {
-                            console.log('.....booking found not for this tour ', that.tour ,bookings)
-                            // bus.$emit("retrieveUserData", response.data.bookings[0].token)
-                            alert('found your booking for another tour')
-                        }
-                    } else {
+                        bus.$emit("setBookingToken", that.bookingToken)
+                        bus.$emit("retrieveUserData", that.bookingToken)
+                        bus.$emit("controlLoadBookings")
+                        alert("Your active booking data is available, please check your details and Save Traveller");
+                    }
+                    else {
                         that.noUser = true;
                     }
                 })
@@ -572,20 +622,21 @@ export default {
         },
         createBooking(customer_id, tour_id) {
             let that = this;
+            alert('calling createBooking!')
             axios.post("/api/booking/create-booking", {
                 customer_id: customer_id,
                 tour_id: tour_id,
                 token: this.bookingToken,
                 fullname: this.full_name
             })
-                .then(response => {
+            .then(response => {
                 const booking = response.data.booking;
                 // set the booking in each module
                 that.debug && console.log("Lead creatingBooking", booking);
                 bus.$emit("setBookingToken", booking.token);
                 bus.$emit("bookingCreated", booking);
             })
-                .catch(error => {
+            .catch(error => {
                 console.log("error createBooking", error);
             });
         },

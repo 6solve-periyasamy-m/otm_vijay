@@ -55,16 +55,4 @@ class ActivitiesController extends ApiController
 
         return response()->json(['success' => true, 'bookings' => $bookings]);
     }
-
-    /**
-     * updateActivities
-     * creates/updates booking activities
-     *
-     * @param Request $request
-     * @return void
-     */
-    public function updateActivities(Request $request)
-    {
-
-    }
 }

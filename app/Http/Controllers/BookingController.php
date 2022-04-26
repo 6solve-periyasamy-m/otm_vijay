@@ -105,7 +105,8 @@ class BookingController extends Controller
     public function payDeposit(Request $request)
     {
 
-        $request->validate(['token' => 'required|exists:bookings',
+        $request->validate(['token' => 'required|exists:bookings','tour_id' => 'required|exists:tours,id',
+            'customer_id' => 'required|exists:customers,id',
             'amount' => 'required|regex:/^\d*\.?\d*$/',
             'currencyamount' => 'required|regex:/^([^\d]*?)(.*)$/']);
             // NB: currency amount only has to capture the currency symbol and can consider the rest as a string (number)
