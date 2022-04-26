@@ -93,7 +93,7 @@
                         <div class="form-group col-md-4">
                             <label class="col-md-12 mb-0">Date of Birth</label>
                             <div class="col-md-12">
-                                <input type="date" name="date_of_birth" id="date_of_birth-input" value="{{ $customer->date_of_birth->format('Y-m-d') ?? '' }}"
+                                <input type="date" name="date_of_birth" id="date_of_birth-input" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}"
                                     class="form-control ps-0 form-control-line" autocomplete="bday">
                             </div>
                         </div>
@@ -267,14 +267,14 @@
                         <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Issue Date</label>
                             <div class="col-md-12">
-                                <input type="date" name="passport_issue_date" id="passport_issue_date-input" value="{{ $customer->passport_issue_date->format('Y-m-d') ?? '' }}"
+                                <input type="date" name="passport_issue_date" id="passport_issue_date-input" value="{{ $customer?->passport_issue_date?->format('Y-m-d') ?? '' }}"
                                     class="form-control ps-0 form-control-line">
                             </div>
                         </div>
                         <div class="form-group col-md-2">
                             <label class="col-md-12 mb-0">Expiry Date</label>
                             <div class="col-md-12">
-                                <input type="date" name="passport_expiry_date" id="passport_expiry_date-input" value="{{ $customer->passport_expiry_date->format('Y-m-d') ?? '' }}"
+                                <input type="date" name="passport_expiry_date" id="passport_expiry_date-input" value="{{ $customer?->passport_expiry_date?->format('Y-m-d') ?? '' }}"
                                     class="form-control ps-0 form-control-line">
                             </div>
                         </div>
