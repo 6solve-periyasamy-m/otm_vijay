@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\OrdersCustomer;
+use App\Models\Order\OrderCustomer;
 
 interface OrdersCustomerRepositoryInterface {
 }
@@ -15,13 +16,13 @@ class OrdersCustomerRepository implements OrdersCustomerRepositoryInterface
 
     public function __construct()
     {
-        $this->model = new OrdersCustomer();
+        $this->model = new OrderCustomer();
     }
 
     public function getCustomerOrder($order_id, $customer_id)
     {
         // get the customer order record
-        $customerOrder = new OrdersCustomer();
+        $customerOrder = new OrderCustomer();
         Log::info('getting customerOrder', [$order_id, $customer_id]);
         try {
             $customerOrders = $customerOrder
@@ -65,7 +66,7 @@ class OrdersCustomerRepository implements OrdersCustomerRepositoryInterface
 
     public function storeOrderCustomer($customer, $request, $isLead)
     {
-        $ordersCustomer = new OrdersCustomer();
+        $ordersCustomer = new OrderCustomer();
         $this->logging == 'orders' && Log::info('loading ordercustomer  order '. $request->order_id.' customer: '.$customer->id);
         $ordersCustomerExists = $ordersCustomer
             ->where('order_id', $request->order_id)
@@ -81,7 +82,6 @@ class OrdersCustomerRepository implements OrdersCustomerRepositoryInterface
             $ordersCustomer->customer_id = $customer->id;
             $this->logging == 'orders' && Log::info('creating ordercustomer for order '. $request->order_id.' customer: '.$customer->id);
         }
-        $ordersCustomer->is_lead_booker = $isLead;
         $ordersCustomer->travel_insurer = null;
         $ordersCustomer->policy_number = null;
         $ordersCustomer->save();

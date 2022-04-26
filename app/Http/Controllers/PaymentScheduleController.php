@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking\PaymentSchedule;
-use App\Models\PaymentInstallments;
 use Illuminate\Http\Request;
 
 class PaymentScheduleController extends Controller

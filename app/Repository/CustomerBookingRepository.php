@@ -3,28 +3,26 @@
 namespace App\Repository;
 
 use App\Events\Order\OrderCreatedEvent;
-use App\Exceptions\RoomingFailedException;
-use App\Models\AccommodationGroup;
-use App\Models\ActivityInventoryTour;
-use App\Models\Booking;
-use App\Models\BookingAccommodation;
-use App\Models\BookingActivity;
-use App\Models\BookingFlight;
-use App\Models\BookingMerchandise;
-use App\Models\BookingTransport;
-use App\Models\BookingTraveller;
-use App\Models\Customer;
-use App\Models\FlightInventoryTour;
-use App\Models\Group;
-use App\Models\Merchandise;
-use App\Models\Order;
-use App\Models\OrderActivity;
-use App\Models\OrderCustomer;
-use App\Models\OrderFlight;
-use App\Models\OrderMerchandise;
-use App\Models\OrderTransport;
-use App\Models\RoomType;
-use App\Models\Tour;
+use App\Models\Booking\AccommodationGroup;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingMerchandise;
+use App\Models\Booking\BookingAccommodation;
+use App\Models\Booking\BookingActivity;
+use App\Models\Booking\BookingFlight;
+use App\Models\Booking\BookingTransport;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Customer\Customer;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Order\Order;
+use App\Models\Tour\Merchandise;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\OrderCustomer;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
+use App\Models\Order\Component\OrderTransport;
+use App\Models\Accommodation\RoomType;
+use App\Models\Tour\Tour;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 use Log;
@@ -158,9 +156,7 @@ class CustomerBookingRepository
 
     public static function addIncludedToBookingTraveller(BookingTraveller $traveller, RoomType $roomType, AccommodationGroup $group)
     {
-        /** @var Booking $booking */
         $booking = $traveller->booking;
-        /** @var Tour $tour */
         $tour = $booking->tour;
         // Accommodation
         foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {

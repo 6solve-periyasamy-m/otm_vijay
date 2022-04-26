@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityInventoryTourUpgrade;
-use App\Models\Booking;
-use App\Models\BookingActivity;
-use App\Models\Customer;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingActivity;
+use App\Models\Customer\Customer;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\CustomerBookingRepository;
 use Illuminate\Http\JsonResponse;
