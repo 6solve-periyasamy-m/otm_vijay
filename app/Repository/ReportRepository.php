@@ -44,7 +44,7 @@ class ReportRepository
     public static function getOrderReport(): array
     {
         $data = [];
-        foreach (Order::withTrashed()->get() as $order) {
+        foreach (Order::all() as $order) {
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;
