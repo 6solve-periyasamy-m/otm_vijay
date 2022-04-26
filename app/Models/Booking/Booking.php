@@ -26,7 +26,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $name
  * @property-read Collection|BookingAccommodation[] $accommodation
  * @property-read int|null $accommodation_count
- * @property-read Collection|BookingActivities[] $activities
+ * @property-read Collection|BookingActivity[] $activities
  * @property-read int|null $activities_count
  * @property-read Customer $customer
  * @property-read Collection|BookingFlight[] $flights
@@ -70,7 +70,7 @@ class Booking extends Model
 
     public function activities(): HasMany
     {
-        return $this->hasMany(BookingActivities::class, 'booking_id');
+        return $this->hasMany(BookingActivity::class, 'booking_id');
     }
 
     public function flights(): HasMany
@@ -81,6 +81,11 @@ class Booking extends Model
     public function transports(): HasMany
     {
         return $this->hasMany(BookingTransport::class, 'booking_id');
+    }
+
+    public function merchandise(): HasMany
+    {
+        return $this->hasMany(BookingMerchandise::class, 'booking_id');
     }
 
     public function travellers(): HasMany

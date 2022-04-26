@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -42,5 +43,30 @@ class BookingTraveller extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer');
+    }
+
+    public function accommodation(): HasMany
+    {
+        return $this->hasMany(BookingAccommodation::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(BookingActivity::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+    }
+
+    public function flights(): HasMany
+    {
+        return $this->hasMany(BookingFlight::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+    }
+
+    public function transport(): HasMany
+    {
+        return $this->hasMany(BookingTransport::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+    }
+
+    public function merchandise(): HasMany
+    {
+        return $this->hasMany(BookingMerchandise::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
     }
 }

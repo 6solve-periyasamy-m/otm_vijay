@@ -23,18 +23,18 @@ use Illuminate\Support\Carbon;
  * @property-read Booking $booking
  * @property-read Customer|null $customer
  * @property-read ActivityInventoryTour $tourComponent
- * @method static Builder|BookingActivities newModelQuery()
- * @method static Builder|BookingActivities newQuery()
- * @method static Builder|BookingActivities query()
- * @method static Builder|BookingActivities whereActivityInventoryTourId($value)
- * @method static Builder|BookingActivities whereBookingId($value)
- * @method static Builder|BookingActivities whereCreatedAt($value)
- * @method static Builder|BookingActivities whereCustomerId($value)
- * @method static Builder|BookingActivities whereId($value)
- * @method static Builder|BookingActivities whereUpdatedAt($value)
+ * @method static Builder|BookingActivity newModelQuery()
+ * @method static Builder|BookingActivity newQuery()
+ * @method static Builder|BookingActivity query()
+ * @method static Builder|BookingActivity whereActivityInventoryTourId($value)
+ * @method static Builder|BookingActivity whereBookingId($value)
+ * @method static Builder|BookingActivity whereCreatedAt($value)
+ * @method static Builder|BookingActivity whereCustomerId($value)
+ * @method static Builder|BookingActivity whereId($value)
+ * @method static Builder|BookingActivity whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class BookingActivities extends Model
+class BookingActivity extends Model
 {
     use HasFactory;
 
@@ -45,7 +45,7 @@ class BookingActivities extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'customer');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function tourComponent(): BelongsTo

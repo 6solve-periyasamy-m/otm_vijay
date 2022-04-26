@@ -3,6 +3,7 @@
 namespace App\Models\Booking;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Accommodation\RoomType;
 use App\Models\Customer\Customer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,11 +50,21 @@ class BookingAccommodation extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'customer');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
+    }
+
+    public function roomType(): BelongsTo
+    {
+        return $this->belongsTo(RoomType::class, 'room_type_id');
+    }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationGroup::class, 'group_id');
     }
 }

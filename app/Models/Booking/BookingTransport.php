@@ -45,7 +45,7 @@ class BookingTransport extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'customer');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function tourComponent(): BelongsTo

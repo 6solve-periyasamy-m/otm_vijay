@@ -147,18 +147,25 @@ class AccommodationInventoryTour extends Model
         ]);
     }
 
-    public function getUpgradeKeyMap(): array
+    public function getUpgradeKeyMap(int $required = 1): array
     {
         $upgrades = $this->upgrades;
+        $included = $this;
         $keys = [];
-        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
-        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        if (empty($upgrades->all())) {
+            $upgrades = $this->parent()->upgrades;
+            $included =  $this->parent();
+        }
+        if ($included->available_stock > $required-1) {
+            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= 0) continue;
+            if ($upgrade->upgrade->available_stock <= $required-1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
     }
+
 
     public function getCustomerUpgradeKeyMap(): array
     {
@@ -176,5 +183,14 @@ class AccommodationInventoryTour extends Model
             }
         }
         return $keys;
+    }
+
+    public function getUsedTourStockAttribute(): int
+    {
+        $used = 0;
+        foreach ($this->orders as $orderComponent) {
+            if (!$orderComponent->isCancelled()) $used++;
+        }
+        return $used;
     }
 }

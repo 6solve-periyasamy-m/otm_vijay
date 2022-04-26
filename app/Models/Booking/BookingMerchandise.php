@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Booking;
 
+use App\Models\Customer\Customer;
+use App\Models\Tour\Merchandise;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
