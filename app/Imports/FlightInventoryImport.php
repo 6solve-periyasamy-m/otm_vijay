@@ -20,17 +20,17 @@ class FlightInventoryImport implements ToModel
      */
     public function model(array $row)
     {
-        $airline = Airline::firstOrCreate($row[0]);
+        $airline = Airline::findOrCreate($row[0]);
         $departure = Airport::where('name', 'like', $row[1])->first();
         $arrival = Airport::where('name', 'like', $row[2])->first();
         $isDomestic = $row[3] == 'YES';
         $currency = Currency::where('code', '=', $row[4])->first();
         if (!isset($departure) || !isset($arrival)) { return null; }
-        $flight = Flight::firstOrCreate($airline, $departure, $arrival, $isDomestic, $currency, $row[5]);
+        $flight = Flight::findOrCreate($airline, $departure, $arrival, $isDomestic, $currency, $row[5]);
         return new FlightInventory([
             'flight_id' => $flight->id,
             'flight_number' => trim($row[6]),
-            'travel_class_id' => TravelClass::firstOrCreate(trim($row[7]))->id,
+            'travel_class_id' => TravelClass::findOrCreate(trim($row[7]))->id,
             'check_in' => Carbon::createFromFormat('d/m/Y H:i', trim($row[8])),
             'departs_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row[9])),
             'arrives_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row[10])),

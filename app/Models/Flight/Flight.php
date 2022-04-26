@@ -77,7 +77,7 @@ class Flight extends Model
         ];
     }
 
-    public static function firstOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes): Flight
+    public static function findOrCreate(Airline $airline, Airport $departure, Airport $arrival, bool $isDomestic, Currency $currency, string $notes): Flight
     {
         $flight = self::where('airline_id', '=', $airline->id)
             ->where('departure_airport_id', '=', $departure->id)

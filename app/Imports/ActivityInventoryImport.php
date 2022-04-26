@@ -21,7 +21,7 @@ class ActivityInventoryImport implements ToModel
         if ($activity == null) return null;
         return new ActivityInventory([
             'activity_id' => $activity->id,
-            'ticket_type_id' => TicketType::firstOrCreate($row[1])->id,
+            'ticket_type_id' => TicketType::findOrCreate($row[1])->id,
             'starts_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row[2])),
             'ends_at' => Carbon::createFromFormat('d/m/Y H:i', trim($row[3])),
             'fit_selectable' => trim($row[4]) == 'YES',

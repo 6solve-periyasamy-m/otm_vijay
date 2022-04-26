@@ -42,7 +42,7 @@ class PaymentMethod extends SimpleModel
         return ['name' => 'required|unique:payment_methods,name'];
     }
 
-    public static function firstOrCreate(string $name)
+    public static function findOrCreate(string $name)
     {
         $type = self::where('name', '=', $name)->first();
         if (!isset($type)) {

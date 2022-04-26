@@ -44,7 +44,7 @@ class RoomType extends Model
         return ['name' => 'required|unique:room_types,name', 'maximum_occupancy' => 'required|integer|min:1'];
     }
 
-    public static function firstOrCreate(string $name, int $maximumOccupancy): RoomType
+    public static function findOrCreate(string $name, int $maximumOccupancy): RoomType
     {
         $type = self::where('name', '=', $name)->first();
         if (!isset($type)) {

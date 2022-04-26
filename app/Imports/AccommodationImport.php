@@ -25,7 +25,7 @@ class AccommodationImport implements ToModel
         $address = Address::create([
             'name' => $row[0],
             'address_parent_id' => AddressParent::getParentId('Accommodation'),
-            'location_type_id' => LocationType::firstOrCreate('Hotel')->id,
+            'location_type_id' => LocationType::findOrCreate('Hotel')->id,
             'address_line_1' => trim($row[3]),
             'address_line_2' => trim($row[4]),
             'town' => trim($row[5]),

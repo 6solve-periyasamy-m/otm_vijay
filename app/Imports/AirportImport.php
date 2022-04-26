@@ -22,7 +22,7 @@ class AirportImport implements ToModel
         $address = Address::create([
             'name' => $row[0],
             'address_parent_id' => AddressParent::getParentId('Activity'),
-            'location_type_id' => LocationType::firstOrCreate('Airport')->id,
+            'location_type_id' => LocationType::findOrCreate('Airport')->id,
             'address_line_1' => trim($row[2]),
             'address_line_2' => trim($row[3]),
             'town' => trim($row[4]),

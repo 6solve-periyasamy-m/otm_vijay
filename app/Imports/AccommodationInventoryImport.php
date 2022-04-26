@@ -22,8 +22,8 @@ class AccommodationInventoryImport implements ToModel
         if ($accommodation == null) return null;
         return new AccommodationInventory([
             'accommodation_id' => $accommodation->id,
-            'room_type_id' => RoomType::firstOrCreate(trim($row[1]), trim($row[2]))->id,
-            'board_type_id' => BoardType::firstOrCreate(trim($row[3]))->id,
+            'room_type_id' => RoomType::findOrCreate(trim($row[1]), trim($row[2]))->id,
+            'board_type_id' => BoardType::findOrCreate(trim($row[3]))->id,
             'check_in' => Carbon::createFromFormat('d/m/Y H:i', trim($row[4])),
             'check_in_time_confirmed' => true,
             'check_out' => Carbon::createFromFormat('d/m/Y H:i', trim($row[5])),
