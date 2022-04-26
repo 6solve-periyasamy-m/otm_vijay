@@ -24,7 +24,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Booking $booking
- * @property-read Customer|null $customer
+ * @property-read Customer $customer
+ * @property-read AccommodationGroup|null $group
+ * @property-read RoomType $roomType
  * @property-read AccommodationInventoryTour $tourComponent
  * @method static Builder|BookingAccommodation newModelQuery()
  * @method static Builder|BookingAccommodation newQuery()

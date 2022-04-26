@@ -26,15 +26,15 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read ActivityInventoryTour $activityInventoryTour
  * @property-read Activity $activity
  * @property-read ActivityInventory $activity_inventory
- * @property-read ActivityInventoryTour $activityInventoryTour
- * @property-read ActivityInventoryTour $tourComponent
  * @property-read bool $cancelled Is the order cancelled?
  * @property-read string $details
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
  * @property-read OrderCustomer $orderCustomer
+ * @property-read ActivityInventoryTour $tourComponent
  * @method static Builder|OrderActivity newModelQuery()
  * @method static Builder|OrderActivity newQuery()
  * @method static QueryBuilder|OrderActivity onlyTrashed()

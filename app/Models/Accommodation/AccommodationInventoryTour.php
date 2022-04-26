@@ -36,6 +36,7 @@ use StringFormatter;
  * @property-read AccommodationInventory $accommodationInventory
  * @property-read int $available_stock How much stock is still available to be sold
  * @property-read string $tour_name
+ * @property-read int $used_tour_stock
  * @property-read AccommodationInventory $inventory
  * @property-read Collection|OrderAccommodation[] $orders
  * @property-read int|null $orders_count

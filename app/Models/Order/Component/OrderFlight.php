@@ -30,16 +30,16 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read Airport|null $arrivalAirport
  * @property-read Airport|null $departureAirport
+ * @property-read FlightInventoryTour|null $flightInventoryTour
+ * @property-read string $atol_string
+ * @property-read bool $cancelled Is the order cancelled?
+ * @property-read string $details
  * @property-read Flight $flight
  * @property-read FlightInventory $flight_inventory
- * @property-read FlightInventoryTour|null $flightInventoryTour
- * @property-read FlightInventoryTour|null $tourComponent
- * @property-read string $atol_string
- * @property-read bool $cancelled
- * @property-read string $details
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
  * @property-read OrderCustomer|null $orderCustomer
+ * @property-read FlightInventoryTour|null $tourComponent
  * @method static Builder|OrderFlight newModelQuery()
  * @method static Builder|OrderFlight newQuery()
  * @method static QueryBuilder|OrderFlight onlyTrashed()

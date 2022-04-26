@@ -27,15 +27,15 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read AccommodationInventoryTour $accommodationInventoryTour
  * @property-read Accommodation $accommodation
  * @property-read AccommodationInventory $accommodation_inventory
- * @property-read AccommodationInventoryTour $accommodationInventoryTour
- * @property-read AccommodationInventoryTour $tourComponent
  * @property-read bool $cancelled Is the order cancelled
  * @property-read string $details
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
  * @property-read Group $group
+ * @property-read AccommodationInventoryTour $tourComponent
  * @method static Builder|OrderAccommodation newModelQuery()
  * @method static Builder|OrderAccommodation newQuery()
  * @method static QueryBuilder|OrderAccommodation onlyTrashed()
@@ -50,7 +50,6 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|OrderAccommodation withTrashed()
  * @method static QueryBuilder|OrderAccommodation withoutTrashed()
  * @mixin Eloquent
-
  */
 class OrderAccommodation extends Model
 {

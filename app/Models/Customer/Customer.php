@@ -37,15 +37,15 @@ use Laravel\Cashier\Subscription;
  * @property string|null $email_address
  * @property string|null $password
  * @property string|null $email_verified_at
- * @property string|null $remember_token Remember token for login
- * @property string|null $login_token Login token for booking form.
+ * @property string|null $remember_token
+ * @property string|null $login_token
  * @property string|null $gender
  * @property string|null $title
  * @property string $first_name
  * @property string|null $middle_names
  * @property string $last_name
  * @property Carbon $date_of_birth
- * @property string $mobile_number
+ * @property string|null $mobile_number
  * @property string|null $other_phone_number
  * @property int $home_address_id
  * @property int $billing_address_id

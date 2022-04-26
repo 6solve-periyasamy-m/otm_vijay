@@ -5,6 +5,7 @@ namespace App\Models\Booking;
 use App\Models\Customer\Customer;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,8 +20,18 @@ use Illuminate\Support\Carbon;
  * @property int $customer_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|BookingAccommodation[] $accommodation
+ * @property-read int|null $accommodation_count
+ * @property-read Collection|BookingActivity[] $activities
+ * @property-read int|null $activities_count
  * @property-read Booking $booking
  * @property-read Customer|null $customer
+ * @property-read Collection|BookingFlight[] $flights
+ * @property-read int|null $flights_count
+ * @property-read Collection|BookingMerchandise[] $merchandise
+ * @property-read int|null $merchandise_count
+ * @property-read Collection|BookingTransport[] $transport
+ * @property-read int|null $transport_count
  * @method static Builder|BookingTraveller newModelQuery()
  * @method static Builder|BookingTraveller newQuery()
  * @method static Builder|BookingTraveller query()
