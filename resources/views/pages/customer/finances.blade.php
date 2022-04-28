@@ -10,7 +10,7 @@
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
                     @foreach($orders as $order)
-                    <option value='{{ $order->booking_reference }}'>{{ $order->booking_reference }}</option>
+                        <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
                 <a href="#" target="_blank" class="invoice btn btn-primary m-l-20">View Invoice</a>
