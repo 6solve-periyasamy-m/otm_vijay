@@ -184,6 +184,7 @@
         <div class="card">
             <div class="card-body">
                 <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
+                Please select Customer for whom you wish to purchase the Upgrade or Add-On for from the left hand list
             </div>
         </div>
         {{-- Accommodation --}}
