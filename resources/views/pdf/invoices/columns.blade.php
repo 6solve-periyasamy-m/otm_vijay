@@ -15,9 +15,18 @@ $order = $invoice->order;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Invoice</title>
         <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+        <style>
+            .cancelled {
+                background-image: url('{{ asset('images/rubberstamp.svg') }}') !important;
+                background-repeat: no-repeat !important;
+                background-position-x: calc(50% + 3em) !important;
+                background-position-y: 8em;
+                background-size: 30em;
+            }
+        </style>
     </head>
     <body>
-        <div class="background center-screen">
+        <div class="background center-screen @if($order->cancelled) cancelled @endif">
             <!-- Header Section -->
             <div class="section">
                 <div class="header">
