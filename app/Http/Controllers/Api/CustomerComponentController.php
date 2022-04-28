@@ -54,6 +54,9 @@ class CustomerComponentController extends Controller
         if (!isset($orderComponent))
             return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
 
+        if ($orderComponent->isCancelled())
+            return response()->json(['success' => false, 'message' => 'That order is cancelled',]);
+
         $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
 
         if (!isset($upgrade))
@@ -106,6 +109,9 @@ class CustomerComponentController extends Controller
         if (!isset($orderComponent))
             return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
 
+        if ($orderComponent->isCancelled())
+            return response()->json(['success' => false, 'message' => 'That order is cancelled',]);
+
         $upgrade = app($upgradeClass)->find($upgradeId);
 
         if (!isset($upgrade))
@@ -131,6 +137,9 @@ class CustomerComponentController extends Controller
 
         if (!isset($orderComponent))
             return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
+
+        if ($orderComponent->isCancelled())
+            return response()->json(['success' => false, 'message' => 'That order is cancelled',]);
 
         $upgrade = app($upgradeClass)->find($upgradeId);
 
