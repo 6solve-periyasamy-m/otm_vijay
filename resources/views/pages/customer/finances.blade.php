@@ -32,7 +32,7 @@
                             <input type="hidden" name="booking_reference" id="form-booking-reference">
                             <div class="form-material row">
                                 <div class="form-group col-12 col-xl-10">
-                                    <input class="form-control form-control-line" name="amount" type="text" placeholder="Enter Amount to Pay Here"/>
+                                    <input class="form-control form-control-line amount-input" name="amount" type="text" placeholder="Enter Amount to Pay Here"/>
                                 </div>
                                 <div class="form-group col-12 col-xl-2">
                                     <input class="form-control form-control-line" type="submit" value="Make Payment">
