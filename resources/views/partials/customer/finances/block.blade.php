@@ -135,7 +135,7 @@ $next = $order->getNextInstallment();
             </div>
         </div>
     </div>
-    @if($next['installment'] !== null)
+    @if($next['installment'] !== null && !$order->cancelled)
     <div class="col-12">
         <div class="card">
             <div class="card-body payment-balance">
