@@ -54,13 +54,18 @@ class CustomerTourController extends Controller
         if (isset($reference)) {
             $order = OrderRepository::getOrderFromBookingReference($reference);
         } else {
-            $order = $customer->orders()->orderByDesc('ordered_on')->first();
+            foreach ($customer->orders()->orderBy('ordered_on', 'desc')->get() as $o) {
+                if (!$o->cancelled) {
+                    $order = $o;
+                    break;
+                }
+            }
         }
+        if (!isset($order) || $order->cancelled) abort(404);
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
             if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
             if (isset($customer->email_address) && isset($customer->password)) abort(404);
         }
-        if (!isset($order)) abort(404);
         $oCustomer = null;
         foreach ($order->orderCustomers as $orderCustomer) {
             if ($orderCustomer->customer_id == $customer->id) {
@@ -76,7 +81,7 @@ class CustomerTourController extends Controller
     public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
         $order = OrderRepository::getOrderFromBookingReference($reference);
-        if (!isset($order)) abort(404);
+        if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
@@ -106,7 +111,7 @@ class CustomerTourController extends Controller
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
         $order = OrderRepository::getOrderFromBookingReference($reference);
-        if (!isset($order)) abort(404);
+        if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
@@ -148,7 +153,7 @@ class CustomerTourController extends Controller
         $customer = CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         $order = OrderRepository::getOrderFromBookingReference($reference);
-        if (!isset($order)) abort(404);
+        if (!isset($order) || $order->cancelled) abort(404);
         if (!OrderRepository::isOrderCustomer($order, $customer)) abort(404);
         if (OrderRepository::isLeadBooker($order, CustomerAuthenticationRepository::getCustomer())) {
             $order->update([

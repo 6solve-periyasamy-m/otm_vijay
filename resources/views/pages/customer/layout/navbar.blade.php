@@ -28,9 +28,16 @@
                 </div>
             </div>
             <div class="p-3 dp-down">
-                <img class="setting-logo dp-button" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}" onclick="window.location = '{{ route('customer.portal') }}'">
+                <a href="{{ route('customer.portal') }}">
+                    <img class="setting-logo dp-button" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}">
+                </a>
                 <div class="dp-content">
                     @if(\App\Repository\CustomerAuthenticationRepository::getCustomer() !== null)
+                    <a href="{{ route('customer.portal') }}"><i class="icon-home"></i>&nbsp;Home</a>
+                    <a href="{{ route('customer.edit') }}"><i class="icon-user"></i>&nbsp;Edit Details</a>
+                    <a href="{{ route('customer.finances') }}"><i class="icon-credit-card"></i>&nbsp;Finances</a>
+                    <a href="{{ route('customer.itinerary') }}"><i class="icon-globe"></i>&nbsp;Itinerary</a>
+                    <a href="{{ route('customer.extras') }}"><i class="icon-diamond"></i>&nbsp;Tour Extras</a>
                     <a href="#" onclick="event.preventDefault();logout();"><i class="icon-login"></i>&nbsp;Logout</a>
                     @else
                     <a href="{{ route('customer.login') }}"><i class="icon-login"></i>&nbsp;Login</a>

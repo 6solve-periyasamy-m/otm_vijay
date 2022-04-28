@@ -158,7 +158,7 @@
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $order)
-                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} - {{ $order->tour->name }}</option>
+                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif @if($order->cancelled) disabled @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
@@ -184,6 +184,7 @@
         <div class="card">
             <div class="card-body">
                 <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
+                Please select Customer for whom you wish to purchase the Upgrade or Add-On for from the left hand list
             </div>
         </div>
         {{-- Accommodation --}}

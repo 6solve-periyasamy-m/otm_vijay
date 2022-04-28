@@ -10,7 +10,7 @@
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
                     @foreach($orders as $order)
-                    <option value='{{ $order->booking_reference }}'>{{ $order->booking_reference }}</option>
+                        <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
                 <a href="#" target="_blank" class="invoice btn btn-primary m-l-20">View Invoice</a>
@@ -32,7 +32,7 @@
                             <input type="hidden" name="booking_reference" id="form-booking-reference">
                             <div class="form-material row">
                                 <div class="form-group col-12 col-xl-10">
-                                    <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay"/>
+                                    <input class="form-control form-control-line amount-input" name="amount" type="text" placeholder="Enter Amount to Pay Here"/>
                                 </div>
                                 <div class="form-group col-12 col-xl-2">
                                     <input class="form-control form-control-line" type="submit" value="Make Payment">
