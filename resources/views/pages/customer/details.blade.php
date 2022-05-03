@@ -164,7 +164,7 @@
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Region</label>
                             <div class="col-md-12">
-                                <input type="text" name="region" id="region-input" value="{{ $customer->homeAddress->region ?? '' }}"
+                                <input type="text" name="home_region" id="home_region-input" value="{{ $customer->homeAddress->region ?? '' }}"
                                     class="form-control ps-0 form-control-line" autocomplete="address-level1">
                             </div>
                         </div>
@@ -175,8 +175,8 @@
                                        class="form-control ps-0 form-control-line" autocomplete="address-level1">
                             </div>
                         </div>
-                        @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'home_country', 'value' => $customer->homeAddress->country_id ?? null, 'width' => 6, 'route' => 'countries',])
-                        @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'billing_country', 'value' => $customer->billingAddress->country_id ?? null, 'width' => 6, 'route' => 'countries',])
+                        @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'home_country_id', 'value' => $customer->homeAddress->country_id ?? null, 'width' => 6, 'route' => 'countries',])
+                        @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'billing_country_id', 'value' => $customer->billingAddress->country_id ?? null, 'width' => 6, 'route' => 'countries',])
                         <div class="form-group col-md-6">
                             <label class="col-md-12 mb-0">Postcode</label>
                             <div class="col-md-12">
