@@ -483,8 +483,10 @@ class OrderRepository
         $paid = self::getTotalPaid($order);
         $paid -= self::getTotalAdjustedValue($order);
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
+        $paid = sigfig($paid);
         foreach ($order->installments as $installment) {
             $paid -= $installment->calculated_amount;
+            $paid = sigfig($paid);
             if ($paid < 0) {
                 return [
                     'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
