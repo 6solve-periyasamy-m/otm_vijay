@@ -96,6 +96,7 @@ class CustomerBookingRepository
         $flights = ['outbound' => [], 'inbound' => [],];
         foreach ($tour->flightInventoryTours as $flight) {
             if ($flight->available_stock <= 0) continue;
+            if (!$flight->is_bookable) continue;
             if ($flight->flight_type == 'Outbound') {
                 $flights['outbound'][] =
                         ['id' => $flight->id,
@@ -137,6 +138,7 @@ class CustomerBookingRepository
         $booking->flights()->delete();
         foreach ($booking->travellers as $traveller) {
             if (isset($outbound)) {
+                if (!$outbound->is_bookable) return false;
                 $bookingComponent = BookingFlight::make([
                     'customer_id' => $traveller->customer_id,
                     'flight_inventory_tour_id' => $outbound->id,
@@ -145,6 +147,7 @@ class CustomerBookingRepository
                 $booking->flights()->save($bookingComponent);
             }
             if (isset($inbound)) {
+                if (!$inbound->is_bookable) return false;
                 $bookingComponent = BookingFlight::make([
                     'customer_id' => $traveller->customer_id,
                     'flight_inventory_tour_id' => $inbound->id,
@@ -186,6 +189,7 @@ class CustomerBookingRepository
         }
         // Activity
         foreach ($tour->activityInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type == 'Included') {
                 if ($inventoryTour->available_stock < $traveller->booking->travellers()->count()) {
                     foreach ($inventoryTour->upgrades as $upgrade) {
@@ -209,6 +213,7 @@ class CustomerBookingRepository
         }
         // Transport
         foreach ($tour->transportInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type == 'Included') {
                 $bookingComponent = BookingTransport::make([
                     'customer_id' => $traveller->customer_id,
@@ -218,6 +223,7 @@ class CustomerBookingRepository
             }
         }
         foreach ($tour->merchandise as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type == 'Included') {
                 $bookingComponent = BookingMerchandise::make([
                     'customer_id' => $traveller->customer_id,
@@ -234,6 +240,7 @@ class CustomerBookingRepository
     public static function upgradeBookingActivity(Booking $booking, ActivityInventoryTour $from, ActivityInventoryTour $to): bool
     {
         if (($booking->tour_id !== $from->tour_id) || ($booking->tour_id !== $to->tour_id)) return false;
+        if (!$to->is_bookable) return false;
         if ($to->available_stock < $booking->travellers()->count()) return false;
         try {
             DB::beginTransaction();
@@ -253,6 +260,7 @@ class CustomerBookingRepository
     public static function addBookingActivityAddon(Booking $booking, ActivityInventoryTour $addon): bool
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
+        if (!$addon->is_bookable) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
         if ($addon->available_stock < $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
@@ -264,6 +272,7 @@ class CustomerBookingRepository
     public static function addBookingMerchandiseAddon(Booking $booking, Merchandise $addon): bool
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
+        if (!$addon->is_bookable) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
         if ($addon->available_stock < $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {

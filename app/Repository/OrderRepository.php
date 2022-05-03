@@ -513,6 +513,7 @@ class OrderRepository
         $order = $orderCustomer->order;
         // Accommodation are added to groups not customers (A:Celeste Gateley)
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderActivities()->save($orderInventory);
@@ -520,6 +521,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderFlights()->save($orderInventory);
@@ -527,6 +529,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderTransports()->save($orderInventory);
@@ -534,6 +537,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->merchandise as $merchandise) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($merchandise->tour_component_type === "Included") {
                 $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderMerchandise()->save($orderMerchandise);
@@ -1138,11 +1142,13 @@ class OrderRepository
         $data = [];
         foreach ($order->tour->merchandise as $tourComponent) {
             $owns = in_array($tourComponent->id, $owned['extras']);
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->available_stock <= 0 && !$owned) continue;
             $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
                 'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owns,];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
                 $owns = in_array($tourComponent->id, $owned['accommodation']);
@@ -1152,6 +1158,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->activityInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
@@ -1161,6 +1168,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->flightInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type  !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['flights'])) continue; // Owned components will be shown elsewhere
@@ -1170,6 +1178,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->transportInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['transport'])) continue; // Owned components will be shown elsewhere

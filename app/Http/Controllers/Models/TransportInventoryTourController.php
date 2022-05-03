@@ -53,9 +53,26 @@ class TransportInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function restore(Tour $tour, $transportInventoryTour)
+    {
+        $inventoryTour = TransportInventoryTour::withTrashed()->find($transportInventoryTour);
+        if ($inventoryTour->trashed()) {
+            $inventoryTour->restore();
+        } else {
+            $inventoryTour->is_bookable = true;
+            $inventoryTour->save();
+        }
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
     public function destroy(Tour $tour, TransportInventoryTour $transportInventoryTour)
     {
-        $transportInventoryTour->delete();
+        if ($tour->orders()->count() > 0) {
+            $transportInventoryTour->is_bookable = false;
+            $transportInventoryTour->save();
+        } else {
+            $transportInventoryTour->delete();
+        }
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 }
