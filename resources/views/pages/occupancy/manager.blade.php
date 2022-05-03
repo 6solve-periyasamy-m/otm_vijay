@@ -13,6 +13,9 @@
             --bed-color: #bfbaba;
             --customer-color: white;
             --shallow-radius: 10px;
+            --image-size: 50px;
+            --margin: 10px;
+            --padding: 5px;
         }
         .drop-shadow {
             box-shadow: -2px 2px 5px var(--shadow-color);
@@ -22,14 +25,14 @@
             background: var(--section-color);
             width: calc(100% - 20px);
             padding: 5px;
-            margin: 10px;
+            margin: var(--margin);
         }
         .customers {
             min-height: 120px;
             display: flex;
             max-width: 100%;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: var(--margin);
         }
         .customers > .customer {
             box-shadow: -2px 2px 5px var(--shadow-color);
@@ -50,7 +53,7 @@
             display: grid;
             justify-items: center;
             align-items: center;
-            padding: 5px;
+            padding: var(--padding);
             text-wrap: normal;
         }
         .customer:hover {
@@ -67,9 +70,9 @@
         .room {
             display: flex;
             flex-wrap: wrap;
-            padding: 5px;
+            padding: var(--padding);
             width: calc(100% - 10px);
-            margin: 10px 5px;
+            margin: var(--margin) calc(var(--margin) / 2);
             border-radius: var(--shallow-radius);
             background-color: var(--internal-section-color);
         }
@@ -77,11 +80,10 @@
             display: flex;
             max-width: 60vw;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: var(--margin);
         }
         .bed {
             border-radius: var(--shallow-radius);
-            /*background-color: var(--bed-color);*/
             width: var(--bed-size);
             min-width: var(--bed-size);
             height: var(--bed-size);
@@ -89,8 +91,8 @@
             border: 1px dashed black;
         }
         .image {
-            width: 50px;
-            height: 50px;
+            width: var(--image-size);
+            height: var(--image-size);
             border-radius: 50%;
         }
         .details {
@@ -136,23 +138,23 @@
 @push('footer-stack')
     <script type="text/javascript">
         function createCustomerBox(id, name, avatar) {
-            return `<div class="customer" customer="${id}"><div class="customer-container"><div class="customer-section"><img src="${avatar}" class="image"></div><div class="customer-section">${name}</div></div>`;
+            return `<div class="customer" customer="${id}"><div class="customer-container"><div class="customer-section"><img src="${avatar}" class="image"></div><div class="customer-section">${name}</div></div></div>`;
         }
         function createRoomBox(id, name, roomName, size, customers = null) {
             let bedString = '';
             if (customers != null) {
                 for (let customer in customers) {
                     let customerBox = createCustomerBox(customers[customer]['id'], customers[customer]['name'], customers[customer]['avatar']);
-                    bedString += `<div class="bed drop-shadow">${customerBox}</div>`
+                    bedString += `<div class="bed">${customerBox}</div>`
                 }
                 if (customers.length < size) {
                     for (let i = 0; i < size - customers.length; i++) {
-                        bedString += `<div class="bed drop-shadow"></div>`
+                        bedString += `<div class="bed"></div>`
                     }
                 }
             } else {
                 for (let i = 0; i < size; i++) {
-                    bedString += `<div class="bed drop-shadow"></div>`
+                    bedString += `<div class="bed"></div>`
                 }
             }
             return `
@@ -227,25 +229,22 @@
         $('.room').each(function (index) {
                 let roomedCustomers = [];
                 let name = $(this).find('.name-input').val();
-                console.log(name);
-                $(this).children('.bed').each(function (index) {
+                $(this).children('.beds').first().children('.bed').each(function (index) {
                     if ($(this).children().first().attr('customer') === undefined) return;
                     roomedCustomers.push($(this).children().first().attr('customer'));
                 });
                 roomingData.push({name: name, roomType: $(this).attr('typeid'), customers: roomedCustomers})
             }
         );
-        console.log(roomingData);
         let request = $.post({
             url: "{{ route('api.roomings.save', ['order' => $order,]) }}",
             dataType: "json",
             data: { "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', "data": roomingData, },
             statusCode: {
                 200: function(xhr) { alert('Success'); },
-                500: function(xhr) { alert('Failed'); }
+                500: function(xhr) { alert('Failed: ' + xhr.message); }
             }
         });
-        console.log(roomingData);
     }
     $(document).ready(function () {
         initialize();
