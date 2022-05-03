@@ -14,7 +14,7 @@ class Order extends Model
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
-    protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments'];
+    protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean',];
 
     public static function getValidationRules()
