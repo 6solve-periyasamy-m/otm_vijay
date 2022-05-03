@@ -150,7 +150,7 @@ class BespokeReportRepository
 
     private static function format($data, string $format): ?string
     {
-        if (!isset($data) || $data == null) return 'Not Set';
+        if (!isset($data)) return 'Not Set';
         switch ($format) {
             case 'date':
                 $data = StringFormatter::formatDate($data);
