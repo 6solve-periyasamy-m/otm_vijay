@@ -577,7 +577,6 @@ class OrderRepository
                 (Carbon::parse($nextPayment['due'])->diffInDays(now(), true) <= $days &&
                  Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $minDays)) continue;
 
-
             $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
 
             if (isset($reminder)) continue;
