@@ -568,15 +568,19 @@ class OrderRepository
      */
     public static function sendAllOrderReminders(int $days, int $minDays = -1000)
     {
-        foreach (Order::all() as $order) {
+        foreach (Order::where('cancelled', false)->get() as $order) {
+            if ($order->cancelled) continue;
+
             $nextPayment = self::getNextPaymentDetails($order);
+
             if (!isset($nextPayment['installment']) ||
                 (Carbon::parse($nextPayment['due'])->diffInDays(now(), true) <= $days &&
                  Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $minDays)) continue;
-            Log::info('Passed');
+
             $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
+
             if (isset($reminder)) continue;
-            Log::info('Reminder Not Found');
+
             self::sendReminderEmail($order, $nextPayment['installment'], $days);
         }
     }
