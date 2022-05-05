@@ -45,6 +45,7 @@ class ReportRepository
     {
         $data = [];
         foreach (Order::all() as $order) {
+            $nextPayment = $order->getNextInstallment();
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;
@@ -55,6 +56,8 @@ class ReportRepository
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
+            $row->due_date = $nextPayment['due'];
+            $row->due_amount = $nextPayment['amount'];
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }

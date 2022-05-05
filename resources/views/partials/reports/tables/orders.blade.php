@@ -11,6 +11,8 @@
             <th scope="col">Balance Paid</th>
             <th scope="col">Balance Outstanding</th>
             <th scope="col">Order Status</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Due Amount</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +28,8 @@
                 <td>{{ $row->balance_paid }}</td>
                 <td>{{ $row->balance_outstanding }}</td>
                 <td class="bg-{{ $row->orderStatus['color'] }}">{{ $row->orderStatus['status'] }}</td>
+                <td>{{ $row->due_date ?? 'No Payment Due' }}</td>
+                <td>{{ $row->due_amount }}</td>
             </tr>
         @endforeach
     </tbody>
