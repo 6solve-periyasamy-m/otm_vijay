@@ -121,7 +121,7 @@
                                 <td>{{ StringFormatter::formatCurrency($data['cost']) }}</td>
                             @endif
                             <td>
-                                @if(count($data['component']->tourComponent->getUpgradeKeyMap()) < 2)
+                                @if(count($data['component']->tourComponent->getBookingUpgradeKeyMap()) < 2)
                                     @if($data['component']->tourComponent->tour_component_type == 'Included')
                                         No Upgrades Available
                                     @elseif($data['component']->tourComponent->tour_component_type == 'Upgrade')
