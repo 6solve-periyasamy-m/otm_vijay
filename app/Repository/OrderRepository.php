@@ -659,9 +659,9 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = ($order->getAdjustmentValue()*-1) + $order->getPaid() - $order->calculated_deposit;
+        $paid = sigfig(($order->getAdjustmentValue()*-1) + $order->getPaid() - $order->calculated_deposit);
         foreach ($order->installments as $orderInstallment) {
-            $paid -= $orderInstallment->calculated_amount;
+            $paid = sigfig($paid - $orderInstallment->calculated_amount);
             if ($paid < 0) return false;
             if ($orderInstallment->id == $installment->id) return true;
         }
