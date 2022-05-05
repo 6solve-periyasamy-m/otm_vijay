@@ -481,7 +481,7 @@ class OrderRepository
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getTotalAdjustedValue($order);
+        $paid -= self::getTotalAdjustedValue($order); // Negative adjustments add to the total paid, so minus is required
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         $paid = sigfig($paid);
         foreach ($order->installments as $installment) {
@@ -489,7 +489,7 @@ class OrderRepository
             $paid = sigfig($paid);
             if ($paid < 0) {
                 return [
-                    'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
+                    'amount' => min($installment->calculated_amount, $paid * -1),
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
