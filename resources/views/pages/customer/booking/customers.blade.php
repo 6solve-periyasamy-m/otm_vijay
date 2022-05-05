@@ -86,6 +86,9 @@
                                class="form-control ps-0 form-control-line" autocomplete="tel" required>
                     </div>
                 </div>
+                <div class="form-group col-md-12">
+                    Sharing is designated by the selection of a room, selecting the same room as another traveller indicates that the room will be shared by those travellers
+                </div>
                 <div class="form-group col-md-6">
                     <label class="col-md-12 mb-0">Ideal Room Type</label>
                     <select name="lead_room_type" class="w-100">
