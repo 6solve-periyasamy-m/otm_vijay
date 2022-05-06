@@ -108,6 +108,7 @@ class AccommodationInventoryTour extends Model
 
         foreach ($upgrades as $upgrade) {
             if ($upgrade->upgrade->id == $this->id) continue;
+            if (!$upgrade->upgrade->is_bookable) continue;
             if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
                 $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
