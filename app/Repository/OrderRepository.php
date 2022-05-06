@@ -481,7 +481,7 @@ class OrderRepository
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getTotalAdjustedValue($order);
+        $paid -= self::getTotalAdjustedValue($order); // Negative adjustments add to the total paid, so minus is required
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         $paid = sigfig($paid);
         foreach ($order->installments as $installment) {
@@ -489,7 +489,7 @@ class OrderRepository
             $paid = sigfig($paid);
             if ($paid < 0) {
                 return [
-                    'amount' => $installment->calculated_amount < $paid * -1 ? $installment->calculated_amount : $paid * -1,
+                    'amount' => min($installment->calculated_amount, $paid * -1),
                     'due' => $installment->due_on,
                     'installment' => $installment,
                 ];
@@ -578,8 +578,8 @@ class OrderRepository
             $nextPayment = self::getNextPaymentDetails($order);
 
             if (!isset($nextPayment['installment']) ||
-                (Carbon::parse($nextPayment['due'])->diffInDays(now(), true) <= $days &&
-                 Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $minDays)) continue;
+                !((Carbon::parse($nextPayment['due'])->diffInDays(now()) * -1) <= $days &&
+                 (Carbon::parse($nextPayment['due'])->diffInDays(now()) * -1) > $minDays)) continue;
 
             $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
 
@@ -663,9 +663,9 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = ($order->getAdjustmentValue()*-1) + $order->getPaid() - $order->calculated_deposit;
+        $paid = sigfig(($order->getAdjustmentValue()*-1) + $order->getPaid() - $order->calculated_deposit);
         foreach ($order->installments as $orderInstallment) {
-            $paid -= $orderInstallment->calculated_amount;
+            $paid = sigfig($paid - $orderInstallment->calculated_amount);
             if ($paid < 0) return false;
             if ($orderInstallment->id == $installment->id) return true;
         }

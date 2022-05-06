@@ -43,7 +43,6 @@ class CheckoutSuccessfulListener implements ShouldQueue
                     } else {
                         $order = BookingRepository::convertBookingToOrder($booking);
                     }
-                    event(new OrderCreatedEvent($order));
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::firstOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);
                     $intention->processed = true;
