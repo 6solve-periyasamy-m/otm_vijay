@@ -333,45 +333,33 @@ class OrderRepository
      */
     public static function getCost(Order $order): float
     {
-        return self::getCostBreakdown($order)['total'];
+        $total = 0;
+        foreach ($order->orderCustomers as $orderCustomer) {
+            $total += $orderCustomer->tour_cost;
+            if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
+            foreach ($orderCustomer->orderActivities as $orderComponent) {
+                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
+                $total += $orderComponent->cost;
+            }
+            foreach ($orderCustomer->orderFlights as $orderComponent) {
+                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
+                $total += $orderComponent->cost;
+            }
+            foreach ($orderCustomer->orderTransports as $orderComponent) {
+                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
+                $total += $orderComponent->cost;
+            }
+        }
+        foreach ($order->groups() as $group) {
+            foreach ($group->rooms as $orderComponent) {
+                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
+                $total += $orderComponent->cost;
+            }
+        }
+        return $total;
     }
 
     // Order Costs
-
-    /**
-     * Get a breakdown of all the costs of the order
-     * @param Order $order
-     * @return array{customers:array,deposit:float,total:float}
-     */
-    public static function getCostBreakdown(Order $order): array
-    {
-        $breakdown = [];
-        $total = 0;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $customerValue = $orderCustomer->tour_cost;
-            if ($orderCustomer->has_surcharge) $customerValue += $orderCustomer->single_occupancy_surcharge;
-            $customerData = [];
-            $data = self::getCustomerAdditionals($orderCustomer);
-            $customerData['upgrades'] = $data['upgrades'];
-            $customerData['addons'] = $data['addons'];
-            $customerValue += $data['additionalValue'];
-            $customerData['additionalValue'] = $customerValue;
-            $total += $customerValue;
-            $breakdown['customers'][] = $customerData;
-        }
-        foreach ($order->groups() as $group) {
-            $groupData = [];
-            $data = self::getGroupAdditionals($group);
-            $groupData['upgrades'] = $data['upgrades'];
-            $groupData['addons'] = $data['addons'];
-            $groupData['additionalValue'] = $data['additionalValue'];
-            $total += $data['additionalValue'];
-            $breakdown['groups'][] = $groupData;
-        }
-        $breakdown['deposit'] = $order->calculated_deposit;
-        $breakdown['total'] = $total;
-        return $breakdown;
-    }
 
     /**
      * Get the sum of the customer and order adjustments
