@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
 
         if (config('app.debug')) {
             $this->call(CountriesTableSeeder::class);
-            $this->call(CountryCurrenciesTableSeeder::class);
             $this->call(CurrenciesTableSeeder::class);
+            $this->call(CountryCurrenciesTableSeeder::class);
 
             $this->call(LocationTypesTableSeeder::class);
             $this->call(AddressesTableSeeder::class);
