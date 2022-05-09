@@ -349,6 +349,10 @@ class OrderRepository
                 if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
                 $total += $orderComponent->cost;
             }
+            foreach ($orderCustomer->orderMerchandise as $orderComponent) {
+                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
+                $total += $orderComponent->cost;
+            }
         }
         foreach ($order->groups() as $group) {
             foreach ($group->rooms as $orderComponent) {
