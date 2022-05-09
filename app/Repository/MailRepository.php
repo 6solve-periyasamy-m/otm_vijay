@@ -103,7 +103,8 @@ class MailRepository
         $mailable = self::generateEmail($mail, $model);
         if (!isset($mailable)) return false;
         try {
-            Mail::to($email)->send($mailable);
+            // TODO: Add toggle for BCC
+            Mail::to($email)->bcc(config('mail.from.address'))->send($mailable);
             return true;
         } catch (Exception $e) {
             Log::error($e);

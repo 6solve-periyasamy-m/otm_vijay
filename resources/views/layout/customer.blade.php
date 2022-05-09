@@ -54,7 +54,7 @@
             <div class="page-breadcrumb">
                 <div class="row align-items-center">
                     <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="page-title mb-0 p-0">@yield('title')</h3>            
+                        <h3 class="page-title mb-0 p-0"></h3>
                     </div>        
                 </div>
             </div>

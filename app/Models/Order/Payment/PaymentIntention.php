@@ -2,6 +2,7 @@
 
 namespace App\Models\Order\Payment;
 
+use App\Events\Order\OrderEditedEvent;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
@@ -161,7 +162,7 @@ class PaymentIntention extends Model
         }
         try {
             DB::commit();
-        } catch (Throwable $e) {
+       event(new OrderEditedEvent($order, true)); } catch (Throwable $e) {
             Log::error($e);
             return false;
         }

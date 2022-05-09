@@ -423,10 +423,12 @@ class OrderRepository
     public static function getNextPaymentDetails(Order $order): array
     {
         $paid = self::getTotalPaid($order);
-        $paid -= self::getTotalAdjustedValue($order);
+        $paid -= self::getTotalAdjustedValue($order); // Negative adjustments add to the total paid, so minus is required
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
+        $paid = sigfig($paid);
         foreach ($order->installments as $installment) {
             $paid -= $installment->calculated_amount;
+            $paid = sigfig($paid);
             if ($paid < 0) {
                 return [
                     'amount' => min($installment->calculated_amount, $paid * -1),
@@ -478,6 +480,7 @@ class OrderRepository
         $order = $orderCustomer->order;
         // Accommodation are added to groups not customers (A:Celeste Gateley)
         foreach ($order->tour->activityInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderActivities()->save($orderInventory);
@@ -485,6 +488,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->flightInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderFlights()->save($orderInventory);
@@ -492,6 +496,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->transportInventoryTours as $inventoryTour) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($inventoryTour->tour_component_type === "Included") {
                 $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
                 $orderCustomer->orderTransports()->save($orderInventory);
@@ -499,6 +504,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->merchandise as $merchandise) {
+            if (!$inventoryTour->is_bookable) continue;
             if ($merchandise->tour_component_type === "Included") {
                 $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id, 'cost' => $merchandise->tour_sales_price,]);
                 $orderCustomer->orderMerchandise()->save($orderMerchandise);
@@ -531,15 +537,19 @@ class OrderRepository
      */
     public static function sendAllOrderReminders(int $days, int $minDays = -1000)
     {
-        foreach (Order::all() as $order) {
+        foreach (Order::where('cancelled', false)->get() as $order) {
+            if ($order->cancelled) continue;
+
             $nextPayment = self::getNextPaymentDetails($order);
+
             if (!isset($nextPayment['installment']) ||
-                (Carbon::parse($nextPayment['due'])->diffInDays(now(), true) <= $days &&
-                 Carbon::parse($nextPayment['due'])->diffInDays(now(), true) > $minDays)) continue;
-            Log::info('Passed');
+                !((Carbon::parse($nextPayment['due'])->diffInDays(now()) * -1) <= $days &&
+                 (Carbon::parse($nextPayment['due'])->diffInDays(now()) * -1) > $minDays)) continue;
+
             $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
+
             if (isset($reminder)) continue;
-            Log::info('Reminder Not Found');
+
             self::sendReminderEmail($order, $nextPayment['installment'], $days);
         }
     }
@@ -617,9 +627,9 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = ($order->getAdjustmentValue() * -1) + $order->paid - $order->calculated_deposit;
+        $paid = sigfig(($order->getAdjustmentValue() * -1) + $order->paid - $order->calculated_deposit);
         foreach ($order->installments as $orderInstallment) {
-            $paid -= $orderInstallment->calculated_amount;
+            $paid = sigfig($paid - $orderInstallment->calculated_amount);
             if ($paid < 0) return false;
             if ($orderInstallment->id == $installment->id) return true;
         }
@@ -1103,11 +1113,13 @@ class OrderRepository
         $data = [];
         foreach ($order->tour->merchandise as $tourComponent) {
             $owns = in_array($tourComponent->id, $owned['extras']);
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->available_stock <= 0 && !$owned) continue;
             $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
                 'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owns,];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type == 'Add-on') {
                 $inventory = $tourComponent->inventory;
                 $owns = in_array($tourComponent->id, $owned['accommodation']);
@@ -1117,6 +1129,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->activityInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['activities'])) continue; // Owned components will be shown elsewhere
@@ -1126,6 +1139,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->flightInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['flights'])) continue; // Owned components will be shown elsewhere
@@ -1135,6 +1149,7 @@ class OrderRepository
             }
         }
         foreach ($order->tour->transportInventoryTours as $tourComponent) {
+            if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->tour_component_type !== 'Upgrade') {
                 $inventory = $tourComponent->inventory;
                 if (in_array($tourComponent->id, $owned['transport'])) continue; // Owned components will be shown elsewhere

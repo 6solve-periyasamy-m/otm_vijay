@@ -55,9 +55,26 @@ class FlightInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function restore(Tour $tour, $flightInventoryTour)
+    {
+        $inventoryTour = FlightInventoryTour::withTrashed()->find($flightInventoryTour);
+        if ($inventoryTour->trashed()) {
+            $inventoryTour->restore();
+        } else {
+            $inventoryTour->is_bookable = true;
+            $inventoryTour->save();
+        }
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
     public function destroy(Tour $tour, FlightInventoryTour $flightInventoryTour)
     {
-        $flightInventoryTour->delete();
+        if ($tour->orders()->count() > 0) {
+            $flightInventoryTour->is_bookable = false;
+            $flightInventoryTour->save();
+        } else {
+            $flightInventoryTour->delete();
+        }
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 }

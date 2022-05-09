@@ -92,6 +92,8 @@ class OrderController extends Controller
     {
         $request->validate(Order::getValidationRules());
         $request->validate(['deposit' => 'required|numeric',]);
+        $shouldInvoice = $order->tour_id != $request->input('tour_id') ||
+                          $order->deposit != $request->input('deposit');
         $order->update([
             'tour_id' => $request->input('tour_id'),
             'ordered_on' => $request->input('ordered_on'),
@@ -100,7 +102,7 @@ class OrderController extends Controller
             'deposit' => $request->input('deposit'),
             'invoice_footer' => $request->input('invoice_footer'),
         ]);
-        event(new OrderEditedEvent($order));
+        event(new OrderEditedEvent($order, $shouldInvoice));
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

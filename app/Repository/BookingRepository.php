@@ -134,7 +134,7 @@ class BookingRepository implements BookingRepositoryInterface
         $order->lead_booker_id = $leadBooker->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        event(new OrderCreatedEvent($order));
+        //event(new OrderCreatedEvent($order));
 
         OrderRepository::addIncludedToCustomer($leadBooker);
         foreach ($booking->travellers as $traveller) {

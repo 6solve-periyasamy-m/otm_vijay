@@ -119,6 +119,7 @@ class BespokeReportRepository
 
     private static function format($data, string $format): ?string
     {
+        if (!isset($data)) return 'Not Set';
         switch ($format) {
             case 'date':
                 $data = StringFormatter::formatDate($data);
@@ -150,13 +151,13 @@ class BespokeReportRepository
             if (in_array($key, $used)) {
                 $field = 'Not Set';
                 if ($info->depth == 0) {
-                    $field = $objGrandparent->{$info->accessor};
+                    $field = $objGrandparent?->{$info->accessor};
                 }
                 if ($info->depth == 1) {
-                    $field = $objParent->{$info->accessor};
+                    $field = $objParent?->{$info->accessor};
                 }
                 if ($info->depth == 2) {
-                    $field = $row->{$info->accessor};
+                    $field = $row?->{$info->accessor};
                 }
                 if ($format) {
                     $field = self::format($field, $info->format);

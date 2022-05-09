@@ -2,6 +2,7 @@
 /**
  * @var \App\Models\Order\Order $order
  */
+$next = $order->getNextInstallment();
 @endphp
 <div class="order order-{{ $order->booking_reference }}">
     <div class="col-12">
@@ -78,7 +79,7 @@
                             Type
                         </div>
                         <div class="col-3">
-                            Due On
+                            Due By
                         </div>
                         <div class="col-3">
                             Amount Due
@@ -103,7 +104,7 @@
                     @foreach($order->installments as $installment)
                         <div class="row">
                             <div class="col-3">
-                                Installment
+                                Instalment
                             </div>
                             <div class="col-3">
                                 {{ StringFormatter::formatDate($installment->due_on) }}
@@ -134,4 +135,27 @@
             </div>
         </div>
     </div>
+    @if($next['installment'] !== null && !$order->cancelled)
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body payment-balance">
+                <div class="row">
+                    <p class="heading">Next Payment Details</p>
+                    <div class="col-md-6">
+                        <p class="payment-value">
+                            <a href="" class="text-dark" onclick="event.preventDefault();$('.amount-input').val({{$next['amount']}})">
+                                {{ StringFormatter::formatCurrency($next['amount']) }}
+                            </a>
+                        </p>
+                        <label class="payment-label">Amount due to fulfil next instalment</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="payment-value">{{ StringFormatter::formatDate($next['due']) }}</p>
+                        <label class="payment-label">Due by</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>

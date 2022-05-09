@@ -54,9 +54,12 @@ class CustomerComponentController extends Controller
         if (!isset($orderComponent))
             return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
 
+        if ($orderComponent->isCancelled())
+            return response()->json(['success' => false, 'message' => 'That order is cancelled',]);
+
         $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
 
-        if (!isset($upgrade))
+        if (!isset($upgrade) || !$upgrade->upgrade->is_bookable)
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if ($upgrade->upgrade->tour_sales_price >= $orderComponent->cost && $orderComponent->tour_component_type != 'Included')
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
@@ -106,9 +109,12 @@ class CustomerComponentController extends Controller
         if (!isset($orderComponent))
             return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
 
+        if ($orderComponent->isCancelled())
+            return response()->json(['success' => false, 'message' => 'That order is cancelled',]);
+
         $upgrade = app($upgradeClass)->find($upgradeId);
 
-        if (!isset($upgrade))
+        if (!isset($upgrade) || !$upgrade->upgrade->is_bookable)
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
 
         if ($upgrade->upgrade->tour_sales_price < $orderComponent->cost
@@ -132,9 +138,12 @@ class CustomerComponentController extends Controller
         if (!isset($orderComponent))
             return response()->json(['success' => false, 'message' => 'Cannot find requested order component',]);
 
+        if ($orderComponent->isCancelled())
+            return response()->json(['success' => false, 'message' => 'That order is cancelled',]);
+
         $upgrade = app($upgradeClass)->find($upgradeId);
 
-        if (!isset($upgrade))
+        if (!isset($upgrade) || !$upgrade->upgrade->is_bookable)
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
 
         if ($upgrade->upgrade->tour_sales_price < $orderComponent->cost

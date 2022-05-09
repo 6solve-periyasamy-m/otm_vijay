@@ -69,9 +69,26 @@ class MerchandiseController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function restore(Tour $tour, $merchandise)
+    {
+        $inventoryTour = Merchandise::withTrashed()->find($merchandise);
+        if ($inventoryTour->trashed()) {
+            $inventoryTour->restore();
+        } else {
+            $inventoryTour->is_bookable = true;
+            $inventoryTour->save();
+        }
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
     public function destroy(Tour $tour, Merchandise $merchandise)
     {
-        $merchandise->delete();
+        if ($tour->orders()->count() > 0) {
+            $merchandise->is_bookable = false;
+            $merchandise->save();
+        } else {
+            $merchandise->delete();
+        }
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 }

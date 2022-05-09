@@ -161,9 +161,12 @@ class ActivityInventoryTour extends Model
             $included =  $this->parent();
         }
         $disabled = $included->available_stock <= $required-1;
-        $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency(0)), 'disabled' => $disabled,];
+        if ($included->is_bookable) {
+            $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency(0)), 'disabled' => $disabled,];
+        }
 
         foreach ($upgrades as $upgrade) {
+            if (!$upgrade->upgrade->is_bookable) continue;
             $disabled = $upgrade->upgrade->available_stock <= $required-1;
             $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
         }
@@ -181,6 +184,7 @@ class ActivityInventoryTour extends Model
 
         foreach ($upgrades as $upgrade) {
             if ($upgrade->upgrade->id == $this->id) continue;
+            if (!$upgrade->upgrade->is_bookable) continue;
             if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
                 $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
