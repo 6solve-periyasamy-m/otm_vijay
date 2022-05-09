@@ -73,7 +73,7 @@ class FlightInventoryTour extends Model
         $inventory = $this->flightInventory;
         $component = $inventory->flight;
         return $component->airline->name . ' ('. $inventory->flight_number . ') ' . $component->departureAirport->name . ' to ' .  $component->arrivalAirport->name .
-            ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
+            ' (' . StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
     }
 

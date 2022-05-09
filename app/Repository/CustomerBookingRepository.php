@@ -387,7 +387,10 @@ class CustomerBookingRepository
             $summary['customers'][$customer->id] = ['customer' => $customer, 'components' => ['accommodation' => [], 'activities' => [], 'flights' => [], 'transport' => [],]];
             $summary['billing']['single_occupants'] = $summary['billing']['single_occupants'] + $traveller->is_single_occupant;
             // Accommodation
-            foreach ($traveller->accommodation as $bookingComponent) {
+            $travellerAccommodation = $traveller->accommodation->getIterator();
+            $travellerAccommodation->uasort([BookingAccommodation::class, 'compare']);
+            //dd($travellerAccommodation, $traveller->accommodation);
+            foreach ($travellerAccommodation as $bookingComponent) {
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['accommodation'][] = [
@@ -400,7 +403,9 @@ class CustomerBookingRepository
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
             // Activity
-            foreach ($traveller->activities as $bookingComponent) {
+            $travellerActivities = $traveller->activities->getIterator();
+            $travellerActivities->uasort([BookingActivity::class, 'compare']);
+            foreach ($travellerActivities as $bookingComponent) {
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['activities'][] = [
@@ -413,7 +418,9 @@ class CustomerBookingRepository
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
             // Flights
-            foreach ($traveller->flights as $bookingComponent) {
+            $travellerFlights = $traveller->flights->getIterator();
+            $travellerFlights->uasort([BookingFlight::class, 'compare']);
+            foreach ($travellerFlights as $bookingComponent) {
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['flights'][] = [
@@ -426,7 +433,9 @@ class CustomerBookingRepository
                 $summary['billing']['additionals'] += $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price;
             }
             // Transport
-            foreach ($traveller->transport as $bookingComponent) {
+            $travellerTransport = $traveller->transport->getIterator();
+            $travellerTransport->uasort([BookingTransport::class, 'compare']);
+            foreach ($travellerTransport as $bookingComponent) {
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['transport'][] = [
@@ -448,7 +457,7 @@ class CustomerBookingRepository
         $summary['billing']['customers'] = $customerCount;
         $summary['billing']['total'] = ($tour->base_price_per_person * $customerCount) + ($summary['billing']['single_occupants'] * $summary['billing']['surcharge']) + $summary['billing']['additionals'];
         $summary['billing']['today'] = $tour->deposit * $customerCount;
-
+        //dd($summary);
         return $summary;
     }
 
