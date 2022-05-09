@@ -279,7 +279,7 @@ class OrderRepository
      */
     public static function getOrderStatus(Order $order): OrderStatus
     {
-        $paidAmount = self::getPayments($order)['amount'];
+        $paidAmount = $order->paid;
         $cost = self::getCost($order);
         $adjustments = self::getTotalAdjustedValue($order);
         $total = $cost + $adjustments;
@@ -308,22 +308,6 @@ class OrderRepository
                 return OrderStatus::PAID_IN_FULL;
             }
         }
-    }
-
-    /**
-     * Get details of all payments on an order
-     * @param Order $order
-     * @return array{payments:array, amount:float} List of payments, as well as the total amount paid
-     */
-    public static function getPayments(Order $order): array
-    {
-        $payments = [];
-        $amount = 0;
-        foreach ($order->payments as $payment) {
-            $payments[] = $payment;
-            $amount += $payment->amount;
-        }
-        return ['payments' => $payments, 'amount' => $amount,];
     }
 
     /**
@@ -414,7 +398,7 @@ class OrderRepository
      */
     public static function getNextPaymentDetails(Order $order): array
     {
-        $paid = self::getTotalPaid($order);
+        $paid = $order->paid;
         $paid -= self::getTotalAdjustedValue($order); // Negative adjustments add to the total paid, so minus is required
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         $paid = sigfig($paid);
@@ -434,16 +418,6 @@ class OrderRepository
             'due' => null,
             'installment' => null,
         ];
-    }
-
-    /**
-     * Get the total value paid for an order
-     * @param Order $order
-     * @return float The amount paid by the customer
-     */
-    public static function getTotalPaid(Order $order): float
-    {
-        return self::getPayments($order)['amount'];
     }
 
     /**
