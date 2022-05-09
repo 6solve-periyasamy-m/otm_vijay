@@ -33,9 +33,6 @@ use ZipArchive;
 
 class OrderRepository
 {
-    public static $addonId = "Add-on";
-    public static $upgradeId = "Upgrade";
-
     public static function saveInvoice(Order $order): Invoice
     {
         $invoice = self::generateInvoice($order);
@@ -214,37 +211,37 @@ class OrderRepository
         $additionalValue = 0;
         // Accommodation Additionals are going to be calculated per group (A:Celeste Gateley)
         foreach ($customer->orderActivities as $orderActivity) {
-            if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
+            if ($orderActivity->activityInventoryTour->tour_component_type == 'Upgrade') {
                 $upgrades[] = ['upgrade' => $orderActivity, 'description' => "{$orderActivity->activityInventoryTour}  ({$customer->customer_name})"];
                 $additionalValue += $orderActivity->cost;
             }
-            if ($orderActivity->activityInventoryTour->tour_component_type == OrderRepository::$addonId) {
+            if ($orderActivity->activityInventoryTour->tour_component_type == 'Add-on') {
                 $addons[] = ['addon' => $orderActivity, 'description' => "{$orderActivity->activityInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderActivity->cost;
             }
         }
         foreach ($customer->orderFlights as $orderFlight) {
-            if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
+            if ($orderFlight->flightInventoryTour->tour_component_type == 'Upgrade') {
                 $upgrades[] = ['upgrade' => $orderFlight, 'description' => "{$orderFlight->flightInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderFlight->cost;
             }
-            if ($orderFlight->flightInventoryTour->tour_component_type == OrderRepository::$addonId) {
+            if ($orderFlight->flightInventoryTour->tour_component_type == 'Add-on') {
                 $addons[] = ['addon' => $orderFlight, 'description' => "{$orderFlight->flightInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderFlight->cost;
             }
         }
         foreach ($customer->orderTransports as $orderTransport) {
-            if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$upgradeId) {
+            if ($orderTransport->transportInventoryTour->tour_component_type == 'Upgrade') {
                 $upgrades[] = ['upgrade' => $orderTransport, 'description' => "{$orderTransport->transportInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderTransport->cost;
             }
-            if ($orderTransport->transportInventoryTour->tour_component_type == OrderRepository::$addonId) {
+            if ($orderTransport->transportInventoryTour->tour_component_type == 'Add-on') {
                 $addons[] = ['addon' => $orderTransport, 'description' => "{$orderTransport->transportInventoryTour}  ({$customer->customer_name})",];
                 $additionalValue += $orderTransport->cost;
             }
         }
         foreach ($customer->orderMerchandise as $orderMerchandise) {
-            if ($orderMerchandise->merchandise->tour_component_type == OrderRepository::$addonId) {
+            if ($orderMerchandise->merchandise->tour_component_type == 'Add-on') {
                 $addons[] = ['addon' => $orderMerchandise, 'description' => "{$orderMerchandise->merchandise}  ({$customer->customer_name})",];
                 $additionalValue += $orderMerchandise->cost;
             }
@@ -258,11 +255,11 @@ class OrderRepository
         $addons = [];
         $additionalValue = 0;
         foreach ($group->rooms as $orderAccommodation) {
-            if ($orderAccommodation->tourComponent->tour_component_type == OrderRepository::$upgradeId) {
+            if ($orderAccommodation->tourComponent->tour_component_type == 'Upgrade') {
                 $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$group->name})"];
                 $additionalValue += $orderAccommodation->cost;
             }
-            if ($orderAccommodation->tourComponent->tour_component_type == OrderRepository::$addonId) {
+            if ($orderAccommodation->tourComponent->tour_component_type == 'Add-on') {
                 $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$group->name})",];
                 $additionalValue += $orderAccommodation->cost;
             }
