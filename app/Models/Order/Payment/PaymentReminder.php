@@ -37,7 +37,7 @@ class PaymentReminder extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['order_id', 'order_installment_id'];
+    protected $fillable = ['order_id', 'order_installment_id', 'period'];
 
     public function order(): BelongsTo
     {
