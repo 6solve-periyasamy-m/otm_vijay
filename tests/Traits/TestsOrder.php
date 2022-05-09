@@ -9,6 +9,8 @@ use App\Repository\OrderRepository;
 
 trait TestsOrder
 {
+    use TestsTour;
+
     function generateOrder(): Order
     {
         return Order::factory()->create();
@@ -22,15 +24,16 @@ trait TestsOrder
         return $payment;
     }
 
-    function generateOrderCustomer(bool $withIncluded = false, ?Order $order = null): OrderCustomer
+    function generateOrderCustomer(bool $withIncluded = false, ?Order $order = null, float $tour_cost = 300, float $surcharge = 50): OrderCustomer
     {
-        if (!isset($order)) {
-            $order = Order::factory()->create();
-        }
-        $orderCustomer = OrderCustomer::factory()->make(['tour_cost' => 300, 'single_occupancy_surcharge' => 50,]);
+        if (!isset($order)) $order = Order::factory()->create();
+
+        $orderCustomer = OrderCustomer::factory()->make(['tour_cost' => $tour_cost, 'single_occupancy_surcharge' => $surcharge,]);
         $order->orderCustomers()->save($orderCustomer);
+
         OrderRepository::assignDefaultRooming($orderCustomer);
         $withIncluded && OrderRepository::addIncludedToCustomer($orderCustomer);
+
         return $orderCustomer;
     }
 
