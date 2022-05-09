@@ -28,6 +28,7 @@ use Illuminate\Validation\Rule;
  * @property int $stock
  * @property float $purchase_price
  * @property float $tour_sales_price
+ * @property bool $is_bookable
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -62,7 +63,7 @@ class Merchandise extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'tour_component_type', 'stock', 'purchase_price', 'tour_sales_price', 'notes', 'image_url'];
-    protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double'];
+    protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
 
     public static function getValidationRules(): array
     {

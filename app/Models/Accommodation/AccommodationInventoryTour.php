@@ -28,6 +28,7 @@ use StringFormatter;
  * @property int $accommodation_inventory_id
  * @property float|null $tour_sales_price
  * @property bool $is_template
+ * @property bool $is_bookable
  * @property string $tour_component_type
  * @property string $booking_policy
  * @property Carbon|null $created_at
@@ -71,7 +72,8 @@ class AccommodationInventoryTour extends Model
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = [
         'tour_sales_price' => 'double',
-        'is_template' => 'boolean'
+        'is_template' => 'boolean',
+        'is_bookable' => 'boolean',
     ];
 
     public static function getValidationRules(): array

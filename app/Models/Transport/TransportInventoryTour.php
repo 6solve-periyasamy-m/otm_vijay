@@ -28,6 +28,7 @@ use StringFormatter;
  * @property int $transport_inventory_id
  * @property string $tour_component_type
  * @property float $tour_sales_price
+ * @property bool $is_bookable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -65,7 +66,7 @@ class TransportInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
-    protected $casts = ['tour_sales_price' => 'double'];
+    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
 
     public static function getValidationRules(): array
     {
