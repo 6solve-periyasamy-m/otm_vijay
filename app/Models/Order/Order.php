@@ -10,7 +10,7 @@ use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\OrderRepository;
 use App\Repository\SettingsRepository;
-use Database\Factories\OrderFactory;
+use Database\Factories\Order\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -192,7 +192,7 @@ class Order extends Model
 
     public function getPaidAttribute(): float
     {
-        return OrderRepository::getTotalPaid($this);
+        return $this->payments()->sum('amount');
     }
 
     public function getTotalAttribute(): float
