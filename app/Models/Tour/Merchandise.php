@@ -5,6 +5,7 @@ namespace App\Models\Tour;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
 use App\Repository\StockRepository;
+use Database\Factories\Tour\MerchandiseFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,6 +39,7 @@ use Illuminate\Validation\Rule;
  * @property-read Collection|OrderMerchandise[] $orderMerchandise
  * @property-read int|null $order_merchandise_count
  * @property-read Tour $tour
+ * @method static MerchandiseFactory factory(...$parameters)
  * @method static Builder|Merchandise newModelQuery()
  * @method static Builder|Merchandise newQuery()
  * @method static QueryBuilder|Merchandise onlyTrashed()
