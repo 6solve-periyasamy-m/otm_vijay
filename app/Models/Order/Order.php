@@ -3,6 +3,7 @@
 namespace App\Models\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
@@ -248,6 +249,9 @@ class Order extends Model
         return substr($names, 0, -2);
     }
 
+    /**
+     * @return Group[]
+     */
     public function groups(): array
     {
         return OrderRepository::getOrderGroups($this);
