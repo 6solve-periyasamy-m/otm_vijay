@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Order;
 
 use App\Models\Order\OrderCustomer;
 use Illuminate\Database\Eloquent\Factories\Factory;

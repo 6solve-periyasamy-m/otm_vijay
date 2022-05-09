@@ -14,6 +14,7 @@ use App\Models\Order\Component\OrderTransport;
 use App\Repository\GroupRepository;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
+use Database\Factories\Order\OrderCustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -72,6 +73,7 @@ use Illuminate\Support\Collection;
  * @property-read int|null $order_merchandise_count How many extras the customer has ordered
  * @property-read SupportCollection|OrderTransport[] $orderTransports What transport the customer is taking
  * @property-read int|null $order_transports_count How many transport the customer is taking
+ * @method static OrderCustomerFactory factory(...$parameters)
  * @method static Builder|OrderCustomer newModelQuery()
  * @method static Builder|OrderCustomer newQuery()
  * @method static QueryBuilder|OrderCustomer onlyTrashed()
