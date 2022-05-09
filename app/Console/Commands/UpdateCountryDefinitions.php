@@ -66,8 +66,8 @@ class UpdateCountryDefinitions extends Command
                 }
             }
             LocationsRepository::updateCountry($data['ccn3'], $data['cca3'], $data['name']['common'], $prefix, $data['currencies'] ?? []);
-            Log::info($data['name']['common'] . ' has been processed');
-            $this->info($data['name']['common'] . ' has been processed');
+            //Log::debug($data['name']['common'] . ' has been processed');
+            //$this->info($data['name']['common'] . ' has been processed');
         }
         return 0;
     }
