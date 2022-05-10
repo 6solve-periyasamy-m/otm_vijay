@@ -26,7 +26,7 @@ trait TestsOrder
 
     function generateOrderCustomer(bool $withIncluded = false, ?Order $order = null, float $tour_cost = 300, float $surcharge = 50): OrderCustomer
     {
-        if (!isset($order)) $order = Order::factory()->create();
+        if (!isset($order)) $order = $this->generateOrder();
 
         $orderCustomer = OrderCustomer::factory()->make(['tour_cost' => $tour_cost, 'single_occupancy_surcharge' => $surcharge,]);
         $order->orderCustomers()->save($orderCustomer);
