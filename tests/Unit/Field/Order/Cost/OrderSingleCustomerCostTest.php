@@ -11,13 +11,13 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
     
     public function testOrderCostSingleWithSurcharge()
     {
-        $orderCustomer = $this->generateOrderCustomer();
+        $orderCustomer = $this->generateOrder()->leadBooker;
         self::assertEquals($orderCustomer->tour_cost + $orderCustomer->single_occupancy_surcharge, $orderCustomer->order->cost);
     }
 
     public function testOrderCostSingleWithSurchargeAndSingleAccommodationUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer();
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $upgradeRoom = $orderCustomer->primary_group->rooms[0];
         $tourRoom = $upgradeRoom->tourComponent;
         $upgradeRoom->update(['cost' => 100,]);
@@ -29,7 +29,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleAccommodationUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer();
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->primary_group->rooms as $room) {
             $tourRoom = $room->tourComponent;
@@ -44,7 +44,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleActivityUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $component = $orderCustomer->orderActivities[0];
         $tourComponent = $component->tourComponent;
         $component->update(['cost' => 100,]);
@@ -56,7 +56,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleActivityUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->orderActivities as $component) {
             $tourComponent = $component->tourComponent;
@@ -71,7 +71,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleFlightUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $component = $orderCustomer->orderFlights[0];
         $tourComponent = $component->tourComponent;
         $component->update(['cost' => 100,]);
@@ -83,7 +83,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleFlightUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->orderFlights as $component) {
             $tourComponent = $component->tourComponent;
@@ -98,7 +98,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleTransportUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $component = $orderCustomer->orderTransports[0];
         $tourComponent = $component->tourComponent;
         $component->update(['cost' => 100,]);
@@ -110,7 +110,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleTransportUpgrade()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $orderCustomer->tour_cost + $orderCustomer->single_occupancy_surcharge;
         foreach ($orderCustomer->orderTransports as $component) {
             $tourComponent = $component->tourComponent;
@@ -125,7 +125,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
     
     public function testOrderCostSingleWithSurchargeAndSingleAccommodationAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer();
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $addonRoom = $orderCustomer->primary_group->rooms[0];
         $tourRoom = $addonRoom->tourComponent;
         $addonRoom->update(['cost' => 100,]);
@@ -137,7 +137,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleAccommodationAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer();
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $orderCustomer->tour_cost + $orderCustomer->single_occupancy_surcharge;
         foreach ($orderCustomer->primary_group->rooms as $room) {
             $tourRoom = $room->tourComponent;
@@ -152,7 +152,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleActivityAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $component = $orderCustomer->orderActivities[0];
         $tourComponent = $component->tourComponent;
         $component->update(['cost' => 100,]);
@@ -164,7 +164,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleActivityAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->orderActivities as $component) {
             $tourComponent = $component->tourComponent;
@@ -179,7 +179,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleFlightAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $component = $orderCustomer->orderFlights[0];
         $tourComponent = $component->tourComponent;
         $component->update(['cost' => 100,]);
@@ -191,7 +191,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleFlightAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->orderFlights as $component) {
             $tourComponent = $component->tourComponent;
@@ -206,7 +206,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleTransportAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $component = $orderCustomer->orderTransports[0];
         $tourComponent = $component->tourComponent;
         $component->update(['cost' => 100,]);
@@ -218,7 +218,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleTransportAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->orderTransports as $component) {
             $tourComponent = $component->tourComponent;
@@ -233,7 +233,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndSingleMerchandiseAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $tourComponent = $this->generateMerchandise($orderCustomer->order->tour, 100, 'Add-on');
         $tourComponent->addToOrder($orderCustomer);
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
@@ -241,7 +241,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
 
     public function testOrderCostSingleWithSurchargeAndMultipleMerchandiseAddon()
     {
-        $orderCustomer = $this->generateOrderCustomer(true);
+        $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         for ($i = 0; $i < 5; $i++) {
             $tourComponent = $this->generateMerchandise($orderCustomer->order->tour, 100, 'Add-on');

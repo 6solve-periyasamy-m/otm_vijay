@@ -4,8 +4,10 @@ namespace Tests\Traits;
 
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
 use App\Repository\OrderRepository;
+use Carbon\Carbon;
 
 trait TestsOrder
 {
@@ -13,7 +15,9 @@ trait TestsOrder
 
     function generateOrder(): Order
     {
-        return Order::factory()->create();
+        $order = Order::factory()->create();
+        $order->lead_booker_id = $this->generateOrderCustomer(true, $order)->id;
+        return $order;
     }
 
     function generatePayment(?Order $order, float $amount): Payment
@@ -35,6 +39,19 @@ trait TestsOrder
         $withIncluded && OrderRepository::addIncludedToCustomer($orderCustomer);
 
         return $orderCustomer;
+    }
+
+    function generateOrderInstallment(Carbon $date, float $amount, ?Order $order = null): OrderInstallment
+    {
+        if (!isset($order)) $order = $this->generateOrder();
+
+        $installment = new OrderInstallment([
+            'amount' => $amount,
+            'due_on' => $date,
+        ]);
+        $order->installments()->save($installment);
+
+        return $installment;
     }
 
     function getDefaultCost(Order $order): float
