@@ -60,7 +60,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
  * @property-read OrderStatus $status The status of the order
  * @property-read float $total The total cost of the order
- * @property-read OrderInstallment|null $next_installment Details regarding how much is due for the next installment
+ * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
  * @property-read int|null $installments_count The amount of installments for the order
  * @property-read Collection|Invoice[] $invoices The invoices for the order
@@ -103,7 +103,7 @@ class Order extends Model
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
 
-    protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
+    protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
 
     public static function getValidationRules(): array
     {
@@ -122,6 +122,8 @@ class Order extends Model
             . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
+
+    // Relationships
 
     public function tour(): BelongsTo
     {
@@ -158,11 +160,6 @@ class Order extends Model
         return $this->hasMany(Invoice::class, 'order_id');
     }
 
-    public function getAdjustmentValue(): float
-    {
-        return OrderRepository::getTotalAdjustedValue($this);
-    }
-
     public function installments(): HasMany
     {
         return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
@@ -173,6 +170,26 @@ class Order extends Model
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
+    // Calculated Relations
+
+    /**
+     * @return Group[]
+     */
+    public function groups(): array
+    {
+        return OrderRepository::getOrderGroups($this);
+    }
+
+    // Attributes
+
+    public function getAdjustmentValue(): float
+    {
+        return OrderRepository::getTotalAdjustedValue($this);
+    }
+
+    /**
+     * @return OrderInstallment|null A temporary installment with details of the next payment, or null if all installments are paid
+     */
     public function getNextInstallmentAttribute(): ?OrderInstallment
     {
         return OrderRepository::getNextPaymentDetails($this);
@@ -255,14 +272,6 @@ class Order extends Model
             $names .= $orderCustomer->customer_name . ', ';
         }
         return substr($names, 0, -2);
-    }
-
-    /**
-     * @return Group[]
-     */
-    public function groups(): array
-    {
-        return OrderRepository::getOrderGroups($this);
     }
 
     public function getHasAtolAttribute(): bool
