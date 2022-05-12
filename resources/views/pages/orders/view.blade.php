@@ -46,7 +46,7 @@
                 @if($order->cancelled)
                     {{ StringFormatter::formatCurrency($order->total) }} ({{ StringFormatter::formatCurrency($order->cost) }} before cancellation)
                 @else
-                    {{ StringFormatter::formatCurrency($order->cost + $order->getAdjustmentValue()) }} ({{ StringFormatter::formatCurrency($order->cost) }} before adjustments)
+                    {{ StringFormatter::formatCurrency($order->cost + $order->total_adjustments) }} ({{ StringFormatter::formatCurrency($order->cost) }} before adjustments)
                 @endif
             </h6>
         </div>

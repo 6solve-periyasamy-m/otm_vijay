@@ -66,12 +66,12 @@ class OrderRepository
             'number' => $order->invoices->count() + 1,
             'generated' => now(),
             'customers' => $customers,
-            'adjustments' => ['total_cost' => $order->getAdjustmentValue(), 'billables' => $adjustments,],
+            'adjustments' => ['total_cost' => $order->total_adjustments, 'billables' => $adjustments,],
             'payments' => ['total_cost' => $order->paid, 'billables' => $payments,],
             'groups' => $groups,
             'installments' => self::snapshotInstallments($order),
             'footer' => $order->invoice_footer,
-            'total_cost' => $order->cost + $order->getAdjustmentValue(),
+            'total_cost' => $order->cost + $order->total_adjustments,
         ]);
     }
 
@@ -278,7 +278,7 @@ class OrderRepository
     {
         $paidAmount = $order->paid;
         $cost = self::getCost($order);
-        $adjustments = self::getTotalAdjustedValue($order);
+        $adjustments = $order->total_adjustments;
         $total = $cost + $adjustments;
         if ($order->trashed() || $order->cancelled) {
             if ($paidAmount == 0) {
@@ -380,7 +380,7 @@ class OrderRepository
     public static function getNextPaymentDetails(Order $order): ?OrderInstallment
     {
         $paid = $order->paid;
-        $paid -= self::getTotalAdjustedValue($order); // Negative adjustments add to the total paid, so minus is required
+        $paid -= $order->total_adjustments; // Negative adjustments add to the total paid, so minus is required
         $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
         $paid = sigfig($paid);
         foreach ($order->installments as $installment) {
@@ -406,7 +406,7 @@ class OrderRepository
     {
         $cost = $order->cost;
         $paid = $order->paid;
-        $adjustments = $order->getAdjustmentValue();
+        $adjustments = $order->total_adjustments;
         return ($cost + $adjustments) - $paid;
     }
 
@@ -571,7 +571,7 @@ class OrderRepository
     public static function isInstallmentPaid(OrderInstallment $installment): bool
     {
         $order = $installment->order;
-        $paid = sigfig(($order->getAdjustmentValue() * -1) + $order->paid - $order->calculated_deposit);
+        $paid = sigfig(($order->total_adjustments * -1) + $order->paid - $order->calculated_deposit);
         foreach ($order->installments as $orderInstallment) {
             $paid = sigfig($paid - $orderInstallment->calculated_amount);
             if ($paid < 0) return false;

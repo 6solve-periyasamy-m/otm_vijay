@@ -59,6 +59,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining_installment Remaining cost on the due installment
  * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
  * @property-read float $order_adjustment_total The sum of all order adjustments, not including customer adjustments
+ * @property-read float $total_adjustments The sum of all adjustments on the order and customers
  * @property-read OrderStatus $status The status of the order
  * @property-read float $total The total cost of the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
@@ -183,7 +184,10 @@ class Order extends Model
 
     // Attributes
 
-    public function getAdjustmentValue(): float
+    /**
+     * @return float The sum of all adjustments on the order and customers
+     */
+    public function getTotalAdjustmentsAttribute(): float
     {
         return OrderRepository::getTotalAdjustedValue($this);
     }
