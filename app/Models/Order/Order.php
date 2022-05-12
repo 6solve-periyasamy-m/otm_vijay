@@ -202,11 +202,17 @@ class Order extends Model
         return $this->cancelled ? $this->paid : $this->cost;
     }
 
+    /**
+     * @return float A summation of all components on the order that cost money (Not including adjustments)
+     */
     public function getCostAttribute(): float
     {
         return OrderRepository::getCost($this);
     }
 
+    /**
+     * @return float The amount left to be paid on the order
+     */
     public function getRemainingAttribute(): float
     {
         return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);

@@ -2,6 +2,7 @@
 
 namespace Tests\Traits;
 
+use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -52,6 +53,20 @@ trait TestsOrder
         $order->installments()->save($installment);
 
         return $installment;
+    }
+
+    function generateManualAdjustment(float $amount, ?Order $order = null): ManualAdjustment
+    {
+        if (!isset($order)) $order = $this->generateOrder();
+
+        $adjustment = new ManualAdjustment([
+            'amount' => $amount,
+            'date' => Carbon::now(),
+            'reason' => 'Test Reason'
+        ]);
+        $order->adjustments()->save($adjustment);
+
+        return $adjustment;
     }
 
     function getDefaultCost(Order $order): float
