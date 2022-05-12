@@ -38,6 +38,6 @@ class CustomerFinancesController extends Controller
         if (!StaticOrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
             abort(404);
         }
-        return view('pdf.invoices.columns', ['invoice' => StaticOrderRepository::generateInvoice($order),]);
+        return view('pdf.invoices.columns', ['invoice' => $order->repository->getInvoiceRepository()->get(),]);
     }
 }

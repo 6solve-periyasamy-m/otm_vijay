@@ -9,6 +9,7 @@ use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
+use App\Repository\Model\OrderRepository;
 use App\Repository\StaticOrderRepository;
 use App\Repository\SettingsRepository;
 use Database\Factories\Order\OrderFactory;
@@ -47,6 +48,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
  * @property-read int|null $customers_count The amount of customers associated with this order
+ * @property-read OrderRepository $repository The repository used for calculations
  * @property-read float $calculated_deposit The calculated deposit based on customer count
  * @property-read float $cost The cost of the order before adjustments
  * @property-read int $customer_count The amount of customers on the order
@@ -329,6 +331,12 @@ class Order extends Model
     public function getOrderAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    public function getRepositoryAttribute(): OrderRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderRepository($this);
+        return $this->internal_repository;
     }
 
     // Functions

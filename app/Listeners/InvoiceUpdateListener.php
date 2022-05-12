@@ -28,7 +28,7 @@ class InvoiceUpdateListener
     public function handle(OrderEvent $event)
     {
         if ($event->shouldInvoice) {
-            StaticOrderRepository::saveInvoice($event->order);
+            $event->order->repository->getInvoiceRepository()->save();
         }
     }
 }
