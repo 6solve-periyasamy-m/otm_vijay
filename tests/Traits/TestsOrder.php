@@ -3,6 +3,7 @@
 namespace Tests\Traits;
 
 use App\Models\Order\Adjustment\ManualAdjustment;
+use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -18,6 +19,7 @@ trait TestsOrder
     {
         $order = Order::factory()->create();
         $order->lead_booker_id = $this->generateOrderCustomer(true, $order)->id;
+        $order->save();
         return $order;
     }
 
@@ -65,6 +67,22 @@ trait TestsOrder
             'reason' => 'Test Reason'
         ]);
         $order->adjustments()->save($adjustment);
+
+        return $adjustment;
+    }
+
+    function generateOrderCustomerAdjustment(float $amount, Order|OrderCustomer|null $model = null): OrderCustomerAdjustment
+    {
+        if ($model instanceof OrderCustomer) $orderCustomer = $model;
+        elseif ($model instanceof Order) $orderCustomer = $model->leadBooker;
+        else $orderCustomer = $this->generateOrder()->leadBooker;
+
+        $adjustment = new OrderCustomerAdjustment([
+            'amount' => $amount,
+            'date' => Carbon::now(),
+            'reason' => 'Test Reason'
+        ]);
+        $orderCustomer->adjustments()->save($adjustment);
 
         return $adjustment;
     }
