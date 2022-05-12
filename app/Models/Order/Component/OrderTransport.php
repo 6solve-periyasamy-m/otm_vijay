@@ -6,6 +6,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Model\Order\Component\OrderTransportRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property-read OrderCustomer|null $orderCustomer
  * @property-read TransportInventoryTour|null $tourComponent
  * @property-read TransportInventoryTour|null $transportInventoryTour
+ * @property-read OrderTransportRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderTransport newModelQuery()
  * @method static Builder|OrderTransport newQuery()
  * @method static QueryBuilder|OrderTransport onlyTrashed()
@@ -106,6 +108,12 @@ class OrderTransport extends Model
     public function getTourSalesPriceAttribute(): float
     {
         return $this->tourComponent->tour_sales_price;
+    }
+
+    public function getRepositoryAttribute(): OrderTransportRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderTransportRepository($this);
+        return $this->internal_repository;
     }
 
     public function swap(TransportInventoryTour $swap)

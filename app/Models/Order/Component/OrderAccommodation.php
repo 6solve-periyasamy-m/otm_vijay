@@ -7,6 +7,7 @@ use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Order\Component\OrderAccommodationRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $tour_sales_price
  * @property-read Group $group
  * @property-read AccommodationInventoryTour $tourComponent
+ * @property-read OrderAccommodationRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderAccommodation newModelQuery()
  * @method static Builder|OrderAccommodation newQuery()
  * @method static QueryBuilder|OrderAccommodation onlyTrashed()
@@ -113,6 +115,12 @@ class OrderAccommodation extends Model
     public function getTourSalesPriceAttribute(): float
     {
         return $this->tourComponent->tour_sales_price;
+    }
+
+    public function getRepositoryAttribute(): OrderAccommodationRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderAccommodationRepository($this);
+        return $this->internal_repository;
     }
 
     public function swap(AccommodationInventoryTour $swap)

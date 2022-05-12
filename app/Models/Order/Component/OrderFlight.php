@@ -7,6 +7,7 @@ use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Order\Component\OrderFlightRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,6 +41,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $tour_sales_price
  * @property-read OrderCustomer|null $orderCustomer
  * @property-read FlightInventoryTour|null $tourComponent
+ * @property-read OrderFlightRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderFlight newModelQuery()
  * @method static Builder|OrderFlight newQuery()
  * @method static QueryBuilder|OrderFlight onlyTrashed()
@@ -126,6 +128,12 @@ class OrderFlight extends Model
     public function getAtolStringAttribute(): string
     {
         return $this->tourComponent->atol_string;
+    }
+
+    public function getRepositoryAttribute(): OrderFlightRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderFlightRepository($this);
+        return $this->internal_repository;
     }
 
     public function swap(FlightInventoryTour $swap)
