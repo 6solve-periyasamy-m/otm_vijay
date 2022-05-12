@@ -11,7 +11,9 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
+use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\GroupRepository;
+use App\Repository\Model\Order\OrderCustomerRepository;
 use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 use Database\Factories\Order\OrderCustomerFactory;
@@ -60,6 +62,8 @@ use Illuminate\Support\Collection;
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
  * @property-read float $adjustment_total The sum of all adjustments for the OrderCustomer
+ * @property-read OrderCustomerRepository $repository The repository used for calculations and storage
+ * @property-read OrderComponentRepository[] $components A generified list of order components
  * @property-read Group|null $primary_group The primary group of the customer
  * @property-read SupportCollection|Group[] $groups All groups the customer is in
  * @property-read int|null $groups_count How many groups the customer is in
@@ -225,5 +229,16 @@ class OrderCustomer extends Model
     public function getAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    public function getRepositoryAttribute(): OrderCustomerRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new OrderCustomerRepository($this);
+        return $this->internal_repository;
+    }
+
+    public function getComponentsAttribute(): array
+    {
+        return $this->repository->getComponents();
     }
 }

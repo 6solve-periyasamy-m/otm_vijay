@@ -39,21 +39,10 @@ class OrderRepository extends ModelRepository
         foreach ($this->order->orderCustomers as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
-            foreach ($orderCustomer->orderActivities as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-            foreach ($orderCustomer->orderFlights as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-            foreach ($orderCustomer->orderTransports as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-            foreach ($orderCustomer->orderMerchandise as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
+            foreach ($orderCustomer->repository->getComponents(false) as $component) {
+                if ($component->getTourComponentType() !== "Included") {
+                    $total += $component->getCost();
+                }
             }
         }
         foreach ($this->order->groups() as $group) {
