@@ -44,6 +44,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $token The token used during the booking process
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
+ * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
  * @property-read int|null $customers_count The amount of customers associated with this order
  * @property-read float $calculated_deposit The calculated deposit based on customer count
@@ -265,5 +266,16 @@ class Order extends Model
     public function getAvailableAdditionals(): array
     {
         return OrderRepository::getAllAdditionals($this);
+    }
+
+    /**
+     * @return int|null Returns the days from now, or null if all installments are paid
+     */
+    public function getDaysUntilNextPaymentAttribute(): ?int
+    {
+        $next = $this->getNextInstallment()['due'];
+        if (!isset($next)) return null;
+        $next = Carbon::parse($next);
+        return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));
     }
 }
