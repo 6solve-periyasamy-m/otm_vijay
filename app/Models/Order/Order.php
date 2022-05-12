@@ -239,7 +239,7 @@ class Order extends Model
      */
     public function getCostAttribute(): float
     {
-        return StaticOrderRepository::getCost($this);
+        return $this->repository->getCost();
     }
 
     /**

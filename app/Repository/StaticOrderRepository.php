@@ -139,7 +139,7 @@ class StaticOrderRepository
     public static function getOrderStatus(Order $order): OrderStatus
     {
         $paidAmount = $order->paid;
-        $cost = self::getCost($order);
+        $cost = $order->cost;
         $adjustments = $order->total_adjustments;
         $total = $cost + $adjustments;
         if ($order->trashed() || $order->cancelled) {
@@ -167,43 +167,6 @@ class StaticOrderRepository
                 return OrderStatus::PAID_IN_FULL;
             }
         }
-    }
-
-    /**
-     * Get total cost amount for an order
-     * @param Order $order
-     * @return float The total cost of the order
-     */
-    public static function getCost(Order $order): float
-    {
-        $total = 0;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $total += $orderCustomer->tour_cost;
-            if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
-            foreach ($orderCustomer->orderActivities as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-            foreach ($orderCustomer->orderFlights as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-            foreach ($orderCustomer->orderTransports as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-            foreach ($orderCustomer->orderMerchandise as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-        }
-        foreach ($order->groups() as $group) {
-            foreach ($group->rooms as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-        }
-        return $total;
     }
 
     // Order Costs
