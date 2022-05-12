@@ -60,7 +60,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ $order->getNextInstallment() !== null ? StringFormatter::formatDate($order->getNextInstallment()->due_on) . ' - ' . StringFormatter::formatCurrency($order->getNextInstallment()->amount) : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">{{ $order->next_installment !== null ? StringFormatter::formatDate($order->next_installment->due_on) . ' - ' . StringFormatter::formatCurrency($order->next_installment->amount) : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Internal Notes</p>

@@ -60,6 +60,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
  * @property-read OrderStatus $status The status of the order
  * @property-read float $total The total cost of the order
+ * @property-read OrderInstallment|null $next_installment Details regarding how much is due for the next installment
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
  * @property-read int|null $installments_count The amount of installments for the order
  * @property-read Collection|Invoice[] $invoices The invoices for the order
@@ -172,7 +173,7 @@ class Order extends Model
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
-    public function getNextInstallment(): ?OrderInstallment
+    public function getNextInstallmentAttribute(): ?OrderInstallment
     {
         return OrderRepository::getNextPaymentDetails($this);
     }
@@ -279,7 +280,7 @@ class Order extends Model
      */
     public function getDaysUntilNextPaymentAttribute(): ?int
     {
-        $next = $this->getNextInstallment()->due_on;
+        $next = $this->next_installment->due_on;
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
         return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));

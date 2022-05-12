@@ -293,7 +293,7 @@ class OrderRepository
                 if (!$orderCustomer->has_occupancy) return OrderStatus::OCCUPANCY_NOT_SET;
             }
             if ($total > $paidAmount) {
-                $next = self::getNextPaymentDetails($order);
+                $next = $order->next_installment;
                 if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
                     return OrderStatus::PAYMENT_OVERDUE;
                 } else {
@@ -500,7 +500,7 @@ class OrderRepository
         foreach (Order::where('cancelled', false)->get() as $order) {
             if ($order->cancelled) continue;
 
-            $nextPayment = self::getNextPaymentDetails($order);
+            $nextPayment = $order->next_installment;
 
             if (!isset($nextPayment) ||
                 !((Carbon::parse($nextPayment->due_on)->diffInDays(now()) * -1) <= $days &&

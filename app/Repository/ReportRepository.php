@@ -45,7 +45,7 @@ class ReportRepository
     {
         $data = [];
         foreach (Order::all() as $order) {
-            $nextPayment = $order->getNextInstallment();
+            $nextPayment = $order->next_installment;
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;

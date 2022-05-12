@@ -2,7 +2,7 @@
 /**
  * @var \App\Models\Order\Order $order
  */
-$next = $order->getNextInstallment();
+$next = $order->next_installment;
 @endphp
 <div class="order order-{{ $order->booking_reference }}">
     <div class="col-12">

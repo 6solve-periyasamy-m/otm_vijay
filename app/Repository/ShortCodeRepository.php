@@ -27,7 +27,7 @@ class ShortCodeRepository
         $faker = Faker::create();
         $customer = $order?->leadBooker->customer;
         $tour = $order?->tour;
-        $nextPayment = isset($order) ? OrderRepository::getNextPaymentDetails($order) : null;
+        $nextPayment = $order?->next_installment;
         $data = [
             'LEAD_TITLE' => $customer?->title ?? $faker->title,
             'LEAD_FIRST_NAME' => $customer->first_name ?? $faker->firstName,
