@@ -69,4 +69,13 @@ class BookingAccommodation extends Model
     {
         return $this->belongsTo(AccommodationGroup::class, 'group_id');
     }
+
+    public static function compare(BookingAccommodation $a, BookingAccommodation $b): int
+    {
+        $aStart = $a->tourComponent->inventory->check_in;
+        $bStart = $b->tourComponent->inventory->check_in;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 }
