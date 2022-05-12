@@ -3,8 +3,10 @@
 namespace App\Repository\Model;
 
 use App\Models\Order\Order;
+use App\Repository\Abstracts\ModelRepository;
+use Illuminate\Database\Eloquent\Model;
 
-class OrderRepository
+class OrderRepository extends ModelRepository
 {
     private Order $order;
 
@@ -93,5 +95,37 @@ class OrderRepository
             $total += $orderCustomer->adjustment_total;
         }
         return $total;
+    }
+
+    public function get(): Order
+    {
+        return $this->order;
+    }
+
+    public function update(array $data): Order
+    {
+        $this->order->update($data);
+        $this->save();
+        return $this->get();
+    }
+
+    public function save(): bool
+    {
+        return $this->order->save();
+    }
+
+    public function delete(): bool
+    {
+        return $this->order->delete();
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->order->trashed();
+    }
+
+    public function __toString(): string
+    {
+        return "Order {$this->order->booking_reference}: {$this->order->tour->name} ({$this->order->lead_booker_name})";
     }
 }
