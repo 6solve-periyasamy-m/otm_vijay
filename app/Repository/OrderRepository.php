@@ -353,7 +353,7 @@ class OrderRepository
      */
     public static function getTotalAdjustedValue(Order $order): float
     {
-        return self::getCustomerAdjustmentTotal($order) + self::getOrderAdjustmentTotal($order);
+        return self::getCustomerAdjustmentTotal($order) + $order->order_adjustment_total;
     }
 
     /**
@@ -365,25 +365,9 @@ class OrderRepository
     {
         $total = 0;
         foreach ($order->orderCustomers as $orderCustomer) {
-            foreach ($orderCustomer->adjustments as $adjustment) {
-                $total += $adjustment->amount;
-            }
+            $total += $orderCustomer->adjustment_total;
         }
         return $total;
-    }
-
-    /**
-     * Get the sum of the Order Adjustments
-     * @param Order $order
-     * @return float The sum of the order adjustments
-     */
-    public static function getOrderAdjustmentTotal(Order $order): float
-    {
-        $value = 0;
-        foreach ($order->adjustments as $adjustment) {
-            $value += $adjustment->amount;
-        }
-        return $value;
     }
 
     // Order Payments

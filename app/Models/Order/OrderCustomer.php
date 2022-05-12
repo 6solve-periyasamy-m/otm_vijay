@@ -59,6 +59,7 @@ use Illuminate\Support\Collection;
  * @property-read bool $cancelled Whether the customer is cancelled
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
+ * @property-read float $adjustment_total The sum of all adjustments for the OrderCustomer
  * @property-read Group|null $primary_group The primary group of the customer
  * @property-read SupportCollection|Group[] $groups All groups the customer is in
  * @property-read int|null $groups_count How many groups the customer is in
@@ -216,5 +217,13 @@ class OrderCustomer extends Model
     public function getHasOccupancyAttribute(): bool
     {
         return OrderRepository::checkOccupancy($this);
+    }
+
+    /**
+     * @return float The sum of all adjustments for the OrderCustomer
+     */
+    public function getAdjustmentTotalAttribute(): float
+    {
+        return $this->adjustments()->sum('amount');
     }
 }

@@ -58,6 +58,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining Remaining amount left to be paid
  * @property-read float $remaining_installment Remaining cost on the due installment
  * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
+ * @property-read float $order_adjustment_total The sum of all order adjustments, not including customer adjustments
  * @property-read OrderStatus $status The status of the order
  * @property-read float $total The total cost of the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
@@ -293,5 +294,13 @@ class Order extends Model
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
         return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));
+    }
+
+    /**
+     * @return float The sum of all order adjustments, not including customer adjustments
+     */
+    public function getOrderAdjustmentTotalAttribute(): float
+    {
+        return $this->adjustments()->sum('amount');
     }
 }
