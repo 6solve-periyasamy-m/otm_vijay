@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Repository\Model;
+namespace App\Repository\Model\Order;
 
 use App\Models\Order\Order;
 use App\Repository\Abstracts\ModelRepository;
-use Illuminate\Database\Eloquent\Model;
 
 class OrderRepository extends ModelRepository
 {
