@@ -240,13 +240,13 @@
                                 </tr>
                             @endif
                             @endforeach
-                            @foreach($order->getAdditionals()['upgrades'] as $upgrade)
+                            @foreach($order->getAdditionalCosts()['upgrades'] as $upgrade)
                                 <tr>
                                     <td>Upgrade: {{ $upgrade['description'] }}</td>
                                     <td>{{ StringFormatter::formatCurrency($upgrade['upgrade']->cost) }}</td>
                                 </tr>
                             @endforeach
-                            @foreach($order->getAdditionals()['addons'] as $addon)
+                            @foreach($order->getAdditionalCosts()['addons'] as $addon)
                                 <tr>
                                     <td>Add-on: {{ $addon['description'] }}</td>
                                     <td>{{ StringFormatter::formatCurrency($addon['addon']->cost) }}</td>

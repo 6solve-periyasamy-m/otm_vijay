@@ -175,7 +175,7 @@ class Order extends Model
     // Calculated Relations
 
     /**
-     * @return Group[]
+     * @return Group[] List of all groups associated with the order
      */
     public function groups(): array
     {
@@ -200,26 +200,33 @@ class Order extends Model
         return OrderRepository::getNextPaymentDetails($this);
     }
 
-    public function getAdditionals(): array
-    {
-        return OrderRepository::getOrderAdditionals($this);
-    }
-
+    /**
+     * @return string The full name of the lead booker
+     */
     public function getLeadBookerNameAttribute(): string
     {
         return $this->leadBooker->customer_name;
     }
 
+    /**
+     * @return OrderStatus The current status of the order
+     */
     public function getStatusAttribute(): OrderStatus
     {
         return OrderRepository::getOrderStatus($this);
     }
 
+    /**
+     * @return float The total amount paid against the order
+     */
     public function getPaidAttribute(): float
     {
         return $this->payments()->sum('amount');
     }
 
+    /**
+     * @return float The total cost of the order, or the amount paid if the order is cancelled
+     */
     public function getTotalAttribute(): float
     {
         return $this->cancelled ? $this->paid : $this->cost;
@@ -241,6 +248,9 @@ class Order extends Model
         return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
     }
 
+    /**
+     * @return float How much is left to be paid after the deposit and all installments
+     */
     public function getRemainingInstallmentAttribute(): float
     {
         $cost = $this->cost - $this->calculated_deposit;
@@ -250,43 +260,56 @@ class Order extends Model
         return $cost;
     }
 
+    /**
+     * @return int The amount of customers on the order
+     */
     public function getCustomerCountAttribute(): int
     {
         return $this->orderCustomers->count();
     }
 
+    /**
+     * @return float What percentage of the total cost is the deposit, or 0 if the cost is 0
+     */
     public function getDepositPercentageAttribute(): float
     {
         return $this->cost == 0 ? 0 : round(($this->calculated_deposit / $this->cost) * 100, 2);
     }
 
+    /**
+     * @return float What percentage of the total cost is the remaining installment, or 0 if the cost is 0
+     */
     public function getRemainingPercentageAttribute(): float
     {
         return $this->cost == 0 ? 0 : round(($this->remaining_installment / $this->cost) * 100, 2);
     }
 
+    /**
+     * @return float The required deposit, calculated from customer count
+     */
     public function getCalculatedDepositAttribute(): float
     {
         return $this->deposit * $this->customer_count;
     }
 
+    /**
+     * @return string Concatenated String of all customer names
+     */
     public function getCustomerNamesAttribute(): string
     {
         $names = "";
         foreach ($this->orderCustomers as $orderCustomer) {
-            $names .= $orderCustomer->customer_name . ', ';
+            $names .= "{$orderCustomer->customer_name}, ";
         }
         return substr($names, 0, -2);
     }
 
+    /**
+     * @return bool Does this order contain any ATOL-protected flights?
+     */
     public function getHasAtolAttribute(): bool
     {
         return OrderRepository::hasFlight($this);
-    }
-
-    public function getAvailableAdditionals(): array
-    {
-        return OrderRepository::getAllAdditionals($this);
     }
 
     /**
@@ -306,5 +329,23 @@ class Order extends Model
     public function getOrderAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    // Functions
+
+    /**
+     * @return array List of all additional costs for the order
+     */
+    public function getAdditionalCosts(): array
+    {
+        return OrderRepository::getOrderAdditionals($this);
+    }
+
+    /**
+     * @return array List of available add-ons for the order
+     */
+    public function getAvailableAddonsAndExtras(): array
+    {
+        return OrderRepository::getAllAdditionals($this);
     }
 }
