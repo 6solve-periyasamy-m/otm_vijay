@@ -216,7 +216,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderAccommodation() as $orderComponent)
+                            @foreach($accommodation as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->accommodation_inventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodation_inventory->check_out) }}</td>
                                     <td>{{ $orderComponent->accommodation->name }}</td>
@@ -281,7 +281,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderActivities as $orderComponent)
+                            @foreach($activities as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->activity_inventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activity_inventory->ends_at) }}</td>
                                     <td>{{ $orderComponent->activity->name }}</td>
@@ -345,7 +345,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderFlights as $orderComponent)
+                            @foreach($flights as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->flight_inventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flight_inventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->flight_inventory->flight_number }}</td>
@@ -411,7 +411,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderTransports as $orderComponent)
+                            @foreach($transports as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->transport_inventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transport_inventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->transport->name }}</td>

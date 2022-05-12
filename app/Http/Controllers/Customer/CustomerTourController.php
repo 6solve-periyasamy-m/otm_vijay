@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Models\Accommodation\AccommodationInventoryTour;
@@ -12,7 +11,11 @@ use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Tour\Merchandise;
 use App\Models\Order\Order;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderTransport;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
@@ -73,9 +76,28 @@ class CustomerTourController extends Controller
                 break;
             }
         }
+
         if (!isset($oCustomer)) abort(404);
-        return view('pages.customer.components',
-            ['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'orderCustomer' => $oCustomer, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
+
+        $accommodation = $oCustomer->orderAccommodation()->getIterator();
+        $accommodation->uasort([OrderAccommodation::class, 'compare']);
+        $activities = $oCustomer->orderActivities->getIterator();
+        $activities->uasort([OrderActivity::class, 'compare']);
+        $flights = $oCustomer->orderFlights->getIterator();
+        $flights->uasort([OrderFlight::class, 'compare']);
+        $transport = $oCustomer->orderTransports->getIterator();
+        $transport->uasort([OrderTransport::class, 'compare']);
+
+        return view('pages.customer.components', [
+            'order' => $order,
+            'orders' => CustomerAuthenticationRepository::getCustomer()->orders,
+            'orderCustomer' => $oCustomer,
+            'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),
+            'accommodation' => $accommodation,
+            'activities' => $activities,
+            'flights' => $flights,
+            'transports' => $transport,
+        ]);
     }
 
     public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
