@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Repository\CustomerAuthenticationRepository;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class CustomerFinancesController extends Controller
@@ -18,9 +18,9 @@ class CustomerFinancesController extends Controller
     public function makePayment(Request $request)
     {
         $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric|min:0.3|max:999999.99']);
-        $order = OrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
+        $order = StaticOrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
         $amount = $request->input('amount');
-        if (!isset($order) || !OrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
+        if (!isset($order) || !StaticOrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
             return back()->withErrors('Cannot make a payment for an invalid order');
         }
         if ($amount > $order->remaining) {
@@ -31,13 +31,13 @@ class CustomerFinancesController extends Controller
 
     public function showInvoice(string $reference)
     {
-        $order = OrderRepository::getOrderFromBookingReference($reference);
+        $order = StaticOrderRepository::getOrderFromBookingReference($reference);
         if (!isset($order)) {
             abort(404);
         }
-        if (!OrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
+        if (!StaticOrderRepository::isOrderCustomer($order, CustomerAuthenticationRepository::getCustomer())) {
             abort(404);
         }
-        return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
+        return view('pdf.invoices.columns', ['invoice' => StaticOrderRepository::generateInvoice($order),]);
     }
 }

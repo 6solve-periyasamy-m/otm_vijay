@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Illuminate\Console\Command;
 
 class SendPaymentDueReminders extends Command
@@ -40,7 +40,7 @@ class SendPaymentDueReminders extends Command
     {
         $days = $this->argument('days') ?? 7;
         $min = $this->argument('min') ?? -1000;
-        OrderRepository::sendAllOrderReminders($days, $min);
+        StaticOrderRepository::sendAllOrderReminders($days, $min);
         return 0;
     }
 }

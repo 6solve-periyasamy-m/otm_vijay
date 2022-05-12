@@ -7,7 +7,7 @@
 
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\TourController;

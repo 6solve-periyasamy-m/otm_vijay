@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class OrderInstallmentController extends Controller
@@ -47,7 +47,7 @@ class OrderInstallmentController extends Controller
         {
             $installment->delete();
         }
-        OrderRepository::cloneInstallments($order);
+        StaticOrderRepository::cloneInstallments($order);
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

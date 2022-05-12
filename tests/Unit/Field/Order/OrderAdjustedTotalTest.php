@@ -7,7 +7,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * @covers Order::getAdjustmentValue
- * @covers \App\Repository\OrderRepository::getTotalAdjustedValue parent method of Order::getAdjustmentValue
+ * @covers \App\Repository\StaticOrderRepository::getTotalAdjustedValue parent method of Order::getAdjustmentValue
  */
 class OrderAdjustedTotalTest extends DatabaseTestCase
 {

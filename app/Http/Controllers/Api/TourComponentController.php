@@ -16,7 +16,7 @@ use App\Http\Gateways\StripeGateway;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -78,7 +78,7 @@ class TourComponentController extends Controller
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:merchandises,id']);
         $oCustomerId = $request->input('customer_id');
         $merchandiseId = $request->input('merchandise_id');
-        $oMerch = OrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
+        $oMerch = StaticOrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
         if (!isset($oMerch)) return response()->json(['success' => false, 'message' => 'Customer already has selected merchandise']);
         return $oMerch;
     }

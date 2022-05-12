@@ -31,7 +31,7 @@ use StringFormatter;
 use Throwable;
 use ZipArchive;
 
-class OrderRepository
+class StaticOrderRepository
 {
     public static function saveInvoice(Order $order): Invoice
     {

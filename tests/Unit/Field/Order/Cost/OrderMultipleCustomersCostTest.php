@@ -12,7 +12,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * @covers Order::getCostAttribute
- * @covers \App\Repository\OrderRepository::getCost
+ * @covers \App\Repository\StaticOrderRepository::getCost
  */
 class OrderMultipleCustomersCostTest extends DatabaseTestCase
 {

@@ -12,7 +12,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
 use App\Repository\GroupRepository;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 use Database\Factories\Order\OrderCustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -198,7 +198,7 @@ class OrderCustomer extends Model
 
     public function getIsLeadBookerAttribute(): bool
     {
-        return OrderRepository::isLeadBooker($this->order, $this->customer);
+        return StaticOrderRepository::isLeadBooker($this->order, $this->customer);
     }
 
     public function getPrimaryGroupAttribute(): ?Group
@@ -216,7 +216,7 @@ class OrderCustomer extends Model
 
     public function getHasOccupancyAttribute(): bool
     {
-        return OrderRepository::checkOccupancy($this);
+        return StaticOrderRepository::checkOccupancy($this);
     }
 
     /**

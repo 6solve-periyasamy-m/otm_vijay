@@ -9,7 +9,7 @@ use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use App\Repository\SettingsRepository;
 use Database\Factories\Order\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -179,7 +179,7 @@ class Order extends Model
      */
     public function groups(): array
     {
-        return OrderRepository::getOrderGroups($this);
+        return StaticOrderRepository::getOrderGroups($this);
     }
 
     // Attributes
@@ -189,7 +189,7 @@ class Order extends Model
      */
     public function getTotalAdjustmentsAttribute(): float
     {
-        return OrderRepository::getTotalAdjustedValue($this);
+        return StaticOrderRepository::getTotalAdjustedValue($this);
     }
 
     /**
@@ -197,7 +197,7 @@ class Order extends Model
      */
     public function getNextInstallmentAttribute(): ?OrderInstallment
     {
-        return OrderRepository::getNextPaymentDetails($this);
+        return StaticOrderRepository::getNextPaymentDetails($this);
     }
 
     /**
@@ -213,7 +213,7 @@ class Order extends Model
      */
     public function getStatusAttribute(): OrderStatus
     {
-        return OrderRepository::getOrderStatus($this);
+        return StaticOrderRepository::getOrderStatus($this);
     }
 
     /**
@@ -237,7 +237,7 @@ class Order extends Model
      */
     public function getCostAttribute(): float
     {
-        return OrderRepository::getCost($this);
+        return StaticOrderRepository::getCost($this);
     }
 
     /**
@@ -245,7 +245,7 @@ class Order extends Model
      */
     public function getRemainingAttribute(): float
     {
-        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
+        return $this->cancelled ? 0 : StaticOrderRepository::getRemainingToPay($this);
     }
 
     /**
@@ -309,7 +309,7 @@ class Order extends Model
      */
     public function getHasAtolAttribute(): bool
     {
-        return OrderRepository::hasFlight($this);
+        return StaticOrderRepository::hasFlight($this);
     }
 
     /**
@@ -338,7 +338,7 @@ class Order extends Model
      */
     public function getAdditionalCosts(): array
     {
-        return OrderRepository::getOrderAdditionals($this);
+        return StaticOrderRepository::getOrderAdditionals($this);
     }
 
     /**
@@ -346,6 +346,6 @@ class Order extends Model
      */
     public function getAvailableAddonsAndExtras(): array
     {
-        return OrderRepository::getAllAdditionals($this);
+        return StaticOrderRepository::getAllAdditionals($this);
     }
 }

@@ -7,7 +7,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * @covers Order::getRemainingAttribute
- * @covers \App\Repository\OrderRepository::getRemainingToPay
+ * @covers \App\Repository\StaticOrderRepository::getRemainingToPay
  */
 class OrderRemainingTest extends DatabaseTestCase
 {

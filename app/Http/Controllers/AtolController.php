@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AtolReportExport;
 use App\Helpers\QuarterHelper;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use App\Repository\ReportRepository;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -75,7 +75,7 @@ class AtolController extends Controller
     {
         if (!$this->verifyBoundaries($year, $quarter)) abort(404);
         $orders = QuarterHelper::getOrdersPlacedInQuarter($year, $quarter);
-        $path = OrderRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
+        $path = StaticOrderRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
         return redirect($path);
     }
 
@@ -83,7 +83,7 @@ class AtolController extends Controller
     {
         if (!$this->verifyBoundaries($year, $quarter)) abort(404);
         $orders = QuarterHelper::getOrdersFromToursInQuarter($year, $quarter);
-        $path = OrderRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
+        $path = StaticOrderRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
         return redirect($path);
     }
 
@@ -91,7 +91,7 @@ class AtolController extends Controller
     {
         if (!$this->verifyBoundaries($year, $quarter)) abort(404);
         $orders = QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter);
-        $path = OrderRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
+        $path = StaticOrderRepository::generateAllAtolCertificates($orders, "{$year}-Q{$quarter}");
         return redirect($path);
     }
 }

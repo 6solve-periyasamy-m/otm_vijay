@@ -490,7 +490,7 @@ class CustomerBookingRepository
             'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
         ]);
 
-        OrderRepository::cloneInstallments($order);
+        StaticOrderRepository::cloneInstallments($order);
 
         $customers = [];
         $order->orderCustomers()->save($leadBooker);

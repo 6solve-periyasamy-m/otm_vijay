@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\Parent\OrderEvent;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -28,7 +28,7 @@ class InvoiceUpdateListener
     public function handle(OrderEvent $event)
     {
         if ($event->shouldInvoice) {
-            OrderRepository::saveInvoice($event->order);
+            StaticOrderRepository::saveInvoice($event->order);
         }
     }
 }

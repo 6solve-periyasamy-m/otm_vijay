@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\OrderRepository;
+use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -48,9 +48,9 @@ class OrderController extends Controller
         $order->lead_booker_id = $orderCustomer->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        OrderRepository::addIncludedToCustomer($orderCustomer);
-        OrderRepository::assignDefaultRooming($orderCustomer);
-        OrderRepository::cloneInstallments($order);
+        StaticOrderRepository::addIncludedToCustomer($orderCustomer);
+        StaticOrderRepository::assignDefaultRooming($orderCustomer);
+        StaticOrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
         if (isset($request->customers)) {
@@ -61,8 +61,8 @@ class OrderController extends Controller
                     'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
                 ]);
                 $order->orderCustomers()->save($orderCustomer);
-                OrderRepository::addIncludedToCustomer($orderCustomer);
-                OrderRepository::assignDefaultRooming($orderCustomer);
+                StaticOrderRepository::addIncludedToCustomer($orderCustomer);
+                StaticOrderRepository::assignDefaultRooming($orderCustomer);
             }
         }
         return redirect()->route('orders.view', ['order' => $order,]);
@@ -75,12 +75,12 @@ class OrderController extends Controller
 
     public function invoice(Order $order)
     {
-        return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
+        return view('pdf.invoices.columns', ['invoice' => StaticOrderRepository::generateInvoice($order),]);
     }
 
     public function atol(Order $order)
     {
-        return OrderRepository::showAtolCertificate($order);
+        return StaticOrderRepository::showAtolCertificate($order);
     }
 
     public function edit(Order $order)
