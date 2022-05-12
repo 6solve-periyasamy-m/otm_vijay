@@ -135,7 +135,7 @@ $next = $order->getNextInstallment();
             </div>
         </div>
     </div>
-    @if($next['installment'] !== null && !$order->cancelled)
+    @if(isset($next) && !$order->cancelled)
     <div class="col-12">
         <div class="card">
             <div class="card-body payment-balance">
@@ -143,14 +143,14 @@ $next = $order->getNextInstallment();
                     <p class="heading">Next Payment Details</p>
                     <div class="col-md-6">
                         <p class="payment-value">
-                            <a href="" class="text-dark" onclick="event.preventDefault();$('.amount-input').val({{$next['amount']}})">
-                                {{ StringFormatter::formatCurrency($next['amount']) }}
+                            <a href="" class="text-dark" onclick="event.preventDefault();$('.amount-input').val({{$next->amount}})">
+                                {{ StringFormatter::formatCurrency($next->amount) }}
                             </a>
                         </p>
                         <label class="payment-label">Amount due to fulfil next instalment</label>
                     </div>
                     <div class="col-md-6">
-                        <p class="payment-value">{{ StringFormatter::formatDate($next['due']) }}</p>
+                        <p class="payment-value">{{ StringFormatter::formatDate($next->due_on) }}</p>
                         <label class="payment-label">Due by</label>
                     </div>
                 </div>

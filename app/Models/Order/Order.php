@@ -172,7 +172,7 @@ class Order extends Model
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
-    public function getNextInstallment(): array
+    public function getNextInstallment(): ?OrderInstallment
     {
         return OrderRepository::getNextPaymentDetails($this);
     }
@@ -279,7 +279,7 @@ class Order extends Model
      */
     public function getDaysUntilNextPaymentAttribute(): ?int
     {
-        $next = $this->getNextInstallment()['due'];
+        $next = $this->getNextInstallment()->due_on;
         if (!isset($next)) return null;
         $next = Carbon::parse($next);
         return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));

@@ -28,8 +28,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $dueDate = Carbon::now()->addDays(10)->setTime(0,0);
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -41,8 +41,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $dueDate = Carbon::now()->subDays(10)->setTime(0,0);
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -54,8 +54,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $dueDate = Carbon::now()->setTime(0,0);
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -68,7 +68,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $this->generatePayment($installment->order, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertNull($nextInstallment['installment']);
+        $this->assertNull($nextInstallment);
     }
 
     /**
@@ -78,7 +78,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
     public function testNoInstallmentAvailable()
     {
         $order = $this->generateOrder();
-        $this->assertNull($order->getNextInstallment()['installment']);
+        $this->assertNull($order->getNextInstallment());
     }
 
     /**
@@ -91,8 +91,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $this->generateOrderInstallment(Carbon::now()->addDays(20), 100, $installment->order);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -105,8 +105,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $this->generateOrderInstallment(Carbon::now()->addDays(20), 100, $installment->order);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -120,8 +120,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $installment = $this->generateOrderInstallment($dueDate, 100);
         $this->generateOrderInstallment(Carbon::now()->subDays(10), 100, $installment->order);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -135,8 +135,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -150,8 +150,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -165,8 +165,8 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 100);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertTrue($dueDate->eq($nextInstallment['due']));
-        $this->assertEquals(100, $nextInstallment['amount']);
+        $this->assertTrue($dueDate->eq($nextInstallment->due_on));
+        $this->assertEquals(100, $nextInstallment->amount);
     }
 
     /**
@@ -180,7 +180,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 200);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertNull($nextInstallment['installment']);
+        $this->assertNull($nextInstallment);
     }
 
     /**
@@ -194,7 +194,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 200);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertNull($nextInstallment['installment']);
+        $this->assertNull($nextInstallment);
     }
 
     /**
@@ -208,7 +208,7 @@ class OrderNextInstallmentTest extends DatabaseTestCase
         $this->generateOrderInstallment($dueDate, 100, $installment->order);
         $this->generatePayment($installment->order, 200);
         $nextInstallment = $installment->order->getNextInstallment();
-        $this->assertNull($nextInstallment['installment']);
+        $this->assertNull($nextInstallment);
     }
 
 }

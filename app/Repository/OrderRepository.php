@@ -294,7 +294,7 @@ class OrderRepository
             }
             if ($total > $paidAmount) {
                 $next = self::getNextPaymentDetails($order);
-                if (isset($next['installment']) && Carbon::now()->isAfter($next['due'])) {
+                if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
                     return OrderStatus::PAYMENT_OVERDUE;
                 } else {
                     return OrderStatus::BALANCE_OUTSTANDING;
@@ -391,9 +391,9 @@ class OrderRepository
     /**
      * Get details about the next payment
      * @param Order $order
-     * @return array{amount:float,due:Carbon|null,installment:OrderInstallment|null} Details about the next installment. If installment is null, then no more installments are required
+     * @return OrderInstallment|null Details about the next installment. If installment is null, then no more installments are required
      */
-    public static function getNextPaymentDetails(Order $order): array
+    public static function getNextPaymentDetails(Order $order): ?OrderInstallment
     {
         $paid = $order->paid;
         $paid -= self::getTotalAdjustedValue($order); // Negative adjustments add to the total paid, so minus is required
@@ -403,18 +403,14 @@ class OrderRepository
             $paid -= $installment->calculated_amount;
             $paid = sigfig($paid);
             if ($paid < 0) {
-                return [
+                return new OrderInstallment([
                     'amount' => min($installment->calculated_amount, $paid * -1),
-                    'due' => $installment->due_on,
-                    'installment' => $installment,
-                ];
+                    'due_on' => $installment->due_on,
+                    'order_id' => $order->id,
+                ]);
             }
         }
-        return [
-            'amount' => 0,
-            'due' => null,
-            'installment' => null,
-        ];
+        return null;
     }
 
     /**
@@ -497,6 +493,7 @@ class OrderRepository
 
     /**
      * Iterates through all orders, and if they have a due installment, sends an email reminder
+     * @todo REWORK
      */
     public static function sendAllOrderReminders(int $days, int $minDays = -1000)
     {
@@ -505,9 +502,9 @@ class OrderRepository
 
             $nextPayment = self::getNextPaymentDetails($order);
 
-            if (!isset($nextPayment['installment']) ||
-                !((Carbon::parse($nextPayment['due'])->diffInDays(now()) * -1) <= $days &&
-                 (Carbon::parse($nextPayment['due'])->diffInDays(now()) * -1) > $minDays)) continue;
+            if (!isset($nextPayment) ||
+                !((Carbon::parse($nextPayment->due_on)->diffInDays(now()) * -1) <= $days &&
+                 (Carbon::parse($nextPayment->due_on)->diffInDays(now()) * -1) > $minDays)) continue;
 
             $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
 
