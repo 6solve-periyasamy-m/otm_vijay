@@ -10,6 +10,10 @@ use App\Repository\GroupRepository;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
+/**
+ * @covers Order::getCostAttribute
+ * @covers \App\Repository\OrderRepository::getCost
+ */
 class OrderMultipleCustomersCostTest extends DatabaseTestCase
 {
     use TestsOrder;

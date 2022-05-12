@@ -5,6 +5,10 @@ namespace Field\Order\Cost;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
+/**
+ * @covers Order::getCostAttribute
+ * @covers \App\Repository\OrderRepository::getCost
+ */
 class OrderSingleCustomerCostTest extends DatabaseTestCase
 {
     use TestsOrder;

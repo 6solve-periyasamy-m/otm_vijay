@@ -5,6 +5,9 @@ namespace Field\Order;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
+/**
+ * @covers Order::getPaidAttribute
+ */
 class OrderPaidTest extends DatabaseTestCase
 {
     use TestsOrder;
