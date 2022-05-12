@@ -247,7 +247,7 @@ class Order extends Model
      */
     public function getRemainingAttribute(): float
     {
-        return $this->cancelled ? 0 : StaticOrderRepository::getRemainingToPay($this);
+        return $this->cancelled ? 0 : $this->repository->getRemaining();
     }
 
     /**

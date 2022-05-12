@@ -222,19 +222,6 @@ class StaticOrderRepository
         return null;
     }
 
-    /**
-     * Get the amount the order has left to pay
-     * @param Order $order
-     * @return float The remaining amount required on the order
-     */
-    public static function getRemainingToPay(Order $order): float
-    {
-        $cost = $order->cost;
-        $paid = $order->paid;
-        $adjustments = $order->total_adjustments;
-        return ($cost + $adjustments) - $paid;
-    }
-
     // Order Management Methods
 
     /**

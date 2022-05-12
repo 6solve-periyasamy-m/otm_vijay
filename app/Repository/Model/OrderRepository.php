@@ -63,4 +63,13 @@ class OrderRepository
         }
         return $total;
     }
+
+    /**
+     * Get the amount the order has left to pay
+     * @return float The remaining amount required on the order
+     */
+    public function getRemaining(): float
+    {
+        return ($this->order->cost + $this->order->total_adjustments) - $this->order->paid;
+    }
 }
