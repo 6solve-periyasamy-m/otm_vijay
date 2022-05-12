@@ -191,7 +191,7 @@ class Order extends Model
      */
     public function getTotalAdjustmentsAttribute(): float
     {
-        return StaticOrderRepository::getTotalAdjustedValue($this);
+        return $this->repository->getTotalAdjustedValue();
     }
 
     /**

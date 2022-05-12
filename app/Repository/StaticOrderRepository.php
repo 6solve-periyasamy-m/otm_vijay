@@ -169,32 +169,6 @@ class StaticOrderRepository
         }
     }
 
-    // Order Costs
-
-    /**
-     * Get the sum of the customer and order adjustments
-     * @param Order $order
-     * @return float Sum of the two adjustment values
-     */
-    public static function getTotalAdjustedValue(Order $order): float
-    {
-        return self::getCustomerAdjustmentTotal($order) + $order->order_adjustment_total;
-    }
-
-    /**
-     * Get the sum of the Customer Adjustments
-     * @param Order $order
-     * @return float The sum of the customer adjustments
-     */
-    public static function getCustomerAdjustmentTotal(Order $order): float
-    {
-        $total = 0;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $total += $orderCustomer->adjustment_total;
-        }
-        return $total;
-    }
-
     // Order Payments
 
     /**

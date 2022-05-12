@@ -72,4 +72,26 @@ class OrderRepository
     {
         return ($this->order->cost + $this->order->total_adjustments) - $this->order->paid;
     }
+
+    /**
+     * Get the sum of the customer and order adjustments
+     * @return float Sum of the two adjustment values
+     */
+    public function getTotalAdjustedValue(): float
+    {
+        return $this->getCustomerAdjustmentTotal() + $this->order->order_adjustment_total;
+    }
+
+    /**
+     * Get the sum of the Customer Adjustments
+     * @return float The sum of the customer adjustments
+     */
+    public function getCustomerAdjustmentTotal(): float
+    {
+        $total = 0;
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $total += $orderCustomer->adjustment_total;
+        }
+        return $total;
+    }
 }
