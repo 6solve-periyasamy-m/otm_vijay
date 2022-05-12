@@ -52,4 +52,13 @@ class BookingTransport extends Model
     {
         return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
+
+    public static function compare(BookingTransport $a, BookingTransport $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 }
