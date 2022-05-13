@@ -110,7 +110,7 @@ class CustomerTourController extends Controller
             if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
             if (isset($customer->email_address) && isset($customer->password)) abort(404);
         }
-        $orderCustomer = StaticOrderRepository::getOrderCustomer($order, $customer);
+        $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
         $tourComponent = $this->getComponent($componentType, $componentId);
@@ -140,7 +140,7 @@ class CustomerTourController extends Controller
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
             if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
         }
-        $orderCustomer = StaticOrderRepository::getOrderCustomer($order, $customer);
+        $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
         $tourComponent = $this->getComponent($componentType, $componentId);
@@ -198,7 +198,7 @@ class CustomerTourController extends Controller
 
     private function getOrderCustomers(Order $order, Customer $customer): array
     {
-        $orderCustomer = StaticOrderRepository::getOrderCustomer($order, $customer);
+        $orderCustomer = $order->repository->getOrderCustomer($customer);
         if ($order->lead_booker_id !== $orderCustomer->id) return [];
         $data = [$orderCustomer,];
         foreach ($order->orderCustomers as $oCustomer) {

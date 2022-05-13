@@ -323,14 +323,6 @@ class StaticOrderRepository
         return Order::whereBookingReference($bookingReference)->first();
     }
 
-    public static function getOrderCustomer(Order $order, Customer $customer): ?OrderCustomer
-    {
-        foreach ($order->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->customer_id == $customer->id) return $orderCustomer;
-        }
-        return null;
-    }
-
     public static function getCustomersForOrder(Order $order): Collection
     {
         $customers = [];

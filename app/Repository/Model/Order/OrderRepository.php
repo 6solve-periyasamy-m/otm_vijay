@@ -4,6 +4,7 @@ namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -123,6 +124,18 @@ class OrderRepository extends ModelRepository
     public function isLeadBooker(Customer $customer): bool
     {
         return $this->order->leadBooker->customer_id == $customer->id;
+    }
+
+    /**
+     * @param Customer $customer The customer to find
+     * @return OrderCustomer|null The OrderCustomer or null if not found
+     */
+    public function getOrderCustomer(Customer $customer): ?OrderCustomer
+    {
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            if ($orderCustomer->customer_id == $customer->id) return $orderCustomer;
+        }
+        return null;
     }
 
     public function get(): Order

@@ -20,7 +20,8 @@ class CustomerFinancesController extends Controller
         $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric|min:0.3|max:999999.99']);
         $order = StaticOrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
         $amount = $request->input('amount');
-        if (!isset($order) || StaticOrderRepository::getOrderCustomer($order, CustomerAuthenticationRepository::getCustomer()) === null) {
+        if (!isset($order) ||
+            $order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
             return back()->withErrors('Cannot make a payment for an invalid order');
         }
         if ($amount > $order->remaining) {
@@ -35,7 +36,7 @@ class CustomerFinancesController extends Controller
         if (!isset($order)) {
             abort(404);
         }
-        if (StaticOrderRepository::getOrderCustomer($order, CustomerAuthenticationRepository::getCustomer()) === null) {
+        if ($order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
             abort(404);
         }
         return view('pdf.invoices.columns', ['invoice' => $order->repository->getInvoiceRepository()->get(),]);
