@@ -17,21 +17,28 @@ class OrderRepository extends ModelRepository
         $this->atolRepository = new AtolRepository($order);
     }
 
+    /**
+     * @param string $reference
+     * @return Order|null
+     */
     public static function getFromBookingReference(string $reference): ?Order
     {
         return Order::whereBookingReference($reference)->first();
     }
 
-    public function getOrder(): Order
-    {
-        return $this->order;
-    }
-
+    /**
+     * Returns the invoice repository for a specific invoice, or the most recent one if the requested does not exist
+     * @param int $number The invoice number to fetch
+     * @return InvoiceRepository The instance of InvoiceRepository related to the invoice
+     */
     public function getInvoiceRepository(int $number = 0): InvoiceRepository
     {
         return InvoiceRepository::getInvoiceById($this->order, $number);
     }
 
+    /**
+     * @return AtolRepository The instance of AtolRepository related to this order
+     */
     public function getAtolRepository(): AtolRepository
     {
         return $this->atolRepository;
