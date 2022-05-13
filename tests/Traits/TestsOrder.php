@@ -15,10 +15,10 @@ trait TestsOrder
 {
     use TestsTour;
 
-    function generateOrder(): Order
+    function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50): Order
     {
         $order = Order::factory()->create();
-        $order->lead_booker_id = $this->generateOrderCustomer(true, $order)->id;
+        if ($withLead) $order->lead_booker_id = $this->generateOrderCustomer($withIncluded, $order, $tour_cost, $surcharge)->id;
         $order->save();
         return $order;
     }

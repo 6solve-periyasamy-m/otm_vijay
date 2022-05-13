@@ -632,18 +632,6 @@ class StaticOrderRepository
             return null;
     }
 
-    public static function hasFlight(Order $order): bool
-    {
-        $query = DB::table('order_flights');
-        $query->join('order_customers', 'order_flights.order_customer_id', '=', 'order_customers.id');
-        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
-        $query->where('orders.id', '=', $order->id);
-        $query->whereNull('order_flights.deleted_at');
-        $query->select('order_flights.id');
-        $results = $query->get();
-        return $results->count() > 0;
-    }
-
     public static function checkOccupancy(OrderCustomer $orderCustomer): bool
     {
         $owned = [];

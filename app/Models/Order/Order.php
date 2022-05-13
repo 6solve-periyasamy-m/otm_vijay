@@ -311,7 +311,7 @@ class Order extends Model
      */
     public function getHasAtolAttribute(): bool
     {
-        return StaticOrderRepository::hasFlight($this);
+        return $this->repository->hasFlight();
     }
 
     /**

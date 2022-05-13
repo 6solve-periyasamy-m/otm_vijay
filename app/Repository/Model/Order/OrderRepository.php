@@ -4,6 +4,7 @@ namespace App\Repository\Model\Order;
 
 use App\Models\Order\Order;
 use App\Repository\Abstracts\ModelRepository;
+use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
 {
@@ -83,6 +84,21 @@ class OrderRepository extends ModelRepository
             $total += $orderCustomer->adjustment_total;
         }
         return $total;
+    }
+
+    /**
+     * @return boolean Whether any customer has a flight
+     */
+    public function hasFlight(): bool
+    {
+        $query = DB::table('order_flights');
+        $query->join('order_customers', 'order_flights.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('orders.id', '=', $this->order->id);
+        $query->whereNull('order_flights.deleted_at');
+        $query->select('order_flights.id');
+        $results = $query->get();
+        return $results->count() > 0;
     }
 
     public function get(): Order
