@@ -7,6 +7,9 @@ use App\Repository\StaticOrderRepository;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
+/**
+ * @covers \App\Repository\StaticOrderRepository::isOrderCustomer
+ */
 class OrderIsCustomerTest extends DatabaseTestCase
 {
     use TestsOrder;

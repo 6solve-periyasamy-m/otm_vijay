@@ -5,6 +5,10 @@ namespace Field\Order;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
+/**
+ * @covers Order::getHasAtolAttribute
+ * @covers \App\Repository\Model\Order\OrderRepository::hasFlight Parent method
+ */
 class OrderHasFlightTest extends DatabaseTestCase
 {
     use TestsOrder;
