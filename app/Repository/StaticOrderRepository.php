@@ -13,7 +13,6 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
-use App\Models\Order\Invoice;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
@@ -532,104 +531,6 @@ class StaticOrderRepository
             Log::error($e->getMessage());
             return false;
         }
-    }
-
-    public static function showAtolCertificate(Order $order): bool
-    {
-        return self::generateAtolCertificate($order)->send();
-    }
-
-    private static function generateAtolCertificate(Order $order): Pdf
-    {
-        $data = self::generateFlightList($order);
-        $protected = $data['normal'];
-        $excess = $data['excess'];
-        $pdf = new Pdf(Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
-        $pdf->fillForm([
-            'companyName' => SettingsRepository::get('company.name'),
-            'issuerName' => SettingsRepository::get('atol.issuer'),
-            'issueDate' => StringFormatter::formatDate($order->ordered_on),
-            'atolNumber' => SettingsRepository::get('atol.number'),
-            'reference' => $order->booking_reference,
-            'customerNames' => $order->customer_names,
-            'customerCount' => $order->customer_count,
-            'protected' => $protected,
-            'excess' => $excess,
-        ])->flatten();
-
-        return $pdf;
-    }
-
-    private static function generateFlightList(Order $order): array
-    {
-        $inbound = [];
-        $outbound = [];
-        foreach ($order->orderCustomers as $orderCustomer) {
-            foreach ($orderCustomer->orderFlights as $orderFlight) {
-                if ($orderFlight->tourComponent->flight_type == 'Inbound') {
-                    $inbound[$orderFlight->tourComponent->id] = $orderFlight->tourComponent;
-                } elseif ($orderFlight->tourComponent->flight_type == 'Outbound') {
-                    $outbound[$orderFlight->tourComponent->id] = $orderFlight->tourComponent;
-                }
-            }
-        }
-        $string = '';
-        $excessString = '';
-        $excess = 3 + (count($outbound) < 3 ? 3 - count($outbound) : 0);
-        foreach ($inbound as $tourComponent) {
-            if ($excess > 0) {
-                $string .= $tourComponent->atol_string . "\n";
-                $excess--;
-            } else {
-                $excessString .= $tourComponent->atol_string . "\n";
-            }
-        }
-        $excess += 3;
-        foreach ($outbound as $tourComponent) {
-            if ($excess > 0) {
-                $string .= $tourComponent->atol_string . "\n";
-                $excess--;
-            } else {
-                $excessString .= $tourComponent->atol_string . "\n";
-            }
-        }
-        return ['normal' => $string, 'excess' => $excessString,];
-    }
-
-    public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
-    {
-        Storage::makeDirectory('uploads/atol');
-        while (true) {
-            try {
-                $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
-                $directory = 'public/' . $filename;
-                if (Storage::exists($directory)) continue;
-                Storage::makeDirectory($directory);
-                break;
-            } catch (Exception) {
-                continue;
-            }
-        }
-        foreach ($orders as $order) {
-            if ($order->cancelled) continue;
-            if (!$order->has_atol) continue;
-            $atol = self::generateAtolCertificate($order);
-            $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
-            if (!$saved) {
-                dd($atol->getError());
-            }
-        }
-        $zip = new ZipArchive();
-        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
-            foreach (Storage::files($directory) as $file) {
-                $exploded = explode('/', $file);
-                $zip->addFile(Storage::path($file), trim(end($exploded)));
-            }
-            $zip->close();
-            Storage::deleteDirectory($directory);
-            return asset('uploads/atol/' . $filename . '.zip');
-        } else
-            return null;
     }
 
     public static function checkOccupancy(OrderCustomer $orderCustomer): bool

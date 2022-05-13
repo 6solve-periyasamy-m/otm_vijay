@@ -22,7 +22,7 @@ class CustomerPortalController extends Controller
         $order = StaticOrderRepository::getOrderFromBookingReference($reference);
         if (!isset($order)) abort(404);
         if (!StaticOrderRepository::isOrderCustomer($order, $customer)) abort(404);
-        return StaticOrderRepository::showAtolCertificate($order);
+        return $order->repository->getAtolRepository()->showAtolCertificate();
     }
 
 

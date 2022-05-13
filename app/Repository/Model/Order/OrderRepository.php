@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\DB;
 class OrderRepository extends ModelRepository
 {
     private Order $order;
+    private AtolRepository $atolRepository;
 
     public function __construct(Order $order)
     {
         $this->order = $order;
+        $this->atolRepository = new AtolRepository($order);
     }
 
     public static function getFromBookingReference(string $reference): ?Order
@@ -28,6 +30,11 @@ class OrderRepository extends ModelRepository
     public function getInvoiceRepository(int $number = 0): InvoiceRepository
     {
         return InvoiceRepository::getInvoiceById($this->order, $number);
+    }
+
+    public function getAtolRepository(): AtolRepository
+    {
+        return $this->atolRepository;
     }
 
     /**
