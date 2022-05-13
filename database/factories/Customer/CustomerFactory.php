@@ -1,12 +1,13 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Customer;
 
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\LocationsRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use function now;
 
 class CustomerFactory extends Factory
 {
@@ -53,9 +54,9 @@ class CustomerFactory extends Factory
             'passport_issue_date' => now(),
             'passport_expiry_date' => $this->faker->dateTimeBetween('-6 months', '+6 months'),
             'internal_notes' => $this->faker->sentence,
-            'external_notes' => $this->faker->sentence,
-            'dietary_notes' => $this->faker->sentence,
-            'mobility_notes' => $this->faker->sentence,
+            //'external_notes' => $this->faker->sentence,
+            //'dietary_notes' => $this->faker->sentence,
+            //'mobility_notes' => $this->faker->sentence,
             'loyalty_number' => $this->faker->randomNumber(9),
         ];
     }

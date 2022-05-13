@@ -9,7 +9,7 @@ use App\Models\System\ApiToken;
 use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\CustomerAuthenticationRepository;
-use Database\Factories\CustomerFactory;
+use Database\Factories\Customer\CustomerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
