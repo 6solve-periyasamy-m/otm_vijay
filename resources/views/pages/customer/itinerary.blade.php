@@ -87,7 +87,7 @@
                 <hr class="splitter">
                 <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post">
                     @csrf
-                    @if(\App\Repository\StaticOrderRepository::isLeadBooker($order, \App\Repository\CustomerAuthenticationRepository::getCustomer()))
+                    @if($order->repository->isLeadBooker(\App\Repository\CustomerAuthenticationRepository::getCustomer()))
                     @include('partials.fields.textarea', ['name' => 'Order Notes', 'field' => 'order_notes', 'value' => $order->external_notes, 'rows' => 2])
                     @endif
                     @include('partials.fields.textarea', ['name' => 'Customer Specific Order Notes', 'field' => 'order_customer_notes', 'value' => $orderCustomer->external_notes, 'rows' => 2])

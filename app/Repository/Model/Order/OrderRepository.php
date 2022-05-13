@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Support\Facades\DB;
@@ -113,6 +114,15 @@ class OrderRepository extends ModelRepository
         $query->select('order_flights.id');
         $results = $query->get();
         return $results->count() > 0;
+    }
+
+    /**
+     * @param Customer $customer The customer to check
+     * @return bool Whether the specific customer is the lead booker
+     */
+    public function isLeadBooker(Customer $customer): bool
+    {
+        return $this->order->leadBooker->customer_id == $customer->id;
     }
 
     public function get(): Order

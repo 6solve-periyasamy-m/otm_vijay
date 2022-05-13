@@ -178,8 +178,8 @@ class CustomerTourController extends Controller
         if (!isset($customer)) abort(404);
         $order = StaticOrderRepository::getOrderFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
-        if (!StaticOrderRepository::isOrderCustomer($order, $customer)) abort(404);
-        if (StaticOrderRepository::isLeadBooker($order, CustomerAuthenticationRepository::getCustomer())) {
+        if (!$order->repository->isLeadBooker($customer)) abort(404);
+        if ($order->repository->isLeadBooker(CustomerAuthenticationRepository::getCustomer())) {
             $order->update([
                 'external_notes' => $request->input('order_notes'),
             ]);

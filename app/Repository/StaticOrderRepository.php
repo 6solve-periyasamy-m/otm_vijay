@@ -323,11 +323,6 @@ class StaticOrderRepository
         return Order::whereBookingReference($bookingReference)->first();
     }
 
-    public static function isLeadBooker(Order $order, Customer $customer): bool
-    {
-        return $order->leadBooker->customer_id == $customer->id;
-    }
-
     public static function isOrderCustomer(Order $order, Customer $customer): bool
     {
         foreach ($order->orderCustomers as $orderCustomer) {

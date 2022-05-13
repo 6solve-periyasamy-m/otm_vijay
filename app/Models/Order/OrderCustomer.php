@@ -202,7 +202,7 @@ class OrderCustomer extends Model
 
     public function getIsLeadBookerAttribute(): bool
     {
-        return StaticOrderRepository::isLeadBooker($this->order, $this->customer);
+        return $this->order->repository->isLeadBooker($this->customer);
     }
 
     public function getPrimaryGroupAttribute(): ?Group
