@@ -282,10 +282,7 @@
                         Add Customer
                     </a>
                 </h2>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
+                <br />
                 Please note that Traveller Email Addresses must be unique, if an Additional Traveller does not have an email address this must be left blank as they cannot share an Email Address with another Customer.
             </div>
         </div>
