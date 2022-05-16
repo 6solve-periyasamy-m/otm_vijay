@@ -10,7 +10,7 @@
 @section('title', 'Booking for ' . $tour->name)
 
 @section('booking-body')
-    <form class="form-horizontal form-material mx-2 row" method="post"
+    <form class="form-horizontal form-material mx-2 row v-form-validation" method="post"
           action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url, 'token' => $token,]) }}">
         <div class="card">
             <div class="card-body">
@@ -67,7 +67,7 @@
                     <div class="col-md-12">
                         <input type="text" name="lead_email_address" id="lead_email_address-input"
                                value="{{ $customer?->email_address ?? '' }}"
-                               class="form-control ps-0 form-control-line" required>
+                               class="form-control ps-0 form-control-line v-email-validation-unique" required>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -284,6 +284,11 @@
                 </h2>
             </div>
         </div>
+        <div class="card">
+            <div class="card-body">
+                Please note that Traveller Email Addresses must be unique, if an Additional Traveller does not have an email address this must be left blank as they cannot share an Email Address with another Customer.
+            </div>
+        </div>
         @php $additionals = 0 @endphp
         @foreach($additionalTravellers as $traveller)
             @if(!isset($traveller)) @continue @endif
@@ -303,6 +308,26 @@
         const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null,])`;
         additional = {{ $additionals ?? 0 }};
         available = {{ $available - $additionals - 1}};
+
+        $(document).ready(function () {
+                $('.v-form-validation').submit(function (event) {
+                    let emails = [];
+                    let failed = false;
+                    $('.v-email-validation-unique').each(function (index) {
+                        let email = this.value.toLowerCase().trim();
+                        if (emails.includes(email)) {
+                            failed = true;
+                            alert('You have used the email ' + this.value.trim() + ' for multiple customers. Please correct this.')
+                            return false;
+                        }
+                        emails.push(email);
+                    });
+                    if (failed) {
+                        event.preventDefault();
+                    }
+                });
+            }
+        );
 
         function addCustomer() {
             if (available <= 0) {
