@@ -284,6 +284,8 @@
                 </h2>
                 <br />
                 Please note that Traveller Email Addresses must be unique, if an Additional Traveller does not have an email address this must be left blank as they cannot share an Email Address with another Customer.
+                <br />
+                If you wish your each Traveller to manage their own booking and for their details not to be managed by the Lead Booker, then they will need a unique Email Address in order to create their own account on our Customer Portal.
             </div>
         </div>
         @php $additionals = 0 @endphp
