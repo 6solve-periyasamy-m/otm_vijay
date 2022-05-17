@@ -4,6 +4,7 @@ namespace App\Models\Transport;
 
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use Database\Factories\Transport\TransportFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|TransportInventory[] $transportInventory
  * @property-read int|null $transport_inventory_count
  * @property-read TransportType $transportType
+ * @method static TransportFactory factory(...$parameters)
  * @method static Builder|Transport newModelQuery()
  * @method static Builder|Transport newQuery()
  * @method static QueryBuilder|Transport onlyTrashed()
