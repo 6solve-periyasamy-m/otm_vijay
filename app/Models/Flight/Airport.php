@@ -3,9 +3,11 @@
 namespace App\Models\Flight;
 
 use App\Models\Location\Address;
+use Database\Factories\Flight\AirportFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $flight_count
  * @property-read Collection|FlightInventory[] $flightInventory
  * @property-read int|null $flight_inventory_count
+ * @method static AirportFactory factory(...$parameters)
  * @method static Builder|Airport newModelQuery()
  * @method static Builder|Airport newQuery()
  * @method static QueryBuilder|Airport onlyTrashed()
@@ -47,7 +50,7 @@ use Illuminate\Support\Carbon;
  */
 class Airport extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['name', 'iata_code', 'address_id'];
 
