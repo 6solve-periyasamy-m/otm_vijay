@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Flight;
 
 use App\Models\Flight\Flight;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,13 +22,8 @@ class FlightFactory extends Factory
     public function definition()
     {
         return [
-            'airline_id' => 1,
-            'departure_airport_id' => 1,
-            'arrival_airport_id' => 2,
-            'is_dometic' => false,
+            'is_domestic' => false,
             'notes' => $this->faker->sentence(),
-            'is_archived' => false,
-            'currency' => 'UKP',
             'available_from' => null
         ];
     }

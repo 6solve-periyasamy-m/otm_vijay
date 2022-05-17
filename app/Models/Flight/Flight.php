@@ -3,6 +3,7 @@
 namespace App\Models\Flight;
 
 use App\Models\Location\Currency;
+use Database\Factories\Flight\FlightFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|FlightInventory[] $flightInventory
  * @property-read int|null $flight_inventory_count
  * @property-read string $flight_details
+ * @method static FlightFactory factory(...$parameters)
  * @method static Builder|Flight newModelQuery()
  * @method static Builder|Flight newQuery()
  * @method static QueryBuilder|Flight onlyTrashed()
