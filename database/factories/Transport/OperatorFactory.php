@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Transport;
 
 use App\Models\Transport\Operator;
 use Illuminate\Database\Eloquent\Factories\Factory;
