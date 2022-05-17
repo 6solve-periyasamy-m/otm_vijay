@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Flight;
 
 use App\Models\Flight\FlightInventoryTour;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,11 +22,9 @@ class FlightInventoryTourFactory extends Factory
     public function definition()
     {
         return [
-            'tour_id' => 1,
-            'flight_inventory_id' => 1,
-            'tour_component_type_id' => 1,
-            'tour_sales_price' => null,
-            'flight_type' => 'Outbound'
+            'tour_component_type' => $this->faker->randomElement(['Included', 'Upgrade', 'Add-on']),
+            'tour_sales_price' => $this->faker->numberBetween(50, 100),
+            'flight_type' => $this->faker->randomElement(['Outbound', 'Inbound',]),
         ];
     }
 }

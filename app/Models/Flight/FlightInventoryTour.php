@@ -6,6 +6,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\FlightComponentRepository;
+use Database\Factories\Flight\FlightInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,6 +48,7 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|FlightInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @method static FlightInventoryTourFactory factory(...$parameters)
  * @method static Builder|FlightInventoryTour newModelQuery()
  * @method static Builder|FlightInventoryTour newQuery()
  * @method static QueryBuilder|FlightInventoryTour onlyTrashed()
