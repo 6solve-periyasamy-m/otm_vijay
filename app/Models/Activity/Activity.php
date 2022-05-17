@@ -4,6 +4,7 @@ namespace App\Models\Activity;
 
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use Database\Factories\Activity\ActivityFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property-read ActivityType $activityType
  * @property-read Address $address
  * @property-read Currency|null $currency
+ * @method static ActivityFactory factory(...$parameters)
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
  * @method static QueryBuilder|Activity onlyTrashed()

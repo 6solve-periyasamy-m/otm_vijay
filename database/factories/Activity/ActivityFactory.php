@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Activity;
 
 use App\Models\Activity\Activity;
+use App\Models\Location\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ActivityFactory extends Factory
@@ -21,9 +22,9 @@ class ActivityFactory extends Factory
      */
     public function definition()
     {
+        $address = Address::factory()->create();
         return [
-            'activity_type_id' => $this->faker->numberBetween(1, 3),
-            'location_id' => $this->faker->numberBetween(1, 5),
+            'address_id' => $address->id,
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
         ];
