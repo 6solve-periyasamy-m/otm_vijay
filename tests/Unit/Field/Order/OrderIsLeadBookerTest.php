@@ -4,6 +4,7 @@ namespace Field\Order;
 
 use App\Models\Customer\Customer;
 use App\Repository\StaticOrderRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
@@ -13,6 +14,7 @@ use Tests\Traits\TestsOrder;
 class OrderIsLeadBookerTest extends DatabaseTestCase
 {
     use TestsOrder;
+    use RefreshDatabase;
 
     public function testIsLeadBookerWithLead()
     {
