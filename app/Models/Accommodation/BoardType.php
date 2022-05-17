@@ -3,8 +3,10 @@
 namespace App\Models\Accommodation;
 
 use App\Models\Helper\SimpleModel;
+use Database\Factories\Accommodation\BoardTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -18,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @method static BoardTypeFactory factory(...$parameters)
  * @method static Builder|BoardType newModelQuery()
  * @method static Builder|BoardType newQuery()
  * @method static QueryBuilder|BoardType onlyTrashed()
@@ -33,7 +36,7 @@ use Illuminate\Support\Carbon;
  */
 class BoardType extends SimpleModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['name',];
 
