@@ -51,6 +51,7 @@ class CustomerBookingController extends Controller
         $request->validate($this->getLeadBookerValidation());
         $loggedIn = CustomerAuthenticationRepository::getCustomer();
         $customer = Customer::where('email_address', $request->lead_email_address)->first();
+        $bookedEmails = [strtolower(trim($request->lead_email_address)),];
         if ((isset($customer?->email_address) && isset($customer?->password))
             && (!isset($loggedIn) || $customer?->id !== $loggedIn?->id)) {
             Session::put('url.intended', URL::full());
@@ -101,6 +102,10 @@ class CustomerBookingController extends Controller
                 if (!isset($traveller) && !empty($additional['email_address'])) {
                     $traveller = Customer::where('email_address', $additional['email_address'])->first();
                 }
+                if (in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
+                    return back()->withErrors(['msg' => 'You have used the email ' . $additional['email_address'] . ' for multiple customers. Please correct this.']);
+                }
+                $bookedEmails[] = strtolower(trim($additional['email_address']));
                 if (!isset($traveller)) {
                     $traveller = Customer::make([
                         'title' => $additional['title'],
