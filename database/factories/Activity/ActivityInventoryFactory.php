@@ -1,9 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Activity;
 
 use App\Models\Activity\ActivityInventory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use function now;
 
 class ActivityInventoryFactory extends Factory
 {
@@ -22,14 +23,12 @@ class ActivityInventoryFactory extends Factory
     public function definition()
     {
         return [
-            'ticket_type_id' => $this->faker->numberBetween(1, 4),
             'starts_at' => now(),
             'ends_at' => now(),
             'fit_selectable' => true,
             'stock' => $this->faker->numberBetween(1, 10),
             'purchase_price' => $this->faker->numberBetween(10, 50),
             'sales_price' => $this->faker->numberBetween(50, 100),
-            'currency' => 'GBP',
             'notes' => $this->faker->sentence,
         ];
     }

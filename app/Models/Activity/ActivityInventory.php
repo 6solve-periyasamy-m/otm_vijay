@@ -3,6 +3,7 @@
 namespace App\Models\Activity;
 
 use App\Repository\StockRepository;
+use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,6 +42,7 @@ use StringFormatter;
  * @property-read TicketType $ticketType
  * @property-read Collection|ActivityInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @method static ActivityInventoryFactory factory(...$parameters)
  * @method static Builder|ActivityInventory newModelQuery()
  * @method static Builder|ActivityInventory newQuery()
  * @method static QueryBuilder|ActivityInventory onlyTrashed()
