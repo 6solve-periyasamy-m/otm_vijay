@@ -19,7 +19,7 @@ class AirportFactory extends Factory
         $address = Address::factory()->create();
         return [
             'name' => $this->faker->word,
-            'iata_code' => $this->faker->randomLetter * 3,
+            'iata_code' => $this->faker->randomLetter . $this->faker->randomLetter . $this->faker->randomLetter,
             'address_id' => $address->id,
         ];
     }
