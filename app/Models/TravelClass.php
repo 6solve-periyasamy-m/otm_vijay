@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Helper\SimpleModel;
+use Database\Factories\TravelClassFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -18,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @method static TravelClassFactory factory(...$parameters)
  * @method static Builder|TravelClass newModelQuery()
  * @method static Builder|TravelClass newQuery()
  * @method static QueryBuilder|TravelClass onlyTrashed()
@@ -33,7 +36,7 @@ use Illuminate\Support\Carbon;
  */
 class TravelClass extends SimpleModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['name',];
 
