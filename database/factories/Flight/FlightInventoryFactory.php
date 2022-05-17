@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Flight;
 
 use App\Models\Flight\FlightInventory;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,17 +22,14 @@ class FlightInventoryFactory extends Factory
     public function definition()
     {
         return [
-            'id' => 1,
-            'check_in' => '2022-05-14 12:30:00',
-            'departs_at' => '2022-05-14 14:30:00',
-            'arrives_at' => '2022-05-14 16:30:00',
+            'check_in' => now(),
+            'departs_at' => now()->addHour(),
+            'arrives_at' => now()->addHours(10),
             'flight_number' => $this->faker->word,
-            'travel_class_id' => 1,
             'fit_selectable' => 1,
             'stock' => 5,
             'purchase_price' => 200,
             'sales_price' => 300,
-            'currency' => 'GBP',
             'notes' => $this->faker->sentence
         ];
     }

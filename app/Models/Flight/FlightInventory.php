@@ -4,10 +4,12 @@ namespace App\Models\Flight;
 
 use App\Models\TravelClass;
 use App\Repository\StockRepository;
+use Database\Factories\Flight\FlightInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,6 +49,7 @@ use StringFormatter;
  * @property-read Collection|FlightInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
  * @property-read TravelClass $travelClass
+ * @method static FlightInventoryFactory factory(...$parameters)
  * @method static Builder|FlightInventory newModelQuery()
  * @method static Builder|FlightInventory newQuery()
  * @method static QueryBuilder|FlightInventory onlyTrashed()
@@ -72,7 +75,7 @@ use StringFormatter;
  */
 class FlightInventory extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected array $cascadeDeletes = ['flightInventoryTour'];
     protected $fillable = ['flight_id', 'travel_class_id', 'flight_number', 'check_in', 'departs_at', 'arrives_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
