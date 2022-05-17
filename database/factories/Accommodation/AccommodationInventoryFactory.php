@@ -1,9 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use function now;
 
 class AccommodationInventoryFactory extends Factory
 {
@@ -22,8 +23,8 @@ class AccommodationInventoryFactory extends Factory
     public function definition()
     {
         return [
-            'board_type_id' => $this->faker->numberBetween(1, 4),
-            'room_type_id' => $this->faker->numberBetween(1, 3),
+            'board_type_id' => 1,
+            'room_type_id' => 1,
             'check_in' => now(),
             'check_in_time_confirmed' => true,
             'check_out' => now(),

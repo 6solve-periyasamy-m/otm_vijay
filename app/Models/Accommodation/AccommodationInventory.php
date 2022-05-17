@@ -3,6 +3,7 @@
 namespace App\Models\Accommodation;
 
 use App\Repository\StockRepository;
+use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,6 +46,7 @@ use StringFormatter;
  * @property-read RoomType $roomType
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @method static AccommodationInventoryFactory factory(...$parameters)
  * @method static Builder|AccommodationInventory newModelQuery()
  * @method static Builder|AccommodationInventory newQuery()
  * @method static QueryBuilder|AccommodationInventory onlyTrashed()
