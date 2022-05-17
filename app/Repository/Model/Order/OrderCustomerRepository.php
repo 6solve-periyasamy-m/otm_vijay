@@ -26,24 +26,29 @@ class OrderCustomerRepository extends ModelRepository
     /**
      * @return OrderComponentRepository[]
      */
-    public function getComponents(bool $includeAccommodation = true): array
+    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
     {
         $components = [];
         if ($includeAccommodation) {
             foreach ($this->orderCustomer->orderAccommodation() as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         foreach ($this->orderCustomer->orderActivities as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         foreach ($this->orderCustomer->orderFlights as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         foreach ($this->orderCustomer->orderTransports as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         foreach ($this->orderCustomer->orderMerchandise as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
             $components[] = $orderComponent->repository;
         }
         return $components;
