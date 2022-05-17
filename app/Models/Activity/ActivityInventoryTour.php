@@ -6,6 +6,7 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\ActivityComponentRepository;
+use Database\Factories\Activity\ActivityInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,6 +45,7 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|ActivityInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @method static ActivityInventoryTourFactory  factory(...$parameters)
  * @method static Builder|ActivityInventoryTour newModelQuery()
  * @method static Builder|ActivityInventoryTour newQuery()
  * @method static QueryBuilder|ActivityInventoryTour onlyTrashed()
