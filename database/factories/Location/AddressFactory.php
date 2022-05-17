@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Location;
 
 use App\Models\Location\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,10 +22,12 @@ class AddressFactory extends Factory
     public function definition()
     {
         return [
+            'name' => $this->faker->word,
+            'address_parent_id' => 1,
             'address_line_1' => $this->faker->streetAddress,
             'town' => $this->faker->city,
             'region' => $this->faker->state,
-            'country' => $this->faker->country,
+            'country_id' => 1,
             'postcode' => $this->faker->postcode
         ];
     }

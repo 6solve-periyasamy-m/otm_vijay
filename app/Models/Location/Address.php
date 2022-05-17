@@ -2,6 +2,7 @@
 
 namespace App\Models\Location;
 
+use Database\Factories\Location\AddressFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property-read AddressParent $addressParent
  * @property-read Country|null $country
  * @property-read LocationType|null $locationType
+ * @method static AddressFactory factory(...$parameters)
  * @method static Builder|Address newModelQuery()
  * @method static Builder|Address newQuery()
  * @method static QueryBuilder|Address onlyTrashed()
