@@ -15,6 +15,8 @@ use App\Models\Transport\TransportInventoryTour;
 
 trait TestsTour
 {
+    use TestsAccommodation;
+
     function generateTour(): Tour
     {
         return Tour::factory()->create();
@@ -31,7 +33,7 @@ trait TestsTour
     function generateAccommodationInventoryTour(?Tour $tour, string $componentType, float $cost, ?AccommodationInventory $inventory = null): AccommodationInventoryTour
     {
         if (!isset($tour)) $tour = $this->generateTour();
-        if (!isset($inventory)) $inventory = AccommodationInventory::all()->first();
+        if (!isset($inventory)) $inventory = $this->generateAccommodationInventory();
         $tourComponent = new AccommodationInventoryTour([
             'tour_component_type' => $componentType,
             'tour_sales_price' => $cost,
