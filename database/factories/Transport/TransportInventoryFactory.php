@@ -1,9 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Transport;
 
 use App\Models\Transport\TransportInventory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use function now;
 
 class TransportInventoryFactory extends Factory
 {
@@ -22,10 +23,9 @@ class TransportInventoryFactory extends Factory
     public function definition()
     {
         return [
-            'travel_class_id' => $this->faker->numberBetween(1, 2),
             'departs_at' => now(),
             'departure_time_confirmed' => true,
-            'arrives_at' => now(),
+            'arrives_at' => now()->addHours(5),
             'arrival_time_confirmed' => false,
             'fit_selectable' => true,
             'stock' => $this->faker->numberBetween(1, 10),

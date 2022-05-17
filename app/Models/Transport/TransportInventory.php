@@ -5,6 +5,7 @@ namespace App\Models\Transport;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\StockRepository;
+use Database\Factories\Transport\TransportInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,6 +48,7 @@ use StringFormatter;
  * @property-read int|null $tour_components_count
  * @property-read Transport $transport
  * @property-read TravelClass $travelClass
+ * @method static TransportInventoryFactory factory(...$parameters)
  * @method static Builder|TransportInventory newModelQuery()
  * @method static Builder|TransportInventory newQuery()
  * @method static QueryBuilder|TransportInventory onlyTrashed()
