@@ -25,7 +25,7 @@ class TransportFactory extends Factory
         return [
             'transport_type_id' => $this->faker->numberBetween(1, 7),
             'arrival_address_id' => Address::factory()->create()->id,
-            'departure_location_id' => Address::factory()->create()->id,
+            'departure_address_id' => Address::factory()->create()->id,
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
             'is_domestic' => true,
