@@ -1,9 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Accommodation;
 
 use App\Models\Accommodation\Accommodation;
+use App\Models\Location\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use function now;
 
 class AccommodationFactory extends Factory
 {
@@ -21,12 +23,12 @@ class AccommodationFactory extends Factory
      */
     public function definition()
     {
+        $address = Address::factory()->create();
         return [
-            'region_id' => $this->faker->numberBetween(1, 8),
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
             'audit_date' => now(),
-            'address' => $this->faker->address,
+            'address_id' => $address->id,
         ];
     }
 }
