@@ -14,6 +14,7 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\StockRepository;
 use App\Repository\TourRepository;
+use Database\Factories\Tour\TourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -82,6 +83,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $transport_inventory_count
  * @property-read Collection|TransportInventoryTour[] $transportInventoryTours
  * @property-read int|null $transport_inventory_tours_count
+ * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
  * @method static QueryBuilder|Tour onlyTrashed()

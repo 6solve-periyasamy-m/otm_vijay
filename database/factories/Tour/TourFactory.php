@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Tour;
 
 use App\Models\Tour\Tour;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,8 +22,6 @@ class TourFactory extends Factory
     public function definition()
     {
         return [
-            'id' => 1,
-            'event_id' => 1,
             'name' => $this->faker->sentence,
             'description' => $this->faker->sentence,
             'notes' => $this->faker->sentence,
@@ -36,9 +34,10 @@ class TourFactory extends Factory
             'tour_category_id' => null,
             'tour_merchandise_id' => null,
             'is_active' => true,
-            'date_from' => '2022-05-01',
-            'date_to' => '2022-05-31',
-            'terms' => 'Default Terms'
+            'date_from' => now(),
+            'date_to' => now()->addDays(30),
+            'terms' => 'Default Terms',
+            'final_payment' => now(),
         ];
     }
 }
