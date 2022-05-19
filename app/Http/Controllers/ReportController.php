@@ -63,7 +63,7 @@ class ReportController extends Controller
 
     public function getActivitiesReport() {
         return view('pages.reports.view', ['tableView' => 'partials.reports.tables.activities',
-            'data' => ReportRepository::getActivityReport(),'title' => 'Activities',
+            'data' => ReportRepository::getActivityReport(),'title' => 'Activity Customer',
             'xlsxExport' => route('reports.activities.export', ['extension' => 'xlsx']),
             'csvExport' => route('reports.activities.export', ['extension' => 'csv']),]);
     }

@@ -43,7 +43,7 @@ class ReportRepository
                 'export' => 'reports.flight-manifest.export',
             ],
             [
-                'name' => 'Activity Tickets',
+                'name' => 'Activity Customer',
                 'details' => 'List of all sold activities and tickets',
                 'view' => 'reports.activities',
                 'export' => 'reports.activities.export',
