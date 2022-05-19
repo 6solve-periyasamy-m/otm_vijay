@@ -724,6 +724,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/tour-stock/{extension}', [ReportController::class, 'exportTourStockReport'])->name('reports.tour-stock.export');
         Route::get('/payments', [ReportController::class, 'getPaymentsReport'])->name('reports.payment');
         Route::get('/payments/{extension}', [ReportController::class, 'exportPaymentsReport'])->name('reports.payment.export');
+        Route::get('/flight-manifest', [ReportController::class, 'getFlightManifestReport'])->name('reports.flight-manifest');
+        Route::get('/flight-manifest/{extension}', [ReportController::class, 'exportFlightManifestReport'])->name('reports.flight-manifest.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');

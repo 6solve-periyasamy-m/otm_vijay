@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Helpers\QuarterHelper;
 use App\Models\Order;
+use App\Models\OrderFlight;
 use App\Models\Tour;
 use Illuminate\Support\Collection;
 
@@ -33,7 +34,13 @@ class ReportRepository
                 'details' => 'Details about all payments in the system',
                 'view' => 'reports.payment',
                 'export' => 'reports.payment.export',
-            ]
+            ],
+            [
+                'name' => 'Flight Manifest',
+                'details' => 'List of all flights and passengers',
+                'view' => 'reports.flight-manifest',
+                'export' => 'reports.flight-manifest.export',
+            ],
         ];
     }
 
@@ -105,6 +112,33 @@ class ReportRepository
                 $row->paid_on = $payment->paid_on;
                 $data[] = $row;
             }
+        }
+        return $data;
+    }
+
+    public static function getFlightManifestReport(): array
+    {
+        $data = [];
+        foreach (OrderFlight::all() as $orderFlight) {
+            if ($orderFlight->isCancelled()) {
+                continue;
+            }
+            $row = collect();
+            $row->departs = $orderFlight?->tourComponent?->flightInventory?->flight?->departureAirport?->__toString();
+            $row->depart_time = $orderFlight?->tourComponent?->flightInventory?->departs_at;
+            $row->arrival = $orderFlight?->tourComponent?->flightInventory?->flight?->arrivalAirport?->__toString();
+            $row->arrive_time = $orderFlight?->tourComponent?->flightInventory?->arrives_at;
+            $row->flight_number = $orderFlight?->tourComponent?->flightInventory?->flight_number;
+            $row->customer = $orderFlight?->orderCustomer?->customer_name;
+            $row->reference = $orderFlight?->orderCustomer?->order?->booking_reference;
+            $row->tour = $orderFlight?->orderCustomer?->order?->tour?->name;
+            $row->is_lead = $orderFlight?->orderCustomer?->is_lead_booker;
+            $row->flight_notes = $orderFlight?->orderCustomer?->flight_notes;
+            $row->order_customer_notes_internal = $orderFlight?->orderCustomer?->internal_notes;
+            $row->order_customer_notes_external = $orderFlight?->orderCustomer?->external_notes;
+            $row->customer_notes_internal = $orderFlight?->orderCustomer?->customer?->internal_notes;
+            $row->customer_notes_external = $orderFlight?->orderCustomer?->customer?->external_notes;
+            $data[] = $row;
         }
         return $data;
     }

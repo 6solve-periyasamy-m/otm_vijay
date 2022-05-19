@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FlightManifestReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
@@ -45,5 +46,17 @@ class ReportController extends Controller
 
     public function exportPaymentsReport(string $extension = 'xlsx') {
         return Excel::download(new PaymentReportExport, 'payments.' . $extension);
+    }
+
+    public function getFlightManifestReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.flight-manifest',
+            'data' => ReportRepository::getFlightManifestReport(),'title' => 'Flight Manifest',
+            'xlsxExport' => route('reports.flight-manifest.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.flight-manifest.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportFlightManifestReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new FlightManifestReportExport, 'flight-manifest.' . $extension);
     }
 }
