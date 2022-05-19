@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Helpers\QuarterHelper;
 use App\Models\Order;
+use App\Models\OrderActivity;
 use App\Models\OrderFlight;
 use App\Models\Tour;
 use Illuminate\Support\Collection;
@@ -40,6 +41,12 @@ class ReportRepository
                 'details' => 'List of all flights and passengers',
                 'view' => 'reports.flight-manifest',
                 'export' => 'reports.flight-manifest.export',
+            ],
+            [
+                'name' => 'Activity Tickets',
+                'details' => 'List of all sold activities and tickets',
+                'view' => 'reports.activities',
+                'export' => 'reports.activities.export',
             ],
         ];
     }
@@ -138,6 +145,31 @@ class ReportRepository
             $row->order_customer_notes_external = $orderFlight?->orderCustomer?->external_notes;
             $row->customer_notes_internal = $orderFlight?->orderCustomer?->customer?->internal_notes;
             $row->customer_notes_external = $orderFlight?->orderCustomer?->customer?->external_notes;
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    public static function getActivityReport(): array
+    {
+        $data = [];
+        foreach (OrderActivity::all() as $orderActivity) {
+            if ($orderActivity->isCancelled()) {
+                continue;
+            }
+            $row = collect();
+            $row->reference = $orderActivity?->orderCustomer?->order?->booking_reference;
+            $row->customer = $orderActivity?->orderCustomer?->customer_name;
+            $row->activity = $orderActivity?->tourComponent?->inventory?->activity?->name;
+            $row->ticket = $orderActivity?->tourComponent?->inventory?->ticketType?->name;
+            $row->starts = $orderActivity?->tourComponent?->inventory?->starts_at;
+            $row->ends = $orderActivity?->tourComponent?->inventory?->ends_at;
+            $row->used_stock = $orderActivity?->tourComponent?->inventory?->used_stock;
+            $row->total_stock = $orderActivity?->tourComponent?->inventory->stock;
+            $row->available_stock = $row?->total_stock - $row?->used_stock;
+            $row->purchased = $orderActivity?->orderCustomer?->order?->ordered_on;
+            $row->cost = $orderActivity?->tourComponent?->tour_component_type === "Included" ? 0 : $orderActivity?->cost;
+            $row->component = $orderActivity?->tourComponent?->tour_component_type;
             $data[] = $row;
         }
         return $data;
