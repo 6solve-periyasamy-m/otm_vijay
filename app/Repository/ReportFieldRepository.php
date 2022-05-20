@@ -550,6 +550,11 @@ class ReportFieldRepository
                         'name' => 'Transport Notes',
                         'method' => 'transport_notes',
                     ],
+                    'has_surcharge' => [
+                        'name' => 'Is Single Occupancy',
+                        'method' => 'has_surcharge',
+                        'format' => 'boolean',
+                    ],
                 ]
             ],
             2 => [
