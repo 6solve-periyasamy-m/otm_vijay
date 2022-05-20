@@ -107,7 +107,7 @@ class OrderFlight extends Model
 
     public function getCancelledAttribute(): bool
     {
-        return $this->orderCustomers->order->cancelled;
+        return $this->orderCustomer->order->cancelled;
     }
 
     public function getDetailsAttribute(): string
