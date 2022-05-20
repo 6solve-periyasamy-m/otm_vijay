@@ -15,7 +15,7 @@ trait TestsOrder
 {
     use TestsTour;
 
-    function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50, float $deposit = 100): Order
+    function generateOrder(bool $withLead = true, bool $withIncluded = true, float $tour_cost = 300, float $surcharge = 50, float $deposit = 0): Order
     {
         $order = Order::factory()->create(['deposit' => $deposit,]);
         if ($withLead) $order->lead_booker_id = $this->generateOrderCustomer($withIncluded, $order, $tour_cost, $surcharge)->id;

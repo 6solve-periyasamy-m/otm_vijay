@@ -80,7 +80,7 @@ class OrderStatusTest extends DatabaseTestCase
 
     public function testDepositHeldSinglePayment()
     {
-        $order = $this->generateOrder();
+        $order = $this->generateOrder(true, true, 300, 50, 100);
         $this->generatepayment($order, 100);
         $order->cancelled = true;
         $order->save();
@@ -89,7 +89,7 @@ class OrderStatusTest extends DatabaseTestCase
 
     public function testDepositHeldMultiplePayment()
     {
-        $order = $this->generateOrder();
+        $order = $this->generateOrder(true, true, 300, 50, 100);
         $this->generatepayment($order, 50);
         $this->generatepayment($order, 50);
         $order->cancelled = true;
