@@ -513,6 +513,11 @@ class ReportFieldRepository
                         'method' => 'single_occupancy_surcharge',
                         'format' => 'currency',
                     ],
+                    'has_surcharge' => [
+                        'name' => 'Is Single Occupancy',
+                        'method' => 'has_surcharge',
+                        'format' => 'boolean',
+                    ],
                     'travel_insurer' => [
                         'name' => 'Travel Insurer',
                         'method' => 'travel_insurer',
@@ -549,11 +554,6 @@ class ReportFieldRepository
                     'transport_notes' => [
                         'name' => 'Transport Notes',
                         'method' => 'transport_notes',
-                    ],
-                    'has_surcharge' => [
-                        'name' => 'Is Single Occupancy',
-                        'method' => 'has_surcharge',
-                        'format' => 'boolean',
                     ],
                 ]
             ],
