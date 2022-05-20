@@ -6,6 +6,7 @@ use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Order\OrderInstallment;
 use App\Repository\Abstracts\ModelRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -175,6 +176,30 @@ class OrderRepository extends ModelRepository
                 return OrderStatus::PAID_IN_FULL;
             }
         }
+    }
+
+    /**
+     * Get details about the next payment
+     * @return OrderInstallment|null Details about the next installment. If installment is null, then no more installments are required
+     */
+    public function getNextPaymentDetails(): ?OrderInstallment
+    {
+        $paid = $this->order->paid;
+        $paid -= $this->order->total_adjustments; // Negative adjustments add to the total paid, so minus is required
+        $paid -= $this->order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
+        $paid = sigfig($paid);
+        foreach ($this->order->installments as $installment) {
+            $paid -= $installment->calculated_amount;
+            $paid = sigfig($paid);
+            if ($paid < 0) {
+                return new OrderInstallment([
+                    'amount' => min($installment->calculated_amount, $paid * -1),
+                    'due_on' => $installment->due_on,
+                    'order_id' => $this->order->id,
+                ]);
+            }
+        }
+        return null;
     }
 
     public function get(): Order

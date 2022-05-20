@@ -199,7 +199,7 @@ class Order extends Model
      */
     public function getNextInstallmentAttribute(): ?OrderInstallment
     {
-        return StaticOrderRepository::getNextPaymentDetails($this);
+        return $this->repository->getNextPaymentDetails();
     }
 
     /**

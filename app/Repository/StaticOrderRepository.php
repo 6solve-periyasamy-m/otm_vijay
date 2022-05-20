@@ -128,33 +128,6 @@ class StaticOrderRepository
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
     }
 
-    // Order Payments
-
-    /**
-     * Get details about the next payment
-     * @param Order $order
-     * @return OrderInstallment|null Details about the next installment. If installment is null, then no more installments are required
-     */
-    public static function getNextPaymentDetails(Order $order): ?OrderInstallment
-    {
-        $paid = $order->paid;
-        $paid -= $order->total_adjustments; // Negative adjustments add to the total paid, so minus is required
-        $paid -= $order->calculated_deposit; // Deposit must be removed as it is an installment, but not treated as one (Celeste)
-        $paid = sigfig($paid);
-        foreach ($order->installments as $installment) {
-            $paid -= $installment->calculated_amount;
-            $paid = sigfig($paid);
-            if ($paid < 0) {
-                return new OrderInstallment([
-                    'amount' => min($installment->calculated_amount, $paid * -1),
-                    'due_on' => $installment->due_on,
-                    'order_id' => $order->id,
-                ]);
-            }
-        }
-        return null;
-    }
-
     // Order Management Methods
 
     /**
