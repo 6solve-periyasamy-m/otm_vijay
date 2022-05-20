@@ -2,6 +2,7 @@
 
 namespace App\Models\Order;
 
+use App\Repository\Model\Order\OrderInstallmentRepository;
 use App\Repository\StaticOrderRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property-read bool $paid Is the installment paid?
  * @property-read float $percentage Percentage of the order amount
  * @property-read Order $order Related order
+ * @property-read OrderInstallmentRepository $repository
  * @method static Builder|OrderInstallment newModelQuery()
  * @method static Builder|OrderInstallment newQuery()
  * @method static QueryBuilder|OrderInstallment onlyTrashed()
@@ -77,5 +79,11 @@ class OrderInstallment extends Model
     public function getCalculatedAmountAttribute(): float
     {
         return $this->amount * $this->order->customer_count;
+    }
+
+    public function getRepositoryAttribute(): OrderInstallmentRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new OrderInstallmentRepository($this);
+        return $this->internal_repository;
     }
 }
