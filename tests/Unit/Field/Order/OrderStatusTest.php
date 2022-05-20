@@ -7,6 +7,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
+/**
+ * @covers Order::getStatusAttribute
+ * @covers \App\Repository\Model\Order\OrderRepository::getOrderStatus Parent method
+ */
 class OrderStatusTest extends DatabaseTestCase
 {
     use TestsOrder;
