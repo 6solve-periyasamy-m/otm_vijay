@@ -3,6 +3,7 @@
 namespace Field\Order;
 
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
@@ -14,6 +15,7 @@ use Tests\Traits\TestsOrder;
 class OrderNextInstallmentTest extends DatabaseTestCase
 {
     use TestsOrder;
+    use RefreshDatabase;
 
     /*
      * NB: addDays() leads to the days being X-1, whilst subDays leads to days being X

@@ -2,6 +2,7 @@
 
 namespace Field\Order\Cost;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
@@ -12,6 +13,7 @@ use Tests\Traits\TestsOrder;
 class OrderSingleCustomerCostTest extends DatabaseTestCase
 {
     use TestsOrder;
+    use RefreshDatabase;
     
     public function testOrderCostSingleWithSurcharge()
     {

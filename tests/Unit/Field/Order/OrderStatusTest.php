@@ -3,12 +3,14 @@
 namespace Field\Order;
 
 use App\Models\Helper\OrderStatus;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
 class OrderStatusTest extends DatabaseTestCase
 {
     use TestsOrder;
+    use RefreshDatabase;
 
     public function testBalanceOutstandingNoInstallments()
     {

@@ -2,6 +2,7 @@
 
 namespace Field\Order;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
@@ -11,6 +12,7 @@ use Tests\Traits\TestsOrder;
 class OrderPaidTest extends DatabaseTestCase
 {
     use TestsOrder;
+    use RefreshDatabase;
 
     public function testAmountPaidSingle()
     {

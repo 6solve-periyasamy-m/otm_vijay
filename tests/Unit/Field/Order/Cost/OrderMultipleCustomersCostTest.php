@@ -7,6 +7,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\GroupRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
@@ -17,6 +18,7 @@ use Tests\Traits\TestsOrder;
 class OrderMultipleCustomersCostTest extends DatabaseTestCase
 {
     use TestsOrder;
+    use RefreshDatabase;
 
     public function testOrderCostDoubleWithSurcharge()
     {
