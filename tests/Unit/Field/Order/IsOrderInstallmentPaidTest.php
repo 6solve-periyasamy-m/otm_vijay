@@ -8,7 +8,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * @covers \App\Models\Order\OrderInstallment::getPaidAttribute
- * @covers \App\Repository\StaticOrderRepository::isInstallmentPaid
+ * @covers \App\Repository\Model\Order\OrderInstallmentRepository::isInstallmentPaid
  */
 class IsOrderInstallmentPaidTest extends DatabaseTestCase
 {

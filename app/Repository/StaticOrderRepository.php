@@ -265,18 +265,6 @@ class StaticOrderRepository
         return collect($customers);
     }
 
-    public static function isInstallmentPaid(OrderInstallment $installment): bool
-    {
-        $order = $installment->order;
-        $paid = sigfig(($order->total_adjustments * -1) + $order->paid - $order->calculated_deposit);
-        foreach ($order->installments as $orderInstallment) {
-            $paid = sigfig($paid - $orderInstallment->calculated_amount);
-            if ($paid < 0) return false;
-            if ($orderInstallment->id == $installment->id) return true;
-        }
-        return $paid >= 0;
-    }
-
     public static function getOrderGroups(Order $order): array
     {
         $customers = $order->orderCustomers;

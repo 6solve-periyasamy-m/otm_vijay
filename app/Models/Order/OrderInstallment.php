@@ -68,7 +68,7 @@ class OrderInstallment extends Model
 
     public function getPaidAttribute(): bool
     {
-        return StaticOrderRepository::isInstallmentPaid($this);
+        return $this->repository->isInstallmentPaid();
     }
 
     public function getPercentageAttribute(): float

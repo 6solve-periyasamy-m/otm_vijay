@@ -15,6 +15,18 @@ class OrderInstallmentRepository extends ModelRepository
         $this->installment = $installment;
     }
 
+    public function isInstallmentPaid(): bool
+    {
+        $order = $this->installment->order;
+        $paid = sigfig(($order->total_adjustments * -1) + $order->paid - $order->calculated_deposit);
+        foreach ($order->installments as $orderInstallment) {
+            $paid = sigfig($paid - $orderInstallment->calculated_amount);
+            if ($paid < 0) return false;
+            if ($orderInstallment->id == $this->installment->id) return true;
+        }
+        return $paid >= 0;
+    }
+
     public function get(): OrderInstallment
     {
         return $this->installment;
