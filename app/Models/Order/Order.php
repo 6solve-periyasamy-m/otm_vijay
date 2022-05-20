@@ -215,7 +215,7 @@ class Order extends Model
      */
     public function getStatusAttribute(): OrderStatus
     {
-        return StaticOrderRepository::getOrderStatus($this);
+        return $this->repository->getOrderStatus();
     }
 
     /**

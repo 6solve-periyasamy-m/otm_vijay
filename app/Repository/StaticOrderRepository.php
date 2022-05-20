@@ -128,46 +128,6 @@ class StaticOrderRepository
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
     }
 
-    // Order/Customer Adjustments
-
-    /**
-     * Get the current status of the order
-     * @param Order $order
-     * @return OrderStatus Status code for order
-     */
-    public static function getOrderStatus(Order $order): OrderStatus
-    {
-        $paidAmount = $order->paid;
-        $cost = $order->cost;
-        $adjustments = $order->total_adjustments;
-        $total = $cost + $adjustments;
-        if ($order->trashed() || $order->cancelled) {
-            if ($paidAmount == 0) {
-                return OrderStatus::CANCELLED_FULL_REFUND;
-            } else if ($paidAmount <= $order->calculated_deposit) {
-                return OrderStatus::CANCELLED_DEPOSIT_HELD;
-            } else {
-                return OrderStatus::CANCELLED_REFUND_REQUIRED;
-            }
-        } else {
-            foreach ($order->orderCustomers as $orderCustomer) {
-                if (!$orderCustomer->has_occupancy) return OrderStatus::OCCUPANCY_NOT_SET;
-            }
-            if ($total > $paidAmount) {
-                $next = $order->next_installment;
-                if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
-                    return OrderStatus::PAYMENT_OVERDUE;
-                } else {
-                    return OrderStatus::BALANCE_OUTSTANDING;
-                }
-            } elseif ($total < $paidAmount) {
-                return OrderStatus::OVERPAID;
-            } else {
-                return OrderStatus::PAID_IN_FULL;
-            }
-        }
-    }
-
     // Order Payments
 
     /**

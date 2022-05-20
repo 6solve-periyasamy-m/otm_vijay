@@ -3,9 +3,11 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\ModelRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
@@ -136,6 +138,43 @@ class OrderRepository extends ModelRepository
             if ($orderCustomer->customer_id == $customer->id) return $orderCustomer;
         }
         return null;
+    }
+
+    /**
+     * Get the current status of the order
+     * @return OrderStatus Status code for order
+     */
+    public function getOrderStatus(): OrderStatus
+    {
+        $paidAmount = $this->order->paid;
+        $cost = $this->order->cost;
+        $adjustments = $this->order->total_adjustments;
+        $total = $cost + $adjustments;
+        if ($this->order->trashed() || $this->order->cancelled) {
+            if ($paidAmount == 0) {
+                return OrderStatus::CANCELLED_FULL_REFUND;
+            } else if ($paidAmount <= $this->order->calculated_deposit) {
+                return OrderStatus::CANCELLED_DEPOSIT_HELD;
+            } else {
+                return OrderStatus::CANCELLED_REFUND_REQUIRED;
+            }
+        } else {
+            foreach ($this->order->orderCustomers as $orderCustomer) {
+                if (!$orderCustomer->has_occupancy) return OrderStatus::OCCUPANCY_NOT_SET;
+            }
+            if ($total > $paidAmount) {
+                $next = $this->order->next_installment;
+                if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
+                    return OrderStatus::PAYMENT_OVERDUE;
+                } else {
+                    return OrderStatus::BALANCE_OUTSTANDING;
+                }
+            } elseif ($total < $paidAmount) {
+                return OrderStatus::OVERPAID;
+            } else {
+                return OrderStatus::PAID_IN_FULL;
+            }
+        }
     }
 
     public function get(): Order
