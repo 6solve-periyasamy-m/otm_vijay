@@ -6,6 +6,7 @@ use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour\Tour;
 use App\Repository\AccommodationComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use Database\Factories\Accommodation\AccommodationInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -47,6 +48,7 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|AccommodationInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @property-read AccommodationInventoryTourRepository $repository
  * @method static AccommodationInventoryTourFactory factory(...$parameters)
  * @method static Builder|AccommodationInventoryTour newModelQuery()
  * @method static Builder|AccommodationInventoryTour newQuery()
@@ -198,5 +200,11 @@ class AccommodationInventoryTour extends Model
             if (!$orderComponent->isCancelled()) $used++;
         }
         return $used;
+    }
+
+    public function getRepositoryAttribute(): AccommodationInventoryTourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryTourRepository($this);
+        return $this->internal_repository;
     }
 }
