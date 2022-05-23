@@ -41,21 +41,6 @@ class AccommodationComponentRepository
         return $components;
     }
 
-    public static function grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId): OrderAccommodation|null
-    {
-        $orderCustomer = OrderCustomer::find($oCustomerId);
-        $group = $orderCustomer->primary_group;
-        if (!isset($group)) return null;
-        $orderComponent = OrderAccommodation::create([
-            'group_id' => $group->id,
-            'accommodation_inventory_tour_id' => $accommodationInventoryTourId,
-            'share_with_user_id' => null,
-            'cost' => AccommodationInventoryTour::findOrFail($accommodationInventoryTourId)->tour_sales_price,
-        ]);
-        //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
-        return $orderComponent;
-    }
-
     public static function getParentComponent(AccommodationInventoryTour $inventoryTour): AccommodationInventoryTour
     {
         $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();

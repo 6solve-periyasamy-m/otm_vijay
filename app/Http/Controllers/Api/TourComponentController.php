@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTourUpgrade;
@@ -46,9 +47,9 @@ class TourComponentController extends Controller
 
     public function addAccommodationAddon(Request $request) {
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'accommodation_id' => 'required|exists:accommodation_inventory_tours,id']);
-        $oCustomerId = $request->input('customer_id');
-        $accommodationInventoryTourId = $request->input('accommodation_id');
-        $orderInventory = AccommodationComponentRepository::grantAddonToCustomer($oCustomerId, $accommodationInventoryTourId);
+        $orderCustomer = OrderCustomer::find($request->input('customer_id'));
+        $inventoryTour = AccommodationInventoryTour::find($request->input('accommodation_id'));
+        $orderInventory = $inventoryTour->repository->grantToCustomer($orderCustomer)->get();
         if (!isset($orderInventory)) return response()->json(['success' => false, 'message' => 'Customer does not have a group assigned',]);
         return $orderInventory;
     }

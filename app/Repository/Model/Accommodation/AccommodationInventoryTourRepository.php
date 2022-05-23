@@ -67,7 +67,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             'cost' => $this->inventoryTour->tour_sales_price,
         ]);
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
-        return $orderComponent;
+        return $orderComponent->repository;
     }
 
     public function getUpgradeParent(): AccommodationInventoryTour
