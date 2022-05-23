@@ -494,6 +494,10 @@ class ReportFieldRepository
                         'name' => 'Booking Reference',
                         'method' => 'booking_reference',
                     ],
+                    'tour_name' => [
+                        'name' => 'Tour Name',
+                        'method' => 'tour_name',
+                    ],
                     'ordered_on' => [
                         'name' => 'Ordered On',
                         'method' => 'ordered_on',
