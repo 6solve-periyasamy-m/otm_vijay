@@ -52,6 +52,7 @@ use Illuminate\Support\Collection;
  * @property-read Customer|null $customer The customer details
  * @property-read string $booking_reference The booking reference of the order
  * @property-read string $customer_name The full name of the customer
+ * @property-read string $tour_name The name of the tour the order is for
  * @property-read bool $has_occupancy Whether the customer has occupancy set correctly
  * @property-read bool $has_surcharge Whether the customer should be charged for single occupancy
  * @property-read bool $is_lead_booker Whether the customer is the lead booker
@@ -181,6 +182,11 @@ class OrderCustomer extends Model
     public function getOrderedOnAttribute(): Carbon
     {
         return $this->order->ordered_on;
+    }
+
+    public function getTourNameAttribute(): string
+    {
+        return $this->order->tour->name;
     }
 
     public function getLeadBookerNameAttribute(): string
