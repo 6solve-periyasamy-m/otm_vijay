@@ -40,7 +40,7 @@
             <label class="col-md-12 mb-0">Email Address</label>
             <div class="col-md-12">
                 <input type="text" name="additional[{{ $number }}][email_address]" id="additional[{{ $number }}][email_address]-input" value="{{ $traveller?->customer?->email_address ?? '' }}"
-                       class="form-control ps-0 form-control-line">
+                       class="form-control ps-0 form-control-line v-email-validation-unique">
             </div>
         </div>
         <div class="form-group col-md-2">
