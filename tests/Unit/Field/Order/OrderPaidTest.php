@@ -7,7 +7,7 @@ use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
 /**
- * @covers Order::getPaidAttribute
+ * @covers \App\Models\Order\Order::getPaidAttribute
  */
 class OrderPaidTest extends DatabaseTestCase
 {

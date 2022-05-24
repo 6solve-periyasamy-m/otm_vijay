@@ -8,7 +8,7 @@ use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
 /**
- * @covers Order::getStatusAttribute
+ * @covers \App\Models\Order\Order::getStatusAttribute
  * @covers \App\Repository\Model\Order\OrderRepository::getOrderStatus Parent method
  */
 class OrderStatusTest extends DatabaseTestCase

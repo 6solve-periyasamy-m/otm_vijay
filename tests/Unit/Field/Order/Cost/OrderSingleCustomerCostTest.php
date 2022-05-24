@@ -7,8 +7,8 @@ use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
 /**
- * @covers Order::getCostAttribute
- * @covers \App\Repository\StaticOrderRepository::getCost
+ * @covers \App\Models\Order\Order::getCostAttribute
+ * @covers \App\Repository\Model\Order\OrderRepository::getCost
  */
 class OrderSingleCustomerCostTest extends DatabaseTestCase
 {

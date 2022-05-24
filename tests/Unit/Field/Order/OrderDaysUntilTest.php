@@ -9,7 +9,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * Tests related to getting the number of days until the next payment is due
- * @covers Order::getDaysUntilNextPaymentAttribute
+ * @covers \App\Models\Order\Order::getDaysUntilNextPaymentAttribute
  */
 class OrderDaysUntilTest extends DatabaseTestCase
 {

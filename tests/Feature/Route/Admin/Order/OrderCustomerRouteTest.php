@@ -13,7 +13,7 @@ class OrderCustomerRouteTest extends AuthenticatedRouteTestCase
     private string $class = OrderCustomer::class;
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderCustomerModelController::show
+     * @covers \App\Http\Controllers\OrderCustomerController::show
      * @return void
      */
     public function testOrderCustomerView(): void

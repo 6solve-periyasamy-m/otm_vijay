@@ -7,8 +7,8 @@ use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
 /**
- * @covers Order::getRemainingAttribute
- * @covers \App\Repository\StaticOrderRepository::getRemainingToPay
+ * @covers \App\Models\Order\Order::getRemainingAttribute
+ * @covers \App\Repository\Model\Order\OrderRepository::getRemaining
  */
 class OrderRemainingTest extends DatabaseTestCase
 {

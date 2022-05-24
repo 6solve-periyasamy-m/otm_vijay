@@ -22,7 +22,7 @@ class OrderPagesRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\OrderController::show
+     * @covers \App\Http\Controllers\OrderSystemController::show
      * @return void
      */
     public function testOrderView(): void

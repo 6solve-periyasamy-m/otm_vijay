@@ -24,7 +24,7 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     }
 
     /**
-     * @covers \App\Http\Controllers\Models\AccommodationController::show
+     * @covers \App\Http\Controllers\Models\AccommodationController::view
      * @return void
      */
     public function testAccommodationView(): void
