@@ -47,18 +47,6 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    // TODO: Move to component Repository
-    public static function getBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
-    {
-        $dateFrom->setTime(0,0);
-        $dateTo->setTime(11,59,59);
-        $inventories = [];
-        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            $inventories[] = $inventoryTour->inventory->id;
-        }
-        return AccommodationInventory::whereBetween('check_in', [$dateFrom, $dateTo])->whereBetween('check_out', [$dateFrom, $dateTo])->whereNotIn('id', $inventories)->get();
-    }
-
     public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
         $group = $orderCustomer->primary_group;
