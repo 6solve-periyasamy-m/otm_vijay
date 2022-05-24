@@ -2,6 +2,7 @@
 
 namespace App\Models\Accommodation;
 
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\StockRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -46,6 +47,7 @@ use StringFormatter;
  * @property-read RoomType $roomType
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @property-read AccommodationInventoryRepository $repository
  * @method static AccommodationInventoryFactory factory(...$parameters)
  * @method static Builder|AccommodationInventory newModelQuery()
  * @method static Builder|AccommodationInventory newQuery()
@@ -152,11 +154,17 @@ class AccommodationInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->roomType} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
+        return $this->repository->__toString();
     }
 
     public function getCustomerDisplayAttribute(): string
     {
         return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
+    }
+
+    public function getRepositoryAttribute(): AccommodationInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryRepository($this);
+        return $this->internal_repository;
     }
 }
