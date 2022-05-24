@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\suspended_features\suspended_24_05_2022;
 
 use App\Models\Flight\Flight;
 use App\Models\Tour\Event;
