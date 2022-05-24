@@ -8,6 +8,7 @@ use App\Models\Tour\TourCategory;
 use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\TransportComponentRepository;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
@@ -72,13 +73,13 @@ class TourTransforms implements TourTransformsInterface
         return $data;
     }
 
-    public static function getAccommodationInventoryDataTable(Tour $tour, $from = "", $to = "")
+    public static function getAccommodationInventoryDataTable(Tour $tour, $from = "", $to = ""): array
     {
         $dateFrom = null;
         $dateTo = null;
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
-        return ["data" => AccommodationComponentRepository::getAvailableBetweenDates($tour, $dateFrom, $dateTo),];
+        return ["data" => AccommodationInventoryTourRepository::getBetweenDates($tour, $dateFrom, $dateTo),];
     }
 
     public static function getActivityInventoryDataTable(Tour $tour, $from = "", $to = "")
