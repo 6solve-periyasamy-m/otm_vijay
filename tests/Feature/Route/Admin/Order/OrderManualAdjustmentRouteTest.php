@@ -6,7 +6,7 @@ use App\Models\Order\Adjustment\ManualAdjustment;
 use Tests\AuthenticatedRouteTestCase;
 use Tests\Traits\TestsOrder;
 
-class OrderManualAdjustmentTest extends AuthenticatedRouteTestCase
+class OrderManualAdjustmentRouteTest extends AuthenticatedRouteTestCase
 {
     use TestsOrder;
 

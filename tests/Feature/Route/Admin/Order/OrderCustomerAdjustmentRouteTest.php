@@ -7,7 +7,7 @@ use App\Models\Order\Adjustment\OrderCustomerAdjustment;
 use Tests\AuthenticatedRouteTestCase;
 use Tests\Traits\TestsOrder;
 
-class OrderCustomerAdjustmentTest extends AuthenticatedRouteTestCase
+class OrderCustomerAdjustmentRouteTest extends AuthenticatedRouteTestCase
 {
     use TestsOrder;
 

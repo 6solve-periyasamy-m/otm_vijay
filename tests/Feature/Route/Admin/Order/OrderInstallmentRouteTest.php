@@ -6,7 +6,7 @@ use App\Models\Order\Order;
 use Tests\AuthenticatedRouteTestCase;
 use Tests\Traits\TestsOrder;
 
-class OrderInstallmentTest extends AuthenticatedRouteTestCase
+class OrderInstallmentRouteTest extends AuthenticatedRouteTestCase
 {
     use TestsOrder;
 

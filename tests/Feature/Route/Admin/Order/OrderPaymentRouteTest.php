@@ -7,7 +7,7 @@ use App\Models\Order\Payment\Payment;
 use Tests\AuthenticatedRouteTestCase;
 use Tests\Traits\TestsOrder;
 
-class OrderPaymentTest extends AuthenticatedRouteTestCase
+class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
 {
     use TestsOrder;
 
