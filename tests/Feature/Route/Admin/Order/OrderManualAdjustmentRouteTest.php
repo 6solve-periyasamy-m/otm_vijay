@@ -31,4 +31,15 @@ class OrderManualAdjustmentRouteTest extends AuthenticatedRouteTestCase
         $orderInstallment = $this->generateManualAdjustment(100);
         $this->performAllForRoute($this->class, 'create', 'manual-adjustments.create', ['order' => $orderInstallment->order, 'manualAdjustment' => $orderInstallment,]);
     }
+
+    /**
+     * @covers \App\Http\Controllers\Models\ManualAdjustmentController::destroy
+     * @return void
+     */
+    public function testOrderCustomerAdjustmentDelete(): void
+    {
+        $orderInstallment = $this->generateManualAdjustment(100);
+        $this->performAllForDeleteRoute($this->class, 'delete', 'manual-adjustments.delete',
+            ['order' => $orderInstallment->order, 'manualAdjustment' => $orderInstallment], $orderInstallment);
+    }
 }
