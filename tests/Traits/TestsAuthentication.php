@@ -12,7 +12,7 @@ trait TestsAuthentication
     private User $user;
 
     /**
-     * @ver User The user with no permissions
+     * @var User The user with no permissions
      */
     private User $guest;
 
