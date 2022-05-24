@@ -156,7 +156,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/restore/', [OrderController::class, 'restore'])->name('orders.restore')->middleware('bouncer:Order\Order,delete');
             Route::get('/invoice', [OrderController::class, 'invoice'])->name('orders.invoice.latest')->middleware('bouncer:Order\Order,read');
             Route::get('/atol', [OrderController::class, 'atol'])->name('orders.atol')->middleware('bouncer:Order\Order,read');
-            Route::get('/occupancy', function (Order $order) { return view('pages.occupancy.manager', array_merge(StaticOrderRepository::exportRoomingData($order), ['order' => $order,])); })->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
+            Route::get('/occupancy', [OrderController::class, 'occupancy'])->name('orders.occupancy')->middleware('bouncer:Order\Order,update');
             Route::prefix('installments')->group(function () {
                 Route::get('/create', [OrderInstallmentController::class, 'create'])->name('order-installments.create')->middleware('bouncer:Order\Order,update');
                 Route::post('/create', [OrderInstallmentController::class, 'store'])->name('order-installments.store')->middleware('bouncer:Order\Order,update');

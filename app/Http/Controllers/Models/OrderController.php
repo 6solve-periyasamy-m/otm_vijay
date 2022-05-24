@@ -83,6 +83,11 @@ class OrderController extends Controller
         return $order->repository->getAtolRepository()->showAtolCertificate();
     }
 
+    public function occupancy(Order $order)
+    {
+        return view('pages.occupancy.manager', array_merge(StaticOrderRepository::exportRoomingData($order), ['order' => $order,]));
+    }
+
     public function edit(Order $order)
     {
         return view('pages.models.orders.update', ['order' => $order,]);
