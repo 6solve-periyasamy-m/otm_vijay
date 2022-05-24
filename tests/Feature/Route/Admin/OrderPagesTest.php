@@ -1,6 +1,6 @@
 <?php
 
-namespace Route;
+namespace Route\Admin;
 
 use App\Models\Order\Order;
 use Tests\AuthenticatedRouteTestCase;
