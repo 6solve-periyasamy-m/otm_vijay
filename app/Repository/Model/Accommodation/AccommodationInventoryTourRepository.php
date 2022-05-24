@@ -2,7 +2,6 @@
 
 namespace App\Repository\Model\Accommodation;
 
-use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
@@ -11,9 +10,6 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use StringFormatter;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
