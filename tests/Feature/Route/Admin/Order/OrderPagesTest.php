@@ -40,4 +40,10 @@ class OrderPagesTest extends AuthenticatedRouteTestCase
         $orderCustomer = $this->generateOrderCustomer(true);
         $this->performAllForRoute($this->class, 'create', 'orders.create', ['order' => $orderCustomer->order,]);
     }
+
+    public function testOrderOccupancy()
+    {
+        $orderCustomer = $this->generateOrderCustomer(true);
+        $this->performAllForRoute($this->class, 'update', 'orders.occupancy', ['order' => $orderCustomer->order,]);
+    }
 }
