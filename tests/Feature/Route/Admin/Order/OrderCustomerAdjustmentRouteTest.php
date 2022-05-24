@@ -34,4 +34,15 @@ class OrderCustomerAdjustmentRouteTest extends AuthenticatedRouteTestCase
         $this->performAllForRoute($this->class, 'create', 'order-customer-adjustments.create',
             ['order' => $orderInstallment->orderCustomer->order, 'orderCustomer' => $orderInstallment->orderCustomer, 'orderCustomerAdjustment' => $orderInstallment]);
     }
+
+    /**
+     * @covers \App\Http\Controllers\Models\OrderCustomerAdjustmentController::destroy
+     * @return void
+     */
+    public function testOrderCustomerAdjustmentDelete(): void
+    {
+        $orderInstallment = $this->generateOrderCustomerAdjustment(100);
+        $this->performAllForDeleteRoute($this->class, 'delete', 'order-customer-adjustments.delete',
+            ['order' => $orderInstallment->orderCustomer->order, 'orderCustomer' => $orderInstallment->orderCustomer, 'orderCustomerAdjustment' => $orderInstallment], $orderInstallment);
+    }
 }
