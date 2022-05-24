@@ -44,7 +44,7 @@ class GetBetweenDatesTest extends DatabaseTestCase
     public function testWithOneAtStartAndEnd()
     {
         $accommodation = $this->generateAccommodation();
-        $this->generateAccommodationInventory($accommodation, null, null, ['check_in' => now()->subDays(10), 'check_out' => now()->addDays(10)]);
+        $this->generateAccommodationInventory($accommodation, null, null, ['check_in' => now()->subDays(10), 'check_out' => now()->addDays(9)]);
         $between = AccommodationInventoryRepository::getBetweenDates(now()->subDays(10), now()->addDays(10));
         $this->assertEquals(1, $between->count());
     }
