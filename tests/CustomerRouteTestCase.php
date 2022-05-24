@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection LaravelFunctionsInspection */
 
 namespace Tests;
 
@@ -23,9 +23,9 @@ abstract class CustomerRouteTestCase extends AuthenticationTestCase
 
     public function performAllForRoute(string $route, array $params = [])
     {
-        print_r('Testing logged out on ' . $route . "\n");
+        env('SHOULD_LOG', true) && print_r('Testing logged out on ' . $route . "\n");
         $this->performRouteLoggedOut($route, $params);
-        print_r('Testing logged in on ' . $route . "\n");
+        env('SHOULD_LOG', true) && print_r('Testing logged in on ' . $route . "\n");
         $this->performRouteWithEverything($route, $params);
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection LaravelFunctionsInspection */
 
 namespace Tests;
 
@@ -15,13 +15,13 @@ abstract class AuthenticatedRouteTestCase extends AuthenticationTestCase
 
     public function performAllForRoute(string $class, string $action, string $route, array $params = [], int $expectedStatus = 200)
     {
-        print_r('Testing logged out on ' . $route . "\n");
+        env('SHOULD_LOG', true) && print_r('Testing logged out on ' . $route . "\n");
         $this->performRouteLoggedOut($route, $params);
-        print_r('Testing with everything on ' . $route . "\n");
+        env('SHOULD_LOG', true) && print_r('Testing with everything on ' . $route . "\n");
         $this->performRouteWithEverything($route, $params, $expectedStatus);
-        print_r('Testing without permission on ' . $route . "\n");
+        env('SHOULD_LOG', true) && print_r('Testing without permission on ' . $route . "\n");
         $this->performRouteUnauthenticated($route, $params);
-        print_r('Testing with specific permission on ' . $route . "\n");
+        env('SHOULD_LOG', true) && print_r('Testing with specific permission on ' . $route . "\n");
         $this->performRouteWithSpecific($class, $action, $route, $params, $expectedStatus);
     }
 
