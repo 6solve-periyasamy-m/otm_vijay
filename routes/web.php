@@ -245,8 +245,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     Route::prefix('accommodation')->group(function () {
         Route::get('/', [AccommodationController::class, 'index'])->name('accommodations.all')->middleware('bouncer:Accommodation\Accommodation,read');
-        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation\Accommodation,read');
-        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store')->middleware('bouncer:Accommodation\Accommodation,read');
+        Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation\Accommodation,create');
+        Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store')->middleware('bouncer:Accommodation\Accommodation,create');
 
         Route::prefix('{accommodation}')->group(function () {
             Route::get('/', [AccommodationController::class, 'view'])->name('accommodations.view')->middleware('bouncer:Accommodation\Accommodation,read');
