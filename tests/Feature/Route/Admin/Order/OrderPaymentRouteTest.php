@@ -17,7 +17,7 @@ class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
      * @covers \App\Http\Controllers\Models\PaymentController::edit
      * @return void
      */
-    public function testManualAdjustmentEdit(): void
+    public function testPaymentEdit(): void
     {
         $orderInstallment = $this->generatePayment($this->generateOrder(), 100);
         $this->performAllForRoute($this->class, 'update', 'payments.edit', ['order' => $orderInstallment->order, 'payment' => $orderInstallment,]);
@@ -27,7 +27,7 @@ class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
      * @covers \App\Http\Controllers\Models\PaymentController::create
      * @return void
      */
-    public function testManualAdjustmentCreate(): void
+    public function testPaymentCreate(): void
     {
         $orderInstallment = $this->generatePayment($this->generateOrder(), 100);
         $this->performAllForRoute($this->class, 'create', 'payments.create', ['order' => $orderInstallment->order, 'payment' => $orderInstallment,]);
