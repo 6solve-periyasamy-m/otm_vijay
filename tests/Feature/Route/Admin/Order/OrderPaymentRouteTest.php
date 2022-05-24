@@ -32,4 +32,14 @@ class OrderPaymentRouteTest extends AuthenticatedRouteTestCase
         $orderInstallment = $this->generatePayment($this->generateOrder(), 100);
         $this->performAllForRoute($this->class, 'create', 'payments.create', ['order' => $orderInstallment->order, 'payment' => $orderInstallment,]);
     }
+
+    /**
+     * @covers \App\Http\Controllers\Models\PaymentController::destroy
+     * @return void
+     */
+    public function testPaymentDelete(): void
+    {
+        $orderInstallment = $this->generatePayment($this->generateOrder(), 100);
+        $this->performAllForDeleteRoute($this->class, 'delete', 'payments.delete', ['order' => $orderInstallment->order, 'payment' => $orderInstallment,], $orderInstallment);
+    }
 }
