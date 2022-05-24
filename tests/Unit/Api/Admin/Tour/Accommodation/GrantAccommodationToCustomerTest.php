@@ -1,11 +1,15 @@
 <?php
 
-namespace Api;
+namespace Api\Admin\Tour\Accommodation;
 
 use Tests\AuthenticationTestCase;
 use Tests\Traits\TestsOrder;
 
-class AdminAddAccommodationAddonApiTest extends AuthenticationTestCase
+/**
+ * @covers \App\Http\Controllers\Api\TourComponentController::addAccommodationAddon
+ * @covers \App\Repository\Model\Accommodation\AccommodationInventoryTourRepository::grantToCustomer
+ */
+class GrantAccommodationToCustomerTest extends AuthenticationTestCase
 {
     use TestsOrder;
 
