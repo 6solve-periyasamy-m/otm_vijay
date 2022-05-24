@@ -52,4 +52,14 @@ class AccommodationRouteTest extends AuthenticatedRouteTestCase
     {
         $this->performAllForRoute($this->class, 'create', 'accommodations.create');
     }
+
+    /**
+     * @covers \App\Http\Controllers\Models\AccommodationController::destroy
+     * @return void
+     */
+    public function testAccommodationDelete(): void
+    {
+        $accommodation = $this->generateAccommodation();
+        $this->performAllForDeleteRoute($this->class, 'delete', 'accommodations.delete', ['accommodation' => $accommodation,], $accommodation);
+    }
 }
