@@ -88,4 +88,13 @@ class OrderAccommodation extends Model
         $this->cost = $swap->tour_sales_price;
         $this->save();
     }
+
+    public static function compare(OrderAccommodation $a, OrderAccommodation $b): int
+    {
+        $aStart = $a->tourComponent->inventory->check_in;
+        $bStart = $b->tourComponent->inventory->check_in;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 }

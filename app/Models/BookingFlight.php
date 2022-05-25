@@ -25,4 +25,13 @@ class BookingFlight extends Model
     {
         return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
+
+    public static function compare(BookingFlight $a, BookingFlight $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 }

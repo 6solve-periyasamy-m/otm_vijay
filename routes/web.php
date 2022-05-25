@@ -467,6 +467,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                         Route::get('/update', [AccommodationInventoryTourController::class, 'edit'])->name('accommodation-inventory-tours.edit')->middleware('bouncer:AccommodationInventoryTour,update');
                         Route::post('/update', [AccommodationInventoryTourController::class, 'update'])->name('accommodation-inventory-tours.update')->middleware('bouncer:AccommodationInventoryTour,update');
                         Route::post('/delete', [AccommodationInventoryTourController::class, 'destroy'])->name('accommodation-inventory-tours.delete')->middleware('bouncer:AccommodationInventoryTour,delete');
+                        Route::post('/restore', [AccommodationInventoryTourController::class, 'restore'])->name('accommodation-inventory-tours.restore')->middleware('bouncer:AccommodationInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
                         Route::get('/', [UpgradeController::class, 'viewAccommodationUpgrade'])->name('accommodation-upgrade.view')->middleware('bouncer:AccommodationInventoryTour,read');
@@ -487,6 +488,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                         Route::get('/update', [ActivityInventoryTourController::class, 'edit'])->name('activity-inventory-tours.edit')->middleware('bouncer:ActivityInventoryTour,update');
                         Route::post('/update', [ActivityInventoryTourController::class, 'update'])->name('activity-inventory-tours.update')->middleware('bouncer:ActivityInventoryTour,update');
                         Route::post('/delete', [ActivityInventoryTourController::class, 'destroy'])->name('activity-inventory-tours.delete')->middleware('bouncer:ActivityInventoryTour,delete');
+                        Route::post('/restore', [ActivityInventoryTourController::class, 'restore'])->name('activity-inventory-tours.restore')->middleware('bouncer:ActivityInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
                         Route::get('/', [UpgradeController::class, 'viewActivityUpgrade'])->name('activity-upgrade.view')->middleware('bouncer:ActivityInventoryTour,read');
@@ -507,6 +509,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                         Route::get('/update', [FlightInventoryTourController::class, 'edit'])->name('flight-inventory-tours.edit')->middleware('bouncer:FlightInventoryTour,update');
                         Route::post('/update', [FlightInventoryTourController::class, 'update'])->name('flight-inventory-tours.update')->middleware('bouncer:FlightInventoryTour,update');
                         Route::post('/delete', [FlightInventoryTourController::class, 'destroy'])->name('flight-inventory-tours.delete')->middleware('bouncer:FlightInventoryTour,delete');
+                        Route::post('/restore', [FlightInventoryTourController::class, 'restore'])->name('flight-inventory-tours.restore')->middleware('bouncer:FlightInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
                         Route::get('/', [UpgradeController::class, 'viewFlightUpgrade'])->name('flight-upgrade.view')->middleware('bouncer:FlightInventoryTour,read');
@@ -526,7 +529,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                         Route::get('/', [TransportInventoryTourController::class, 'view'])->name('transport-inventory-tours.view')->middleware('bouncer:TransportInventoryTour,read');
                         Route::get('/update', [TransportInventoryTourController::class, 'edit'])->name('transport-inventory-tours.edit')->middleware('bouncer:TransportInventoryTour,update');
                         Route::post('/update', [TransportInventoryTourController::class, 'update'])->name('transport-inventory-tours.update')->middleware('bouncer:TransportInventoryTour,update');
-                        Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:TransportInventoryTour,delete=');
+                        Route::post('/delete', [TransportInventoryTourController::class, 'destroy'])->name('transport-inventory-tours.delete')->middleware('bouncer:TransportInventoryTour,delete');
+                        Route::post('/restore', [TransportInventoryTourController::class, 'restore'])->name('transport-inventory-tours.restore')->middleware('bouncer:TransportInventoryTour,delete');
                     });
                     Route::prefix('upgrade/{inventoryTour}')->group(function () {
                         Route::get('/', [UpgradeController::class, 'viewTransportUpgrade'])->name('transport-upgrade.view')->middleware('bouncer:TransportInventoryTour,read');
@@ -559,6 +563,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::get('/update', [MerchandiseController::class, 'edit'])->name('merchandise.edit');
                     Route::post('/update', [MerchandiseController::class, 'update'])->name('merchandise.update');
                     Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('merchandise.delete');
+                    Route::post('/restore', [MerchandiseController::class, 'restore'])->name('merchandise.delete');
                 });
             });
         });
@@ -719,6 +724,10 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/tour-stock/{extension}', [ReportController::class, 'exportTourStockReport'])->name('reports.tour-stock.export');
         Route::get('/payments', [ReportController::class, 'getPaymentsReport'])->name('reports.payment');
         Route::get('/payments/{extension}', [ReportController::class, 'exportPaymentsReport'])->name('reports.payment.export');
+        Route::get('/flight-manifest', [ReportController::class, 'getFlightManifestReport'])->name('reports.flight-manifest');
+        Route::get('/flight-manifest/{extension}', [ReportController::class, 'exportFlightManifestReport'])->name('reports.flight-manifest.export');
+        Route::get('/activities', [ReportController::class, 'getActivitiesReport'])->name('reports.activities');
+        Route::get('/activities/{extension}', [ReportController::class, 'exportActivitiesReport'])->name('reports.activities.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');

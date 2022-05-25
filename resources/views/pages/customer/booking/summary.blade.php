@@ -54,7 +54,7 @@
         </div>
     </div>
     @foreach($customers as $customerData)
-        @if(sizeof($customerData['components']['activities']) > 0)
+        @if(sizeof($customerData['components']['accommodation']) > 0)
         <div class="card">
             <div class="card-body">
                 <h2 class="col-md-12 mb-0">Accommodation</h2>
@@ -121,7 +121,7 @@
                                 <td>{{ StringFormatter::formatCurrency($data['cost']) }}</td>
                             @endif
                             <td>
-                                @if(count($data['component']->tourComponent->getUpgradeKeyMap()) < 2)
+                                @if(count($data['component']->tourComponent->getBookingUpgradeKeyMap()) < 2)
                                     @if($data['component']->tourComponent->tour_component_type == 'Included')
                                         No Upgrades Available
                                     @elseif($data['component']->tourComponent->tour_component_type == 'Upgrade')
@@ -269,6 +269,60 @@
         @endif
         @break
     @endforeach
+    <div class="card">
+        <div class="card-body">
+            <h2 class="col-md-12 mb-0">Payment Schedule</h2>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped text-center">
+                <thead>
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Cost</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Instalment total</th>
+                    <th scope="col">Total Owed</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Due with Order</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['deposit']) }}</td>
+                    <td>{{ $billing['customers'] }}</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['today']) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($billing['today']) }}</td>
+                </tr>
+                @php
+                    /** @var \App\Models\PaymentInstallment $installment */
+                    $cumulative = $billing['today'];
+                @endphp
+                @foreach($tour->paymentInstallments as $installment)
+                    @php $cumulative += ($installment->cost * $billing['customers']) @endphp
+                    <tr @if ($installment->due_on->lt(now())) style="text-decoration: underline black;" @endif>
+                        <td>
+                            {{ StringFormatter::formatDate($installment->due_on) }}
+
+                        </td>
+                        <td>{{ StringFormatter::formatCurrency($installment->cost) }}</td>
+                        <td>{{ $billing['customers'] }}</td>
+                        <td>{{ StringFormatter::formatCurrency($installment->cost * $billing['customers']) }}</td>
+                        <td>{{ StringFormatter::formatCurrency($cumulative) }}</td>
+                    </tr>
+                @endforeach
+                @php $cumulative += ($tour->remaining_installment * $billing['customers']) @endphp
+                <tr>
+                    <td>{{ StringFormatter::formatDate($tour->final_payment) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }}</td>
+                    <td>{{ $billing['customers'] }}</td>
+                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment * $billing['customers']) }}</td>
+                    <td>{{ StringFormatter::formatCurrency($cumulative) }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="card">
         <div class="card-body">
             <h2 class="col-md-12 mb-0">Cost Summary</h2>

@@ -94,4 +94,13 @@ class OrderFlight extends Model
     {
         return $this->tourComponent->atol_string;
     }
+
+    public static function compare(OrderFlight $a, OrderFlight $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 }

@@ -494,6 +494,10 @@ class ReportFieldRepository
                         'name' => 'Booking Reference',
                         'method' => 'booking_reference',
                     ],
+                    'tour_name' => [
+                        'name' => 'Tour Name',
+                        'method' => 'tour_name',
+                    ],
                     'ordered_on' => [
                         'name' => 'Ordered On',
                         'method' => 'ordered_on',
@@ -512,6 +516,11 @@ class ReportFieldRepository
                         'name' => 'Single Occupancy Surcharge',
                         'method' => 'single_occupancy_surcharge',
                         'format' => 'currency',
+                    ],
+                    'has_surcharge' => [
+                        'name' => 'Is Single Occupancy',
+                        'method' => 'has_surcharge',
+                        'format' => 'boolean',
                     ],
                     'travel_insurer' => [
                         'name' => 'Travel Insurer',

@@ -10,7 +10,7 @@
 @section('title', 'Booking for ' . $tour->name)
 
 @section('booking-body')
-    <form class="form-horizontal form-material mx-2 row" method="post"
+    <form class="form-horizontal form-material mx-2 row v-form-validation" method="post"
           action="{{ route('customer-booking.store-customers', ['bookingUrl' => $tour->booking_form_url, 'token' => $token,]) }}">
         <div class="card">
             <div class="card-body">
@@ -67,7 +67,7 @@
                     <div class="col-md-12">
                         <input type="text" name="lead_email_address" id="lead_email_address-input"
                                value="{{ $customer?->email_address ?? '' }}"
-                               class="form-control ps-0 form-control-line" required>
+                               class="form-control ps-0 form-control-line v-email-validation-unique" required>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -85,6 +85,9 @@
                                value="{{ $customer?->mobile_number ?? '' }}"
                                class="form-control ps-0 form-control-line" autocomplete="tel" required>
                     </div>
+                </div>
+                <div class="form-group col-md-12">
+                    Sharing is designated by the selection of a room, selecting the same room as another traveller indicates that the room will be shared by those travellers
                 </div>
                 <div class="form-group col-md-6">
                     <label class="col-md-12 mb-0">Ideal Room Type</label>
@@ -279,6 +282,10 @@
                         Add Customer
                     </a>
                 </h2>
+                <br />
+                Please note that Traveller Email Addresses must be unique, please leave this blank if the email address is unknown. This will also mean that you will manage the travellers on this booking including payments and extras.
+                <br />
+                If you wish each Traveller to have the ability to manage their own booking and for their details not to be managed by the Lead Booker, then please enter a unique Email Address in order to create their own account on our Customer Portal. This can also be added post booking.
             </div>
         </div>
         @php $additionals = 0 @endphp
@@ -300,6 +307,26 @@
         const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null,])`;
         additional = {{ $additionals ?? 0 }};
         available = {{ $available - $additionals - 1}};
+
+        $(document).ready(function () {
+                $('.v-form-validation').submit(function (event) {
+                    let emails = [];
+                    let failed = false;
+                    $('.v-email-validation-unique').each(function (index) {
+                        let email = this.value.toLowerCase().trim();
+                        if (emails.includes(email)) {
+                            failed = true;
+                            alert('You have used the email ' + this.value.trim() + ' for multiple customers. Please correct this.')
+                            return false;
+                        }
+                        emails.push(email);
+                    });
+                    if (failed) {
+                        event.preventDefault();
+                    }
+                });
+            }
+        );
 
         function addCustomer() {
             if (available <= 0) {

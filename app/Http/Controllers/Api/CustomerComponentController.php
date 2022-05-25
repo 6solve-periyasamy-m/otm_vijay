@@ -59,7 +59,7 @@ class CustomerComponentController extends Controller
 
         $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
 
-        if (!isset($upgrade))
+        if (!isset($upgrade) || !$upgrade->upgrade->is_bookable)
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if ($upgrade->upgrade->tour_sales_price >= $orderComponent->cost && $orderComponent->tour_component_type != 'Included')
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
@@ -114,7 +114,7 @@ class CustomerComponentController extends Controller
 
         $upgrade = app($upgradeClass)->find($upgradeId);
 
-        if (!isset($upgrade))
+        if (!isset($upgrade) || !$upgrade->upgrade->is_bookable)
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
 
         if ($upgrade->upgrade->tour_sales_price < $orderComponent->cost
@@ -143,7 +143,7 @@ class CustomerComponentController extends Controller
 
         $upgrade = app($upgradeClass)->find($upgradeId);
 
-        if (!isset($upgrade))
+        if (!isset($upgrade) || !$upgrade->upgrade->is_bookable)
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
 
         if ($upgrade->upgrade->tour_sales_price < $orderComponent->cost

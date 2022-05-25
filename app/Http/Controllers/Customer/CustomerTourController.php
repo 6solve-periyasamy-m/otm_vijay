@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Models\AccommodationInventoryTour;
@@ -12,7 +11,11 @@ use App\Models\Customer;
 use App\Models\FlightInventoryTour;
 use App\Models\Merchandise;
 use App\Models\Order;
+use App\Models\OrderAccommodation;
+use App\Models\OrderActivity;
 use App\Models\OrderCustomer;
+use App\Models\OrderFlight;
+use App\Models\OrderTransport;
 use App\Models\TransportInventoryTour;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
@@ -73,9 +76,28 @@ class CustomerTourController extends Controller
                 break;
             }
         }
+
         if (!isset($oCustomer)) abort(404);
-        return view('pages.customer.components',
-            ['order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'orderCustomer' => $oCustomer, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
+
+        $accommodation = $oCustomer->orderAccommodation()->getIterator();
+        $accommodation->uasort([OrderAccommodation::class, 'compare']);
+        $activities = $oCustomer->orderActivities->getIterator();
+        $activities->uasort([OrderActivity::class, 'compare']);
+        $flights = $oCustomer->orderFlights->getIterator();
+        $flights->uasort([OrderFlight::class, 'compare']);
+        $transport = $oCustomer->orderTransports->getIterator();
+        $transport->uasort([OrderTransport::class, 'compare']);
+
+        return view('pages.customer.components', [
+            'order' => $order,
+            'orders' => CustomerAuthenticationRepository::getCustomer()->orders,
+            'orderCustomer' => $oCustomer,
+            'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),
+            'accommodation' => $accommodation,
+            'activities' => $activities,
+            'flights' => $flights,
+            'transports' => $transport,
+        ]);
     }
 
     public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
@@ -93,6 +115,7 @@ class CustomerTourController extends Controller
 
         $tourComponent = $this->getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
+        if (!$tourComponent->is_bookable) abort(404);
 
         if ($tourComponent->available_stock <= 0) abort(404);
 
@@ -122,6 +145,7 @@ class CustomerTourController extends Controller
 
         $tourComponent = $this->getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
+        if (!$tourComponent->is_bookable) abort(404);
 
         if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
 

@@ -78,6 +78,11 @@ class OrderCustomer extends Model
         return $this->order->cancelled;
     }
 
+    public function getTourNameAttribute(): string
+    {
+        return $this->order->tour->name;
+    }
+
     public function getBookingReferenceAttribute()
     {
         return $this->order->booking_reference;
