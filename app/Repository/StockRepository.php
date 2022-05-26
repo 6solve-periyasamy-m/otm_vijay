@@ -100,11 +100,14 @@ class StockRepository
 
     public static function getExtraStock(Merchandise $merchandise): int
     {
-        $used = 0;
-        foreach ($merchandise->orderMerchandise as $orderMerchandise) {
-            if (!$orderMerchandise->cancelled) $used++;
-        }
-        return $used;
+        $query = DB::table('order_merchandises');
+        $query->join('merchandises', 'order_merchandises.merchandise_id', '=', 'merchandises.id');
+        $query->join('order_customers', 'order_merchandises.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('merchandises.id', '=', $merchandise->id);
+        $query->where('orders.cancelled', '=', 0);
+        $query->whereNull('order_merchandises.deleted_at');
+        return $query->selectRaw("count(order_merchandises.id) as 'used_stock'")->first()->used_stock;
     }
 
 }
