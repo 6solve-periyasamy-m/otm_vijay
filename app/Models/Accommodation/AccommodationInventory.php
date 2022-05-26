@@ -44,6 +44,7 @@ use StringFormatter;
  * @property-read string $customer_display Display string to show to customers
  * @property-read int $used_on_tour_count How many tours this inventory is used on
  * @property-read int $used_stock The amount of stock that has been sold
+ * @property-read int $available_stock The amount of stock that is available to be sold
  * @property-read RoomType $roomType
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
@@ -144,7 +145,12 @@ class AccommodationInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getAccommodationStock($this);
+        return $this->repository->getUsedStock();
+    }
+
+    public function getAvailableStockAttribute(): int
+    {
+        return $this->repository->getAvailableStock();
     }
 
     public function getUsedOnTourCountAttribute(): int

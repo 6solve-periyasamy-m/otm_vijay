@@ -142,7 +142,7 @@ class AccommodationInventoryTour extends Model
 
     public function getAvailableStockAttribute(): int
     {
-        return $this->inventory->stock - $this->inventory->used_stock;
+        return $this->inventory->available_stock;
     }
 
     public function addToOrder(Group $group): OrderAccommodation

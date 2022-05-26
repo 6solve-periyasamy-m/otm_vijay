@@ -41,6 +41,27 @@ class AccommodationInventoryRepository extends InventoryRepository
         return AccommodationInventory::whereBetween('check_in', [$from, $to])->whereBetween('check_out', [$from, $to])->whereNotIn('id', $inventories)->get();
     }
 
+    public function getUsedStock(): int
+    {
+        $used = 0;
+        foreach ($this->inventory->tourComponents as $component) {
+            foreach ($component->orders as $orderComponent) {
+                if (!$orderComponent->cancelled) $used++;
+            }
+        }
+        return $used;
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->inventory->stock;
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->getTotalStock() - $this->getUsedStock();
+    }
+
     public function get(): AccommodationInventory
     {
         return $this->inventory;

@@ -15,22 +15,6 @@ class StockRepository
     // Possible Optimization: SQL count query rather than O(n^2) nested for loops
 
     /**
-     * Get the amount of used stock for an AccommodationInventory
-     * @param AccommodationInventory $inventory The inventory to check
-     * @returns int The amount of stock that has been used
-     */
-    public static function getAccommodationStock(AccommodationInventory $inventory): int
-    {
-        $used = 0;
-        foreach ($inventory->tourComponents as $component) {
-            foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->cancelled) $used++;
-            }
-        }
-        return $used;
-    }
-
-    /**
      * Get the amount of used stock for an ActivityInventory
      * @param ActivityInventory $inventory The inventory to check
      * @return int The amount of stock that has been used
