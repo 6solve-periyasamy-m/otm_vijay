@@ -132,7 +132,7 @@ class AccommodationInventoryTour extends Model
     {
         $inventory = $this->accommodationInventory;
         $component = $inventory->accommodation;
-        return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
+        return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
     public function getTourNameAttribute(): string
@@ -164,11 +164,11 @@ class AccommodationInventoryTour extends Model
             $included =  $this->parent();
         }
         if ($included->available_stock > $required-1) {
-            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+            $keys[0] = 'Included - ' . f_currency(0);
         }
         foreach ($upgrades as $upgrade) {
             if ($upgrade->upgrade->available_stock <= $required-1) continue;
-            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
     }
@@ -187,7 +187,7 @@ class AccommodationInventoryTour extends Model
             if (!$upgrade->upgrade->is_bookable) continue;
             if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
-                $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+                $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
             }
         }
         return $keys;

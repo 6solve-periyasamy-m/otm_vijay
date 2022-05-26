@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if (!function_exists('sigfig')) {
     function sigfig($number, $figures = 2): float
     {
@@ -30,5 +32,42 @@ if (!function_exists('flag')) {
     function flag(string $key, bool $default = false): bool
     {
         return Settings::getBoolean($key, $default);
+    }
+}
+
+if (!function_exists('f_currency')) {
+    /**
+     * Alias for StringFormatter::formatCurrency
+     * @param float $amount
+     * @param $currency
+     * @return string
+     */
+    function f_currency(float $amount, $currency = null): string
+    {
+        return StringFormatter::formatCurrency($amount, $currency);
+    }
+}
+
+if (!function_exists('f_date')) {
+    /**
+     * Alias for StringFormatter::formatDate
+     * @param Carbon $date
+     * @return string
+     */
+    function f_date(Carbon $date): string
+    {
+        return StringFormatter::formatDate($date);
+    }
+}
+
+if (!function_exists('f_datetime')) {
+    /**
+     * Alias for StringFormatter::formatDateTime
+     * @param Carbon $date
+     * @return string
+     */
+    function f_datetime(Carbon $date): string
+    {
+        return StringFormatter::formatDateTime($date);
     }
 }

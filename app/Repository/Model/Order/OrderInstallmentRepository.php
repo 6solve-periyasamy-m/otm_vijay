@@ -56,6 +56,6 @@ class OrderInstallmentRepository extends ModelRepository
 
     public function __toString(): string
     {
-        return StringFormatter::formatDate($this->installment->due_on) . ' - ' . StringFormatter::formatCurrency($this->installment->calculated_amount);
+        return f_date($this->installment->due_on) . ' - ' . f_currency($this->installment->calculated_amount);
     }
 }

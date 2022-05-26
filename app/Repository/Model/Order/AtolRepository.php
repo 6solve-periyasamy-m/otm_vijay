@@ -34,7 +34,7 @@ class AtolRepository
         $pdf->fillForm([
             'companyName' => setting('company.name'),
             'issuerName' => setting('atol.issuer'),
-            'issueDate' => StringFormatter::formatDate($this->order->ordered_on),
+            'issueDate' => f_date($this->order->ordered_on),
             'atolNumber' => setting('atol.number'),
             'reference' => $this->order->booking_reference,
             'customerNames' => $this->order->customer_names,

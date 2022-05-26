@@ -110,6 +110,6 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         $inventory = $this->inventoryTour->accommodationInventory;
         $component = $inventory->accommodation;
-        return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
+        return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 }

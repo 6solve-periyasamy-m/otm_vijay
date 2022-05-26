@@ -165,7 +165,7 @@ class AccommodationInventory extends Model
 
     public function getCustomerDisplayAttribute(): string
     {
-        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
+        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . f_datetime($this->check_in) . " to " . f_datetime($this->check_out) . ")";
     }
 
     public function getRepositoryAttribute(): AccommodationInventoryRepository

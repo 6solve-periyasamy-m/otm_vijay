@@ -137,6 +137,6 @@ class ActivityInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->ticketType} (" . StringFormatter::formatDateTime($this->starts_at) . " to " . StringFormatter::formatDateTime($this->ends_at) . ")";
+        return "{$this->component} - {$this->ticketType} (" . f_datetime($this->starts_at) . " to " . f_datetime($this->ends_at) . ")";
     }
 }

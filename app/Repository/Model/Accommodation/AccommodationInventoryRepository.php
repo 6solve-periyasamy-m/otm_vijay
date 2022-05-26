@@ -91,6 +91,6 @@ class AccommodationInventoryRepository extends InventoryRepository
 
     public function __toString(): string
     {
-        return "{$this->inventory->component} - {$this->inventory->roomType} {$this->inventory->boardType} (" . StringFormatter::formatDateTime($this->inventory->check_in) . " to " . StringFormatter::formatDateTime($this->inventory->check_out) . ")";
+        return "{$this->inventory->component} - {$this->inventory->roomType} {$this->inventory->boardType} (" . f_datetime($this->inventory->check_in) . " to " . f_datetime($this->inventory->check_out) . ")";
     }
 }

@@ -184,7 +184,7 @@ class InvoiceRepository
         }
         $data[] = [
             'due' => $order->tour->final_payment,
-            'description' => 'Remaining Balance: ' . StringFormatter::formatCurrency($order->remaining_installment),
+            'description' => 'Remaining Balance: ' . f_currency($order->remaining_installment),
             'amount' => $order->remaining_installment,
             'paid' => $order->paid >= $order->cost,
         ];
@@ -194,6 +194,6 @@ class InvoiceRepository
     private static function buildInstallmentString(string $type, Order $order, float $amount, float $calculated): string
     {
         return "{$type}: {$order->customer_count} Customer" . ($order->customer_count > 1 ? 's' : '')
-            . " x " . StringFormatter::formatCurrency($amount) . " = " . StringFormatter::formatCurrency($calculated);
+            . " x " . f_currency($amount) . " = " . f_currency($calculated);
     }
 }

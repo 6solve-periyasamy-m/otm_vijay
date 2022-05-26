@@ -45,6 +45,6 @@ class AccommodationInventoryTourUpgradeRepository extends ComponentUpgradeReposi
 
     public function __toString(): string
     {
-        return "{$this->upgrade->description} - " . StringFormatter::formatCurrency($this->upgrade->upgrade->tour_sales_price);
+        return "{$this->upgrade->description} - " . f_currency($this->upgrade->upgrade->tour_sales_price);
     }
 }

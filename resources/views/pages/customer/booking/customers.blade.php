@@ -2,8 +2,8 @@
 
 @php
     /**
-     * @var \App\Models\Tour $tour
-     * @var \App\Models\Customer|null $customer
+     * @var \App\Models\Tour\Tour $tour
+     * @var \App\Models\Customer\Customer|null $customer
      */
 @endphp
 
@@ -249,7 +249,7 @@
                         <select name="outbound" class="w-100">
                             @foreach($flights['outbound'] as $flight)
                                 <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
-                                    {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
+                                    {{ $flight['details'] }} - {{ f_currency($flight['cost']) }}
                                 </option>
                             @endforeach
                         </select>
@@ -265,7 +265,7 @@
                         <select name="inbound" class="w-100" required>
                             @foreach($flights['inbound'] as $flight)
                                 <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
-                                    {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
+                                    {{ $flight['details'] }} - {{ f_currency($flight['cost']) }}
                                 </option>
                             @endforeach
                         </select>

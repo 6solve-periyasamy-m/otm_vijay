@@ -1,6 +1,6 @@
 <tr>
     <td><a href="{{ route('customers.view', ['customer' => $customer,]) }}">{{ $name }}</a></td>
-    <td>{{ StringFormatter::formatDate($date_of_birth) }}</td>
+    <td>{{ f_date($date_of_birth) }}</td>
     <td>{{ $home_address }}</td>
     <td>{{ $mobile_number }}</td>
     <td>{{ $passport_expiry_date }}</td>

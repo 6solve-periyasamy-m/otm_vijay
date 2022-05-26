@@ -80,7 +80,7 @@
                                 <td colspan="2">{{ $data['type'] }}</td>
                             @else
                                 <td>{{ $data['type'] }}</td>
-                                <td>{{ StringFormatter::formatCurrency($data['cost']) }}</td>
+                                <td>{{ f_currency($data['cost']) }}</td>
                             @endif
                         </tr>
                     @endforeach
@@ -118,7 +118,7 @@
                                 <td colspan="2">{{ $data['type'] }}</td>
                             @else
                                 <td>{{ $data['type'] }}</td>
-                                <td>{{ StringFormatter::formatCurrency($data['cost']) }}</td>
+                                <td>{{ f_currency($data['cost']) }}</td>
                             @endif
                             <td>
                                 @if(count($data['component']->tourComponent->getBookingUpgradeKeyMap()) < 2)
@@ -172,7 +172,7 @@
                                 <td colspan="2">{{ $data['type'] }}</td>
                             @else
                                 <td>{{ $data['type'] }}</td>
-                                <td>{{ StringFormatter::formatCurrency($data['cost']) }}</td>
+                                <td>{{ f_currency($data['cost']) }}</td>
                             @endif
                         </tr>
                     @endforeach
@@ -207,7 +207,7 @@
                                 <td colspan="2">{{ $data['type'] }}</td>
                             @else
                                 <td>{{ $data['type'] }}</td>
-                                <td>{{ StringFormatter::formatCurrency($data['cost']) }}</td>
+                                <td>{{ f_currency($data['cost']) }}</td>
                             @endif
                         </tr>
                     @endforeach
@@ -245,7 +245,7 @@
                                     {{ $bookingComponent['type'] }}
                                 </td>
                                 <td>
-                                    {{ StringFormatter::formatCurrency($bookingComponent['cost']) }}
+                                    {{ f_currency($bookingComponent['cost']) }}
                                 </td>
                             @endif
                             <td>
@@ -289,35 +289,35 @@
                 <tbody>
                 <tr>
                     <td>Due with Order</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['deposit']) }}</td>
+                    <td>{{ f_currency($billing['deposit']) }}</td>
                     <td>{{ $billing['customers'] }}</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['today']) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['today']) }}</td>
+                    <td>{{ f_currency($billing['today']) }}</td>
+                    <td>{{ f_currency($billing['today']) }}</td>
                 </tr>
                 @php
-                    /** @var \App\Models\PaymentInstallment $installment */
+                    /** @var \App\Models\Tour\PaymentInstallment $installment */
                     $cumulative = $billing['today'];
                 @endphp
                 @foreach($tour->paymentInstallments as $installment)
                     @php $cumulative += ($installment->cost * $billing['customers']) @endphp
                     <tr @if ($installment->due_on->lt(now())) style="text-decoration: underline black;" @endif>
                         <td>
-                            {{ StringFormatter::formatDate($installment->due_on) }}
+                            {{ f_date($installment->due_on) }}
 
                         </td>
-                        <td>{{ StringFormatter::formatCurrency($installment->cost) }}</td>
+                        <td>{{ f_currency($installment->cost) }}</td>
                         <td>{{ $billing['customers'] }}</td>
-                        <td>{{ StringFormatter::formatCurrency($installment->cost * $billing['customers']) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($cumulative) }}</td>
+                        <td>{{ f_currency($installment->cost * $billing['customers']) }}</td>
+                        <td>{{ f_currency($cumulative) }}</td>
                     </tr>
                 @endforeach
                 @php $cumulative += ($tour->remaining_installment * $billing['customers']) @endphp
                 <tr>
-                    <td>{{ StringFormatter::formatDate($tour->final_payment) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }}</td>
+                    <td>{{ f_date($tour->final_payment) }}</td>
+                    <td>{{ f_currency($tour->remaining_installment) }}</td>
                     <td>{{ $billing['customers'] }}</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment * $billing['customers']) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($cumulative) }}</td>
+                    <td>{{ f_currency($tour->remaining_installment * $billing['customers']) }}</td>
+                    <td>{{ f_currency($cumulative) }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -342,35 +342,35 @@
                 <tbody>
                 <tr>
                     <td>Base Cost</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['cost']) }}</td>
+                    <td>{{ f_currency($billing['cost']) }}</td>
                     <td>{{ $billing['customers'] }}</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['cost'] * $billing['customers']) }}</td>
+                    <td>{{ f_currency($billing['cost'] * $billing['customers']) }}</td>
                 </tr>
                 @if($billing['additionals'] > 0)
                 <tr>
                     <td>Additional Costs (As Above)</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['additionals'] / $billing['customers']) }}</td>
+                    <td>{{ f_currency($billing['additionals'] / $billing['customers']) }}</td>
                     <td>{{ $billing['customers'] }}</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['additionals']) }}</td>
+                    <td>{{ f_currency($billing['additionals']) }}</td>
                 </tr>
                 @endif
                 @if($billing['single_occupants'] > 0)
                 <tr>
                     <td>Single Occupancy Surcharge</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['surcharge'])}}</td>
+                    <td>{{ f_currency($billing['surcharge'])}}</td>
                     <td>{{ $billing['single_occupants'] }}</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['surcharge'] * $billing['single_occupants']) }}</td>
+                    <td>{{ f_currency($billing['surcharge'] * $billing['single_occupants']) }}</td>
                 </tr>
                 @endif
                 <tr>
                     <td colspan="3">Total Cost</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['total']) }}</td>
+                    <td>{{ f_currency($billing['total']) }}</td>
                 </tr>
                 <tr>
                     <td>Deposit (Due Today)</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['deposit']) }}</td>
+                    <td>{{ f_currency($billing['deposit']) }}</td>
                     <td>{{ $billing['customers'] }}</td>
-                    <td>{{ StringFormatter::formatCurrency($billing['today']) }}</td>
+                    <td>{{ f_currency($billing['today']) }}</td>
                 </tr>
                 </tbody>
             </table>

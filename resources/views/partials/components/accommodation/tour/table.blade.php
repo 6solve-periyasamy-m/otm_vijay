@@ -61,11 +61,11 @@
             <td>{{ $inventory->roomType }}</td>
             <td>{{ $inventory->boardType }}</td>
             <td>
-                {{ StringFormatter::formatDateTime($inventory->check_in) }}&nbsp
+                {{ f_datetime($inventory->check_in) }}&nbsp
                 <input type="checkbox" disabled @if($inventory->check_in_time_confirmed == 1) checked @endif>
             </td>
             <td>
-                {{ StringFormatter::formatDateTime($inventory->check_out) }}&nbsp
+                {{ f_datetime($inventory->check_out) }}&nbsp
                 <input type="checkbox" disabled @if($inventory->check_out_time_confirmed == 1) checked @endif>
             </td>
             <td>
@@ -75,8 +75,8 @@
                 {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
                 ({{$inventory->used_stock}} Sold)
             </td>
-            <td>{{ StringFormatter::formatCurrency($inventory->purchase_price) }}</td>
-            <td>{{ StringFormatter::formatCurrency($inventory->sales_price) }}</td>
+            <td>{{ f_currency($inventory->purchase_price) }}</td>
+            <td>{{ f_currency($inventory->sales_price) }}</td>
             <td>{{ $inventory->notes }}</td>
         </tr>
     @endforeach

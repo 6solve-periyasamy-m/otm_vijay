@@ -36,11 +36,11 @@
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
                     <td>
-                        {{ StringFormatter::formatDateTime($accommodationInventory->check_in) }}&nbsp
+                        {{ f_datetime($accommodationInventory->check_in) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_in_time_confirmed == 1) checked @endif>
                     </td>
                     <td>
-                        {{ StringFormatter::formatDateTime($accommodationInventory->check_out) }}&nbsp
+                        {{ f_datetime($accommodationInventory->check_out) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_out_time_confirmed == 1) checked @endif>
                     </td>
                     <td>
@@ -50,8 +50,8 @@
                         {{$accommodationInventory->stock - $accommodationInventory->used_stock}}/{{ $accommodationInventory->stock }}<br/>
                         ({{$accommodationInventory->used_stock}} Sold)
                     </td>
-                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->purchase_price) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->sales_price) }}</td>
+                    <td>{{ f_currency($accommodationInventory->purchase_price) }}</td>
+                    <td>{{ f_currency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\Accommodation\AccommodationInventory::class)

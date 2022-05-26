@@ -34,7 +34,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($order->tour->date_from) . " to " . StringFormatter::formatDate($order->tour->date_to) }}</h6>
+            <h6 class="fw-bold">{{ f_date($order->tour->date_from) . " to " . f_date($order->tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
@@ -44,23 +44,23 @@
             <p>Order Value</p>
             <h6 class="fw-bold">
                 @if($order->cancelled)
-                    {{ StringFormatter::formatCurrency($order->total) }} ({{ StringFormatter::formatCurrency($order->cost) }} before cancellation)
+                    {{ f_currency($order->total) }} ({{ f_currency($order->cost) }} before cancellation)
                 @else
-                    {{ StringFormatter::formatCurrency($order->cost + $order->total_adjustments) }} ({{ StringFormatter::formatCurrency($order->cost) }} before adjustments)
+                    {{ f_currency($order->cost + $order->total_adjustments) }} ({{ f_currency($order->cost) }} before adjustments)
                 @endif
             </h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Paid</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->paid) }}</h6>
+            <h6 class="fw-bold">{{ f_currency($order->paid) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Balance Outstanding</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatCurrency($order->remaining) }}</h6>
+            <h6 class="fw-bold">{{ f_currency($order->remaining) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Next Payment Due</p>
-            <h6 class="fw-bold">{{ $order->next_installment !== null ? StringFormatter::formatDate($order->next_installment->due_on) . ' - ' . StringFormatter::formatCurrency($order->next_installment->amount) : 'All installments paid' }}</h6>
+            <h6 class="fw-bold">{{ $order->next_installment !== null ? f_date($order->next_installment->due_on) . ' - ' . f_currency($order->next_installment->amount) : 'All installments paid' }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Internal Notes</p>
@@ -136,7 +136,7 @@
                         @endcan
                     </h6>
                     <p>Born</p>
-                    <h6 class="fw-bold">{{ StringFormatter::formatDate($ordersCustomer->customer->date_of_birth) }}</h6>
+                    <h6 class="fw-bold">{{ f_date($ordersCustomer->customer->date_of_birth) }}</h6>
                     <p>Passport Number</p>
                     <h6 class="fw-bold">{{ $ordersCustomer->customer->passport_number ?? 'Not Set' }}</h6>
                 </div>
@@ -188,8 +188,8 @@
                                     <td>{{ $payment->payment_type }}</td>
                                     <td>{{ $payment->paymentMethod->name }}</td>
                                     <td>{{ $payment->customer->full_name }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($payment->amount) }}</td>
-                                    <td>{{ StringFormatter::formatDateTime($payment->paid_on) }}</td>
+                                    <td>{{ f_currency($payment->amount) }}</td>
+                                    <td>{{ f_datetime($payment->paid_on) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
@@ -231,25 +231,25 @@
                             @foreach($order->orderCustomers as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
-                                <td>{{ StringFormatter::formatCurrency($ordersCustomer->tour_cost) }}</td>
+                                <td>{{ f_currency($ordersCustomer->tour_cost) }}</td>
                             </tr>
                             @if($ordersCustomer->has_surcharge)
                                 <tr>
                                     <td>Single Occupancy Surcharge: {{ $ordersCustomer->customer->full_name }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($ordersCustomer->single_occupancy_surcharge) }}</td>
+                                    <td>{{ f_currency($ordersCustomer->single_occupancy_surcharge) }}</td>
                                 </tr>
                             @endif
                             @endforeach
                             @foreach($order->getAdditionalCosts()['upgrades'] as $upgrade)
                                 <tr>
                                     <td>Upgrade: {{ $upgrade['description'] }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade['upgrade']->cost) }}</td>
+                                    <td>{{ f_currency($upgrade['upgrade']->cost) }}</td>
                                 </tr>
                             @endforeach
                             @foreach($order->getAdditionalCosts()['addons'] as $addon)
                                 <tr>
                                     <td>Add-on: {{ $addon['description'] }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($addon['addon']->cost) }}</td>
+                                    <td>{{ f_currency($addon['addon']->cost) }}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -287,7 +287,7 @@
                             <tr>
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
-                                <td>{{ StringFormatter::formatCurrency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
+                                <td>{{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
                                 <td>{{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}</td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
@@ -298,8 +298,8 @@
                             @foreach($order->installments as $installment)
                                 <tr>
                                     <th scope="row">Installment</th>
-                                    <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
+                                    <td>{{ f_date($installment->due_on) }}</td>
+                                    <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
                                     <td>{{ StringFormatter::formatBoolean($installment->paid) }}</td>
                                     <td class="actions">
                                         <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
@@ -317,8 +317,8 @@
                             @endforeach
                             <tr>
                                 <th scope="row">Remaining Balance</th>
-                                <td>{{ StringFormatter::formatDate($order->tour->final_payment) }}</td>
-                                <td>{{ StringFormatter::formatCurrency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
+                                <td>{{ f_date($order->tour->final_payment) }}</td>
+                                <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
                                 <td>{{ StringFormatter::formatBoolean($order->remaining <= 0) }}</td>
                                 <td class="actions">
                                     <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
@@ -356,7 +356,7 @@
                             </thead>
                             @foreach($order->adjustments as $adjustment)
                                 <tr>
-                                    <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
+                                    <td>{{ f_currency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Adjustment\ManualAdjustment::class)
@@ -402,7 +402,7 @@
                                 @foreach($ordersCustomer->adjustments as $adjustment)
                                 <tr>
                                     <td>{{ $ordersCustomer->customer->first_name .  " " . $ordersCustomer->customer->last_name }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
+                                    <td>{{ f_currency($adjustment->amount) }}</td>
                                     <td>{{ $adjustment->reason }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)

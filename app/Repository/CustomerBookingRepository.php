@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Events\Order\OrderCreatedEvent;
 use App\Models\Booking\AccommodationGroup;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
@@ -13,6 +12,7 @@ use App\Models\Booking\BookingFlight;
 use App\Models\Booking\BookingTransport;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Tour\Merchandise;
@@ -26,7 +26,6 @@ use App\Models\Tour\Tour;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 use Log;
-use StringFormatter;
 use Throwable;
 
 class CustomerBookingRepository
@@ -390,7 +389,7 @@ class CustomerBookingRepository
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['accommodation'][] = [
-                    'time' => StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out),
+                    'time' => f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out),
                     'description' => $inventory->component->name . ' (' . $inventory->component->address?->region . ', ' . $inventory->component->address?->country?->name . ') (' . $inventory->boardType . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
@@ -405,7 +404,7 @@ class CustomerBookingRepository
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['activities'][] = [
-                    'time' => StringFormatter::formatDateTime($inventory->starts_at) . ' to ' . StringFormatter::formatDateTime($inventory->ends_at),
+                    'time' => f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at),
                     'description' => $inventory->component->name . ' (' . $inventory->component->address . ')' . ' (' . $inventory->ticketType . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
@@ -420,7 +419,7 @@ class CustomerBookingRepository
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['flights'][] = [
-                    'time' => StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at),
+                    'time' => f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->arrives_at),
                     'description' => $inventory->component->departureAirport . ' to ' . $inventory->component->arrivalAirport . ' (' . $inventory->travelClass . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,
@@ -435,7 +434,7 @@ class CustomerBookingRepository
                 $tourComponent = $bookingComponent->tourComponent;
                 $inventory = $tourComponent->inventory;
                 $summary['customers'][$bookingComponent->customer_id]['components']['transport'][] = [
-                    'time' => StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at),
+                    'time' => f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at),
                     'description' => $inventory->component->name . ' (' . $inventory->component->transportType . ') (' . $inventory->travelClass . ')',
                     'type' => $tourComponent->tour_component_type,
                     'cost' => $tourComponent->tour_component_type == 'Included' ? 0 : $tourComponent->tour_sales_price,

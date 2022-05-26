@@ -11,11 +11,11 @@ $next = $order->next_installment;
                 <div class="row">
                     <p class="heading">Payment Balance</p>
                     <div class="col-md-4">
-                        <p class="payment-value">{{ StringFormatter::formatCurrency($order->total) }}</p>
+                        <p class="payment-value">{{ f_currency($order->total) }}</p>
                         <label class="payment-label">Total Order Value</label>
                     </div>
                     <div class="col-md-4">
-                        <p class="payment-value">{{ StringFormatter::formatCurrency($order->remaining) }}</p>
+                        <p class="payment-value">{{ f_currency($order->remaining) }}</p>
                         <label class="payment-label">Balance Outstanding</label>
                     </div>
                     <div class="col-md-4">
@@ -53,10 +53,10 @@ $next = $order->next_installment;
                                 {{ $payment->payment_type }}
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatDate($payment->paid_on) }}
+                                {{ f_date($payment->paid_on) }}
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatCurrency($payment->amount) }}
+                                {{ f_currency($payment->amount) }}
                             </div>
                             <div class="col-3">
                                 {{ $payment->paymentMethod }}
@@ -95,7 +95,7 @@ $next = $order->next_installment;
                             With Order
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatCurrency($order->calculated_deposit) }}
+                            {{ f_currency($order->calculated_deposit) }}
                         </div>
                         <div class="col-3">
                             {{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}
@@ -107,10 +107,10 @@ $next = $order->next_installment;
                                 Instalment
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatDate($installment->due_on) }}
+                                {{ f_date($installment->due_on) }}
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatCurrency($installment->calculated_amount) }}
+                                {{ f_currency($installment->calculated_amount) }}
                             </div>
                             <div class="col-3">
                                 {{ StringFormatter::formatBoolean($installment->paid) }}
@@ -122,10 +122,10 @@ $next = $order->next_installment;
                             Remaining
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatDate($order->tour->final_payment) }}
+                            {{ f_date($order->tour->final_payment) }}
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatCurrency($order->remaining_installment) }}
+                            {{ f_currency($order->remaining_installment) }}
                         </div>
                         <div class="col-3">
                             {{ StringFormatter::formatBoolean($order->remaining <= 0) }}
@@ -144,13 +144,13 @@ $next = $order->next_installment;
                     <div class="col-md-6">
                         <p class="payment-value">
                             <a href="" class="text-dark" onclick="event.preventDefault();$('.amount-input').val({{$next->amount}})">
-                                {{ StringFormatter::formatCurrency($next->amount) }}
+                                {{ f_currency($next->amount) }}
                             </a>
                         </p>
                         <label class="payment-label">Amount due to fulfil next instalment</label>
                     </div>
                     <div class="col-md-6">
-                        <p class="payment-value">{{ StringFormatter::formatDate($next->due_on) }}</p>
+                        <p class="payment-value">{{ f_date($next->due_on) }}</p>
                         <label class="payment-label">Due by</label>
                     </div>
                 </div>

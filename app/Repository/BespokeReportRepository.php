@@ -122,16 +122,16 @@ class BespokeReportRepository
         if (!isset($data)) return 'Not Set';
         switch ($format) {
             case 'date':
-                $data = StringFormatter::formatDate($data);
+                $data = f_date($data);
                 break;
             case 'datetime':
-                $data = StringFormatter::formatDateTime($data);
+                $data = f_datetime($data);
                 break;
             case 'boolean':
                 $data = StringFormatter::formatBoolean($data);
                 break;
             case 'currency':
-                $data = StringFormatter::formatCurrency($data);
+                $data = f_currency($data);
                 break;
             case 'asset':
                 $data = asset($data);

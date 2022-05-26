@@ -169,6 +169,6 @@ class FlightInventory extends Model
 
     public function __toString(): string
     {
-        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . StringFormatter::formatDateTime($this->departs_at) . " to " . StringFormatter::formatDateTime($this->arrives_at) . ")";
+        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . f_datetime($this->departs_at) . " to " . f_datetime($this->arrives_at) . ")";
     }
 }

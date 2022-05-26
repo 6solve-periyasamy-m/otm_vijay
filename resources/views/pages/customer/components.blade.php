@@ -218,7 +218,7 @@
                             </thead>
                             @foreach($accommodation as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->accommodation_inventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodation_inventory->check_out) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderComponent->accommodation_inventory->check_in) }} to {{ f_datetime($orderComponent->accommodation_inventory->check_out) }}</td>
                                     <td>{{ $orderComponent->accommodation->name }}</td>
                                     <td>{{ $orderComponent->accommodation_inventory->roomType->name }}, {{ $orderComponent->accommodation_inventory->boardType->name }}</td>
                                     <td>{{ empty($orderComponent->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderComponent->group->getMembers($orderCustomer) }}</td>
@@ -231,7 +231,7 @@
                                             {{ $orderComponent->tourComponent->tour_component_type }}
                                         </td>
                                         <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                            {{ f_currency($orderComponent->cost) }}
                                         </td>
                                     @endif
                                     <td style="width: 20%">
@@ -283,7 +283,7 @@
                             </thead>
                             @foreach($activities as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->activity_inventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activity_inventory->ends_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderComponent->activity_inventory->starts_at) }} to {{ f_datetime($orderComponent->activity_inventory->ends_at) }}</td>
                                     <td>{{ $orderComponent->activity->name }}</td>
                                     <td>{{ $orderComponent->activity_inventory->ticketType->name }}</td>
                                     @if($orderComponent->tourComponent->tour_component_type === 'Included')
@@ -295,7 +295,7 @@
                                             {{ $orderComponent->tourComponent->tour_component_type }}
                                         </td>
                                         <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                            {{ f_currency($orderComponent->cost) }}
                                         </td>
                                     @endif
                                     <td style="width: 20%">
@@ -347,7 +347,7 @@
                             </thead>
                             @foreach($flights as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->flight_inventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flight_inventory->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderComponent->flight_inventory->departs_at) }} to {{ f_datetime($orderComponent->flight_inventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->flight_inventory->flight_number }}</td>
                                     <td>{{ $orderComponent->flight->departureAirport->name }} to {{ $orderComponent->flight->arrivalAirport->name }}</td>
                                     <td>{{ $orderComponent->flight_inventory->travelClass->name }}</td>
@@ -360,7 +360,7 @@
                                             {{ $orderComponent->tourComponent->tour_component_type }}
                                         </td>
                                         <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                            {{ f_currency($orderComponent->cost) }}
                                         </td>
                                     @endif
                                     <td style="width: 20%">
@@ -413,7 +413,7 @@
                             </thead>
                             @foreach($transports as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->transport_inventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transport_inventory->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderComponent->transport_inventory->departs_at) }} to {{ f_datetime($orderComponent->transport_inventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->transport->name }}</td>
                                     <td>{{ $orderComponent->transport->transportType->name }}</td>
                                     <td>{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
@@ -427,7 +427,7 @@
                                             {{ $orderComponent->tourComponent->tour_component_type }}
                                         </td>
                                         <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                            {{ f_currency($orderComponent->cost) }}
                                         </td>
                                     @endif
                                     <td style="width: 20%">
@@ -485,7 +485,7 @@
                                         {{ $orderComponent['type'] }}
                                     </td>
                                     <td>
-                                        {{ StringFormatter::formatCurrency($orderComponent['cost']) }}
+                                        {{ f_currency($orderComponent['cost']) }}
                                     </td>
                                 @endif
                                 <td>

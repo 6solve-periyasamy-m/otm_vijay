@@ -33,8 +33,8 @@
             @foreach($activity->activityInventory as $activityInventory)
                 <tr>
                     <td>{{ $activityInventory->ticketType->name }}</td>
-                    <td>{{ StringFormatter::formatDateTime($activityInventory->starts_at) }}</td>
-                    <td>{{ StringFormatter::formatDateTime($activityInventory->ends_at) }}</td>
+                    <td>{{ f_datetime($activityInventory->starts_at) }}</td>
+                    <td>{{ f_datetime($activityInventory->ends_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($activityInventory->fit_selectable == 1) checked @endif>
                     </td>
@@ -42,8 +42,8 @@
                         {{$activityInventory->stock - $activityInventory->used_stock}}/{{ $activityInventory->stock }}<br/>
                         ({{$activityInventory->used_stock}} Sold)
                     </td>
-                    <td>{{ StringFormatter::formatCurrency($activityInventory->purchase_price) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($activityInventory->sales_price) }}</td>
+                    <td>{{ f_currency($activityInventory->purchase_price) }}</td>
+                    <td>{{ f_currency($activityInventory->sales_price) }}</td>
                     <td>{{ $activityInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\Activity\ActivityInventory::class)

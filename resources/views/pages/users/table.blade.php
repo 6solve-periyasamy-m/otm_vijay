@@ -45,9 +45,9 @@
                     <tr>
                         <th scope="row">{{ $user->name }}</th>
                         <td>{{ $user->email }}</td>
-                        <td>{{ StringFormatter::formatDateTime($user->email_verified_at) }}</td>
+                        <td>{{ f_datetime($user->email_verified_at) }}</td>
                         <td>{{ $user->roles->implode('title', ', ') }}</td>
-                        <td>{{ StringFormatter::formatDateTime($user->created_at) }}</td>
+                        <td>{{ f_datetime($user->created_at) }}</td>
                         @can('update', \App\Models\User::class)
                             @if(Auth::user()->getHighestRoleLevel() > $user->getHighestRoleLevel() || Auth::user()->id == $user->id)
                             <td>
