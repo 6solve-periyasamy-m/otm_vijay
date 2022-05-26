@@ -73,13 +73,15 @@ class StockRepository
      */
     public static function getTransportStock(TransportInventory $inventory): int
     {
-        $used = 0;
-        foreach ($inventory->tourComponents as $component) {
-            foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->cancelled) $used++;
-            }
-        }
-        return $used;
+        $query = DB::table('order_transports');
+        $query->join('transport_inventory_tours', 'order_transports.transport_inventory_tour_id', '=', 'transport_inventory_tours.id');
+        $query->join('transport_inventories', 'transport_inventory_tours.transport_inventory_id', '=', 'transport_inventories.id');
+        $query->join('order_customers', 'order_transports.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('transport_inventories.id', '=', $inventory->id);
+        $query->where('orders.cancelled', '=', 0);
+        $query->whereNull('order_transports.deleted_at');
+        return $query->selectRaw("count(order_transports.id) as 'used_stock'")->first()->used_stock;
     }
 
     /**
