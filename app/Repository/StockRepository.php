@@ -55,13 +55,15 @@ class StockRepository
      */
     public static function getFlightStock(FlightInventory $inventory): int
     {
-        $used = 0;
-        foreach ($inventory->flightInventoryTour as $component) {
-            foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->cancelled) $used++;
-            }
-        }
-        return $used;
+        $query = DB::table('order_flights');
+        $query->join('flight_inventory_tours', 'order_flights.flight_inventory_tour_id', '=', 'flight_inventory_tours.id');
+        $query->join('flight_inventories', 'flight_inventory_tours.flight_inventory_id', '=', 'flight_inventories.id');
+        $query->join('order_customers', 'order_flights.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('flight_inventories.id', '=', $inventory->id);
+        $query->where('orders.cancelled', '=', 0);
+        $query->whereNull('order_flights.deleted_at');
+        return $query->selectRaw("count(order_flights.id) as 'used_stock'")->first()->used_stock;
     }
 
     /**
