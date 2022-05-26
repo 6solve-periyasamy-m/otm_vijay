@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Location\Currency;
 use App\Repository\SettingsRepository;
 use Illuminate\Http\Request;
+use Settings;
 
 class SettingsController extends Controller
 {
@@ -39,7 +40,7 @@ class SettingsController extends Controller
 
     public function update(Request $request) {
         $request->validate(SettingsController::getValidationRules());;
-        SettingsRepository::setAll([
+        Settings::setAll([
             'company.name' => $request->input('company_name'),
             'company.contact.email' => $request->input('company_email'),
             'company.contact.phone' => $request->input('company_phone'),
@@ -64,13 +65,13 @@ class SettingsController extends Controller
             'payment.required' => $request->input('payment_required') == 'on' ? 1 : 0,
         ]);
         if ($request->has('company_logo')  && $request->file('company_logo') != null) {
-            SettingsRepository::set('company.logo', $this->saveImage($request->file('company_logo')));
+            Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
         }
         if ($request->has('atol_stamp') && $request->file('atol_stamp') != null) {
-            SettingsRepository::set('atol.stamp', $this->saveImage($request->file('atol_stamp')));
+            Settings::set('atol.stamp', $this->saveImage($request->file('atol_stamp')));
         }
         $currency = Currency::where('id', '=', $request->input('currency_id'))->first();
-        SettingsRepository::set('system.currency', $currency->code);
+        Settings::set('system.currency', $currency->code);
         return redirect()->route('dash');
     }
 

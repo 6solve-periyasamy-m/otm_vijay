@@ -32,10 +32,10 @@ class AtolRepository
         $excess = $data['excess'];
         $pdf = new Pdf(Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
         $pdf->fillForm([
-            'companyName' => SettingsRepository::get('company.name'),
-            'issuerName' => SettingsRepository::get('atol.issuer'),
+            'companyName' => setting('company.name'),
+            'issuerName' => setting('atol.issuer'),
             'issueDate' => StringFormatter::formatDate($this->order->ordered_on),
-            'atolNumber' => SettingsRepository::get('atol.number'),
+            'atolNumber' => setting('atol.number'),
             'reference' => $this->order->booking_reference,
             'customerNames' => $this->order->customer_names,
             'customerCount' => $this->order->customer_count,

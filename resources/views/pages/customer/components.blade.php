@@ -15,7 +15,7 @@
         function onOrderChange(selector) {
             window.location = route + '/' + $(selector).val();
         }
-        @if(\App\Repository\SettingsRepository::getBoolean('payment.required', true))
+        @if(flag('payment.required', true))
             function applyAccommodationUpgrade(selector, btn) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
                 let component_id = $(btn).closest('tr').attr('component');
@@ -492,7 +492,7 @@
                                     @if($orderComponent['owned'])
                                         Owned
                                     @else
-                                        @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+                                        @if(!(flag('payment.required', true)))
                                         <a href="{{ route('customer.extras.apply',
                                             ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                              'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"

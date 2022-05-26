@@ -3,29 +3,29 @@
 @section('title', 'Edit Settings')
 
 @section('form-body')
-@include('partials.fields.text', ['name' => 'Company Name', 'field' => 'company_name', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.name', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Email', 'field' => 'company_email', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.contact.email', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Phone Number', 'field' => 'company_phone', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company VAT', 'field' => 'company_vat', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.vat', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Link', 'field' => 'company_url', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.url', ''), 'width' => 12])
+@include('partials.fields.text', ['name' => 'Company Name', 'field' => 'company_name', 'value' => setting('company.name', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Email', 'field' => 'company_email', 'value' => setting('company.contact.email', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Phone Number', 'field' => 'company_phone', 'value' => setting('company.contact.phone', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company VAT', 'field' => 'company_vat', 'value' => setting('company.vat', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Link', 'field' => 'company_url', 'value' => setting('company.url', ''), 'width' => 12])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Company Address Line 1', 'field' => 'address_line_1', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.address.line_1', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Address Line 2', 'field' => 'address_line_2', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Address City', 'field' => 'city', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.address.city', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Address Region', 'field' => 'region', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.address.region', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Address Country', 'field' => 'country', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.address.country', ''), 'width' => 6])
-@include('partials.fields.text', ['name' => 'Company Address Postcode', 'field' => 'postcode', 'value' => \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Address Line 1', 'field' => 'address_line_1', 'value' => setting('company.address.line_1', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Address Line 2', 'field' => 'address_line_2', 'value' => setting('company.address.line_2', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Address City', 'field' => 'city', 'value' => setting('company.address.city', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Address Region', 'field' => 'region', 'value' => setting('company.address.region', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Address Country', 'field' => 'country', 'value' => setting('company.address.country', ''), 'width' => 6])
+@include('partials.fields.text', ['name' => 'Company Address Postcode', 'field' => 'postcode', 'value' => setting('company.address.postcode', ''), 'width' => 6])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Booking Reference Prefix', 'field' => 'booking_prefix', 'value' => \App\Repository\SettingsRepository::getOrDefault('booking.prefix', ''), 'width' => 4])
-@include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => \App\Repository\SettingsRepository::getOrDefault('atol.issuer', ''), 'width' => 4])
-@include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => \App\Repository\SettingsRepository::getOrDefault('atol.number', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Booking Reference Prefix', 'field' => 'booking_prefix', 'value' => setting('booking.prefix', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 4])
 <hr class="splitter"/>
 @include('partials.fields.file', ['name' => 'Company Logo', 'field' => 'company_logo', 'width' => 6])
 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
 <hr class="splitter"/>
 @include('partials.fields.selector.default',
-    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies',])
-@include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => \App\Repository\SettingsRepository::getBoolean('payment.required', true),])
+    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(setting('system.currency', '')) ?? null, 'route' => 'currencies',])
+@include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => flag('payment.required', true),])
 <hr class="splitter"/>
 @include('partials.fields.dropdown', [
     'name' => 'Date Format',
@@ -46,7 +46,7 @@
         'jS F Y' => '31st January 2021 (Time)',
         'F jS Y' => 'January 31st 2021 (Time)'
     ],
-    'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'd/m/Y'),
+    'selected' => setting('system.format.date', 'd/m/Y'),
     'width' => 4,
 ])
 @include('partials.fields.dropdown', [
@@ -58,14 +58,14 @@
         'H:i:s' => '14:30:45',
         'h:i:s A'=> '02:30:45 PM'
     ],
-    'selected' => \App\Repository\SettingsRepository::getOrDefault('system.format.date', 'H:i'),
+    'selected' => setting('system.format.date', 'H:i'),
     'width' => 4,
 ])
-@include('partials.fields.date', ['name' => 'Financial Year Start Date', 'field' => 'year_start', 'value' => \App\Repository\SettingsRepository::getOrDefault('system.year.start', '2022-04-01'), 'width' => 4])
+@include('partials.fields.date', ['name' => 'Financial Year Start Date', 'field' => 'year_start', 'value' => setting('system.year.start', '2022-04-01'), 'width' => 4])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.facebook', ''), 'width' => 4])
-@include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.twitter', ''), 'width' => 4])
-@include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => \App\Repository\SettingsRepository::getOrDefault('social.instagram', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Facebook Link', 'field' => 'social_facebook', 'value' => setting('social.facebook', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Twitter Link', 'field' => 'social_twitter', 'value' => setting('social.twitter', ''), 'width' => 4])
+@include('partials.fields.text', ['name' => 'Instagram Link', 'field' => 'social_instagram', 'value' => setting('social.instagram', ''), 'width' => 4])
 <hr class="splitter"/>
 @include('partials.fields.submit')
 <hr class="splitter"/>

@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Log;
+use Settings;
 
 class MailRepository
 {
@@ -76,7 +77,7 @@ class MailRepository
      */
     private static function getTemplateFromSettings(string $name): string
     {
-        return SettingsRepository::getOrDefault($name, 'This template has not been set up yet');
+        return setting($name, 'This template has not been set up yet');
     }
 
     /**
@@ -255,7 +256,7 @@ class MailRepository
     {
         $info = self::getMailInformation($mail);
         if (!isset($info)) return false;
-        SettingsRepository::set($info['template'], $body);
+        Settings::set($info['template'], $body);
         return true;
     }
 
@@ -269,7 +270,7 @@ class MailRepository
     {
         $info = self::getMailInformation($mail);
         if (!isset($info)) return false;
-        SettingsRepository::set($info['subject'], $subject);
+        Settings::set($info['subject'], $subject);
         return true;
     }
 }

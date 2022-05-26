@@ -147,7 +147,7 @@ class CustomerTourController extends Controller
         if (!isset($tourComponent)) abort(404);
         if (!$tourComponent->is_bookable) abort(404);
 
-        if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
+        if (!(flag('payment.required', true))) abort(404);
 
         if ($tourComponent->available_stock <= 0) abort(404);
 

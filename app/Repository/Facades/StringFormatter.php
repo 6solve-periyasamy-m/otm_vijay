@@ -12,13 +12,13 @@ class StringFormatter
 {
     public function formatCurrency($value, $currency = null) : string {
         if (!isset($currency)) {
-            $currency = SettingsRepository::getOrDefault('system.currency', 'GBP');
+            $currency = setting('system.currency', 'GBP');
         }
         return (new \NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($value, $currency);
     }
 
     public function formatDate($date) : string {
-        $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y');
+        $format = setting('system.format.date', 'd/m/Y');
         try {
             return Carbon::parse($date)->format($format);
         } catch (InvalidFormatException $exception) {
@@ -27,7 +27,7 @@ class StringFormatter
     }
 
     public function formatDateTime($date) : string {
-        $format = SettingsRepository::getOrDefault('system.format.date', 'd/m/Y') . ' ' . SettingsRepository::getOrDefault('system.format.time', 'H:i');
+        $format = setting('system.format.date', 'd/m/Y') . ' ' . setting('system.format.time', 'H:i');
         try {
             return Carbon::parse($date)->format($format);
         } catch (InvalidFormatException $exception) {

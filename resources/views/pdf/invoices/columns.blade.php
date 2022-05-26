@@ -32,7 +32,7 @@ $order = $invoice->order;
                 <div class="header">
                     <div class="flex-container titles">
                         <div class="flex-items site-info vert-align">
-                            <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
+                            <img src="{{ asset(setting('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ setting('company.name') }}" />
                         </div>
                         <div class="flex-items vert-align">
                             <h2 class="header-title tour-name">{{ $order->tour->name }}</h2>
@@ -43,9 +43,9 @@ $order = $invoice->order;
                     </div>
                     <div class="flex-container">
                         <div class="flex-items">
-                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ \App\Repository\SettingsRepository::getOrDefault('company.url', URL::to('/')) }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.url', URL::to('/')) }}</a>
-                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}</a>
-                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}</a>
+                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ setting('company.url', URL::to('/')) }}">{{ setting('company.url', URL::to('/')) }}</a>
+                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ setting('company.contact.email', 'Email not set') }}">{{ setting('company.contact.email', 'Email not set') }}</a>
+                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ setting('company.contact.phone', 'Phone number not set') }}">{{ setting('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Date<br /><span class="metadata-text">{{ StringFormatter::formatDate($invoice->generated) }}</span></div>
@@ -77,12 +77,12 @@ $order = $invoice->order;
                         <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->postcode }}{!! isset($order->leadBooker->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
                     </div>
                     <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.city', 'Company City Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.region', 'Company Region Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.country', 'Company Country Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', 'Company Postcode Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.city', 'Company City Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.region', 'Company Region Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.country', 'Company Country Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.postcode', 'Company Postcode Not Set') }}</div>
                     </div>
                 </div>
             </div>

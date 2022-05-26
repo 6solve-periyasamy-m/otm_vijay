@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\StringFormatProvider::class,
+        App\Providers\SettingsProvider::class,
 
     ],
 
@@ -231,6 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
+        'Settings' => \App\Facades\SettingsFacade::class,
 
     ],
     // this apps settings

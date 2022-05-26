@@ -65,7 +65,7 @@ class CustomerComponentController extends Controller
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
         if (!AccommodationComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $data = null;
-        if (SettingsRepository::getOrDefault('payment.require', false)) {
+        if (flag('payment.require', false)) {
             $data = [
                 'upgrades' => [[
                     'customer' => $orderComponent->group->id,
@@ -102,7 +102,7 @@ class CustomerComponentController extends Controller
     
     private function applyUpgrade($parentClass, $upgradeClass, $repository, $componentId, $upgradeId): JsonResponse
     {
-        if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
+        if (!(flag('payment.required', true))) abort(404);
 
         $orderComponent = app($parentClass)->find($componentId);
 

@@ -120,7 +120,7 @@ class Order extends Model
 
     public static function generateBookingReference(Order $order): string
     {
-        return SettingsRepository::get('booking.prefix')
+        return setting('booking.prefix')
             . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
