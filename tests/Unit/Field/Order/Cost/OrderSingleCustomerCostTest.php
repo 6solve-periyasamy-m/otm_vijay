@@ -240,7 +240,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
     public function testOrderCostSingleWithSurchargeAndSingleMerchandiseAddon()
     {
         $orderCustomer = $this->generateOrder()->leadBooker;
-        $tourComponent = $this->generateMerchandise($orderCustomer->order->tour, 100, 'Add-on');
+        $tourComponent = $this->generateMerchandise($orderCustomer->order->tour, 'Add-on', 100);
         $tourComponent->addToOrder($orderCustomer);
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
@@ -250,7 +250,7 @@ class OrderSingleCustomerCostTest extends DatabaseTestCase
         $orderCustomer = $this->generateOrder()->leadBooker;
         $cost = $this->getDefaultCost($orderCustomer->order);
         for ($i = 0; $i < 5; $i++) {
-            $tourComponent = $this->generateMerchandise($orderCustomer->order->tour, 100, 'Add-on');
+            $tourComponent = $this->generateMerchandise($orderCustomer->order->tour, 'Add-on', 100);
             $tourComponent->addToOrder($orderCustomer);
             $cost += 100;
         }

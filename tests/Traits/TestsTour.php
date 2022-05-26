@@ -25,7 +25,7 @@ trait TestsTour
         return Tour::factory()->create();
     }
 
-    function generateMerchandise(?Tour $tour, float $cost, string $tour_component_type): Merchandise
+    function generateMerchandise(?Tour $tour, string $tour_component_type, float $cost): Merchandise
     {
         if (!isset($tour)) $tour = $this->generateTour();
         $merchandise = Merchandise::factory()->make(['tour_component_type' => $tour_component_type, 'tour_sales_price' => $cost,]);

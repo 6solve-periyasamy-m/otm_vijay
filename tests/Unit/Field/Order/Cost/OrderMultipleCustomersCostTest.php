@@ -547,7 +547,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
     {
         $orderCustomer = $this->generateOrderCustomer(true);
         $this->generateOrderCustomer(true, $orderCustomer->order);
-        $this->generateMerchandise($orderCustomer->order->tour, 100, 'Add-on')->addToOrder($orderCustomer);
+        $this->generateMerchandise($orderCustomer->order->tour, 'Add-on', 100)->addToOrder($orderCustomer);
         self::assertEquals($this->getDefaultCost($orderCustomer->order) + 100, $orderCustomer->order->cost);
     }
 
@@ -557,7 +557,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->order->orderCustomers as $oCustomer) {
-            $this->generateMerchandise($oCustomer->order->tour, 100, 'Add-on')->addToOrder($oCustomer);
+            $this->generateMerchandise($oCustomer->order->tour, 'Add-on', 100)->addToOrder($oCustomer);
             $cost += 100;
         }
         self::assertEquals($cost, $orderCustomer->order->cost);
@@ -569,7 +569,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $this->generateOrderCustomer(true, $orderCustomer->order);
         $cost = $this->getDefaultCost($orderCustomer->order);
         for ($i = 0; $i < 5; $i++) {
-            $this->generateMerchandise($orderCustomer->order->tour, 100, 'Add-on')->addToOrder($orderCustomer);
+            $this->generateMerchandise($orderCustomer->order->tour, 'Add-on', 100)->addToOrder($orderCustomer);
             $cost += 100;
         }
         self::assertEquals($cost, $orderCustomer->order->cost);
@@ -582,7 +582,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $cost = $this->getDefaultCost($orderCustomer->order);
         foreach ($orderCustomer->order->orderCustomers as $oCustomer) {
             for ($i = 0; $i < 5; $i++) {
-                $this->generateMerchandise($oCustomer->order->tour, 100, 'Add-on')->addToOrder($oCustomer);
+                $this->generateMerchandise($oCustomer->order->tour, 'Add-on', 100)->addToOrder($oCustomer);
                 $cost += 100;
             }
         }
