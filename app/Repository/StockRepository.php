@@ -8,6 +8,7 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
+use DB;
 
 class StockRepository
 {
@@ -36,13 +37,15 @@ class StockRepository
      */
     public static function getActivityStock(ActivityInventory $inventory): int
     {
-        $used = 0;
-        foreach ($inventory->tourComponents as $component) {
-            foreach ($component->orders as $orderComponent) {
-                if (!$orderComponent->cancelled) $used++;
-            }
-        }
-        return $used;
+        $query = DB::table('order_activities');
+        $query->join('activity_inventory_tours', 'order_activities.activity_inventory_tour_id', '=', 'activity_inventory_tours.id');
+        $query->join('activity_inventories', 'activity_inventory_tours.activity_inventory_id', '=', 'activity_inventories.id');
+        $query->join('order_customers', 'order_activities.order_customer_id', '=', 'order_customers.id');
+        $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
+        $query->where('activity_inventories.id', '=', $inventory->id);
+        $query->where('orders.cancelled', '=', 0);
+        $query->whereNull('order_activities.deleted_at');
+        return $query->selectRaw("count(order_activities.id) as 'used_stock'")->first()->used_stock;
     }
 
     /**
