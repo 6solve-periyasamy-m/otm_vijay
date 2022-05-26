@@ -39,6 +39,7 @@ class CustomerBookingController extends Controller
             'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
             'rooms' => AccommodationComponentRepository::getAvailableRoomTypes($tour),
             'groups' => AccommodationGroup::all(),
+            'stock_control' => $tour->stock_control_active,
             'available' => $tour->stock - $tour->getUsedStock()]);
     }
 

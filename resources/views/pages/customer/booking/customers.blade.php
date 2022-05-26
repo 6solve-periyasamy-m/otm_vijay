@@ -329,10 +329,12 @@
         );
 
         function addCustomer() {
-            if (available <= 0) {
-                alert('There is not enough stock for more customers');
-                return;
-            }
+            @if ($stock_control)
+                if (available <= 0) {
+                    alert('There is not enough stock for more customers');
+                    return;
+                }
+            @endif
             $('.customer-before').before(customerSection.replaceAll('%NUMBER%', additional));
             additional++;
             available--;
