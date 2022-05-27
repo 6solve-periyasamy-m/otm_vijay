@@ -484,6 +484,10 @@ class ReportFieldRepository
                         'name' => 'Mobility Notes',
                         'method' => 'mobility_notes',
                     ],
+                    'created_at_system' => [
+                        'name' => 'Created At',
+                        'field' => 'created_at'
+                    ]
                 ],
             ],
             1 => [
