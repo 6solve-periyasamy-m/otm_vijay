@@ -262,7 +262,7 @@
                     </div>
                     <hr class="splitter">
                     <div class="col-12">
-                        <select name="inbound" class="w-100" required>
+                        <select name="inbound" class="w-100">
                             @foreach($flights['inbound'] as $flight)
                                 <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
                                     {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
