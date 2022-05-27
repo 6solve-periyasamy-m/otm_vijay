@@ -33,14 +33,25 @@
                 </tr>
                 </thead>
                 @foreach($customers as $customer)
-                    @include('partials.models.customers.row', [
-                    'customer' => $customer,
-                    'name' => $customer->title . ' ' . $customer->first_name . ' ' . $customer->last_name,
-                    'date_of_birth' => $customer->date_of_birth,
-                    'mobile_number' => $customer->mobile_number,
-                    'passport_expiry_date' => $customer->passport_expiry_date,
-                    'home_address' => $customer->homeAddress->address_line_1 . ', ' . $customer->homeAddress->country
-                    ])
+                    <tr>
+                        <td><a href="{{ route('customers.view', ['customer' => $customer,]) }}">{{ $customer->full_name }}</a></td>
+                        <td>{{ f_date($customer->date_of_birth) }}</td>
+                        <td>{{ $customer->homeAddress }}</td>
+                        <td>{{ $customer->mobile_number }}</td>
+                        <td>{{ f_date($customer->passport_expiry_date) }}</td>
+                        <td class="actions">
+                            <a href="{{route('customers.edit', ['customer' => $customer,])}}" class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-danger btn-sm mb-1"
+                               onclick="event.preventDefault();document.getElementById('customer-{{ $customer->id }}-delete').submit();">
+                                <i class="icon-trash"></i>
+                            </a>
+                            <form id="customer-{{ $customer->id }}-delete"
+                                  action="{{ route('customers.delete', ['customer' => $customer,]) }}" method="POST"
+                                  style="display: none;">{{ csrf_field() }}</form>
+                        </td>
+                    </tr>
                 @endforeach
             </table>
         </div>

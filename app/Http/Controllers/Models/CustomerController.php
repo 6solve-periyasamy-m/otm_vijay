@@ -24,7 +24,7 @@ class CustomerController extends Controller
 
     public function index()
     {
-        return view('pages.models.customers.table', ['customers' => Customer::all(),]);
+        return view('pages.models.customers.table', ['customers' => Customer::with('homeAddress',)->get(),]);
     }
 
     public function create()
