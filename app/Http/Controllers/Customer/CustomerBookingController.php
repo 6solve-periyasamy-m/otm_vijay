@@ -102,10 +102,10 @@ class CustomerBookingController extends Controller
                 if (!isset($traveller) && !empty($additional['email_address'])) {
                     $traveller = Customer::where('email_address', $additional['email_address'])->first();
                 }
-                if (in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
+                if (!empty($additional['email_address']) && in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
                     return back()->withErrors(['msg' => 'You have used the email ' . $additional['email_address'] . ' for multiple customers. Please correct this.']);
                 }
-                $bookedEmails[] = strtolower(trim($additional['email_address']));
+                if (!empty($additional['email_address'])) $bookedEmails[] = strtolower(trim($additional['email_address']));
                 if (!isset($traveller)) {
                     $traveller = Customer::make([
                         'title' => $additional['title'],

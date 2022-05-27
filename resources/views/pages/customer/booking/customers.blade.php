@@ -314,6 +314,7 @@
                     let failed = false;
                     $('.v-email-validation-unique').each(function (index) {
                         let email = this.value.toLowerCase().trim();
+                        if (!email || email.length === 0) return true;
                         if (emails.includes(email)) {
                             failed = true;
                             alert('You have used the email ' + this.value.trim() + ' for multiple customers. Please correct this.')
