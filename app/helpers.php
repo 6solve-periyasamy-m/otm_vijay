@@ -38,11 +38,11 @@ if (!function_exists('flag')) {
 if (!function_exists('f_currency')) {
     /**
      * Alias for StringFormatter::formatCurrency
-     * @param float $amount
-     * @param $currency
+     * @param float|null $amount
+     * @param null $currency
      * @return string
      */
-    function f_currency(float $amount, $currency = null): string
+    function f_currency(?float $amount, $currency = null): string
     {
         return StringFormatter::formatCurrency($amount, $currency);
     }
@@ -51,10 +51,10 @@ if (!function_exists('f_currency')) {
 if (!function_exists('f_date')) {
     /**
      * Alias for StringFormatter::formatDate
-     * @param Carbon $date
+     * @param $date
      * @return string
      */
-    function f_date(Carbon $date): string
+    function f_date($date): string
     {
         return StringFormatter::formatDate($date);
     }
@@ -63,10 +63,10 @@ if (!function_exists('f_date')) {
 if (!function_exists('f_datetime')) {
     /**
      * Alias for StringFormatter::formatDateTime
-     * @param Carbon $date
+     * @param $date
      * @return string
      */
-    function f_datetime(Carbon $date): string
+    function f_datetime($date): string
     {
         return StringFormatter::formatDateTime($date);
     }
