@@ -18,6 +18,10 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Merchandise;
+use App\Repository\Model\Order\Component\OrderAccommodationRepository;
+use App\Repository\Model\Order\Component\OrderActivityRepository;
+use App\Repository\Model\Order\Component\OrderFlightRepository;
+use App\Repository\Model\Order\Component\OrderTransportRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
@@ -389,25 +393,25 @@ class StaticOrderRepository
     private static function getOwnedTourComponents(OrderCustomer $orderCustomer): array
     {
         $data = ['accommodation' => [], 'activities' => [], 'flights' => [], 'transports' => []];
-        foreach ($orderCustomer->orderAccommodation() as $orderComponent) {
-            $data['accommodation'][] = $orderComponent->tourComponent->id;
-            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
-                $data['accommodation'][] = $orderComponent->tourComponent->parent()->id;
-        }
-        foreach ($orderCustomer->orderActivities as $orderComponent) {
-            $data['activities'][] = $orderComponent->tourComponent->id;
-            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
-                $data['activities'][] = $orderComponent->tourComponent->parent()->id;
-        }
-        foreach ($orderCustomer->orderFlights as $orderComponent) {
-            $data['flights'][] = $orderComponent->tourComponent->id;
-            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
-                $data['flights'][] = $orderComponent->tourComponent->parent()->id;
-        }
-        foreach ($orderCustomer->orderTransports as $orderComponent) {
-            $data['transports'][] = $orderComponent->tourComponent->id;
-            if ($orderComponent->tourComponent->tour_component_type == 'Upgrade')
-                $data['activities'][] = $orderComponent->tourComponent->parent()->id;
+        foreach ($orderCustomer->repository->getComponents() as $orderComponentRepository) {
+            $ids = [$orderComponentRepository->get()->id,];
+            if ($orderComponentRepository->getTourComponentType() === 'Upgrade') {
+                $ids[] = $orderComponentRepository->get()->tourComponent->parent()->id;
+            }
+            switch (true) {
+                case $orderComponentRepository instanceof OrderAccommodationRepository:
+                    $data['accommodation'] = array_merge($data['accommodation'], $ids);
+                    break;
+                case $orderComponentRepository instanceof OrderActivityRepository:
+                    $data['accommodation'] = array_merge($data['activities'], $ids);
+                    break;
+                case $orderComponentRepository instanceof OrderFlightRepository:
+                    $data['accommodation'] = array_merge($data['flights'], $ids);
+                    break;
+                case $orderComponentRepository instanceof OrderTransportRepository:
+                    $data['accommodation'] = array_merge($data['transports'], $ids);
+                    break;
+            }
         }
         return [
             'accommodation' => array_unique($data['accommodation']),
