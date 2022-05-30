@@ -6,6 +6,7 @@ use App\Models\Customer;
 use DB;
 use Exception;
 use Faker\Factory as Faker;
+use Hash;
 use Illuminate\Console\Command;
 use Log;
 use Schema;
@@ -43,6 +44,10 @@ class AnonymizeCustomers extends Command
      */
     public function handle()
     {
+        if (!config('app.anonymization', false)) {
+            $this->error('Anonymization is not allowed on this instance. To enable, add: "ALLOW_ANONYMIZATION=true" to the environment');
+            return 0;
+        }
         $faker = Faker::create();
         foreach (Customer::withTrashed()->get() as $customer) {
             do {
