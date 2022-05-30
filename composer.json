@@ -55,7 +55,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "exclude-from-classmap": ["tests/suspended_features"]
     },
     "autoload-dev": {
         "psr-4": {
