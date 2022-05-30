@@ -54,7 +54,8 @@
             justify-items: center;
             align-items: center;
             padding: var(--padding);
-            text-wrap: normal;
+            height: 100%;
+            font-size: 12px;
         }
         .customer:hover {
             filter: brightness(95%);
@@ -96,12 +97,31 @@
             border-radius: 50%;
         }
         .details {
-            display: inline-block;
+            display: inline;
+            height: 10%;
+            width: 100%;
+            padding: 2px 2px 5px 2px;
+        }
+        .details:after {
+            content: "";
+            display: block;
+            float: left;
+            background: var(--section-color);
+            width: 100%;
+            height: 5px;
+            border-radius: 3px;
+            margin-top: 5px;
+            margin-bottom: 2px
         }
         .group-input {
-            display:block;
+            display:inline;
         }
-        .round { border-radius: var(--shallow-radius); }
+        .name-input {
+            border-radius: 10px;
+        }
+        .round {
+            border-radius: var(--shallow-radius);
+        }
     </style>
 @endpush
 
