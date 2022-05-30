@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Customer;
 use DB;
 use Exception;
+use Faker\Factory as Faker;
 use Illuminate\Console\Command;
 use Log;
 use Schema;
@@ -42,23 +43,24 @@ class AnonymizeCustomers extends Command
      */
     public function handle()
     {
-        Schema::disableForeignKeyConstraints();
-        $customers = Customer::withTrashed()->orderBy('id', 'desc')->first()->id;
-        $this->info("Found highest id of {$customers}");
-        DB::statement('TRUNCATE customers;');
-        while ($customers > 0) {
-            try {
-                $customer = Customer::factory()->create();
-                if (!isset($customer)) continue;
-                $customers--;
-            } catch (Exception $e) {
-                Log::error($e);
-                continue;
-            }
+        $faker = Faker::create();
+        foreach (Customer::withTrashed()->get() as $customer) {
+            do {
+                $succeeded = false;
+                try {
+                    $customer->update([
+                        'first_name' => $faker->firstName,
+                        'last_name' => $faker->lastName,
+                        'mobile_number' => $faker->phoneNumber,
+                        'email_address' => isset($customer->email_address) ? $faker->email : null,
+                        'passport_number' => isset($customer->passport_number) ? 123456 : null,
+                    ]);
+                    $customer->save();
+                    $this->info("Anonymized {$customer->full_name}");
+                    $succeeded = true;
+                } catch (Exception) {continue;}
+            } while (!$succeeded);
         }
-        $customers = Customer::withTrashed()->count();
-        $this->info("Generated {$customers} customers");
-        Schema::enableForeignKeyConstraints();
         return 0;
     }
 }
