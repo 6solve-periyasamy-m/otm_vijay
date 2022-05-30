@@ -49,11 +49,19 @@ class AnonymizeCustomers extends Command
                 $succeeded = false;
                 try {
                     $customer->update([
+                        'title' => $faker->title,
                         'first_name' => $faker->firstName,
+                        'middle_names' => $faker->firstName,
                         'last_name' => $faker->lastName,
                         'mobile_number' => $faker->phoneNumber,
                         'email_address' => isset($customer->email_address) ? $faker->email : null,
                         'passport_number' => isset($customer->passport_number) ? 123456 : null,
+                        'password' => isset($customer->password) ? '$2a$12$4nlbfjMtXBPbvy0AjK3BH.owxxpVPVJlDk1TBN2X7eV7pKGqTa2D6' : null, // password
+                        'passport_first_name' => $faker->firstName,
+                        'passport_middle_name' => $faker->firstName,
+                        'passport_last_name' => $faker->lastName,
+                        'emergency_contact_name' => $faker->firstName . ' ' . $faker->lastName,
+                        'emergency_contact_telephone' => $faker->phoneNumber,
                     ]);
                     $customer->save();
                     $this->info("Anonymized {$customer->full_name}");
