@@ -94,6 +94,82 @@ $menu_colors : #4cc1ef, #c13018, #f7931f, #a2b969;
         }
     }
 }
+.customer-portal-mobile {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .donut-menu, .click-menu {
+        display: none;
+    }
+    .customer-portal-mobile {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-content: space-around;
+        height: 50vh;
+    }
+    .customer-portal-mobile-item {
+        min-width: 60vw;
+        min-height: 10vh;
+        border-radius: 10px;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+
+        &:nth-child(1) {
+            background-color: #67caf1;
+
+            &:hover {
+                background-color: #4cc1ef;
+            }
+        }
+        &:nth-child(2) {
+            background-color: #b0c37f;
+            &:hover {
+                background-color: #a2b969;
+            }
+        }
+        &:nth-child(3) {
+            background-color: #f8a340;
+            &:hover {
+                background-color: #f7931f;
+            }
+        }
+        &:nth-child(4) {
+            background-color: #ca4f3a;
+            &:hover {
+                background-color: #c13018;
+            }
+        }
+
+        .item-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            .item-icon {
+                font-size: 20px;
+                font-weight: 500;
+            }
+            .item-text {
+                font-size: 16px;
+                font-weight: 600;
+            }
+        }
+    }
+    .navbar-nav .nav-link {
+        font-size: 1.2rem;
+    }
+
+    .topbar {
+        height: 10%
+    }
+    .setting-logo {
+        height: calc(10vh - 30px);
+    }
+}
 
 @mixin rotation {
     @for $i from 1 through 4 {
@@ -223,4 +299,59 @@ $right_offset: 312px, 276px, 210px, 117px, 10px;
             }
         }
     }
+}
+.socials {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 18px;
+
+    .facebook {
+		@extend %social-icon-base;
+        background-color: #4267B2;
+
+        &:hover {
+            background-color: #5074BE;
+        }
+    }
+
+    .twitter {
+        @extend %social-icon-base;
+        background-color: #1DA1F2;
+
+        &:hover {
+            background-color: #35ABF3;
+        }
+    }
+
+    .instagram {
+        @extend %social-icon-base;
+        background-color: #3F729B;
+
+        &:hover {
+            background-color: #467FAD;
+        }
+    }
+}
+%social-icon-base {
+	width: 30px;
+	height: 30px;
+    color: white;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    a:hover {
+        color: white;
+    }
+}
+
+button.navbar-toggler {
+	box-shadow: none !important;
+}
+nav li a.nav-link:hover {
+    color: #fff;
+    background-color: #3490dc;
+}
+nav li {
+    padding-left: 5px;
 }
