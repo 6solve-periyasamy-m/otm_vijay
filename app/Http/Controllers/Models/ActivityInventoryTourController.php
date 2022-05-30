@@ -53,9 +53,26 @@ class ActivityInventoryTourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function restore(Tour $tour, $activityInventoryTour)
+    {
+        $inventoryTour = ActivityInventoryTour::withTrashed()->find($activityInventoryTour);
+        if ($inventoryTour->trashed()) {
+            $inventoryTour->restore();
+        } else {
+            $inventoryTour->is_bookable = true;
+            $inventoryTour->save();
+        }
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
     public function destroy(Tour $tour, ActivityInventoryTour $activityInventoryTour)
     {
-        $activityInventoryTour->delete();
+        if ($tour->orders()->count() > 0) {
+            $activityInventoryTour->is_bookable = false;
+            $activityInventoryTour->save();
+        } else {
+            $activityInventoryTour->delete();
+        }
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 }

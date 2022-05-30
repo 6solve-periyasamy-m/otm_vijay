@@ -158,7 +158,7 @@
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $order)
-                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} - {{ $order->tour->name }}</option>
+                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif @if($order->cancelled) disabled @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
@@ -184,6 +184,7 @@
         <div class="card">
             <div class="card-body">
                 <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
+                Please select Customer for whom you wish to purchase the Upgrade or Add-On for from the left hand list
             </div>
         </div>
         {{-- Accommodation --}}
@@ -209,7 +210,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderAccommodation() as $orderComponent)
+                            @foreach($accommodation as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_out) }}</td>
                                     <td>{{ $orderComponent->accommodation->name }}</td>
@@ -274,7 +275,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderActivities as $orderComponent)
+                            @foreach($activities as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activityInventory->ends_at) }}</td>
                                     <td>{{ $orderComponent->activity->name }}</td>
@@ -338,7 +339,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderFlights as $orderComponent)
+                            @foreach($flights as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flightInventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->flightInventory->flight_number }}</td>
@@ -404,7 +405,7 @@
                                 <th scope="col">Upgrades</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderTransports as $orderComponent)
+                            @foreach($transports as $orderComponent)
                                 <tr component="{{ $orderComponent->id }}">
                                     <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transportInventory->arrives_at) }}</td>
                                     <td>{{ $orderComponent->transport->name }}</td>

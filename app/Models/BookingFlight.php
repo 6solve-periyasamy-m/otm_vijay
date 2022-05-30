@@ -9,6 +9,8 @@ class BookingFlight extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['customer_id', 'flight_inventory_tour_id', 'flight_type', 'booking_id'];
+
     public function booking()
     {
         return $this->belongsTo(Booking::class, 'booking_id');
@@ -22,5 +24,14 @@ class BookingFlight extends Model
     public function tourComponent()
     {
         return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
+    }
+
+    public static function compare(BookingFlight $a, BookingFlight $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
     }
 }

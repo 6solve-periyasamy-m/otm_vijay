@@ -73,7 +73,7 @@ class FlightInventoryTour extends Model
         $inventory = $this->flightInventory;
         $component = $inventory->flight;
         return $component->airline->name . ' ('. $inventory->flight_number . ') ' . $component->departureAirport->name . ' to ' .  $component->arrivalAirport->name .
-            ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
+            ' (' . StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
     }
 
@@ -87,14 +87,20 @@ class FlightInventoryTour extends Model
         return $this->flightInventory();
     }
 
-    public function getUpgradeKeyMap(): array
+    public function getUpgradeKeyMap(int $required = 1): array
     {
         $upgrades = $this->upgrades;
+        $included = $this;
         $keys = [];
-        if (empty($upgrades->all())) $upgrades = $this->parent()->upgrades;
-        $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        if (empty($upgrades->all())) {
+            $upgrades = $this->parent()->upgrades;
+            $included =  $this->parent();
+        }
+        if ($included->available_stock > $required-1) {
+            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= 0) continue;
+            if ($upgrade->upgrade->available_stock <= $required-1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
@@ -117,6 +123,7 @@ class FlightInventoryTour extends Model
 
         foreach ($upgrades as $upgrade) {
             if ($upgrade->upgrade->id == $this->id) continue;
+            if (!$upgrade->upgrade->is_bookable) continue;
             if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
                 $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);

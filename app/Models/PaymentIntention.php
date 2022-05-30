@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Order\OrderEditedEvent;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use DB;
@@ -115,7 +116,7 @@ class PaymentIntention extends Model
                 $orderComponent->delete();
             }
         }
-        try { DB::commit(); } catch (\Throwable $e) { Log::error($e); return false; }
+        try { DB::commit(); event(new OrderEditedEvent($order, true)); } catch (\Throwable $e) { Log::error($e); return false; }
 
         return true;
     }

@@ -484,6 +484,10 @@ class ReportFieldRepository
                         'name' => 'Mobility Notes',
                         'method' => 'mobility_notes',
                     ],
+                    'created_at_system' => [
+                        'name' => 'Created At',
+                        'field' => 'created_at'
+                    ]
                 ],
             ],
             1 => [
@@ -493,6 +497,10 @@ class ReportFieldRepository
                     'booking_reference' => [
                         'name' => 'Booking Reference',
                         'method' => 'booking_reference',
+                    ],
+                    'tour_name' => [
+                        'name' => 'Tour Name',
+                        'method' => 'tour_name',
                     ],
                     'ordered_on' => [
                         'name' => 'Ordered On',
@@ -512,6 +520,11 @@ class ReportFieldRepository
                         'name' => 'Single Occupancy Surcharge',
                         'method' => 'single_occupancy_surcharge',
                         'format' => 'currency',
+                    ],
+                    'has_surcharge' => [
+                        'name' => 'Is Single Occupancy',
+                        'method' => 'has_surcharge',
+                        'format' => 'boolean',
                     ],
                     'travel_insurer' => [
                         'name' => 'Travel Insurer',

@@ -11,6 +11,8 @@ class Booking extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['customer_id','tour_id','token','name','status'];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -39,6 +41,11 @@ class Booking extends Model
     public function transports()
     {
         return $this->hasMany(BookingTransport::class, 'booking_id');
+    }
+
+    public function merchandise()
+    {
+        return $this->hasMany(BookingMerchandise::class, 'booking_id');
     }
 
     public function travellers()

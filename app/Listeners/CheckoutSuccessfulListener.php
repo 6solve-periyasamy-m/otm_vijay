@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\PaymentIntention;
 use App\Models\PaymentMethod;
 use App\Repository\BookingRepository;
+use App\Repository\CustomerBookingRepository;
 use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,13 +38,16 @@ class CheckoutSuccessfulListener implements ShouldQueue
                 }
                 $booking = Booking::where('token', $intention->reference)->first();
                 if (isset($booking)) {
-                    $order = BookingRepository::convertBookingToOrder($booking);
-                    event(new OrderCreatedEvent($order));
+                    if (strlen($booking->token) == 64) {
+                        $order = CustomerBookingRepository::convertBookingToOrder($booking);
+                    } else {
+                        $order = BookingRepository::convertBookingToOrder($booking);
+                    }
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::firstOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);
                     $intention->processed = true;
                     $intention->save();
-                    event(new PaymentCreatedEvent($payment));
+                    event(new OrderCreatedEvent($order));
                 }
             }
         }

@@ -62,15 +62,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         PaymentEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         PaymentRemovedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         AdjustmentCreatedEvent::class => [
             InvoiceUpdateListener::class,
@@ -91,7 +91,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderCustomerEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         OrderCustomerRemovedEvent::class => [
             InvoiceUpdateListener::class,
@@ -100,15 +100,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderCustomerComponentAddedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentRemovedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         CustomerAdjustmentCreatedEvent::class => [
             InvoiceUpdateListener::class,

@@ -15,9 +15,18 @@ $order = $invoice->order;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Invoice</title>
         <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+        <style>
+            .cancelled {
+                background-image: url('{{ asset('images/rubberstamp.svg') }}') !important;
+                background-repeat: no-repeat !important;
+                background-position-x: calc(50% + 3em) !important;
+                background-position-y: 8em;
+                background-size: 30em;
+            }
+        </style>
     </head>
     <body>
-        <div class="background center-screen">
+        <div class="background center-screen @if($order->cancelled) cancelled @endif">
             <!-- Header Section -->
             <div class="section">
                 <div class="header">
@@ -157,7 +166,7 @@ $order = $invoice->order;
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ StringFormatter::formatCurrency($invoice->total_cost) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ StringFormatter::formatCurrency($order->cancelled ? 0 : $invoice->total_cost) }}</h1>
                     </div>
                 </div>
             </div>
@@ -193,7 +202,7 @@ $order = $invoice->order;
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Remaining Amount: {{ StringFormatter::formatCurrency($invoice->total_cost - $invoice->payments['total_cost']) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Remaining Amount: {{ StringFormatter::formatCurrency($order->cancelled ? 0 : ($invoice->total_cost - $invoice->payments['total_cost'])) }}</h1>
                     </div>
                 </div>
             </div>

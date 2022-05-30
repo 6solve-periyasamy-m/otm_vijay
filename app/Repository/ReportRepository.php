@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Helpers\QuarterHelper;
 use App\Models\Order;
+use App\Models\OrderActivity;
+use App\Models\OrderFlight;
 use App\Models\Tour;
 use Illuminate\Support\Collection;
 
@@ -33,7 +35,19 @@ class ReportRepository
                 'details' => 'Details about all payments in the system',
                 'view' => 'reports.payment',
                 'export' => 'reports.payment.export',
-            ]
+            ],
+            [
+                'name' => 'Flight Manifest',
+                'details' => 'List of all flights and passengers',
+                'view' => 'reports.flight-manifest',
+                'export' => 'reports.flight-manifest.export',
+            ],
+            [
+                'name' => 'Activity Customer',
+                'details' => 'List of all sold activities and tickets',
+                'view' => 'reports.activities',
+                'export' => 'reports.activities.export',
+            ],
         ];
     }
 
@@ -44,7 +58,8 @@ class ReportRepository
     public static function getOrderReport(): array
     {
         $data = [];
-        foreach (Order::withTrashed()->get() as $order) {
+        foreach (Order::all() as $order) {
+            $nextPayment = $order->getNextInstallment();
             $row = collect();
             $row->ordered_on = $order->ordered_on;
             $row->booking_reference = $order->booking_reference;
@@ -55,6 +70,8 @@ class ReportRepository
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
+            $row->due_date = $nextPayment['due'];
+            $row->due_amount = $nextPayment['amount'];
             $row->orderStatus = $order->getStatus();
             $data[$order->id] = $row;
         }
@@ -102,6 +119,55 @@ class ReportRepository
                 $row->paid_on = $payment->paid_on;
                 $data[] = $row;
             }
+        }
+        return $data;
+    }
+
+    public static function getFlightManifestReport(): array
+    {
+        $data = [];
+        foreach (OrderFlight::all() as $orderFlight) {
+            if ($orderFlight->isCancelled()) {
+                continue;
+            }
+            $row = collect();
+            $row->departs = $orderFlight?->tourComponent?->flightInventory?->flight?->departureAirport?->__toString();
+            $row->depart_time = $orderFlight?->tourComponent?->flightInventory?->departs_at;
+            $row->arrival = $orderFlight?->tourComponent?->flightInventory?->flight?->arrivalAirport?->__toString();
+            $row->arrive_time = $orderFlight?->tourComponent?->flightInventory?->arrives_at;
+            $row->flight_number = $orderFlight?->tourComponent?->flightInventory?->flight_number;
+            $row->customer = $orderFlight?->orderCustomer?->customer_name;
+            $row->reference = $orderFlight?->orderCustomer?->order?->booking_reference;
+            $row->tour = $orderFlight?->orderCustomer?->order?->tour?->name;
+            $row->is_lead = $orderFlight?->orderCustomer?->is_lead_booker;
+            $row->flight_notes = $orderFlight?->orderCustomer?->flight_notes;
+            $row->order_customer_notes_internal = $orderFlight?->orderCustomer?->internal_notes;
+            $row->order_customer_notes_external = $orderFlight?->orderCustomer?->external_notes;
+            $row->customer_notes_internal = $orderFlight?->orderCustomer?->customer?->internal_notes;
+            $row->customer_notes_external = $orderFlight?->orderCustomer?->customer?->external_notes;
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    public static function getActivityReport(): array
+    {
+        $data = [];
+        foreach (OrderActivity::all() as $orderActivity) {
+            if ($orderActivity->isCancelled()) {
+                continue;
+            }
+            $row = collect();
+            $row->reference = $orderActivity?->orderCustomer?->order?->booking_reference;
+            $row->customer = $orderActivity?->orderCustomer?->customer_name;
+            $row->activity = $orderActivity?->tourComponent?->inventory?->activity?->name;
+            $row->ticket = $orderActivity?->tourComponent?->inventory?->ticketType?->name;
+            $row->starts = $orderActivity?->tourComponent?->inventory?->starts_at;
+            $row->ends = $orderActivity?->tourComponent?->inventory?->ends_at;
+            $row->purchased = $orderActivity?->orderCustomer?->order?->ordered_on;
+            $row->cost = $orderActivity?->tourComponent?->tour_component_type === "Included" ? 0 : $orderActivity?->cost;
+            $row->component = $orderActivity?->tourComponent?->tour_component_type;
+            $data[] = $row;
         }
         return $data;
     }

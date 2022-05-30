@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Http\Gateways\StripeGateway;
 use App\Models\AccommodationInventoryTour;
 use App\Models\AccommodationInventoryTourUpgrade;
@@ -113,6 +114,7 @@ class TourComponentController extends Controller
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!ActivityComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
+        event(new OrderCustomerComponentEditedEvent($orderComponent));
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
@@ -129,6 +131,7 @@ class TourComponentController extends Controller
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!FlightComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
+        event(new OrderCustomerComponentEditedEvent($orderComponent));
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 
@@ -145,6 +148,7 @@ class TourComponentController extends Controller
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if (!TransportComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
+        event(new OrderCustomerComponentEditedEvent($orderComponent));
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
 }
