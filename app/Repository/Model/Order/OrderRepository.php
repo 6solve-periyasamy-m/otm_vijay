@@ -168,7 +168,11 @@ class OrderRepository extends ModelRepository
                 }
             } else {
                 foreach ($this->order->orderCustomers as $orderCustomer) {
-                    if (!$orderCustomer->has_occupancy) $status = OrderStatus::OCCUPANCY_NOT_SET;
+                    if (!$orderCustomer->has_occupancy) {
+                        $status = OrderStatus::OCCUPANCY_NOT_SET;
+                        Cache::put("orders.{$this->order->id}.status", $status, self::STATUS_CACHE_TIME);
+                        return $status;
+                    }
                 }
                 if ($total > $paidAmount) {
                     $next = $this->order->next_installment;
