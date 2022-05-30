@@ -70,7 +70,7 @@
             <td>{{ f_datetime($inventory->departs_at) }}</td>
             <td>{{ $inventory->component->arrivalAddress->name }}</td>
             <td>{{ f_datetime($inventory->arrives_at) }}</td>
-            <td>{{ StringFormatter::formatBoolean($inventory->component->is_domestic) }}</td>
+            <td>{{ f_bool($inventory->component->is_domestic) }}</td>
             <td>
                 <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
             </td>

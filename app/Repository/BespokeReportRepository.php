@@ -128,7 +128,7 @@ class BespokeReportRepository
                 $data = f_datetime($data);
                 break;
             case 'boolean':
-                $data = StringFormatter::formatBoolean($data);
+                $data = f_bool($data);
                 break;
             case 'currency':
                 $data = f_currency($data);

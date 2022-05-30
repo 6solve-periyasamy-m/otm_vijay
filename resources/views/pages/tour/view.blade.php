@@ -146,7 +146,7 @@
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->boardType->name }}</td>
-                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_template) }}</td>
+                                    <td>{{ f_bool($accommodationEntry["tour"]->is_template) }}</td>
                                     <td>
                                         @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
                                             <abbr title="{{ $accommodationEntry["tour"]->parent() }}">
@@ -156,7 +156,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($accommodationEntry["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             @if($accommodationEntry["tour"]->tour_component_type !== 'Add-on')
@@ -228,7 +228,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($activity["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($activity["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Activity\ActivityInventoryTour::class)
                                             @if($activity["tour"]->tour_component_type !== 'Add-on')
@@ -300,7 +300,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($flight["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($flight["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Flight\FlightInventoryTour::class)
                                             @if($flight["tour"]->tour_component_type !== 'Add-on')
@@ -370,7 +370,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($transport["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($transport["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Transport\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')

@@ -288,7 +288,7 @@
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
                                 <td>{{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
-                                <td>{{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}</td>
+                                <td>{{ f_bool($order->calculated_deposit <= $order->paid) }}</td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         <i class="icon-note"></i>
@@ -300,7 +300,7 @@
                                     <th scope="row">Installment</th>
                                     <td>{{ f_date($installment->due_on) }}</td>
                                     <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
-                                    <td>{{ StringFormatter::formatBoolean($installment->paid) }}</td>
+                                    <td>{{ f_bool($installment->paid) }}</td>
                                     <td class="actions">
                                         <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                             <i class="icon-note"></i>
@@ -319,7 +319,7 @@
                                 <th scope="row">Remaining Balance</th>
                                 <td>{{ f_date($order->tour->final_payment) }}</td>
                                 <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
-                                <td>{{ StringFormatter::formatBoolean($order->remaining <= 0) }}</td>
+                                <td>{{ f_bool($order->remaining <= 0) }}</td>
                                 <td class="actions">
                                     <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         <i class="icon-note"></i>

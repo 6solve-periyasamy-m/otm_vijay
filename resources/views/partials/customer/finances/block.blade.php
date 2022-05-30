@@ -98,7 +98,7 @@ $next = $order->next_installment;
                             {{ f_currency($order->calculated_deposit) }}
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}
+                            {{ f_bool($order->calculated_deposit <= $order->paid) }}
                         </div>
                     </div>
                     @foreach($order->installments as $installment)
@@ -113,7 +113,7 @@ $next = $order->next_installment;
                                 {{ f_currency($installment->calculated_amount) }}
                             </div>
                             <div class="col-3">
-                                {{ StringFormatter::formatBoolean($installment->paid) }}
+                                {{ f_bool($installment->paid) }}
                             </div>
                         </div>
                     @endforeach
@@ -128,7 +128,7 @@ $next = $order->next_installment;
                             {{ f_currency($order->remaining_installment) }}
                         </div>
                         <div class="col-3">
-                            {{ StringFormatter::formatBoolean($order->remaining <= 0) }}
+                            {{ f_bool($order->remaining <= 0) }}
                         </div>
                     </div>
                 </div>

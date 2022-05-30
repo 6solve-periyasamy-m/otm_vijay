@@ -227,7 +227,7 @@ $order = $invoice->order;
                                 <tr>
                                     <td class="date">{{ f_date($installment['due']) }}</td>
                                     <td class="amount">{!! array_key_exists('description',$installment) ? nl2br($installment['description']) : nl2br(f_currency($installment['amount'])) !!} </td>
-                                    <td class="paid">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
+                                    <td class="paid">{{ f_bool($installment['paid']) }}</td>
                                 </tr>
                             @endforeach
                         @endif

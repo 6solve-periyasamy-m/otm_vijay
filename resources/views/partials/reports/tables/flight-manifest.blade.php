@@ -28,7 +28,7 @@
                 <td>{{ $row->reference }}</td>
                 <td>{{ $row->tour }}</td>
                 <td>{{ $row->customer }}</td>
-                <td>{{ StringFormatter::formatBoolean($row->is_lead) }}</td>
+                <td>{{ f_bool($row->is_lead) }}</td>
                 <td>{{ $row->flight_notes }}</td>
                 <td>{{ $row->order_customer_notes_internal }}</td>
                 <td>{{ $row->order_customer_notes_external }}</td>
