@@ -8,6 +8,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Repository\Abstracts\ModelRepository;
+use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,7 @@ class OrderRepository extends ModelRepository
 {
     private Order $order;
     private AtolRepository $atolRepository;
+    private const STATUS_CACHE_TIME = 600;
 
     public function __construct(Order $order)
     {
@@ -147,35 +149,41 @@ class OrderRepository extends ModelRepository
      */
     public function getOrderStatus(): OrderStatus
     {
-        $paidAmount = $this->order->paid;
-        $cost = $this->order->cost;
-        $adjustments = $this->order->total_adjustments;
-        $total = $cost + $adjustments;
-        if ($this->order->trashed() || $this->order->cancelled) {
-            if ($paidAmount == 0) {
-                return OrderStatus::CANCELLED_FULL_REFUND;
-            } else if ($paidAmount <= $this->order->calculated_deposit) {
-                return OrderStatus::CANCELLED_DEPOSIT_HELD;
-            } else {
-                return OrderStatus::CANCELLED_REFUND_REQUIRED;
-            }
-        } else {
-            foreach ($this->order->orderCustomers as $orderCustomer) {
-                if (!$orderCustomer->has_occupancy) return OrderStatus::OCCUPANCY_NOT_SET;
-            }
-            if ($total > $paidAmount) {
-                $next = $this->order->next_installment;
-                if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
-                    return OrderStatus::PAYMENT_OVERDUE;
+        /** @var OrderStatus $status */
+        $status = Cache::get("orders.{$this->order->id}.status");
+        if (!isset($status)) {
+            $paidAmount = $this->order->paid;
+            $cost = $this->order->cost;
+            $adjustments = $this->order->total_adjustments;
+            $total = $cost + $adjustments;
+            if ($this->order->trashed() || $this->order->cancelled) {
+                if ($paidAmount == 0) {
+                    $status = OrderStatus::CANCELLED_FULL_REFUND;
+                } else if ($paidAmount <= $this->order->calculated_deposit) {
+                    $status = OrderStatus::CANCELLED_DEPOSIT_HELD;
                 } else {
-                    return OrderStatus::BALANCE_OUTSTANDING;
+                    $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
-            } elseif ($total < $paidAmount) {
-                return OrderStatus::OVERPAID;
             } else {
-                return OrderStatus::PAID_IN_FULL;
+                foreach ($this->order->orderCustomers as $orderCustomer) {
+                    if (!$orderCustomer->has_occupancy) $status = OrderStatus::OCCUPANCY_NOT_SET;
+                }
+                if ($total > $paidAmount) {
+                    $next = $this->order->next_installment;
+                    if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
+                        $status = OrderStatus::PAYMENT_OVERDUE;
+                    } else {
+                        $status = OrderStatus::BALANCE_OUTSTANDING;
+                    }
+                } elseif ($total < $paidAmount) {
+                    $status = OrderStatus::OVERPAID;
+                } else {
+                    $status = OrderStatus::PAID_IN_FULL;
+                }
             }
+            Cache::put("orders.{$this->order->id}.status", $status, self::STATUS_CACHE_TIME);
         }
+        return $status;
     }
 
     /**
