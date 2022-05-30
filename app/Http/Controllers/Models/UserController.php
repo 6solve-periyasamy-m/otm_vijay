@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('pages.users.table', ['users' => User::all(),]);
+        return view('pages.users.table', ['users' => User::withTrashed()->get(),]);
     }
 
     public function create()
@@ -125,6 +125,14 @@ class UserController extends Controller
     {
         $this->verifyUser($user, false);
         $user->delete();
+        return redirect()->route('users.all');
+    }
+
+    public function restore($user)
+    {
+        if (UserRepository::getRemainingUserCount() <= 0) abort(403);
+        $user = User::withTrashed()->findOrFail($user);
+        $user->restore();
         return redirect()->route('users.all');
     }
 }

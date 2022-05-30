@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -64,7 +65,7 @@ use Silber\Bouncer\Database\Role;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities;
+    use \Illuminate\Auth\Authenticatable, HasFactory, Notifiable, HasRolesAndAbilities, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

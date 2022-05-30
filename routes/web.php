@@ -681,6 +681,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [UserController::class, 'edit'])->name('users.edit')->middleware('bouncer:User,update');
             Route::post('/update', [UserController::class, 'update'])->name('users.update')->middleware('bouncer:User,update');
             Route::post('/delete', [UserController::class, 'destroy'])->name('users.delete')->middleware('bouncer:User,delete');
+            Route::post('/restore', [UserController::class, 'restore'])->name('users.restore')->middleware('bouncer:User,delete');
         });
     });
 
