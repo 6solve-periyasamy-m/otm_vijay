@@ -14,6 +14,7 @@ use App\Models\Order\Component\OrderTransport;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\GroupRepository;
 use App\Repository\Model\Order\OrderCustomerRepository;
+use App\Repository\RoomingRepository;
 use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 use Database\Factories\Order\OrderCustomerFactory;
@@ -226,7 +227,7 @@ class OrderCustomer extends Model
 
     public function getHasOccupancyAttribute(): bool
     {
-        return StaticOrderRepository::checkOccupancy($this);
+        return RoomingRepository::checkOccupancy($this);
     }
 
     /**

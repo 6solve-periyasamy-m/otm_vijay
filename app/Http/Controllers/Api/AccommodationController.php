@@ -12,6 +12,7 @@ use App\Models\Tour\Tour;
 use App\Repository\AccommodationRepository;
 use App\Repository\BookingRepository;
 use App\Repository\BookingTravellerRepository;
+use App\Repository\RoomingRepository;
 use App\Repository\StaticOrderRepository;
 use App\Repository\TourRepository;
 use Illuminate\Http\Request;
@@ -173,7 +174,7 @@ class AccommodationController extends ApiController
 
     public function saveRoomingData(Request $request, Order $order) {
         try {
-            StaticOrderRepository::buildGroupRooming($order, $request->data);
+            RoomingRepository::buildGroupRooming($order, $request->data);
             return response('Building Saved', 200);
         } catch (RoomingFailedException $e) {
             abort(500, $e->getMessage());

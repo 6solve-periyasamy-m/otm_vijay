@@ -12,6 +12,7 @@ use App\Models\Order\Order;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\AccommodationComponentRepository;
+use App\Repository\RoomingRepository;
 use App\Repository\StockRepository;
 use App\Repository\TourRepository;
 use Database\Factories\Tour\TourFactory;
@@ -240,7 +241,7 @@ class Tour extends Model
 
     public function getTemplatesAttribute(): \Illuminate\Support\Collection
     {
-        return AccommodationComponentRepository::getTemplateTourInventory($this);
+        return RoomingRepository::getTemplateTourInventory($this);
     }
 
     public function clone(): Tour

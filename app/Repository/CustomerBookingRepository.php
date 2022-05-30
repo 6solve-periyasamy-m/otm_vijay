@@ -161,13 +161,13 @@ class CustomerBookingRepository
         $booking = $traveller->booking;
         $tour = $booking->tour;
         // Accommodation
-        foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {
-            $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $roomType);
+        foreach (RoomingRepository::getTemplateTourInventory($tour) as $template) {
+            $found = RoomingRepository::getInventoryWithRoomType($template, $roomType);
             if (!isset($found)) {
-                $types = AccommodationComponentRepository::hydrateRoomTypes(AccommodationComponentRepository::getRoomTypesForInventory($template));
+                $types = RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($template));
                 foreach ($types as $type) {
                     if ($type->maximum_occupancy == $roomType->maximum_occupancy) {
-                        $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $type);
+                        $found = RoomingRepository::getInventoryWithRoomType($template, $type);
                         if ($found->tour_component_type == 'Included') break;
                     }
                 }

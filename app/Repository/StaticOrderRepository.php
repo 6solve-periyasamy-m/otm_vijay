@@ -136,7 +136,7 @@ class StaticOrderRepository
      * This method should only be called when an order is intially created
      * @param OrderCustomer $orderCustomer
      */
-    public static function addIncludedToCustomer(OrderCustomer $orderCustomer)
+    public static function addIncludedToCustomer(OrderCustomer $orderCustomer): void
     {
         $order = $orderCustomer->order;
         // Accommodation are added to groups not customers (A:Celeste Gateley)
@@ -197,7 +197,7 @@ class StaticOrderRepository
      * Iterates through all orders, and if they have a due installment, sends an email reminder
      * @todo REWORK
      */
-    public static function sendAllOrderReminders(int $days, int $minDays = -1000)
+    public static function sendAllOrderReminders(int $days, int $minDays = -1000): void
     {
         foreach (Order::where('cancelled', false)->get() as $order) {
             if ($order->cancelled) continue;
@@ -222,7 +222,7 @@ class StaticOrderRepository
      * @param OrderInstallment $installment
      * @param int $days
      */
-    public static function sendReminderEmail(Order $order, OrderInstallment $installment, int $days)
+    public static function sendReminderEmail(Order $order, OrderInstallment $installment, int $days): void
     {
         PaymentReminder::create([
             'order_id' => $order->id,
@@ -279,173 +279,6 @@ class StaticOrderRepository
             $groups[] = Group::find($groupId);
         }
         return $groups;
-    }
-
-    /**
-     *
-     * @param Order $order
-     * @throws RoomingFailedException
-     * @throws Throwable
-     * @var Group $group
-     */
-    public static function buildGroupRooming(Order $order, $data)
-    {
-        try {
-            DB::beginTransaction();
-            $inflated = self::inflateRoomingData($data);
-            foreach ($order->groups() as $group) {
-                $group->delete();
-            }
-            foreach ($inflated as $groupData) {
-                $group = Group::create([
-                    'room_type_id' => $groupData->room_type->id,
-                    'name' => $groupData->name,
-                ]);
-                foreach ($groupData->customers as $customer) {
-                    $group->orderCustomers()->save($customer);
-                }
-                self::addRoomsToGroup($order, $group);
-            }
-            DB::commit();
-        } catch (Throwable $e) {
-            Log::error($e);
-            DB::rollBack();
-            throw new RoomingFailedException($e);
-        }
-    }
-
-    /**
-     * @throws RoomingFailedException
-     */
-    private static function inflateRoomingData($data): array
-    {
-        $inflated = [];
-        foreach ($data as $object) {
-            Log::error($data);
-            $collection = new Collection();
-            $roomType = RoomType::find($object['roomType']);
-            if (!isset($roomType)) throw new RoomingFailedException('An invalid room type was provided');
-            $collection->room_type = $roomType;
-            $members = [];
-            $collection->name = $object['name'];
-            if (!array_key_exists('customers', $object)) continue;
-            foreach ($object['customers'] as $customerId) {
-                $customer = OrderCustomer::find($customerId);
-                if (!isset($customer)) throw new RoomingFailedException('An invalid customer was provided');
-                $members[] = $customer;
-            }
-            if (sizeof($members) < 1) continue;
-            $collection->customers = $members;
-            $inflated[] = $collection;
-        }
-        return $inflated;
-    }
-
-    /**
-     * @throws RoomingFailedException
-     */
-    public static function addRoomsToGroup(Order $order, Group $group)
-    {
-        $templates = AccommodationComponentRepository::getTemplateTourInventory($order->tour);
-        $roomType = $group->roomType;
-        foreach ($templates as $template) {
-            $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $roomType);
-            if (!isset($found)) {
-                $types = AccommodationComponentRepository::hydrateRoomTypes(AccommodationComponentRepository::getRoomTypesForInventory($template));
-                foreach ($types as $type) {
-                    if ($type->maximum_occupancy == $roomType->maximum_occupancy) {
-                        $found = AccommodationComponentRepository::getInventoryWithRoomType($template, $type);
-                        break;
-                    }
-                }
-            }
-            if (!isset($found)) throw new RoomingFailedException("Template {$template->id} has no inventory of type {$roomType->name} or size {$roomType->maximum_occupancy}");
-            OrderAccommodation::create([
-                'accommodation_inventory_tour_id' => $found->id,
-                'group_id' => $group->id,
-                'cost' => $found->tour_sales_price,
-            ]);
-        }
-    }
-
-    public static function exportRoomingData(Order $order): array
-    {
-        $groups = [];
-        $usedIds = [];
-        foreach ($order->groups() as $group) {
-            $grouping = ['name' => $group->name, 'roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
-            $customers = [];
-            foreach ($group->orderCustomers as $orderCustomer) {
-                $customers[] = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture),];
-                $usedIds[] = $orderCustomer->id;
-            }
-            $grouping['customers'] = $customers;
-            $groups[] = $grouping;
-        }
-        $data['rooms'] = [];
-        foreach (AccommodationComponentRepository::getAvailableRoomTypes($order->tour) as $roomType) {
-            $data['rooms'][] = ['id' => $roomType->id, 'name' => $roomType->name, 'size' => $roomType->maximum_occupancy,];
-        }
-        $data['groups'] = $groups;
-        $data['customers'] = [];
-        $data['unused'] = [];
-        $unused = array_diff(self::getOrderCustomerIds($order), $usedIds);
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $customerData = ['id' => $orderCustomer->id, 'name' => $orderCustomer->customer_name, 'avatar' => asset($orderCustomer->customer->profile_picture),];
-            $data['customers'][] = $customerData;
-            if (in_array($orderCustomer->id, $unused)) {
-                $data['unused'][] = $customerData;
-            }
-        }
-        return $data;
-    }
-
-    private static function getOrderCustomerIds(Order $order): array
-    {
-        $query = DB::table('order_customers')->where('order_id', '=', $order->id)->select('id');
-        $ids = [];
-        foreach ($query->get() as $result) {
-            $ids[] = $result->id;
-        }
-        return $ids;
-    }
-
-    public static function assignDefaultRooming(OrderCustomer $orderCustomer): bool
-    {
-        $singleRoom = null;
-        foreach (AccommodationComponentRepository::getAvailableRoomTypes($orderCustomer->order->tour) as $roomType) {
-            if ($singleRoom != null && $singleRoom->maximum_occupancy <= $roomType->maximum_occupancy) continue;
-            $singleRoom = $roomType;
-            if ($singleRoom->maximum_occupancy == 1) break;
-        }
-        if (!isset($singleRoom)) return false;
-        $group = Group::create([
-            'room_type_id' => $singleRoom->id,
-            'name' => $orderCustomer->customer_name,
-        ]);
-        (new GroupRepository($group))->addCustomerToGroup($orderCustomer);
-        try {
-            self::addRoomsToGroup($orderCustomer->order, $group);
-            return true;
-        } catch (RoomingFailedException $e) {
-            Log::error($e->getMessage());
-            return false;
-        }
-    }
-
-    public static function checkOccupancy(OrderCustomer $orderCustomer): bool
-    {
-        $owned = [];
-        foreach ($orderCustomer->orderAccommodation() as $orderAccommodation) {
-            $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0, 0);
-            $owned[$date->unix()] = $orderAccommodation;
-        }
-        foreach ($orderCustomer->order->tour->templates as $template) {
-            $date = $template->inventory->check_in->clone()->setTime(0, 0, 0);
-            if (array_key_exists($date->unix(), $owned)) continue;
-            return false;
-        }
-        return true;
     }
 
     #[ArrayShape(['accommodation' => "array", 'activities' => "array", 'flights' => "array", 'transports' => "array"])]

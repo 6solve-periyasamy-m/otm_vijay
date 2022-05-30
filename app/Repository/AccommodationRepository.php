@@ -40,7 +40,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
      */
     public static function loadRoomsForTour(Tour $tour)
     {
-        $rooms = AccommodationComponentRepository::getAvailableRoomTypes($tour);
+        $rooms = RoomingRepository::getAvailableRoomTypes($tour);
 
         return $rooms;
     }

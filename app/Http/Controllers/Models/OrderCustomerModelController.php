@@ -8,6 +8,7 @@ use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Repository\RoomingRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,7 @@ class OrderCustomerModelController extends Controller
         ]);
         $order->orderCustomers()->save($orderCustomer);
         StaticOrderRepository::addIncludedToCustomer($orderCustomer);
-        StaticOrderRepository::assignDefaultRooming($orderCustomer);
+        RoomingRepository::assignDefaultRooming($orderCustomer);
         event(new OrderCustomerCreatedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }

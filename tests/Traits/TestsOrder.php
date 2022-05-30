@@ -8,6 +8,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
+use App\Repository\RoomingRepository;
 use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 
@@ -38,7 +39,7 @@ trait TestsOrder
         $orderCustomer = OrderCustomer::factory()->make(['tour_cost' => $tour_cost, 'single_occupancy_surcharge' => $surcharge,]);
         $order->orderCustomers()->save($orderCustomer);
 
-        StaticOrderRepository::assignDefaultRooming($orderCustomer);
+        RoomingRepository::assignDefaultRooming($orderCustomer);
         $withIncluded && StaticOrderRepository::addIncludedToCustomer($orderCustomer);
 
         return $orderCustomer;

@@ -185,7 +185,7 @@ class BookingRepository implements BookingRepositoryInterface
         }
         foreach ($groups as $group) {
             try {
-                StaticOrderRepository::addRoomsToGroup($order, $group);
+                RoomingRepository::addRoomsToGroup($order, $group);
             } catch (RoomingFailedException $e) { Log::error($e); }
         }
     }

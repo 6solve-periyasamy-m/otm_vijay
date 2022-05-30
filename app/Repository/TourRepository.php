@@ -191,9 +191,9 @@ class TourRepository implements TourRepositoryInterface
     public static function getTemplateData(Tour $tour): array
     {
         $data = [];
-        foreach (AccommodationComponentRepository::getTemplateTourInventory($tour) as $template) {
+        foreach (RoomingRepository::getTemplateTourInventory($tour) as $template) {
             $templateData = ['template' => $template, 'available' => []];
-            foreach (AccommodationComponentRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
+            foreach (RoomingRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
                 $templateData['available'][] = $roomType;
             }
             $data[] = $templateData;

@@ -18,6 +18,7 @@ use App\Repository\AccommodationComponentRepository;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerBookingRepository;
 use App\Repository\LocationsRepository;
+use App\Repository\RoomingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -37,7 +38,7 @@ class CustomerBookingController extends Controller
             'leadTraveller' => CustomerBookingRepository::getLeadTraveller($booking),
             'additionalTravellers' => CustomerBookingRepository::getAdditionalTravellers($booking),
             'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
-            'rooms' => AccommodationComponentRepository::getAvailableRoomTypes($tour),
+            'rooms' => RoomingRepository::getAvailableRoomTypes($tour),
             'groups' => AccommodationGroup::all(),
             'available' => $tour->stock - $tour->getUsedStock()]);
     }

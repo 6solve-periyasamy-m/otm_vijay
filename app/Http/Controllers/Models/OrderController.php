@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\RoomingRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
@@ -49,7 +50,7 @@ class OrderController extends Controller
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
         StaticOrderRepository::addIncludedToCustomer($orderCustomer);
-        StaticOrderRepository::assignDefaultRooming($orderCustomer);
+        RoomingRepository::assignDefaultRooming($orderCustomer);
         StaticOrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
@@ -62,7 +63,7 @@ class OrderController extends Controller
                 ]);
                 $order->orderCustomers()->save($orderCustomer);
                 StaticOrderRepository::addIncludedToCustomer($orderCustomer);
-                StaticOrderRepository::assignDefaultRooming($orderCustomer);
+                RoomingRepository::assignDefaultRooming($orderCustomer);
             }
         }
         return redirect()->route('orders.view', ['order' => $order,]);
@@ -85,7 +86,7 @@ class OrderController extends Controller
 
     public function occupancy(Order $order)
     {
-        return view('pages.occupancy.manager', array_merge(StaticOrderRepository::exportRoomingData($order), ['order' => $order,]));
+        return view('pages.occupancy.manager', array_merge(RoomingRepository::exportRoomingData($order), ['order' => $order,]));
     }
 
     public function edit(Order $order)
