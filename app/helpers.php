@@ -71,3 +71,15 @@ if (!function_exists('f_datetime')) {
         return StringFormatter::formatDateTime($date);
     }
 }
+
+if (!function_exists('f_bool')) {
+    /**
+     * Alias for StringFormatter::formatBoolean
+     * @param bool|null $value
+     * @return string
+     */
+    function f_bool(?bool $value): string
+    {
+        return StringFormatter::formatBoolean($value);
+    }
+}
