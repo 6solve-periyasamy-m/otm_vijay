@@ -43,6 +43,32 @@
                 </div>
             </div>
         </div>
+        <div class="customer-portal-mobile">
+            <div class="customer-portal-mobile-item" onclick="window.location = '{{ route('customer.edit') }}'">
+                <div class="item-wrapper">
+                    <span class="icon-user item-icon"></span>
+                    <span class="item-text">Your Details</span>
+                </div>
+            </div>
+            <div class="customer-portal-mobile-item" onclick="window.location = '{{ route('customer.finances') }}'">
+                <div class="item-wrapper">
+                    <span class="icon-credit-card item-icon"></span>
+                    <span class="item-text">Your Finance</span>
+                </div>
+            </div>
+            <div class="customer-portal-mobile-item" onclick="window.location = '{{ route('customer.extras') }}'">
+                <div class="item-wrapper">
+                    <span class="icon-diamond item-icon"></span>
+                    <span class="item-text">Your Extras</span>
+                </div>
+            </div>
+            <div class="customer-portal-mobile-item" onclick="window.location = '{{ route('customer.itinerary') }}'">
+                <div class="item-wrapper">
+                    <span class="icon-globe item-icon"></span>
+                    <span class="item-text">Your Tours</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
