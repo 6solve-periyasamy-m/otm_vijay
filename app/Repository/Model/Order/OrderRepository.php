@@ -147,10 +147,12 @@ class OrderRepository extends ModelRepository
      * Get the current status of the order
      * @return OrderStatus Status code for order
      */
-    public function getOrderStatus(): OrderStatus
+    public function getOrderStatus(bool $forceCache = false): OrderStatus
     {
         /** @var OrderStatus $status */
-        $status = Cache::get("orders.{$this->order->id}.status");
+        if (!$forceCache) {
+            $status = Cache::get("orders.{$this->order->id}.status");
+        }
         if (!isset($status)) {
             $paidAmount = $this->order->paid;
             $cost = $this->order->cost;
