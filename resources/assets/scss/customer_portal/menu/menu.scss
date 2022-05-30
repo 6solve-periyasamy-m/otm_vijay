@@ -4,6 +4,13 @@ $number_margin_value_y : 23px;
 
 $menu_colors : #4cc1ef, #c13018, #f7931f, #a2b969;
 
+$socials-facebook: #4267B2;
+$socials-facebook-hover: #5074BE;
+$socials-twitter: #1DA1F2;
+$socials-twitter-hover: #35ABF3;
+$socials-instagram: #3F729B;
+$socials-instagram-hover: #467FAD;
+
 @mixin menu_color {
     @for $i from 1 through 4 {
         &:nth-child(#{$i}) {
@@ -307,28 +314,28 @@ $right_offset: 312px, 276px, 210px, 117px, 10px;
 
     .facebook {
 		@extend %social-icon-base;
-        background-color: #4267B2;
+        background-color: $socials-facebook;
 
         &:hover {
-            background-color: #5074BE;
+            background-color: $socials-facebook-hover;
         }
     }
 
     .twitter {
         @extend %social-icon-base;
-        background-color: #1DA1F2;
+        background-color: $socials-twitter;
 
         &:hover {
-            background-color: #35ABF3;
+            background-color: $socials-twitter-hover;
         }
     }
 
     .instagram {
         @extend %social-icon-base;
-        background-color: #3F729B;
+        background-color: $socials-instagram;
 
         &:hover {
-            background-color: #467FAD;
+            background-color: $socials-instagram-hover;
         }
     }
 }
