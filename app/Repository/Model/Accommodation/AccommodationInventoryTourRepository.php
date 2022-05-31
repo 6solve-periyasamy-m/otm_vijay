@@ -24,7 +24,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array
     {
         $components = [];
-        foreach ($tour->accommodationInventoryTours as $component) {
+        foreach ($tour->accommodationInventoryTours()
+                     ->with('accommodationInventory', 'accommodationInventory.accommodation')
+                     ->get() as $component) {
             if ($component->tour_component_type !== "Upgrade") {
                 if ($component->available_stock <= 0) continue;
                 $components[$component->id] = [];

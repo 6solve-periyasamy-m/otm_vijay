@@ -5,7 +5,6 @@ namespace App\Models\Accommodation;
 use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour\Tour;
-use App\Repository\AccommodationComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use Database\Factories\Accommodation\AccommodationInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -20,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use StringFormatter;
 
 /**
  * App\Models\Accommodation\AccommodationInventoryTour
@@ -120,7 +118,7 @@ class AccommodationInventoryTour extends Model
 
     public function parent(): AccommodationInventoryTour
     {
-        return AccommodationComponentRepository::getParentComponent($this);
+        return $this->repository->getUpgradeParent();
     }
 
     public function tour(): BelongsTo

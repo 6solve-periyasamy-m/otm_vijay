@@ -13,10 +13,9 @@ use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
-use App\Http\Gateways\StripeGateway;
-use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\StaticOrderRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +26,7 @@ class TourComponentController extends Controller
 {
     public function getAvailableAccommodationAddons($oCustomerId) {
         $oCustomer = OrderCustomer::findOrFail($oCustomerId);
-        return AccommodationComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+        return AccommodationInventoryTourRepository::getAvailableAddons($oCustomer->order->tour, $oCustomer);
     }
 
     public function getAvailableActivityAddons($oCustomerId) {
@@ -95,7 +94,7 @@ class TourComponentController extends Controller
             $upgrade = AccommodationInventoryTourUpgrade::find($request->input('upgrade_id'));
         }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
-        if (!AccommodationComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        if (!$orderComponent->tourComponent->repository->onUpgradeTree($upgrade->repository)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);
     }
