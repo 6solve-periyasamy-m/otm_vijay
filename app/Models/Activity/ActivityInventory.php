@@ -129,7 +129,7 @@ class ActivityInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getActivityStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getUsedOnTourCountAttribute(): int

@@ -51,7 +51,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
             'cost' => $this->tourComponent->tour_sales_price,
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
-        return $orderComponent;
+        return $orderComponent->repository;
     }
 
     public function getUpgradeParent(): ActivityInventoryTour
