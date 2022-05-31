@@ -12,7 +12,7 @@
                     <center class="mt-4">
                         <div class="overlay-container">
                             <label for="profile_picture">
-                                <img src="{{ asset($customer->profile_picture) }}" class="rounded-circle hover-upload" width="150" />
+                                <img src="{{ $customer->avatar_url }}" class="rounded-circle hover-upload" width="150" />
                                 <div class="image-overlay">Upload new picture</div>
                             </label>
                         </div>
