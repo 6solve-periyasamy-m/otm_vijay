@@ -28,7 +28,7 @@ class CustomerBookingController extends Controller
         } else {
             $to = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
         }
-        if (!isset($to) || !$to->upgrade->is_bookable || $to->upgrade->tour_id !== $booking->tour_id || !ActivityComponentRepository::isOnUpgradeTree($from->tourComponent, $to))
+        if (!isset($to) || !$to->upgrade->is_bookable || $to->upgrade->tour_id !== $booking->tour_id || $from->tourComponent->repository->onUpgradeTree($to->repository))
             return response()->json(['success' => false, 'message' => 'That upgrade does not exist on that activity tree']);
         try {
             $success = CustomerBookingRepository::upgradeBookingActivity($booking, $from->tourComponent, $request->input('upgrade_id') == 0 ? $to->base : $to->upgrade);

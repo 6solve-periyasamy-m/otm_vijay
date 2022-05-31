@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Repository\Model\Activity\ActivityInventoryTourUpgradeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read ActivityInventoryTour $base
  * @property-read ActivityInventoryTour $upgrade
+ * @property-read ActivityInventoryTourUpgradeRepository $repository
  * @method static Builder|ActivityInventoryTourUpgrade newModelQuery()
  * @method static Builder|ActivityInventoryTourUpgrade newQuery()
  * @method static QueryBuilder|ActivityInventoryTourUpgrade onlyTrashed()
@@ -52,5 +54,11 @@ class ActivityInventoryTourUpgrade extends Model
     public function upgrade(): BelongsTo
     {
         return $this->belongsTo(ActivityInventoryTour::class, 'upgrade_id');
+    }
+
+    public function getRepositoryAttribute(): ActivityInventoryTourUpgradeRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new ActivityInventoryTourUpgradeRepository($this);
+        return $this->internal_repository;
     }
 }

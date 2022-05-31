@@ -112,7 +112,7 @@ class TourComponentController extends Controller
             $upgrade = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
         }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
-        if (!ActivityComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        if (!$orderComponent->tourComponent->repository->onUpgradeTree($upgrade->repository)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         event(new OrderCustomerComponentEditedEvent($orderComponent));
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);

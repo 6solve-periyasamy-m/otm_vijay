@@ -14,15 +14,6 @@ use Illuminate\Support\Collection;
 
 class ActivityComponentRepository
 {
-    public static function isOnUpgradeTree(ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade): bool
-    {
-        if ($upgrade->base_id == $inventoryTour->id) return true;
-        foreach ($inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
-            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
-        }
-        return false;
-    }
-
     public static function getAvailableBetweenDates(Tour $tour, Carbon $dateFrom = null, Carbon $dateTo = null): Collection
     {
         $inventories = [];

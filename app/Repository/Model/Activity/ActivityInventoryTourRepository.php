@@ -10,9 +10,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
-use Illuminate\Database\Eloquent\Model;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
 {
@@ -65,7 +63,12 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
 
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
     {
-        // TODO: Implement onUpgradeTree() method.
+        $upgrade = $upgradeRepository->get();
+        if ($upgrade->base_id == $this->tourComponent->id) return true;
+        foreach ($this->tourComponent->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
     }
 
     public function get(): ActivityInventoryTour
