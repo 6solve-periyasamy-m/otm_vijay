@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Repository\Model\Activity\ActivityInventoryRepository;
 use App\Repository\StockRepository;
 use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -42,6 +43,7 @@ use StringFormatter;
  * @property-read TicketType $ticketType
  * @property-read Collection|ActivityInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @property-read ActivityInventoryRepository $repository
  * @method static ActivityInventoryFactory factory(...$parameters)
  * @method static Builder|ActivityInventory newModelQuery()
  * @method static Builder|ActivityInventory newQuery()
@@ -138,5 +140,11 @@ class ActivityInventory extends Model
     public function __toString(): string
     {
         return "{$this->component} - {$this->ticketType} (" . f_datetime($this->starts_at) . " to " . f_datetime($this->ends_at) . ")";
+    }
+
+    public function getRepositoryAttribute(): ActivityInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new ActivityInventoryRepository($this);
+        return $this->internal_repository;
     }
 }
