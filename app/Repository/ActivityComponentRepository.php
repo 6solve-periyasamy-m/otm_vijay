@@ -14,17 +14,6 @@ use Illuminate\Support\Collection;
 
 class ActivityComponentRepository
 {
-    public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId): OrderActivity
-    {
-        $orderComponent = OrderActivity::create([
-            'order_customer_id' => $oCustomerId,
-            'activity_inventory_tour_id' => $activityInventoryTourId,
-            'cost' => ActivityInventoryTour::findOrFail($activityInventoryTourId)->tour_sales_price,
-        ]);
-        event(new OrderCustomerComponentAddedEvent($orderComponent));
-        return $orderComponent;
-    }
-
     public static function getParentComponent(ActivityInventoryTour $inventoryTour): ActivityInventoryTour
     {
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();

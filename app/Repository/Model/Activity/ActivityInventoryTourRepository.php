@@ -2,15 +2,26 @@
 
 namespace App\Repository\Model\Activity;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Model\Order\Component\OrderActivityRepository;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
 {
+    private ActivityInventoryTour $tourComponent;
+
+    public function __construct(ActivityInventoryTour $tourComponent)
+    {
+        $this->tourComponent = $tourComponent;
+    }
+
     public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array
     {
         $components = [];
@@ -33,9 +44,15 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderActivityRepository
     {
-        // TODO: Implement grantToCustomer() method.
+        $orderComponent = OrderActivity::create([
+            'order_customer_id' => $orderCustomer->id,
+            'activity_inventory_tour_id' => $this->tourComponent->id,
+            'cost' => $this->tourComponent->tour_sales_price,
+        ]);
+        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        return $orderComponent;
     }
 
     public function getUpgradeParent(): Model
@@ -48,33 +65,37 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         // TODO: Implement onUpgradeTree() method.
     }
 
-    public function get(): Model
+    public function get(): ActivityInventoryTour
     {
-        // TODO: Implement get() method.
+        return $this->tourComponent;
     }
 
-    public function update(array $data): Model
+    public function update(array $data): ActivityInventoryTour
     {
-        // TODO: Implement update() method.
+        $this->tourComponent->update($data);
+        $this->save();
+        return $this->get();
     }
 
     public function save(): bool
     {
-        // TODO: Implement save() method.
+        return $this->tourComponent->save();
     }
 
     public function delete(): bool
     {
-        // TODO: Implement delete() method.
+        return $this->tourComponent->delete();
     }
 
     public function isDeleted(): bool
     {
-        // TODO: Implement isDeleted() method.
+        return $this->tourComponent->trashed();
     }
 
     public function __toString(): string
     {
-        // TODO: Implement __toString() method.
+        $inventory = $this->tourComponent->activityInventory;
+        $component = $inventory->activity;
+        return $component->name . ' (' . f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
     }
 }

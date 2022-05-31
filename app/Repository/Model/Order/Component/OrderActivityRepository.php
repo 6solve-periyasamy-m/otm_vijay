@@ -15,12 +15,12 @@ class OrderActivityRepository extends OrderComponentRepository
         $this->orderComponent = $orderComponent;
     }
 
-    public function get(): Model
+    public function get(): OrderActivity
     {
         return $this->orderComponent;
     }
 
-    public function update(array $data): Model
+    public function update(array $data): OrderActivity
     {
         $this->orderComponent->update($data);
         $this->save();

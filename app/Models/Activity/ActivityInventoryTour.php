@@ -6,6 +6,7 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\ActivityComponentRepository;
+use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use Database\Factories\Activity\ActivityInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -45,6 +46,7 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|ActivityInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @property-read ActivityInventoryTourRepository $repository
  * @method static ActivityInventoryTourFactory  factory(...$parameters)
  * @method static Builder|ActivityInventoryTour newModelQuery()
  * @method static Builder|ActivityInventoryTour newQuery()
@@ -198,11 +200,7 @@ class ActivityInventoryTour extends Model
 
     public function addToOrder(OrderCustomer $orderCustomer): OrderActivity
     {
-        return OrderActivity::create([
-            'order_customer_id' => $orderCustomer->id,
-            'activity_inventory_tour_id' => $this->id,
-            'cost' => $this->tour_sales_price,
-        ]);
+        return $this->repository->grantToCustomer($orderCustomer)->get();
     }
 
     public function getUsedTourStockAttribute(): int
@@ -212,5 +210,11 @@ class ActivityInventoryTour extends Model
             if (!$orderComponent->isCancelled()) $used++;
         }
         return $used;
+    }
+
+    public function getRepositoryAttribute(): ActivityInventoryTourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new ActivityInventoryTourRepository($this);
+        return $this->internal_repository;
     }
 }

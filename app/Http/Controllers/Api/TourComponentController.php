@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
@@ -56,9 +57,9 @@ class TourComponentController extends Controller
 
     public function addActivityAddon(Request $request) {
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'activity_id' => 'required|exists:activity_inventory_tours,id']);
-        $oCustomerId = $request->input('customer_id');
-        $activityInventoryTourId = $request->input('activity_id');
-        return ActivityComponentRepository::grantAddonToCustomer($oCustomerId, $activityInventoryTourId);
+        $oCustomer = OrderCustomer::find($request->input('customer_id'));
+        $activityInventoryTour = ActivityInventoryTour::find($request->input('activity_id'));
+        return $activityInventoryTour->addToOrder($oCustomer);
     }
 
     public function addFlightAddon(Request $request) {
