@@ -4,6 +4,7 @@ namespace App\Repository\Model\Activity;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
@@ -55,9 +56,11 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $orderComponent;
     }
 
-    public function getUpgradeParent(): Model
+    public function getUpgradeParent(): ActivityInventoryTour
     {
-        // TODO: Implement getUpgradeParent() method.
+        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
+        if (!isset($upgrade)) return $this->tourComponent;
+        return $upgrade->base;
     }
 
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool

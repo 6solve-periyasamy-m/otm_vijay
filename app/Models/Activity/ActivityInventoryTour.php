@@ -112,7 +112,7 @@ class ActivityInventoryTour extends Model
 
     public function parent(): ActivityInventoryTour
     {
-        return ActivityComponentRepository::getParentComponent($this);
+        return $this->repository->getUpgradeParent();
     }
 
     public function tour(): BelongsTo

@@ -14,13 +14,6 @@ use Illuminate\Support\Collection;
 
 class ActivityComponentRepository
 {
-    public static function getParentComponent(ActivityInventoryTour $inventoryTour): ActivityInventoryTour
-    {
-        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
-        if (!isset($upgrade)) return $inventoryTour;
-        return $upgrade->base;
-    }
-
     public static function isOnUpgradeTree(ActivityInventoryTour $inventoryTour, ActivityInventoryTourUpgrade $upgrade): bool
     {
         if ($upgrade->base_id == $inventoryTour->id) return true;
