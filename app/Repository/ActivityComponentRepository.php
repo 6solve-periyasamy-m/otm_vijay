@@ -14,30 +14,6 @@ use Illuminate\Support\Collection;
 
 class ActivityComponentRepository
 {
-    public static function getAvailableAddons($tourId, $oCustomerId = -1): array
-    {
-        $tour = Tour::findOrFail($tourId);
-        $oCustomer = $oCustomerId == -1 ? null : OrderCustomer::findOrFail($oCustomerId);
-        $components = [];
-        foreach ($tour->activityInventoryTours as $component) {
-            if ($component->tour_component_type !== "Upgrade") {
-                if ($component->available_stock <= 0) continue;
-                $components[$component->id] = [];
-                $components[$component->id]['id'] = $component->id;
-                $components[$component->id]['name'] = $component->activityInventory->activity->name;
-                $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->name;
-            }
-        }
-        if ($oCustomer != null) {
-            // Remove all components the customer already has
-            foreach ($oCustomer->orderActivities as $oComponent) {
-                $component = $oComponent->activityInventoryTour;
-                unset($components[$component->id]);
-            }
-        }
-        return $components;
-    }
-
     public static function grantAddonToCustomer($oCustomerId, $activityInventoryTourId): OrderActivity
     {
         $orderComponent = OrderActivity::create([

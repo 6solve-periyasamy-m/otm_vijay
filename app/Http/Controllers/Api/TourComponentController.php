@@ -16,6 +16,7 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
+use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use App\Repository\StaticOrderRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\JsonResponse;
@@ -31,7 +32,7 @@ class TourComponentController extends Controller
 
     public function getAvailableActivityAddons($oCustomerId) {
         $oCustomer = OrderCustomer::findOrFail($oCustomerId);
-        return ActivityComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+        return ActivityInventoryTourRepository::getAvailableAddons($oCustomer->order->tour, $oCustomer);
     }
 
     public function getAvailableFlightAddons($oCustomerId) {
