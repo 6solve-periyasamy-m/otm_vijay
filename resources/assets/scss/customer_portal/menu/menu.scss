@@ -104,7 +104,12 @@ $socials-instagram-hover: #467FAD;
 .customer-portal-mobile {
     display: none;
 }
-
+.customer-footer {
+    display: none;
+}
+.navbar-nav .nav-link {
+    padding-left: 15px;
+}
 @media only screen and (max-width: 768px) {
     .donut-menu, .click-menu {
         display: none;
@@ -176,8 +181,14 @@ $socials-instagram-hover: #467FAD;
     .setting-logo {
         height: calc(10vh - 30px);
     }
+    .sidebar-logo {
+        height: calc(10vh - 10px);
+    }
+    .customer-footer {
+        display: block;
+        width: 100%;
+    }
 }
-
 @mixin rotation {
     @for $i from 1 through 4 {
         &:nth-child(#{$i}) {

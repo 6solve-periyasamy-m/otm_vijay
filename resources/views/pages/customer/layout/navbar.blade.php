@@ -13,25 +13,8 @@
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             <div style="width: 100%; display: flex; justify-content: center; align-items: center; ">
-                <img class="setting-logo dp-button" style="margin-right: 20px;" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}">
+                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}">
             </div>
-          </div>
-          <div class="socials">
-            @if(empty(\App\Repository\SettingsRepository::get('social.facebook')))
-              <div class="facebook">
-                  <a href="{{ \App\Repository\SettingsRepository::get('social.facebook') }}" class="icon-social-facebook"></a>
-              </div>
-            @endif
-            @if(empty(\App\Repository\SettingsRepository::get('social.twitter')))
-              <div class="twitter">
-                <a href="{{ \App\Repository\SettingsRepository::get('social.twitter') }}" class="icon-social-twitter"></a>
-    	      </div>
-            @endif
-            @if(empty(\App\Repository\SettingsRepository::get('social.instagram')))
-    	        <div class="instagram">
-    		        <a href="{{ \App\Repository\SettingsRepository::get('social.instagram') }}" class="icon-social-instagram"></a>
-    	        </div>
-            @endif
           </div>
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1">
@@ -86,10 +69,27 @@
                     </ul>
                 </div>
                 <div style="position: fixed; bottom: 0;">
-                <hr />
-                    <div class="d-flex justify-content-between align-items-center" style="font-size: 12px; font-weight: 600;">
+                    <hr />
+                    <div class="socials">
+                        @if(empty(\App\Repository\SettingsRepository::get('social.facebook')))
+                          <div class="facebook">
+                              <a href="{{ \App\Repository\SettingsRepository::get('social.facebook') }}" class="icon-social-facebook"></a>
+                          </div>
+                        @endif
+                        @if(empty(\App\Repository\SettingsRepository::get('social.twitter')))
+                          <div class="twitter">
+                            <a href="{{ \App\Repository\SettingsRepository::get('social.twitter') }}" class="icon-social-twitter"></a>
+                          </div>
+                        @endif
+                        @if(empty(\App\Repository\SettingsRepository::get('social.instagram')))
+                            <div class="instagram">
+                                <a href="{{ \App\Repository\SettingsRepository::get('social.instagram') }}" class="icon-social-instagram"></a>
+                            </div>
+                        @endif
+                      </div>
+                    <div class="d-flex justify-content-between align-items-center" style="font-size: 13px; font-weight: 600;">
                         <span class="p-3 pe-5 d-flex flex-column">
-                            <img class="stamp-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('atol.stamp', '')) }}" />
+                            <img class="stamp-logo sidebar-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('atol.stamp', '')) }}" />
                         </span>
                         <span class="p-3 d-flex flex-column">
                             <span>{{ \App\Repository\SettingsRepository::getOrDefault('company.name', '') }}</span>
