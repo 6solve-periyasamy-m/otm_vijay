@@ -72,3 +72,36 @@
     </div>
 </div>
 @endsection
+
+@section('footer')
+<div class="customer-footer" style="position: fixed; bottom: 0;">
+    <hr />
+    <div class="socials">
+        @if(empty(\App\Repository\SettingsRepository::get('social.facebook')))
+          <div class="facebook">
+              <a href="{{ \App\Repository\SettingsRepository::get('social.facebook') }}" class="icon-social-facebook"></a>
+          </div>
+        @endif
+        @if(empty(\App\Repository\SettingsRepository::get('social.twitter')))
+          <div class="twitter">
+            <a href="{{ \App\Repository\SettingsRepository::get('social.twitter') }}" class="icon-social-twitter"></a>
+          </div>
+        @endif
+        @if(empty(\App\Repository\SettingsRepository::get('social.instagram')))
+            <div class="instagram">
+                <a href="{{ \App\Repository\SettingsRepository::get('social.instagram') }}" class="icon-social-instagram"></a>
+            </div>
+        @endif
+      </div>
+    <div class="d-flex justify-content-between align-items-center footer-wrapper" style="font-size: 13px; font-weight: 600;">
+        <span class="p-3 pe-5 d-flex flex-column">
+            <img class="stamp-logo sidebar-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('atol.stamp', '')) }}" />
+        </span>
+        <span class="p-3 d-flex flex-column footer-client-details">
+            <span>{{ \App\Repository\SettingsRepository::getOrDefault('company.name', '') }}</span>
+            <span><i class="icon-envelope"></i> {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', '') }}</span>
+            <span><i class="icon-call-end"></i> {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', '') }}</span>
+        </span>
+    </div>
+</div>
+@endsection
