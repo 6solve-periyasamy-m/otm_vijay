@@ -21,27 +21,40 @@
                     </center>
                 </div>
             </div>
-            @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
-                <div class="card other-profile" onclick="window.location = '{{ route('customer.edit') }}';">
-                    <div class="card-body profile-card">
-                        <center class="mt-4">
-                            <h4 class="card-title mt-2">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
-                            <h6 class="card-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
-                        </center>
-                    </div>
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Additional Customers
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                      @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                          <div class="card other-profile" onclick="window.location = '{{ route('customer.edit') }}';">
+                              <div class="card-body profile-card">
+                                  <center class="mt-4">
+                                      <h4 class="card-title mt-2">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
+                                      <h6 class="card-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
+                                  </center>
+                              </div>
+                          </div>
+                      @endif
+                      @foreach($editable as $editee)
+                          @if($editee->id === $customer->id) @continue @endif
+                          <div class="card other-profile" onclick="window.location = '{{ route('customer.edit.other', ['customer' => $editee,]) }}';">
+                              <div class="card-body profile-card">
+                                  <center class="mt-4">
+                                      <h4 class="card-title mt-2">{{ $editee->first_name }} {{ $editee->last_name }}</h4>
+                                      <h6 class="card-subtitle">{{ $editee->email_address }}</h6>
+                                  </center>
+                              </div>
+                          </div>
+                      @endforeach
+                  </div>
                 </div>
-            @endif
-            @foreach($editable as $editee)
-                @if($editee->id === $customer->id) @continue @endif
-                <div class="card other-profile" onclick="window.location = '{{ route('customer.edit.other', ['customer' => $editee,]) }}';">
-                    <div class="card-body profile-card">
-                        <center class="mt-4">
-                            <h4 class="card-title mt-2">{{ $editee->first_name }} {{ $editee->last_name }}</h4>
-                            <h6 class="card-subtitle">{{ $editee->email_address }}</h6>
-                        </center>
-                    </div>
-                </div>
-            @endforeach
+              </div>
+            </div>
         </div>
         <!-- Column -->
         <!-- Column -->

@@ -191,3 +191,23 @@
         }
     }    
 }
+
+.accordion {
+    box-shadow: 0px 2px 8px rgb(0 0 0 / 10%);
+}
+
+.accordion-button {
+    background-color: #ffffff;
+    border-radius: 4px;
+    color: #455a64;
+    &:not(.collapsed) {
+        color: #455a64;
+        background-color: #ffffff;
+        border-bottom-left-radius:0;
+        border-bottom-right-radius:0;
+    }
+}
+
+.accordion-item {
+    border: none;
+}
