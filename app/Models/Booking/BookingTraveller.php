@@ -15,15 +15,22 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
 
 /**
- * App\Models\BookingTraveller
+ * App\Models\Booking\BookingTraveller
  *
  * @property int $id
  * @property int $booking_id
- * @property int $customer_id
+ * @property int|null $customer_id
+ * @property string|null $title
+ * @property string|null $first_name
+ * @property string|null $middle_names
+ * @property string|null $last_name
+ * @property string|null $date_of_birth
+ * @property string|null $mobile_number
+ * @property string|null $email_address
+ * @property int|null $home_address_id
+ * @property int|null $billing_address_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|BookingAccommodation[] $accommodation
- * @property-read int|null $accommodation_count
  * @property-read Collection|BookingActivity[] $activities
  * @property-read int|null $activities_count
  * @property-read Booking $booking
@@ -37,30 +44,21 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @method static Builder|BookingTraveller newModelQuery()
  * @method static Builder|BookingTraveller newQuery()
  * @method static Builder|BookingTraveller query()
+ * @method static Builder|BookingTraveller whereBillingAddressId($value)
  * @method static Builder|BookingTraveller whereBookingId($value)
  * @method static Builder|BookingTraveller whereCreatedAt($value)
  * @method static Builder|BookingTraveller whereCustomerId($value)
- * @method static Builder|BookingTraveller whereId($value)
- * @method static Builder|BookingTraveller whereUpdatedAt($value)
- * @mixin Eloquent
- * @property string|null $title
- * @property string|null $first_name
- * @property string|null $middle_names
- * @property string|null $last_name
- * @property string|null $date_of_birth
- * @property string|null $mobile_number
- * @property string|null $email_address
- * @property int|null $home_address_id
- * @property int|null $billing_address_id
- * @method static Builder|BookingTraveller whereBillingAddressId($value)
  * @method static Builder|BookingTraveller whereDateOfBirth($value)
  * @method static Builder|BookingTraveller whereEmailAddress($value)
  * @method static Builder|BookingTraveller whereFirstName($value)
  * @method static Builder|BookingTraveller whereHomeAddressId($value)
+ * @method static Builder|BookingTraveller whereId($value)
  * @method static Builder|BookingTraveller whereLastName($value)
  * @method static Builder|BookingTraveller whereMiddleNames($value)
  * @method static Builder|BookingTraveller whereMobileNumber($value)
  * @method static Builder|BookingTraveller whereTitle($value)
+ * @method static Builder|BookingTraveller whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class BookingTraveller extends Model
 {

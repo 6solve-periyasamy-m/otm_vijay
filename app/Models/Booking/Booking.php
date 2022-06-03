@@ -24,9 +24,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read \App\Models\Booking\BookingTraveller|null $leadTraveller
+ * @property-read BookingTraveller|null $leadTraveller
  * @property-read Tour $tour
- * @property-read Collection|\App\Models\Booking\BookingTraveller[] $travellers
+ * @property-read Collection|BookingTraveller[] $travellers
  * @property-read int|null $travellers_count
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()

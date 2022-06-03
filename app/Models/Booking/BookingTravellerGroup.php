@@ -2,6 +2,7 @@
 
 namespace App\Models\Booking;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,13 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $booking_traveller_id
  * @property int $booking_group_id
- * @property-read \App\Models\Booking\BookingGroup|null $group
- * @property-read \App\Models\Booking\BookingTraveller|null $traveller
- * @method static \Illuminate\Database\Eloquent\Builder|BookingTravellerGroup newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BookingTravellerGroup newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BookingTravellerGroup query()
- * @method static \Illuminate\Database\Eloquent\Builder|BookingTravellerGroup whereBookingGroupId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BookingTravellerGroup whereBookingTravellerId($value)
+ * @property-read BookingGroup|null $group
+ * @property-read BookingTraveller|null $traveller
+ * @method static Builder|BookingTravellerGroup newModelQuery()
+ * @method static Builder|BookingTravellerGroup newQuery()
+ * @method static Builder|BookingTravellerGroup query()
+ * @method static Builder|BookingTravellerGroup whereBookingGroupId($value)
+ * @method static Builder|BookingTravellerGroup whereBookingTravellerId($value)
  * @mixin \Eloquent
  */
 class BookingTravellerGroup extends Model

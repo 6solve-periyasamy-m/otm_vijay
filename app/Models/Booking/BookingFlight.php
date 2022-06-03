@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read FlightInventoryTour $tourComponent
- * @property-read \App\Models\Booking\BookingTraveller $traveller
+ * @property-read BookingTraveller $traveller
  * @method static Builder|BookingFlight newModelQuery()
  * @method static Builder|BookingFlight newQuery()
  * @method static Builder|BookingFlight query()

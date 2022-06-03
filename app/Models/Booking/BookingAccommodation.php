@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int $accommodation_inventory_tour_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Booking\BookingGroup $group
+ * @property-read BookingGroup $group
  * @property-read AccommodationInventoryTour $tourComponent
  * @method static Builder|BookingAccommodation newModelQuery()
  * @method static Builder|BookingAccommodation newQuery()

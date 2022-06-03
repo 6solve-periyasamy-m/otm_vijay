@@ -12,30 +12,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\BookingTransport
+ * App\Models\Booking\BookingTransport
  *
  * @property int $id
- * @property int $booking_id
- * @property int $customer_id
+ * @property int $booking_traveller_id
  * @property int $transport_inventory_tour_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Booking $booking
- * @property-read Customer $customer
  * @property-read TransportInventoryTour $tourComponent
+ * @property-read BookingTraveller $traveller
  * @method static Builder|BookingTransport newModelQuery()
  * @method static Builder|BookingTransport newQuery()
  * @method static Builder|BookingTransport query()
- * @method static Builder|BookingTransport whereBookingId($value)
+ * @method static Builder|BookingTransport whereBookingTravellerId($value)
  * @method static Builder|BookingTransport whereCreatedAt($value)
- * @method static Builder|BookingTransport whereCustomerId($value)
  * @method static Builder|BookingTransport whereId($value)
  * @method static Builder|BookingTransport whereTransportInventoryTourId($value)
  * @method static Builder|BookingTransport whereUpdatedAt($value)
  * @mixin Eloquent
- * @property int $booking_traveller_id
- * @method static Builder|BookingTransport whereBookingTravellerId($value)
- * @property-read \App\Models\Booking\BookingTraveller $traveller
  */
 class BookingTransport extends Model
 {

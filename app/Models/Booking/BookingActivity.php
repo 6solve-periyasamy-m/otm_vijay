@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read ActivityInventoryTour $tourComponent
- * @property-read \App\Models\Booking\BookingTraveller $traveller
+ * @property-read BookingTraveller $traveller
  * @method static Builder|BookingActivity newModelQuery()
  * @method static Builder|BookingActivity newQuery()
  * @method static Builder|BookingActivity query()
