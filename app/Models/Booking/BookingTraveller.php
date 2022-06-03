@@ -3,6 +3,7 @@
 namespace App\Models\Booking;
 
 use App\Models\Customer\Customer;
+use App\Models\Location\Address;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,13 +25,17 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property string|null $first_name
  * @property string|null $middle_names
  * @property string|null $last_name
- * @property string|null $date_of_birth
+ * @property Carbon|null $date_of_birth
  * @property string|null $mobile_number
  * @property string|null $email_address
  * @property int|null $home_address_id
  * @property int|null $billing_address_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Address|null $billingAddress Relation to local address (DO NOT USE)
+ * @property-read Address|null $billing_address
+ * @property-read Address|null $home_address
+ * @property-read Address|null $homeAddress Relation to local address (DO NOT USE)
  * @property-read Collection|BookingActivity[] $activities
  * @property-read int|null $activities_count
  * @property-read Booking $booking
@@ -59,11 +64,14 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @method static Builder|BookingTraveller whereTitle($value)
  * @method static Builder|BookingTraveller whereUpdatedAt($value)
  * @mixin Eloquent
+
  */
 class BookingTraveller extends Model
 {
     use HasFactory;
     use HasDeepRelation;
+
+    protected $casts = ['date_of_birth' => 'date',];
 
     public function booking(): BelongsTo
     {
@@ -99,4 +107,61 @@ class BookingTraveller extends Model
     {
         return $this->hasMany(BookingMerchandise::class, 'booking_traveller_id');
     }
+
+    public function homeAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'home_address_id');
+    }
+
+    public function billingAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
+    public function getTitleAttribute(): ?string
+    {
+        return $this->customer?->title ?? $this->title;
+    }
+
+    public function getFirstNameAttribute(): ?string
+    {
+        return $this->customer?->first_name ?? $this->first_name;
+    }
+
+    public function getMiddleNamesAttribute(): ?string
+    {
+        return $this->middle_names?->title ?? $this->middle_names;
+    }
+
+    public function getLastNameAttribute(): ?string
+    {
+        return $this->customer?->last_name ?? $this->last_name;
+    }
+
+    public function getDateOfBirthAttribute(): ?Carbon
+    {
+        return $this->customer?->date_of_birth ?? $this->date_of_birth;
+    }
+
+    public function getEmailAddressAttribute(): ?string
+    {
+        return $this->customer?->email_address ?? $this->email_address;
+    }
+
+    public function getMobileNumberAttribute(): ?string
+    {
+        return $this->customer?->mobile_number ?? $this->mobile_number;
+    }
+
+    public function getHomeAddressAttribute(): ?Address
+    {
+        return $this->customer?->homeAddress ?? $this->homeAddress;
+    }
+
+    public function getBillingAddressAttribute(): ?Address
+    {
+        return $this->customer?->billingAddress ?? $this->billingAddress;
+    }
+
+
 }
