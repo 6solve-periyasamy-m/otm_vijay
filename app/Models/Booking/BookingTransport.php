@@ -33,19 +33,17 @@ use Illuminate\Support\Carbon;
  * @method static Builder|BookingTransport whereTransportInventoryTourId($value)
  * @method static Builder|BookingTransport whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int $booking_traveller_id
+ * @method static Builder|BookingTransport whereBookingTravellerId($value)
+ * @property-read \App\Models\Booking\BookingTraveller $traveller
  */
 class BookingTransport extends Model
 {
     use HasFactory;
 
-    public function booking(): BelongsTo
+    public function traveller(): BelongsTo
     {
-        return $this->belongsTo(Booking::class, 'booking_id');
-    }
-
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');
     }
 
     public function tourComponent(): BelongsTo

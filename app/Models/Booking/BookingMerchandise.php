@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|BookingMerchandise whereMerchandiseId($value)
  * @method static Builder|BookingMerchandise whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read \App\Models\Booking\BookingTraveller $traveller
  */
 class BookingMerchandise extends Model
 {
@@ -40,14 +41,9 @@ class BookingMerchandise extends Model
 
     protected $fillable = ['customer_id', 'merchandise_id', 'booking_id'];
 
-    public function booking(): BelongsTo
+    public function traveller(): BelongsTo
     {
-        return $this->belongsTo(Booking::class, 'booking_id');
-    }
-
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');
     }
 
     public function tourComponent(): BelongsTo

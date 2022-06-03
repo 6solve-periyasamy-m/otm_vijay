@@ -10,6 +10,8 @@
     "require": {
         "php": "^8.1",
         "ext-intl": "*",
+        "ext-json": "*",
+        "ext-zip": "*",
         "dyrynda/laravel-cascade-soft-deletes": "^4.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -22,10 +24,9 @@
         "mikehaertl/php-pdftk": "^0.11.0",
         "orangehill/iseed": "^3.0",
         "silber/bouncer": "^1.0",
-        "ext-json": "*",
         "spatie/laravel-stripe-webhooks": "^3.1",
-        "stripe/stripe-php": "^7.110",
-        "ext-zip": "*"
+        "staudenmeir/eloquent-has-many-deep": "^1.15",
+        "stripe/stripe-php": "^7.110"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",

@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
 
 /**
  * App\Models\BookingTraveller
@@ -41,10 +43,29 @@ use Illuminate\Support\Carbon;
  * @method static Builder|BookingTraveller whereId($value)
  * @method static Builder|BookingTraveller whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property string|null $title
+ * @property string|null $first_name
+ * @property string|null $middle_names
+ * @property string|null $last_name
+ * @property string|null $date_of_birth
+ * @property string|null $mobile_number
+ * @property string|null $email_address
+ * @property int|null $home_address_id
+ * @property int|null $billing_address_id
+ * @method static Builder|BookingTraveller whereBillingAddressId($value)
+ * @method static Builder|BookingTraveller whereDateOfBirth($value)
+ * @method static Builder|BookingTraveller whereEmailAddress($value)
+ * @method static Builder|BookingTraveller whereFirstName($value)
+ * @method static Builder|BookingTraveller whereHomeAddressId($value)
+ * @method static Builder|BookingTraveller whereLastName($value)
+ * @method static Builder|BookingTraveller whereMiddleNames($value)
+ * @method static Builder|BookingTraveller whereMobileNumber($value)
+ * @method static Builder|BookingTraveller whereTitle($value)
  */
 class BookingTraveller extends Model
 {
     use HasFactory;
+    use HasDeepRelation;
 
     public function booking(): BelongsTo
     {
@@ -56,28 +77,28 @@ class BookingTraveller extends Model
         return $this->belongsTo(Customer::class, 'customer');
     }
 
-    public function accommodation(): HasMany
+    public function accommodation(): HasManyDeep
     {
-        return $this->hasMany(BookingAccommodation::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+        return $this->hasManyDeep(BookingAccommodation::class, [BookingTravellerGroup::class, BookingGroup::class]);
     }
 
     public function activities(): HasMany
     {
-        return $this->hasMany(BookingActivity::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+        return $this->hasMany(BookingActivity::class, 'booking_traveller_id');
     }
 
     public function flights(): HasMany
     {
-        return $this->hasMany(BookingFlight::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+        return $this->hasMany(BookingFlight::class, 'booking_traveller_id');
     }
 
     public function transport(): HasMany
     {
-        return $this->hasMany(BookingTransport::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+        return $this->hasMany(BookingTransport::class, 'booking_traveller_id');
     }
 
     public function merchandise(): HasMany
     {
-        return $this->hasMany(BookingMerchandise::class, 'customer_id', 'customer_id')->where('booking_id', $this->booking_id);
+        return $this->hasMany(BookingMerchandise::class, 'booking_traveller_id');
     }
 }
