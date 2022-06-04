@@ -14,8 +14,8 @@
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
-            <div class="form-group d-flex align-items-center">
-                <p class="mb-0  heading">Select Order</p>
+            <div class="form-group d-flex align-items-center flex-wrap">
+                <p class="mb-0 heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $selector)
                         <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected @endif @if($selector->cancelled) disabled @endif>{{ $selector->booking_reference }} @if($selector->cancelled) (Cancelled) @endif - {{ $selector->tour->name }}</option>
