@@ -35,7 +35,7 @@
                               <div class="card-body profile-card">
                                   <center class="mt-4">
                                       <h4 class="card-title mt-2 additional-customer-title">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
-                                      <h6 class="card-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
+                                      <h6 class="card-subtitle additional-customer-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
                                   </center>
                               </div>
                           </div>
@@ -46,7 +46,7 @@
                               <div class="card-body profile-card">
                                   <center class="mt-4">
                                       <h4 class="card-title mt-2 additional-customer-title">{{ $editee->first_name }} {{ $editee->last_name }}</h4>
-                                      <h6 class="card-subtitle">{{ $editee->email_address }}</h6>
+                                      <h6 class="card-subtitle additional-customer-subtitle">{{ $editee->email_address }}</h6>
                                   </center>
                               </div>
                           </div>
