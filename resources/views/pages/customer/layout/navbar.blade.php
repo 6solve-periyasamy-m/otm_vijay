@@ -4,11 +4,11 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
             <span class="icon-menu"></span>
           </button>
-        <a class="navbar-brand" href="#" style="width: 100%; padding-right: 30px;">
+        <div class="navbar-brand" style="width: 100%; padding-right: 30px;">
           <div class="d-flex justify-content-center">
             <img class="setting-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}">
           </div>
-        </a>
+        </div>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
