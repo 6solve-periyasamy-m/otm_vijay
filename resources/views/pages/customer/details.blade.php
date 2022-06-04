@@ -21,14 +21,15 @@
                     </center>
                 </div>
             </div>
-            <div class="accordion" id="accordionExample">
+            @if($editable !== null || \App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+            <div class="accordion" id="accordionCustomers">
               <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <h2 class="accordion-header" id="headingCustomers">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     Additional Customers
                   </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingCustomers" data-bs-parent="#accordionCustomers">
                   <div class="accordion-body">
                       @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
                           <div class="card other-profile" onclick="window.location = '{{ route('customer.edit') }}';">
@@ -55,6 +56,7 @@
                 </div>
               </div>
             </div>
+            @endif
         </div>
         <!-- Column -->
         <!-- Column -->
