@@ -77,17 +77,17 @@
 <div class="customer-footer" style="position: fixed; bottom: 0;">
     <hr />
     <div class="socials">
-        @if(empty(\App\Repository\SettingsRepository::get('social.facebook')))
+        @if(!empty(\App\Repository\SettingsRepository::get('social.facebook')))
           <div class="facebook">
               <a href="{{ \App\Repository\SettingsRepository::get('social.facebook') }}" class="icon-social-facebook"></a>
           </div>
         @endif
-        @if(empty(\App\Repository\SettingsRepository::get('social.twitter')))
+        @if(!empty(\App\Repository\SettingsRepository::get('social.twitter')))
           <div class="twitter">
             <a href="{{ \App\Repository\SettingsRepository::get('social.twitter') }}" class="icon-social-twitter"></a>
           </div>
         @endif
-        @if(empty(\App\Repository\SettingsRepository::get('social.instagram')))
+        @if(!empty(\App\Repository\SettingsRepository::get('social.instagram')))
             <div class="instagram">
                 <a href="{{ \App\Repository\SettingsRepository::get('social.instagram') }}" class="icon-social-instagram"></a>
             </div>
