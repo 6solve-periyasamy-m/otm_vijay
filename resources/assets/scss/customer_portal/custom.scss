@@ -270,4 +270,7 @@
     [data-content]:before {
         content: attr(data-content);
     }
+    .order-select {
+        width: -webkit-fill-available !important;
+    }
 }
