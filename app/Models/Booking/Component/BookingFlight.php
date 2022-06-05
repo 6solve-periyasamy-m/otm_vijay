@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Booking;
+namespace App\Models\Booking\Component;
 
-use App\Models\Customer\Customer;
+use App\Models\Booking\BookingTraveller;
 use App\Models\Flight\FlightInventoryTour;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

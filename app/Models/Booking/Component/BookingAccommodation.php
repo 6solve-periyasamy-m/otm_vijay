@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Models\Booking;
+namespace App\Models\Booking\Component;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\Accommodation\RoomType;
-use App\Models\Customer\Customer;
+use App\Models\Booking\BookingGroup;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

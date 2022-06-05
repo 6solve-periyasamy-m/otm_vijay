@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Booking\Booking;
-use App\Models\Booking\BookingFlight;
+use App\Models\Booking\Component\BookingFlight;
 use App\Models\Flight\Airport;
 use App\Models\Flight\Flight;
 use App\Models\Flight\FlightInventory;

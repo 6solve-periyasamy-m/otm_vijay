@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Models\Booking\AccommodationGroup;
+use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Booking\AccommodationGroup;
 use App\Models\Booking\Booking;
-use App\Models\Booking\BookingMerchandise;
-use App\Models\Booking\BookingAccommodation;
-use App\Models\Booking\BookingActivity;
-use App\Models\Booking\BookingFlight;
-use App\Models\Booking\BookingTransport;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingAccommodation;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingMerchandise;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Order\Order;
-use App\Models\Tour\Merchandise;
 use App\Models\Order\Component\OrderActivity;
-use App\Models\Order\OrderCustomer;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
-use App\Models\Accommodation\RoomType;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;

@@ -2,6 +2,11 @@
 
 namespace App\Models\Booking;
 
+use App\Models\Booking\Component\BookingAccommodation;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Booking\Component\BookingFlight;
+use App\Models\Booking\Component\BookingMerchandise;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use Eloquent;
