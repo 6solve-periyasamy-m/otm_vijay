@@ -154,7 +154,7 @@
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group d-flex align-items-center flex-wrap order-select-wrapper">
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $order)
@@ -168,339 +168,365 @@
             </div>
         </form>
     </div>
-    <div class="col-2">
-        @foreach($editable as $editableOrderCustomer)
-            <div class="card other-profile" onclick="window.location = '{{ route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
-                <div class="card-body profile-card">
-                    <center class="mt-4">
-                        <h4 class="card-title mt-2">{{ $editableOrderCustomer->customer->first_name }} {{ $editableOrderCustomer->customer->last_name }}</h4>
-                        <h6 class="card-subtitle">{{ $editableOrderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
-                    </center>
-                </div>
-            </div>
-        @endforeach
-    </div>
-    <div class="col-10">
-        <div class="card">
-            <div class="card-body">
-                <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
-                Please select Customer for whom you wish to purchase the Upgrade or Add-On for from the left hand list
-            </div>
-        </div>
-        {{-- Accommodation --}}
-        <div class="card">
-            <div class="card-body">
-                <span class="h2">Accommodation</span><br />
-                @include('partials.customer.instructions')
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div id="accommodation">
-                    <div id="accommodation-details">
-                        <table id="accommodation-table" class="table table-striped table-responsive-sm text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Room Info</th>
-                                <th scope="col">Shared With</th>
-                                <th scope="col">Component Type</th>
-                                <th scope="col">Cost</th>
-                                <th scope="col">Upgrades</th>
-                            </tr>
-                            </thead>
-                            @foreach($accommodation as $orderComponent)
-                                <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_out) }}</td>
-                                    <td>{{ $orderComponent->accommodation->name }}</td>
-                                    <td>{{ $orderComponent->accommodationInventory->roomType->name }}, {{ $orderComponent->accommodationInventory->boardType->name }}</td>
-                                    <td>{{ empty($orderComponent->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderComponent->group->getMembers($orderCustomer) }}</td>
-                                    @if($orderComponent->tourComponent->tour_component_type === 'Included')
-                                        <td colspan="2">
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                    @else
-                                        <td>
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                        <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
-                                        </td>
-                                    @endif
-                                    <td style="width: 20%">
-                                        @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
-                                            Not Available
-                                        @else
-                                            @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
-                                                No Upgrades Available
-                                            @else
-                                                @include('partials.fields.selector.upgrade-purchase',
-                                                    ['field' => 'accommodation_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'purchaseRoute' => '#',
-                                                    'onclick' => 'event.preventDefault();applyAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'onclickPurchase' => 'event.preventDefault();purchaseAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderComponent->tourComponent),
-                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
-                                            @endif
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
+        <div class="container">
+            <div class="row">
+                @if($editable !== null)
+                    <div class="col-sm-12 col-md-3">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Customers
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            @foreach($editable as $editableOrderCustomer)
+                                                <div class="card other-profile col-md-12 col-xs-2" onclick="window.location = '{{ route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
+                                                    <div class="card-body profile-card">
+                                                        <center class="mt-4">
+                                                            <h4 class="card-title mt-2 additional-customer-title">{{ $editableOrderCustomer->customer->first_name }} {{ $editableOrderCustomer->customer->last_name }}</h4>
+                                                            <h6 class="card-subtitle additional-customer-subtitle">{{ $editableOrderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
+                                                        </center>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="col-sm-12 {{ $editable !== null ? 'col-md-9' : 'col-md-12' }}">
+
+                <div class="card">
+                    <div class="card-body">
+                        <span class="h2">Order {{ $orderCustomer->order->booking_reference }} - {{ $orderCustomer->order->tour->name }}</span><br />
+                        Please select Customer for whom you wish to purchase the Upgrade or Add-On for from the left hand list
                     </div>
                 </div>
-            </div>
-        </div>
-        {{-- Activities --}}
-        <div class="card">
-            <div class="card-body">
-                <span class="h2">Activities</span><br />
-                @include('partials.customer.instructions')
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div id="activities">
-                    <div id="activities-details">
-                        <table id="activities-table" class="table table-striped table-responsive-sm text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Ticket Type</th>
-                                <th scope="col">Component Type</th>
-                                <th scope="col">Cost</th>
-                                <th scope="col">Upgrades</th>
-                            </tr>
-                            </thead>
-                            @foreach($activities as $orderComponent)
-                                <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activityInventory->ends_at) }}</td>
-                                    <td>{{ $orderComponent->activity->name }}</td>
-                                    <td>{{ $orderComponent->activityInventory->ticketType->name }}</td>
-                                    @if($orderComponent->tourComponent->tour_component_type === 'Included')
-                                        <td colspan="2">
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                    @else
-                                        <td>
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                        <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
-                                        </td>
-                                    @endif
-                                    <td style="width: 20%">
-                                        @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
-                                            Not Available
-                                        @else
-                                            @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
-                                                No Upgrades Available
-                                            @else
-                                                @include('partials.fields.selector.upgrade-purchase',
-                                                    ['field' => 'activity_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '', 'purchaseRoute' => '',
-                                                    'onclick' => 'event.preventDefault();applyActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'onclickPurchase' => 'event.preventDefault();purchaseActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
-                                            @endif
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
+                {{-- Accommodation --}}
+                <div class="card">
+                    <div class="card-body">
+                        <span class="h2">Accommodation</span><br />
+                        @include('partials.customer.instructions')
                     </div>
                 </div>
-            </div>
-        </div>
-        {{-- Flights --}}
-        <div class="card">
-            <div class="card-body">
-                <span class="h2">Flights</span><br />
-                @include('partials.customer.instructions')
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div id="flights">
-                    <div id="flights-details">
-                        <table id="flights-table" class="table table-striped table-responsive-sm text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Flight Number</th>
-                                <th scope="col">Flight Details</th>
-                                <th scope="col">Travel Class</th>
-                                <th scope="col">Component Type</th>
-                                <th scope="col">Cost</th>
-                                <th scope="col">Upgrades</th>
-                            </tr>
-                            </thead>
-                            @foreach($flights as $orderComponent)
-                                <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flightInventory->arrives_at) }}</td>
-                                    <td>{{ $orderComponent->flightInventory->flight_number }}</td>
-                                    <td>{{ $orderComponent->flight->departureAirport->name }} to {{ $orderComponent->flight->arrivalAirport->name }}</td>
-                                    <td>{{ $orderComponent->flightInventory->travelClass->name }}</td>
-                                    @if($orderComponent->tourComponent->tour_component_type === 'Included')
-                                        <td colspan="2">
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                    @else
-                                        <td>
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                        <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
-                                        </td>
-                                    @endif
-                                    <td style="width: 20%">
-                                        @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
-                                            Not Available
-                                        @else
-                                            @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
-                                                No Upgrades Available
+                <div class="card">
+                    <div class="card-body">
+                        <div id="accommodation">
+                            <div id="accommodation-details">
+                                <table id="accommodation-table" class="table table-striped table-responsive-sm text-center">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Room Info</th>
+                                        <th scope="col">Shared With</th>
+                                        <th scope="col">Component Type</th>
+                                        <th scope="col">Cost</th>
+                                        <th scope="col">Upgrades</th>
+                                    </tr>
+                                    </thead>
+                                    @foreach($accommodation as $orderComponent)
+                                        <tr component="{{ $orderComponent->id }}">
+                                            <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_out) }}</td>
+                                            <td data-content="Name">{{ $orderComponent->accommodation->name }}</td>
+                                            <td data-content="Room Info">{{ $orderComponent->accommodationInventory->roomType->name }}, {{ $orderComponent->accommodationInventory->boardType->name }}</td>
+                                            <td data-content="Shared With">{{ empty($orderComponent->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderComponent->group->getMembers($orderCustomer) }}</td>
+                                            @if($orderComponent->tourComponent->tour_component_type === 'Included')
+                                                <td colspan="2" data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
                                             @else
-                                                @include('partials.fields.selector.upgrade-purchase',
-                                                    ['field' => 'flight_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'purchaseRoute' => '#',
-                                                    'onclick' => 'event.preventDefault();applyFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'onclickPurchase' => 'event.preventDefault();purchaseFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                <td data-content="Cost">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                                <td data-content="Upgrades">
+                                                    {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                </td>
                                             @endif
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
+                                            <td data-content="Upgrades">
+                                                @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    Not Available
+                                                @else
+                                                    @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
+                                                        No Upgrades Available
+                                                    @else
+                                                        @include('partials.fields.selector.upgrade-purchase',
+                                                            ['field' => 'accommodation_' . $orderComponent->id . '_upgrade', 'preselect' => false,
+                                                            'createRoute' => '#', 'purchaseRoute' => '#',
+                                                            'onclick' => 'event.preventDefault();applyAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'onclickPurchase' => 'event.preventDefault();purchaseAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'target' => '',
+                                                            'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderComponent->tourComponent),
+                                                            'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        {{-- Transport --}}
-        <div class="card">
-            <div class="card-body">
-                <span class="h2">Transport</span><br />
-                @include('partials.customer.instructions')
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div id="transports">
-                    <div id="transports-details">
-                        <table id="transports-table" class="table table-striped table-responsive-sm text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Transport Type</th>
-                                <th scope="col">Transport Information</th>
-                                <th scope="col">Travel Class</th>
-                                <th scope="col">Component Type</th>
-                                <th scope="col">Cost</th>
-                                <th scope="col">Upgrades</th>
-                            </tr>
-                            </thead>
-                            @foreach($transports as $orderComponent)
-                                <tr component="{{ $orderComponent->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderComponent->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transportInventory->arrives_at) }}</td>
-                                    <td>{{ $orderComponent->transport->name }}</td>
-                                    <td>{{ $orderComponent->transport->transportType->name }}</td>
-                                    <td>{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
-                                    <td>{{ $orderComponent->transportInventory->travelClass->name }}</td>
-                                    @if($orderComponent->tourComponent->tour_component_type === 'Included')
-                                        <td colspan="2">
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                    @else
-                                        <td>
-                                            {{ $orderComponent->tourComponent->tour_component_type }}
-                                        </td>
-                                        <td>
-                                            {{ StringFormatter::formatCurrency($orderComponent->cost) }}
-                                        </td>
-                                    @endif
-                                    <td style="width: 20%">
-                                        @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
-                                            Not Available
-                                        @else
-                                            @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
-                                                No Upgrades Available
-                                            @else
-                                                @include('partials.fields.selector.upgrade-purchase',
-                                                    ['field' => 'transport_' . $orderComponent->id . '_upgrade', 'preselect' => false,
-                                                    'createRoute' => '#', 'purchaseRoute' => '#',
-                                                    'onclick' => 'event.preventDefault();applyTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'onclickPurchase' => 'event.preventDefault();purchaseTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
-                                                    'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
-                                            @endif
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
+                {{-- Activities --}}
+                <div class="card">
+                    <div class="card-body">
+                        <span class="h2">Activities</span><br />
+                        @include('partials.customer.instructions')
                     </div>
                 </div>
-            </div>
-        </div>
-        {{-- Add-ons and Extras --}}
-        <div class="card">
-            <div class="card-body">
-                <span class="h2">Add-ons and Extras</span><br />
-                @include('partials.customer.instructions')
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div id="merchandise-details">
-                    <table id="merchandise-table" class="table table-striped table-responsive-sm text-center">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Component Type</th>
-                            <th scope="col">Cost</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        @foreach(\App\Repository\OrderRepository::getOrderCustomerAdditionals($orderCustomer) as $orderComponent)
-                            <tr>
-                                <td>{{ $orderComponent['name'] }}</td>
-                                @if($orderComponent['type'] === 'Included')
-                                    <td colspan="2">
-                                        {{ $orderComponent['type'] }}
-                                    </td>
-                                @else
-                                    <td>
-                                        {{ $orderComponent['type'] }}
-                                    </td>
-                                    <td>
-                                        {{ StringFormatter::formatCurrency($orderComponent['cost']) }}
-                                    </td>
-                                @endif
-                                <td>
-                                    @if($orderComponent['owned'])
-                                        Owned
-                                    @else
-                                        @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
-                                        <a href="{{ route('customer.extras.apply',
-                                            ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
-                                             'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
-                                           class="btn btn-success ms-1">+</a>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="activities">
+                            <div id="activities-details">
+                                <table id="activities-table" class="table table-striped table-responsive-sm text-center">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Ticket Type</th>
+                                        <th scope="col">Component Type</th>
+                                        <th scope="col">Cost</th>
+                                        <th scope="col">Upgrades</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($activities as $orderComponent)
+                                        <tr component="{{ $orderComponent->id }}">
+                                            <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activityInventory->ends_at) }}</td>
+                                            <td data-content="Name">{{ $orderComponent->activity->name }}</td>
+                                            <td data-content="Ticket Type">{{ $orderComponent->activityInventory->ticketType->name }}</td>
+                                            @if($orderComponent->tourComponent->tour_component_type === 'Included')
+                                                <td colspan="2" data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                            @else
+                                                <td data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                                <td data-content="Cost">
+                                                    {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                </td>
+                                            @endif
+                                            <td data-content="Upgrades">
+                                                @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    Not Available
+                                                @else
+                                                    @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
+                                                        No Upgrades Available
+                                                    @else
+                                                        @include('partials.fields.selector.upgrade-purchase',
+                                                            ['field' => 'activity_' . $orderComponent->id . '_upgrade', 'preselect' => false,
+                                                            'createRoute' => '', 'purchaseRoute' => '',
+                                                            'onclick' => 'event.preventDefault();applyActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'onclickPurchase' => 'event.preventDefault();purchaseActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'target' => '',
+                                                            'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Flights --}}
+                <div class="card">
+                    <div class="card-body">
+                        <span class="h2">Flights</span><br />
+                        @include('partials.customer.instructions')
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="flights">
+                            <div id="flights-details">
+                                <table id="flights-table" class="table table-striped table-responsive-sm text-center">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Flight Number</th>
+                                        <th scope="col">Flight Details</th>
+                                        <th scope="col">Travel Class</th>
+                                        <th scope="col">Component Type</th>
+                                        <th scope="col">Cost</th>
+                                        <th scope="col">Upgrades</th>
+                                    </tr>
+                                    </thead>
+                                    @foreach($flights as $orderComponent)
+                                        <tr component="{{ $orderComponent->id }}">
+                                            <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flightInventory->arrives_at) }}</td>
+                                            <td data-content="Flight Number">{{ $orderComponent->flightInventory->flight_number }}</td>
+                                            <td data-content="Flight Details">{{ $orderComponent->flight->departureAirport->name }} to {{ $orderComponent->flight->arrivalAirport->name }}</td>
+                                            <td data-content="Travel Class">{{ $orderComponent->flightInventory->travelClass->name }}</td>
+                                            @if($orderComponent->tourComponent->tour_component_type === 'Included')
+                                                <td colspan="2" data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                            @else
+                                                <td data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                                <td data-content="Cost">
+                                                    {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                </td>
+                                            @endif
+                                            <td data-content="Upgrades">
+                                                @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    Not Available
+                                                @else
+                                                    @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
+                                                        No Upgrades Available
+                                                    @else
+                                                        @include('partials.fields.selector.upgrade-purchase',
+                                                            ['field' => 'flight_' . $orderComponent->id . '_upgrade', 'preselect' => false,
+                                                            'createRoute' => '#', 'purchaseRoute' => '#',
+                                                            'onclick' => 'event.preventDefault();applyFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'onclickPurchase' => 'event.preventDefault();purchaseFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'target' => '',
+                                                            'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Transport --}}
+                <div class="card">
+                    <div class="card-body">
+                        <span class="h2">Transport</span><br />
+                        @include('partials.customer.instructions')
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="transports">
+                            <div id="transports-details">
+                                <table id="transports-table" class="table table-striped table-responsive-sm text-center">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Transport Type</th>
+                                        <th scope="col">Transport Information</th>
+                                        <th scope="col">Travel Class</th>
+                                        <th scope="col">Component Type</th>
+                                        <th scope="col">Cost</th>
+                                        <th scope="col">Upgrades</th>
+                                    </tr>
+                                    </thead>
+                                    @foreach($transports as $orderComponent)
+                                        <tr component="{{ $orderComponent->id }}">
+                                            <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transportInventory->arrives_at) }}</td>
+                                            <td data-content="Name">{{ $orderComponent->transport->name }}</td>
+                                            <td data-content="Transport Type">{{ $orderComponent->transport->transportType->name }}</td>
+                                            <td data-content="Transport Information">{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
+                                            <td data-content="Travel Class">{{ $orderComponent->transportInventory->travelClass->name }}</td>
+                                            @if($orderComponent->tourComponent->tour_component_type === 'Included')
+                                                <td colspan="2" data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                            @else
+                                                <td data-content="Component Type">
+                                                    {{ $orderComponent->tourComponent->tour_component_type }}
+                                                </td>
+                                                <td data-content="Cost">
+                                                    {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                </td>
+                                            @endif
+                                            <td data-content="Upgrades">
+                                                @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
+                                                    Not Available
+                                                @else
+                                                    @if(count($orderComponent->tourComponent->getCustomerUpgradeKeyMap()) < 1)
+                                                        No Upgrades Available
+                                                    @else
+                                                        @include('partials.fields.selector.upgrade-purchase',
+                                                            ['field' => 'transport_' . $orderComponent->id . '_upgrade', 'preselect' => false,
+                                                            'createRoute' => '#', 'purchaseRoute' => '#',
+                                                            'onclick' => 'event.preventDefault();applyTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'onclickPurchase' => 'event.preventDefault();purchaseTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
+                                                            'target' => '',
+                                                            'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Add-ons and Extras --}}
+                <div class="card">
+                    <div class="card-body">
+                        <span class="h2">Add-ons and Extras</span><br />
+                        @include('partials.customer.instructions')
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="merchandise-details">
+                            <table id="merchandise-table" class="table table-striped table-responsive-sm text-center">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Component Type</th>
+                                    <th scope="col">Cost</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                                </thead>
+                                @foreach(\App\Repository\OrderRepository::getOrderCustomerAdditionals($orderCustomer) as $orderComponent)
+                                    <tr>
+                                        <td data-content="Name">{{ $orderComponent['name'] }}</td>
+                                        @if($orderComponent['type'] === 'Included')
+                                            <td colspan="2" data-content="Component Type">
+                                                {{ $orderComponent['type'] }}
+                                            </td>
+                                        @else
+                                            <td data-content="Component Type">
+                                                {{ $orderComponent['type'] }}
+                                            </td>
+                                            <td data-content="Cost">
+                                                {{ StringFormatter::formatCurrency($orderComponent['cost']) }}
+                                            </td>
                                         @endif
-                                        <a href="{{ route('customer.extras.purchase',
-                                            ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
-                                             'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
-                                           class="btn btn-primary ms-1">$</a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
+                                        <td data-content="Actions">
+                                            @if($orderComponent['owned'])
+                                                Owned
+                                            @else
+                                            <div style="display: flex;justify-content: end;">
+                                                @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+                                                <a href="{{ route('customer.extras.apply',
+                                                    ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                                     'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                                   class="btn btn-success ms-1">+</a>
+                                                @endif
+                                                <a href="{{ route('customer.extras.purchase',
+                                                    ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                                     'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                                   class="btn btn-primary ms-1">$</a>
+                                            </div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
