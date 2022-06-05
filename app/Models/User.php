@@ -44,6 +44,7 @@ use Silber\Bouncer\Database\Role;
  * @property-read int|null $roles_count
  * @property-read Collection|ApiToken[] $tokens
  * @property-read int|null $tokens_count
+ * @property-read string $avatar_url The URL for the avatar
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
