@@ -159,6 +159,6 @@ class Customer extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if (isset($this->profile_picture)) return asset($this->profile_picture);
-        return Gravatar::get($this->email_address);
+        return isset($this->email_address) ? Gravatar::get($this->email_address) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
     }
 }
