@@ -208,7 +208,7 @@
                     </div>
                 </div>
                 {{-- Accommodation --}}
-                <div class="card">
+                <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Accommodation</span><br />
                         @include('partials.customer.instructions')
@@ -274,7 +274,7 @@
                     </div>
                 </div>
                 {{-- Activities --}}
-                <div class="card">
+                <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Activities</span><br />
                         @include('partials.customer.instructions')
@@ -339,7 +339,7 @@
                     </div>
                 </div>
                 {{-- Flights --}}
-                <div class="card">
+                <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Flights</span><br />
                         @include('partials.customer.instructions')
@@ -404,7 +404,7 @@
                     </div>
                 </div>
                 {{-- Transport --}}
-                <div class="card">
+                <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Transport</span><br />
                         @include('partials.customer.instructions')
@@ -471,7 +471,7 @@
                     </div>
                 </div>
                 {{-- Add-ons and Extras --}}
-                <div class="card">
+                <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Add-ons and Extras</span><br />
                         @include('partials.customer.instructions')
