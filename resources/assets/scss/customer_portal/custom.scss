@@ -219,6 +219,13 @@
 .additional-customer-subtitle {
     font-size: 0.850rem !important;
 }
+.order-select-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-left: 125px;
+}
 
 /*-- ==============================================================
  Screen smaller than 760px and also iPads specifically.
@@ -232,6 +239,9 @@
     table, thead, tbody, th, td, tr {
         display: block;
     }
+    table.text-center {
+        text-align: left !important;
+    }
 
     /* Hide table headers (but not display: none;, for accessibility) */
     thead tr {
@@ -239,12 +249,12 @@
         top: -9999px;
         left: -9999px;
     }
+    .table > :not(:first-child) {
+        border-top: none;
+    }
 
-    tr:nth-child(odd):not(.bg-light-blue) {
-      background: #ededed !important;
-      td {
-        border-bottom: none;
-      }
+    tr:not(.bg-light-blue) {
+        border-bottom: 2px solid #3490dc;
     }
 
     td {
@@ -253,6 +263,7 @@
         border-bottom: 1px solid #eee;
         position: relative;
         padding-left: 50%;
+        padding-top: 1.5rem !important;
     }
 
     td:before {
@@ -265,6 +276,7 @@
         padding-right: 10px;
         white-space: nowrap;
         font-weight: bold;
+        color: #54667a;
     }
 
     [data-content]:before {
@@ -272,5 +284,10 @@
     }
     .order-select {
         width: -webkit-fill-available !important;
+    }
+    .order-select-wrapper {
+        justify-content: start;
+        flex-wrap: nowrap;
+        padding-left: 0;
     }
 }
