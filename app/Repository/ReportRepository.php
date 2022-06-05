@@ -166,9 +166,6 @@ class ReportRepository
             $row->ticket = $orderActivity?->tourComponent?->inventory?->ticketType?->name;
             $row->starts = $orderActivity?->tourComponent?->inventory?->starts_at;
             $row->ends = $orderActivity?->tourComponent?->inventory?->ends_at;
-            $row->used_stock = $orderActivity?->tourComponent?->inventory?->used_stock;
-            $row->total_stock = $orderActivity?->tourComponent?->inventory->stock;
-            $row->available_stock = $row?->total_stock - $row?->used_stock;
             $row->purchased = $orderActivity?->orderCustomer?->order?->ordered_on;
             $row->cost = $orderActivity?->tourComponent?->tour_component_type === "Included" ? 0 : $orderActivity?->cost;
             $row->component = $orderActivity?->tourComponent?->tour_component_type;

@@ -12,6 +12,7 @@
         "ext-intl": "*",
         "ext-json": "*",
         "ext-zip": "*",
+        "creativeorange/gravatar": "~1.0",
         "dyrynda/laravel-cascade-soft-deletes": "^4.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",

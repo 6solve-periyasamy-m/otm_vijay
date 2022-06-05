@@ -6,6 +6,7 @@ use App\Models\System\ApiToken;
 use App\Repository\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
+use Gravatar;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -44,6 +45,7 @@ use Silber\Bouncer\Database\Role;
  * @property-read int|null $roles_count
  * @property-read Collection|ApiToken[] $tokens
  * @property-read int|null $tokens_count
+ * @property-read string $avatar_url The URL for the avatar
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -184,5 +186,11 @@ class User extends Authenticatable implements MustVerifyEmail
             $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
         }
         return $highest;
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if (isset($this->avatar)) return asset($this->avatar);
+        return Gravatar::get($this->email);
     }
 }

@@ -92,6 +92,7 @@ use Laravel\Cashier\Subscription;
  * @property-read TShirtSize|null $tShirtSize Customer t-shirt size
  * @property-read Collection|CustomerApiToken[] $tokens Customer API tokens
  * @property-read int|null $tokens_count Amount of Customer API tokens
+ * @property-read string $avatar_url The URL for the avatar
  * @method static CustomerFactory factory(...$parameters)
  * @method static Builder|Customer newModelQuery()
  * @method static Builder|Customer newQuery()
@@ -277,5 +278,11 @@ class Customer extends Authenticatable
     public function purgeTokens(int $limit = ApiToken::DEFAULT_LIMIT)
     {
         CustomerAuthenticationRepository::purgeUserTokens($this, $limit);
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if (isset($this->profile_picture)) return asset($this->profile_picture);
+        return Gravatar::get($this->email_address);
     }
 }

@@ -40,6 +40,7 @@ class CustomerBookingController extends Controller
             'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
             'rooms' => RoomingRepository::getAvailableRoomTypes($tour),
             'groups' => AccommodationGroup::all(),
+            'stock_control' => $tour->stock_control_active,
             'available' => $tour->stock - $tour->getUsedStock()]);
     }
 
@@ -47,7 +48,7 @@ class CustomerBookingController extends Controller
     {
         $tour = $this->getTour($bookingUrl);
         if (!isset($tour) || !$tour->is_active) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 1 + ($request->has('additional') ? sizeof($request->additional) : 0))
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() < 1 + ($request->has('additional') ? sizeof($request->additional) : 0))
             abort(404, 'That tour is out of stock');
         $request->validate($this->getLeadBookerValidation());
         $loggedIn = CustomerAuthenticationRepository::getCustomer();
@@ -103,10 +104,10 @@ class CustomerBookingController extends Controller
                 if (!isset($traveller) && !empty($additional['email_address'])) {
                     $traveller = Customer::where('email_address', $additional['email_address'])->first();
                 }
-                if (in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
+                if (!empty($additional['email_address']) && in_array(strtolower(trim($additional['email_address'])), $bookedEmails)) {
                     return back()->withErrors(['msg' => 'You have used the email ' . $additional['email_address'] . ' for multiple customers. Please correct this.']);
                 }
-                $bookedEmails[] = strtolower(trim($additional['email_address']));
+                if (!empty($additional['email_address'])) $bookedEmails[] = strtolower(trim($additional['email_address']));
                 if (!isset($traveller)) {
                     $traveller = Customer::make([
                         'title' => $additional['title'],
@@ -180,7 +181,7 @@ class CustomerBookingController extends Controller
         if (!isset($tour) || !$tour->is_active) abort(404);
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= $booking->travellers()->count()) abort(404, 'That tour is out of stock');
+        if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() < $booking->travellers()->count()) abort(404, 'That tour is out of stock');
         return view('pages.customer.booking.summary', array_merge(['tour' => $tour,'token' => $token, 'booking' => $booking,], CustomerBookingRepository::generateSummary($booking)));
     }
 

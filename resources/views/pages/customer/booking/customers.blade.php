@@ -262,7 +262,7 @@
                     </div>
                     <hr class="splitter">
                     <div class="col-12">
-                        <select name="inbound" class="w-100" required>
+                        <select name="inbound" class="w-100">
                             @foreach($flights['inbound'] as $flight)
                                 <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
                                     {{ $flight['details'] }} - {{ f_currency($flight['cost']) }}
@@ -314,6 +314,7 @@
                     let failed = false;
                     $('.v-email-validation-unique').each(function (index) {
                         let email = this.value.toLowerCase().trim();
+                        if (!email || email.length === 0) return true;
                         if (emails.includes(email)) {
                             failed = true;
                             alert('You have used the email ' + this.value.trim() + ' for multiple customers. Please correct this.')
@@ -329,10 +330,12 @@
         );
 
         function addCustomer() {
-            if (available <= 0) {
-                alert('There is not enough stock for more customers');
-                return;
-            }
+            @if ($stock_control)
+                if (available <= 0) {
+                    alert('There is not enough stock for more customers');
+                    return;
+                }
+            @endif
             $('.customer-before').before(customerSection.replaceAll('%NUMBER%', additional));
             additional++;
             available--;
