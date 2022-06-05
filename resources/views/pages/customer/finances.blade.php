@@ -6,7 +6,7 @@
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group finances-select-wrapper">
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
                     @foreach($orders as $order)
