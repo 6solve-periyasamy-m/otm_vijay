@@ -170,7 +170,7 @@
     </div>
         <div class="container">
             <div class="row">
-                @if($editable == null)
+                @if($editable !== null)
                     <div class="col-sm-12 col-md-3">
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
