@@ -6,6 +6,7 @@ use App\Models\System\ApiToken;
 use App\Repository\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
+use Gravatar;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -183,5 +184,11 @@ class User extends Authenticatable implements MustVerifyEmail
             $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
         }
         return $highest;
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if (isset($this->avatar)) return asset($this->avatar);
+        return Gravatar::get($this->email);
     }
 }
