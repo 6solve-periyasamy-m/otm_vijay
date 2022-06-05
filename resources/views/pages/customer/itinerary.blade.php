@@ -31,7 +31,7 @@
     <div class="container">
         <div class="row">
             @if($editable !== null)
-                <div class="col-sm-3">
+                <div class="col-sm-12 col-md-3">
                     <div class="accordion" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             @endif
-            <div class=" {{ $editable !== null ? 'col-sm-9' : 'col-sm-12' }}">
+            <div class="col-sm-12 {{ $editable !== null ? 'col-md-9' : 'col-md-12' }}">
                 <div class="card">
                     <div class="card-body">
                         <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>

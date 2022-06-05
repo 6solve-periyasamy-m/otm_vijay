@@ -154,7 +154,7 @@
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
-            <div class="form-group d-flex align-items-center flex-wrap order-select-wrapper">
+            <div class="form-group order-select-wrapper">
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $order)
@@ -170,7 +170,7 @@
     </div>
         <div class="container">
             <div class="row">
-                @if($editable !== null)
+                @if($editable == null)
                     <div class="col-sm-12 col-md-3">
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
@@ -220,15 +220,15 @@
                             <div id="accommodation-details">
                                 <table id="accommodation-table" class="table table-striped table-responsive-sm text-center">
                                     <thead>
-                                    <tr>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Room Info</th>
-                                        <th scope="col">Shared With</th>
-                                        <th scope="col">Component Type</th>
-                                        <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Room Info</th>
+                                            <th scope="col">Shared With</th>
+                                            <th scope="col">Component Type</th>
+                                            <th scope="col">Cost</th>
+                                            <th scope="col">Upgrades</th>
+                                        </tr>
                                     </thead>
                                     @foreach($accommodation as $orderComponent)
                                         <tr component="{{ $orderComponent->id }}">
