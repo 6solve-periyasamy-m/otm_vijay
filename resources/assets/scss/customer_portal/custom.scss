@@ -225,6 +225,17 @@
     flex-wrap: wrap;
     justify-content: center;
     padding-left: 125px;
+    align-items: center;
+}
+.finances-select-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.no-header-line > :not(:first-child) {
+    border-top: none !important;
 }
 
 /*-- ==============================================================
@@ -287,7 +298,10 @@
     }
     .order-select-wrapper {
         justify-content: start;
-        flex-wrap: nowrap;
+        padding-left: 0;
+    }
+    .finances-select-wrapper {
+        justify-content: start;
         padding-left: 0;
     }
 }
