@@ -11,7 +11,6 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
-use App\Repository\AccommodationComponentRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\StockRepository;
 use App\Repository\TourRepository;
@@ -84,6 +83,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $transport_inventory_count
  * @property-read Collection|TransportInventoryTour[] $transportInventoryTours
  * @property-read int|null $transport_inventory_tours_count
+ * @property-read TourRepository $repository
  * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
@@ -247,5 +247,11 @@ class Tour extends Model
     public function clone(): Tour
     {
         return TourRepository::clone($this);
+    }
+
+    public function getRepositoryAttribute(): TourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TourRepository($this);
+        return $this->internal_repository;
     }
 }
