@@ -3,6 +3,7 @@
 namespace App\Models\Flight;
 
 use App\Models\TravelClass;
+use App\Repository\Model\Flight\FlightInventoryRepository;
 use App\Repository\StockRepository;
 use Database\Factories\Flight\FlightInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -49,6 +50,7 @@ use StringFormatter;
  * @property-read Collection|FlightInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
  * @property-read TravelClass $travelClass
+ * @property-read FlightInventoryRepository $repository
  * @method static FlightInventoryFactory factory(...$parameters)
  * @method static Builder|FlightInventory newModelQuery()
  * @method static Builder|FlightInventory newQuery()
@@ -159,7 +161,7 @@ class FlightInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getFlightStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getUsedOnTourCountAttribute(): int
@@ -170,5 +172,11 @@ class FlightInventory extends Model
     public function __toString(): string
     {
         return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . f_datetime($this->departs_at) . " to " . f_datetime($this->arrives_at) . ")";
+    }
+
+    public function getRepositoryAttribute(): FlightInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new FlightInventoryRepository($this);
+        return $this->internal_repository;
     }
 }

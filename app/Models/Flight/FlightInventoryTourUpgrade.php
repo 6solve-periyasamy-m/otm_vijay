@@ -2,6 +2,7 @@
 
 namespace App\Models\Flight;
 
+use App\Repository\Model\Flight\FlightInventoryTourUpgradeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read FlightInventoryTour $base
  * @property-read FlightInventoryTour $upgrade
+ * @property-read FlightInventoryTourUpgradeRepository $repository
  * @method static Builder|FlightInventoryTourUpgrade newModelQuery()
  * @method static Builder|FlightInventoryTourUpgrade newQuery()
  * @method static QueryBuilder|FlightInventoryTourUpgrade onlyTrashed()
@@ -53,5 +55,11 @@ class FlightInventoryTourUpgrade extends Model
     public function upgrade(): BelongsTo
     {
         return $this->belongsTo(FlightInventoryTour::class, 'upgrade_id');
+    }
+
+    public function getRepositoryAttribute(): FlightInventoryTourUpgradeRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new FlightInventoryTourUpgradeRepository($this);
+        return $this->internal_repository;
     }
 }

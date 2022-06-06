@@ -6,6 +6,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
@@ -14,10 +15,9 @@ use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
-use App\Repository\ActivityComponentRepository;
-use App\Repository\FlightComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
+use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use App\Repository\StaticOrderRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +38,7 @@ class TourComponentController extends Controller
 
     public function getAvailableFlightAddons($oCustomerId) {
         $oCustomer = OrderCustomer::findOrFail($oCustomerId);
-        return FlightComponentRepository::getAvailableAddons($oCustomer->order->tour->id, $oCustomerId);
+        return FlightInventoryTourRepository::getAvailableAddons($oCustomer->order->tour, $oCustomer);
     }
 
     public function getAvailableTransportAddons($oCustomerId) {
@@ -64,9 +64,9 @@ class TourComponentController extends Controller
 
     public function addFlightAddon(Request $request) {
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'flight_id' => 'required|exists:flight_inventory_tours,id']);
-        $oCustomerId = $request->input('customer_id');
-        $flightInventoryTourId = $request->input('flight_id');
-        return FlightComponentRepository::grantAddonToCustomer($oCustomerId, $flightInventoryTourId);
+        $oCustomer = OrderCustomer::find($request->input('customer_id'));
+        $flightInventoryTour = FlightInventoryTour::find($request->input('flight_id'));
+        return $flightInventoryTour->addToOrder($oCustomer);
     }
 
     public function addTransportAddon(Request $request) {
@@ -129,7 +129,7 @@ class TourComponentController extends Controller
             $upgrade = FlightInventoryTourUpgrade::find($request->input('upgrade_id'));
         }
         if (!isset($upgrade)) return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
-        if (!FlightComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        if (!$orderComponent->tourComponent->repository->onUpgradeTree($upgrade->repository)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $orderComponent->swap($request->input('upgrade_id') == 0 ? $upgrade->base : $upgrade->upgrade);
         event(new OrderCustomerComponentEditedEvent($orderComponent));
         return response()->json(['success' => true, 'message' => 'Upgrade has been applied successfully']);

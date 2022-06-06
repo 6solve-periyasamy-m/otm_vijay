@@ -6,6 +6,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\FlightComponentRepository;
+use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use Database\Factories\Flight\FlightInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -48,6 +49,7 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|FlightInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @property-read FlightInventoryTourRepository $repository
  * @method static FlightInventoryTourFactory factory(...$parameters)
  * @method static Builder|FlightInventoryTour newModelQuery()
  * @method static Builder|FlightInventoryTour newQuery()
@@ -118,7 +120,7 @@ class FlightInventoryTour extends Model
 
     public function parent(): FlightInventoryTour
     {
-        return FlightComponentRepository::getParentComponent($this);
+        return $this->repository->getUpgradeParent();
     }
 
     public function tour(): BelongsTo
@@ -197,11 +199,7 @@ class FlightInventoryTour extends Model
 
     public function addToOrder(OrderCustomer $orderCustomer): OrderFlight
     {
-        return OrderFlight::create([
-            'order_customer_id' => $orderCustomer->id,
-            'flight_inventory_tour_id' => $this->id,
-            'cost' => $this->tour_sales_price,
-        ]);
+        return $this->repository->grantToCustomer($orderCustomer)->get();
     }
 
     public function getUsedTourStockAttribute(): int
@@ -211,5 +209,11 @@ class FlightInventoryTour extends Model
             if (!$orderComponent->isCancelled()) $used++;
         }
         return $used;
+    }
+
+    public function getRepositoryAttribute(): FlightInventoryTourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new FlightInventoryTourRepository($this);
+        return $this->internal_repository;
     }
 }

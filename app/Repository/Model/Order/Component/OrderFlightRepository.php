@@ -15,12 +15,12 @@ class OrderFlightRepository extends OrderComponentRepository
         $this->orderComponent = $orderComponent;
     }
 
-    public function get(): Model
+    public function get(): OrderFlight
     {
         return $this->orderComponent;
     }
 
-    public function update(array $data): Model
+    public function update(array $data): OrderFlight
     {
         $this->orderComponent->update($data);
         $this->save();
