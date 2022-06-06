@@ -2,6 +2,7 @@
 
 namespace App\Models\Booking;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|BookingTravellerGroup query()
  * @method static Builder|BookingTravellerGroup whereBookingGroupId($value)
  * @method static Builder|BookingTravellerGroup whereBookingTravellerId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class BookingTravellerGroup extends Model
 {
