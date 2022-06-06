@@ -9,12 +9,14 @@ use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
+use App\Repository\Model\Booking\BookingTravellerRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
@@ -46,11 +48,14 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read Booking $booking
  * @property-read Customer|null $customer
  * @property-read Collection|BookingFlight[] $flights
+ * @property-read Collection|BookingGroup[] $groups
  * @property-read int|null $flights_count
  * @property-read Collection|BookingMerchandise[] $merchandise
  * @property-read int|null $merchandise_count
  * @property-read Collection|BookingTransport[] $transport
  * @property-read int|null $transport_count
+ * @property-read BookingTravellerRepository $repository
+ * @property-read BookingGroup|null $primary_group
  * @method static Builder|BookingTraveller newModelQuery()
  * @method static Builder|BookingTraveller newQuery()
  * @method static Builder|BookingTraveller query()
@@ -86,6 +91,11 @@ class BookingTraveller extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer');
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(BookingGroup::class, BookingTravellerGroup::class)->using(BookingTravellerGroup::class);
     }
 
     public function accommodation(): HasManyDeep
@@ -168,5 +178,14 @@ class BookingTraveller extends Model
         return $this->customer?->billingAddress ?? $this->billingAddress;
     }
 
+    public function getPrimaryGroupAttribute(): ?BookingGroup
+    {
+        return $this->groups()->first();
+    }
 
+    public function getRepositoryAttribute(): BookingTravellerRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new BookingTravellerRepository($this);
+        return $this->internal_repository;
+    }
 }
