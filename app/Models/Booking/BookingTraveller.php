@@ -2,6 +2,7 @@
 
 namespace App\Models\Booking;
 
+use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Booking\Component\BookingFlight;
@@ -37,6 +38,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property string|null $email_address
  * @property int|null $home_address_id
  * @property int|null $billing_address_id
+ * @property int $room_type_id
+ * @property int $group_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Address|null $billingAddress Relation to local address (DO NOT USE)
@@ -96,6 +99,11 @@ class BookingTraveller extends Model
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(BookingGroup::class, BookingTravellerGroup::class)->using(BookingTravellerGroup::class);
+    }
+
+    public function roomType(): BelongsTo
+    {
+        return $this->belongsTo(RoomType::class);
     }
 
     public function accommodation(): HasManyDeep

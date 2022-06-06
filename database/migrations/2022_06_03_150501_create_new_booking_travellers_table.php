@@ -26,6 +26,9 @@ class CreateNewBookingTravellersTable extends Migration
             $table->string('email_address', 255)->nullable();
             $table->foreignId('home_address_id')->nullable()->constrained('addresses')->onDelete('cascade');
             $table->foreignId('billing_address_id')->nullable()->constrained('addresses')->onDelete('cascade');
+            // Temporary columns used for re-populating customers page. Will be removed when using rooming selector
+            $table->foreignId('room_type_id')->constrained()->cascadeOnDelete();
+            $table->integer('group_id');
             $table->timestamps();
         });
     }
