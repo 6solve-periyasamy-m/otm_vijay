@@ -4,6 +4,7 @@ namespace App\Models\Booking;
 
 use App\Models\Customer\Customer;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Booking\BookingRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property-read Tour $tour
  * @property-read Collection|BookingTraveller[] $travellers
  * @property-read int|null $travellers_count
+ * @property-read BookingRepository $repository
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
  * @method static Builder|Booking query()
@@ -58,5 +60,11 @@ class Booking extends Model
     public function travellers(): HasMany
     {
         return $this->hasMany(BookingTraveller::class, 'booking_id');
+    }
+
+    public function getRepositoryAttribute(): BookingRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new BookingRepository($this);
+        return $this->internal_repository;
     }
 }
