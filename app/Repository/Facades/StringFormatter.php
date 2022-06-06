@@ -2,7 +2,6 @@
 
 namespace App\Repository\Facades;
 
-use App\Repository\SettingsRepository;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Facades\App;

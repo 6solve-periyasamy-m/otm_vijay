@@ -2,9 +2,6 @@
 
 namespace App\Repository\Model\Transport;
 
-use App\Models\Accommodation\AccommodationInventory;
-use App\Models\Activity\ActivityInventory;
-use App\Models\Flight\FlightInventory;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Repository\Abstracts\InventoryRepository;

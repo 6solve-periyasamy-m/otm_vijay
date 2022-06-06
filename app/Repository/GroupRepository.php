@@ -4,11 +4,11 @@ namespace App\Repository;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;
-use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Customer\OrderCustomerGroup;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
-use Illuminate\Support\Collection;
 use DB;
+use Illuminate\Support\Collection;
 
 class GroupRepository
 {

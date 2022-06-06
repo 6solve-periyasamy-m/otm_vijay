@@ -3,7 +3,6 @@
 namespace App\Repository\Model\Transport;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;

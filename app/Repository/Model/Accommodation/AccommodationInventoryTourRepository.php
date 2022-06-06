@@ -10,7 +10,6 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use StringFormatter;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
 {

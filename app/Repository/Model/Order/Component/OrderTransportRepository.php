@@ -4,7 +4,6 @@ namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderTransport;
 use App\Repository\Abstracts\OrderComponentRepository;
-use Illuminate\Database\Eloquent\Model;
 
 class OrderTransportRepository extends OrderComponentRepository
 {

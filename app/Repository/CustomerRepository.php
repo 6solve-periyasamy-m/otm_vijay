@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use Illuminate\Support\Facades\Log;
 use App\Models\Customer\Customer;
+use Illuminate\Support\Facades\Log;
 
 interface CustomerRepositoryInterface
 {

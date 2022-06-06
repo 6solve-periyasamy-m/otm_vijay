@@ -3,12 +3,10 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Order\Order;
-use App\Repository\SettingsRepository;
 use Exception;
 use Illuminate\Support\Collection;
 use mikehaertl\pdftk\Pdf;
 use Storage;
-use StringFormatter;
 use ZipArchive;
 
 class AtolRepository

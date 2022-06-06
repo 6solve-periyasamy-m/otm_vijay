@@ -4,7 +4,6 @@ namespace App\Repository\Model\Order;
 
 use App\Models\Order\OrderInstallment;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\Facades\StringFormatter;
 
 class OrderInstallmentRepository extends ModelRepository
 {

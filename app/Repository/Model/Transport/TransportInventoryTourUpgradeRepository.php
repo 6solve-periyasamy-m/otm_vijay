@@ -2,7 +2,6 @@
 
 namespace App\Repository\Model\Transport;
 
-use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 

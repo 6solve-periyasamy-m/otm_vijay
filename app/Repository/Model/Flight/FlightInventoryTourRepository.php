@@ -3,18 +3,13 @@
 namespace App\Repository\Model\Flight;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Models\Activity\ActivityInventoryTour;
-use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
-use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 
 class FlightInventoryTourRepository extends InventoryTourRepository

@@ -7,7 +7,6 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use Illuminate\Database\Eloquent\Model;
 
 class OrderCustomerRepository extends ModelRepository
 {

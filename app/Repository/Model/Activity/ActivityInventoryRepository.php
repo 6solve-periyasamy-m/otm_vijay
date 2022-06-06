@@ -2,7 +2,6 @@
 
 namespace App\Repository\Model\Activity;
 
-use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;

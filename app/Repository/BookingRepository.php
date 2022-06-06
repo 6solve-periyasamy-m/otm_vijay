@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\RoomingFailedException;
 use App\Models\Booking\AccommodationGroup;
 use App\Models\Booking\Booking;

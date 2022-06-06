@@ -4,8 +4,6 @@ namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
-use App\Repository\Facades\StringFormatter;
-use Illuminate\Database\Eloquent\Model;
 
 class AccommodationInventoryTourUpgradeRepository extends ComponentUpgradeRepository
 {

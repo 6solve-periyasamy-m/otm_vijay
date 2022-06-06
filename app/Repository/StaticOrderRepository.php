@@ -3,12 +3,7 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
-use App\Exceptions\RoomingFailedException;
-use App\Models\Accommodation\RoomType;
-use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
-use App\Models\Helper\OrderStatus;
-use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
@@ -23,16 +18,8 @@ use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
-use Log;
-use mikehaertl\pdftk\Pdf;
-use Storage;
-use StringFormatter;
-use Throwable;
-use ZipArchive;
 
 class StaticOrderRepository
 {

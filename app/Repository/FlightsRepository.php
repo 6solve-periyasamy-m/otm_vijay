@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use Exception;
-use App\Models\Flight\Flight;
 use App\Models\Flight\Airport;
+use App\Models\Flight\Flight;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
