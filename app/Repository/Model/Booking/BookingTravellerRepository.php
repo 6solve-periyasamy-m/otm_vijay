@@ -8,6 +8,7 @@ use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 
 class BookingTravellerRepository extends ModelRepository
@@ -75,6 +76,23 @@ class BookingTravellerRepository extends ModelRepository
     {
         $inbound?->repository->grantToTraveller($this->traveller);
         $outbound?->repository->grantToTraveller($this->traveller);
+    }
+
+    /**
+     * @param InventoryTourRepository[] $tourComponentRepositories
+     * @return void
+     */
+    public function addComponents(array $tourComponentRepositories): void
+    {
+        foreach ($tourComponentRepositories as $tourComponentRepository) {
+            $this->addComponent($tourComponentRepository);
+        }
+    }
+
+    public function addComponent(InventoryTourRepository $tourComponentRepository): bool
+    {
+        $component = $tourComponentRepository->grantToTraveller($this->traveller);
+        return isset($component);
     }
 
     public function get(): BookingTraveller

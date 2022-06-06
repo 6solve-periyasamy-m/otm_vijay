@@ -31,6 +31,14 @@ class BookingRepository extends ModelRepository
         return $booking;
     }
 
+    public function addIncludedToAll(): void
+    {
+        $components = $this->booking->tour->repository->getComponents(false, true, false, true, true, ['Included',]);
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->repository->addComponents($components);
+        }
+    }
+
     /**
      * @throws NotOnTourException
      */
