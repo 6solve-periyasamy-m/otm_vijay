@@ -4,6 +4,7 @@ namespace App\Models\Tour;
 
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Tour\MerchandiseRepository;
 use App\Repository\StockRepository;
 use Database\Factories\Tour\MerchandiseFactory;
 use Eloquent;
@@ -39,6 +40,7 @@ use Illuminate\Validation\Rule;
  * @property-read Collection|OrderMerchandise[] $orderMerchandise
  * @property-read int|null $order_merchandise_count
  * @property-read Tour $tour
+ * @property-read MerchandiseRepository $repository
  * @method static MerchandiseFactory factory(...$parameters)
  * @method static Builder|Merchandise newModelQuery()
  * @method static Builder|Merchandise newQuery()
@@ -109,11 +111,17 @@ class Merchandise extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getExtraStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getAvailableStockAttribute(): int
     {
-        return $this->stock - $this->used_stock;
+        return $this->repository->getAvailableStock();
+    }
+
+    public function getRepositoryAttribute(): MerchandiseRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new MerchandiseRepository($this);
+        return $this->internal_repository;
     }
 }
