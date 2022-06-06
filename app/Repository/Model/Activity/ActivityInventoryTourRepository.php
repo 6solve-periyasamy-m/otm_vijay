@@ -5,9 +5,12 @@ namespace App\Repository\Model\Activity;
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingActivity;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
@@ -103,5 +106,14 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         $inventory = $this->tourComponent->activityInventory;
         $component = $inventory->activity;
         return $component->name . ' (' . f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
+    }
+
+    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $bookingComponent = BookingActivity::create([
+            'booking_traveller_id' => $traveller->id,
+            'activity_inventory_tour_id' => $this->tourComponent->id,
+        ]);
+        return $bookingComponent->repository;
     }
 }

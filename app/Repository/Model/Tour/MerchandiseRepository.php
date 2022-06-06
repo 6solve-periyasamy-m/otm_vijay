@@ -2,10 +2,13 @@
 
 namespace App\Repository\Model\Tour;
 
+use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
@@ -111,5 +114,14 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     public function getAvailableStock(): int
     {
         return $this->getTotalStock() - $this->getUsedStock();
+    }
+
+    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $bookingComponent = BookingMerchandise::create([
+            'booking_traveller_id' => $traveller->id,
+            'merchandise_id' => $this->tourComponent->id,
+        ]);
+        return $bookingComponent->repository;
     }
 }

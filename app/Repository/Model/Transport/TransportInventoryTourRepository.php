@@ -3,11 +3,14 @@
 namespace App\Repository\Model\Transport;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingTransport;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
+use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
@@ -107,5 +110,14 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             ' (' . $component->transportType->name . ') ' .
             ' (' . f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
+    }
+
+    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $bookingComponent = BookingTransport::create([
+            'booking_traveller_id' => $traveller->id,
+            'transport_inventory_tour_id' => $this->tourComponent->id,
+        ]);
+        return $bookingComponent->repository;
     }
 }

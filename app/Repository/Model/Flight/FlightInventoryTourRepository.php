@@ -3,11 +3,14 @@
 namespace App\Repository\Model\Flight;
 
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingFlight;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
@@ -110,5 +113,14 @@ class FlightInventoryTourRepository extends InventoryTourRepository
         return $component->airline->name . ' (' . $inventory->flight_number . ') ' . $component->departureAirport->name . ' to ' . $component->arrivalAirport->name .
             ' (' . f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at) . ')' .
             ' (' . $inventory->travelClass->name . ')';
+    }
+
+    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $bookingComponent = BookingFlight::create([
+            'booking_traveller_id' => $traveller->id,
+            'flight_inventory_tour_id' => $this->tourComponent->id,
+        ]);
+        return $bookingComponent->repository;
     }
 }

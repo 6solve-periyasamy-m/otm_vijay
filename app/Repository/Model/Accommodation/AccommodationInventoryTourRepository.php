@@ -4,9 +4,12 @@ namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
@@ -112,5 +115,14 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         $inventory = $this->inventoryTour->accommodationInventory;
         $component = $inventory->accommodation;
         return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
+    }
+
+    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $component = BookingAccommodation::create([
+            'booking_group_id' => $traveller->primary_group->id,
+            'accommodation_inventory_tour_id' => $this->inventoryTour->id,
+        ]);
+        return $component->repository;
     }
 }
