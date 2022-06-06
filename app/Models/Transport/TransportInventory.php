@@ -4,6 +4,7 @@ namespace App\Models\Transport;
 
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
+use App\Repository\Model\Transport\TransportInventoryRepository;
 use App\Repository\StockRepository;
 use Database\Factories\Transport\TransportInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -48,6 +49,7 @@ use StringFormatter;
  * @property-read int|null $tour_components_count
  * @property-read Transport $transport
  * @property-read TravelClass $travelClass
+ * @property-read TransportInventoryRepository $repository
  * @method static TransportInventoryFactory factory(...$parameters)
  * @method static Builder|TransportInventory newModelQuery()
  * @method static Builder|TransportInventory newQuery()
@@ -157,5 +159,11 @@ class TransportInventory extends Model
     public function __toString(): string
     {
         return "{$this->component} - {$this->travelClass} (" . f_datetime($this->departs_at) . " to " . f_datetime($this->arrives_at) . ")";
+    }
+
+    public function getRepositoryAttribute(): TransportInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TransportInventoryRepository($this);
+        return $this->internal_repository;
     }
 }

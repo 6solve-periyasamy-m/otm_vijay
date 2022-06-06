@@ -60,7 +60,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Repository\TransportComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(23, 59, 59)) as $inventory)
+    @foreach(\App\Repository\Model\Transport\TransportInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
             <td>{{ $inventory->component->transportType }}</td>

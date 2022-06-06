@@ -5,7 +5,7 @@ namespace App\Models\Transport;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\TransportComponentRepository;
+use App\Repository\Model\Transport\TransportInventoryTourRepository;
 use Database\Factories\Transport\TransportInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -45,6 +45,7 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|TransportInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @property-read TransportInventoryTourRepository $repository
  * @method static TransportInventoryTourFactory factory(...$parameters)
  * @method static Builder|TransportInventoryTour newModelQuery()
  * @method static Builder|TransportInventoryTour newQuery()
@@ -110,7 +111,7 @@ class TransportInventoryTour extends Model
 
     public function parent(): TransportInventoryTour
     {
-        return TransportComponentRepository::getParentComponent($this);
+        return $this->repository->getUpgradeParent();
     }
 
     public function tour(): BelongsTo
@@ -179,11 +180,7 @@ class TransportInventoryTour extends Model
 
     public function addToOrder(OrderCustomer $orderCustomer): OrderTransport
     {
-        return OrderTransport::create([
-            'order_customer_id' => $orderCustomer->id,
-            'transport_inventory_tour_id' => $this->id,
-            'cost' => $this->tour_sales_price,
-        ]);
+        return $this->repository->grantToCustomer($orderCustomer)->get();
     }
 
     public function getUsedTourStockAttribute(): int
@@ -193,5 +190,11 @@ class TransportInventoryTour extends Model
             if (!$orderComponent->isCancelled()) $used++;
         }
         return $used;
+    }
+
+    public function getRepositoryAttribute(): TransportInventoryTourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TransportInventoryTourRepository($this);
+        return $this->internal_repository;
     }
 }

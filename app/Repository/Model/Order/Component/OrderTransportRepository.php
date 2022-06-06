@@ -15,12 +15,12 @@ class OrderTransportRepository extends OrderComponentRepository
         $this->orderComponent = $orderComponent;
     }
 
-    public function get(): Model
+    public function get(): OrderTransport
     {
         return $this->orderComponent;
     }
 
-    public function update(array $data): Model
+    public function update(array $data): OrderTransport
     {
         $this->orderComponent->update($data);
         $this->save();
