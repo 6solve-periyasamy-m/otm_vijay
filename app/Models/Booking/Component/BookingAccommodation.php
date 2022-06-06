@@ -4,6 +4,7 @@ namespace App\Models\Booking\Component;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Booking\BookingGroup;
+use App\Repository\Model\Booking\Component\BookingAccommodationRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read BookingGroup $group
  * @property-read AccommodationInventoryTour $tourComponent
+ * @property-read BookingAccommodationRepository $repository
  * @method static Builder|BookingAccommodation newModelQuery()
  * @method static Builder|BookingAccommodation newQuery()
  * @method static Builder|BookingAccommodation query()
@@ -52,5 +54,11 @@ class BookingAccommodation extends Model
         if ($aStart->gt($bStart)) return 1;
         if ($aStart->lt($bStart)) return -1;
         return 0;
+    }
+
+    public function getRepositoryAttribute(): BookingAccommodationRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new BookingAccommodationRepository($this);
+        return $this->internal_repository;
     }
 }

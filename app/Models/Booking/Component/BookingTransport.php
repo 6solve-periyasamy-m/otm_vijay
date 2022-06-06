@@ -4,6 +4,7 @@ namespace App\Models\Booking\Component;
 
 use App\Models\Booking\BookingTraveller;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Model\Booking\Component\BookingTransportRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read TransportInventoryTour $tourComponent
  * @property-read BookingTraveller $traveller
+ * @property-read BookingTransportRepository $repository
  * @method static Builder|BookingTransport newModelQuery()
  * @method static Builder|BookingTransport newQuery()
  * @method static Builder|BookingTransport query()
@@ -52,5 +54,11 @@ class BookingTransport extends Model
         if ($aStart->gt($bStart)) return 1;
         if ($aStart->lt($bStart)) return -1;
         return 0;
+    }
+
+    public function getRepositoryAttribute(): BookingTransportRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new BookingTransportRepository($this);
+        return $this->internal_repository;
     }
 }

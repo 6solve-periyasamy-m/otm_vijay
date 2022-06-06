@@ -4,6 +4,7 @@ namespace App\Models\Booking\Component;
 
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\BookingTraveller;
+use App\Repository\Model\Booking\Component\BookingActivityRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read ActivityInventoryTour $tourComponent
  * @property-read BookingTraveller $traveller
+ * @property-read BookingActivityRepository $repository
  * @method static Builder|BookingActivity newModelQuery()
  * @method static Builder|BookingActivity newQuery()
  * @method static Builder|BookingActivity query()
@@ -52,5 +54,11 @@ class BookingActivity extends Model
         if ($aStart->gt($bStart)) return 1;
         if ($aStart->lt($bStart)) return -1;
         return 0;
+    }
+
+    public function getRepositoryAttribute(): BookingActivityRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new BookingActivityRepository($this);
+        return $this->internal_repository;
     }
 }
