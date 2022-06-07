@@ -48,6 +48,12 @@ class AnonymizeCustomers extends Command
             $this->error('Anonymization is not allowed on this instance. To enable, add: "ALLOW_ANONYMIZATION=true" to the environment');
             return 0;
         }
+        // Matches if either within the /var/www/octopustravelmatrix/ (all non-production servers), or running on a windows machine (My Dev Environment)
+        if (!(str_starts_with(dirname(__FILE__), '/var/www/octopustravelmatrix/')
+            || preg_match('/[A-Za-z]:\\.*/m', dirname(__FILE__)))) {
+            $this->error('This command can only be run in a development/non-production environment');
+            return 0;
+        }
         $faker = Faker::create();
         foreach (Customer::withTrashed()->get() as $customer) {
             do {
