@@ -13,6 +13,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
@@ -115,5 +116,20 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
             'activity_inventory_tour_id' => $this->tourComponent->id,
         ]);
         return $bookingComponent->repository;
+    }
+
+    public function getUsedStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getTotalStock();
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getAvailableStock();
     }
 }

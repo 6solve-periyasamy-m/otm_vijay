@@ -125,4 +125,19 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         ]);
         return $component->repository;
     }
+
+    public function getUsedStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getTotalStock();
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getAvailableStock();
+    }
 }
