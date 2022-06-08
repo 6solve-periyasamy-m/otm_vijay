@@ -10,6 +10,7 @@ use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 
 class BookingTravellerRepository extends ModelRepository
 {
@@ -91,6 +92,22 @@ class BookingTravellerRepository extends ModelRepository
 
     public function addComponent(InventoryTourRepository $tourComponentRepository): bool
     {
+        // In booking, only activity is stock-controlled
+        if ($tourComponentRepository instanceof ActivityInventoryTourRepository) {
+            $travellers = $this->traveller->booking->travellers()->count();
+            if ($tourComponentRepository->getAvailableStock() < $travellers) {
+                $found = false;
+                foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
+                    $repo = $upgrade->upgrade->repository;
+                    if ($repo->getAvailableStock() >= $travellers) {
+                        $tourComponentRepository = $repo;
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) return false;
+            }
+        }
         $component = $tourComponentRepository->grantToTraveller($this->traveller);
         return isset($component);
     }
