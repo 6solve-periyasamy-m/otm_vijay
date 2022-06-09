@@ -15,8 +15,8 @@ class CreateNewBookingAccommodationsTable extends Migration
     {
         Schema::create('booking_accommodations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_group_id')->constrained();
-            $table->foreignId('accommodation_inventory_tour_id')->constrained();
+            $table->foreignId('booking_group_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('accommodation_inventory_tour_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -29,6 +29,9 @@ use Illuminate\Support\Carbon;
  * @property-read Tour $tour
  * @property-read Collection|BookingTraveller[] $travellers
  * @property-read int|null $travellers_count
+ * @property-read int $traveller_count
+ * @property-read float $total_cost
+ * @property-read float $deposit
  * @property-read BookingRepository $repository
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
@@ -46,6 +49,8 @@ use Illuminate\Support\Carbon;
 class Booking extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 
     public function tour(): BelongsTo
     {
@@ -66,5 +71,20 @@ class Booking extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new BookingRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getTotalCostAttribute(): float
+    {
+        return $this->tour->base_price_per_person * $this->traveller_count;
+    }
+
+    public function getTravellerCountAttribute(): int
+    {
+        return $this->travellers()->count();
+    }
+
+    public function getDepositAttribute(): float
+    {
+        return $this->tour->deposit;
     }
 }

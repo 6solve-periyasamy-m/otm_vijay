@@ -15,7 +15,7 @@ class CreateNewBookingTravellersTable extends Migration
     {
         Schema::create('booking_travellers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained();
+            $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
             $table->foreignId('customer_id')->nullable()->constrained();
             $table->string('title', 20)->nullable();
             $table->string('first_name', 160)->nullable();
@@ -24,8 +24,8 @@ class CreateNewBookingTravellersTable extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('mobile_number', 25)->nullable();
             $table->string('email_address', 255)->nullable();
-            $table->foreignId('home_address_id')->nullable()->constrained('addresses')->onDelete('cascade');
-            $table->foreignId('billing_address_id')->nullable()->constrained('addresses')->onDelete('cascade');
+            $table->foreignId('home_address_id')->nullable()->constrained('addresses')->cascadeOnDelete();
+            $table->foreignId('billing_address_id')->nullable()->constrained('addresses')->cascadeOnDelete();
             // Temporary columns used for re-populating customers page. Will be removed when using rooming selector
             $table->foreignId('room_type_id')->constrained()->cascadeOnDelete();
             $table->integer('group_id');

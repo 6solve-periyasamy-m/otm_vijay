@@ -15,8 +15,8 @@ class CreateNewBookingFlightsTable extends Migration
     {
         Schema::create('booking_flights', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_traveller_id')->constrained();
-            $table->foreignId('flight_inventory_tour_id')->constrained();
+            $table->foreignId('booking_traveller_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('flight_inventory_tour_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

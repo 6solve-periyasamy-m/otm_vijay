@@ -18,6 +18,15 @@ class CustomerAuthenticationRepository
         return Customer::find(Auth::guard('customer')->id());
     }
 
+    public static function verifyForBooking(?string $email_address): bool
+    {
+        $customer = Customer::whereEmailAddress($email_address);
+        return !isset($email_address) ||
+                !isset($customer) ||
+                !isset($customer->password) ||
+                $customer->id === CustomerAuthenticationRepository::getCustomer();
+    }
+
     public static function getLatestToken(Customer $user): CustomerApiToken
     {
         $token = $user->tokens()->latest()->first();

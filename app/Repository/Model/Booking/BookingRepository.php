@@ -39,6 +39,32 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function getTotalCost(): float
+    {
+        $cost = 0;
+        foreach ($this->booking->travellers as $traveller) { $cost += $traveller->total_cost; }
+        return $cost;
+    }
+
+    public function getDueTodayAmount(): float
+    {
+        return $this->booking->tour->deposit * $this->booking->travellers()->count();
+    }
+
+    public function getSingleOccupancyCount(): int
+    {
+        $count = 0;
+        foreach ($this->booking->travellers as $traveller) { $count += $traveller->has_single_occupancy; }
+        return $count;
+    }
+
+    public function getSingleOccupancyAmount(): float
+    {
+        $cost = 0;
+        foreach ($this->booking->travellers as $traveller) { $cost += $traveller->surcharge_amount; }
+        return $cost;
+    }
+
     /**
      * @throws NotOnTourException
      */

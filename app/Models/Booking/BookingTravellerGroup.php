@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * App\Models\Booking\BookingTravellerGroup
@@ -22,10 +23,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|BookingTravellerGroup whereBookingTravellerId($value)
  * @mixin Eloquent
  */
-class BookingTravellerGroup extends Model
+class BookingTravellerGroup extends Pivot
 {
     use HasFactory;
     public $timestamps = false;
+    protected $guarded = [];
+    protected $table = 'booking_traveller_groups';
 
     public function traveller(): BelongsTo
     {

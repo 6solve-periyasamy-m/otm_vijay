@@ -8,6 +8,7 @@ use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
@@ -35,9 +36,10 @@ class BookingTravellerRepository extends ModelRepository
 
     public static function make(array $details): BookingTraveller
     {
-        $customer = array_key_exists('email_address', $details) ? Customer::whereEmailAddress($details['email_address']) : null;
+        $customer = array_key_exists('email_address', $details) ? Customer::whereEmailAddress($details['email_address'])->first() : null;
         if (isset($customer)) {
-            return BookingTraveller::make(['customer_id' => $customer->id,]);
+            $homeAddress = $customer->homeAddress;
+            $billingAddress = $customer->billingAddress;
         } else {
             $homeAddress = Address::create([
                 'name' => ($details['first_name'] ?? '') . ($details['last_name'] ?? '') . ' - Home Address',
@@ -59,18 +61,22 @@ class BookingTravellerRepository extends ModelRepository
                 'country_id' => $details['billing_country_id'] ?? null,
                 'postcode' => $details['billing_postcode'] ?? null,
             ]);
-            return BookingTraveller::make([
-                'title' => $details['title'] ?? null,
-                'first_name' => $details['first_name'] ?? null,
-                'middle_names' => $details['middle_names'] ?? null,
-                'last_name' => $details['last_name'] ?? null,
-                'email_address' => $details['email_address'] ?? null,
-                'date_of_birth' => $details['date_of_birth'] ?? null,
-                'mobile_number' => $details['mobile_number'] ?? null,
-                'home_address_id' => $homeAddress->id,
-                'billing_address_id' => $billingAddress->id,
-            ]);
         }
+        return BookingTraveller::make([
+            'customer_id' => $customer?->id,
+            'title' => $details['title'] ?? null,
+            'first_name' => $details['first_name'] ?? null,
+            'middle_names' => $details['middle_names'] ?? null,
+            'last_name' => $details['last_name'] ?? null,
+            'email_address' => $details['email_address'] ?? null,
+            'date_of_birth' => $details['date_of_birth'] ?? null,
+            'mobile_number' => $details['mobile_number'] ?? null,
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            'room_type_id' => $details['room_type_id'],
+            'group_id' => $details['group_id'],
+        ]);
+
     }
 
     public function selectFlights(?FlightInventoryTour $inbound, ?FlightInventoryTour $outbound): void
@@ -110,6 +116,69 @@ class BookingTravellerRepository extends ModelRepository
         }
         $component = $tourComponentRepository->grantToTraveller($this->traveller);
         return isset($component);
+    }
+
+    /**
+     * @return BookingComponentRepository[]
+     */
+    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
+    {
+        $components = [];
+        if ($includeAccommodation) {
+            foreach ($this->traveller->accommodation()->with('tourComponent')->get() as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
+        }
+        foreach ($this->traveller->activities()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->traveller->flights()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->traveller->transport()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->traveller->merchandise()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        return $components;
+    }
+
+    public function hasSingleOccupancy(): bool
+    {
+        foreach ($this->traveller->groups as $group) {
+            if ($group->travellers()->count() == 1) return true;
+        }
+        return false;
+    }
+
+    public function getBaseCost(): float
+    {
+        return $this->traveller->booking->tour->base_price_per_person;
+    }
+    
+    public function getTotalCost(): float
+    {
+        return $this->getBaseCost() + $this->getAdditionalCost() + $this->getSingleOccupancy();
+    }
+
+    public function getAdditionalCost(): float
+    {
+        $cost = 0;
+        foreach ($this->getComponents(true,  ['Upgrade', 'Add-on']) as $componentRepository) {
+            $cost += $componentRepository->getCost();
+        }
+        return $cost;
+    }
+
+    public function getSingleOccupancy(): float
+    {
+        return $this->hasSingleOccupancy() ? $this->traveller->booking->tour->single_occupancy_surcharge : 0;
     }
 
     public function get(): BookingTraveller

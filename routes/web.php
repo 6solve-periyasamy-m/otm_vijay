@@ -3,7 +3,7 @@
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\Customer\CustomerBookingController;
+use App\Http\Controllers\Customer\CustomerNewBookingController;
 use App\Http\Controllers\Customer\CustomerDetailsController;
 use App\Http\Controllers\Customer\CustomerFinancesController;
 use App\Http\Controllers\Customer\CustomerForgotPasswordController;
@@ -794,10 +794,10 @@ Route::get('/atol-report', function () {
 });
 
 Route::prefix('/booking/{bookingUrl}')->group(function () {
-    Route::get('/{token?}', [CustomerBookingController::class, 'index'])->name('customer-booking.index');
-    Route::post('/{token?}', [CustomerBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
-    Route::get('/{token}/summary', [CustomerBookingController::class, 'components'])->name('customer-booking.summary');
-    Route::post('/{token}/pay', [CustomerBookingController::class, 'payDeposit'])->name('customer-booking.deposit');
-    Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
-    Route::get('/{token}/addon/remove/{id}/{type}', [CustomerBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
+    Route::get('/{token?}', [CustomerNewBookingController::class, 'index'])->name('customer-booking.index');
+    Route::post('/{token?}', [CustomerNewBookingController::class, 'storeCustomers'])->name('customer-booking.store-customers');
+    Route::get('/{token}/summary', [CustomerNewBookingController::class, 'components'])->name('customer-booking.summary');
+    Route::post('/{token}/pay', [CustomerNewBookingController::class, 'payDeposit'])->name('customer-booking.deposit');
+    Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerNewBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
+    Route::get('/{token}/addon/remove/{id}/{type}', [CustomerNewBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
 });

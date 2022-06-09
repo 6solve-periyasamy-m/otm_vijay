@@ -37,6 +37,8 @@ class BookingMerchandise extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $fillable = ['customer_id', 'merchandise_id', 'booking_id'];
 
     public function traveller(): BelongsTo

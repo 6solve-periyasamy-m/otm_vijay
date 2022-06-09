@@ -37,6 +37,8 @@ class BookingTransport extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function traveller(): BelongsTo
     {
         return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');

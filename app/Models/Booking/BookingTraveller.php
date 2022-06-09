@@ -50,6 +50,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read int|null $activities_count
  * @property-read Booking $booking
  * @property-read Customer|null $customer
+ * @property-read Collection|BookingAccommodation[] $accommodation
  * @property-read Collection|BookingFlight[] $flights
  * @property-read Collection|BookingGroup[] $groups
  * @property-read int|null $flights_count
@@ -59,6 +60,12 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read int|null $transport_count
  * @property-read BookingTravellerRepository $repository
  * @property-read BookingGroup|null $primary_group
+ * @property-read RoomType|null $roomType
+ * @property-read bool $has_single_occupancy
+ * @property-read float $total_cost
+ * @property-read float $base_cost Base Price Per Person
+ * @property-read float $additional_cost Cost of Addons/Upgrades
+ * @property-read float $surcharge_amount The cost of the single occupancy surcharge
  * @method static Builder|BookingTraveller newModelQuery()
  * @method static Builder|BookingTraveller newQuery()
  * @method static Builder|BookingTraveller query()
@@ -85,6 +92,7 @@ class BookingTraveller extends Model
     use HasDeepRelation;
 
     protected $casts = ['date_of_birth' => 'date',];
+    protected $guarded = [];
 
     public function booking(): BelongsTo
     {
@@ -93,7 +101,7 @@ class BookingTraveller extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'customer');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function groups(): BelongsToMany
@@ -108,7 +116,10 @@ class BookingTraveller extends Model
 
     public function accommodation(): HasManyDeep
     {
-        return $this->hasManyDeep(BookingAccommodation::class, [BookingTravellerGroup::class, BookingGroup::class]);
+        return $this->hasManyDeep(BookingAccommodation::class,
+            [BookingTravellerGroup::class, BookingGroup::class],
+            ['booking_traveller_id', 'id', 'booking_group_id']
+        );
     }
 
     public function activities(): HasMany
@@ -141,51 +152,6 @@ class BookingTraveller extends Model
         return $this->belongsTo(Address::class, 'billing_address_id');
     }
 
-    public function getTitleAttribute(): ?string
-    {
-        return $this->customer?->title ?? $this->title;
-    }
-
-    public function getFirstNameAttribute(): ?string
-    {
-        return $this->customer?->first_name ?? $this->first_name;
-    }
-
-    public function getMiddleNamesAttribute(): ?string
-    {
-        return $this->middle_names?->title ?? $this->middle_names;
-    }
-
-    public function getLastNameAttribute(): ?string
-    {
-        return $this->customer?->last_name ?? $this->last_name;
-    }
-
-    public function getDateOfBirthAttribute(): ?Carbon
-    {
-        return $this->customer?->date_of_birth ?? $this->date_of_birth;
-    }
-
-    public function getEmailAddressAttribute(): ?string
-    {
-        return $this->customer?->email_address ?? $this->email_address;
-    }
-
-    public function getMobileNumberAttribute(): ?string
-    {
-        return $this->customer?->mobile_number ?? $this->mobile_number;
-    }
-
-    public function getHomeAddressAttribute(): ?Address
-    {
-        return $this->customer?->homeAddress ?? $this->homeAddress;
-    }
-
-    public function getBillingAddressAttribute(): ?Address
-    {
-        return $this->customer?->billingAddress ?? $this->billingAddress;
-    }
-
     public function getPrimaryGroupAttribute(): ?BookingGroup
     {
         return $this->groups()->first();
@@ -195,5 +161,30 @@ class BookingTraveller extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new BookingTravellerRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getHasSingleOccupancyAttribute(): bool
+    {
+        return $this->repository->hasSingleOccupancy();
+    }
+
+    public function getTotalCostAttribute(): float
+    {
+        return $this->repository->getTotalCost();
+    }
+
+    public function getBaseCostAttribute(): float
+    {
+        return $this->repository->getBaseCost();
+    }
+
+    public function getAdditionalCostAttribute(): float
+    {
+        return $this->repository->getAdditionalCost();
+    }
+
+    public function getSurchargeAmountAttribute(): float
+    {
+        return $this->repository->getSingleOccupancy();
     }
 }

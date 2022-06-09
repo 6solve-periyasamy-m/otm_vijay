@@ -37,6 +37,8 @@ class BookingAccommodation extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function group(): BelongsTo
     {
         return $this->belongsTo(BookingGroup::class, 'booking_group_id');

@@ -110,9 +110,9 @@ class RoomingRepository
 
     /**
      * @param Tour $tour
-     * @return Collection
+     * @return Collection|AccommodationInventoryTour[]
      */
-    public static function getTemplateTourInventory(Tour $tour): Collection
+    public static function getTemplateTourInventory(Tour $tour): array|Collection
     {
         return AccommodationInventoryTour::where('tour_id', '=', $tour->id)->where('is_template', '=', 1)->get();
     }
@@ -133,6 +133,10 @@ class RoomingRepository
         return $query->first() == null ? null : AccommodationInventoryTour::find($query->first()->id);
     }
 
+    /**
+     * @param array $ids
+     * @return RoomType[]
+     */
     public static function hydrateRoomTypes(array $ids): array
     {
         $types = [];
@@ -298,6 +302,10 @@ class RoomingRepository
         return RoomingRepository::hydrateRoomTypes(array_unique($availableTypes));
     }
 
+    /**
+     * @param AccommodationInventoryTour $inventoryTour
+     * @return RoomType[]
+     */
     public static function getHydratedRoomTypesForInventory(AccommodationInventoryTour $inventoryTour): array
     {
         return RoomingRepository::hydrateRoomTypes(RoomingRepository::getRoomTypesForInventory($inventoryTour));

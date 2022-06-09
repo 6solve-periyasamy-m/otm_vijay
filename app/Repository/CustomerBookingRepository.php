@@ -117,7 +117,7 @@ class CustomerBookingRepository
         $selected = ['outbound' => 0, 'inbound' => 0,];
         if (!isset($booking)) return $selected;
         // TODO: Rework when Per-Customer components
-        foreach ($booking->flights as $flight) {
+        foreach ($booking->leadTraveller->flights as $flight) {
             if ($flight->tourComponent->flight_type == 'Outbound') {
                 $selected['outbound'] = $flight->flight_inventory_tour_id;
             } else if ($flight->tourComponent->flight_type == 'Inbound') {
@@ -239,10 +239,12 @@ class CustomerBookingRepository
         if ($to->available_stock < $booking->travellers()->count()) return false;
         try {
             DB::beginTransaction();
-            DB::table('booking_activities')
-                ->where('booking_id', '=', $booking->id)
-                ->where('activity_inventory_tour_id', '=', $from->id)
-                ->update(['activity_inventory_tour_id' => $to->id,]);
+            foreach ($booking->travellers as $traveller) {
+                DB::table('booking_activities')
+                    ->where('booking_traveller_id', '=', $traveller->id)
+                    ->where('activity_inventory_tour_id', '=', $from->id)
+                    ->update(['activity_inventory_tour_id' => $to->id,]);
+            }
             DB::commit();
         } catch (Throwable $e) {
             Log::error($e);
@@ -259,7 +261,7 @@ class CustomerBookingRepository
         if ($addon->tour_component_type !== 'Add-on') return false;
         if ($addon->available_stock < $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
-            $booking->activities()->save(BookingActivity::make(['customer_id' => $traveller->customer->id,'activity_inventory_tour_id' => $addon->id,]));
+            $traveller->repository->addComponent($addon->repository);
         }
         return true;
     }
@@ -271,7 +273,7 @@ class CustomerBookingRepository
         if ($addon->tour_component_type !== 'Add-on') return false;
         if ($addon->available_stock < $booking->travellers()->count()) return false;
         foreach ($booking->travellers as $traveller) {
-            $booking->merchandise()->save(BookingMerchandise::make(['customer_id' => $traveller->customer->id,'merchandise_id' => $addon->id,]));
+            $traveller->repository->addComponent($addon->repository);
         }
         return true;
     }
@@ -280,9 +282,8 @@ class CustomerBookingRepository
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
-        foreach ($booking->activities as $bookingComponent) {
-            if ($bookingComponent->tourComponent->id == $addon->id)
-                $bookingComponent->delete();
+        foreach ($booking->travellers as $traveller) {
+            $traveller->activities()->where('activity_inventory_tour_id', $addon->id)->delete();
         }
         return true;
     }
@@ -291,9 +292,8 @@ class CustomerBookingRepository
     {
         if ($booking->tour_id !== $addon->tour_id) return false;
         if ($addon->tour_component_type !== 'Add-on') return false;
-        foreach ($booking->merchandise as $bookingComponent) {
-            if ($bookingComponent->tourComponent->id == $addon->id)
-                $bookingComponent->delete();
+        foreach ($booking->travellers as $traveller) {
+            $traveller->merchandise()->where('merchandise_id', $addon->id)->delete();
         }
         return true;
     }

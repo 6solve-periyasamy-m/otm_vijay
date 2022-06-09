@@ -14,6 +14,7 @@ class CreateBookingTravellerGroupsTable extends Migration
     public function up()
     {
         Schema::create('booking_traveller_groups', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('booking_traveller_id')->constrained()->cascadeOnDelete();
             $table->foreignId('booking_group_id')->constrained()->cascadeOnDelete();
         });
