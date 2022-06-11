@@ -194,6 +194,17 @@
 .pagebreak-inside {
     page-break-inside: avoid;
 }
+
+
+.topbar {
+  position: fixed !important;
+  width: inherit;
+}
+
+.topbar-padding {
+    padding-top: 150px;
+}
+
 @media (max-width: 768px) {
     .overlay-container img {
         width: 35%;
@@ -202,6 +213,9 @@
         .payment-record {
             margin-bottom: 0rem;
         }
+    }
+    .topbar-padding {
+        padding-top: 87.39px;
     }
 }
 
