@@ -21,9 +21,9 @@
                         <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected @endif @if($selector->cancelled) disabled @endif>{{ $selector->booking_reference }} @if($selector->cancelled) (Cancelled) @endif - {{ $selector->tour->name }}</option>
                     @endforeach
                 </select>
-                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
+                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-primary">Invoice</a>
                 @if ($order->has_atol_certificate)
-                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-5 invoice btn btn-secondary">ATOL Certificate</a>
+                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-secondary">ATOL Certificate</a>
                 @endif
             </div>
         </form>
@@ -78,12 +78,12 @@
                                     @foreach($itinerary as $timeslot)
                                         @php $currentSlot = $timeslot['start']->copy()->setTime(0, 0, 0) @endphp
                                         @if (!isset($previousSlot))
-                                            <tr class="text-center font-bold bg-light-blue">
+                                            <tr class="text-center font-bold bg-light-blue pagebreak-inside">
                                                 <td colspan="3">Day {{ $day }}: {{ StringFormatter::formatDate($currentSlot) }}</td>
                                             </tr>
                                         @elseif ($previousSlot->diffInDays($currentSlot) >= 1)
                                             @php $day += $previousSlot->diffInDays($currentSlot) @endphp
-                                            <tr class="text-center font-bold bg-light-blue">
+                                            <tr class="text-center font-bold bg-light-blue pagebreak-inside">
                                                 <td colspan="3">Day {{ $day }}: {{ StringFormatter::formatDate($currentSlot) }}</td>
                                             </tr>
                                         @endif
