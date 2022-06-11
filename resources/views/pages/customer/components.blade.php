@@ -161,9 +161,9 @@
                     <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif @if($order->cancelled) disabled @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
-                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-20 invoice btn btn-primary">Invoice</a>
+                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="nvoice btn btn-primary">Invoice</a>
                 @if ($orderCustomer->order->has_atol_certificate)
-                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="m-l-5 invoice btn btn-secondary">ATOL Certificate</a>
+                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-secondary">ATOL Certificate</a>
                 @endif
             </div>
         </form>
