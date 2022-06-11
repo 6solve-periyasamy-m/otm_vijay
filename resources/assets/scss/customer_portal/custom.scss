@@ -18,12 +18,21 @@
 
 .order-select {
     width: fit-content;
-    margin-left: 1rem;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+.payable-amount:hover {
+    text-decoration: underline !important;
 }
 
 .splitter {
     border-bottom: 5px solid #cccccc;
     border-radius: 2px;
+}
+.overlay-container img {
+    width: 100%;
 }
 
 .overlay-container:hover .image-overlay {
@@ -49,7 +58,6 @@
 .hover-upload {
     opacity: 1;
     display: block;
-    width: 100%;
     height: auto;
     transition: .5s ease;
     backface-visibility: hidden;
@@ -183,13 +191,18 @@
         align-items: center;
     }
 }
-
+.pagebreak-inside {
+    page-break-inside: avoid;
+}
 @media (max-width: 768px) {
+    .overlay-container img {
+        width: 35%;
+    }
     .col-md-6:last-child {
         .payment-record {
             margin-bottom: 0rem;
         }
-    }    
+    }
 }
 
 .accordion {
@@ -226,6 +239,7 @@
     justify-content: center;
     padding-left: 125px;
     align-items: center;
+    gap: 5px;
 }
 .finances-select-wrapper {
     display: flex;
@@ -233,9 +247,19 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    gap: 5px;
 }
 .no-header-line > :not(:first-child) {
     border-top: none !important;
+}
+
+.show-on-mobile-flex,
+.show-on-mobile-block {
+    display: none !important;
+}
+
+.form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label {
+    transform: scale(0.85) translateY(-0.9rem) translateX(0.15rem);
 }
 
 /*-- ==============================================================
@@ -244,7 +268,7 @@
 
 @media only screen
     and (max-width: 760px), (min-device-width: 768px)
-    and (max-device-width: 1024px)  {
+    and (max-device-width: 1024px) {
 
     /* Force table to not be like tables anymore */
     table, thead, tbody, th, td, tr {
@@ -289,12 +313,51 @@
         font-weight: bold;
         color: #54667a;
     }
+    td.text-center:before {
+        width: 100%;
+    }
 
+    /* Sided layout */
+    .table.table-mobile-sided> :not(:first-child) {
+        border-top: none;
+    }
+
+    .table.table-mobile-sided>:not(caption)>*>* {
+        border-color: var(--bs-table-border-color);
+    }
+    .table.table-mobile-sided td {
+          /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid var(--tmr-white);
+        position: relative;
+        padding-left: 50%;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .table.table-mobile-sided td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        white-space: nowrap;
+        font-weight: bold;
+        color: var(--tmr-table-header);
+    }
     [data-content]:before {
         content: attr(data-content);
     }
     .order-select {
-        width: -webkit-fill-available !important;
+        width: 100%;
+        width: -moz-available;
+        width: -webkit-fill-available;
+        width: fill-available;
     }
     .order-select-wrapper {
         justify-content: start;
@@ -306,5 +369,26 @@
     }
     .card-heading {
         margin-bottom: 0 !important;
+    }
+    .hide-on-mobile {
+        display: none !important;
+    }
+    .show-on-mobile-block {
+        display: block !important;
+    }
+    .show-on-mobile-flex {
+        display: flex !important;
+    }
+    .upgrade-wrapper {
+        align-items: center !important;
+    }
+}
+
+@media print {
+    .col {
+        float: none;
+    }
+    .pagebreak-inside {
+        break-after: always;
     }
 }
