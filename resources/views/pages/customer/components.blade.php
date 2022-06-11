@@ -211,7 +211,7 @@
                 <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Accommodation</span><br />
-                        @include('partials.customer.instructions')
+                        <span class="hide-on-mobile">@include('partials.customer.instructions')</span>
                     </div>
                 </div>
                 <div class="card">
@@ -277,7 +277,7 @@
                 <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Activities</span><br />
-                        @include('partials.customer.instructions')
+                        <span class="hide-on-mobile">@include('partials.customer.instructions')</span>
                     </div>
                 </div>
                 <div class="card">
@@ -342,7 +342,7 @@
                 <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Flights</span><br />
-                        @include('partials.customer.instructions')
+                        <span class="hide-on-mobile">@include('partials.customer.instructions')</span>
                     </div>
                 </div>
                 <div class="card">
@@ -407,7 +407,7 @@
                 <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Transport</span><br />
-                        @include('partials.customer.instructions')
+                        <span class="hide-on-mobile">@include('partials.customer.instructions')</span>
                     </div>
                 </div>
                 <div class="card">
@@ -474,7 +474,7 @@
                 <div class="card card-heading">
                     <div class="card-body">
                         <span class="h2">Add-ons and Extras</span><br />
-                        @include('partials.customer.instructions')
+                        <span class="hide-on-mobile">@include('partials.customer.instructions')</span>
                     </div>
                 </div>
                 <div class="card">
@@ -508,7 +508,7 @@
                                             @if($orderComponent['owned'])
                                                 Owned
                                             @else
-                                            <div style="display: flex;justify-content: end;">
+                                            <div style="display: flex; justify-content: center;" class="hide-on-mobile">
                                                 @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
                                                 <a href="{{ route('customer.extras.apply',
                                                     ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
@@ -519,6 +519,18 @@
                                                     ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                                      'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
                                                    class="btn btn-primary ms-1">$</a>
+                                            </div>
+                                            <div style="display: flex; justify-content: center;" class="show-on-mobile-flex">
+                                                @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+                                                <a href="{{ route('customer.extras.apply',
+                                                    ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                                     'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                                   class="btn btn-success ms-1">Add to Cart</a>
+                                                @endif
+                                                <a href="{{ route('customer.extras.purchase',
+                                                    ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
+                                                     'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
+                                                   class="btn btn-primary ms-1">Buy Now</a>
                                             </div>
                                             @endif
                                         </td>
