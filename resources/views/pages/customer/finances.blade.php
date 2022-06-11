@@ -13,7 +13,7 @@
                         <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
                     @endforeach
                 </select>
-                <a href="#" target="_blank" class="invoice btn btn-primary m-l-20">View Invoice</a>
+                <a href="#" target="_blank" class="invoice btn btn-primary">View Invoice</a>
             </div>
         </form>
     </div>
@@ -26,16 +26,16 @@
                 <div class="row">
                     <p class="heading">Make Payment</p>
                     <div class="col-md-12">
-                        <p class="sub-heading">Make Payment</p>
                         <form class="form-material" action="{{ route('customer.payment.make') }}" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="booking_reference" id="form-booking-reference">
-                            <div class="form-material row">
-                                <div class="form-group col-12 col-xl-10">
-                                    <input class="form-control form-control-line amount-input" name="amount" type="text" placeholder="Enter Amount to Pay Here"/>
+                            <div class="row">
+                                <div class="form-floating form-group col-12 col-xl-10">
+                                    <input type="text" class="form-control amount-input" id="floatingAmountInput" name="amount" placeholder="name@example.com">
+                                    <label for="floatingAmountInput">Enter Amount</label>
                                 </div>
-                                <div class="form-group col-12 col-xl-2">
-                                    <input class="form-control form-control-line" type="submit" value="Make Payment">
+                                <div class="col-12 col-xl-2 d-flex justify-content-center align-items-center">
+                                    <button type="submit" class="btn btn-primary">Make Payment</button>
                                 </div>
                             </div>
                         </form>
