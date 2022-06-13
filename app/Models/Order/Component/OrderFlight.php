@@ -65,6 +65,8 @@ class OrderFlight extends Model
     protected $fillable = ['order_customer_id', 'flight_inventory_tour_id', 'cost'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderFlightRepository $internal_repository;
+
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
         return OrderFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();

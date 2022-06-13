@@ -39,6 +39,8 @@ class BookingTransport extends Model
 
     protected $guarded = [];
 
+    private BookingTransportRepository $internal_repository;
+
     public function traveller(): BelongsTo
     {
         return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');

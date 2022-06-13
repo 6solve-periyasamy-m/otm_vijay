@@ -5,7 +5,6 @@ namespace App\Models\Flight;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\FlightComponentRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use Database\Factories\Flight\FlightInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -20,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use StringFormatter;
 
 /**
  * App\Models\Flight\FlightInventoryTour
@@ -75,6 +73,8 @@ class FlightInventoryTour extends Model
     protected $fillable = ['tour_id', 'flight_inventory_id', 'tour_component_type', 'flight_type', 'tour_sales_price',];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+
+    private FlightInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {

@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use StringFormatter;
 
 /**
  * App\Models\Transport\TransportInventoryTour
@@ -70,6 +69,8 @@ class TransportInventoryTour extends Model
     protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+
+    private TransportInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {

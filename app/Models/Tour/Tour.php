@@ -125,6 +125,8 @@ class Tour extends Model
         'base_price_per_person' => 'double','deposit' => 'double', 'margin' => 'double', 'stock_control_active' => 'boolean'];
     protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments'];
 
+    private TourRepository $internal_repository;
+
     public static function getValidationRules(): array
     {
         return [

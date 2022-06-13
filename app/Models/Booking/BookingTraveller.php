@@ -10,6 +10,7 @@ use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
+use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property int $id
  * @property int $booking_id
  * @property int|null $customer_id
+ * @property int|null $order_customer_id
  * @property string|null $title
  * @property string|null $first_name
  * @property string|null $middle_names
@@ -46,6 +48,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read Address|null $billing_address
  * @property-read Address|null $home_address
  * @property-read Address|null $homeAddress Relation to local address (DO NOT USE)
+ * @property-read OrderCustomer|null $orderCustomer
  * @property-read Collection|BookingActivity[] $activities
  * @property-read int|null $activities_count
  * @property-read Booking $booking
@@ -70,6 +73,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @method static Builder|BookingTraveller newQuery()
  * @method static Builder|BookingTraveller query()
  * @method static Builder|BookingTraveller whereBillingAddressId($value)
+ * @method static Builder|BookingTraveller whereOrderCustomerId($value)
  * @method static Builder|BookingTraveller whereBookingId($value)
  * @method static Builder|BookingTraveller whereCreatedAt($value)
  * @method static Builder|BookingTraveller whereCustomerId($value)
@@ -91,6 +95,8 @@ class BookingTraveller extends Model
     use HasFactory;
     use HasDeepRelation;
 
+    private BookingTravellerRepository $internal_repository;
+
     protected $casts = ['date_of_birth' => 'date',];
     protected $guarded = [];
 
@@ -102,6 +108,11 @@ class BookingTraveller extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function orderCustomer(): BelongsTo
+    {
+        return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
     }
 
     public function groups(): BelongsToMany

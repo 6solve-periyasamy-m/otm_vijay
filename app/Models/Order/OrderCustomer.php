@@ -15,7 +15,6 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\GroupRepository;
 use App\Repository\Model\Order\OrderCustomerRepository;
 use App\Repository\RoomingRepository;
-use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 use Database\Factories\Order\OrderCustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -30,7 +29,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon as SupportCarbon;
-use Illuminate\Support\Collection;
 
 /**
  * App\Models\Order\OrderCustomer
@@ -109,6 +107,8 @@ class OrderCustomer extends Model
 {
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
+
+    private OrderCustomerRepository $internal_repository;
 
     protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',
         'internal_notes', 'external_notes', 'accommodation_notes', 'activity_notes', 'flight_notes', 'transport_notes',];

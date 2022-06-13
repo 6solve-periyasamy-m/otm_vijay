@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 /**
  * App\Models\Transport\TransportInventory
@@ -87,6 +86,8 @@ class TransportInventory extends Model
         'fit_selectable' => 'boolean',
         'purchase_price' => 'double',
     ];
+
+    private TransportInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {

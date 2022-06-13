@@ -38,6 +38,7 @@ class BookingActivity extends Model
     use HasFactory;
 
     protected $guarded = [];
+    private BookingActivityRepository $internal_repository;
 
     public function traveller(): BelongsTo
     {

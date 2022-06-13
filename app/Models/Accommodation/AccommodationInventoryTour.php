@@ -70,6 +70,8 @@ class AccommodationInventoryTour extends Model
 {
     use HasFactory, CascadeSoftDeletes, SoftDeletes;
 
+    private AccommodationInventoryTourRepository $internal_repository;
+
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price', 'is_template'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = [

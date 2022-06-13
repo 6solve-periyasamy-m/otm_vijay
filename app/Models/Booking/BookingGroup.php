@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -18,8 +19,10 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property string $name
+ * @property int $booking_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Booking $booking
  * @property-read Collection|BookingAccommodation[] $accommodation
  * @property-read int|null $accommodation_count
  * @property-read Collection|BookingTraveller[] $travellers
@@ -33,10 +36,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|BookingGroup whereName($value)
  * @method static Builder|BookingGroup whereUpdatedAt($value)
  * @mixin Eloquent
+ * @method static Builder|BookingGroup whereBookingId($value)
  */
 class BookingGroup extends Model
 {
     use HasFactory;
+
+    private BookingGroupRepository $internal_repository;
 
     protected $guarded = [];
 
@@ -48,6 +54,11 @@ class BookingGroup extends Model
     public function accommodation(): HasMany
     {
         return $this->hasMany(BookingAccommodation::class);
+    }
+
+    public function booking(): BelongsTo
+    {
+        return $this->belongsTo(Booking::class);
     }
 
     public function getRepositoryAttribute(): BookingGroupRepository

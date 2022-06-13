@@ -60,6 +60,8 @@ class OrderTransport extends Model
     protected $fillable = ['order_customer_id', 'transport_inventory_tour_id', 'cost'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderTransportRepository $internal_repository;
+
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
         return OrderTransport::where('order_customer_id', $orderCustomerId)->get();

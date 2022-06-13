@@ -6,7 +6,6 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;
-use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Order\Component\OrderAccommodationRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,6 +59,8 @@ class OrderAccommodation extends Model
 
     protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id', 'cost', 'group_id'];
     protected $casts = ['cost' => 'double',];
+
+    private OrderAccommodationRepository $internal_repository;
 
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {

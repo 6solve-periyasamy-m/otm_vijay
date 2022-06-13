@@ -60,6 +60,8 @@ class OrderActivity extends Model
     protected $fillable = ['order_customer_id', 'activity_inventory_tour_id', 'cost'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderActivityRepository $internal_repository;
+
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
         return OrderActivity::where('order_customer_id', $orderCustomerId)->get();

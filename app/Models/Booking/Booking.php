@@ -2,7 +2,6 @@
 
 namespace App\Models\Booking;
 
-use App\Models\Customer\Customer;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use Eloquent;
@@ -27,6 +26,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $deleted_at
  * @property-read BookingTraveller|null $leadTraveller
  * @property-read Tour $tour
+ * @property-read Collection|BookingGroup[] $groups
+ * @property-read int|null $groups_count
  * @property-read Collection|BookingTraveller[] $travellers
  * @property-read int|null $travellers_count
  * @property-read int $traveller_count
@@ -50,6 +51,8 @@ class Booking extends Model
 {
     use HasFactory;
 
+    private BookingRepository $internal_repository;
+
     protected $guarded = [];
 
     public function tour(): BelongsTo
@@ -65,6 +68,11 @@ class Booking extends Model
     public function travellers(): HasMany
     {
         return $this->hasMany(BookingTraveller::class, 'booking_id');
+    }
+
+    public function groups(): HasMany
+    {
+        return $this->hasMany(BookingGroup::class, 'booking_id');
     }
 
     public function getRepositoryAttribute(): BookingRepository

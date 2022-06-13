@@ -3,7 +3,6 @@
 namespace App\Models\Activity;
 
 use App\Repository\Model\Activity\ActivityInventoryRepository;
-use App\Repository\StockRepository;
 use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -16,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 
 /**
@@ -69,6 +67,8 @@ use StringFormatter;
 class ActivityInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
+
+    private ActivityInventoryRepository $internal_repository;
 
     protected $fillable = ['activity_id', 'ticket_type_id', 'starts_at', 'ends_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected array $cascadeDeletes = ['tourComponents'];

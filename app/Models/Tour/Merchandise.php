@@ -5,7 +5,6 @@ namespace App\Models\Tour;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Tour\MerchandiseRepository;
-use App\Repository\StockRepository;
 use Database\Factories\Tour\MerchandiseFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -68,6 +67,8 @@ class Merchandise extends Model
 
     protected $fillable = ['name', 'tour_component_type', 'stock', 'purchase_price', 'tour_sales_price', 'notes', 'image_url'];
     protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+
+    private MerchandiseRepository $internal_repository;
 
     public static function getValidationRules(): array
     {

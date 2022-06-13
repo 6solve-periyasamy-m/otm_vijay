@@ -44,6 +44,8 @@ class ActivityInventoryTourUpgrade extends Model
 {
     use HasFactory, SoftDeletes;
 
+    private ActivityInventoryTourUpgradeRepository $internal_repository;
+
     protected $fillable = ['upgrade_id', 'description'];
 
     public function base(): BelongsTo

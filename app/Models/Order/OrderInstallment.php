@@ -3,7 +3,6 @@
 namespace App\Models\Order;
 
 use App\Repository\Model\Order\OrderInstallmentRepository;
-use App\Repository\StaticOrderRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,6 +49,8 @@ class OrderInstallment extends Model
 
     protected $fillable = ['amount', 'due_on',];
     protected $casts = ['due_on' => 'date', 'amount' => 'double',];
+
+    private OrderInstallmentRepository $internal_repository;
 
     public static function getValidationRules(): array
     {

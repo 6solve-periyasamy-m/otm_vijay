@@ -3,7 +3,6 @@
 namespace App\Models\Accommodation;
 
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
-use App\Repository\StockRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -16,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 /**
  * App\Models\Accommodation\AccommodationInventory
@@ -77,6 +75,8 @@ use StringFormatter;
 class AccommodationInventory extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
+
+    private AccommodationInventoryRepository $internal_repository;
 
     protected $fillable = ['accommodation_id', 'room_type_id', 'board_type_id', 'check_in', 'check_in_time_confirmed', 'check_out', 'check_out_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'notes', 'currency_id'];
     protected array $cascadeDeletes = ['tourComponents'];

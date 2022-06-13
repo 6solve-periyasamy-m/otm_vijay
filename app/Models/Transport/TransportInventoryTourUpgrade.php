@@ -46,6 +46,8 @@ class TransportInventoryTourUpgrade extends Model
 
     protected $fillable = ['upgrade_id', 'description'];
 
+    private TransportInventoryTourUpgradeRepository $internal_repository;
+
     public function base(): BelongsTo
     {
         return $this->belongsTo(TransportInventoryTour::class, 'base_id');

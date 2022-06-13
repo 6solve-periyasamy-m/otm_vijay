@@ -4,7 +4,6 @@ namespace App\Models\Flight;
 
 use App\Models\TravelClass;
 use App\Repository\Model\Flight\FlightInventoryRepository;
-use App\Repository\StockRepository;
 use Database\Factories\Flight\FlightInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -18,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 /**
  * App\Models\Flight\FlightInventory
@@ -89,6 +87,8 @@ class FlightInventory extends Model
         'purchase_price' => 'double',
         'sales_price' => 'double',
     ];
+
+    private FlightInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {

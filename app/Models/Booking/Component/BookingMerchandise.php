@@ -41,6 +41,8 @@ class BookingMerchandise extends Model
 
     protected $fillable = ['customer_id', 'merchandise_id', 'booking_id'];
 
+    private BookingMerchandiseRepository $internal_repository;
+
     public function traveller(): BelongsTo
     {
         return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');

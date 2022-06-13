@@ -47,6 +47,8 @@ class FlightInventoryTourUpgrade extends Model
 
     protected $fillable = ['upgrade_id', 'description'];
 
+    private FlightInventoryTourUpgradeRepository $internal_repository;
+
     public function base(): BelongsTo
     {
         return $this->belongsTo(FlightInventoryTour::class, 'base_id');

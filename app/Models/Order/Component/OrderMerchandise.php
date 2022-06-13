@@ -54,6 +54,8 @@ class OrderMerchandise extends Model
     protected $fillable = ['merchandise_id', 'order_customer_id', 'cost'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderMerchandiseRepository $internal_repository;
+
     public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');

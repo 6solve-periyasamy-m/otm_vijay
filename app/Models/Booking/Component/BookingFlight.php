@@ -37,6 +37,8 @@ class BookingFlight extends Model
 {
     use HasFactory;
 
+    private BookingFlightRepository $internal_repository;
+
     protected $guarded = [];
 
     public function traveller(): BelongsTo

@@ -37,6 +37,8 @@ class BookingAccommodation extends Model
 {
     use HasFactory;
 
+    private BookingAccommodationRepository $internal_repository;
+
     protected $guarded = [];
 
     public function group(): BelongsTo

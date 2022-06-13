@@ -5,7 +5,6 @@ namespace App\Models\Activity;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\ActivityComponentRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use Database\Factories\Activity\ActivityInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -20,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use StringFormatter;
 
 /**
  * App\Models\Activity\ActivityInventoryTour
@@ -67,6 +65,8 @@ use StringFormatter;
 class ActivityInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
+
+    private ActivityInventoryTourRepository $internal_repository;
 
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
