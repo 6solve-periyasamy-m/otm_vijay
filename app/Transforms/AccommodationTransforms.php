@@ -89,7 +89,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
     }
 
     public static function getSelectInventoryForAccommodation(AccommodationInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableAccommodationForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];

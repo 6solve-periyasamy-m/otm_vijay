@@ -89,7 +89,7 @@ class ActivityTransforms implements ActivityTransformsInterface
     }
 
     public static function getSelectInventoryForActivity(ActivityInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableActivityForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];

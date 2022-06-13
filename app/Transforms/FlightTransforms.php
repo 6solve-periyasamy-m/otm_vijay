@@ -89,7 +89,7 @@ class FlightTransforms implements FlightTransformsInterface
     }
 
     public static function getSelectInventoryForFlight(FlightInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableFlightForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];

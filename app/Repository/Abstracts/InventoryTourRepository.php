@@ -25,6 +25,8 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
 
     public abstract function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool;
 
+    public abstract function getAvailableForUpgrade(): array;
+
     public abstract function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository;
 
     public abstract function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository;

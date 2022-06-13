@@ -113,7 +113,7 @@ class TransportTransforms implements TransportTransformsInterface
     }
 
     public static function getSelectInventoryForTransport(TransportInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableTransportForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];

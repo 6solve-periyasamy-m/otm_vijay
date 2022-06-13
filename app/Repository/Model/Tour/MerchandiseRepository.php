@@ -152,4 +152,9 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     {
         return $this->merchandise->tour_component_type;
     }
+
+    public function getAvailableForUpgrade(): array
+    {
+        return [];
+    }
 }

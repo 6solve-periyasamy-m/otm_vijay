@@ -171,4 +171,21 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         return $this->inventoryTour->tour_component_type;
     }
+
+    public function getAvailableForUpgrade(): array
+    {
+        $tour = $this->inventoryTour->tour;
+        $included = [];
+        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+            $included[$inventoryTour->accommodationInventory->id] = $inventoryTour->accommodationInventory->id;
+        }
+        $data = [];
+        foreach ($this->inventoryTour->accommodationInventory->accommodation->inventory as $inventory) {
+            if (in_array($inventory->id, $included)) continue;
+            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->check_out->lte($tour->date_to->setTime(23, 59, 59))) {
+                $data[$inventory->id] = $inventory;
+            }
+        }
+        return $data;
+    }
 }
