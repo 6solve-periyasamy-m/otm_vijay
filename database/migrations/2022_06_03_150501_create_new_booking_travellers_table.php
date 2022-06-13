@@ -17,6 +17,7 @@ class CreateNewBookingTravellersTable extends Migration
             $table->id();
             $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
             $table->foreignId('customer_id')->nullable()->constrained();
+            $table->foreignId('order_customer_id')->nullable()->constrained();
             $table->string('title', 20)->nullable();
             $table->string('first_name', 160)->nullable();
             $table->string('middle_names', 160)->nullable();

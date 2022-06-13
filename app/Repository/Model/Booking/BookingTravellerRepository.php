@@ -8,6 +8,8 @@ use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
@@ -76,7 +78,19 @@ class BookingTravellerRepository extends ModelRepository
             'room_type_id' => $details['room_type_id'],
             'group_id' => $details['group_id'],
         ]);
+    }
 
+    public function getSelectedFlights(): array
+    {
+        $selected = ['outbound' => 0, 'inbound' => 0,];
+        foreach ($this->traveller->flights as $flight) {
+            if ($flight->tourComponent->flight_type == 'Outbound') {
+                $selected['outbound'] = $flight->flight_inventory_tour_id;
+            } else if ($flight->tourComponent->flight_type == 'Inbound') {
+                $selected['inbound'] = $flight->flight_inventory_tour_id;
+            }
+        }
+        return $selected;
     }
 
     public function selectFlights(?FlightInventoryTour $inbound, ?FlightInventoryTour $outbound): void
@@ -157,6 +171,42 @@ class BookingTravellerRepository extends ModelRepository
         return false;
     }
 
+    public function convertToCustomer(): Customer
+    {
+        $customer = Customer::create([
+            'title' => $this->traveller->title ?? null,
+            'first_name' => $this->traveller->first_name ?? null,
+            'middle_names' => $this->traveller->middle_names ?? null,
+            'last_name' => $this->traveller->last_name ?? null,
+            'email_address' => $this->traveller->email_address ?? null,
+            'date_of_birth' => $this->traveller->date_of_birth ?? null,
+            'mobile_number' => $this->traveller->mobile_number ?? null,
+            'home_address_id' => $this->traveller->home_address_id,
+            'billing_address_id' => $this->traveller->billing_address_id,
+        ]);
+        $this->traveller->customer_id = $customer->id;
+        return $customer;
+    }
+
+    public function convertToOrderCustomer(Order $order): OrderCustomer
+    {
+        if (!isset($this->traveller->customer_id)) {
+            $this->convertToCustomer();
+        }
+        $orderCustomer = OrderCustomer::make([
+            'customer_id' => $this->traveller->customer_id,
+            'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
+            'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
+        ]);
+        $order->orderCustomers()->save($orderCustomer);
+        foreach ($this->getComponents(false) as $componentRepository) {
+            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
+        }
+        $this->traveller->order_customer_id = $orderCustomer->id;
+        $this->save();
+        return $orderCustomer;
+    }
+
     public function getBaseCost(): float
     {
         return $this->traveller->booking->tour->base_price_per_person;
@@ -200,6 +250,11 @@ class BookingTravellerRepository extends ModelRepository
 
     public function delete(): bool
     {
+        foreach ($this->traveller->groups as $group) {
+            if ($group->travellers()->count() == 1) {
+                $group->delete();
+            }
+        }
         return $this->traveller->delete();
     }
 
