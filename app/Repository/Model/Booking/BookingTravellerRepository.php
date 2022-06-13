@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Booking;
 
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
@@ -14,6 +15,9 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
+use DB;
+use Log;
+use Throwable;
 
 class BookingTravellerRepository extends ModelRepository
 {
@@ -130,6 +134,33 @@ class BookingTravellerRepository extends ModelRepository
         }
         $component = $tourComponentRepository->grantToTraveller($this->traveller);
         return isset($component);
+    }
+
+    public function upgradeActivity(ActivityInventoryTour $from, ActivityInventoryTour $to, bool $verified = false): bool
+    {
+        if (!$verified) {
+            if ($to->available_stock < 1) return false;
+            if (!$to->is_bookable) return false;
+        }
+        try {
+            if (!$verified) {
+                DB::beginTransaction();
+            }
+            DB::table('booking_activities')
+                ->where('booking_traveller_id', '=', $this->traveller->id)
+                ->where('activity_inventory_tour_id', '=', $from->id)
+                ->update(['activity_inventory_tour_id' => $to->id,]);
+            if (!$verified) {
+                DB::commit();
+            }
+        } catch (Throwable $e) {
+            Log::error($e);
+            if (!$verified) {
+                DB::rollBack();
+            }
+            return false;
+        }
+        return true;
     }
 
     /**

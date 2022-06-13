@@ -7,8 +7,6 @@ use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingActivity;
-use App\Models\Customer\Customer;
-use App\Repository\CustomerBookingRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Log;
@@ -28,14 +26,13 @@ class CustomerBookingController extends Controller
         } else {
             $to = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
         }
-        Log::info($to);
         if (!isset($to)
             || !$to->upgrade->is_bookable
             || $to->upgrade->tour_id !== $booking->tour_id
             || !$from->tourComponent->repository->onUpgradeTree($to->repository))
             return response()->json(['success' => false, 'message' => 'That upgrade does not exist on that activity tree']);
         try {
-            $success = CustomerBookingRepository::upgradeBookingActivity($booking, $from->tourComponent, $request->input('upgrade_id') == 0 ? $to->base : $to->upgrade);
+            $success = $booking->repository->upgradeActivityForAll($from, $to);
             if (!$success)
                 return response()->json(['success' => false, 'message' => 'Upgrade failed to apply, please try again later']);
             return response()->json(['success' => true, 'message' => 'Upgrade applied successfully']);

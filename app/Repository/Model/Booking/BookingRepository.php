@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Booking;
 
 use App\Exceptions\NotOnTourException;
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Group;
@@ -13,6 +14,9 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\GroupRepository;
 use Carbon\Carbon;
+use DB;
+use Log;
+use Throwable;
 
 class BookingRepository extends ModelRepository
 {
@@ -43,6 +47,28 @@ class BookingRepository extends ModelRepository
             $booking = Booking::where('token', $token)->first();
         } while (isset($booking));
         return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
+    }
+
+    public function upgradeActivityForAll(ActivityInventoryTour $from, ActivityInventoryTour $to): bool
+    {
+        if ($to->available_stock < $this->booking->travellers()->count()) return false;
+        if (!$to->is_bookable) return false;
+        try {
+            DB::beginTransaction();
+            foreach ($this->booking->travellers as $traveller) {
+                $success = $traveller->repository->upgradeActivity($from, $to, true);
+                if (!$success) {
+                    DB::rollBack();
+                    return false;
+                }
+            }
+            DB::commit();
+        } catch (Throwable $e) {
+            Log::error($e);
+            DB::rollBack();
+            return false;
+        }
+        return true;
     }
 
     public function addComponentToAll(InventoryTourRepository $repository): void
