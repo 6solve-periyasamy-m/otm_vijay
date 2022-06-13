@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\MailRepository;
+use App\Repository\Mailing\MailRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 

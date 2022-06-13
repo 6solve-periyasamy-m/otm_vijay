@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Mailing;
 
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;

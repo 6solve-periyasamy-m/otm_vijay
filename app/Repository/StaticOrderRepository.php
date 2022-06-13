@@ -13,6 +13,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Merchandise;
+use App\Repository\Mailing\MailRepository;
 use App\Repository\Model\Order\Component\OrderAccommodationRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
