@@ -140,4 +140,35 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->inventory->repository->getAvailableStock();
     }
+
+    public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    {
+        foreach ($orderCustomer->orderAccommodation as $accommodation) {
+            if ($accommodation->accommodation_inventory_tour_id == $this->inventoryTour->id) return $accommodation->repository;
+        }
+        return null;
+    }
+
+    public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        foreach ($traveller->accommodation as $accommodation) {
+            if ($accommodation->accommodation_inventory_tour_id == $this->inventoryTour->id) return $accommodation->repository;
+        }
+        return null;
+    }
+
+    public function getComponentString(): string
+    {
+        return 'accommodation';
+    }
+
+    public function getCost(): float
+    {
+        return $this->inventoryTour->tour_sales_price;
+    }
+
+    public function getComponentType(): string
+    {
+        return $this->inventoryTour->tour_component_type;
+    }
 }

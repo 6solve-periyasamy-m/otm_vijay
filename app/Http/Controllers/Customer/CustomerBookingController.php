@@ -13,6 +13,7 @@ use App\Models\Booking\Booking;
 use App\Models\Booking\BookingGroup;
 use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerBookingRepository;
 use App\Repository\Model\Booking\BookingGroupRepository;
@@ -149,26 +150,9 @@ class CustomerBookingController extends Controller
         if (!isset($tour)) abort(404);
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        switch ($type) {
-            case 'activity':
-                $model = ActivityInventoryTour::find($id);
-                if (!isset($model)) abort(404);
-                $applied = CustomerBookingRepository::addBookingActivityAddon($booking, $model);
-                if (!$applied) {
-                    abort(404);
-                }
-                break;
-            case 'extra':
-                $model = Merchandise::find($id);
-                if (!isset($model)) abort(404);
-                $applied = CustomerBookingRepository::addBookingMerchandiseAddon($booking, $model);
-                if (!$applied) {
-                    abort(404);
-                }
-                break;
-            default:
-                abort(404);
-        }
+        $componentRepo = InventoryTourRepository::getComponent($type, $id);
+        if (!isset($componentRepo)) abort(404);
+        $booking->repository->addComponentToAll($componentRepo);
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $token,]);
     }
 
@@ -182,26 +166,9 @@ class CustomerBookingController extends Controller
         if (!isset($booking) || $booking->tour_id !== $tour->id) {
             abort(404);
         }
-        switch ($type) {
-            case 'activity':
-                $model = ActivityInventoryTour::find($id);
-                if (!isset($model)) {
-                    abort(404);
-                }
-                $applied = CustomerBookingRepository::removeBookingActivityAddon($booking, $model);
-                if (!$applied) {
-                    abort(404);
-                }
-                break;
-            case 'extra':
-                $model = Merchandise::find($id);
-                if (!isset($model)) abort(404);
-                $applied = CustomerBookingRepository::removeBookingMerchandiseAddon($booking, $model);
-                if (!$applied) abort(404);
-                break;
-            default:
-                abort(404);
-        }
+        $componentRepo = InventoryTourRepository::getComponent($type, $id);
+        if (!isset($componentRepo)) abort(404);
+        $booking->repository->removeComponentFromAll($componentRepo);
         return redirect()->route('customer-booking.summary', ['bookingUrl' => $bookingUrl, 'token' => $token,]);
     }
 

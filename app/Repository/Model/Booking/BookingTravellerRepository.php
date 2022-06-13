@@ -163,6 +163,25 @@ class BookingTravellerRepository extends ModelRepository
         return $components;
     }
 
+    /**
+     * @return InventoryTourRepository[]
+     */
+    public function getAvailableAddons(bool $filter = false): array
+    {
+        $tour = $this->traveller->booking->tour;
+        $components = $tour->repository->getComponents(false, true, false, false, true, ['Add-on',]);
+        $available = [];
+        if (!$filter) {
+            return $components;
+        }
+        foreach ($components as $inventoryTourRepository) {
+            $repo = $inventoryTourRepository->getBookingComponent($this->traveller);
+            if (isset($repo)) continue;
+            $available[] = $inventoryTourRepository;
+        }
+        return $available;
+    }
+
     public function hasSingleOccupancy(): bool
     {
         foreach ($this->traveller->groups as $group) {

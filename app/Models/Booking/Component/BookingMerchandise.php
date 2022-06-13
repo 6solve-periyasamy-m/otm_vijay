@@ -39,8 +39,6 @@ class BookingMerchandise extends Model
 
     protected $guarded = [];
 
-    protected $fillable = ['customer_id', 'merchandise_id', 'booking_id'];
-
     private BookingMerchandiseRepository $internal_repository;
 
     public function traveller(): BelongsTo

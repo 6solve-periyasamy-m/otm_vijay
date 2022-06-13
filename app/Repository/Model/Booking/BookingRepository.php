@@ -9,6 +9,7 @@ use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\GroupRepository;
 use Carbon\Carbon;
@@ -42,6 +43,20 @@ class BookingRepository extends ModelRepository
             $booking = Booking::where('token', $token)->first();
         } while (isset($booking));
         return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
+    }
+
+    public function addComponentToAll(InventoryTourRepository $repository): void
+    {
+        foreach ($this->booking->travellers as $traveller) {
+            $repository->grantToTraveller($traveller);
+        }
+    }
+
+    public function removeComponentFromAll(InventoryTourRepository $repository): void
+    {
+        foreach ($this->booking->travellers as $traveller) {
+            $repository->getBookingComponent($traveller)?->delete();
+        }
     }
 
     public function addIncludedToAll(): void

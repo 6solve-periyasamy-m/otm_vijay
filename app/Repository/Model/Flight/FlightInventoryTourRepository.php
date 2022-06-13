@@ -13,6 +13,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 
 class FlightInventoryTourRepository extends InventoryTourRepository
@@ -137,5 +138,32 @@ class FlightInventoryTourRepository extends InventoryTourRepository
     public function getAvailableStock(): int
     {
         return $this->tourComponent->inventory->repository->getAvailableStock();
+    }
+
+    public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    {
+        $component = $orderCustomer->orderFlights()->where('flight_inventory_tour_id', $this->tourComponent->id)->first();
+        return $component?->repository;
+    }
+
+    public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $component = $traveller->flights()->where('flight_inventory_tour_id', $this->tourComponent->id)->first();
+        return $component?->repository;
+    }
+
+    public function getComponentString(): string
+    {
+        return 'flight';
+    }
+
+    public function getCost(): float
+    {
+        return $this->tourComponent->tour_sales_price;
+    }
+
+    public function getComponentType(): string
+    {
+        return $this->tourComponent->tour_component_type;
     }
 }
