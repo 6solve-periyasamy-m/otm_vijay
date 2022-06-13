@@ -40,7 +40,7 @@ class RunUpgradeRetrospective extends Command
     public function handle()
     {
         foreach (Tour::all() as $tour) {
-            TourRepository::fixUpgrades($tour);
+            $tour->repository->fixUpgrades();
         }
         return 0;
     }

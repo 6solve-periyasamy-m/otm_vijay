@@ -13,7 +13,6 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
-use App\Repository\StockRepository;
 use Database\Factories\Tour\TourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -248,7 +247,7 @@ class Tour extends Model
 
     public function clone(): Tour
     {
-        return TourRepository::clone($this);
+        return $this->repository->duplicate();
     }
 
     public function getRepositoryAttribute(): TourRepository
