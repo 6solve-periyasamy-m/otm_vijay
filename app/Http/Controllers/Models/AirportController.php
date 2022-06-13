@@ -7,6 +7,7 @@ use App\Models\Flight\Airport;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\LocationsRepository;
+use App\Repository\Model\Location\AddressRepository;
 use Illuminate\Http\Request;
 
 class AirportController extends Controller
@@ -30,10 +31,11 @@ class AirportController extends Controller
             'iata_code' => $request->input('iata_code'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('airport'));
+            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('airport'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('airport'), $request, $request->input('name'), '');
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('airport')));
+            $address->repository->save();
         }
         $airport->address_id = $address->id;
         $airport->save();
@@ -58,10 +60,10 @@ class AirportController extends Controller
             'iata_code' => $request->input('iata_code'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('airport'), $airport->address);
+            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('airport'), $airport->address);
         } else {
             $request->validate(Address::getValidationRules());
-            LocationsRepository::storeAddressFromGenericRequest($airport->address, AddressParent::getParentId('airport'), $request, $request->input('name'));
+            $airport->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('airport')));
         }
         return view('pages.close');
     }

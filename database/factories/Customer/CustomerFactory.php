@@ -33,7 +33,7 @@ class CustomerFactory extends Factory
             'country_id' => 1,
             'postcode' => $this->faker->postcode
         ]);
-        $billingAddress = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'));
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
         return [
             'title' => $this->faker->title,
             'first_name' => $this->faker->firstName,
