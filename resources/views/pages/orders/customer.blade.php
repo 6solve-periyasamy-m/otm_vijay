@@ -347,14 +347,14 @@ $(document).ready( function () {
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderAccommodation() as $orderAccommodation)
+                            @foreach($orderCustomer->orderAccommodation as $orderAccommodation)
                                 <tr component="{{ $orderAccommodation->id }}">
-                                    <td style="min-width: 200px">{{ f_datetime($orderAccommodation->accommodation_inventory->check_in) }} to {{ f_datetime($orderAccommodation->accommodation_inventory->check_out) }}</td>
-                                    <td>{{ $orderAccommodation->accommodation->name }}</td>
-                                    <td>{{ $orderAccommodation->accommodation_inventory->roomType->name }}</td>
-                                    <td>{{ $orderAccommodation->accommodation_inventory->boardType->name }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderAccommodation->tourComponent->inventory->check_in) }} to {{ f_datetime($orderAccommodation->tourComponent->inventory->check_out) }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->accommodation->name }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->roomType->name }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->boardType->name }}</td>
                                     <td>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</td>
-                                    <td>{{ $orderAccommodation->accommodationInventoryTour->tour_component_type }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->tour_component_type }}</td>
                                     <td>
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Included')
                                             {{ f_currency(0) }}

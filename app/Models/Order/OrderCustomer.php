@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon as SupportCarbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Order\OrderCustomer
@@ -49,6 +51,7 @@ use Illuminate\Support\Carbon as SupportCarbon;
  * @property SupportCarbon|null $created_at
  * @property SupportCarbon|null $updated_at
  * @property SupportCarbon|null $deleted_at
+ * @property-read SupportCollection|OrderAccommodation[] $orderAccommodation
  * @property-read SupportCollection|OrderCustomerAdjustment[] $adjustments Customer specific price adjustments
  * @property-read int|null $adjustments_count Amount of customer specific adjustments
  * @property-read Customer|null $customer The customer details
@@ -107,6 +110,7 @@ class OrderCustomer extends Model
 {
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
+    use HasRelationships;
 
     private OrderCustomerRepository $internal_repository;
 
@@ -169,12 +173,12 @@ class OrderCustomer extends Model
         return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 
-    /**
-     * @return OrderAccommodation[]
-     */
-    public function orderAccommodation(): array
+    public function orderAccommodation(): HasManyDeep
     {
-        return GroupRepository::getOrderCustomerAccommodation($this);
+        return $this->hasManyDeep(OrderAccommodation::class,
+            [OrderCustomerGroup::class, Group::class],
+            ['order_customer_id', 'id', 'group_id']
+        );
     }
 
     public function getCancelledAttribute(): bool
