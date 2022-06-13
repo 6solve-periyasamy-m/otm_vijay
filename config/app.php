@@ -251,4 +251,5 @@ return [
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
+    'anonymization' => env('ALLOW_ANONYMIZATION', false), // Prevents running anonymization commands on production servers
 ];
