@@ -165,7 +165,7 @@ class AccommodationController extends ApiController
                     $tour->accommodationInventoryTours()->save($inventoryTour);
                 }
             }
-            TourRepository::autoAssignTemplating($tour);
+            $tour->repository->autoAssignTemplating();
             return response('Any listed components have been successfully added', 200);
         }
         abort(400, 'Invalid component type has been provided');

@@ -93,38 +93,4 @@ class TourRepository
         $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
         return isset($upgrade) ? $upgrade->id : -1;
     }
-
-    public static function autoAssignTemplating(Tour $tour): void
-    {
-        $dates = [];
-        foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-            if ($inventoryTour->tour_component_type !== 'Included') continue;
-            $start = $inventoryTour->inventory->check_in->clone();
-            $start->setTime(0,0,0);
-            if (array_key_exists($start->unix(), $dates)) {
-                if ($inventoryTour->is_template && !$dates[$start->unix()]->is_template) {
-                    $dates[$start->unix()] = $inventoryTour;
-                }
-            } else {
-                $dates[$start->unix()] = $inventoryTour;
-            }
-        }
-        foreach ($dates as $inventoryTour) {
-            $inventoryTour->is_template = true;
-            $inventoryTour->save();
-        }
-    }
-
-    public static function getTemplateData(Tour $tour): array
-    {
-        $data = [];
-        foreach (RoomingRepository::getTemplateTourInventory($tour) as $template) {
-            $templateData = ['template' => $template, 'available' => []];
-            foreach (RoomingRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
-                $templateData['available'][] = $roomType;
-            }
-            $data[] = $templateData;
-        }
-        return $data;
-    }
 }

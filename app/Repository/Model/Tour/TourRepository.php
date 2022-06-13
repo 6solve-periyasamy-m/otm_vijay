@@ -14,6 +14,7 @@ use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\HasStockControl;
+use App\Repository\RoomingRepository;
 
 class TourRepository extends ModelRepository implements HasStockControl
 {
@@ -230,6 +231,40 @@ class TourRepository extends ModelRepository implements HasStockControl
                 $inventoryTour->upgrades()->save($upgrade);
                 $upgrade->save();
             }
+        }
+    }
+
+    public function getTemplateData(): array
+    {
+        $data = [];
+        foreach (RoomingRepository::getTemplateTourInventory($this->tour) as $template) {
+            $templateData = ['template' => $template, 'available' => []];
+            foreach (RoomingRepository::getHydratedRoomTypesForInventory($template) as $roomType) {
+                $templateData['available'][] = $roomType;
+            }
+            $data[] = $templateData;
+        }
+        return $data;
+    }
+
+    public function autoAssignTemplating(): void
+    {
+        $dates = [];
+        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
+            if ($inventoryTour->tour_component_type !== 'Included') continue;
+            $start = $inventoryTour->inventory->check_in->clone();
+            $start->setTime(0,0,0);
+            if (array_key_exists($start->unix(), $dates)) {
+                if ($inventoryTour->is_template && !$dates[$start->unix()]->is_template) {
+                    $dates[$start->unix()] = $inventoryTour;
+                }
+            } else {
+                $dates[$start->unix()] = $inventoryTour;
+            }
+        }
+        foreach ($dates as $inventoryTour) {
+            $inventoryTour->is_template = true;
+            $inventoryTour->save();
         }
     }
 }

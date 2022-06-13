@@ -40,7 +40,7 @@ class AssignTemplatesToTours extends Command
     public function handle()
     {
         foreach (Tour::all() as $tour) {
-            TourRepository::autoAssignTemplating($tour);
+            $tour->repository->autoAssignTemplating();
         }
         return 0;
     }

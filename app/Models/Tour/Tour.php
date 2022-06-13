@@ -237,7 +237,7 @@ class Tour extends Model
 
     public function getAccommodationTemplateData(): array
     {
-        return TourRepository::getTemplateData($this);
+        return $this->repository->getTemplateData();
     }
 
     public function getTemplatesAttribute(): \Illuminate\Support\Collection
