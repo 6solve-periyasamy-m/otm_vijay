@@ -11,6 +11,7 @@ use App\Notifications\CustomerResetPassword;
 use App\Repository\CustomerAuthenticationRepository;
 use Database\Factories\Customer\CustomerFactory;
 use Eloquent;
+use Gravatar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -283,6 +284,6 @@ class Customer extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if (isset($this->profile_picture)) return asset($this->profile_picture);
-        return Gravatar::get($this->email_address);
+        return isset($this->email_address) ? Gravatar::get($this->email_address) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
     }
 }

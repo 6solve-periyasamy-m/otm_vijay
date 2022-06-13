@@ -191,6 +191,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getAvatarUrlAttribute(): string
     {
         if (isset($this->avatar)) return asset($this->avatar);
-        return Gravatar::get($this->email);
+        return isset($this->email) ? Gravatar::get($this->email) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
     }
 }
