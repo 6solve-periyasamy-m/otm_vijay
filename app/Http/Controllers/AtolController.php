@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AtolReportExport;
 use App\Helpers\QuarterHelper;
 use App\Repository\Model\Order\AtolRepository;
-use App\Repository\StaticOrderRepository;
-use App\Repository\ReportRepository;
+use App\Repository\Reporting\ReportRepository;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AtolController extends Controller

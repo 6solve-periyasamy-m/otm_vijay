@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Reporting;
 
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;

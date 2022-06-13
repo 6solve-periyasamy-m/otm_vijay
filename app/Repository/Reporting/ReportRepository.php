@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Reporting;
 
 use App\Helpers\QuarterHelper;
 use App\Models\Order\Component\OrderActivity;

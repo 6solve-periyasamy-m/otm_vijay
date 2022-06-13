@@ -7,7 +7,7 @@ use App\Exports\FlightManifestReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
-use App\Repository\ReportRepository;
+use App\Repository\Reporting\ReportRepository;
 use Excel;
 
 class ReportController extends Controller

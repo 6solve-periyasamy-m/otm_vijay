@@ -62,9 +62,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UpgradeController;
-use App\Models\Order\Order;
 use App\Models\Tour\Tour;
-use App\Repository\StaticOrderRepository;
+use App\Repository\Reporting\ReportRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -786,11 +785,6 @@ Route::prefix('payment')->name('payment.')->group(function () {
             Route::get('cancelled', [StripeController::class, 'cancelled'])->name('cancelled');
         });
     });
-});
-
-Route::get('/atol-report', function () {
-    return view('pages.reports.atol',
-        ['data' => \App\Repository\ReportRepository::getOrdersDepartingInQuarterReport(2022, 2)]);
 });
 
 Route::prefix('/booking/{bookingUrl}')->group(function () {
