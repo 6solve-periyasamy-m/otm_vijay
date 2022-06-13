@@ -5,15 +5,19 @@ namespace App\Repository\Model\Booking;
 use App\Exceptions\NotOnTourException;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Customer\Group;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\GroupRepository;
+use Carbon\Carbon;
 
 class BookingRepository extends ModelRepository
 {
     private Booking $booking;
 
-    public function __construct(Booking $booking)
+    public function __construct(?Booking $booking)
     {
         $this->booking = $booking;
     }
@@ -29,6 +33,15 @@ class BookingRepository extends ModelRepository
         $booking->lead_traveller_id = $leadTraveller->id;
         $booking->save();
         return $booking;
+    }
+
+    public static function make(Tour $tour): Booking
+    {
+        do {
+            $token = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(64/strlen($x)) )),1,64);
+            $booking = Booking::where('token', $token)->first();
+        } while (isset($booking));
+        return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
     }
 
     public function addIncludedToAll(): void
@@ -81,6 +94,66 @@ class BookingRepository extends ModelRepository
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->selectFlights($inboundFlight, $outboundFlight);
         }
+    }
+
+    public function getAvailableFlights(): array
+    {
+        $selected = $this?->booking->leadTraveller?->repository->getSelectedFlights() ?? ['outbound' => 0, 'inbound' => 0];
+        $flights = ['outbound' => [], 'inbound' => [],];
+        foreach ($this->booking->tour->flightInventoryTours as $flight) {
+            if ($flight->available_stock <= 0) continue;
+            if (!$flight->is_bookable) continue;
+            if ($flight->flight_type == 'Outbound') {
+                $flights['outbound'][] =
+                    ['id' => $flight->id,
+                        'details' => $flight->__toString(),
+                        'cost' => $flight->tour_component_type == 'Included' ? 0 : $flight->tour_sales_price,
+                        'selected' => $selected['outbound'] == $flight->id,];
+            } else if ($flight->flight_type == 'Inbound') {
+                $flights['inbound'][] =
+                    ['id' => $flight->id,
+                        'details' => $flight->__toString(),
+                        'cost' => $flight->tour_component_type == 'Included' ? 0 : $flight->tour_sales_price,
+                        'selected' => $selected['inbound'] == $flight->id,];
+            }
+        }
+        return $flights;
+    }
+
+    public function convertToOrder(?Carbon $orderedOn = null): Order
+    {
+        $tour = $this->booking->tour;
+        $order = Order::create([
+            'tour_id' => $this->booking->tour_id,
+            'token' => $this->booking->token,
+            'deposit' => $tour->deposit,
+            'invoice_footer' => $tour->invoice_footer,
+            'ordered_on' => $orderedOn ?? now(),
+        ]);
+        foreach ($this->booking->travellers as $traveller) {
+            $orderCustomer = $traveller->repository->convertToOrderCustomer($order);
+
+            if ($traveller->id == $this->booking->lead_traveller_id) {
+                $order->lead_booker_id = $orderCustomer->id;
+                $order->save();
+            }
+        }
+        $order->booking_reference = Order::generateBookingReference($order);
+        $order->repository->save();
+        foreach ($this->booking->groups as $bookingGroup) {
+            $group = Group::create([
+                'name' => $bookingGroup->name,
+                'room_type_id' => $bookingGroup->travellers()->first()->room_type_id
+            ]);
+            $repo = new GroupRepository($group);
+            foreach ($bookingGroup->travellers as $traveller) {
+                $repo->addCustomerToGroup($traveller->orderCustomer);
+            }
+            foreach ($bookingGroup->accommodation as $room) {
+                $repo->addRoomToGroup($room->tourComponent);
+            }
+        }
+        return $order;
     }
 
     public function get(): Booking

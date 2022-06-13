@@ -4,6 +4,7 @@ namespace App\Repository\Model\Booking\Component;
 
 use App\Models\Booking\Component\BookingFlight;
 use App\Repository\Abstracts\BookingComponentRepository;
+use App\Repository\Model\Flight\FlightInventoryTourRepository;
 
 class BookingFlightRepository extends BookingComponentRepository
 {
@@ -54,5 +55,10 @@ class BookingFlightRepository extends BookingComponentRepository
     public function getCost(): float
     {
         return $this->bookingComponent->tourComponent->tour_sales_price;
+    }
+
+    public function getTourComponent(): FlightInventoryTourRepository
+    {
+        return $this->bookingComponent->tourComponent->repository;
     }
 }

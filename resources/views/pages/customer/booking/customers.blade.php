@@ -149,8 +149,8 @@
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Home Country</label>
                         <div class="col-md-12">
-                            <select name="lead_home_country" class="w-100">
-                                <option selected disabled>Please Select</option>
+                            <select name="lead_home_country" class="w-100" required>
+                                <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->homeAddress?->country_id == $country->id) selected @endif>
                                         {{ $country->name }}
@@ -209,8 +209,8 @@
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
-                            <select name="lead_billing_country" class="w-100">
-                                <option selected disabled>Please Select</option>
+                            <select name="lead_billing_country" class="w-100" required>
+                                <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->billingAddress?->country_id == $country->id) selected @endif>
                                         {{ $country->name }}

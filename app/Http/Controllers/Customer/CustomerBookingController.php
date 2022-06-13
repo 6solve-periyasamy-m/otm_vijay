@@ -52,8 +52,8 @@ class CustomerBookingController extends Controller
             'customer' => $customer,
             'token' => $token,
             'leadTraveller' => $customer,
-            'additionalTravellers' => $booking?->travellers()->whereNot('id', $booking->leadTraveller->id)->get(),
-            'flights' => CustomerBookingRepository::getAvailableFlights($tour, $booking),
+            'additionalTravellers' => $booking?->travellers()->whereNot('id', $booking->leadTraveller?->id)->get(),
+            'flights' => $booking?->repository->getAvailableFlights() ?? BookingRepository::make($tour)->repository->getAvailableFlights(),
             'rooms' => RoomingRepository::getAvailableRoomTypes($tour),
             'available' => $tour->stock - $tour->getUsedStock(),
         ]);
@@ -83,7 +83,7 @@ class CustomerBookingController extends Controller
 
         $booking = BookingRepository::create($tour, BookingTravellerRepository::make($request->getLeadTravellerDetails()));
 
-        $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group"]);
+        $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group", 'booking_id' => $booking->id]);
 
         $leadRoomType = RoomType::find($request->lead_room_type);
 
@@ -117,7 +117,7 @@ class CustomerBookingController extends Controller
             if (key_exists($groupNumber, $grouping)) {
                 $grouping[$groupNumber]['group']->repository->addTravellerToGroup($traveller);
             } else {
-                $group = BookingGroup::create(['name' => "Room $groupNumber"]);
+                $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
                 $group->repository->addTravellerToGroup($traveller);
                 $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
             }
@@ -212,9 +212,9 @@ class CustomerBookingController extends Controller
         if ($tour->stock_control_active && $tour->stock - $tour->getUsedStock() <= 0) abort(404, 'That tour is out of stock');
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
-        $values = CustomerBookingRepository::generateSummary($booking);
-        $min = max($values['billing']['today'], 0.3);
-        $max = min($values['billing']['total'], 999999.99);
+        $dueToday = $booking->repository->getDueTodayAmount();
+        $min = max($dueToday, 0.3);
+        $max = min($dueToday, 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
         return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id);
     }

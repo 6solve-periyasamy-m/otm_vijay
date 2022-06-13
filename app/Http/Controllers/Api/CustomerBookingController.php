@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\Booking;
+use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Customer\Customer;
 use App\Repository\CustomerBookingRepository;
@@ -48,11 +49,11 @@ class CustomerBookingController extends Controller
     {
         $booking = Booking::where('token', $token)->first();
         if (!isset($booking)) return response()->json(['success' => false, 'message' => 'That booking does not exist']);
-        $customer = Customer::find($request->customer);
-        if (!isset($customer)) return response()->json(['success' => false, 'message' => 'That customer does not exist on that booking']);
-        if ($booking->customer_id == $customer->id) return response()->json(['success' => false, 'message' => 'Cannot remove Lead Booker from Order']);
-        $success = CustomerBookingRepository::removeCustomerFromBooking($booking, $customer);
-        if (!$success) return response()->json(['success' => false, 'message' => 'That customer does not exist on that booking']);
+        $customer = BookingTraveller::find($request->customer);
+        if (!isset($customer)) return response()->json(['success' => false, 'message' => 'That traveller does not exist on that booking']);
+        if ($booking->lead_traveller_id == $customer->id) return response()->json(['success' => false, 'message' => 'Cannot remove Lead Booker from Order']);
+        $success = $customer->repository->delete();
+        if (!$success) return response()->json(['success' => false, 'message' => 'Failed to remove that traveller']);
         return response()->json(['success' => true, 'message' => 'Customer Removed Successfully']);
     }
 }
