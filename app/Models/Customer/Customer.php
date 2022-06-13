@@ -8,7 +8,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\System\ApiToken;
 use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
-use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
 use Database\Factories\Customer\CustomerFactory;
 use Eloquent;
 use Gravatar;

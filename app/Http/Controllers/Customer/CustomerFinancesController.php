@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
-use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\PermissionsRepository;
+use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

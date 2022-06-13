@@ -37,7 +37,7 @@
                          src="{{ asset(setting('company.logo', '')) }}">
                 </a>
                 <div class="dp-content">
-                    @if(\App\Repository\CustomerAuthenticationRepository::getCustomer() !== null)
+                    @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer() !== null)
                         <a href="{{ route('customer.portal') }}"><i class="icon-home"></i>&nbsp;Home</a>
                         <a href="{{ route('customer.edit') }}"><i class="icon-user"></i>&nbsp;Edit Details</a>
                         <a href="{{ route('customer.finances') }}"><i class="icon-credit-card"></i>&nbsp;Finances</a>

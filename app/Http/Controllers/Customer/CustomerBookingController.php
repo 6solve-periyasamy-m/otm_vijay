@@ -12,7 +12,7 @@ use App\Models\Booking\Booking;
 use App\Models\Booking\BookingGroup;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Booking\BookingRepository;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use App\Repository\RoomingRepository;

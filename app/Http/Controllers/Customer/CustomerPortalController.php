@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer\Customer;
-use App\Repository\BookingRepository;
-use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\StaticOrderRepository;
 
 class CustomerPortalController extends Controller

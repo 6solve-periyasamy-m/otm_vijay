@@ -12,7 +12,7 @@ interface PermissionTransformsInterface
 class PermissionTransforms implements PermissionTransformsInterface
 {
 
-    public static function getRolesForDropdown(Collection $roles)
+    public static function getRolesForDropdown(Collection $roles): array
     {
         $data = [];
         foreach ($roles as $role) {

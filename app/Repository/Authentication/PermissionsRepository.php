@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Authentication;
 
 use App\Models\User;
 use Bouncer;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\Database\Role;
 
@@ -221,7 +222,7 @@ class PermissionsRepository
     /**
      * @throws AuthorizationException
      */
-    public static function grantPermission(Role $role, string $ability, string $class, $onFail = null)
+    public static function grantPermission(Role $role, string $ability, string $class, $onFail = null): void
     {
         if (!self::canCurrentUser($ability, $class)) {
             if (!isset($onFail)) {
@@ -241,7 +242,7 @@ class PermissionsRepository
     /**
      * @throws AuthorizationException
      */
-    public static function revokePermission(Role $role, string $ability, string $class, $onFail = null)
+    public static function revokePermission(Role $role, string $ability, string $class, $onFail = null): void
     {
         if (!self::canCurrentUser($ability, $class)) {
             if (!isset($onFail)) {
@@ -253,7 +254,7 @@ class PermissionsRepository
         Bouncer::disallow($role)->to($ability, '\\App\\Models\\' . $class);
     }
 
-    public static function createPresetRole(string $title, int $level)
+    public static function createPresetRole(string $title, int $level): Role
     {
         return self::createRole(strtolower(str_replace(' ', '-', $title)), $title, $level);
     }
@@ -276,7 +277,7 @@ class PermissionsRepository
         return $role;
     }
 
-    public static function getAvailableRoles()
+    public static function getAvailableRoles(): Collection
     {
         return Role::where('level', '<', self::getCurrentLevel())->get();
     }

@@ -1,33 +1,17 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Authentication;
 
-use App\Models\Customer\Customer;
 use App\Models\System\ApiToken;
-use App\Models\System\CustomerApiToken;
 use App\Models\User;
-use Auth;
 use Bouncer;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 
-class CustomerAuthenticationRepository
+class UserRepository
 {
-    public static function getCustomer(): ?Customer
-    {
-        return Customer::find(Auth::guard('customer')->id());
-    }
 
-    public static function verifyForBooking(?string $email_address): bool
-    {
-        $customer = Customer::whereEmailAddress($email_address);
-        return !isset($email_address) ||
-                !isset($customer) ||
-                !isset($customer->password) ||
-                $customer->id === CustomerAuthenticationRepository::getCustomer();
-    }
-
-    public static function getLatestToken(Customer $user): CustomerApiToken
+    public static function getLatestToken(User $user): ApiToken
     {
         $token = $user->tokens()->latest()->first();
         if (!(isset($token) && !$token->hasExpired())) $token = $user->generateToken();
@@ -36,28 +20,28 @@ class CustomerAuthenticationRepository
 
     public static function getUserFromToken(string $token): User
     {
-        $apiToken = CustomerApiToken::findOrFail($token);
-        return $apiToken->customer;
+        $apiToken = ApiToken::findOrFail($token);
+        return $apiToken->user;
     }
 
-    public static function generateUserToken(Customer $user, int $expiresIn = ApiToken::DEFAULT_EXPIRY): CustomerApiToken
+    public static function generateUserToken(User $user, int $expiresIn = ApiToken::DEFAULT_EXPIRY): ApiToken
     {
         // This will attempt to create an API key, and re-attempt if a collision occurs. Should be rare, but may bite us in future
         while (true) {
             try {
-                $apiToken = CustomerApiToken::make([
+                $apiToken = ApiToken::make([
                     'token' => Str::random(32),
                     'expiry' => now()->addMinutes($expiresIn),
                 ]);
                 $user->tokens()->save($apiToken);
                 return $apiToken;
-            } catch (QueryException) {
+            } catch (QueryException $ignored) {
                 continue;
             }
         }
     }
 
-    public static function purgeUserTokens(Customer $user, int $limit = ApiToken::DEFAULT_LIMIT): void
+    public static function purgeUserTokens(User $user, int $limit = ApiToken::DEFAULT_LIMIT): void
     {
         foreach ($user->tokens as $token) {
             if (now()->addHours($limit * -1)->isAfter($token->expiry)) {
@@ -66,7 +50,7 @@ class CustomerAuthenticationRepository
         }
     }
 
-    public static function invalidateAllUserTokens(Customer $user): void
+    public static function invalidateAllUserTokens(User $user): void
     {
         foreach ($user->tokens as $token) {
             if (!$token->hasExpired()) {

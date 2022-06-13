@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\System\ApiToken;
-use App\Repository\UserRepository;
+use App\Repository\Authentication\UserRepository;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Gravatar;
