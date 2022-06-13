@@ -6,7 +6,6 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Transport\TransportInventoryTour;
-use App\Repository\GroupRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
@@ -32,8 +31,7 @@ class OrderMultipleCustomersCostTest extends DatabaseTestCase
         $orderCustomer1 = $this->generateOrderCustomer();
         $orderCustomer2 = $this->generateOrderCustomer(false, $orderCustomer1->order);
         $orderCustomer2->groups()->delete();
-        $repo = new GroupRepository($orderCustomer1->primary_group);
-        $repo->addCustomerToGroup($orderCustomer2);
+        $orderCustomer1->primary_group->repository->addCustomerToGroup($orderCustomer2);
         self::assertEquals($this->getDefaultCost($orderCustomer1->order), $orderCustomer1->order->cost);
     }
 

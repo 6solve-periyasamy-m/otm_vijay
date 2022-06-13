@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Model\Customer;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;
@@ -8,7 +8,6 @@ use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
 use DB;
-use Illuminate\Support\Collection;
 
 class GroupRepository
 {

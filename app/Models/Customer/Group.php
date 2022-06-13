@@ -5,6 +5,7 @@ namespace App\Models\Customer;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Customer\GroupRepository;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property-read RoomType|null $roomType
  * @property-read Collection|OrderAccommodation[] $rooms
  * @property-read int|null $rooms_count
+ * @property-read GroupRepository $repository
  * @method static Builder|Group newModelQuery()
  * @method static Builder|Group newQuery()
  * @method static QueryBuilder|Group onlyTrashed()
@@ -51,6 +53,8 @@ use Illuminate\Support\Carbon;
 class Group extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
+
+    private GroupRepository $internal_repository;
 
     protected array $cascadeDeletes = ['pivot', 'rooms'];
     protected $fillable = ['room_type_id', 'name'];
@@ -84,5 +88,11 @@ class Group extends Model
         }
         if (empty($members)) return $members;
         return substr($members, 0, -2);
+    }
+
+    public function getRepositoryAttribute(): GroupRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new GroupRepository($this);
+        return $this->internal_repository;
     }
 }

@@ -195,7 +195,7 @@ class RoomingRepository
             'room_type_id' => $singleRoom->id,
             'name' => $orderCustomer->customer_name,
         ]);
-        (new GroupRepository($group))->addCustomerToGroup($orderCustomer);
+        $group->repository->addCustomerToGroup($orderCustomer);
         try {
             self::addRoomsToGroup($orderCustomer->order, $group);
             return true;

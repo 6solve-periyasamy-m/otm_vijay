@@ -12,7 +12,6 @@ use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
-use App\Repository\GroupRepository;
 use Carbon\Carbon;
 use DB;
 use Log;
@@ -186,12 +185,11 @@ class BookingRepository extends ModelRepository
                 'name' => $bookingGroup->name,
                 'room_type_id' => $bookingGroup->travellers()->first()->room_type_id
             ]);
-            $repo = new GroupRepository($group);
             foreach ($bookingGroup->travellers as $traveller) {
-                $repo->addCustomerToGroup($traveller->orderCustomer);
+                $group->repository->addCustomerToGroup($traveller->orderCustomer);
             }
             foreach ($bookingGroup->accommodation as $room) {
-                $repo->addRoomToGroup($room->tourComponent);
+                $group->repository->addRoomToGroup($room->tourComponent);
             }
         }
         return $order;
