@@ -31,25 +31,25 @@
                       <li>
                         <a href="{{ route('customer.edit') }}" class="nav-link link-dark">
                           <span class="icon-user"></span>
-                          &nbsp;Edit Details
+                          &nbsp;Your Details
                         </a>
                       </li>
                       <li>
                         <a href="{{ route('customer.finances') }}" class="nav-link link-dark">
                           <span class="icon-credit-card"></span>
-                          &nbsp;Finances
+                          &nbsp;Your Finances
                         </a>
                       </li>
                       <li>
                         <a href="{{ route('customer.itinerary') }}" class="nav-link link-dark">
                           <span class="icon-globe"></span>
-                          &nbsp;Itinerary
+                          &nbsp;Your Tours
                         </a>
                       </li>
                       <li>
                         <a href="{{ route('customer.extras') }}" class="nav-link link-dark">
                           <span class="icon-diamond"></span>
-                          &nbsp;Tour Extras
+                          &nbsp;Your Extras
                         </a>
                       </li>
                       <li>
