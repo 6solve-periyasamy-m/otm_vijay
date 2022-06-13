@@ -7,7 +7,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * @covers \App\Models\Tour\Merchandise::getUsedStockAttribute
- * @covers \App\Repository\StockRepository::getExtraStock
+ * @covers \App\Repository\Model\Tour\MerchandiseRepository::getUsedStock
  */
 class MerchandiseUsedStockTest extends DatabaseTestCase
 {

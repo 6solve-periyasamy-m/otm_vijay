@@ -5,8 +5,9 @@ namespace App\Repository\Model\Tour;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\HasStockControl;
 
-class TourRepository extends ModelRepository
+class TourRepository extends ModelRepository implements HasStockControl
 {
     private Tour $tour;
 
@@ -85,5 +86,24 @@ class TourRepository extends ModelRepository
     public function __toString(): string
     {
         return "{$this->tour->name}";
+    }
+
+    public function getUsedStock(): int
+    {
+        $used = 0;
+        foreach ($this->tour->orders as $order) {
+            if (!$order->cancelled) $used += $order->orderCustomers()->count();
+        }
+        return $used;
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->tour->stock;
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->getTotalStock() - $this->getUsedStock();
     }
 }

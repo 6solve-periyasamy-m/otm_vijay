@@ -149,7 +149,7 @@ class TransportInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getTransportStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getUsedOnTourCountAttribute(): int

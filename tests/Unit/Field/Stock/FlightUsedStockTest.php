@@ -7,7 +7,7 @@ use Tests\Traits\TestsOrder;
 
 /**
  * @covers \App\Models\Flight\FlightInventory::getUsedStockAttribute
- * @covers \App\Repository\StockRepository::getFlightStock
+ * @covers \App\Repository\Model\Flight\FlightInventoryRepository::getUsedStock
  */
 class FlightUsedStockTest extends DatabaseTestCase
 {

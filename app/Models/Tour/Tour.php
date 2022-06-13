@@ -211,7 +211,7 @@ class Tour extends Model
 
     public function getUsedStock(): int
     {
-        return StockRepository::getTourStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getRemainingInstallmentAttribute(): float
