@@ -63,7 +63,7 @@ class InvoiceRepository
                 $adjustments[] = ['description' => "Customer Adjustment ({$customer->customer_name}): {$adjustment->reason}", 'cost' => $adjustment->amount,];
             }
         }
-        foreach ($order->groups() as $group) {
+        foreach ($order->groups as $group) {
             $groups[$group->name] = InvoiceRepository::processGroupComponentsForInvoice($group);
         }
         foreach ($order->adjustments as $adjustment) {

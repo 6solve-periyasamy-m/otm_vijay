@@ -67,7 +67,7 @@ class OrderRepository extends ModelRepository
                 }
             }
         }
-        foreach ($this->order->groups() as $group) {
+        foreach ($this->order->groups as $group) {
             foreach ($group->rooms as $orderComponent) {
                 if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
                 $total += $orderComponent->cost;

@@ -33,7 +33,7 @@ class RoomingRepository
         try {
             DB::beginTransaction();
             $inflated = self::inflateRoomingData($data);
-            foreach ($order->groups() as $group) {
+            foreach ($order->groups as $group) {
                 $group->delete();
             }
             foreach ($inflated as $groupData) {
@@ -251,7 +251,7 @@ class RoomingRepository
     {
         $groups = [];
         $usedIds = [];
-        foreach ($order->groups() as $group) {
+        foreach ($order->groups as $group) {
             $grouping = ['name' => $group->name, 'roomType' => ['id' => $group->room_type_id, 'name' => $group->roomType->name, 'size' => $group->roomType->maximum_occupancy],];
             $customers = [];
             foreach ($group->orderCustomers as $orderCustomer) {

@@ -4,6 +4,7 @@ namespace App\Models\Order;
 
 use App\Models\Customer\Customer;
 use App\Models\Customer\Group;
+use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Order\Order
@@ -62,6 +65,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $order_adjustment_total The sum of all order adjustments, not including customer adjustments
  * @property-read float $total_adjustments The sum of all adjustments on the order and customers
  * @property-read OrderStatus $status The status of the order
+ * @property-read Collection|Group[] $groups List of groups
  * @property-read float $total The total cost of the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
@@ -101,7 +105,7 @@ use Illuminate\Support\Carbon;
  */
 class Order extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes, HasFactory;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships;
 
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
@@ -175,14 +179,9 @@ class Order extends Model
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
-    // Calculated Relations
-
-    /**
-     * @return Group[] List of all groups associated with the order
-     */
-    public function groups(): array
+    public function groups(): HasManyDeep
     {
-        return StaticOrderRepository::getOrderGroups($this);
+        return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,]);
     }
 
     // Attributes

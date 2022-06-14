@@ -43,7 +43,7 @@ class StaticOrderRepository
             $upgrades = array_merge($upgrades, $data['upgrades']);
             $additionalValue += $data['additionalValue'];
         }
-        foreach ($order->groups() as $group) {
+        foreach ($order->groups as $group) {
             $data = self::getGroupAdditionals($group);
             $addons = array_merge($addons, $data['addons']);
             $upgrades = array_merge($upgrades, $data['upgrades']);
@@ -178,22 +178,6 @@ class StaticOrderRepository
             ]);
             $order->installments()->save($oInstallment);
         }
-    }
-
-    public static function getOrderGroups(Order $order): array
-    {
-        $customers = $order->orderCustomers;
-        $groupIds = [];
-        foreach ($customers as $customer) {
-            foreach ($customer->groups as $group) {
-                $groupIds[] = $group->id;
-            }
-        }
-        $groups = [];
-        foreach (array_unique($groupIds) as $groupId) {
-            $groups[] = Group::find($groupId);
-        }
-        return $groups;
     }
 
     #[ArrayShape(['accommodation' => "array", 'activities' => "array", 'flights' => "array", 'transports' => "array"])]
