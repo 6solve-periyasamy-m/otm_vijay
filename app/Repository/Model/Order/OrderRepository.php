@@ -7,7 +7,9 @@ use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
+use App\Models\Order\Payment\PaymentReminder;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Mailing\MailRepository;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -207,6 +209,7 @@ class OrderRepository extends ModelRepository
             $paid = sigfig($paid);
             if ($paid < 0) {
                 return new OrderInstallment([
+                    'id' => $installment->id,
                     'amount' => min($installment->calculated_amount, $paid * -1),
                     'due_on' => $installment->due_on,
                     'order_id' => $this->order->id,
@@ -214,6 +217,40 @@ class OrderRepository extends ModelRepository
             }
         }
         return null;
+    }
+
+    public function resetInstallments(): void
+    {
+        $this->order->installments()->delete();
+        foreach ($this->order->tour->paymentInstallments as $installment) {
+            $oInstallment = OrderInstallment::make([
+                'amount' => $installment->cost,
+                'due_on' => $installment->due_on,
+            ]);
+            $this->order->installments()->save($oInstallment);
+        }
+    }
+
+    public function shouldRemind(int $days, int $minDays = -1000): bool
+    {
+        $daysUntil = $this->order->days_until_next_payment;
+        return $daysUntil <= $days && $daysUntil >= $minDays;
+    }
+
+    public function sendReminderEmails(int $days, int $minDays = -1000): void
+    {
+        if (!$this->shouldRemind($days, $minDays)) return;
+        $nextInstallment = $this->order->next_installment;
+        PaymentReminder::create([
+            'order_id' => $this->order->id,
+            'order_installment_id' => $nextInstallment->id,
+            'period' => $days
+        ]);
+        if ($days < 0) {
+            MailRepository::sendMailable('payment-overdue', $this->order->leadBooker->customer->email_address, $this->order);
+        } else {
+            MailRepository::sendMailable('payment-due', $this->order->leadBooker->customer->email_address, $this->order);
+        }
     }
 
     public function get(): Order

@@ -51,7 +51,7 @@ class OrderController extends Controller
         $order->save();
         $orderCustomer->repository->addAllIncluded();
         RoomingRepository::assignDefaultRooming($orderCustomer);
-        StaticOrderRepository::cloneInstallments($order);
+        $order->repository->resetInstallments();
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
         if (isset($request->customers)) {

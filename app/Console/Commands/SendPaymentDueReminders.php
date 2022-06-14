@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Order\Order;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Console\Command;
 
@@ -40,7 +41,9 @@ class SendPaymentDueReminders extends Command
     {
         $days = $this->argument('days') ?? 7;
         $min = $this->argument('min') ?? -1000;
-        StaticOrderRepository::sendAllOrderReminders($days, $min);
+        foreach (Order::where('cancelled',false)->get() as $order) {
+            $order->repository->sendReminderEmails($days, $min);
+        }
         return 0;
     }
 }

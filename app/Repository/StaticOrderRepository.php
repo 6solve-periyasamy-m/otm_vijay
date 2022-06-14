@@ -5,10 +5,6 @@ namespace App\Repository;
 use App\Models\Customer\Group;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Order\OrderInstallment;
-use App\Models\Order\Payment\PaymentReminder;
-use App\Repository\Mailing\MailRepository;
-use Carbon\Carbon;
 
 class StaticOrderRepository
 {
@@ -106,65 +102,5 @@ class StaticOrderRepository
             }
         }
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
-    }
-
-    // Order Management Methods
-
-    /**
-     * Iterates through all orders, and if they have a due installment, sends an email reminder
-     * @todo REWORK
-     */
-    public static function sendAllOrderReminders(int $days, int $minDays = -1000): void
-    {
-        foreach (Order::where('cancelled', false)->get() as $order) {
-            if ($order->cancelled) continue;
-
-            $nextPayment = $order->next_installment;
-
-            if (!isset($nextPayment) ||
-                !((Carbon::parse($nextPayment->due_on)->diffInDays(now()) * -1) <= $days &&
-                 (Carbon::parse($nextPayment->due_on)->diffInDays(now()) * -1) > $minDays)) continue;
-
-            $reminder = PaymentReminder::where('order_id', '=', $order->id)->where('order_installment_id', '=', $nextPayment['installment']->id)->where('period', '=', $days)->first();
-
-            if (isset($reminder)) continue;
-
-            self::sendReminderEmail($order, $nextPayment['installment'], $days);
-        }
-    }
-
-    /**
-     * Sends an email reminder of a due installment
-     * @param Order $order
-     * @param OrderInstallment $installment
-     * @param int $days
-     */
-    public static function sendReminderEmail(Order $order, OrderInstallment $installment, int $days): void
-    {
-        PaymentReminder::create([
-            'order_id' => $order->id,
-            'order_installment_id' => $installment->id,
-            'period' => $days
-        ]);
-        if ($days < 0) {
-            MailRepository::sendMailable('payment-overdue', $order->leadBooker->customer->email_address, $order);
-        } else {
-            MailRepository::sendMailable('payment-due', $order->leadBooker->customer->email_address, $order);
-        }
-    }
-
-    /**
-     * Clone tour installments into order installments
-     * @param Order $order
-     */
-    public static function cloneInstallments(Order $order)
-    {
-        foreach ($order->tour->paymentInstallments as $installment) {
-            $oInstallment = OrderInstallment::make([
-                'amount' => $installment->cost,
-                'due_on' => $installment->due_on,
-            ]);
-            $order->installments()->save($oInstallment);
-        }
     }
 }

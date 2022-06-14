@@ -43,11 +43,7 @@ class OrderInstallmentController extends Controller
 
     public function resync(Order $order)
     {
-        foreach ($order->installments as $installment)
-        {
-            $installment->delete();
-        }
-        StaticOrderRepository::cloneInstallments($order);
+        $order->repository->resetInstallments();
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

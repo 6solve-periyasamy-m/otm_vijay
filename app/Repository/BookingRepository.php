@@ -124,7 +124,7 @@ class BookingRepository implements BookingRepositoryInterface
             'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
         ]);
 
-        StaticOrderRepository::cloneInstallments($order);
+        $order->repository->resetInstallments();
 
         $customers = [];
         $order->orderCustomers()->save($leadBooker);
