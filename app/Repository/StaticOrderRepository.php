@@ -180,42 +180,6 @@ class StaticOrderRepository
         }
     }
 
-    /**
-     * @param OrderCustomer $orderCustomer
-     * @return array
-     */
-    #[ArrayShape(['accommodation' => "array", 'activities' => "array", 'flights' => "array", 'transports' => "array"])]
-    private static function getOwnedTourComponents(OrderCustomer $orderCustomer): array
-    {
-        $data = ['accommodation' => [], 'activities' => [], 'flights' => [], 'transports' => []];
-        foreach ($orderCustomer->repository->getComponents() as $orderComponentRepository) {
-            $ids = [$orderComponentRepository->get()->id,];
-            if ($orderComponentRepository->getTourComponentType() === 'Upgrade') {
-                $ids[] = $orderComponentRepository->get()->tourComponent->parent()->id;
-            }
-            switch (true) {
-                case $orderComponentRepository instanceof OrderAccommodationRepository:
-                    $data['accommodation'] = array_merge($data['accommodation'], $ids);
-                    break;
-                case $orderComponentRepository instanceof OrderActivityRepository:
-                    $data['accommodation'] = array_merge($data['activities'], $ids);
-                    break;
-                case $orderComponentRepository instanceof OrderFlightRepository:
-                    $data['accommodation'] = array_merge($data['flights'], $ids);
-                    break;
-                case $orderComponentRepository instanceof OrderTransportRepository:
-                    $data['accommodation'] = array_merge($data['transports'], $ids);
-                    break;
-            }
-        }
-        return [
-            'accommodation' => array_unique($data['accommodation']),
-            'activities' => array_unique($data['activities']),
-            'flights' => array_unique($data['flights']),
-            'transports' => array_unique($data['transports']),
-        ];
-    }
-
     public static function getAllAdditionals(Order $order): array
     {
         $data = [];
