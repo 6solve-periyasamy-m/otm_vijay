@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AbandonedBookingsReportExport;
 use App\Exports\ActivitiesReportExport;
 use App\Exports\FlightManifestReportExport;
 use App\Exports\OrderReportExport;
@@ -71,5 +72,17 @@ class ReportController extends Controller
     public function exportActivitiesReport(string $extension = 'xlsx')
     {
         return Excel::download(new ActivitiesReportExport(), 'activities.' . $extension);
+    }
+
+    public function getAbandonedBookingsReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.abandoned-bookings',
+            'data' => ReportRepository::getAbandonedBookingsReport(),'title' => 'Abandoned Bookings',
+            'xlsxExport' => route('reports.abandoned-bookings.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.abandoned-bookings.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportAbandonedBookingsReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new AbandonedBookingsReportExport(), 'abandoned-bookings.' . $extension);
     }
 }

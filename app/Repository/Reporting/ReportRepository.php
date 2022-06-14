@@ -3,6 +3,7 @@
 namespace App\Repository\Reporting;
 
 use App\Helpers\QuarterHelper;
+use App\Models\Booking\Booking;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Order;
@@ -47,6 +48,12 @@ class ReportRepository
                 'details' => 'List of all sold activities and tickets',
                 'view' => 'reports.activities',
                 'export' => 'reports.activities.export',
+            ],
+            [
+                'name' => 'Abandoned Bookings',
+                'details' => 'List of all abandoned bookings',
+                'view' => 'reports.abandoned-bookings',
+                'export' => 'reports.abandoned-bookings.export',
             ],
         ];
     }
@@ -169,6 +176,24 @@ class ReportRepository
             $row->purchased = $orderActivity?->orderCustomer?->order?->ordered_on;
             $row->cost = $orderActivity?->tourComponent?->tour_component_type === "Included" ? 0 : $orderActivity?->cost;
             $row->component = $orderActivity?->tourComponent?->tour_component_type;
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    public static function getAbandonedBookingsReport(): array
+    {
+        $data = [];
+        foreach (Booking::whereNull('order_id')->with('tour', 'leadTraveller', 'leadTraveller.customer')->get() as $booking) {
+            $row = collect();
+            $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
+            $row->name = $cDetailsSource->title . ' ' . $cDetailsSource->first_name . ' ' . $cDetailsSource->last_name;
+            $row->tour = $booking->tour->name;
+            $row->travellers = $booking->travellers()->count();
+            $row->expected = $booking->repository->getTotalCost();
+            $row->contact_email = $cDetailsSource->email_address;
+            $row->contact_number = $cDetailsSource->mobile_number;
+            $row->continue = route('customer-booking.summary', ['bookingUrl' => $booking->tour->booking_form_url, 'token' => $booking->token,]);
             $data[] = $row;
         }
         return $data;

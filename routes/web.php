@@ -728,6 +728,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/flight-manifest/{extension}', [ReportController::class, 'exportFlightManifestReport'])->name('reports.flight-manifest.export');
         Route::get('/activities', [ReportController::class, 'getActivitiesReport'])->name('reports.activities');
         Route::get('/activities/{extension}', [ReportController::class, 'exportActivitiesReport'])->name('reports.activities.export');
+        Route::get('/abandoned-bookings', [ReportController::class, 'getAbandonedBookingsReport'])->name('reports.abandoned-bookings');
+        Route::get('/abandoned-bookings/{extension}', [ReportController::class, 'exportAbandonedBookingsReport'])->name('reports.abandoned-bookings.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');
