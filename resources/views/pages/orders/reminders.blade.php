@@ -15,7 +15,7 @@
             overflow-y: scroll;
             border: 1px solid black;
             border-radius: 10px;
-            height: 500px;
+            height: 300px;
             width: 100%;
             list-style: none;
             padding: 0;
@@ -50,6 +50,30 @@
 @section('content')
     <div class="card">
         <div class="card-body">
+            <div class="row">
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => 30, 'min' => 14]) }}">30 Days</a>
+                </div>
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => 14, 'min' => 7]) }}">14 Days</a>
+                </div>
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => 7, 'min' => 0]) }}">7 Days</a>
+                </div>
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => 0, 'min' => -1]) }}">Today</a>
+                </div>
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => -1, 'min' => -7]) }}">1 Day Overdue</a>
+                </div>
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => -7, 'min' => -14]) }}">7 Days Overdue</a>
+                </div>
+                <div class="form-group col-12 col-xl-2 text-white">
+                    <a class="form-control mx-auto btn btn-block btn-primary" href="{{ route('orders.reminders', ['max' => -14, 'min' => -1000]) }}">14 Days Overdue</a>
+                </div>
+                <hr class="splitter">
+            </div>
             <div class="row">
                 @include('partials.fields.text', ['name' => 'Maximum Days', 'field' => 'max', 'value' => $max, 'width' => 5])
                 @include('partials.fields.text', ['name' => 'Minimum Days', 'field' => 'min', 'value' => $min, 'width' => 5])
