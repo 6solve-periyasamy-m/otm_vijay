@@ -170,7 +170,7 @@ class RoomingRepository
     public static function checkOccupancy(OrderCustomer $orderCustomer): bool
     {
         $owned = [];
-        foreach ($orderCustomer->orderAccommodation() as $orderAccommodation) {
+        foreach ($orderCustomer->orderAccommodation as $orderAccommodation) {
             $date = $orderAccommodation->tourComponent->inventory->check_in->clone()->setTime(0, 0);
             $owned[$date->unix()] = $orderAccommodation;
         }

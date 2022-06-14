@@ -157,7 +157,6 @@ class OrderCustomerRepository extends ModelRepository
         foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, true, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
             $inventoryTourRepository->grantToCustomer($this->orderCustomer);
-            event(new OrderCustomerComponentAddedEvent($inventoryTourRepository->get()));
         }
     }
 
