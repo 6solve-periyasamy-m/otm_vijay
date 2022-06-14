@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class CustomerFinancesController extends Controller
     public function makePayment(Request $request)
     {
         $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric|min:0.3|max:999999.99']);
-        $order = StaticOrderRepository::getOrderFromBookingReference($request->input('booking_reference'));
+        $order = OrderRepository::getFromBookingReference($request->input('booking_reference'));
         $amount = $request->input('amount');
         if (!isset($order) ||
             $order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
@@ -32,7 +33,7 @@ class CustomerFinancesController extends Controller
 
     public function showInvoice(string $reference)
     {
-        $order = StaticOrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order)) {
             abort(404);
         }

@@ -7,6 +7,7 @@ use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Models\Booking\Booking;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\WebhookClient\Models\WebhookCall;
@@ -22,7 +23,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
             $intention = PaymentIntention::fetch($metadata['intention_id']);
             if (!isset($intention)) return;
             if (!$intention->processed) {
-                $order = StaticOrderRepository::getOrderFromBookingReference($intention->reference);
+                $order = OrderRepository::getFromBookingReference($intention->reference);
                 if (isset($order)) {
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::findOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);

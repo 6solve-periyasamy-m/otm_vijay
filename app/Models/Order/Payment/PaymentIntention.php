@@ -17,6 +17,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 use DB;
@@ -119,7 +120,7 @@ class PaymentIntention extends Model
     {
         if (!isset($this->data)) return true;
 
-        $order = StaticOrderRepository::getOrderFromBookingReference($this->reference);
+        $order = OrderRepository::getFromBookingReference($this->reference);
         if (!isset($order)) return false;
 
         try {

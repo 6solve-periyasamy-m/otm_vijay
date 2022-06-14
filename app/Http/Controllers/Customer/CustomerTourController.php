@@ -19,6 +19,7 @@ use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class CustomerTourController extends Controller
     {
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (isset($reference)) {
-            $order = StaticOrderRepository::getOrderFromBookingReference($reference);
+            $order = OrderRepository::getFromBookingReference($reference);
         } else {
             $order = $customer->orders()->orderByDesc('ordered_on')->first();
         }
@@ -54,7 +55,7 @@ class CustomerTourController extends Controller
     {
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (isset($reference)) {
-            $order = StaticOrderRepository::getOrderFromBookingReference($reference);
+            $order = OrderRepository::getFromBookingReference($reference);
         } else {
             foreach ($customer->orders()->orderBy('ordered_on', 'desc')->get() as $o) {
                 if (!$o->cancelled) {
@@ -101,7 +102,7 @@ class CustomerTourController extends Controller
 
     public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = StaticOrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
@@ -132,7 +133,7 @@ class CustomerTourController extends Controller
 
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = StaticOrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
@@ -175,7 +176,7 @@ class CustomerTourController extends Controller
     {
         $customer = CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
-        $order = StaticOrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
         if (!$order->repository->isLeadBooker($customer)) abort(404);
         if ($order->repository->isLeadBooker(CustomerAuthenticationRepository::getCustomer())) {

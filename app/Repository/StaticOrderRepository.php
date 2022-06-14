@@ -199,11 +199,6 @@ class StaticOrderRepository
         }
     }
 
-    public static function getOrderFromBookingReference(string $bookingReference): ?Order
-    {
-        return Order::whereBookingReference($bookingReference)->first();
-    }
-
     public static function getOrderGroups(Order $order): array
     {
         $customers = $order->orderCustomers;
