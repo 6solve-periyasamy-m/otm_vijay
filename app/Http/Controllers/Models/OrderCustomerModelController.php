@@ -42,7 +42,7 @@ class OrderCustomerModelController extends Controller
             'transport_notes' => $request->input('transport_notes'),
         ]);
         $order->orderCustomers()->save($orderCustomer);
-        StaticOrderRepository::addIncludedToCustomer($orderCustomer);
+        $orderCustomer->repository->addAllIncluded();;
         RoomingRepository::assignDefaultRooming($orderCustomer);
         event(new OrderCustomerCreatedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);

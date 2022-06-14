@@ -40,7 +40,7 @@ trait TestsOrder
         $order->orderCustomers()->save($orderCustomer);
 
         RoomingRepository::assignDefaultRooming($orderCustomer);
-        $withIncluded && StaticOrderRepository::addIncludedToCustomer($orderCustomer);
+        $withIncluded && $orderCustomer->repository->addAllIncluded();
 
         return $orderCustomer;
     }

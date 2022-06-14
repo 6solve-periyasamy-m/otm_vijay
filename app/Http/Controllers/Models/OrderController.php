@@ -49,7 +49,7 @@ class OrderController extends Controller
         $order->lead_booker_id = $orderCustomer->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        StaticOrderRepository::addIncludedToCustomer($orderCustomer);
+        $orderCustomer->repository->addAllIncluded();
         RoomingRepository::assignDefaultRooming($orderCustomer);
         StaticOrderRepository::cloneInstallments($order);
         event(new OrderCreatedEvent($order));
@@ -62,7 +62,7 @@ class OrderController extends Controller
                     'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
                 ]);
                 $order->orderCustomers()->save($orderCustomer);
-                StaticOrderRepository::addIncludedToCustomer($orderCustomer);
+                $orderCustomer->repository->addAllIncluded();
                 RoomingRepository::assignDefaultRooming($orderCustomer);
             }
         }

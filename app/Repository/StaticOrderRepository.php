@@ -123,50 +123,6 @@ class StaticOrderRepository
     // Order Management Methods
 
     /**
-     * Adds the included components to an order-customer
-     * Adding the included should not be invoiced, as it would create many invoices with little to no changes on them
-     * This method should only be called when an order is intially created
-     * @param OrderCustomer $orderCustomer
-     */
-    public static function addIncludedToCustomer(OrderCustomer $orderCustomer): void
-    {
-        $order = $orderCustomer->order;
-        // Accommodation are added to groups not customers (A:Celeste Gateley)
-        foreach ($order->tour->activityInventoryTours as $inventoryTour) {
-            if (!$inventoryTour->is_bookable) continue;
-            if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderActivity::make(['activity_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
-                $orderCustomer->orderActivities()->save($orderInventory);
-                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
-            }
-        }
-        foreach ($order->tour->flightInventoryTours as $inventoryTour) {
-            if (!$inventoryTour->is_bookable) continue;
-            if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderFlight::make(['flight_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
-                $orderCustomer->orderFlights()->save($orderInventory);
-                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
-            }
-        }
-        foreach ($order->tour->transportInventoryTours as $inventoryTour) {
-            if (!$inventoryTour->is_bookable) continue;
-            if ($inventoryTour->tour_component_type === "Included") {
-                $orderInventory = OrderTransport::make(['transport_inventory_tour_id' => $inventoryTour->id, 'cost' => $inventoryTour->tour_sales_price,]);
-                $orderCustomer->orderTransports()->save($orderInventory);
-                event(new OrderCustomerComponentAddedEvent($orderInventory, false));
-            }
-        }
-        foreach ($order->tour->merchandise as $merchandise) {
-            if (!$inventoryTour->is_bookable) continue;
-            if ($merchandise->tour_component_type === "Included") {
-                $orderMerchandise = OrderMerchandise::make(['merchandise_id' => $merchandise->id, 'cost' => $merchandise->tour_sales_price,]);
-                $orderCustomer->orderMerchandise()->save($orderMerchandise);
-                event(new OrderCustomerComponentAddedEvent($orderMerchandise, false));
-            }
-        }
-    }
-
-    /**
      * Adds an Add-on Merchandise to an Order Customer
      * @param int $oCustomerId
      * @param int $merchandiseId

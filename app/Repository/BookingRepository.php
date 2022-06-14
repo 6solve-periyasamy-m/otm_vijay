@@ -135,7 +135,7 @@ class BookingRepository implements BookingRepositoryInterface
         $order->save();
         //event(new OrderCreatedEvent($order));
 
-        StaticOrderRepository::addIncludedToCustomer($leadBooker);
+        $leadBooker->repository->addAllIncluded();
         foreach ($booking->travellers as $traveller) {
             if (array_key_exists($traveller->customer_id, $customers)) continue;
             $customer = OrderCustomer::make([
@@ -146,7 +146,7 @@ class BookingRepository implements BookingRepositoryInterface
             $order->orderCustomers()->save($customer);
             $customers[$traveller->customer_id] = $customer;
             event(new OrderCustomerCreatedEvent($customer));
-            StaticOrderRepository::addIncludedToCustomer($customer);
+            $customer->repository->addAllIncluded();
         }
 
         //self::processComponent($customers, 'activities', $booking);

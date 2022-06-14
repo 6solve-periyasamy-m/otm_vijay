@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -51,6 +52,15 @@ class OrderCustomerRepository extends ModelRepository
             $components[] = $orderComponent->repository;
         }
         return $components;
+    }
+
+    public function addAllIncluded()
+    {
+        foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, true, ['Included',]) as $inventoryTourRepository) {
+            if (!$inventoryTourRepository->isBookable()) continue;
+            $inventoryTourRepository->grantToCustomer($this->orderCustomer);
+            event(new OrderCustomerComponentAddedEvent($inventoryTourRepository->get()));
+        }
     }
 
     public function get(): OrderCustomer
