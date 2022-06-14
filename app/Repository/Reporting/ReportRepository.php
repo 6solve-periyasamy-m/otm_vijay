@@ -55,6 +55,12 @@ class ReportRepository
                 'view' => 'reports.abandoned-bookings',
                 'export' => 'reports.abandoned-bookings.export',
             ],
+            [
+                'name' => 'Order Reminders',
+                'details' => 'Payments due to be reminded',
+                'view' => 'reports.reminders',
+                'export' => 'reports.reminders.export',
+            ],
         ];
     }
 

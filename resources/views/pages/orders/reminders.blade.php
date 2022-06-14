@@ -35,7 +35,7 @@
 @endpush
 
 @section('content')
-    @include('partials.orders.reminder-frequencies')
+    @include('partials.orders.reminder-frequencies', ['route' => 'orders.reminders'])
     <div class="card">
         <div class="card-body">
             <ul class="scroll-list">

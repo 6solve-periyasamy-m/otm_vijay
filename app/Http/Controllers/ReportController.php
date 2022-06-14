@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AbandonedBookingsReportExport;
+use App\Exports\OrderReminderReportExport;
 use App\Exports\ActivitiesReportExport;
 use App\Exports\FlightManifestReportExport;
 use App\Exports\OrderReportExport;
@@ -84,5 +85,18 @@ class ReportController extends Controller
     public function exportAbandonedBookingsReport(string $extension = 'xlsx')
     {
         return Excel::download(new AbandonedBookingsReportExport(), 'abandoned-bookings.' . $extension);
+    }
+
+    public function getOrderRemindersReport(int $max = 7, int $min = -1000) {
+        return view('pages.reports.reminders', ['tableView' => 'partials.reports.tables.reminders',
+            'data' => ReportRepository::getRemindersReport($max, $min),'title' => 'Order Reminders',
+            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.reminders.export', ['extension' => 'csv']),
+            'min' => $min, 'max' => $max,]);
+    }
+
+    public function exportOrderRemindersReport(string $extension = 'xlsx', int $max = 7, int $min = -1000)
+    {
+        return Excel::download(new OrderReminderReportExport($max, $min), 'abandoned-bookings.' . $extension);
     }
 }
