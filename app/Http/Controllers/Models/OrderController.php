@@ -23,6 +23,17 @@ class OrderController extends Controller
         return view('pages.models.orders.table', ['orders' => Order::all(),]);
     }
 
+    public function reminders(int $max = 7, int $min = -1000)
+    {
+        $orders = [];
+        foreach (Order::where('cancelled', false)->get() as $order) {
+            if ($order->repository->shouldRemind($max, $min)) {
+                $orders[] = $order;
+            }
+        }
+        return view('pages.orders.reminders', ['max' => $max, 'min' => $min, 'orders' => $orders,]);
+    }
+
     public function create()
     {
         return view('pages.models.orders.create');

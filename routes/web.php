@@ -146,7 +146,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/', [OrderSystemController::class, 'index'])->name("orders.all")->middleware('bouncer:Order\Order,read');
         Route::get('/create', [OrderController::class, 'create'])->name('orders.create')->middleware('bouncer:Order\Order,create');
         Route::post('/create', [OrderController::class, 'store'])->name('orders.store')->middleware('bouncer:Order\Order,create');
-
+        Route::get('reminders/{max?}/{min?}', [OrderController::class, 'reminders'])->name('orders.reminders')->middleware('bouncer:Order\Order,read');
         Route::prefix('{order}')->group(function () {
             Route::get('/', [OrderSystemController::class, 'show'])->name("orders.view")->middleware('bouncer:Order\Order,read');
             Route::get('/update/', [OrderController::class, 'edit'])->name('orders.edit')->middleware('bouncer:Order\Order,update');
