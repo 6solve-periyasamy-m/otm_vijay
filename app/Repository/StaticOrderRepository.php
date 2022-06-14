@@ -123,25 +123,6 @@ class StaticOrderRepository
     // Order Management Methods
 
     /**
-     * Adds an Add-on Merchandise to an Order Customer
-     * @param int $oCustomerId
-     * @param int $merchandiseId
-     * @return OrderMerchandise|null
-     */
-    public static function grantMerchandiseToCustomer(int $oCustomerId, int $merchandiseId): ?OrderMerchandise
-    {
-        $oCustomer = OrderCustomer::findOrFail($oCustomerId);
-        $merchandise = Merchandise::findOrFail($merchandiseId);
-        foreach ($oCustomer->orderMerchandise as $oMerch) {
-            if ($oMerch->merchandise->id == $merchandiseId) return null;
-        }
-        $oMerch = OrderMerchandise::make(['merchandise_id' => $merchandiseId, 'cost' => $merchandise->tour_sales_price,]);
-        $oCustomer->orderMerchandise()->save($oMerch);
-        event(new OrderCustomerComponentAddedEvent($oMerch));
-        return $oMerch;
-    }
-
-    /**
      * Iterates through all orders, and if they have a due installment, sends an email reminder
      * @todo REWORK
      */

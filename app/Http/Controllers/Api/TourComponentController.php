@@ -13,6 +13,7 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
@@ -79,11 +80,9 @@ class TourComponentController extends Controller
 
     public function addMerchandiseAddon(Request $request) {
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:merchandises,id']);
-        $oCustomerId = $request->input('customer_id');
-        $merchandiseId = $request->input('merchandise_id');
-        $oMerch = StaticOrderRepository::grantMerchandiseToCustomer($oCustomerId, $merchandiseId);
-        if (!isset($oMerch)) return response()->json(['success' => false, 'message' => 'Customer already has selected merchandise']);
-        return $oMerch;
+        $oCustomer = OrderCustomer::find($request->input('customer_id'));
+        $merchandise = Merchandise::find($request->input('merchandise_id'));
+        return $merchandise->repository->grantToCustomer($oCustomer);
     }
 
     public function applyAccommodationUpgrade(Request $request): JsonResponse
