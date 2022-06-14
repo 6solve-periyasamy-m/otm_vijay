@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
+use App\Repository\Reporting\ReportRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
@@ -25,13 +26,7 @@ class OrderController extends Controller
 
     public function reminders(int $max = 7, int $min = -1000)
     {
-        $orders = [];
-        foreach (Order::where('cancelled', false)->get() as $order) {
-            if ($order->repository->shouldRemind($max, $min)) {
-                $orders[] = $order;
-            }
-        }
-        return view('pages.orders.reminders', ['max' => $max, 'min' => $min, 'orders' => $orders,]);
+        return view('pages.orders.reminders', ['max' => $max, 'min' => $min, 'orders' => ReportRepository::getRemindersReport($max, $min),]);
     }
 
     public function create()

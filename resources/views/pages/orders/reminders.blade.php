@@ -2,12 +2,6 @@
 
 @section('title', 'Due Reminders')
 
-@php
-    /**
-     * @var \App\Models\Order\Order[] $orders
-     */
-@endphp
-
 @push('header-stack')
     <style>
         .scroll-list {
@@ -84,17 +78,16 @@
                 <hr class="splitter">
             </div>
             <ul class="scroll-list">
-                @foreach($orders as $order)
-                    @php $daysDue = $order->days_until_next_payment; $next = $order->next_installment; @endphp
-                    <li @if ($daysDue < 0) class="overdue" @endif onclick="window.location='{{ route('orders.view', ['order' => $order,]) }}';">
+                @foreach($orders as $row)
+                    <li @if ($row->days < 0) class="overdue" @endif onclick="window.location='{{ route('orders.view', ['order' => $row->order,]) }}';">
                         <div class="row">
-                            <div class="col-2 text-center">{{ $order->booking_reference }}</div><div class="col-2 text-center">{{ $order->lead_booker_name }}</div><div class="col-2 text-center">{{ $order->leadBooker->customer->email_address }}</div>
-                            @if($daysDue > 0)
-                                <div class="col-4 text-center">{{ f_currency($next->amount) }} is due in {{ $daysDue }} days ({{ f_date($next->due_on) }})</div>
-                            @elseif($daysDue === 0)
-                                <div class="col-4 text-center">{{ f_currency($next->amount) }} is due today ({{ f_date($next->due_on) }})</div>
+                            <div class="col-2 text-center">{{ $row->order->booking_reference }}</div><div class="col-2 text-center">{{ $row->order->lead_booker_name }}</div><div class="col-2 text-center">{{ $row->order->leadBooker->customer->email_address }}</div>
+                            @if($row->days  > 0)
+                                <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due in {{ $row->days }} days ({{ f_date($row->next?->due_on) }})</div>
+                            @elseif($row->days === 0)
+                                <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due today ({{ f_date($row->next?->due_on) }})</div>
                             @else
-                                <div class="col-4 text-center">{{ f_currency($next->amount) }} was due {{ $daysDue * -1 }} days ago ({{ f_date($next->due_on) }})</div>
+                                <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} was due {{ $row->days * -1 }} days ago ({{ f_date($row->next?->due_on) }})</div>
                             @endif
                         </div>
 

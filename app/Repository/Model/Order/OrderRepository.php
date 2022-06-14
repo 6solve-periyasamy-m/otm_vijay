@@ -234,7 +234,7 @@ class OrderRepository extends ModelRepository
     public function shouldRemind(int $days, int $minDays = -1000): bool
     {
         $daysUntil = $this->order->days_until_next_payment;
-        return $daysUntil <= $days && $daysUntil >= $minDays;
+        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays);
     }
 
     public function sendReminderEmails(int $days, int $minDays = -1000): void

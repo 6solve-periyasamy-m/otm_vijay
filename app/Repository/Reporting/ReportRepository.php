@@ -199,6 +199,21 @@ class ReportRepository
         return $data;
     }
 
+    public static function getRemindersReport($max = 7, $min = -1000): array
+    {
+        $data = [];
+        foreach (Order::where('cancelled', false)->get() as $order) {
+            if ($order->repository->shouldRemind($max, $min)) {
+                $row = collect();
+                $row->order = $order;
+                $row->days = $order->days_until_next_payment;
+                $row->next = $order->next_installment;
+                $data[] = $row;
+            }
+        }
+        return $data;
+    }
+
     public static function getOrdersPlacedInQuarterReport(int $year, int $quarter): Collection
     {
         return self::generateAtolReport(QuarterHelper::getOrdersPlacedInQuarter($year, $quarter));
