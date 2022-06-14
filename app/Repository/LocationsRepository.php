@@ -2,10 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\Location\Address;
 use App\Models\Location\Country;
 use App\Models\Location\Currency;
-use Illuminate\Http\Request;
 
 class LocationsRepository
 {

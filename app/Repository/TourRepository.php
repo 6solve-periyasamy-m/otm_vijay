@@ -2,15 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
-use App\Models\Activity\ActivityInventoryTour;
-use App\Models\Activity\ActivityInventoryTourUpgrade;
-use App\Models\Flight\FlightInventoryTour;
-use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Tour\Tour;
-use App\Models\Transport\TransportInventoryTour;
-use App\Models\Transport\TransportInventoryTourUpgrade;
 
 class TourRepository
 {

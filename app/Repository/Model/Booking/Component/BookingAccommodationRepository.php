@@ -2,11 +2,8 @@
 
 namespace App\Repository\Model\Booking\Component;
 
-use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Booking\Component\BookingAccommodation;
 use App\Repository\Abstracts\BookingComponentRepository;
-use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 
 class BookingAccommodationRepository extends BookingComponentRepository

@@ -2,25 +2,13 @@
 
 namespace App\Repository;
 
-use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Customer\Group;
-use App\Models\Order\Component\OrderActivity;
-use App\Models\Order\Component\OrderFlight;
-use App\Models\Order\Component\OrderMerchandise;
-use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\PaymentReminder;
-use App\Models\Tour\Merchandise;
 use App\Repository\Mailing\MailRepository;
-use App\Repository\Model\Order\Component\OrderAccommodationRepository;
-use App\Repository\Model\Order\Component\OrderActivityRepository;
-use App\Repository\Model\Order\Component\OrderFlightRepository;
-use App\Repository\Model\Order\Component\OrderTransportRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use JetBrains\PhpStorm\ArrayShape;
 
 class StaticOrderRepository
 {
