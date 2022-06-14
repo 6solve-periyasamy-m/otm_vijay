@@ -10,7 +10,7 @@ class CustomerDashboardRepository
     public static function generateItinerary(OrderCustomer $orderCustomer): array
     {
         $data = [];
-        foreach ($orderCustomer->orderAccommodation() as $orderComponent) {
+        foreach ($orderCustomer->orderAccommodation as $orderComponent) {
             $tourComponent = $orderComponent->tourComponent;
             $inventory = $tourComponent->inventory;
             $component = $inventory->component;
