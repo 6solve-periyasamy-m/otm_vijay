@@ -183,4 +183,12 @@ class FlightInventoryTourRepository extends InventoryTourRepository
         }
         return $data;
     }
+
+    public function getUpgradeId(): int
+    {
+        $upgrade = FlightInventoryTourUpgrade::where('base_id', '=', $this->tourComponent->id)->first();
+        if (isset($upgrade)) return 0;
+        $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
+        return isset($upgrade) ? $upgrade->id : -1;
+    }
 }

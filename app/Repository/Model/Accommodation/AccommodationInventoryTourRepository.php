@@ -188,4 +188,12 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         }
         return $data;
     }
+
+    public function getUpgradeId(): int
+    {
+        $upgrade = AccommodationInventoryTourUpgrade::where('base_id', '=', $this->inventoryTour->id)->first();
+        if (isset($upgrade)) return 0;
+        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $this->inventoryTour->id)->first();
+        return isset($upgrade) ? $upgrade->id : -1;
+    }
 }

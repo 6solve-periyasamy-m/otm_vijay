@@ -47,7 +47,7 @@
                             @include('partials.fields.selector.adder-preset-booking',
                                 ['field' => 'activity_' . $component->id . '_upgrade', 'preselect' => false,
                                 'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $component->id . '_upgrade-input", this)', 'target' => '',
-                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($component->tourComponent), 'options' => $component->tourComponent->getBookingUpgradeKeyMap($booking->travellers()->count()),])
+                                'selected' => $component->tourComponent->repository->getUpgradeId(), 'options' => $component->tourComponent->getBookingUpgradeKeyMap($booking->travellers()->count()),])
                         @endif
                     </td>
                 </tr>

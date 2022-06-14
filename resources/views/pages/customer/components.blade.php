@@ -247,7 +247,7 @@
                                                     'onclick' => 'event.preventDefault();applyAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'onclickPurchase' => 'event.preventDefault();purchaseAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderComponent->tourComponent),
+                                                    'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
                                                     'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
@@ -311,7 +311,8 @@
                                                     'onclick' => 'event.preventDefault();applyActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'onclickPurchase' => 'event.preventDefault();purchaseActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
                                     </td>
@@ -376,7 +377,8 @@
                                                     'onclick' => 'event.preventDefault();applyFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'onclickPurchase' => 'event.preventDefault();purchaseFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
                                     </td>
@@ -443,7 +445,8 @@
                                                     'onclick' => 'event.preventDefault();applyTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'onclickPurchase' => 'event.preventDefault();purchaseTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
                                                     'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                    'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                             @endif
                                         @endif
                                     </td>

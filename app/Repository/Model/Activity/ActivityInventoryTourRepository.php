@@ -177,4 +177,12 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         }
         return $data;
     }
+
+    public function getUpgradeId(): int
+    {
+        $upgrade = ActivityInventoryTourUpgrade::where('base_id', '=', $this->tourComponent->id)->first();
+        if (isset($upgrade)) return 0;
+        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
+        return isset($upgrade) ? $upgrade->id : -1;
+    }
 }

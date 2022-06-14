@@ -157,4 +157,9 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     {
         return [];
     }
+
+    public function getUpgradeId(): int
+    {
+        return -1;
+    }
 }

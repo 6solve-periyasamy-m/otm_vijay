@@ -14,7 +14,6 @@ use App\Models\Transport\TransportInventoryTourUpgrade;
 
 class TourRepository
 {
-
     public static function getTourDetails($id)
     {
         $tour = Tour::findOrFail($id);
@@ -60,37 +59,5 @@ class TourRepository
         $details['transports'] = $transports;
 
         return $details;
-    }
-
-    public static function getUpgradeIdFromAccommodation(AccommodationInventoryTour $inventoryTour): int
-    {
-        $upgrade = AccommodationInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->first();
-        if (isset($upgrade)) return 0;
-        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
-        return isset($upgrade) ? $upgrade->id : -1;
-    }
-
-    public static function getUpgradeIdFromActivity(ActivityInventoryTour $inventoryTour): int
-    {
-        $upgrade = ActivityInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->first();
-        if (isset($upgrade)) return 0;
-        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
-        return isset($upgrade) ? $upgrade->id : -1;
-    }
-
-    public static function getUpgradeIdFromFlight(FlightInventoryTour $inventoryTour): int
-    {
-        $upgrade = FlightInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->first();
-        if (isset($upgrade)) return 0;
-        $upgrade = FlightInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
-        return isset($upgrade) ? $upgrade->id : -1;
-    }
-
-    public static function getUpgradeIdFromTransport(TransportInventoryTour $inventoryTour): int
-    {
-        $upgrade = TransportInventoryTourUpgrade::where('base_id', '=', $inventoryTour->id)->first();
-        if (isset($upgrade)) return 0;
-        $upgrade = TransportInventoryTourUpgrade::where('upgrade_id', '=', $inventoryTour->id)->first();
-        return isset($upgrade) ? $upgrade->id : -1;
     }
 }
