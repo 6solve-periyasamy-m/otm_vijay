@@ -476,7 +476,7 @@
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
-                        @foreach(\App\Repository\StaticOrderRepository::getOrderCustomerAdditionals($orderCustomer) as $orderComponent)
+                        @foreach($orderCustomer->repository->getAvailableToAdd() as $orderComponent)
                             <tr>
                                 <td>{{ $orderComponent['name'] }}</td>
                                 @if($orderComponent['type'] === 'Included')
