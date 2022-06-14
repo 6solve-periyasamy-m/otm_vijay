@@ -181,7 +181,7 @@ class Order extends Model
 
     public function groups(): HasManyDeep
     {
-        return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,]);
+        return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
     }
 
     // Attributes

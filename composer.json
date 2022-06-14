@@ -27,7 +27,8 @@
         "silber/bouncer": "^1.0",
         "spatie/laravel-stripe-webhooks": "^3.1",
         "staudenmeir/eloquent-has-many-deep": "^1.15",
-        "stripe/stripe-php": "^7.110"
+        "stripe/stripe-php": "^7.110",
+      "ext-pdo": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
