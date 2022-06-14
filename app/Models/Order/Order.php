@@ -348,12 +348,4 @@ class Order extends Model
     {
         return StaticOrderRepository::getOrderAdditionals($this);
     }
-
-    /**
-     * @return array List of available add-ons for the order
-     */
-    public function getAvailableAddonsAndExtras(): array
-    {
-        return StaticOrderRepository::getAllAdditionals($this);
-    }
 }

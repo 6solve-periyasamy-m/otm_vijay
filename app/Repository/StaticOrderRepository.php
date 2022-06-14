@@ -180,47 +180,6 @@ class StaticOrderRepository
         }
     }
 
-    public static function getAllAdditionals(Order $order): array
-    {
-        $data = [];
-        foreach ($order->tour->merchandise as $tourComponent) {
-            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
-                'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(),];
-        }
-        foreach ($order->tour->accommodationInventoryTours as $tourComponent) {
-            if ($tourComponent->tour_component_type == 'Add-on') {
-                $inventory = $tourComponent->inventory;
-                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'accommodation', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
-            }
-        }
-        foreach ($order->tour->activityInventoryTours as $tourComponent) {
-            if ($tourComponent->tour_component_type == 'Add-on') {
-                $inventory = $tourComponent->inventory;
-                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'activity', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->starts_at->unix(),];
-            }
-        }
-        foreach ($order->tour->flightInventoryTours as $tourComponent) {
-            if ($tourComponent->tour_component_type == 'Add-on') {
-                $inventory = $tourComponent->inventory;
-                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'flight', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->check_in->unix(),];
-            }
-        }
-        foreach ($order->tour->transportInventoryTours as $tourComponent) {
-            if ($tourComponent->tour_component_type == 'Add-on') {
-                $inventory = $tourComponent->inventory;
-                $data[] = ['id' => $tourComponent->id, 'name' => $inventory->__toString(), 'component' => 'transport', 'type' => $tourComponent->tour_component_type,
-                    'cost' => $tourComponent->tour_sales_price, 'date' => $inventory->departs_at->unix(),];
-            }
-        }
-        usort($data, function ($previous, $next) {
-            return $previous['date'] <=> $next['date'];
-        });
-        return $data;
-    }
-
     public static function getOrderCustomerAdditionals(OrderCustomer $orderCustomer): array
     {
         $order = $orderCustomer->order;
@@ -280,7 +239,7 @@ class StaticOrderRepository
     {
         $data = [];
         $subData = [];
-        foreach ($orderCustomer->orderAccommodation() as $orderComponent) {
+        foreach ($orderCustomer->orderAccommodation as $orderComponent) {
             $subData[] = $orderComponent->tourComponent->id;
             if ($orderComponent->tourComponent->tour_component_type == 'Upgrade') {
                 $subData[] = $orderComponent->tourComponent->parent()->id;
