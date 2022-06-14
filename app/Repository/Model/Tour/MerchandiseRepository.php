@@ -17,11 +17,11 @@ use DB;
 
 class MerchandiseRepository extends InventoryTourRepository implements HasStockControl
 {
-    private Merchandise $merchandise;
+    private Merchandise $tourComponent;
 
-    public function __construct(Merchandise $merchandise)
+    public function __construct(Merchandise $tourComponent)
     {
-        $this->merchandise = $merchandise;
+        $this->tourComponent = $tourComponent;
     }
 
     public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array
@@ -54,7 +54,7 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
 
     public function getUpgradeParent(): Merchandise
     {
-        return $this->merchandise; // Merchandise do not have upgrades
+        return $this->tourComponent; // Merchandise do not have upgrades
     }
 
     public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
@@ -64,34 +64,34 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
 
     public function get(): Merchandise
     {
-        return $this->merchandise;
+        return $this->tourComponent;
     }
 
     public function update(array $data): Merchandise
     {
-        $this->merchandise->update($data);
+        $this->tourComponent->update($data);
         $this->save();
         return $this->get();
     }
 
     public function save(): bool
     {
-        return $this->merchandise->save();
+        return $this->tourComponent->save();
     }
 
     public function delete(): bool
     {
-        return $this->merchandise->delete();
+        return $this->tourComponent->delete();
     }
 
     public function isDeleted(): bool
     {
-        return $this->merchandise->trashed();
+        return $this->tourComponent->trashed();
     }
 
     public function __toString(): string
     {
-        return $this->merchandise->name;
+        return $this->tourComponent->name;
     }
 
     public function getUsedStock(): int
@@ -100,7 +100,7 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
         $query->join('merchandises', 'order_merchandises.merchandise_id', '=', 'merchandises.id');
         $query->join('order_customers', 'order_merchandises.order_customer_id', '=', 'order_customers.id');
         $query->join('orders', 'order_customers.order_id', '=', 'orders.id');
-        $query->where('merchandises.id', '=', $this->merchandise->id);
+        $query->where('merchandises.id', '=', $this->tourComponent->id);
         $query->where('orders.cancelled', '=', 0);
         $query->whereNull('order_merchandises.deleted_at');
         return $query->selectRaw("count(order_merchandises.id) as 'used_stock'")->first()->used_stock;
@@ -108,7 +108,7 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
 
     public function getTotalStock(): int
     {
-        return $this->merchandise->stock;
+        return $this->tourComponent->stock;
     }
 
     public function getAvailableStock(): int
@@ -121,20 +121,20 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
         \Log::info($traveller);
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
-            'merchandise_id' => $this->merchandise->id,
+            'merchandise_id' => $this->tourComponent->id,
         ]);
         return $bookingComponent->repository;
     }
 
     public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
-        $component = $orderCustomer->orderMerchandise()->where('merchandise_id', $this->merchandise->id)->first();
+        $component = $orderCustomer->orderMerchandise()->where('merchandise_id', $this->tourComponent->id)->first();
         return $component?->repository;
     }
 
     public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository
     {
-        $component = $traveller->merchandise()->where('merchandise_id', $this->merchandise->id)->first();
+        $component = $traveller->merchandise()->where('merchandise_id', $this->tourComponent->id)->first();
         return $component?->repository;
     }
 
@@ -145,12 +145,12 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
 
     public function getCost(): float
     {
-        return $this->merchandise->tour_sales_price;
+        return $this->tourComponent->tour_sales_price;
     }
 
     public function getComponentType(): string
     {
-        return $this->merchandise->tour_component_type;
+        return $this->tourComponent->tour_component_type;
     }
 
     public function getAvailableForUpgrade(): array
@@ -161,5 +161,10 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     public function getUpgradeId(): int
     {
         return -1;
+    }
+
+    public function isBookable(): bool
+    {
+        return $this->tourComponent->is_bookable;
     }
 }

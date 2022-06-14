@@ -39,6 +39,8 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
 
     public abstract function getComponentType(): string;
 
+    public abstract function isBookable(): bool;
+
     public static function getComponent(string $type, int $id): ?InventoryTourRepository
     {
         return match ($type) {

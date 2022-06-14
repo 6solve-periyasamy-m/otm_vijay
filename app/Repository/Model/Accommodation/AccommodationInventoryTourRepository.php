@@ -16,11 +16,11 @@ use App\Repository\Abstracts\OrderComponentRepository;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
 {
-    private AccommodationInventoryTour $inventoryTour;
+    private AccommodationInventoryTour $tourComponent;
 
-    public function __construct(AccommodationInventoryTour $inventoryTour)
+    public function __construct(AccommodationInventoryTour $tourComponent)
     {
-        $this->inventoryTour = $inventoryTour;
+        $this->tourComponent = $tourComponent;
     }
 
     public static function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array
@@ -53,9 +53,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
             'group_id' => $group->id,
-            'accommodation_inventory_tour_id' => $this->inventoryTour,
+            'accommodation_inventory_tour_id' => $this->tourComponent,
             'share_with_user_id' => null,
-            'cost' => $this->inventoryTour->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price,
         ]);
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $orderComponent->repository;
@@ -63,8 +63,8 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getUpgradeParent(): AccommodationInventoryTour
     {
-        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $this->inventoryTour->id)->first();
-        if (!isset($upgrade)) return $this->inventoryTour;
+        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
+        if (!isset($upgrade)) return $this->tourComponent;
         return $upgrade->base;
     }
 
@@ -76,8 +76,8 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         $upgrade = $upgradeRepository->get();
         if (!($upgrade instanceof AccommodationInventoryTourUpgrade)) return false;
-        if ($upgrade->base_id == $this->inventoryTour->id) return true;
-        foreach ($this->inventoryTour->parent()->upgrades as $inventoryTourUpgrade) {
+        if ($upgrade->base_id == $this->tourComponent->id) return true;
+        foreach ($this->tourComponent->parent()->upgrades as $inventoryTourUpgrade) {
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
         }
         return false;
@@ -85,34 +85,34 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function get(): AccommodationInventoryTour
     {
-        return $this->inventoryTour;
+        return $this->tourComponent;
     }
 
     public function update(array $data): AccommodationInventoryTour
     {
-        $this->inventoryTour->update($data);
+        $this->tourComponent->update($data);
         $this->save();
-        return $this->inventoryTour;
+        return $this->tourComponent;
     }
 
     public function save(): bool
     {
-        return $this->inventoryTour->save();
+        return $this->tourComponent->save();
     }
 
     public function delete(): bool
     {
-        return $this->inventoryTour->delete();
+        return $this->tourComponent->delete();
     }
 
     public function isDeleted(): bool
     {
-        return $this->inventoryTour->trashed();
+        return $this->tourComponent->trashed();
     }
 
     public function __toString(): string
     {
-        $inventory = $this->inventoryTour->accommodationInventory;
+        $inventory = $this->tourComponent->accommodationInventory;
         $component = $inventory->accommodation;
         return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
@@ -121,7 +121,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     {
         $component = BookingAccommodation::create([
             'booking_group_id' => $traveller->primary_group->id,
-            'accommodation_inventory_tour_id' => $this->inventoryTour->id,
+            'accommodation_inventory_tour_id' => $this->tourComponent->id,
         ]);
         return $component->repository;
     }
@@ -144,7 +144,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
         foreach ($orderCustomer->orderAccommodation as $accommodation) {
-            if ($accommodation->accommodation_inventory_tour_id == $this->inventoryTour->id) return $accommodation->repository;
+            if ($accommodation->accommodation_inventory_tour_id == $this->tourComponent->id) return $accommodation->repository;
         }
         return null;
     }
@@ -152,7 +152,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository
     {
         foreach ($traveller->accommodation as $accommodation) {
-            if ($accommodation->accommodation_inventory_tour_id == $this->inventoryTour->id) return $accommodation->repository;
+            if ($accommodation->accommodation_inventory_tour_id == $this->tourComponent->id) return $accommodation->repository;
         }
         return null;
     }
@@ -164,23 +164,23 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getCost(): float
     {
-        return $this->inventoryTour->tour_sales_price;
+        return $this->tourComponent->tour_sales_price;
     }
 
     public function getComponentType(): string
     {
-        return $this->inventoryTour->tour_component_type;
+        return $this->tourComponent->tour_component_type;
     }
 
     public function getAvailableForUpgrade(): array
     {
-        $tour = $this->inventoryTour->tour;
+        $tour = $this->tourComponent->tour;
         $included = [];
         foreach ($tour->accommodationInventoryTours as $inventoryTour) {
             $included[$inventoryTour->accommodationInventory->id] = $inventoryTour->accommodationInventory->id;
         }
         $data = [];
-        foreach ($this->inventoryTour->accommodationInventory->accommodation->inventory as $inventory) {
+        foreach ($this->tourComponent->accommodationInventory->accommodation->inventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
             if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->check_out->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
@@ -191,9 +191,14 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getUpgradeId(): int
     {
-        $upgrade = AccommodationInventoryTourUpgrade::where('base_id', '=', $this->inventoryTour->id)->first();
+        $upgrade = AccommodationInventoryTourUpgrade::where('base_id', '=', $this->tourComponent->id)->first();
         if (isset($upgrade)) return 0;
-        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $this->inventoryTour->id)->first();
+        $upgrade = AccommodationInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
         return isset($upgrade) ? $upgrade->id : -1;
+    }
+
+    public function isBookable(): bool
+    {
+        return $this->tourComponent->is_bookable;
     }
 }

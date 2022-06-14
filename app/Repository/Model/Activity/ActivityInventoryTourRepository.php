@@ -185,4 +185,9 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
         return isset($upgrade) ? $upgrade->id : -1;
     }
+
+    public function isBookable(): bool
+    {
+        return $this->tourComponent->is_bookable;
+    }
 }
