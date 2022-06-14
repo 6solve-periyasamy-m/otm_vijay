@@ -204,15 +204,6 @@ class StaticOrderRepository
         return Order::whereBookingReference($bookingReference)->first();
     }
 
-    public static function getCustomersForOrder(Order $order): Collection
-    {
-        $customers = [];
-        foreach ($order->orderCustomers as $orderCustomer) {
-            $customers[] = $orderCustomer->customer;
-        }
-        return collect($customers);
-    }
-
     public static function getOrderGroups(Order $order): array
     {
         $customers = $order->orderCustomers;
