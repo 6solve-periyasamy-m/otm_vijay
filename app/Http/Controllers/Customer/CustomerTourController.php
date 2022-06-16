@@ -18,7 +18,6 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
-use App\Repository\CustomerDashboardRepository;
 use App\Repository\Model\Order\OrderRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -46,8 +45,12 @@ class CustomerTourController extends Controller
             }
         }
         if (!isset($oCustomer)) abort(404);
-        return view('pages.customer.itinerary',
-            ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'orderCustomer' => $oCustomer, 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
+        return view('pages.customer.itinerary', [
+            'itinerary' => $oCustomer->repository->getItinerary(),
+            'orderCustomer' => $oCustomer,
+            'order' => $order,
+            'orders' => CustomerAuthenticationRepository::getCustomer()->orders,
+            'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
     }
 
     public function showExtras(?string $reference = null, ?Customer $customer = null)

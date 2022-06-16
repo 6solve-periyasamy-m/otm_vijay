@@ -172,6 +172,16 @@ class OrderCustomerRepository extends ModelRepository
         return $components;
     }
 
+    public function getItinerary(): array
+    {
+        $data = [];
+        foreach ($this->getComponents(true, true, true, true, false) as $componentRepository) {
+            $data = array_merge($data, $componentRepository->getItineraryItems());
+        }
+        usort($data, function ($a, $b) { return $a['start']->unix() <=> $b['start']->unix(); });
+        return $data;
+    }
+
     /**
      * Get the addons and upgrades for a specific customer
      * @return array{addons:array,upgrades:array,additionalValue:float} The list of upgrades, addons and the sum of their costs
