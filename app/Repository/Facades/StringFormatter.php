@@ -13,7 +13,7 @@ class StringFormatter
         if (!isset($currency)) {
             $currency = setting('system.currency', 'GBP');
         }
-        return (new \NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($value, $currency);
+        return (new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY))->formatCurrency($value, $currency);
     }
 
     public function formatDate($date) : string {
