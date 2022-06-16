@@ -54,10 +54,9 @@ class Group extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    private GroupRepository $internal_repository;
-
     protected array $cascadeDeletes = ['pivot', 'rooms'];
     protected $fillable = ['room_type_id', 'name'];
+    private GroupRepository $internal_repository;
 
     public function orderCustomers(): BelongsToMany
     {

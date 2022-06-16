@@ -42,9 +42,8 @@ class BookingGroup extends Model
 {
     use HasFactory;
 
-    private BookingGroupRepository $internal_repository;
-
     protected $guarded = [];
+    private BookingGroupRepository $internal_repository;
 
     public function travellers(): BelongsToMany
     {

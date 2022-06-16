@@ -70,8 +70,6 @@ class AccommodationInventoryTour extends Model
 {
     use HasFactory, CascadeSoftDeletes, SoftDeletes;
 
-    private AccommodationInventoryTourRepository $internal_repository;
-
     protected $fillable = ['tour_id', 'accommodation_inventory_id', 'tour_component_type', 'tour_sales_price', 'is_template'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = [
@@ -79,6 +77,7 @@ class AccommodationInventoryTour extends Model
         'is_template' => 'boolean',
         'is_bookable' => 'boolean',
     ];
+    private AccommodationInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -116,11 +115,6 @@ class AccommodationInventoryTour extends Model
     public function upgradeParents(): HasMany
     {
         return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'upgrade_id');
-    }
-
-    public function parent(): AccommodationInventoryTour
-    {
-        return $this->repository->getUpgradeParent();
     }
 
     public function tour(): BelongsTo
@@ -161,18 +155,22 @@ class AccommodationInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included =  $this->parent();
+            $included = $this->parent();
         }
-        if ($included->available_stock > $required-1) {
+        if ($included->available_stock > $required - 1) {
             $keys[0] = 'Included - ' . f_currency(0);
         }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= $required-1) continue;
+            if ($upgrade->upgrade->available_stock <= $required - 1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
     }
 
+    public function parent(): AccommodationInventoryTour
+    {
+        return $this->repository->getUpgradeParent();
+    }
 
     public function getCustomerUpgradeKeyMap(): array
     {

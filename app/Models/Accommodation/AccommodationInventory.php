@@ -76,8 +76,6 @@ class AccommodationInventory extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    private AccommodationInventoryRepository $internal_repository;
-
     protected $fillable = ['accommodation_id', 'room_type_id', 'board_type_id', 'check_in', 'check_in_time_confirmed', 'check_out', 'check_out_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'notes', 'currency_id'];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
@@ -89,6 +87,7 @@ class AccommodationInventory extends Model
         'purchase_price' => 'double',
         'sales_price' => 'double',
     ];
+    private AccommodationInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -130,11 +129,6 @@ class AccommodationInventory extends Model
         return $this->belongsTo(RoomType::class);
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(AccommodationInventoryTour::class, 'accommodation_inventory_id');
-    }
-
     public function getAccommodationForTourAttribute(): string
     {
         $check_in = !is_null($this->check_in) ? $this->check_in->format('d/m/Y H:i') : "Unconfirmed";
@@ -156,6 +150,11 @@ class AccommodationInventory extends Model
     public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
+    }
+
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(AccommodationInventoryTour::class, 'accommodation_inventory_id');
     }
 
     public function __toString(): string

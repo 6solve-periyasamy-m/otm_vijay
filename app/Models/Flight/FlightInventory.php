@@ -131,11 +131,6 @@ class FlightInventory extends Model
         return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
-    }
-
     public function departureAirport(): HasOneThrough
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'departure_airport_id', 'id');
@@ -167,6 +162,11 @@ class FlightInventory extends Model
     public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
+    }
+
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
     }
 
     public function __toString(): string

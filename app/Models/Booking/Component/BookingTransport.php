@@ -41,6 +41,15 @@ class BookingTransport extends Model
 
     private BookingTransportRepository $internal_repository;
 
+    public static function compare(BookingTransport $a, BookingTransport $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
+
     public function traveller(): BelongsTo
     {
         return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');
@@ -49,15 +58,6 @@ class BookingTransport extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
-    }
-
-    public static function compare(BookingTransport $a, BookingTransport $b): int
-    {
-        $aStart = $a->tourComponent->inventory->departs_at;
-        $bStart = $b->tourComponent->inventory->departs_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 
     public function getRepositoryAttribute(): BookingTransportRepository

@@ -40,6 +40,15 @@ class BookingActivity extends Model
     protected $guarded = [];
     private BookingActivityRepository $internal_repository;
 
+    public static function compare(BookingActivity $a, BookingActivity $b): int
+    {
+        $aStart = $a->tourComponent->inventory->starts_at;
+        $bStart = $b->tourComponent->inventory->starts_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
+
     public function traveller(): BelongsTo
     {
         return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');
@@ -48,15 +57,6 @@ class BookingActivity extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(ActivityInventoryTour::class, 'activity_inventory_tour_id');
-    }
-
-    public static function compare(BookingActivity $a, BookingActivity $b): int
-    {
-        $aStart = $a->tourComponent->inventory->starts_at;
-        $bStart = $b->tourComponent->inventory->starts_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 
     public function getRepositoryAttribute(): BookingActivityRepository

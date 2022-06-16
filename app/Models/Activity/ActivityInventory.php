@@ -68,8 +68,6 @@ class ActivityInventory extends Model
 {
     use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
-    private ActivityInventoryRepository $internal_repository;
-
     protected $fillable = ['activity_id', 'ticket_type_id', 'starts_at', 'ends_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
     protected array $cascadeDeletes = ['tourComponents'];
     protected $casts = [
@@ -79,6 +77,7 @@ class ActivityInventory extends Model
         'purchase_price' => 'double',
         'sales_price' => 'double',
     ];
+    private ActivityInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -114,11 +113,6 @@ class ActivityInventory extends Model
         return $this->belongsTo(TicketType::class, 'ticket_type_id');
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
-    }
-
     public function getActivityForTourAttribute(): string
     {
         $starts_at = $this->starts_at->format('d/m/Y H:i');
@@ -135,6 +129,11 @@ class ActivityInventory extends Model
     public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
+    }
+
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
     }
 
     public function __toString(): string

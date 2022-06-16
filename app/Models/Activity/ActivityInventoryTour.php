@@ -66,11 +66,10 @@ class ActivityInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    private ActivityInventoryTourRepository $internal_repository;
-
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price',];
     protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+    private ActivityInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -110,11 +109,6 @@ class ActivityInventoryTour extends Model
         return $this->hasMany(ActivityInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent(): ActivityInventoryTour
-    {
-        return $this->repository->getUpgradeParent();
-    }
-
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
@@ -144,16 +138,21 @@ class ActivityInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included =  $this->parent();
+            $included = $this->parent();
         }
-        if ($included->available_stock > $required-1) {
+        if ($included->available_stock > $required - 1) {
             $keys[0] = 'Included - ' . f_currency(0);
         }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= $required-1) continue;
+            if ($upgrade->upgrade->available_stock <= $required - 1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
+    }
+
+    public function parent(): ActivityInventoryTour
+    {
+        return $this->repository->getUpgradeParent();
     }
 
     public function getBookingUpgradeKeyMap(int $required = 1): array
@@ -163,16 +162,16 @@ class ActivityInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included =  $this->parent();
+            $included = $this->parent();
         }
-        $disabled = $included->available_stock <= $required-1;
+        $disabled = $included->available_stock <= $required - 1;
         if ($included->is_bookable) {
             $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : f_currency(0)), 'disabled' => $disabled,];
         }
 
         foreach ($upgrades as $upgrade) {
             if (!$upgrade->upgrade->is_bookable) continue;
-            $disabled = $upgrade->upgrade->available_stock <= $required-1;
+            $disabled = $upgrade->upgrade->available_stock <= $required - 1;
             $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : f_currency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
         }
         return $keys;

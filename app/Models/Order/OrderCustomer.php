@@ -111,12 +111,11 @@ class OrderCustomer extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasRelationships;
 
-    private OrderCustomerRepository $internal_repository;
-
     protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',
         'internal_notes', 'external_notes', 'accommodation_notes', 'activity_notes', 'flight_notes', 'transport_notes',];
     protected array $cascadeDeletes = ['orderCustomerGroups', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
     protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double',];
+    private OrderCustomerRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -157,19 +156,9 @@ class OrderCustomer extends Model
         return $this->hasMany(OrderTransport::class, 'order_customer_id');
     }
 
-    public function adjustments(): HasMany
-    {
-        return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
-    }
-
     public function orderMerchandise(): HasMany
     {
         return $this->hasMany(OrderMerchandise::class, 'order_customer_id');
-    }
-
-    public function groups(): BelongsToMany
-    {
-        return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 
     public function orderAccommodation(): HasManyDeep
@@ -220,6 +209,11 @@ class OrderCustomer extends Model
         return $this->groups()->first();
     }
 
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
+    }
+
     public function getHasSurchargeAttribute(): bool
     {
         foreach ($this->groups as $group) {
@@ -239,6 +233,11 @@ class OrderCustomer extends Model
     public function getAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    public function adjustments(): HasMany
+    {
+        return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
     }
 
     public function getRepositoryAttribute(): OrderCustomerRepository

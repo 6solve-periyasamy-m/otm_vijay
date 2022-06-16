@@ -118,11 +118,6 @@ class FlightInventoryTour extends Model
         return $this->hasMany(FlightInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent(): FlightInventoryTour
-    {
-        return $this->repository->getUpgradeParent();
-    }
-
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
@@ -162,16 +157,21 @@ class FlightInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included =  $this->parent();
+            $included = $this->parent();
         }
-        if ($included->available_stock > $required-1) {
+        if ($included->available_stock > $required - 1) {
             $keys[0] = 'Included - ' . f_currency(0);
         }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= $required-1) continue;
+            if ($upgrade->upgrade->available_stock <= $required - 1) continue;
             $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
+    }
+
+    public function parent(): FlightInventoryTour
+    {
+        return $this->repository->getUpgradeParent();
     }
 
     public function getCustomerUpgradeKeyMap(): array

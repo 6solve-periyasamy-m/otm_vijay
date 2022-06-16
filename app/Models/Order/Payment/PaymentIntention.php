@@ -162,7 +162,8 @@ class PaymentIntention extends Model
         }
         try {
             DB::commit();
-       event(new OrderEditedEvent($order, true)); } catch (Throwable $e) {
+            event(new OrderEditedEvent($order, true));
+        } catch (Throwable $e) {
             Log::error($e);
             return false;
         }

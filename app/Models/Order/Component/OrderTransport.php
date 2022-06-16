@@ -67,6 +67,15 @@ class OrderTransport extends Model
         return OrderTransport::where('order_customer_id', $orderCustomerId)->get();
     }
 
+    public static function compare(OrderTransport $a, OrderTransport $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
+
     public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
@@ -123,14 +132,5 @@ class OrderTransport extends Model
         $this->transport_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
-    }
-
-    public static function compare(OrderTransport $a, OrderTransport $b): int
-    {
-        $aStart = $a->tourComponent->inventory->departs_at;
-        $bStart = $b->tourComponent->inventory->departs_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 }

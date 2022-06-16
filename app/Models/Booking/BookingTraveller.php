@@ -88,17 +88,15 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @method static Builder|BookingTraveller whereTitle($value)
  * @method static Builder|BookingTraveller whereUpdatedAt($value)
  * @mixin Eloquent
-
  */
 class BookingTraveller extends Model
 {
     use HasFactory;
     use HasDeepRelation;
 
-    private BookingTravellerRepository $internal_repository;
-
     protected $casts = ['date_of_birth' => 'date',];
     protected $guarded = [];
+    private BookingTravellerRepository $internal_repository;
 
     public function booking(): BelongsTo
     {
@@ -113,11 +111,6 @@ class BookingTraveller extends Model
     public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
-    }
-
-    public function groups(): BelongsToMany
-    {
-        return $this->belongsToMany(BookingGroup::class, BookingTravellerGroup::class)->using(BookingTravellerGroup::class);
     }
 
     public function roomType(): BelongsTo
@@ -166,6 +159,11 @@ class BookingTraveller extends Model
     public function getPrimaryGroupAttribute(): ?BookingGroup
     {
         return $this->groups()->first();
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(BookingGroup::class, BookingTravellerGroup::class)->using(BookingTravellerGroup::class);
     }
 
     public function getRepositoryAttribute(): BookingTravellerRepository

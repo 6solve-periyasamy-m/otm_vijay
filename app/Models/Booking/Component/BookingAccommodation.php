@@ -37,9 +37,17 @@ class BookingAccommodation extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     private BookingAccommodationRepository $internal_repository;
 
-    protected $guarded = [];
+    public static function compare(BookingAccommodation $a, BookingAccommodation $b): int
+    {
+        $aStart = $a->tourComponent->inventory->check_in;
+        $bStart = $b->tourComponent->inventory->check_in;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 
     public function group(): BelongsTo
     {
@@ -49,15 +57,6 @@ class BookingAccommodation extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
-    }
-
-    public static function compare(BookingAccommodation $a, BookingAccommodation $b): int
-    {
-        $aStart = $a->tourComponent->inventory->check_in;
-        $bStart = $b->tourComponent->inventory->check_in;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 
     public function getRepositoryAttribute(): BookingAccommodationRepository

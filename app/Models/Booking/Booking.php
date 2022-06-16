@@ -51,9 +51,8 @@ class Booking extends Model
 {
     use HasFactory;
 
-    private BookingRepository $internal_repository;
-
     protected $guarded = [];
+    private BookingRepository $internal_repository;
 
     public function tour(): BelongsTo
     {
@@ -63,11 +62,6 @@ class Booking extends Model
     public function leadTraveller(): BelongsTo
     {
         return $this->belongsTo(BookingTraveller::class, 'lead_traveller_id');
-    }
-
-    public function travellers(): HasMany
-    {
-        return $this->hasMany(BookingTraveller::class, 'booking_id');
     }
 
     public function groups(): HasMany
@@ -89,6 +83,11 @@ class Booking extends Model
     public function getTravellerCountAttribute(): int
     {
         return $this->travellers()->count();
+    }
+
+    public function travellers(): HasMany
+    {
+        return $this->hasMany(BookingTraveller::class, 'booking_id');
     }
 
     public function getDepositAttribute(): float

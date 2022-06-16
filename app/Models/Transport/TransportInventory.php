@@ -5,7 +5,6 @@ namespace App\Models\Transport;
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
 use App\Repository\Model\Transport\TransportInventoryRepository;
-use App\Repository\StockRepository;
 use Database\Factories\Transport\TransportInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -128,11 +127,6 @@ class TransportInventory extends Model
         return $this->belongsTo(TravelClass::class, 'travel_class_id');
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
-    }
-
     public function getTransportForTourAttribute(): string
     {
         if (empty($this->transport)) {
@@ -155,6 +149,11 @@ class TransportInventory extends Model
     public function getUsedOnTourCountAttribute(): int
     {
         return $this->tourComponents()->count();
+    }
+
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
     }
 
     public function __toString(): string

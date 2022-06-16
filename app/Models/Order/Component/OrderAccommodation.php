@@ -67,6 +67,15 @@ class OrderAccommodation extends Model
         return OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
     }
 
+    public static function compare(OrderAccommodation $a, OrderAccommodation $b): int
+    {
+        $aStart = $a->tourComponent->inventory->check_in;
+        $bStart = $b->tourComponent->inventory->check_in;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
+
     public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class, 'group_id');
@@ -102,7 +111,6 @@ class OrderAccommodation extends Model
         return true;
     }
 
-
     public function getDetailsAttribute(): string
     {
         return "{$this->tourComponent->inventory} - {$this->tourComponent->booking_policy}";
@@ -129,14 +137,5 @@ class OrderAccommodation extends Model
         $this->accommodation_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
-    }
-
-    public static function compare(OrderAccommodation $a, OrderAccommodation $b): int
-    {
-        $aStart = $a->tourComponent->inventory->check_in;
-        $bStart = $b->tourComponent->inventory->check_in;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 }

@@ -66,7 +66,7 @@ class Flight extends Model
 
     protected array $cascadeDeletes = ['flightInventory'];
     protected $fillable = ['airline_id', 'departure_airport_id', 'arrival_airport_id', 'is_domestic', 'currency_id', 'notes', 'available_from', 'image_url'];
-    protected $casts = ['available_from' => 'date','is_domestic' => 'boolean'];
+    protected $casts = ['available_from' => 'date', 'is_domestic' => 'boolean'];
 
     public static function getValidationRules(): array
     {

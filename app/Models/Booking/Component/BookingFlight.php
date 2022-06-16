@@ -37,9 +37,17 @@ class BookingFlight extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     private BookingFlightRepository $internal_repository;
 
-    protected $guarded = [];
+    public static function compare(BookingFlight $a, BookingFlight $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
 
     public function traveller(): BelongsTo
     {
@@ -49,15 +57,6 @@ class BookingFlight extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
-    }
-
-    public static function compare(BookingFlight $a, BookingFlight $b): int
-    {
-        $aStart = $a->tourComponent->inventory->departs_at;
-        $bStart = $b->tourComponent->inventory->departs_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 
     public function getRepositoryAttribute(): BookingFlightRepository

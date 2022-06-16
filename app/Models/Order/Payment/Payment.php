@@ -55,7 +55,7 @@ class Payment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['order_id', 'payment_method_id', 'amount', 'paid_on', 'payment_type', 'customer_id'];
-    protected $casts = ['paid_on' => 'datetime','amount' => 'double'];
+    protected $casts = ['paid_on' => 'datetime', 'amount' => 'double'];
 
     public static function getValidationRules(): array
     {

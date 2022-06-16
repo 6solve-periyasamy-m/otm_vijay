@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class BookingTravellerGroup extends Pivot
 {
     use HasFactory;
+
     public $timestamps = false;
     protected $guarded = [];
     protected $table = 'booking_traveller_groups';

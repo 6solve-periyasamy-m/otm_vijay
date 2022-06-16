@@ -72,6 +72,15 @@ class OrderFlight extends Model
         return OrderFlight::where('order_customer_id', $orderCustomerId)->with('arrivalAirport')->with('departureAirport')->get();
     }
 
+    public static function compare(OrderFlight $a, OrderFlight $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
+    }
+
     public function orderCustomer(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'order_customer_id');
@@ -143,14 +152,5 @@ class OrderFlight extends Model
         $this->flight_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
-    }
-
-    public static function compare(OrderFlight $a, OrderFlight $b): int
-    {
-        $aStart = $a->tourComponent->inventory->departs_at;
-        $bStart = $b->tourComponent->inventory->departs_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 }

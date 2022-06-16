@@ -143,19 +143,9 @@ class Order extends Model
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class, 'order_id');
-    }
-
     public function leadBooker(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'lead_booker_id');
-    }
-
-    public function adjustments(): HasMany
-    {
-        return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 
     public function reminders(): HasMany
@@ -183,8 +173,6 @@ class Order extends Model
         return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
     }
 
-    // Attributes
-
     /**
      * @return float The sum of all adjustments on the order and customers
      */
@@ -200,6 +188,8 @@ class Order extends Model
     {
         return $this->repository->getNextPaymentDetails();
     }
+
+    // Attributes
 
     /**
      * @return string The full name of the lead booker
@@ -223,6 +213,11 @@ class Order extends Model
     public function getPaidAttribute(): float
     {
         return $this->payments()->sum('amount');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'order_id');
     }
 
     /**
@@ -330,6 +325,11 @@ class Order extends Model
     public function getOrderAdjustmentTotalAttribute(): float
     {
         return $this->adjustments()->sum('amount');
+    }
+
+    public function adjustments(): HasMany
+    {
+        return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 
     public function getRepositoryAttribute(): OrderRepository
