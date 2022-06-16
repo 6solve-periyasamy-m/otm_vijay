@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Repository\UserRepository;
 use App\Rules\EmailCurrentOrUnique;
+use Gravatar;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -133,5 +134,11 @@ class User extends Authenticatable implements MustVerifyEmail
             $highest = isset($highest) && $highest->level >= $role->level ? $highest : $role;
         }
         return $highest;
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if (isset($this->avatar)) return asset($this->avatar);
+        return isset($this->email) ? Gravatar::get($this->email) : ('https://secure.gravatar.com/avatar/?d=mp&s=300');
     }
 }

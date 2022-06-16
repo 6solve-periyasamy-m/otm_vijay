@@ -163,6 +163,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Creativeorange\Gravatar\GravatarServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -229,6 +230,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
 
@@ -249,4 +251,5 @@ return [
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
+    'anonymization' => env('ALLOW_ANONYMIZATION', false), // Prevents running anonymization commands on production servers
 ];
