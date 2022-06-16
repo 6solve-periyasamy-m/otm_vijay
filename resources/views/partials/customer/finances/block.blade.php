@@ -35,8 +35,8 @@ $next = $order->getNextInstallment();
                 <table class="table no-header-line table-striped table-responsive-sm text-center table-mobile-sided">
                     <thead>
                         <tr>
+                            <th scope="col" class="fw-bold">Paid On</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Paid On</th>
                             <th scope="col">Amount Paid</th>
                             <th scope="col">Method</th>
                         </tr>
@@ -44,8 +44,8 @@ $next = $order->getNextInstallment();
                     <tbody>
                         @foreach($order->payments as $payment)
                             <tr>
+                                <td data-content="Paid On" class="fw-bold">{{ StringFormatter::formatDate($payment->paid_on) }}</td>
                                 <td data-content="Type">{{ $payment->payment_type }}</td>
-                                <td data-content="Paid On">{{ StringFormatter::formatDate($payment->paid_on) }}</td>
                                 <td data-content="Amount Paid">{{ StringFormatter::formatCurrency($payment->amount) }}</td>
                                 <td data-content="Method">{{ $payment->paymentMethod }}</td>
                             </tr>
@@ -64,30 +64,30 @@ $next = $order->getNextInstallment();
                 <table class="table no-header-line table-striped table-responsive-sm text-center table-mobile-sided">
                     <thead>
                         <tr>
-                            <th scope="col">Type</th>
                             <th scope="col">Due By</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Amount Due</th>
                             <th scope="col">Paid?</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td data-content="Due By" class="fw-bold">With Order</td>
                             <td data-content="Type">Deposit</td>
-                            <td data-content="Due By">With Order</td>
                             <td data-content="Amount Due">{{ StringFormatter::formatCurrency($order->calculated_deposit) }}</td>
                             <td data-content="Paid?">{{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}</td>
                         </tr>
                         @foreach($order->installments as $installment)
                             <tr>
+                                <td data-content="Due By" class="fw-bold">{{ StringFormatter::formatDate($installment->due_on) }}</td>
                                 <td data-content="Type">Instalment</td>
-                                <td data-content="Due By">{{ StringFormatter::formatDate($installment->due_on) }}</td>
                                 <td data-content="Amount Due">{{ StringFormatter::formatCurrency($installment->calculated_amount) }}</td>
                                 <td data-content="Paid?">{{ StringFormatter::formatBoolean($installment->paid) }}</td>
                             </tr>
                         @endforeach
                         <tr>
+                            <td data-content="Due By" class="fw-bold">{{ StringFormatter::formatDate($order->tour->final_payment) }}</td>
                             <td data-content="Type">Remaining</td>
-                            <td data-content="Due By">{{ StringFormatter::formatDate($order->tour->final_payment) }}</td>
                             <td data-content="Amount Due">{{ StringFormatter::formatCurrency($order->remaining_installment) }}</td>
                             <td data-content="Paid?">{{ StringFormatter::formatBoolean($order->remaining <= 0) }}</td>
                         </tr>

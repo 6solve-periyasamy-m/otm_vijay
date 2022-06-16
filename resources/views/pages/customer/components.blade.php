@@ -2,6 +2,12 @@
 
 @section('title', 'Your Extras')
 
+@php
+    /**
+     * @var \App\Models\Order\OrderCustomer $orderCustomer
+     * @var \App\Models\Order\OrderCustomer[] $editable
+     */
+@endphp
 
 @push('header-stack')
     <script type="text/javascript">
@@ -158,7 +164,7 @@
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $order)
-                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif @if($order->cancelled) disabled @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
+                    <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif @if($order->cancelled) disabled @endif>{{ $order->tour->name }} ({{ $order->booking_reference }}@if($order->cancelled) (Cancelled)@endif&#41;</option>
                     @endforeach
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="nvoice btn btn-primary">Invoice</a>
@@ -170,8 +176,16 @@
     </div>
         <div class="container">
             <div class="row">
-                @if($editable !== null)
+                @if(sizeof($editable ?? []) > 1)
                     <div class="col-sm-12 col-md-3">
+                        <div class="card other-profile col-md-12 col-xs-2" onclick="window.location = '{{ route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer,]) }}'">
+                            <div class="card-body profile-card">
+                                <center class="mt-4">
+                                    <h4 class="card-title mt-2 additional-customer-title">{{ $orderCustomer->customer->first_name }} {{ $orderCustomer->customer->last_name }}</h4>
+                                    <h6 class="card-subtitle additional-customer-subtitle">{{ $orderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
+                                </center>
+                            </div>
+                        </div>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingOne">
@@ -183,6 +197,7 @@
                                     <div class="accordion-body">
                                         <div class="row">
                                             @foreach($editable as $editableOrderCustomer)
+                                                @if ($editableOrderCustomer->id === $orderCustomer->id) @continue @endif
                                                 <div class="card other-profile col-md-12 col-xs-2" onclick="window.location = '{{ route('customer.extras', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
                                                     <div class="card-body profile-card">
                                                         <center class="mt-4">
@@ -199,7 +214,7 @@
                         </div>
                     </div>
                 @endif
-                <div class="col-sm-12 {{ $editable !== null ? 'col-md-9' : 'col-md-12' }}">
+                <div class="col-sm-12 {{ sizeof($editable ?? []) > 1 ? 'col-md-9' : 'col-md-12' }}">
 
                 <div class="card">
                     <div class="card-body">
@@ -227,7 +242,7 @@
                                             <th scope="col">Shared With</th>
                                             <th scope="col">Component Type</th>
                                             <th scope="col">Cost</th>
-                                            <th scope="col">Upgrades</th>
+                                            <th scope="col">Available Upgrades</th>
                                         </tr>
                                     </thead>
                                     @foreach($accommodation as $orderComponent)
@@ -241,14 +256,14 @@
                                                     {{ $orderComponent->tourComponent->tour_component_type }}
                                                 </td>
                                             @else
-                                                <td data-content="Cost">
+                                                <td data-content="Component Type">
                                                     {{ $orderComponent->tourComponent->tour_component_type }}
                                                 </td>
-                                                <td data-content="Upgrades">
+                                                <td data-content="Cost">
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
@@ -292,7 +307,7 @@
                                         <th scope="col">Ticket Type</th>
                                         <th scope="col">Component Type</th>
                                         <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
+                                        <th scope="col">Available Upgrades</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -313,7 +328,7 @@
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
@@ -358,7 +373,7 @@
                                         <th scope="col">Travel Class</th>
                                         <th scope="col">Component Type</th>
                                         <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
+                                        <th scope="col">Available Upgrades</th>
                                     </tr>
                                     </thead>
                                     @foreach($flights as $orderComponent)
@@ -379,7 +394,7 @@
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
@@ -424,7 +439,7 @@
                                         <th scope="col">Travel Class</th>
                                         <th scope="col">Component Type</th>
                                         <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
+                                        <th scope="col">Available Upgrades</th>
                                     </tr>
                                     </thead>
                                     @foreach($transports as $orderComponent)
@@ -446,7 +461,7 @@
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
