@@ -130,11 +130,7 @@ class FlightInventoryTour extends Model
 
     public function __toString(): string
     {
-        $inventory = $this->flightInventory;
-        $component = $inventory->flight;
-        return $component->airline->name . ' (' . $inventory->flight_number . ') ' . $component->departureAirport->name . ' to ' . $component->arrivalAirport->name .
-            ' (' . f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at) . ')' .
-            ' (' . $inventory->travelClass->name . ')';
+        return $this->repository->__toString();
     }
 
     public function getTourNameAttribute(): string

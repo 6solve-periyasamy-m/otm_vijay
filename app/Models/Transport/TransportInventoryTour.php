@@ -122,12 +122,7 @@ class TransportInventoryTour extends Model
 
     public function __toString(): string
     {
-        $inventory = $this->transportInventory;
-        $component = $inventory->transport;
-        return $component->name . ' (' . $component->departureAddress->name . ' to ' . $component->arrivalAddress->name . ')' .
-            ' (' . $component->transportType->name . ') ' .
-            ' (' . f_datetime($inventory->departs_at) . ' to ' . f_datetime($inventory->arrives_at) . ')' .
-            ' (' . $inventory->travelClass->name . ')';
+        return $this->repository->__toString();
     }
 
     public function getTourNameAttribute(): string
