@@ -18,6 +18,11 @@ class AtolRepository
         $this->order = $order;
     }
 
+    /**
+     * @param Collection<Order> $orders
+     * @param string $name
+     * @return string|null
+     */
     public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
     {
         Storage::makeDirectory('uploads/atol');
@@ -35,7 +40,7 @@ class AtolRepository
         foreach ($orders as $order) {
             if ($order->cancelled) continue;
             if (!$order->has_atol) continue;
-            $atol = self::generateAtolCertificate();
+            $atol = $order->repository->getAtolRepository()->generateAtolCertificate();
             $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
             if (!$saved) {
                 dd($atol->getError());
@@ -56,7 +61,7 @@ class AtolRepository
 
     public function showAtolCertificate(): bool
     {
-        return self::generateAtolCertificate()->send();
+        return $this->generateAtolCertificate()->send();
     }
 
     public function generateAtolCertificate(): Pdf
