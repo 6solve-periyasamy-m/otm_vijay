@@ -31,6 +31,7 @@ class AtolRepository
         $pdf = new Pdf(Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
         $pdf->fillForm([
             'companyName' => setting('company.name'),
+            'companyName2' => setting('company.name'),
             'issuerName' => setting('atol.issuer'),
             'issueDate' => f_date($this->order->ordered_on),
             'atolNumber' => setting('atol.number'),
