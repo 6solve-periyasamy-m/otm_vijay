@@ -15,11 +15,6 @@ class OrderActivityRepository extends OrderComponentRepository
         $this->orderComponent = $orderComponent;
     }
 
-    public function get(): OrderActivity
-    {
-        return $this->orderComponent;
-    }
-
     public function update(array $data): OrderActivity
     {
         $this->orderComponent->update($data);
@@ -30,6 +25,11 @@ class OrderActivityRepository extends OrderComponentRepository
     public function save(): bool
     {
         return $this->orderComponent->save();
+    }
+
+    public function get(): OrderActivity
+    {
+        return $this->orderComponent;
     }
 
     public function delete(): bool

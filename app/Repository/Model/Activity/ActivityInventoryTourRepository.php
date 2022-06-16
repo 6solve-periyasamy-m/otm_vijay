@@ -171,7 +171,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         $data = [];
         foreach ($this->tourComponent->activityInventory->activity->activityInventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->starts_at->gte($tour->date_from->setTime(0,0)) && $inventory->ends_at->lte($tour->date_to->setTime(23, 59, 59))) {
+            if ($inventory->starts_at->gte($tour->date_from->setTime(0, 0)) && $inventory->ends_at->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }

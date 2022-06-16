@@ -25,6 +25,90 @@ class TourRepository extends ModelRepository implements HasStockControl
         $this->tour = $tour;
     }
 
+    public function update(array $data): Tour
+    {
+        $this->tour->update($data);
+        $this->save();
+        return $this->get();
+    }
+
+    public function save(): bool
+    {
+        return $this->tour->save();
+    }
+
+    public function get(): Tour
+    {
+        return $this->tour;
+    }
+
+    public function delete(): bool
+    {
+        return $this->tour->delete();
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->tour->trashed();
+    }
+
+    public function __toString(): string
+    {
+        return "{$this->tour->name}";
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->getTotalStock() - $this->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->tour->stock;
+    }
+
+    public function getUsedStock(): int
+    {
+        $used = 0;
+        foreach ($this->tour->orders as $order) {
+            if (!$order->cancelled) $used += $order->orderCustomers()->count();
+        }
+        return $used;
+    }
+
+    public function duplicate(): Tour
+    {
+        $newTour = $this->tour->replicate();
+        $newTour->save();
+        foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
+            $inventoryTour = $inventoryTourRepository->get();
+            if ($inventoryTour->tour_component_type == 'Upgrade') continue;
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+            foreach ($inventoryTour->upgrades as $upgrade) {
+                $newUpgrade = $upgrade->replicate();
+                $newUpgrade->base_id = $newInventoryTour->id;
+                $clonedInventoryUpgrade = $upgrade->upgrade->replicate();
+                $clonedInventoryUpgrade->tour_id = $newTour->id;
+                $clonedInventoryUpgrade->save();
+                $newUpgrade->upgrade_id = $clonedInventoryUpgrade->id;
+                $newUpgrade->save();
+            }
+        }
+        foreach ($this->tour->merchandise as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        foreach ($this->tour->paymentInstallments as $inventoryTour) {
+            $newInventoryTour = $inventoryTour->replicate();
+            $newInventoryTour->tour_id = $newTour->id;
+            $newInventoryTour->save();
+        }
+        return $newTour;
+    }
+
     /**
      * @param bool $accommodation Should accommodation be included
      * @param bool $activities Should activities be included
@@ -65,95 +149,11 @@ class TourRepository extends ModelRepository implements HasStockControl
         return $components;
     }
 
-    public function get(): Tour
-    {
-        return $this->tour;
-    }
-
-    public function update(array $data): Tour
-    {
-        $this->tour->update($data);
-        $this->save();
-        return $this->get();
-    }
-
-    public function save(): bool
-    {
-        return $this->tour->save();
-    }
-
-    public function delete(): bool
-    {
-        return $this->tour->delete();
-    }
-
-    public function isDeleted(): bool
-    {
-        return $this->tour->trashed();
-    }
-
-    public function __toString(): string
-    {
-        return "{$this->tour->name}";
-    }
-
-    public function getUsedStock(): int
-    {
-        $used = 0;
-        foreach ($this->tour->orders as $order) {
-            if (!$order->cancelled) $used += $order->orderCustomers()->count();
-        }
-        return $used;
-    }
-
-    public function getTotalStock(): int
-    {
-        return $this->tour->stock;
-    }
-
-    public function getAvailableStock(): int
-    {
-        return $this->getTotalStock() - $this->getUsedStock();
-    }
-    
-    public function duplicate(): Tour
-    {
-        $newTour = $this->tour->replicate();
-        $newTour->save();
-        foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
-            $inventoryTour = $inventoryTourRepository->get();
-            if ($inventoryTour->tour_component_type == 'Upgrade') continue;
-            $newInventoryTour = $inventoryTour->replicate();
-            $newInventoryTour->tour_id = $newTour->id;
-            $newInventoryTour->save();
-            foreach ($inventoryTour->upgrades as $upgrade) {
-                $newUpgrade = $upgrade->replicate();
-                $newUpgrade->base_id = $newInventoryTour->id;
-                $clonedInventoryUpgrade = $upgrade->upgrade->replicate();
-                $clonedInventoryUpgrade->tour_id = $newTour->id;
-                $clonedInventoryUpgrade->save();
-                $newUpgrade->upgrade_id = $clonedInventoryUpgrade->id;
-                $newUpgrade->save();
-            }
-        }
-        foreach ($this->tour->merchandise as $inventoryTour) {
-            $newInventoryTour = $inventoryTour->replicate();
-            $newInventoryTour->tour_id = $newTour->id;
-            $newInventoryTour->save();
-        }
-        foreach ($this->tour->paymentInstallments as $inventoryTour) {
-            $newInventoryTour = $inventoryTour->replicate();
-            $newInventoryTour->tour_id = $newTour->id;
-            $newInventoryTour->save();
-        }
-        return $newTour;
-    }
-
     public function fixUpgrades(): void
     {
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type !== 'Included') continue;
-            $upgrades = AccommodationInventoryTour::join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id',  '=', 'accommodation_inventories.id')
+            $upgrades = AccommodationInventoryTour::join('accommodation_inventories', 'accommodation_inventory_tours.accommodation_inventory_id', '=', 'accommodation_inventories.id')
                 ->where('accommodation_inventory_tours.tour_id', '=', $this->tour->id)
                 ->where('accommodation_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('accommodation_inventories.accommodation_id', '=', $inventoryTour->inventory->component->id)
@@ -174,7 +174,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         }
         foreach ($this->tour->activityInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type !== 'Included') continue;
-            $upgrades = ActivityInventoryTour::join('activity_inventories', 'activity_inventory_tours.activity_inventory_id',  '=', 'activity_inventories.id')
+            $upgrades = ActivityInventoryTour::join('activity_inventories', 'activity_inventory_tours.activity_inventory_id', '=', 'activity_inventories.id')
                 ->where('activity_inventory_tours.tour_id', '=', $this->tour->id)
                 ->where('activity_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('activity_inventories.activity_id', '=', $inventoryTour->inventory->component->id)
@@ -194,7 +194,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         }
         foreach ($this->tour->flightInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type !== 'Included') continue;
-            $upgrades = FlightInventoryTour::join('flight_inventories', 'flight_inventory_tours.flight_inventory_id',  '=', 'flight_inventories.id')
+            $upgrades = FlightInventoryTour::join('flight_inventories', 'flight_inventory_tours.flight_inventory_id', '=', 'flight_inventories.id')
                 ->where('flight_inventory_tours.tour_id', '=', $this->tour->id)
                 ->where('flight_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('flight_inventories.flight_id', '=', $inventoryTour->inventory->component->id)
@@ -214,7 +214,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         }
         foreach ($this->tour->transportInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type !== 'Included') continue;
-            $upgrades = TransportInventoryTour::join('transport_inventories', 'transport_inventory_tours.transport_inventory_id',  '=', 'transport_inventories.id')
+            $upgrades = TransportInventoryTour::join('transport_inventories', 'transport_inventory_tours.transport_inventory_id', '=', 'transport_inventories.id')
                 ->where('transport_inventory_tours.tour_id', '=', $this->tour->id)
                 ->where('transport_inventory_tours.tour_component_type', '=', 'Upgrade')
                 ->where('transport_inventories.transport_id', '=', $inventoryTour->inventory->component->id)
@@ -253,7 +253,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
             if ($inventoryTour->tour_component_type !== 'Included') continue;
             $start = $inventoryTour->inventory->check_in->clone();
-            $start->setTime(0,0,0);
+            $start->setTime(0, 0, 0);
             if (array_key_exists($start->unix(), $dates)) {
                 if ($inventoryTour->is_template && !$dates[$start->unix()]->is_template) {
                     $dates[$start->unix()] = $inventoryTour;

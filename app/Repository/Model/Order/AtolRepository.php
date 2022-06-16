@@ -18,6 +18,42 @@ class AtolRepository
         $this->order = $order;
     }
 
+    public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
+    {
+        Storage::makeDirectory('uploads/atol');
+        while (true) {
+            try {
+                $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
+                $directory = 'public/' . $filename;
+                if (Storage::exists($directory)) continue;
+                Storage::makeDirectory($directory);
+                break;
+            } catch (Exception) {
+                continue;
+            }
+        }
+        foreach ($orders as $order) {
+            if ($order->cancelled) continue;
+            if (!$order->has_atol) continue;
+            $atol = self::generateAtolCertificate($order);
+            $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
+            if (!$saved) {
+                dd($atol->getError());
+            }
+        }
+        $zip = new ZipArchive();
+        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
+            foreach (Storage::files($directory) as $file) {
+                $exploded = explode('/', $file);
+                $zip->addFile(Storage::path($file), trim(end($exploded)));
+            }
+            $zip->close();
+            Storage::deleteDirectory($directory);
+            return asset('uploads/atol/' . $filename . '.zip');
+        } else
+            return null;
+    }
+
     public function showAtolCertificate(): bool
     {
         return self::generateAtolCertificate($this->order)->send();
@@ -79,41 +115,5 @@ class AtolRepository
             }
         }
         return ['normal' => $string, 'excess' => $excessString,];
-    }
-
-    public static function generateAllAtolCertificates(Collection $orders, string $name): ?string
-    {
-        Storage::makeDirectory('uploads/atol');
-        while (true) {
-            try {
-                $filename = str_replace(' ', '_', strtolower($name)) . '-' . now()->unix();
-                $directory = 'public/' . $filename;
-                if (Storage::exists($directory)) continue;
-                Storage::makeDirectory($directory);
-                break;
-            } catch (Exception) {
-                continue;
-            }
-        }
-        foreach ($orders as $order) {
-            if ($order->cancelled) continue;
-            if (!$order->has_atol) continue;
-            $atol = self::generateAtolCertificate($order);
-            $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
-            if (!$saved) {
-                dd($atol->getError());
-            }
-        }
-        $zip = new ZipArchive();
-        if ($zip->open(Storage::path('uploads/atol/' . $filename . '.zip'), ZipArchive::CREATE) === true) {
-            foreach (Storage::files($directory) as $file) {
-                $exploded = explode('/', $file);
-                $zip->addFile(Storage::path($file), trim(end($exploded)));
-            }
-            $zip->close();
-            Storage::deleteDirectory($directory);
-            return asset('uploads/atol/' . $filename . '.zip');
-        } else
-            return null;
     }
 }

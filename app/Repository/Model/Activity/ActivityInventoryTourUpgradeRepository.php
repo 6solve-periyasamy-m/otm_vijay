@@ -14,11 +14,6 @@ class ActivityInventoryTourUpgradeRepository extends ComponentUpgradeRepository
         $this->upgrade = $upgrade;
     }
 
-    public function get(): ActivityInventoryTourUpgrade
-    {
-        return $this->upgrade;
-    }
-
     public function update(array $data): ActivityInventoryTourUpgrade
     {
         $this->upgrade->update($data);
@@ -29,6 +24,11 @@ class ActivityInventoryTourUpgradeRepository extends ComponentUpgradeRepository
     public function save(): bool
     {
         return $this->upgrade->save();
+    }
+
+    public function get(): ActivityInventoryTourUpgrade
+    {
+        return $this->upgrade;
     }
 
     public function delete(): bool

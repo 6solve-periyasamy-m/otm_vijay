@@ -12,10 +12,28 @@ use Illuminate\Support\Collection;
 class TransportInventoryRepository extends InventoryRepository
 {
     private TransportInventory $inventory;
-    
+
     public function __construct(TransportInventory $inventory)
     {
         $this->inventory = $inventory;
+    }
+
+    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    {
+        $from->setTime(0, 0);
+        $to->setTime(11, 59, 59);
+        $inventories = [];
+        if (isset($tour)) {
+            foreach ($tour->flightInventoryTours as $inventoryTour) {
+                $inventories[] = $inventoryTour->inventory->id;
+            }
+        }
+        return TransportInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();
+    }
+
+    public function get(): TransportInventory
+    {
+        return $this->inventory;
     }
 
     public function getStartTime(): Carbon
@@ -28,17 +46,14 @@ class TransportInventoryRepository extends InventoryRepository
         return $this->inventory->arrives_at;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public function getAvailableStock(): int
     {
-        $from->setTime(0,0);
-        $to->setTime(11,59,59);
-        $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->flightInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
-            }
-        }
-        return TransportInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();
+        return $this->getTotalStock() - $this->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->inventory->stock;
     }
 
     public function getUsedStock(): int
@@ -52,21 +67,6 @@ class TransportInventoryRepository extends InventoryRepository
         $query->where('orders.cancelled', '=', 0);
         $query->whereNull('order_transports.deleted_at');
         return $query->selectRaw("count(order_transports.id) as 'used_stock'")->first()->used_stock;
-    }
-
-    public function getTotalStock(): int
-    {
-        return $this->inventory->stock;
-    }
-
-    public function getAvailableStock(): int
-    {
-        return $this->getTotalStock() - $this->getUsedStock();
-    }
-
-    public function get(): TransportInventory
-    {
-        return $this->inventory;
     }
 
     public function update(array $data): TransportInventory

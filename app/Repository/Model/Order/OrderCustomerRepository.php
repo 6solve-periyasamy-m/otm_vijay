@@ -2,7 +2,6 @@
 
 namespace App\Repository\Model\Order;
 
-use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -21,37 +20,6 @@ class OrderCustomerRepository extends ModelRepository
     public static function find(Order $order, Customer $customer): ?OrderCustomer
     {
         return OrderCustomer::where('order_id', $order->id)->where('customer_id', $customer->id)->first();
-    }
-
-    /**
-     * @return OrderComponentRepository[]
-     */
-    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
-    {
-        $components = [];
-        if ($includeAccommodation) {
-            foreach ($this->orderCustomer->orderAccommodation() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-                $components[] = $orderComponent->repository;
-            }
-        }
-        foreach ($this->orderCustomer->orderActivities as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        foreach ($this->orderCustomer->orderFlights as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        foreach ($this->orderCustomer->orderTransports as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        foreach ($this->orderCustomer->orderMerchandise as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        return $components;
     }
 
     public function getAvailableToAdd(): array
@@ -152,12 +120,48 @@ class OrderCustomerRepository extends ModelRepository
         return $data;
     }
 
+    public function __toString(): string
+    {
+        return "{$this->orderCustomer->customer_name} ({$this->orderCustomer->order->booking_reference})";
+    }
+
     public function addAllIncluded()
     {
         foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, true, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
             $inventoryTourRepository->grantToCustomer($this->orderCustomer);
         }
+    }
+
+    /**
+     * @return OrderComponentRepository[]
+     */
+    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
+    {
+        $components = [];
+        if ($includeAccommodation) {
+            foreach ($this->orderCustomer->orderAccommodation() as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
+        }
+        foreach ($this->orderCustomer->orderActivities as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->orderCustomer->orderFlights as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->orderCustomer->orderTransports as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->orderCustomer->orderMerchandise as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        return $components;
     }
 
     /**
@@ -207,10 +211,5 @@ class OrderCustomerRepository extends ModelRepository
     public function isDeleted(): bool
     {
         return $this->orderCustomer->trashed();
-    }
-
-    public function __toString(): string
-    {
-        return "{$this->orderCustomer->customer_name} ({$this->orderCustomer->order->booking_reference})";
     }
 }

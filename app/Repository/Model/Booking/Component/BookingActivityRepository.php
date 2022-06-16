@@ -15,11 +15,6 @@ class BookingActivityRepository extends BookingComponentRepository
         $this->bookingComponent = $bookingComponent;
     }
 
-    public function get(): BookingActivity
-    {
-        return $this->bookingComponent;
-    }
-
     public function update(array $data): BookingActivity
     {
         $this->bookingComponent->update($data);
@@ -30,6 +25,11 @@ class BookingActivityRepository extends BookingComponentRepository
     public function save(): bool
     {
         return $this->bookingComponent->save();
+    }
+
+    public function get(): BookingActivity
+    {
+        return $this->bookingComponent;
     }
 
     public function delete(): bool

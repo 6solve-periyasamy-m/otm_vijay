@@ -21,24 +21,6 @@ class InvoiceRepository
     }
 
     /**
-     * @return Invoice The invoice stored in the repository
-     */
-    public function get(): Invoice
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * Saves the invoice into the database
-     * @return Invoice
-     */
-    public function save(): Invoice
-    {
-        $this->invoice->save();
-        return $this->invoice;
-    }
-
-    /**
      * Get the invoice with a specific number, or generate a new one if it is not found
      * @param Order $order The order the invoice is for
      * @param int $number The invoice number
@@ -194,5 +176,23 @@ class InvoiceRepository
     {
         return "{$type}: {$order->customer_count} Customer" . ($order->customer_count > 1 ? 's' : '')
             . " x " . f_currency($amount) . " = " . f_currency($calculated);
+    }
+
+    /**
+     * @return Invoice The invoice stored in the repository
+     */
+    public function get(): Invoice
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * Saves the invoice into the database
+     * @return Invoice
+     */
+    public function save(): Invoice
+    {
+        $this->invoice->save();
+        return $this->invoice;
     }
 }

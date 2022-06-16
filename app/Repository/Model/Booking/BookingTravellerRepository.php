@@ -28,6 +28,189 @@ class BookingTravellerRepository extends ModelRepository
         $this->traveller = $traveller;
     }
 
+    public function getSelectedFlights(): array
+    {
+        $selected = ['outbound' => 0, 'inbound' => 0,];
+        foreach ($this->traveller->flights as $flight) {
+            if ($flight->tourComponent->flight_type == 'Outbound') {
+                $selected['outbound'] = $flight->flight_inventory_tour_id;
+            } else if ($flight->tourComponent->flight_type == 'Inbound') {
+                $selected['inbound'] = $flight->flight_inventory_tour_id;
+            }
+        }
+        return $selected;
+    }
+
+    public function selectFlights(?FlightInventoryTour $inbound, ?FlightInventoryTour $outbound): void
+    {
+        $inbound?->repository->grantToTraveller($this->traveller);
+        $outbound?->repository->grantToTraveller($this->traveller);
+    }
+
+    /**
+     * @param InventoryTourRepository[] $tourComponentRepositories
+     * @return void
+     */
+    public function addComponents(array $tourComponentRepositories): void
+    {
+        foreach ($tourComponentRepositories as $tourComponentRepository) {
+            $this->addComponent($tourComponentRepository);
+        }
+    }
+
+    public function addComponent(InventoryTourRepository $tourComponentRepository): bool
+    {
+        // In booking, only activity is stock-controlled
+        if ($tourComponentRepository instanceof ActivityInventoryTourRepository) {
+            $travellers = $this->traveller->booking->travellers()->count();
+            if ($tourComponentRepository->getAvailableStock() < $travellers) {
+                $found = false;
+                foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
+                    $repo = $upgrade->upgrade->repository;
+                    if ($repo->getAvailableStock() >= $travellers) {
+                        $tourComponentRepository = $repo;
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) return false;
+            }
+        }
+        $component = $tourComponentRepository->grantToTraveller($this->traveller);
+        return isset($component);
+    }
+
+    public function get(): BookingTraveller
+    {
+        return $this->traveller;
+    }
+
+    public function upgradeActivity(ActivityInventoryTour $from, ActivityInventoryTour $to, bool $verified = false): bool
+    {
+        if (!$verified) {
+            if ($to->available_stock < 1) return false;
+            if (!$to->is_bookable) return false;
+        }
+        try {
+            if (!$verified) {
+                DB::beginTransaction();
+            }
+            DB::table('booking_activities')
+                ->where('booking_traveller_id', '=', $this->traveller->id)
+                ->where('activity_inventory_tour_id', '=', $from->id)
+                ->update(['activity_inventory_tour_id' => $to->id,]);
+            if (!$verified) {
+                DB::commit();
+            }
+        } catch (Throwable $e) {
+            Log::error($e);
+            if (!$verified) {
+                DB::rollBack();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public function update(array $data): BookingTraveller
+    {
+        $this->traveller->update($data);
+        $this->save();
+        return $this->get();
+    }
+
+    public function save(): bool
+    {
+        return $this->traveller->save();
+    }
+
+    /**
+     * @return InventoryTourRepository[]
+     */
+    public function getAvailableAddons(bool $filter = false): array
+    {
+        $tour = $this->traveller->booking->tour;
+        $components = $tour->repository->getComponents(false, true, false, false, true, ['Add-on',]);
+        $available = [];
+        if (!$filter) {
+            return $components;
+        }
+        foreach ($components as $inventoryTourRepository) {
+            $repo = $inventoryTourRepository->getBookingComponent($this->traveller);
+            if (isset($repo)) continue;
+            $available[] = $inventoryTourRepository;
+        }
+        return $available;
+    }
+
+    /**
+     * @return BookingComponentRepository[]
+     */
+    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
+    {
+        $components = [];
+        if ($includeAccommodation) {
+            foreach ($this->traveller->accommodation()->with('tourComponent')->get() as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
+        }
+        foreach ($this->traveller->activities()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->traveller->flights()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->traveller->transport()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        foreach ($this->traveller->merchandise()->with('tourComponent')->get() as $orderComponent) {
+            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+            $components[] = $orderComponent->repository;
+        }
+        return $components;
+    }
+
+    public function convertToOrderCustomer(Order $order): OrderCustomer
+    {
+        if (!isset($this->traveller->customer_id)) {
+            $this->convertToCustomer();
+        }
+        $orderCustomer = OrderCustomer::make([
+            'customer_id' => $this->traveller->customer_id,
+            'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
+            'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
+        ]);
+        $order->orderCustomers()->save($orderCustomer);
+        foreach ($this->getComponents(false) as $componentRepository) {
+            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
+        }
+        $this->traveller->order_customer_id = $orderCustomer->id;
+        $this->save();
+        return $orderCustomer;
+    }
+
+    public function convertToCustomer(): Customer
+    {
+        if (isset($this->traveller->customer_id)) return $this->traveller->customer;
+        $customer = Customer::create([
+            'title' => $this->traveller->title ?? null,
+            'first_name' => $this->traveller->first_name ?? null,
+            'middle_names' => $this->traveller->middle_names ?? null,
+            'last_name' => $this->traveller->last_name ?? null,
+            'email_address' => $this->traveller->email_address ?? null,
+            'date_of_birth' => $this->traveller->date_of_birth ?? null,
+            'mobile_number' => $this->traveller->mobile_number ?? null,
+            'home_address_id' => $this->traveller->home_address_id,
+            'billing_address_id' => $this->traveller->billing_address_id,
+        ]);
+        $this->traveller->customer_id = $customer->id;
+        return $customer;
+    }
+
     /**
      * @param Booking $booking
      * @param array $details
@@ -84,194 +267,20 @@ class BookingTravellerRepository extends ModelRepository
         ]);
     }
 
-    public function getSelectedFlights(): array
+    public function getTotalCost(): float
     {
-        $selected = ['outbound' => 0, 'inbound' => 0,];
-        foreach ($this->traveller->flights as $flight) {
-            if ($flight->tourComponent->flight_type == 'Outbound') {
-                $selected['outbound'] = $flight->flight_inventory_tour_id;
-            } else if ($flight->tourComponent->flight_type == 'Inbound') {
-                $selected['inbound'] = $flight->flight_inventory_tour_id;
-            }
-        }
-        return $selected;
-    }
-
-    public function selectFlights(?FlightInventoryTour $inbound, ?FlightInventoryTour $outbound): void
-    {
-        $inbound?->repository->grantToTraveller($this->traveller);
-        $outbound?->repository->grantToTraveller($this->traveller);
-    }
-
-    /**
-     * @param InventoryTourRepository[] $tourComponentRepositories
-     * @return void
-     */
-    public function addComponents(array $tourComponentRepositories): void
-    {
-        foreach ($tourComponentRepositories as $tourComponentRepository) {
-            $this->addComponent($tourComponentRepository);
-        }
-    }
-
-    public function addComponent(InventoryTourRepository $tourComponentRepository): bool
-    {
-        // In booking, only activity is stock-controlled
-        if ($tourComponentRepository instanceof ActivityInventoryTourRepository) {
-            $travellers = $this->traveller->booking->travellers()->count();
-            if ($tourComponentRepository->getAvailableStock() < $travellers) {
-                $found = false;
-                foreach ($tourComponentRepository->get()->upgrades()->with('upgrade')->get() as $upgrade) {
-                    $repo = $upgrade->upgrade->repository;
-                    if ($repo->getAvailableStock() >= $travellers) {
-                        $tourComponentRepository = $repo;
-                        $found = true;
-                        break;
-                    }
-                }
-                if (!$found) return false;
-            }
-        }
-        $component = $tourComponentRepository->grantToTraveller($this->traveller);
-        return isset($component);
-    }
-
-    public function upgradeActivity(ActivityInventoryTour $from, ActivityInventoryTour $to, bool $verified = false): bool
-    {
-        if (!$verified) {
-            if ($to->available_stock < 1) return false;
-            if (!$to->is_bookable) return false;
-        }
-        try {
-            if (!$verified) {
-                DB::beginTransaction();
-            }
-            DB::table('booking_activities')
-                ->where('booking_traveller_id', '=', $this->traveller->id)
-                ->where('activity_inventory_tour_id', '=', $from->id)
-                ->update(['activity_inventory_tour_id' => $to->id,]);
-            if (!$verified) {
-                DB::commit();
-            }
-        } catch (Throwable $e) {
-            Log::error($e);
-            if (!$verified) {
-                DB::rollBack();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @return BookingComponentRepository[]
-     */
-    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
-    {
-        $components = [];
-        if ($includeAccommodation) {
-            foreach ($this->traveller->accommodation()->with('tourComponent')->get() as $orderComponent) {
-                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-                $components[] = $orderComponent->repository;
-            }
-        }
-        foreach ($this->traveller->activities()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        foreach ($this->traveller->flights()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        foreach ($this->traveller->transport()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        foreach ($this->traveller->merchandise()->with('tourComponent')->get() as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
-        }
-        return $components;
-    }
-
-    /**
-     * @return InventoryTourRepository[]
-     */
-    public function getAvailableAddons(bool $filter = false): array
-    {
-        $tour = $this->traveller->booking->tour;
-        $components = $tour->repository->getComponents(false, true, false, false, true, ['Add-on',]);
-        $available = [];
-        if (!$filter) {
-            return $components;
-        }
-        foreach ($components as $inventoryTourRepository) {
-            $repo = $inventoryTourRepository->getBookingComponent($this->traveller);
-            if (isset($repo)) continue;
-            $available[] = $inventoryTourRepository;
-        }
-        return $available;
-    }
-
-    public function hasSingleOccupancy(): bool
-    {
-        foreach ($this->traveller->groups as $group) {
-            if ($group->travellers()->count() == 1) return true;
-        }
-        return false;
-    }
-
-    public function convertToCustomer(): Customer
-    {
-        if (isset($this->traveller->customer_id)) return $this->traveller->customer;
-        $customer = Customer::create([
-            'title' => $this->traveller->title ?? null,
-            'first_name' => $this->traveller->first_name ?? null,
-            'middle_names' => $this->traveller->middle_names ?? null,
-            'last_name' => $this->traveller->last_name ?? null,
-            'email_address' => $this->traveller->email_address ?? null,
-            'date_of_birth' => $this->traveller->date_of_birth ?? null,
-            'mobile_number' => $this->traveller->mobile_number ?? null,
-            'home_address_id' => $this->traveller->home_address_id,
-            'billing_address_id' => $this->traveller->billing_address_id,
-        ]);
-        $this->traveller->customer_id = $customer->id;
-        return $customer;
-    }
-
-    public function convertToOrderCustomer(Order $order): OrderCustomer
-    {
-        if (!isset($this->traveller->customer_id)) {
-            $this->convertToCustomer();
-        }
-        $orderCustomer = OrderCustomer::make([
-            'customer_id' => $this->traveller->customer_id,
-            'tour_cost' => $this->traveller->booking->tour->base_price_per_person,
-            'single_occupancy_surcharge' => $this->traveller->booking->tour->single_occupancy_surcharge,
-        ]);
-        $order->orderCustomers()->save($orderCustomer);
-        foreach ($this->getComponents(false) as $componentRepository) {
-            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer);
-        }
-        $this->traveller->order_customer_id = $orderCustomer->id;
-        $this->save();
-        return $orderCustomer;
+        return $this->getBaseCost() + $this->getAdditionalCost() + $this->getSingleOccupancy();
     }
 
     public function getBaseCost(): float
     {
         return $this->traveller->booking->tour->base_price_per_person;
     }
-    
-    public function getTotalCost(): float
-    {
-        return $this->getBaseCost() + $this->getAdditionalCost() + $this->getSingleOccupancy();
-    }
 
     public function getAdditionalCost(): float
     {
         $cost = 0;
-        foreach ($this->getComponents(true,  ['Upgrade', 'Add-on']) as $componentRepository) {
+        foreach ($this->getComponents(true, ['Upgrade', 'Add-on']) as $componentRepository) {
             $cost += $componentRepository->getCost();
         }
         return $cost;
@@ -282,21 +291,12 @@ class BookingTravellerRepository extends ModelRepository
         return $this->hasSingleOccupancy() ? $this->traveller->booking->tour->single_occupancy_surcharge : 0;
     }
 
-    public function get(): BookingTraveller
+    public function hasSingleOccupancy(): bool
     {
-        return $this->traveller;
-    }
-
-    public function update(array $data): BookingTraveller
-    {
-        $this->traveller->update($data);
-        $this->save();
-        return $this->get();
-    }
-
-    public function save(): bool
-    {
-        return $this->traveller->save();
+        foreach ($this->traveller->groups as $group) {
+            if ($group->travellers()->count() == 1) return true;
+        }
+        return false;
     }
 
     public function delete(): bool

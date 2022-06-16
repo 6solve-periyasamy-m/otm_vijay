@@ -60,20 +60,6 @@ class BookingGroupRepository extends ModelRepository
         ]);
     }
 
-    public function getTravellersAsString($delimiter = ', '): string
-    {
-        $customers = "";
-        foreach ($this->group->travellers as $traveller) {
-            $customers .= "{$traveller->first_name} {$traveller->last_name}{$delimiter}";
-        }
-        return substr($customers, 0, -1*strlen($delimiter));
-    }
-
-    public function get(): BookingGroup
-    {
-        return $this->group;
-    }
-
     public function update(array $data): BookingGroup
     {
         $this->group->update($data);
@@ -84,6 +70,11 @@ class BookingGroupRepository extends ModelRepository
     public function save(): bool
     {
         return $this->group->save();
+    }
+
+    public function get(): BookingGroup
+    {
+        return $this->group;
     }
 
     public function delete(): bool
@@ -99,5 +90,14 @@ class BookingGroupRepository extends ModelRepository
     public function __toString(): string
     {
         return $this->getTravellersAsString();
+    }
+
+    public function getTravellersAsString($delimiter = ', '): string
+    {
+        $customers = "";
+        foreach ($this->group->travellers as $traveller) {
+            $customers .= "{$traveller->first_name} {$traveller->last_name}{$delimiter}";
+        }
+        return substr($customers, 0, -1 * strlen($delimiter));
     }
 }

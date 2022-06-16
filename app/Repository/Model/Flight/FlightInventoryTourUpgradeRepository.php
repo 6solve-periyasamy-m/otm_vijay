@@ -14,11 +14,6 @@ class FlightInventoryTourUpgradeRepository extends ComponentUpgradeRepository
         $this->upgrade = $upgrade;
     }
 
-    public function get(): FlightInventoryTourUpgrade
-    {
-        return $this->upgrade;
-    }
-
     public function update(array $data): FlightInventoryTourUpgrade
     {
         $this->upgrade->update($data);
@@ -29,6 +24,11 @@ class FlightInventoryTourUpgradeRepository extends ComponentUpgradeRepository
     public function save(): bool
     {
         return $this->upgrade->save();
+    }
+
+    public function get(): FlightInventoryTourUpgrade
+    {
+        return $this->upgrade;
     }
 
     public function delete(): bool

@@ -16,11 +16,6 @@ class OrderAccommodationRepository extends OrderComponentRepository
         $this->orderComponent = $orderComponent;
     }
 
-    public function get(): Model
-    {
-        return $this->orderComponent;
-    }
-
     public function update(array $data): Model
     {
         $this->orderComponent->update($data);
@@ -31,6 +26,11 @@ class OrderAccommodationRepository extends OrderComponentRepository
     public function save(): bool
     {
         return $this->orderComponent->save();
+    }
+
+    public function get(): Model
+    {
+        return $this->orderComponent;
     }
 
     public function delete(): bool

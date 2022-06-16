@@ -26,23 +26,10 @@ class BookingRepository extends ModelRepository
         $this->booking = $booking;
     }
 
-    public static function create(Tour $tour, BookingTraveller $leadTraveller): Booking
-    {
-        do {
-            $token = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(64/strlen($x)) )),1,64);
-            $booking = Booking::where('token', $token)->first();
-        } while (isset($booking));
-        $booking = Booking::create(['token' => $token, 'tour_id' => $tour->id]);
-        $booking->travellers()->save($leadTraveller);
-        $booking->lead_traveller_id = $leadTraveller->id;
-        $booking->save();
-        return $booking;
-    }
-
     public static function make(Tour $tour): Booking
     {
         do {
-            $token = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(64/strlen($x)) )),1,64);
+            $token = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(64 / strlen($x)))), 1, 64);
             $booking = Booking::where('token', $token)->first();
         } while (isset($booking));
         return Booking::make(['token' => $token, 'tour_id' => $tour->id]);
@@ -84,6 +71,11 @@ class BookingRepository extends ModelRepository
         }
     }
 
+    public function delete(): bool
+    {
+        return $this->booking->delete();
+    }
+
     public function addIncludedToAll(): void
     {
         $components = $this->booking->tour->repository->getComponents(false, true, false, true, true, ['Included',]);
@@ -95,7 +87,9 @@ class BookingRepository extends ModelRepository
     public function getTotalCost(): float
     {
         $cost = 0;
-        foreach ($this->booking->travellers as $traveller) { $cost += $traveller->total_cost; }
+        foreach ($this->booking->travellers as $traveller) {
+            $cost += $traveller->total_cost;
+        }
         return $cost;
     }
 
@@ -107,14 +101,18 @@ class BookingRepository extends ModelRepository
     public function getSingleOccupancyCount(): int
     {
         $count = 0;
-        foreach ($this->booking->travellers as $traveller) { $count += $traveller->has_single_occupancy; }
+        foreach ($this->booking->travellers as $traveller) {
+            $count += $traveller->has_single_occupancy;
+        }
         return $count;
     }
 
     public function getSingleOccupancyAmount(): float
     {
         $cost = 0;
-        foreach ($this->booking->travellers as $traveller) { $cost += $traveller->surcharge_amount; }
+        foreach ($this->booking->travellers as $traveller) {
+            $cost += $traveller->surcharge_amount;
+        }
         return $cost;
     }
 
@@ -160,6 +158,11 @@ class BookingRepository extends ModelRepository
         return $flights;
     }
 
+    public function __toString(): string
+    {
+        return "{{$this->booking->token}} - {$this->booking->tour->name}";
+    }
+
     public function convertToOrder(?Carbon $orderedOn = null): Order
     {
         $tour = $this->booking->tour;
@@ -195,9 +198,22 @@ class BookingRepository extends ModelRepository
         return $order;
     }
 
-    public function get(): Booking
+    public static function create(Tour $tour, BookingTraveller $leadTraveller): Booking
     {
-        return $this->booking;
+        do {
+            $token = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(64 / strlen($x)))), 1, 64);
+            $booking = Booking::where('token', $token)->first();
+        } while (isset($booking));
+        $booking = Booking::create(['token' => $token, 'tour_id' => $tour->id]);
+        $booking->travellers()->save($leadTraveller);
+        $booking->lead_traveller_id = $leadTraveller->id;
+        $booking->save();
+        return $booking;
+    }
+
+    public function save(): bool
+    {
+        return $this->booking->save();
     }
 
     public function update(array $data): Booking
@@ -207,23 +223,13 @@ class BookingRepository extends ModelRepository
         return $this->get();
     }
 
-    public function save(): bool
+    public function get(): Booking
     {
-        return $this->booking->save();
-    }
-
-    public function delete(): bool
-    {
-        return $this->booking->delete();
+        return $this->booking;
     }
 
     public function isDeleted(): bool
     {
         return !isset($this->booking);
-    }
-
-    public function __toString(): string
-    {
-        return "{{$this->booking->token}} - {$this->booking->tour->name}";
     }
 }

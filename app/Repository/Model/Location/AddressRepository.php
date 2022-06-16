@@ -46,11 +46,6 @@ class AddressRepository extends ModelRepository
         return $to;
     }
 
-    public function get(): Address
-    {
-        return $this->address;
-    }
-
     public function update(array $data): Address
     {
         $this->address->updateOrCreate($data);
@@ -61,6 +56,11 @@ class AddressRepository extends ModelRepository
     public function save(): bool
     {
         return $this->address->save();
+    }
+
+    public function get(): Address
+    {
+        return $this->address;
     }
 
     public function delete(): bool

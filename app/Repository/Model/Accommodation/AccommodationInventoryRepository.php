@@ -11,10 +11,28 @@ use Illuminate\Support\Collection;
 class AccommodationInventoryRepository extends InventoryRepository
 {
     private AccommodationInventory $inventory;
-    
+
     public function __construct(AccommodationInventory $inventory)
     {
         $this->inventory = $inventory;
+    }
+
+    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    {
+        $from->setTime(0, 0);
+        $to->setTime(11, 59, 59);
+        $inventories = [];
+        if (isset($tour)) {
+            foreach ($tour->accommodationInventoryTours as $inventoryTour) {
+                $inventories[] = $inventoryTour->inventory->id;
+            }
+        }
+        return AccommodationInventory::whereBetween('check_in', [$from, $to])->whereBetween('check_out', [$from, $to])->whereNotIn('id', $inventories)->get();
+    }
+
+    public function get(): AccommodationInventory
+    {
+        return $this->inventory;
     }
 
     public function getStartTime(): Carbon
@@ -27,17 +45,14 @@ class AccommodationInventoryRepository extends InventoryRepository
         return $this->inventory->check_out;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public function getAvailableStock(): int
     {
-        $from->setTime(0,0);
-        $to->setTime(11,59,59);
-        $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
-            }
-        }        
-        return AccommodationInventory::whereBetween('check_in', [$from, $to])->whereBetween('check_out', [$from, $to])->whereNotIn('id', $inventories)->get();
+        return $this->getTotalStock() - $this->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->inventory->stock;
     }
 
     public function getUsedStock(): int
@@ -49,21 +64,6 @@ class AccommodationInventoryRepository extends InventoryRepository
             }
         }
         return $used;
-    }
-
-    public function getTotalStock(): int
-    {
-        return $this->inventory->stock;
-    }
-
-    public function getAvailableStock(): int
-    {
-        return $this->getTotalStock() - $this->getUsedStock();
-    }
-
-    public function get(): AccommodationInventory
-    {
-        return $this->inventory;
     }
 
     public function update(array $data): AccommodationInventory

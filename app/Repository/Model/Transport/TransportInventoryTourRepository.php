@@ -175,7 +175,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         $data = [];
         foreach ($this->tourComponent->transportInventory->transport->transportInventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->departs_at->gte($tour->date_from->setTime(0,0)) && $inventory->arrives_at->lte($tour->date_to->setTime(23, 59, 59))) {
+            if ($inventory->departs_at->gte($tour->date_from->setTime(0, 0)) && $inventory->arrives_at->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }

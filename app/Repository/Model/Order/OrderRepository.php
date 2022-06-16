@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
 {
+    private const STATUS_CACHE_TIME = 600;
     private Order $order;
     private AtolRepository $atolRepository;
-    private const STATUS_CACHE_TIME = 600;
 
     public function __construct(Order $order)
     {
@@ -148,6 +148,11 @@ class OrderRepository extends ModelRepository
         return $results->count() > 0;
     }
 
+    public function get(): Order
+    {
+        return $this->order;
+    }
+
     /**
      * @param Customer $customer The customer to check
      * @return bool Whether the specific customer is the lead booker
@@ -255,10 +260,14 @@ class OrderRepository extends ModelRepository
         }
     }
 
-    public function shouldRemind(int $days, int $minDays = -1000): bool
+    public function delete(): bool
     {
-        $daysUntil = $this->order->days_until_next_payment;
-        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays);
+        return $this->order->delete();
+    }
+
+    public function save(): bool
+    {
+        return $this->order->save();
     }
 
     public function sendReminderEmails(int $days, int $minDays = -1000): void
@@ -277,9 +286,10 @@ class OrderRepository extends ModelRepository
         }
     }
 
-    public function get(): Order
+    public function shouldRemind(int $days, int $minDays = -1000): bool
     {
-        return $this->order;
+        $daysUntil = $this->order->days_until_next_payment;
+        return isset($daysUntil) && ($daysUntil <= $days && $daysUntil >= $minDays);
     }
 
     public function update(array $data): Order
@@ -287,16 +297,6 @@ class OrderRepository extends ModelRepository
         $this->order->update($data);
         $this->save();
         return $this->get();
-    }
-
-    public function save(): bool
-    {
-        return $this->order->save();
-    }
-
-    public function delete(): bool
-    {
-        return $this->order->delete();
     }
 
     public function isDeleted(): bool

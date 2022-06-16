@@ -15,11 +15,6 @@ class OrderFlightRepository extends OrderComponentRepository
         $this->orderComponent = $orderComponent;
     }
 
-    public function get(): OrderFlight
-    {
-        return $this->orderComponent;
-    }
-
     public function update(array $data): OrderFlight
     {
         $this->orderComponent->update($data);
@@ -30,6 +25,11 @@ class OrderFlightRepository extends OrderComponentRepository
     public function save(): bool
     {
         return $this->orderComponent->save();
+    }
+
+    public function get(): OrderFlight
+    {
+        return $this->orderComponent;
     }
 
     public function delete(): bool

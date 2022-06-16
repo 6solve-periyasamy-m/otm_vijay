@@ -15,6 +15,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Interfaces\HasStockControl;
 use DB;
+use Log;
 
 class MerchandiseRepository extends InventoryTourRepository implements HasStockControl
 {
@@ -63,11 +64,6 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
         return false; // Merchandise do not have upgrades
     }
 
-    public function get(): Merchandise
-    {
-        return $this->tourComponent;
-    }
-
     public function update(array $data): Merchandise
     {
         $this->tourComponent->update($data);
@@ -78,6 +74,11 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     public function save(): bool
     {
         return $this->tourComponent->save();
+    }
+
+    public function get(): Merchandise
+    {
+        return $this->tourComponent;
     }
 
     public function delete(): bool
@@ -95,6 +96,16 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
         return $this->tourComponent->name;
     }
 
+    public function getAvailableStock(): int
+    {
+        return $this->getTotalStock() - $this->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->tourComponent->stock;
+    }
+
     public function getUsedStock(): int
     {
         $query = DB::table('order_merchandises');
@@ -107,19 +118,9 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
         return $query->selectRaw("count(order_merchandises.id) as 'used_stock'")->first()->used_stock;
     }
 
-    public function getTotalStock(): int
-    {
-        return $this->tourComponent->stock;
-    }
-
-    public function getAvailableStock(): int
-    {
-        return $this->getTotalStock() - $this->getUsedStock();
-    }
-
     public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
-        \Log::info($traveller);
+        Log::info($traveller);
         $bookingComponent = BookingMerchandise::create([
             'booking_traveller_id' => $traveller->id,
             'merchandise_id' => $this->tourComponent->id,

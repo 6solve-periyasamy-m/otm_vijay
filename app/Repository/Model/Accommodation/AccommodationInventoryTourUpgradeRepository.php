@@ -14,11 +14,6 @@ class AccommodationInventoryTourUpgradeRepository extends ComponentUpgradeReposi
         $this->upgrade = $upgrade;
     }
 
-    public function get(): AccommodationInventoryTourUpgrade
-    {
-        return $this->upgrade;
-    }
-
     public function update(array $data): AccommodationInventoryTourUpgrade
     {
         $this->upgrade->update($data);
@@ -29,6 +24,11 @@ class AccommodationInventoryTourUpgradeRepository extends ComponentUpgradeReposi
     public function save(): bool
     {
         return $this->upgrade->save();
+    }
+
+    public function get(): AccommodationInventoryTourUpgrade
+    {
+        return $this->upgrade;
     }
 
     public function delete(): bool

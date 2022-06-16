@@ -48,6 +48,11 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
+    public function get(): AccommodationInventoryTour
+    {
+        return $this->tourComponent;
+    }
+
     public function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository
     {
         $group = $orderCustomer->primary_group;
@@ -82,11 +87,6 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             if ($inventoryTourUpgrade->id == $upgrade->id) return true;
         }
         return false;
-    }
-
-    public function get(): AccommodationInventoryTour
-    {
-        return $this->tourComponent;
     }
 
     public function update(array $data): AccommodationInventoryTour
@@ -183,7 +183,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         $data = [];
         foreach ($this->tourComponent->accommodationInventory->accommodation->inventory as $inventory) {
             if (in_array($inventory->id, $included)) continue;
-            if ($inventory->check_in->gte($tour->date_from->setTime(0,0,0)) && $inventory->check_out->lte($tour->date_to->setTime(23, 59, 59))) {
+            if ($inventory->check_in->gte($tour->date_from->setTime(0, 0, 0)) && $inventory->check_out->lte($tour->date_to->setTime(23, 59, 59))) {
                 $data[$inventory->id] = $inventory;
             }
         }
