@@ -149,6 +149,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         return $components;
     }
 
+    /** @noinspection PhpMethodParametersCountMismatchInspection */
     public function fixUpgrades(): void
     {
         foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {

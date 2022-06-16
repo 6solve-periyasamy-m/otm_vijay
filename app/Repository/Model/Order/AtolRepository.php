@@ -35,7 +35,7 @@ class AtolRepository
         foreach ($orders as $order) {
             if ($order->cancelled) continue;
             if (!$order->has_atol) continue;
-            $atol = self::generateAtolCertificate($order);
+            $atol = self::generateAtolCertificate();
             $saved = $atol->saveAs(Storage::path($directory) . '/' . $order->booking_reference . '.pdf');
             if (!$saved) {
                 dd($atol->getError());
@@ -56,12 +56,12 @@ class AtolRepository
 
     public function showAtolCertificate(): bool
     {
-        return self::generateAtolCertificate($this->order)->send();
+        return self::generateAtolCertificate()->send();
     }
 
     public function generateAtolCertificate(): Pdf
     {
-        $data = $this->generateFlightList($this->order);
+        $data = $this->generateFlightList();
         $protected = $data['normal'];
         $excess = $data['excess'];
         $pdf = new Pdf(Storage::path('templates/' . (empty($excess) ? 'atol-template.pdf' : 'atol-template-excess.pdf')));
