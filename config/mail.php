@@ -107,4 +107,5 @@ return [
         ],
     ],
 
+    'bcc' => env('BCC_ADDRESS')
 ];
