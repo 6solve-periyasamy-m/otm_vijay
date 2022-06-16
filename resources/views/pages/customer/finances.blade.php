@@ -9,16 +9,16 @@
             <div class="form-group finances-select-wrapper">
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
-                    @foreach($orders as $order)
-                        <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
+                    @foreach($orders as $selector)
+                        <option value='{{ $selector->booking_reference }}'>{{ $selector->tour->name }} ({{ $selector->booking_reference }}@if($selector->cancelled) (Cancelled)@endif&#41;</option>
                     @endforeach
                 </select>
                 <a href="#" target="_blank" class="invoice btn btn-primary">View Invoice</a>
             </div>
         </form>
     </div>
-    @foreach($orders as $order)
-        @include('partials.customer.finances.block', ['order' => $order,])
+    @foreach($orders as $selector)
+        @include('partials.customer.finances.block', ['order' => $selector,])
     @endforeach
     <div class="col-12">
         <div class="card">

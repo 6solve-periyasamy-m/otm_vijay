@@ -18,7 +18,7 @@
                 <p class="mb-0 heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
                     @foreach($orders as $selector)
-                        <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected @endif @if($selector->cancelled) disabled @endif>{{ $selector->booking_reference }} @if($selector->cancelled) (Cancelled) @endif - {{ $selector->tour->name }}</option>
+                        <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected @endif @if($selector->cancelled) disabled @endif>{{ $selector->tour->name }} ({{ $selector->booking_reference }}@if($selector->cancelled) (Cancelled)@endif&#41;</option>
                     @endforeach
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-primary">Invoice</a>
