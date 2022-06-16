@@ -136,30 +136,38 @@ class OrderCustomerRepository extends ModelRepository
     /**
      * @return OrderComponentRepository[]
      */
-    public function getComponents(bool $includeAccommodation = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
+    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $extras = true, array $typeFilters = ['Included', 'Upgrade', 'Add-on']): array
     {
         $components = [];
-        if ($includeAccommodation) {
-            foreach ($this->orderCustomer->orderAccommodation() as $orderComponent) {
+        if ($accommodation) {
+            foreach ($this->orderCustomer->orderAccommodation as $orderComponent) {
                 if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
-        foreach ($this->orderCustomer->orderActivities as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
+        if ($activities) {
+            foreach ($this->orderCustomer->orderActivities as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
         }
-        foreach ($this->orderCustomer->orderFlights as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
+        if ($flights) {
+            foreach ($this->orderCustomer->orderFlights as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
         }
-        foreach ($this->orderCustomer->orderTransports as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
+        if ($transport) {
+            foreach ($this->orderCustomer->orderTransports as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
         }
-        foreach ($this->orderCustomer->orderMerchandise as $orderComponent) {
-            if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
-            $components[] = $orderComponent->repository;
+        if ($extras){
+            foreach ($this->orderCustomer->orderMerchandise as $orderComponent) {
+                if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
+                $components[] = $orderComponent->repository;
+            }
         }
         return $components;
     }
@@ -174,12 +182,12 @@ class OrderCustomerRepository extends ModelRepository
         $addons = [];
         $additionalValue = 0;
         // Accommodation Additionals are going to be calculated per group (A:Celeste Gateley)
-        foreach ($this->orderCustomer->repository->getComponents(false, ['Add-on', 'Upgrade']) as $componentRepository) {
+        foreach ($this->orderCustomer->repository->getComponents(false, true, true, true, true, ['Add-on', 'Upgrade']) as $componentRepository) {
             if ($componentRepository->getTourComponentType() == 'Add-on') {
-                $addons[] = ['addon' => $componentRepository->get(), 'description' => "{$componentRepository->get()->tourComponent}  ({$this->orderCustomer->customer_name})",];
+                $addons[] = ['addon' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
             }
             if ($componentRepository->getTourComponentType() == 'Upgrade') {
-                $addons[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->get()->tourComponent}  ({$this->orderCustomer->customer_name})",];
+                $addons[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
             }
             $additionalValue += $componentRepository->getCost();
         }
