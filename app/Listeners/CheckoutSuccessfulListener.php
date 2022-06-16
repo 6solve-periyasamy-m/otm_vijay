@@ -8,7 +8,6 @@ use App\Models\Booking\Booking;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
 use App\Repository\Model\Order\OrderRepository;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\WebhookClient\Models\WebhookCall;
 

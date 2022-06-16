@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\RoomingRepository;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class OrderCustomerModelController extends Controller

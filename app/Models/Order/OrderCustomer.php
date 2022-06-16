@@ -251,4 +251,12 @@ class OrderCustomer extends Model
     {
         return $this->repository->getComponents();
     }
+
+    /**
+     * @return array List of all additional costs for the order
+     */
+    public function getAdditionalCosts(): array
+    {
+        return $this->repository->getAdditionalCosts();
+    }
 }

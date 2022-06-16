@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Order\Order;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Console\Command;
 
 class SendPaymentDueReminders extends Command

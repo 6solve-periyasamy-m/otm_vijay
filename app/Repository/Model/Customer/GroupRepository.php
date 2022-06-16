@@ -53,4 +53,22 @@ class GroupRepository
         $this->group->rooms()->save($oAccom);
         return $oAccom;
     }
+
+    public function getAdditionalCosts(): array
+    {
+        $upgrades = [];
+        $addons = [];
+        $additionalValue = 0;
+        foreach ($this->group->rooms as $orderAccommodation) {
+            if ($orderAccommodation->tourComponent->tour_component_type == 'Upgrade') {
+                $upgrades[] = ['upgrade' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->name})"];
+                $additionalValue += $orderAccommodation->cost;
+            }
+            if ($orderAccommodation->tourComponent->tour_component_type == 'Add-on') {
+                $addons[] = ['addon' => $orderAccommodation, 'description' => "{$orderAccommodation->tourComponent}  ({$this->group->name})",];
+                $additionalValue += $orderAccommodation->cost;
+            }
+        }
+        return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
+    }
 }

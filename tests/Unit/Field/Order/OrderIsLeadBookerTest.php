@@ -3,7 +3,6 @@
 namespace Field\Order;
 
 use App\Models\Customer\Customer;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;

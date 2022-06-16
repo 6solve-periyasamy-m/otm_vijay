@@ -21,7 +21,6 @@ use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;
 use App\Repository\Model\Transport\TransportInventoryTourRepository;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

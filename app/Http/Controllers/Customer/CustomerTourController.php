@@ -20,7 +20,6 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
 use App\Repository\Model\Order\OrderRepository;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 

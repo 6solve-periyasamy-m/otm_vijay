@@ -13,8 +13,6 @@ use App\Repository\AccommodationRepository;
 use App\Repository\BookingRepository;
 use App\Repository\BookingTravellerRepository;
 use App\Repository\RoomingRepository;
-use App\Repository\StaticOrderRepository;
-use App\Repository\TourRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 

@@ -79,6 +79,30 @@ class OrderRepository extends ModelRepository
     }
 
     /**
+     * Get all addons and upgrades for an order
+     * @return array{addons:array, upgrades:array, additionalValue:float} List of all addons, upgrades, and how much they come to total
+     */
+    public function getAdditionalCosts(): array
+    {
+        $addons = [];
+        $upgrades = [];
+        $additionalValue = 0;
+        foreach ($this->order->orderCustomers as $orderCustomer) {
+            $data = $orderCustomer->getAdditionalCosts();
+            $addons = array_merge($addons, $data['addons']);
+            $upgrades = array_merge($upgrades, $data['upgrades']);
+            $additionalValue += $data['additionalValue'];
+        }
+        foreach ($this->order->groups as $group) {
+            $data = $group->repository->getAdditionalCosts();
+            $addons = array_merge($addons, $data['addons']);
+            $upgrades = array_merge($upgrades, $data['upgrades']);
+            $additionalValue += $data['additionalValue'];
+        }
+        return ['upgrades' => $upgrades, 'addons' => $addons, 'additionalValue' => $additionalValue,];
+    }
+
+    /**
      * Get the amount the order has left to pay
      * @return float The remaining amount required on the order
      */

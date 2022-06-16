@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
-use App\Repository\StaticOrderRepository;
 use App\Repository\TourRepository;
 use Illuminate\Http\Request;
 

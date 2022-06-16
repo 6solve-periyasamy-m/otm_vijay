@@ -18,7 +18,6 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Order\OrderRepository;
-use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 use DB;
 use Eloquent;

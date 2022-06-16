@@ -13,7 +13,6 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Reporting\ReportRepository;
 use App\Repository\RoomingRepository;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller

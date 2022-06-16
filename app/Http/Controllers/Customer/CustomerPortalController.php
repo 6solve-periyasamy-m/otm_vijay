@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer\Customer;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
-use App\Repository\StaticOrderRepository;
 
 class CustomerPortalController extends Controller
 {

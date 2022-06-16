@@ -160,6 +160,28 @@ class OrderCustomerRepository extends ModelRepository
         }
     }
 
+    /**
+     * Get the addons and upgrades for a specific customer
+     * @return array{addons:array,upgrades:array,additionalValue:float} The list of upgrades, addons and the sum of their costs
+     */
+    public function getAdditionalCosts(): array
+    {
+        $upgrades = [];
+        $addons = [];
+        $additionalValue = 0;
+        // Accommodation Additionals are going to be calculated per group (A:Celeste Gateley)
+        foreach ($this->orderCustomer->repository->getComponents(false, ['Add-on', 'Upgrade']) as $componentRepository) {
+            if ($componentRepository->getTourComponentType() == 'Add-on') {
+                $addons[] = ['addon' => $componentRepository->get(), 'description' => "{$componentRepository->get()->tourComponent}  ({$this->orderCustomer->customer_name})",];
+            }
+            if ($componentRepository->getTourComponentType() == 'Upgrade') {
+                $addons[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->get()->tourComponent}  ({$this->orderCustomer->customer_name})",];
+            }
+            $additionalValue += $componentRepository->getCost();
+        }
+        return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
+    }
+
     public function get(): OrderCustomer
     {
         return $this->orderCustomer;

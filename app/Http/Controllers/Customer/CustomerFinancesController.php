@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class CustomerFinancesController extends Controller

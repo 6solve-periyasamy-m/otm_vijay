@@ -9,7 +9,6 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
 use App\Repository\RoomingRepository;
-use App\Repository\StaticOrderRepository;
 use Carbon\Carbon;
 
 trait TestsOrder

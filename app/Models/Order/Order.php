@@ -11,7 +11,6 @@ use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
-use App\Repository\StaticOrderRepository;
 use Database\Factories\Order\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -346,6 +345,6 @@ class Order extends Model
      */
     public function getAdditionalCosts(): array
     {
-        return StaticOrderRepository::getOrderAdditionals($this);
+        return $this->repository->getAdditionalCosts();
     }
 }

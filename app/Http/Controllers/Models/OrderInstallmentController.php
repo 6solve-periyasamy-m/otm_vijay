@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
-use App\Repository\StaticOrderRepository;
 use Illuminate\Http\Request;
 
 class OrderInstallmentController extends Controller
