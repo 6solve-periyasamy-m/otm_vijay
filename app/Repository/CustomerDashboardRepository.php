@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Models\Customer\Customer;
-use App\Models\Order\OrderCustomer;
 
 class CustomerDashboardRepository
 {
