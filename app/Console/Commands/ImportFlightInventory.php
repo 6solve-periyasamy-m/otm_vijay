@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Imports\FlightInventoryImport;
-use Illuminate\Console\Command;
 use Excel;
+use Illuminate\Console\Command;
 
 class ImportFlightInventory extends Command
 {

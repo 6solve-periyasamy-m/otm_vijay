@@ -2,14 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Customer;
-use DB;
+use App\Models\Customer\Customer;
 use Exception;
 use Faker\Factory as Faker;
-use Hash;
 use Illuminate\Console\Command;
-use Log;
-use Schema;
 
 class AnonymizeCustomers extends Command
 {

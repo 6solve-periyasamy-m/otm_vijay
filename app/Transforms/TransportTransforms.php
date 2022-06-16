@@ -8,8 +8,6 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportType;
 use App\Models\TravelClass;
-use App\Repository\TourRepository;
-use StringFormatter;
 
 interface TransportTransformsInterface {
     public static function getSelectTransportTypes($filter);

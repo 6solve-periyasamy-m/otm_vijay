@@ -7,8 +7,6 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\OrderCustomer;
-use StringFormatter;
-use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {
     public static function getSelectRoomTypes($filter);

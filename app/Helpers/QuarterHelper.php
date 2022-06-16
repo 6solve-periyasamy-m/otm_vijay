@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
-use App\Repository\SettingsRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

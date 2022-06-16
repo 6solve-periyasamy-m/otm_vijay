@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Imports\AccommodationInventoryImport;
-use Illuminate\Console\Command;
 use Excel;
+use Illuminate\Console\Command;
 
 class ImportAccommodationInventory extends Command
 {

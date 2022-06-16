@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTour;
@@ -16,7 +17,6 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
-use App\Events\Order\Customer\Component\OrderCustomerComponentEditedEvent;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;

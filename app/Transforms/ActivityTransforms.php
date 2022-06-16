@@ -7,8 +7,6 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityType;
 use App\Models\Activity\TicketType;
 use App\Models\Order\OrderCustomer;
-use App\Repository\TourRepository;
-use StringFormatter;
 
 interface ActivityTransformsInterface {
     public static function getSelectActivityTypes($filter);

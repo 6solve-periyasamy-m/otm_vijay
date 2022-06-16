@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AbandonedBookingsReportExport;
-use App\Exports\OrderReminderReportExport;
 use App\Exports\ActivitiesReportExport;
 use App\Exports\FlightManifestReportExport;
+use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;

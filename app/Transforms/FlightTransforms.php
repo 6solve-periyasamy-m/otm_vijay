@@ -7,8 +7,6 @@ use App\Models\Flight\Airport;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\OrderCustomer;
-use App\Repository\TourRepository;
-use StringFormatter;
 
 interface FlightTransformsInterface {
     public static function getSelectAirlines($filter);

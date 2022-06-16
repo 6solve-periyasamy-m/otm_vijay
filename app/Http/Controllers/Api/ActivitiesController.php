@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+ use App\Http\Controllers\ApiController;
 use App\Models\Tour\Tour;
-use Illuminate\Http\Request;
-use App\Repository\BookingRepository;
-use App\Repository\ActivityRepository;
-use App\Http\Controllers\ApiController;
 use App\Repository\ActivityBookingRepository;
+use App\Repository\ActivityRepository;
+use App\Repository\BookingRepository;
 
 class ActivitiesController extends ApiController
 {

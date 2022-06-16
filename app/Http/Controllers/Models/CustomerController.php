@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
-use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Log;

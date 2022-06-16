@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
-use App\Repository\LocationsRepository;
 use App\Repository\Model\Location\AddressRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
