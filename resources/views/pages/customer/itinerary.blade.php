@@ -30,8 +30,16 @@
     </div>
     <div class="container">
         <div class="row">
-            @if($editable !== null)
+            @if(sizeof($editable ?? []) > 1)
                 <div class="col-sm-12 col-md-3">
+                    <div class="card other-profile col-md-12 col-xs-2" onclick="window.location = '{{ route('customer.itinerary', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer,]) }}'">
+                        <div class="card-body profile-card">
+                            <center class="mt-4">
+                                <h4 class="card-title mt-2 additional-customer-title">{{ $orderCustomer->customer->first_name }} {{ $orderCustomer->customer->last_name }}</h4>
+                                <h6 class="card-subtitle additional-customer-subtitle">{{ $orderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
+                            </center>
+                        </div>
+                    </div>
                     <div class="accordion" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -41,8 +49,9 @@
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <div class="row"> <!-- Add col tag to each card that keeps it small on big screen but col-xs-3 elsewise -->
+                                    <div class="row">
                                         @foreach($editable as $editableOrderCustomer)
+                                            @if ($editableOrderCustomer->id === $orderCustomer->id) @continue @endif
                                             <div class="card other-profile col-md-12 col-xs-2" onclick="window.location = '{{ route('customer.itinerary', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
                                                 <div class="card-body profile-card">
                                                     <center class="mt-4">
@@ -59,7 +68,7 @@
                     </div>
                 </div>
             @endif
-            <div class="col-sm-12 {{ $editable !== null ? 'col-md-9' : 'col-md-12' }}">
+            <div class="col-sm-12 {{ sizeof($editable ?? []) > 1 ? 'col-md-9' : 'col-md-12' }}">
                 <div class="card">
                     <div class="card-body">
                         <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
@@ -68,7 +77,7 @@
                                 <thead>
                                     <tr class="font-bold font-16">
                                         <td class="w-10">Start Time</td>
-                                        <td class="w-20">Activity</td>
+                                        <td class="w-20">Item</td>
                                         <td class="w-70">Description</td>
                                     </tr>
                                 </thead>
@@ -93,7 +102,7 @@
                                                 to {{ StringFormatter::formatDateTime($timeslot['end']) }}
                                                 @endif
                                             </td>
-                                            <td data-content="Activity">
+                                            <td data-content="Item">
                                                 {{ $timeslot['activity'] }}
                                             </td>
                                             <td data-content="Description">{{ $timeslot['description'] }}</td>
