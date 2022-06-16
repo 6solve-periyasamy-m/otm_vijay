@@ -242,7 +242,7 @@
                                             <th scope="col">Shared With</th>
                                             <th scope="col">Component Type</th>
                                             <th scope="col">Cost</th>
-                                            <th scope="col">Upgrades</th>
+                                            <th scope="col">Available Upgrades</th>
                                         </tr>
                                     </thead>
                                     @foreach($accommodation as $orderComponent)
@@ -256,14 +256,14 @@
                                                     {{ $orderComponent->tourComponent->tour_component_type }}
                                                 </td>
                                             @else
-                                                <td data-content="Cost">
+                                                <td data-content="Component Type">
                                                     {{ $orderComponent->tourComponent->tour_component_type }}
                                                 </td>
-                                                <td data-content="Upgrades">
+                                                <td data-content="Cost">
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
@@ -307,7 +307,7 @@
                                         <th scope="col">Ticket Type</th>
                                         <th scope="col">Component Type</th>
                                         <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
+                                        <th scope="col">Available Upgrades</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -328,7 +328,7 @@
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
@@ -373,7 +373,7 @@
                                         <th scope="col">Travel Class</th>
                                         <th scope="col">Component Type</th>
                                         <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
+                                        <th scope="col">Available Upgrades</th>
                                     </tr>
                                     </thead>
                                     @foreach($flights as $orderComponent)
@@ -394,7 +394,7 @@
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
@@ -439,7 +439,7 @@
                                         <th scope="col">Travel Class</th>
                                         <th scope="col">Component Type</th>
                                         <th scope="col">Cost</th>
-                                        <th scope="col">Upgrades</th>
+                                        <th scope="col">Available Upgrades</th>
                                     </tr>
                                     </thead>
                                     @foreach($transports as $orderComponent)
@@ -461,7 +461,7 @@
                                                     {{ StringFormatter::formatCurrency($orderComponent->cost) }}
                                                 </td>
                                             @endif
-                                            <td data-content="Upgrades">
+                                            <td data-content="Available Upgrades">
                                                 @if($orderComponent->tourComponent->tour_component_type == 'Add-on')
                                                     Not Available
                                                 @else
