@@ -12,6 +12,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
+use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
@@ -195,5 +196,10 @@ class FlightInventoryTourRepository extends InventoryTourRepository
     public function isBookable(): bool
     {
         return $this->tourComponent->is_bookable;
+    }
+
+    public function getInventory(): ?InventoryRepository
+    {
+        return $this->tourComponent->inventory->repository;
     }
 }

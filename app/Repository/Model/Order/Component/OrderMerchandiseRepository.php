@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderMerchandise;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,5 +56,10 @@ class OrderMerchandiseRepository extends OrderComponentRepository
     public function getCost(): float
     {
         return $this->orderComponent->cost;
+    }
+
+    public function getTourComponent(): ?InventoryTourRepository
+    {
+        return $this->orderComponent->tourComponent->repository;
     }
 }

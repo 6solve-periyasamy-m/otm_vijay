@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order\Component;
 
 use App\Models\Order\Component\OrderActivity;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 
 class OrderActivityRepository extends OrderComponentRepository
@@ -54,5 +55,10 @@ class OrderActivityRepository extends OrderComponentRepository
     public function getCost(): float
     {
         return $this->orderComponent->cost;
+    }
+
+    public function getTourComponent(): ?InventoryTourRepository
+    {
+        return $this->orderComponent->tourComponent->repository;
     }
 }
