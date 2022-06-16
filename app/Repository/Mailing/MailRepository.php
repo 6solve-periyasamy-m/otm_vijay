@@ -83,7 +83,7 @@ class MailRepository
     /**
      * Send a mail to the currently logged-in user. Shortcut to the sendMailable method
      * @param string $mail The mail to send
-     * @param Order|Payment|null $model The model to get data from
+     * @param Model|null $model The model to get data from
      * @return bool Was the mail sent?
      */
     public static function sendDemoMailable(string $mail, ?Model $model = null): bool
@@ -95,7 +95,7 @@ class MailRepository
      * Send a mail to a specific email address.
      * @param string $mail The mail to send
      * @param string $email The email to send to
-     * @param Order|Payment|OrderCustomer|null $model The model to get data from
+     * @param Model|null $model The model to get data from
      * @return bool Was the mail sent?
      */
     public static function sendMailable(string $mail, string $email, ?Model $model = null): bool
@@ -116,7 +116,7 @@ class MailRepository
     /**
      * Generates a mailable, ready to be sent
      * @param string $mail The mail to send
-     * @param Order|Payment|null $model The model to get data from
+     * @param Model|null $model The model to get data from
      * @return TemplatedMailable|null The generated mailable, ready to be sent, or null if $mail is invalid
      */
     public static function generateEmail(string $mail, ?Model $model): ?TemplatedMailable

@@ -314,12 +314,12 @@ class PermissionsRepository
         return null;
     }
 
-    public static function getRoleFromName(string $role)
+    public static function getRoleFromName(string $role): Role
     {
         return Role::where('name', '=', $role)->first();
     }
 
-    public static function revokeEverything(Role $role)
+    public static function revokeEverything(Role $role): void
     {
         Bouncer::disallow($role)->everything();
     }
