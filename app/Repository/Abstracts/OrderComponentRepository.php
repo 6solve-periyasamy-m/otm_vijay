@@ -13,6 +13,7 @@ abstract class OrderComponentRepository extends ModelRepository
     public abstract function getTourComponentType(): string;
     public abstract function getCost(): float;
     public abstract function getTourComponent(): ?InventoryTourRepository;
+    public abstract function getItineraryItems(): array;
 
     public static function getComponent(string $type, int $id): ?OrderComponentRepository
     {

@@ -62,4 +62,17 @@ class OrderAccommodationRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->repository;
     }
+
+    public function getItineraryItems(): array
+    {
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $data = [];
+        $data[] = ['start' => $inventory->check_in, 'activity' => 'Room Check In',
+            'description' => "{$component->name} ({$inventory->roomType->name}) ({$inventory->boardType})"];
+        $data[] = ['start' => $inventory->check_out, 'activity' => 'Room Check Out',
+            'description' => "{$component->name} ({$inventory->roomType->name}) ({$inventory->boardType})"];
+        return $data;
+    }
 }

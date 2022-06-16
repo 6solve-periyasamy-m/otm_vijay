@@ -62,4 +62,9 @@ class OrderMerchandiseRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->repository;
     }
+
+    public function getItineraryItems(): array
+    {
+        return [];
+    }
 }

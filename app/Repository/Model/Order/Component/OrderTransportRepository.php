@@ -61,4 +61,17 @@ class OrderTransportRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->repository;
     }
+
+    public function getItineraryItems(): array
+    {
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        $data = [];
+        $data[] = ['start' => $inventory->departs_at, 'activity' => 'Transport Departure',
+            'description' => "{$component->name} ({$component->departureAddress->name} to {$component->arrivalAddress->name}) ({$inventory->travelClass})"];
+        $data[] = ['start' => $inventory->arrives_at, 'activity' => 'Transport Arrival',
+            'description' => "{$component->name} ({$component->departureAddress->name} to {$component->arrivalAddress->name}) ({$inventory->travelClass})"];
+        return $data;
+    }
 }

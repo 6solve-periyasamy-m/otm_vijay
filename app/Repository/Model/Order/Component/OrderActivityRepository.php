@@ -61,4 +61,16 @@ class OrderActivityRepository extends OrderComponentRepository
     {
         return $this->orderComponent->tourComponent->repository;
     }
+
+    public function getItineraryItems(): array
+    {
+        $tourComponent = $this->orderComponent->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        return [[
+            'start' => $inventory->starts_at,
+            'activity' => $component->activityType,
+            'description' => "{$component->name} ({$component->address}) ({$inventory->ticketType})"],
+            ];
+    }
 }
