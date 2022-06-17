@@ -4,12 +4,14 @@
 
 @section('footer-script')
     <script type="text/javascript">
-        $(document).ready(function () { $('.report-table').DataTable({fixedHeader: true}); });
+        $(document).ready(function () {
+            $('.report-table').DataTable({fixedHeader: true});
+        });
     </script>
 @endsection
 
 @section('content')
-    @include('partials.orders.reminder-frequencies', ['route' => 'reports.reminders'])
+    @include('partials.orders.reminder.frequencies', ['route' => 'reports.reminders'])
     <div class="card">
         <div class="card-body">
             Negative days means that the payment is overdue
