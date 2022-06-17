@@ -97,6 +97,6 @@ class ReportController extends Controller
 
     public function exportOrderRemindersReport(string $extension = 'xlsx', int $max = 7, int $min = -1000)
     {
-        return Excel::download(new OrderReminderReportExport($max, $min), 'abandoned-bookings.' . $extension);
+        return Excel::download(new OrderReminderReportExport($max, $min), 'reminders.' . $extension);
     }
 }

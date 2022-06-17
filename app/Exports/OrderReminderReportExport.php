@@ -15,6 +15,6 @@ class OrderReminderReportExport implements FromView
 
     public function view(): View
     {
-        return view('partials.reports.tables.abandoned-bookings', ['data' => ReportRepository::getRemindersReport($this->max, $this->min),]);
+        return view('partials.reports.tables.reminders', ['data' => ReportRepository::getRemindersReport($this->max, $this->min),]);
     }
 }
