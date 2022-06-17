@@ -26,9 +26,9 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-3">Passengers: {{ $data->passengers }}</div>
-                <div class="col-3">Revenue (Gross Invoice Value): {{ StringFormatter::formatCurrency($data->revenue) }}</div>
-                <div class="col-3">Balance Paid: {{ StringFormatter::formatCurrency($data->paid) }}</div>
-                <div class="col-3">Remaining Value: {{ StringFormatter::formatCurrency($data->remaining) }}</div>
+                <div class="col-3">Revenue (Gross Invoice Value): {{ f_currency($data->revenue) }}</div>
+                <div class="col-3">Balance Paid: {{ f_currency($data->paid) }}</div>
+                <div class="col-3">Remaining Value: {{ f_currency($data->remaining) }}</div>
             </div>
         </div>
     </div>
@@ -50,14 +50,14 @@
                 <tbody>
                 @foreach($data->orders as $order)
                     <tr>
-                        <td>{{ StringFormatter::formatDateTime($order->ordered_on) }}</td>
+                        <td>{{ f_datetime($order->ordered_on) }}</td>
                         <td>{{ $order->booking_reference }}</td>
                         <td>{{ $order->lead_booker_name }}</td>
                         <td>{{ $order->cancelled ? 'Cancelled' : $order->customer_count }}</td>
                         <td>{{ $order->tour->name }}</td>
-                        <td>{{ StringFormatter::formatCurrency($order->total) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($order->paid) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($order->remaining) }}</td>
+                        <td>{{ f_currency($order->total) }}</td>
+                        <td>{{ f_currency($order->paid) }}</td>
+                        <td>{{ f_currency($order->remaining) }}</td>
                     </tr>
                 @endforeach
                 </tbody>

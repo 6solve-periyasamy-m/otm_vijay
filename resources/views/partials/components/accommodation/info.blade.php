@@ -5,7 +5,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Audit Date</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($accommodation->audit_date) }}</h6>
+            <h6 class="fw-bold">{{ f_date($accommodation->audit_date) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Address</p>

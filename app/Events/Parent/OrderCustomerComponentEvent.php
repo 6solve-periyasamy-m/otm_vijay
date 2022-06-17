@@ -7,6 +7,7 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class OrderCustomerComponentEvent extends OrderCustomerEvent
 {
@@ -16,7 +17,7 @@ abstract class OrderCustomerComponentEvent extends OrderCustomerEvent
     public $orderComponent;
 
     /**
-     * @param OrderAccommodation|OrderActivity|OrderFlight|OrderTransport|OrderMerchandise $orderComponent
+     * @param OrderAccommodation|OrderActivity|OrderFlight|OrderTransport|OrderMerchandise|Model $orderComponent
      * @param bool $shouldInvoice
      */
     public function __construct($orderComponent, bool $shouldInvoice = true) {

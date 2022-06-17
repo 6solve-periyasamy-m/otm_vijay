@@ -2,8 +2,10 @@
 
 namespace App\Models\Accommodation;
 
+use Database\Factories\Accommodation\RoomTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -19,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @method static RoomTypeFactory factory(...$parameters)
  * @method static Builder|RoomType newModelQuery()
  * @method static Builder|RoomType newQuery()
  * @method static QueryBuilder|RoomType onlyTrashed()
@@ -35,7 +38,7 @@ use Illuminate\Support\Carbon;
  */
 class RoomType extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['name', 'maximum_occupancy',];
 

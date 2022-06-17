@@ -1,18 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Gateways\StripeGateway;
 use App\Models\Order\Order;
+use App\Models\System\Setting;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Exception;
-
-use App\Models\System\Setting;
-use App\Http\Gateways\StripeGateway;
-use Illuminate\Support\Facades\Auth;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {

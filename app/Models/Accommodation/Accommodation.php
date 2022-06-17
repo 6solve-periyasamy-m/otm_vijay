@@ -4,6 +4,7 @@ namespace App\Models\Accommodation;
 
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use Database\Factories\Accommodation\AccommodationFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property-read Currency|null $currency
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
  * @property-read int|null $inventory_count
+ * @method static AccommodationFactory factory(...$parameters)
  * @method static Builder|Accommodation newModelQuery()
  * @method static Builder|Accommodation newQuery()
  * @method static QueryBuilder|Accommodation onlyTrashed()

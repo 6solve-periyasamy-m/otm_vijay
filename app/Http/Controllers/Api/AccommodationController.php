@@ -12,8 +12,7 @@ use App\Models\Tour\Tour;
 use App\Repository\AccommodationRepository;
 use App\Repository\BookingRepository;
 use App\Repository\BookingTravellerRepository;
-use App\Repository\OrderRepository;
-use App\Repository\TourRepository;
+use App\Repository\RoomingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -164,7 +163,7 @@ class AccommodationController extends ApiController
                     $tour->accommodationInventoryTours()->save($inventoryTour);
                 }
             }
-            TourRepository::autoAssignTemplating($tour);
+            $tour->repository->autoAssignTemplating();
             return response('Any listed components have been successfully added', 200);
         }
         abort(400, 'Invalid component type has been provided');
@@ -173,7 +172,7 @@ class AccommodationController extends ApiController
 
     public function saveRoomingData(Request $request, Order $order) {
         try {
-            OrderRepository::buildGroupRooming($order, $request->data);
+            RoomingRepository::buildGroupRooming($order, $request->data);
             return response('Building Saved', 200);
         } catch (RoomingFailedException $e) {
             abort(500, $e->getMessage());

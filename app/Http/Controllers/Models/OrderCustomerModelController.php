@@ -8,7 +8,7 @@ use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Repository\OrderRepository;
+use App\Repository\RoomingRepository;
 use Illuminate\Http\Request;
 
 class OrderCustomerModelController extends Controller
@@ -41,8 +41,8 @@ class OrderCustomerModelController extends Controller
             'transport_notes' => $request->input('transport_notes'),
         ]);
         $order->orderCustomers()->save($orderCustomer);
-        OrderRepository::addIncludedToCustomer($orderCustomer);
-        OrderRepository::assignDefaultRooming($orderCustomer);
+        $orderCustomer->repository->addAllIncluded();;
+        RoomingRepository::assignDefaultRooming($orderCustomer);
         event(new OrderCustomerCreatedEvent($orderCustomer));
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }

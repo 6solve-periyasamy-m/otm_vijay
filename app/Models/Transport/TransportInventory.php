@@ -4,7 +4,8 @@ namespace App\Models\Transport;
 
 use App\Models\Tour\Tour;
 use App\Models\TravelClass;
-use App\Repository\StockRepository;
+use App\Repository\Model\Transport\TransportInventoryRepository;
+use Database\Factories\Transport\TransportInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 /**
  * App\Models\Transport\TransportInventory
@@ -47,6 +47,8 @@ use StringFormatter;
  * @property-read int|null $tour_components_count
  * @property-read Transport $transport
  * @property-read TravelClass $travelClass
+ * @property-read TransportInventoryRepository $repository
+ * @method static TransportInventoryFactory factory(...$parameters)
  * @method static Builder|TransportInventory newModelQuery()
  * @method static Builder|TransportInventory newQuery()
  * @method static QueryBuilder|TransportInventory onlyTrashed()
@@ -83,6 +85,8 @@ class TransportInventory extends Model
         'fit_selectable' => 'boolean',
         'purchase_price' => 'double',
     ];
+
+    private TransportInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -123,11 +127,6 @@ class TransportInventory extends Model
         return $this->belongsTo(TravelClass::class, 'travel_class_id');
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
-    }
-
     public function getTransportForTourAttribute(): string
     {
         if (empty($this->transport)) {
@@ -144,7 +143,7 @@ class TransportInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getTransportStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getUsedOnTourCountAttribute(): int
@@ -152,8 +151,19 @@ class TransportInventory extends Model
         return $this->tourComponents()->count();
     }
 
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(TransportInventoryTour::class, 'transport_inventory_id');
+    }
+
     public function __toString(): string
     {
-        return "{$this->component} - {$this->travelClass} (" . StringFormatter::formatDateTime($this->departs_at) . " to " . StringFormatter::formatDateTime($this->arrives_at) . ")";
+        return "{$this->component} - {$this->travelClass} (" . f_datetime($this->departs_at) . " to " . f_datetime($this->arrives_at) . ")";
+    }
+
+    public function getRepositoryAttribute(): TransportInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TransportInventoryRepository($this);
+        return $this->internal_repository;
     }
 }

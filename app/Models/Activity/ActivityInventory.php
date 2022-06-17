@@ -2,7 +2,8 @@
 
 namespace App\Models\Activity;
 
-use App\Repository\StockRepository;
+use App\Repository\Model\Activity\ActivityInventoryRepository;
+use Database\Factories\Activity\ActivityInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 
 /**
@@ -41,6 +41,8 @@ use StringFormatter;
  * @property-read TicketType $ticketType
  * @property-read Collection|ActivityInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @property-read ActivityInventoryRepository $repository
+ * @method static ActivityInventoryFactory factory(...$parameters)
  * @method static Builder|ActivityInventory newModelQuery()
  * @method static Builder|ActivityInventory newQuery()
  * @method static QueryBuilder|ActivityInventory onlyTrashed()
@@ -75,6 +77,7 @@ class ActivityInventory extends Model
         'purchase_price' => 'double',
         'sales_price' => 'double',
     ];
+    private ActivityInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -110,11 +113,6 @@ class ActivityInventory extends Model
         return $this->belongsTo(TicketType::class, 'ticket_type_id');
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
-    }
-
     public function getActivityForTourAttribute(): string
     {
         $starts_at = $this->starts_at->format('d/m/Y H:i');
@@ -125,7 +123,7 @@ class ActivityInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getActivityStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getUsedOnTourCountAttribute(): int
@@ -133,8 +131,19 @@ class ActivityInventory extends Model
         return $this->tourComponents()->count();
     }
 
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(ActivityInventoryTour::class, 'activity_inventory_id');
+    }
+
     public function __toString(): string
     {
-        return "{$this->component} - {$this->ticketType} (" . StringFormatter::formatDateTime($this->starts_at) . " to " . StringFormatter::formatDateTime($this->ends_at) . ")";
+        return "{$this->component} - {$this->ticketType} (" . f_datetime($this->starts_at) . " to " . f_datetime($this->ends_at) . ")";
+    }
+
+    public function getRepositoryAttribute(): ActivityInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new ActivityInventoryRepository($this);
+        return $this->internal_repository;
     }
 }

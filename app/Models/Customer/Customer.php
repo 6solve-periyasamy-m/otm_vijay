@@ -8,8 +8,8 @@ use App\Models\Order\OrderCustomer;
 use App\Models\System\ApiToken;
 use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
-use App\Repository\CustomerAuthenticationRepository;
-use Database\Factories\CustomerFactory;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
+use Database\Factories\Customer\CustomerFactory;
 use Eloquent;
 use Gravatar;
 use Illuminate\Database\Eloquent\Builder;
@@ -157,7 +157,7 @@ class Customer extends Authenticatable
         'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone',
         'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date',
         'passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id',
-        'billing_address_id','internal_notes','external_notes','dietary_notes','mobility_notes'];
+        'billing_address_id', 'internal_notes', 'external_notes', 'dietary_notes', 'mobility_notes'];
 
     protected $casts = ['date_of_birth' => 'date', 'passport_issue_date' => 'date', 'passport_expiry_date' => 'date',];
 

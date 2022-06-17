@@ -7,9 +7,7 @@ use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Models\Booking\Booking;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
-use App\Repository\BookingRepository;
-use App\Repository\CustomerBookingRepository;
-use App\Repository\OrderRepository;
+use App\Repository\Model\Order\OrderRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\WebhookClient\Models\WebhookCall;
 
@@ -24,7 +22,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
             $intention = PaymentIntention::fetch($metadata['intention_id']);
             if (!isset($intention)) return;
             if (!$intention->processed) {
-                $order = OrderRepository::getOrderFromBookingReference($intention->reference);
+                $order = OrderRepository::getFromBookingReference($intention->reference);
                 if (isset($order)) {
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::findOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);
@@ -36,11 +34,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
                 }
                 $booking = Booking::where('token', $intention->reference)->first();
                 if (isset($booking)) {
-                    if (strlen($booking->token) == 64) {
-                        $order = CustomerBookingRepository::convertBookingToOrder($booking);
-                    } else {
-                        $order = BookingRepository::convertBookingToOrder($booking);
-                    }
+                    $order = $booking->repository->convertToOrder(now());
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::findOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);
                     $intention->processed = true;

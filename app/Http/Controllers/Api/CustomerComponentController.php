@@ -11,10 +11,9 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Transport\TransportInventoryTourUpgrade;
-use App\Repository\AccommodationComponentRepository;
 use App\Repository\ActivityComponentRepository;
 use App\Repository\FlightComponentRepository;
-use App\Repository\SettingsRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 use App\Repository\TransportComponentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +25,7 @@ class CustomerComponentController extends Controller
     public function applyAccommodationUpgrade(Request $request): JsonResponse
     {
         return $this->applyUpgrade(OrderAccommodation::class, AccommodationInventoryTourUpgrade::class,
-            AccommodationComponentRepository::class, $request->input('component_id'), $request->input('upgrade_id'));
+            AccommodationInventoryTourRepository::class, $request->input('component_id'), $request->input('upgrade_id'));
     }
 
     public function applyActivityUpgrade(Request $request): JsonResponse
@@ -63,9 +62,9 @@ class CustomerComponentController extends Controller
             return response()->json(['success' => false, 'message' => 'Cannot find requested upgrade',]);
         if ($upgrade->upgrade->tour_sales_price >= $orderComponent->cost && $orderComponent->tour_component_type != 'Included')
             return response()->json(['success' => false, 'message' => 'Please contact us if you wish to downgrade',]);
-        if (!AccommodationComponentRepository::isOnUpgradeTree($orderComponent->tourComponent, $upgrade)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
+        if (!$orderComponent->tourComponent->repository->onUpgradeTree($upgrade->repository)) return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
         $data = null;
-        if (SettingsRepository::getOrDefault('payment.require', false)) {
+        if (flag('payment.require', false)) {
             $data = [
                 'upgrades' => [[
                     'customer' => $orderComponent->group->id,
@@ -102,7 +101,7 @@ class CustomerComponentController extends Controller
     
     private function applyUpgrade($parentClass, $upgradeClass, $repository, $componentId, $upgradeId): JsonResponse
     {
-        if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
+        if (!(flag('payment.required', true))) abort(404);
 
         $orderComponent = app($parentClass)->find($componentId);
 
@@ -124,7 +123,7 @@ class CustomerComponentController extends Controller
         if ($upgrade->upgrade->available_stock <= 0)
             return response()->json(['success' => false, 'message' => 'This upgrade is currently out of stock',]);
 
-        if (!app($repository)->isOnUpgradeTree($orderComponent->tourComponent, $upgrade))
+        if (!$orderComponent->tourComponent->repository->onUpgradeTree($upgrade))
             return response()->json(['success' => false, 'message' => 'Requested upgrade not on inventory upgrade tree',]);
 
         $orderComponent->swap($upgrade->upgrade);

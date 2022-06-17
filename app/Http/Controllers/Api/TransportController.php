@@ -5,8 +5,8 @@ use App\Http\Controllers\ApiController;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
-use Illuminate\Http\Request;
 use App\Repository\TransportRepository;
+use Illuminate\Http\Request;
 
 class TransportController extends ApiController
 {

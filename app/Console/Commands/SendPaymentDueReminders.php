@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Repository\OrderRepository;
+use App\Models\Order\Order;
 use Illuminate\Console\Command;
+use Settings;
 
 class SendPaymentDueReminders extends Command
 {
@@ -12,7 +13,7 @@ class SendPaymentDueReminders extends Command
      *
      * @var string
      */
-    protected $signature = 'payment:remind {days?} {min?}';
+    protected $signature = 'payment:remind {days?} {min?} {--force}';
 
     /**
      * The console command description.
@@ -38,9 +39,15 @@ class SendPaymentDueReminders extends Command
      */
     public function handle()
     {
-        $days = $this->argument('days') ?? 7;
-        $min = $this->argument('min') ?? -1000;
-        OrderRepository::sendAllOrderReminders($days, $min);
+        if (Settings::authorized('authorization.reminders') || $this->option('force')) {
+            $days = $this->argument('days') ?? 7;
+            $min = $this->argument('min') ?? -1000;
+            foreach (Order::where('cancelled',false)->get() as $order) {
+                $order->repository->sendReminderEmails($days, $min);
+            }
+        } else {
+            $this->error('Reminders are not authorized to run. Use --force to bypass this check');
+        }
         return 0;
     }
 }

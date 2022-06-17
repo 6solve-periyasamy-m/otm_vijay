@@ -2,7 +2,8 @@
 
 namespace App\Models\Accommodation;
 
-use App\Repository\StockRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
+use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 /**
  * App\Models\Accommodation\AccommodationInventory
@@ -42,9 +42,12 @@ use StringFormatter;
  * @property-read string $customer_display Display string to show to customers
  * @property-read int $used_on_tour_count How many tours this inventory is used on
  * @property-read int $used_stock The amount of stock that has been sold
+ * @property-read int $available_stock The amount of stock that is available to be sold
  * @property-read RoomType $roomType
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @property-read AccommodationInventoryRepository $repository
+ * @method static AccommodationInventoryFactory factory(...$parameters)
  * @method static Builder|AccommodationInventory newModelQuery()
  * @method static Builder|AccommodationInventory newQuery()
  * @method static QueryBuilder|AccommodationInventory onlyTrashed()
@@ -84,6 +87,7 @@ class AccommodationInventory extends Model
         'purchase_price' => 'double',
         'sales_price' => 'double',
     ];
+    private AccommodationInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -125,11 +129,6 @@ class AccommodationInventory extends Model
         return $this->belongsTo(RoomType::class);
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(AccommodationInventoryTour::class, 'accommodation_inventory_id');
-    }
-
     public function getAccommodationForTourAttribute(): string
     {
         $check_in = !is_null($this->check_in) ? $this->check_in->format('d/m/Y H:i') : "Unconfirmed";
@@ -140,7 +139,12 @@ class AccommodationInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getAccommodationStock($this);
+        return $this->repository->getUsedStock();
+    }
+
+    public function getAvailableStockAttribute(): int
+    {
+        return $this->repository->getAvailableStock();
     }
 
     public function getUsedOnTourCountAttribute(): int
@@ -148,13 +152,24 @@ class AccommodationInventory extends Model
         return $this->tourComponents()->count();
     }
 
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(AccommodationInventoryTour::class, 'accommodation_inventory_id');
+    }
+
     public function __toString(): string
     {
-        return "{$this->component} - {$this->roomType} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
+        return $this->repository->__toString();
     }
 
     public function getCustomerDisplayAttribute(): string
     {
-        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . StringFormatter::formatDateTime($this->check_in) . " to " . StringFormatter::formatDateTime($this->check_out) . ")";
+        return "{$this->component} - {$this->roomType->name} {$this->boardType} (" . f_datetime($this->check_in) . " to " . f_datetime($this->check_out) . ")";
+    }
+
+    public function getRepositoryAttribute(): AccommodationInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryRepository($this);
+        return $this->internal_repository;
     }
 }

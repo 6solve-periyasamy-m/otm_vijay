@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Events\Customer\CustomerEditedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Customer\Customer;
-use App\Repository\CustomerAuthenticationRepository;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\CustomerDashboardRepository;
 use Hash;
 use Illuminate\Http\Request;

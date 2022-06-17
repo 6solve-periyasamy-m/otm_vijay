@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-
 use App\Models\Location\Country;
 
 class CountryApiController extends ApiController

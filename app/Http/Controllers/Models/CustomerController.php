@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer\Customer;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
-use App\Repository\LocationsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Log;
@@ -24,7 +23,7 @@ class CustomerController extends Controller
 
     public function index()
     {
-        return view('pages.models.customers.table', ['customers' => Customer::all(),]);
+        return view('pages.models.customers.table', ['customers' => Customer::with('homeAddress',)->get(),]);
     }
 
     public function create()
@@ -80,7 +79,7 @@ class CustomerController extends Controller
         ]);
         $customer->home_address_id = $homeAddress->id;
         if ($request->input('home_is_billing') == 'on') {
-            $customer->billing_address_id = LocationsRepository::cloneAddressToAddress($homeAddress, AddressParent::getParentId('customer'))->id;
+            $customer->billing_address_id = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'))->id;
         } else {
             $billingAddress = Address::create([
                 'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Billing)',
@@ -157,7 +156,7 @@ class CustomerController extends Controller
         ]);
         $customer->homeAddress->save();
         if ($request->input('home_is_billing') == 'on') {
-            LocationsRepository::cloneAddressToAddress($customer->homeAddress, AddressParent::getParentId('customer'), $customer->billingAddress);
+            $customer->homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'), $customer->billingAddress);
         } else {
             $customer->billingAddress->update([
                 'name' => $request->input('email') . ' (' . $request->input('first_name') . ' ' . $request->input('last_name') . ') (Billing)',

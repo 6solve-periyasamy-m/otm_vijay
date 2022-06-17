@@ -2,6 +2,8 @@
 
 namespace App\Models\Location;
 
+use App\Repository\Model\Location\AddressRepository;
+use Database\Factories\Location\AddressFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,8 +31,10 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read AddressParent $addressParent
+ * @property-read AddressRepository $repository
  * @property-read Country|null $country
  * @property-read LocationType|null $locationType
+ * @method static AddressFactory factory(...$parameters)
  * @method static Builder|Address newModelQuery()
  * @method static Builder|Address newQuery()
  * @method static QueryBuilder|Address onlyTrashed()
@@ -58,6 +62,9 @@ class Address extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'address_parent_id', 'location_type_id', 'address_line_1', 'address_line_2', 'address_line_3', 'town', 'region', 'country_id', 'postcode',];
+    protected $with = ['country'];
+
+    private AddressRepository $internal_repository;
 
     public static function getValidationRules($prefix = ''): array
     {
@@ -84,16 +91,15 @@ class Address extends Model
         return $this->belongsTo(AddressParent::class, 'address_parent_id');
     }
 
+    public function getRepositoryAttribute(): AddressRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new AddressRepository($this);
+        return $this->internal_repository;
+    }
+
+
     public function __toString(): string
     {
-        $address = "";
-        if (isset($this->address_line_1)) $address .= $this->address_line_1;
-        if (isset($this->address_line_2)) $address .= ", " . $this->address_line_2;
-        if (isset($this->address_line_3)) $address .= ", " . $this->address_line_3;
-        if (isset($this->town)) $address .= ", " . $this->town;
-        if (isset($this->region)) $address .= ", " . $this->region;
-        if (isset($this->country)) $address .= ", " . $this->country->name;
-        if (isset($this->postcode)) $address .= ", " . $this->postcode;
-        return empty($address) ? "Address details empty" : $address;
+        return $this->repository->__toString();
     }
 }

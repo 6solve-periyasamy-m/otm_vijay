@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
+use App\Models\Order\OrderCustomer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\Order\OrderCustomer;
 
 interface OrdersCustomerRepositoryInterface {
 }

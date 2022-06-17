@@ -2,8 +2,8 @@
 
 @php
     /**
-     * @var \App\Models\Tour $tour
-     * @var \App\Models\Customer|null $customer
+     * @var \App\Models\Tour\Tour $tour
+     * @var \App\Models\Booking\BookingTraveller|null $customer
      */
 @endphp
 
@@ -102,11 +102,9 @@
                 <div class="form-group col-md-6">
                     <label class="col-md-12 mb-0">Room Sharing Group</label>
                     <select name="lead_group" class="w-100">
-                        @foreach($groups as $group)
-                            <option value="{{ $group->id }}" @if(isset($leadTraveller) && $leadTraveller?->group?->id == $group->id) selected @endif>
-                                {{ $group->name }}
-                            </option>
-                        @endforeach
+                        @for($group = 1; $group < 31; $group++)
+                            <option value="{{ $group }}">Room {{ $group }}</option>
+                        @endfor
                     </select>
                 </div>
 
@@ -151,8 +149,9 @@
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Home Country</label>
                         <div class="col-md-12">
-                            <select name="lead_home_country" class="w-100">
-                                @foreach(\App\Models\Country::orderBy('name', 'asc')->get() as $country)
+                            <select name="lead_home_country" class="w-100" required>
+                                <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
+                                @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->homeAddress?->country_id == $country->id) selected @endif>
                                         {{ $country->name }}
                                     </option>
@@ -210,8 +209,9 @@
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
-                            <select name="lead_billing_country" class="w-100">
-                                @foreach(\App\Models\Country::orderBy('name', 'asc')->get() as $country)
+                            <select name="lead_billing_country" class="w-100" required>
+                                <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
+                                @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
                                     <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->billingAddress?->country_id == $country->id) selected @endif>
                                         {{ $country->name }}
                                     </option>
@@ -249,7 +249,7 @@
                         <select name="outbound" class="w-100">
                             @foreach($flights['outbound'] as $flight)
                                 <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
-                                    {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
+                                    {{ $flight['details'] }} - {{ f_currency($flight['cost']) }}
                                 </option>
                             @endforeach
                         </select>
@@ -265,7 +265,7 @@
                         <select name="inbound" class="w-100">
                             @foreach($flights['inbound'] as $flight)
                                 <option value="{{ $flight['id'] }}" @if($flight['selected']) selected @endif>
-                                    {{ $flight['details'] }} - {{ StringFormatter::formatCurrency($flight['cost']) }}
+                                    {{ $flight['details'] }} - {{ f_currency($flight['cost']) }}
                                 </option>
                             @endforeach
                         </select>
@@ -289,7 +289,7 @@
             </div>
         </div>
         @php $additionals = 0 @endphp
-        @foreach($additionalTravellers as $traveller)
+        @foreach($additionalTravellers ?? [] as $traveller)
             @if(!isset($traveller)) @continue @endif
             @include('partials.customer.booking.traveller', ['number' => $additionals, 'traveller' => $traveller,])
             @php $additionals++ @endphp
@@ -330,7 +330,7 @@
         );
 
         function addCustomer() {
-            @if ($stock_control)
+            @if ($tour->stock_control_active)
                 if (available <= 0) {
                     alert('There is not enough stock for more customers');
                     return;

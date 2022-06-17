@@ -3,11 +3,13 @@
 namespace App\Models\Flight;
 
 use App\Models\TravelClass;
-use App\Repository\StockRepository;
+use App\Repository\Model\Flight\FlightInventoryRepository;
+use Database\Factories\Flight\FlightInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use StringFormatter;
 
 /**
  * App\Models\Flight\FlightInventory
@@ -47,6 +48,8 @@ use StringFormatter;
  * @property-read Collection|FlightInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
  * @property-read TravelClass $travelClass
+ * @property-read FlightInventoryRepository $repository
+ * @method static FlightInventoryFactory factory(...$parameters)
  * @method static Builder|FlightInventory newModelQuery()
  * @method static Builder|FlightInventory newQuery()
  * @method static QueryBuilder|FlightInventory onlyTrashed()
@@ -72,7 +75,7 @@ use StringFormatter;
  */
 class FlightInventory extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory;
 
     protected array $cascadeDeletes = ['flightInventoryTour'];
     protected $fillable = ['flight_id', 'travel_class_id', 'flight_number', 'check_in', 'departs_at', 'arrives_at', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'currency_id', 'notes',];
@@ -84,6 +87,8 @@ class FlightInventory extends Model
         'purchase_price' => 'double',
         'sales_price' => 'double',
     ];
+
+    private FlightInventoryRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -126,11 +131,6 @@ class FlightInventory extends Model
         return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
     }
 
-    public function tourComponents(): HasMany
-    {
-        return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
-    }
-
     public function departureAirport(): HasOneThrough
     {
         return $this->hasOneThrough(Airport::class, Flight::class, 'departure_airport_id', 'id');
@@ -156,7 +156,7 @@ class FlightInventory extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getFlightStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getUsedOnTourCountAttribute(): int
@@ -164,8 +164,19 @@ class FlightInventory extends Model
         return $this->tourComponents()->count();
     }
 
+    public function tourComponents(): HasMany
+    {
+        return $this->hasMany(FlightInventoryTour::class, 'flight_inventory_id');
+    }
+
     public function __toString(): string
     {
-        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . StringFormatter::formatDateTime($this->departs_at) . " to " . StringFormatter::formatDateTime($this->arrives_at) . ")";
+        return "{$this->component} - {$this->flight_number} ({$this->travelClass}) (" . f_datetime($this->departs_at) . " to " . f_datetime($this->arrives_at) . ")";
+    }
+
+    public function getRepositoryAttribute(): FlightInventoryRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new FlightInventoryRepository($this);
+        return $this->internal_repository;
     }
 }

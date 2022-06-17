@@ -5,10 +5,10 @@ namespace App\Transforms;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Tour\TourCategory;
-use App\Repository\AccommodationComponentRepository;
-use App\Repository\ActivityComponentRepository;
-use App\Repository\FlightComponentRepository;
-use App\Repository\TransportComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
+use App\Repository\Model\Activity\ActivityInventoryRepository;
+use App\Repository\Model\Flight\FlightInventoryRepository;
+use App\Repository\Model\Transport\TransportInventoryRepository;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 
@@ -72,13 +72,13 @@ class TourTransforms implements TourTransformsInterface
         return $data;
     }
 
-    public static function getAccommodationInventoryDataTable(Tour $tour, $from = "", $to = "")
+    public static function getAccommodationInventoryDataTable(Tour $tour, $from = "", $to = ""): array
     {
         $dateFrom = null;
         $dateTo = null;
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
-        return ["data" => AccommodationComponentRepository::getAvailableBetweenDates($tour, $dateFrom, $dateTo),];
+        return ["data" => AccommodationInventoryRepository::getBetweenDates($dateFrom, $dateTo, $tour),];
     }
 
     public static function getActivityInventoryDataTable(Tour $tour, $from = "", $to = "")
@@ -87,7 +87,7 @@ class TourTransforms implements TourTransformsInterface
         $dateTo = null;
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
-        return ["data" => ActivityComponentRepository::getBetweenDates($tour, $dateFrom, $dateTo),];
+        return ["data" => ActivityInventoryRepository::getBetweenDates($dateFrom, $dateTo, $tour),];
     }
 
     public static function getTransportInventoryDataTable(Tour $tour, $from = "", $to = "")
@@ -96,7 +96,7 @@ class TourTransforms implements TourTransformsInterface
         $dateTo = null;
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
-        return ["data" => TransportComponentRepository::getBetweenDates($tour, $dateFrom, $dateTo),];
+        return ["data" => TransportInventoryRepository::getBetweenDates($dateFrom, $dateTo, $tour),];
     }
 
     public static function getFlightInventoryDataTable(Tour $tour, $from = "", $to = "")
@@ -105,7 +105,7 @@ class TourTransforms implements TourTransformsInterface
         $dateTo = null;
         try { if (!empty($from)) $dateFrom = Carbon::parse($from); } catch (InvalidFormatException $ignored) {}
         try { if (!empty($to)) $dateTo = Carbon::parse($to); } catch (InvalidFormatException $ignored) {}
-        return ["data" => FlightComponentRepository::getBetweenDates($tour, $dateFrom, $dateTo),];
+        return ["data" => FlightInventoryRepository::getBetweenDates($dateFrom, $dateTo, $tour),];
     }
 
     public static function getSelectTourCategories($filter)

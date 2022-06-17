@@ -1,7 +1,7 @@
 <tr>
     <td><a href="{{ route('accommodations.view', ['accommodation' => $accommodation,]) }}">{{ $name }}</a></td>
     <td>{{ $description }}</td>
-    <td>{{ StringFormatter::formatDate($audit_date) }}</td>
+    <td>{{ f_date($audit_date) }}</td>
     <td>{{ $address }}</td>
     <td>{{ $currency }}</td>
     <td class="actions">

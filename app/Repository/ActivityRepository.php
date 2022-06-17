@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\Tour\Tour;
 use App\Models\Activity\Activity;
+use App\Models\Tour\Tour;
 
 interface ActivityRepositoryInterface 
 {

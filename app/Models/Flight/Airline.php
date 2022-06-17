@@ -3,8 +3,10 @@
 namespace App\Models\Flight;
 
 use App\Models\Helper\SimpleModel;
+use Database\Factories\Flight\AirlineFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -18,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @method static AirlineFactory factory(...$parameters)
  * @method static Builder|Airline newModelQuery()
  * @method static Builder|Airline newQuery()
  * @method static QueryBuilder|Airline onlyTrashed()
@@ -33,7 +36,7 @@ use Illuminate\Support\Carbon;
  */
 class Airline extends SimpleModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = ['name',];
 

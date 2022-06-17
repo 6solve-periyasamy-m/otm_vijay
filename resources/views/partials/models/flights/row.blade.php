@@ -3,7 +3,7 @@
     <td>{{ $flight->departureAirport->name }}</td>
     <td>{{ $flight->arrivalAirport->name }}</td>
     <td>{{ $is_domestic ? "Domestic" : "International" }}</td>
-    <td>{{ StringFormatter::formatDate($available_from) }}</td>
+    <td>{{ f_date($available_from) }}</td>
     <td>{{ $notes }}</td>
     <td class="actions-3">
         @can('create', \App\Models\Flight\Flight::class)

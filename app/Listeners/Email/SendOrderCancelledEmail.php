@@ -3,9 +3,8 @@
 namespace App\Listeners\Email;
 
 use App\Events\Order\OrderCancelledEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Events\Parent\OrderEvent;
-use App\Repository\MailRepository;
+use App\Repository\Mailing\MailRepository;
 
 class SendOrderCancelledEmail
 {

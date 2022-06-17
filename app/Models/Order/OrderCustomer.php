@@ -11,9 +11,11 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
-use App\Repository\GroupRepository;
-use App\Repository\OrderRepository;
+use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Model\Order\OrderCustomerRepository;
+use App\Repository\RoomingRepository;
 use Carbon\Carbon;
+use Database\Factories\Order\OrderCustomerFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,7 +28,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon as SupportCarbon;
-use Illuminate\Support\Collection;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Order\OrderCustomer
@@ -47,6 +50,7 @@ use Illuminate\Support\Collection;
  * @property SupportCarbon|null $created_at
  * @property SupportCarbon|null $updated_at
  * @property SupportCarbon|null $deleted_at
+ * @property-read SupportCollection|OrderAccommodation[] $orderAccommodation
  * @property-read SupportCollection|OrderCustomerAdjustment[] $adjustments Customer specific price adjustments
  * @property-read int|null $adjustments_count Amount of customer specific adjustments
  * @property-read Customer|null $customer The customer details
@@ -59,6 +63,9 @@ use Illuminate\Support\Collection;
  * @property-read bool $cancelled Whether the customer is cancelled
  * @property-read string $lead_booker_name The full name of the lead booker
  * @property-read Carbon $ordered_on When the order was placed
+ * @property-read float $adjustment_total The sum of all adjustments for the OrderCustomer
+ * @property-read OrderCustomerRepository $repository The repository used for calculations and storage
+ * @property-read OrderComponentRepository[] $components A generified list of order components
  * @property-read Group|null $primary_group The primary group of the customer
  * @property-read SupportCollection|Group[] $groups All groups the customer is in
  * @property-read int|null $groups_count How many groups the customer is in
@@ -73,6 +80,7 @@ use Illuminate\Support\Collection;
  * @property-read int|null $order_merchandise_count How many extras the customer has ordered
  * @property-read SupportCollection|OrderTransport[] $orderTransports What transport the customer is taking
  * @property-read int|null $order_transports_count How many transport the customer is taking
+ * @method static OrderCustomerFactory factory(...$parameters)
  * @method static Builder|OrderCustomer newModelQuery()
  * @method static Builder|OrderCustomer newQuery()
  * @method static QueryBuilder|OrderCustomer onlyTrashed()
@@ -101,11 +109,13 @@ class OrderCustomer extends Model
 {
     use HasFactory;
     use SoftDeletes, CascadeSoftDeletes;
+    use HasRelationships;
 
     protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',
         'internal_notes', 'external_notes', 'accommodation_notes', 'activity_notes', 'flight_notes', 'transport_notes',];
     protected array $cascadeDeletes = ['orderCustomerGroups', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
     protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double',];
+    private OrderCustomerRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -146,27 +156,17 @@ class OrderCustomer extends Model
         return $this->hasMany(OrderTransport::class, 'order_customer_id');
     }
 
-    public function adjustments(): HasMany
-    {
-        return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
-    }
-
     public function orderMerchandise(): HasMany
     {
         return $this->hasMany(OrderMerchandise::class, 'order_customer_id');
     }
 
-    public function groups(): BelongsToMany
+    public function orderAccommodation(): HasManyDeep
     {
-        return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
-    }
-
-    /**
-     * @return OrderAccommodation[]
-     */
-    public function orderAccommodation(): array
-    {
-        return GroupRepository::getOrderCustomerAccommodation($this);
+        return $this->hasManyDeep(OrderAccommodation::class,
+            [OrderCustomerGroup::class, Group::class],
+            ['order_customer_id', 'id', 'group_id']
+        );
     }
 
     public function getCancelledAttribute(): bool
@@ -201,12 +201,17 @@ class OrderCustomer extends Model
 
     public function getIsLeadBookerAttribute(): bool
     {
-        return OrderRepository::isLeadBooker($this->order, $this->customer);
+        return $this->order->repository->isLeadBooker($this->customer);
     }
 
     public function getPrimaryGroupAttribute(): ?Group
     {
         return $this->groups()->first();
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, OrderCustomerGroup::class)->using(OrderCustomerGroup::class);
     }
 
     public function getHasSurchargeAttribute(): bool
@@ -219,6 +224,38 @@ class OrderCustomer extends Model
 
     public function getHasOccupancyAttribute(): bool
     {
-        return OrderRepository::checkOccupancy($this);
+        return RoomingRepository::checkOccupancy($this);
+    }
+
+    /**
+     * @return float The sum of all adjustments for the OrderCustomer
+     */
+    public function getAdjustmentTotalAttribute(): float
+    {
+        return $this->adjustments()->sum('amount');
+    }
+
+    public function adjustments(): HasMany
+    {
+        return $this->hasMany(OrderCustomerAdjustment::class, 'order_customer_id');
+    }
+
+    public function getRepositoryAttribute(): OrderCustomerRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new OrderCustomerRepository($this);
+        return $this->internal_repository;
+    }
+
+    public function getComponentsAttribute(): array
+    {
+        return $this->repository->getComponents();
+    }
+
+    /**
+     * @return array List of all additional costs for the order
+     */
+    public function getAdditionalCosts(): array
+    {
+        return $this->repository->getAdditionalCosts();
     }
 }

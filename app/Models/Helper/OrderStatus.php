@@ -15,6 +15,11 @@ enum OrderStatus: int
     case OCCUPANCY_NOT_SET = 4;
     case UNKNOWN = 999;
 
+    public function description(): string
+    {
+        return $this->getStatusArray()['status'];
+    }
+
     public function getStatusArray(): array
     {
         return match ($this) {
@@ -28,11 +33,6 @@ enum OrderStatus: int
             self::OCCUPANCY_NOT_SET => ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'],
             self::UNKNOWN => ['status' => 'Status Unknown', 'color' => 'dark'],
         };
-    }
-
-    public function description(): string
-    {
-        return $this->getStatusArray()['status'];
     }
 
     public function color(): string

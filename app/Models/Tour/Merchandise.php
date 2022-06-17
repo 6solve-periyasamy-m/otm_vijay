@@ -4,7 +4,8 @@ namespace App\Models\Tour;
 
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
-use App\Repository\StockRepository;
+use App\Repository\Model\Tour\MerchandiseRepository;
+use Database\Factories\Tour\MerchandiseFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,6 +39,8 @@ use Illuminate\Validation\Rule;
  * @property-read Collection|OrderMerchandise[] $orderMerchandise
  * @property-read int|null $order_merchandise_count
  * @property-read Tour $tour
+ * @property-read MerchandiseRepository $repository
+ * @method static MerchandiseFactory factory(...$parameters)
  * @method static Builder|Merchandise newModelQuery()
  * @method static Builder|Merchandise newQuery()
  * @method static QueryBuilder|Merchandise onlyTrashed()
@@ -64,6 +67,8 @@ class Merchandise extends Model
 
     protected $fillable = ['name', 'tour_component_type', 'stock', 'purchase_price', 'tour_sales_price', 'notes', 'image_url'];
     protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+
+    private MerchandiseRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -107,11 +112,17 @@ class Merchandise extends Model
 
     public function getUsedStockAttribute(): int
     {
-        return StockRepository::getExtraStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getAvailableStockAttribute(): int
     {
-        return $this->stock - $this->used_stock;
+        return $this->repository->getAvailableStock();
+    }
+
+    public function getRepositoryAttribute(): MerchandiseRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new MerchandiseRepository($this);
+        return $this->internal_repository;
     }
 }

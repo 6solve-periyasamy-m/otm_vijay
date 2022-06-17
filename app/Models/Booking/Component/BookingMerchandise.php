@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Models\Booking\Component;
+
+use App\Models\Booking\BookingTraveller;
+use App\Models\Tour\Merchandise;
+use App\Repository\Model\Booking\Component\BookingMerchandiseRepository;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+
+/**
+ * App\Models\Booking\BookingMerchandise
+ *
+ * @property int $id
+ * @property int $merchandise_id
+ * @property int $booking_traveller_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Merchandise|null $tourComponent
+ * @property-read BookingTraveller $traveller
+ * @property-read BookingMerchandiseRepository $repository
+ * @method static Builder|BookingMerchandise newModelQuery()
+ * @method static Builder|BookingMerchandise newQuery()
+ * @method static Builder|BookingMerchandise query()
+ * @method static Builder|BookingMerchandise whereBookingTravellerId($value)
+ * @method static Builder|BookingMerchandise whereCreatedAt($value)
+ * @method static Builder|BookingMerchandise whereId($value)
+ * @method static Builder|BookingMerchandise whereMerchandiseId($value)
+ * @method static Builder|BookingMerchandise whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
+class BookingMerchandise extends Model
+{
+    use HasFactory;
+
+    protected $guarded = [];
+
+    private BookingMerchandiseRepository $internal_repository;
+
+    public function traveller(): BelongsTo
+    {
+        return $this->belongsTo(BookingTraveller::class, 'booking_traveller_id');
+    }
+
+    public function tourComponent(): BelongsTo
+    {
+        return $this->belongsTo(Merchandise::class, 'merchandise_id');
+    }
+
+    public function getRepositoryAttribute(): BookingMerchandiseRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new BookingMerchandiseRepository($this);
+        return $this->internal_repository;
+    }
+}

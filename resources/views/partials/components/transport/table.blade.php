@@ -38,11 +38,11 @@ $(document).ready(function() {
             <tr>
                 <td>{{ $transportInventory->travelClass->name }}</td>
                 <td>
-                    {{ StringFormatter::formatDateTime($transportInventory->departs_at) }}&nbsp
+                    {{ f_datetime($transportInventory->departs_at) }}&nbsp
                     <input type="checkbox" disabled @if($transportInventory->departure_time_confirmed == 1) checked @endif>
                 </td>
                 <td>
-                    {{ StringFormatter::formatDateTime($transportInventory->arrives_at) }}
+                    {{ f_datetime($transportInventory->arrives_at) }}
                     <input type="checkbox" disabled @if($transportInventory->arrival_time_confirmed == 1) checked @endif>
                 </td>
                 <td>
@@ -52,8 +52,8 @@ $(document).ready(function() {
                     {{$transportInventory->stock - $transportInventory->used_stock}}/{{ $transportInventory->stock }}<br/>
                     ({{$transportInventory->used_stock}} Sold)
                 </td>
-                <td>{{ StringFormatter::formatCurrency($transportInventory->purchase_price) }}</td>
-                <td>{{ StringFormatter::formatCurrency($transportInventory->sales_price) }}</td>
+                <td>{{ f_currency($transportInventory->purchase_price) }}</td>
+                <td>{{ f_currency($transportInventory->sales_price) }}</td>
                 <td>{{ $transportInventory->notes }}</td>
                 <td class="actions-3">
                     @can('create', \App\Models\Transport\TransportInventory::class)

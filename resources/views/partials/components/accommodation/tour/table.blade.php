@@ -54,18 +54,18 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Repository\AccommodationComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(23, 59, 59)) as $inventory)
+    @foreach(\App\Repository\Model\Accommodation\AccommodationInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
             <td>{{ $inventory->component->address }}</td>
             <td>{{ $inventory->roomType }}</td>
             <td>{{ $inventory->boardType }}</td>
             <td>
-                {{ StringFormatter::formatDateTime($inventory->check_in) }}&nbsp
+                {{ f_datetime($inventory->check_in) }}&nbsp
                 <input type="checkbox" disabled @if($inventory->check_in_time_confirmed == 1) checked @endif>
             </td>
             <td>
-                {{ StringFormatter::formatDateTime($inventory->check_out) }}&nbsp
+                {{ f_datetime($inventory->check_out) }}&nbsp
                 <input type="checkbox" disabled @if($inventory->check_out_time_confirmed == 1) checked @endif>
             </td>
             <td>
@@ -75,8 +75,8 @@
                 {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
                 ({{$inventory->used_stock}} Sold)
             </td>
-            <td>{{ StringFormatter::formatCurrency($inventory->purchase_price) }}</td>
-            <td>{{ StringFormatter::formatCurrency($inventory->sales_price) }}</td>
+            <td>{{ f_currency($inventory->purchase_price) }}</td>
+            <td>{{ f_currency($inventory->sales_price) }}</td>
             <td>{{ $inventory->notes }}</td>
         </tr>
     @endforeach

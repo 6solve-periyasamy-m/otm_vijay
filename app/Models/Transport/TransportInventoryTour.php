@@ -5,7 +5,8 @@ namespace App\Models\Transport;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Tour;
-use App\Repository\TransportComponentRepository;
+use App\Repository\Model\Transport\TransportInventoryTourRepository;
+use Database\Factories\Transport\TransportInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use StringFormatter;
 
 /**
  * App\Models\Transport\TransportInventoryTour
@@ -44,6 +44,8 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|TransportInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @property-read TransportInventoryTourRepository $repository
+ * @method static TransportInventoryTourFactory factory(...$parameters)
  * @method static Builder|TransportInventoryTour newModelQuery()
  * @method static Builder|TransportInventoryTour newQuery()
  * @method static QueryBuilder|TransportInventoryTour onlyTrashed()
@@ -67,6 +69,8 @@ class TransportInventoryTour extends Model
     protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+
+    private TransportInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -106,11 +110,6 @@ class TransportInventoryTour extends Model
         return $this->hasMany(TransportInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent(): TransportInventoryTour
-    {
-        return TransportComponentRepository::getParentComponent($this);
-    }
-
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
@@ -118,12 +117,7 @@ class TransportInventoryTour extends Model
 
     public function __toString(): string
     {
-        $inventory = $this->transportInventory;
-        $component = $inventory->transport;
-        return $component->name . ' (' . $component->departureAddress->name . ' to ' . $component->arrivalAddress->name . ')' .
-            ' (' . $component->transportType->name . ') ' .
-            ' (' . StringFormatter::formatDateTime($inventory->departs_at) . ' to ' . StringFormatter::formatDateTime($inventory->arrives_at) . ')' .
-            ' (' . $inventory->travelClass->name . ')';
+        return $this->repository->__toString();
     }
 
     public function getTourNameAttribute(): string
@@ -143,16 +137,21 @@ class TransportInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included =  $this->parent();
+            $included = $this->parent();
         }
-        if ($included->available_stock > $required-1) {
-            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        if ($included->available_stock > $required - 1) {
+            $keys[0] = 'Included - ' . f_currency(0);
         }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= $required-1) continue;
-            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+            if ($upgrade->upgrade->available_stock <= $required - 1) continue;
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
+    }
+
+    public function parent(): TransportInventoryTour
+    {
+        return $this->repository->getUpgradeParent();
     }
 
     public function getCustomerUpgradeKeyMap(): array
@@ -169,7 +168,7 @@ class TransportInventoryTour extends Model
             if (!$upgrade->upgrade->is_bookable) continue;
             if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
-                $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+                $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
             }
         }
         return $keys;
@@ -177,11 +176,7 @@ class TransportInventoryTour extends Model
 
     public function addToOrder(OrderCustomer $orderCustomer): OrderTransport
     {
-        return OrderTransport::create([
-            'order_customer_id' => $orderCustomer->id,
-            'transport_inventory_tour_id' => $this->id,
-            'cost' => $this->tour_sales_price,
-        ]);
+        return $this->repository->grantToCustomer($orderCustomer)->get();
     }
 
     public function getUsedTourStockAttribute(): int
@@ -191,5 +186,11 @@ class TransportInventoryTour extends Model
             if (!$orderComponent->isCancelled()) $used++;
         }
         return $used;
+    }
+
+    public function getRepositoryAttribute(): TransportInventoryTourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TransportInventoryTourRepository($this);
+        return $this->internal_repository;
     }
 }

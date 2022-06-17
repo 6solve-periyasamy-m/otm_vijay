@@ -3,6 +3,7 @@
 namespace App\Models\Activity;
 
 use App\Models\Helper\SimpleModel;
+use Database\Factories\Activity\TicketTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @method static TicketTypeFactory factory(...$parameters)
  * @method static Builder|TicketType newModelQuery()
  * @method static Builder|TicketType newQuery()
  * @method static QueryBuilder|TicketType onlyTrashed()

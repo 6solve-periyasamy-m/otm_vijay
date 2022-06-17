@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity\Activity;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
-use App\Repository\LocationsRepository;
+use App\Repository\Model\Location\AddressRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -34,10 +34,11 @@ class ActivityController extends Controller
             'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            $address = LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'));
+            $address = Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'));
         } else {
             $request->validate(Address::getValidationRules());
-            $address = LocationsRepository::storeAddressFromGenericRequest(null, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+            $address = new Address(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('activity')));
+            $address->repository->save();
         }
         if ($request->has('image') && $request->file('image') != null) {
             $activity->image_url = $request->file('image')->storePublicly('uploads/images');
@@ -68,10 +69,10 @@ class ActivityController extends Controller
             'notes' => $request->input('notes'),
         ]);
         if ($request->input('use_existing') == 'on') {
-            LocationsRepository::cloneAddressToAddress(Address::findOrFail($request->input('address_id')), AddressParent::getParentId('activity'), $activity->address);
+            Address::findOrFail($request->input('address_id'))->repository->cloneToNew(AddressParent::getParentId('activity'), $activity->address);
         } else {
             $request->validate(Address::getValidationRules());
-            LocationsRepository::storeAddressFromGenericRequest($activity->address, AddressParent::getParentId('activity'), $request, $request->input('name'), '');
+            $activity->address->update(AddressRepository::getArrayFromGenericRequest($request, $request->input('name'), AddressParent::getParentId('activity')));
         }
         if ($request->has('image') && $request->file('image') != null) {
             if (isset($activity->image_url)) {

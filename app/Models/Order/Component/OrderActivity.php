@@ -6,6 +6,7 @@ use App\Models\Activity\Activity;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Order\Component\OrderActivityRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $tour_sales_price
  * @property-read OrderCustomer $orderCustomer
  * @property-read ActivityInventoryTour $tourComponent
+ * @property-read OrderActivityRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderActivity newModelQuery()
  * @method static Builder|OrderActivity newQuery()
  * @method static QueryBuilder|OrderActivity onlyTrashed()
@@ -58,9 +60,20 @@ class OrderActivity extends Model
     protected $fillable = ['order_customer_id', 'activity_inventory_tour_id', 'cost'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderActivityRepository $internal_repository;
+
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
         return OrderActivity::where('order_customer_id', $orderCustomerId)->get();
+    }
+
+    public static function compare(OrderActivity $a, OrderActivity $b): int
+    {
+        $aStart = $a->tourComponent->inventory->starts_at;
+        $bStart = $b->tourComponent->inventory->starts_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
     }
 
     public function orderCustomer(): BelongsTo
@@ -108,19 +121,16 @@ class OrderActivity extends Model
         return $this->tourComponent->tour_sales_price;
     }
 
+    public function getRepositoryAttribute(): OrderActivityRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderActivityRepository($this);
+        return $this->internal_repository;
+    }
+
     public function swap(ActivityInventoryTour $swap)
     {
         $this->activity_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
-    }
-
-    public static function compare(OrderActivity $a, OrderActivity $b): int
-    {
-        $aStart = $a->tourComponent->inventory->starts_at;
-        $bStart = $b->tourComponent->inventory->starts_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Model\Order\Component\OrderTransportRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property-read OrderCustomer|null $orderCustomer
  * @property-read TransportInventoryTour|null $tourComponent
  * @property-read TransportInventoryTour|null $transportInventoryTour
+ * @property-read OrderTransportRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderTransport newModelQuery()
  * @method static Builder|OrderTransport newQuery()
  * @method static QueryBuilder|OrderTransport onlyTrashed()
@@ -58,9 +60,20 @@ class OrderTransport extends Model
     protected $fillable = ['order_customer_id', 'transport_inventory_tour_id', 'cost'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderTransportRepository $internal_repository;
+
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
         return OrderTransport::where('order_customer_id', $orderCustomerId)->get();
+    }
+
+    public static function compare(OrderTransport $a, OrderTransport $b): int
+    {
+        $aStart = $a->tourComponent->inventory->departs_at;
+        $bStart = $b->tourComponent->inventory->departs_at;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
     }
 
     public function orderCustomer(): BelongsTo
@@ -108,19 +121,16 @@ class OrderTransport extends Model
         return $this->tourComponent->tour_sales_price;
     }
 
+    public function getRepositoryAttribute(): OrderTransportRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderTransportRepository($this);
+        return $this->internal_repository;
+    }
+
     public function swap(TransportInventoryTour $swap)
     {
         $this->transport_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
-    }
-
-    public static function compare(OrderTransport $a, OrderTransport $b): int
-    {
-        $aStart = $a->tourComponent->inventory->departs_at;
-        $bStart = $b->tourComponent->inventory->departs_at;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 }

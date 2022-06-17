@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Tour\Tour;
-use App\Repository\TourRepository;
 use Illuminate\Console\Command;
 
 class RunUpgradeRetrospective extends Command
@@ -40,7 +39,7 @@ class RunUpgradeRetrospective extends Command
     public function handle()
     {
         foreach (Tour::all() as $tour) {
-            TourRepository::fixUpgrades($tour);
+            $tour->repository->fixUpgrades();
         }
         return 0;
     }

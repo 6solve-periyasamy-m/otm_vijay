@@ -9,18 +9,16 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Tour\Merchandise;
-use App\Models\Order\Order;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
-use App\Models\Order\OrderCustomer;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
-use App\Repository\CustomerAuthenticationRepository;
-use App\Repository\CustomerDashboardRepository;
-use App\Repository\OrderRepository;
-use App\Repository\SettingsRepository;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
+use App\Repository\Model\Order\OrderRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -30,7 +28,7 @@ class CustomerTourController extends Controller
     {
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (isset($reference)) {
-            $order = OrderRepository::getOrderFromBookingReference($reference);
+            $order = OrderRepository::getFromBookingReference($reference);
         } else {
             $order = $customer->orders()->orderByDesc('ordered_on')->first();
         }
@@ -47,15 +45,19 @@ class CustomerTourController extends Controller
             }
         }
         if (!isset($oCustomer)) abort(404);
-        return view('pages.customer.itinerary',
-            ['itinerary' => CustomerDashboardRepository::generateItinerary($oCustomer), 'orderCustomer' => $oCustomer, 'order' => $order, 'orders' => CustomerAuthenticationRepository::getCustomer()->orders, 'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
+        return view('pages.customer.itinerary', [
+            'itinerary' => $oCustomer->repository->getItinerary(),
+            'orderCustomer' => $oCustomer,
+            'order' => $order,
+            'orders' => CustomerAuthenticationRepository::getCustomer()->orders,
+            'editable' => self::getOrderCustomers($order, CustomerAuthenticationRepository::getCustomer()),]);
     }
 
     public function showExtras(?string $reference = null, ?Customer $customer = null)
     {
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (isset($reference)) {
-            $order = OrderRepository::getOrderFromBookingReference($reference);
+            $order = OrderRepository::getFromBookingReference($reference);
         } else {
             foreach ($customer->orders()->orderBy('ordered_on', 'desc')->get() as $o) {
                 if (!$o->cancelled) {
@@ -79,7 +81,7 @@ class CustomerTourController extends Controller
 
         if (!isset($oCustomer)) abort(404);
 
-        $accommodation = $oCustomer->orderAccommodation()->getIterator();
+        $accommodation = collect($oCustomer->orderAccommodation)->getIterator();
         $accommodation->uasort([OrderAccommodation::class, 'compare']);
         $activities = $oCustomer->orderActivities->getIterator();
         $activities->uasort([OrderActivity::class, 'compare']);
@@ -102,7 +104,7 @@ class CustomerTourController extends Controller
 
     public function purchaseExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = OrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
@@ -110,7 +112,7 @@ class CustomerTourController extends Controller
             if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
             if (isset($customer->email_address) && isset($customer->password)) abort(404);
         }
-        $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
+        $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
         $tourComponent = $this->getComponent($componentType, $componentId);
@@ -133,21 +135,21 @@ class CustomerTourController extends Controller
 
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
     {
-        $order = OrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
         $customer = $customer ?? CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         if (CustomerAuthenticationRepository::getCustomer()->id != $customer->id) {
             if ($order->leadBooker->customer_id != CustomerAuthenticationRepository::getCustomer()->id) abort(404);
         }
-        $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
+        $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
         $tourComponent = $this->getComponent($componentType, $componentId);
         if (!isset($tourComponent)) abort(404);
         if (!$tourComponent->is_bookable) abort(404);
 
-        if (!(SettingsRepository::getBoolean('payment.required', true))) abort(404);
+        if (!(flag('payment.required', true))) abort(404);
 
         if ($tourComponent->available_stock <= 0) abort(404);
 
@@ -176,10 +178,10 @@ class CustomerTourController extends Controller
     {
         $customer = CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
-        $order = OrderRepository::getOrderFromBookingReference($reference);
+        $order = OrderRepository::getFromBookingReference($reference);
         if (!isset($order) || $order->cancelled) abort(404);
-        if (!OrderRepository::isOrderCustomer($order, $customer)) abort(404);
-        if (OrderRepository::isLeadBooker($order, CustomerAuthenticationRepository::getCustomer())) {
+        if (!$order->repository->isLeadBooker($customer)) abort(404);
+        if ($order->repository->isLeadBooker(CustomerAuthenticationRepository::getCustomer())) {
             $order->update([
                 'external_notes' => $request->input('order_notes'),
             ]);
@@ -198,7 +200,7 @@ class CustomerTourController extends Controller
 
     private function getOrderCustomers(Order $order, Customer $customer): array
     {
-        $orderCustomer = OrderRepository::getOrderCustomer($order, $customer);
+        $orderCustomer = $order->repository->getOrderCustomer($customer);
         if ($order->lead_booker_id !== $orderCustomer->id) return [];
         $data = [$orderCustomer,];
         foreach ($order->orderCustomers as $oCustomer) {

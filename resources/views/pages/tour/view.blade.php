@@ -41,11 +41,11 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>From</p>
-                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_from) }}</h6>
+                <h6 class="fw-bold">{{ f_date($tour->date_from) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>To</p>
-                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_to) }}</h6>
+                <h6 class="fw-bold">{{ f_date($tour->date_to) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Margin</p>
@@ -137,16 +137,16 @@
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
                                     <td style="min-width: 200px">
-                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }}
+                                        {{ f_datetime($accommodationEntry["inventory"]->check_in) }}
                                         <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_in_time_confirmed == 1) checked @endif>
                                         &nbspto&nbsp
-                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}
+                                        {{ f_datetime($accommodationEntry["inventory"]->check_out) }}
                                         <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_out_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->boardType->name }}</td>
-                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_template) }}</td>
+                                    <td>{{ f_bool($accommodationEntry["tour"]->is_template) }}</td>
                                     <td>
                                         @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
                                             <abbr title="{{ $accommodationEntry["tour"]->parent() }}">
@@ -156,7 +156,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($accommodationEntry["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             @if($accommodationEntry["tour"]->tour_component_type !== 'Add-on')
@@ -215,7 +215,7 @@
                             </thead>
                             @foreach($activities as $activity)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($activity["inventory"]->starts_at) }} to {{ StringFormatter::formatDateTime($activity["inventory"]->ends_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($activity["inventory"]->starts_at) }} to {{ f_datetime($activity["inventory"]->ends_at) }}</td>
                                     <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["inventory"]->ticketType->name }}</td>
@@ -228,7 +228,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($activity["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($activity["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Activity\ActivityInventoryTour::class)
                                             @if($activity["tour"]->tour_component_type !== 'Add-on')
@@ -287,7 +287,7 @@
                             </thead>
                             @foreach($flights as $flight)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($flight["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($flight["inventory"]->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($flight["inventory"]->departs_at) }} to {{ f_datetime($flight["inventory"]->arrives_at) }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->flight_type }}</td>
@@ -300,7 +300,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($flight["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($flight["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Flight\FlightInventoryTour::class)
                                             @if($flight["tour"]->tour_component_type !== 'Add-on')
@@ -358,7 +358,7 @@
                             </thead>
                             @foreach($transports as $transport)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($transport["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($transport["inventory"]->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($transport["inventory"]->departs_at) }} to {{ f_datetime($transport["inventory"]->arrives_at) }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>
@@ -370,7 +370,7 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($transport["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($transport["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
                                         @can('update', \App\Models\Transport\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')
@@ -432,7 +432,7 @@
                 </thead>
                 @foreach($tour->getAccommodationTemplateData() as $templateData)
                     <tr>
-                        <th scope="row">{{ StringFormatter::formatDate($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
+                        <th scope="row">{{ f_date($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
                         <td>{{ $templateData['template'] }}</td>
                         <td>{{ implode(', ', $templateData['available']) }}</td>
                     </tr>
@@ -467,7 +467,7 @@
                 <tr>
                     <th scope="row">Deposit</th>
                     <td>With Order</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)</td>
+                    <td>{{ f_currency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>
@@ -477,8 +477,8 @@
                 @foreach($tour->paymentInstallments as $installment)
                     <tr>
                         <th scope="row">Installment</th>
-                        <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($installment->cost) }} ({{ $installment->percentage }}%)</td>
+                        <td>{{ f_date($installment->due_on) }}</td>
+                        <td>{{ f_currency($installment->cost) }} ({{ $installment->percentage }}%)</td>
                         <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -495,8 +495,8 @@
                 @endforeach
                 <tr>
                     <th scope="row">Remaining Balance</th>
-                    <td>{{ StringFormatter::formatDate($tour->final_payment) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)</td>
+                    <td>{{ f_date($tour->final_payment) }}</td>
+                    <td>{{ f_currency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Models\Activity\Activity;
 use App\Models\Booking\Booking;
-use App\Models\Booking\BookingActivity;
+use App\Models\Booking\Component\BookingActivity;
 use App\Models\Tour\Tour;
 
 interface ActivityBookingRepositoryInterface {

@@ -73,13 +73,13 @@
                             </thead>
                             @foreach($inventoryTour->upgrades as $upgrade)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($upgrade->upgrade->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($upgrade->upgrade->accommodationInventory->check_out) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($upgrade->upgrade->accommodationInventory->check_in) }} to {{ f_datetime($upgrade->upgrade->accommodationInventory->check_out) }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->accommodation->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->roomType->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->boardType->name }}</td>
                                     <td>{{ $upgrade->upgrade->accommodationInventory->stock }}</td>
                                     <td>{{ $upgrade->description }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
+                                    <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             <a href="{{ route('accommodation-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

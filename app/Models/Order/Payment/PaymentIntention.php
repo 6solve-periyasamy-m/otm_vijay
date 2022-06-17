@@ -17,7 +17,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
-use App\Repository\OrderRepository;
+use App\Repository\Model\Order\OrderRepository;
 use Carbon\Carbon;
 use DB;
 use Eloquent;
@@ -119,7 +119,7 @@ class PaymentIntention extends Model
     {
         if (!isset($this->data)) return true;
 
-        $order = OrderRepository::getOrderFromBookingReference($this->reference);
+        $order = OrderRepository::getFromBookingReference($this->reference);
         if (!isset($order)) return false;
 
         try {
@@ -162,7 +162,8 @@ class PaymentIntention extends Model
         }
         try {
             DB::commit();
-       event(new OrderEditedEvent($order, true)); } catch (Throwable $e) {
+            event(new OrderEditedEvent($order, true));
+        } catch (Throwable $e) {
             Log::error($e);
             return false;
         }

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\ApiController;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\Booking;
-use App\Models\Booking\BookingActivity;
+use App\Models\Booking\Component\BookingActivity;
 use App\Models\Customer\Customer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\ApiController;
 
 class BookingActivityController extends ApiController
 {

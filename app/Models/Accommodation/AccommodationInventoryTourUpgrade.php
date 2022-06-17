@@ -2,6 +2,7 @@
 
 namespace App\Models\Accommodation;
 
+use App\Repository\Model\Accommodation\AccommodationInventoryTourUpgradeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read AccommodationInventoryTour $base
  * @property-read AccommodationInventoryTour $upgrade
+ * @property-read AccommodationInventoryTourUpgradeRepository $repository
  * @method static Builder|AccommodationInventoryTourUpgrade newModelQuery()
  * @method static Builder|AccommodationInventoryTourUpgrade newQuery()
  * @method static QueryBuilder|AccommodationInventoryTourUpgrade onlyTrashed()
@@ -43,6 +45,7 @@ class AccommodationInventoryTourUpgrade extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['upgrade_id', 'description'];
+    private AccommodationInventoryTourUpgradeRepository $internal_repository;
 
     public function base(): BelongsTo
     {
@@ -52,5 +55,11 @@ class AccommodationInventoryTourUpgrade extends Model
     public function upgrade(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventoryTour::class, 'upgrade_id');
+    }
+
+    public function getRepositoryAttribute(): AccommodationInventoryTourUpgradeRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryTourUpgradeRepository($this);
+        return $this->internal_repository;
     }
 }

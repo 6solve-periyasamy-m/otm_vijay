@@ -4,6 +4,7 @@ namespace App\Models\Order\Component;
 
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
+use App\Repository\Model\Order\Component\OrderMerchandiseRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @property-read Merchandise $merchandise
  * @property-read OrderCustomer $orderCustomer
  * @property-read Merchandise $tourComponent
+ * @property-read OrderMerchandiseRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderMerchandise newModelQuery()
  * @method static Builder|OrderMerchandise newQuery()
  * @method static QueryBuilder|OrderMerchandise onlyTrashed()
@@ -51,6 +53,8 @@ class OrderMerchandise extends Model
 
     protected $fillable = ['merchandise_id', 'order_customer_id', 'cost'];
     protected $casts = ['cost' => 'double',];
+
+    private OrderMerchandiseRepository $internal_repository;
 
     public function orderCustomer(): BelongsTo
     {
@@ -85,5 +89,11 @@ class OrderMerchandise extends Model
     public function getTourSalesPriceAttribute(): float
     {
         return $this->tourComponent->tour_sales_price;
+    }
+
+    public function getRepositoryAttribute(): OrderMerchandiseRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderMerchandiseRepository($this);
+        return $this->internal_repository;
     }
 }

@@ -3,12 +3,12 @@
     <td>{{ isset($tour->event) ? $tour->event->name : "No Event" }}</td>
     <td>{{ isset($tour->category) ? $tour->category->name : "No Category" }}</td>
     <td>{{ $description }}</td>
-    <td>{{ StringFormatter::formatDate($date_from) }}</td>
-    <td>{{ StringFormatter::formatDate($date_to) }}</td>
-    <td>{{ StringFormatter::formatCurrency($base_price_per_person) }}</td>
-    <td>{{ StringFormatter::formatCurrency($margin) }}</td>
-    <td>{{ StringFormatter::formatCurrency($deposit) }}</td>
-    <td>{{ StringFormatter::formatCurrency($single_occupancy_surcharge) }}</td>
+    <td>{{ f_date($date_from) }}</td>
+    <td>{{ f_date($date_to) }}</td>
+    <td>{{ f_currency($base_price_per_person) }}</td>
+    <td>{{ f_currency($margin) }}</td>
+    <td>{{ f_currency($deposit) }}</td>
+    <td>{{ f_currency($single_occupancy_surcharge) }}</td>
     <td>{{ $stock_control_active ? "Yes" : "No" }}</td>
     <td>
         @if($stock_control_active)

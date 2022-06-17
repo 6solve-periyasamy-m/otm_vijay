@@ -7,8 +7,6 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityType;
 use App\Models\Activity\TicketType;
 use App\Models\Order\OrderCustomer;
-use App\Repository\TourRepository;
-use StringFormatter;
 
 interface ActivityTransformsInterface {
     public static function getSelectActivityTypes($filter);
@@ -89,7 +87,7 @@ class ActivityTransforms implements ActivityTransformsInterface
     }
 
     public static function getSelectInventoryForActivity(ActivityInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableActivityForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];
@@ -123,7 +121,7 @@ class ActivityTransforms implements ActivityTransformsInterface
                 $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
                     . ' - ' .
                     ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
-                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
+                        f_currency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

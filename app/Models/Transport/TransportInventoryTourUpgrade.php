@@ -2,6 +2,7 @@
 
 namespace App\Models\Transport;
 
+use App\Repository\Model\Transport\TransportInventoryTourUpgradeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read TransportInventoryTour $base
  * @property-read TransportInventoryTour $upgrade
+ * @property-read TransportInventoryTourUpgradeRepository $repository
  * @method static Builder|TransportInventoryTourUpgrade newModelQuery()
  * @method static Builder|TransportInventoryTourUpgrade newQuery()
  * @method static QueryBuilder|TransportInventoryTourUpgrade onlyTrashed()
@@ -44,6 +46,8 @@ class TransportInventoryTourUpgrade extends Model
 
     protected $fillable = ['upgrade_id', 'description'];
 
+    private TransportInventoryTourUpgradeRepository $internal_repository;
+
     public function base(): BelongsTo
     {
         return $this->belongsTo(TransportInventoryTour::class, 'base_id');
@@ -52,5 +56,11 @@ class TransportInventoryTourUpgrade extends Model
     public function upgrade(): BelongsTo
     {
         return $this->belongsTo(TransportInventoryTour::class, 'upgrade_id');
+    }
+
+    public function getRepositoryAttribute(): TransportInventoryTourUpgradeRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TransportInventoryTourUpgradeRepository($this);
+        return $this->internal_repository;
     }
 }

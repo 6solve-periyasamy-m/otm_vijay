@@ -7,8 +7,6 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\BoardType;
 use App\Models\Accommodation\RoomType;
 use App\Models\Order\OrderCustomer;
-use StringFormatter;
-use App\Repository\TourRepository;
 
 interface AccommodationTransformsInterface {
     public static function getSelectRoomTypes($filter);
@@ -89,7 +87,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
     }
 
     public static function getSelectInventoryForAccommodation(AccommodationInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableAccommodationForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];
@@ -125,7 +123,7 @@ class AccommodationTransforms implements AccommodationTransformsInterface
                 $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
                     . ' - ' .
                     ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
-                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
+                        f_currency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

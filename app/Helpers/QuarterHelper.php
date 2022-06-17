@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
-use App\Repository\SettingsRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -42,7 +41,7 @@ class QuarterHelper
 
     public static function getYearStartDate(): Carbon
     {
-        return Carbon::createFromFormat('Y-m-d', SettingsRepository::getOrDefault('system.year.start', '2022-04-01'));
+        return Carbon::createFromFormat('Y-m-d', setting('system.year.start', '2022-04-01'));
     }
 
     public static function getEndOfQuarter(int $year, int $quarter, ?Carbon $startDate = null): Carbon

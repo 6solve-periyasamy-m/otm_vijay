@@ -8,8 +8,6 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportType;
 use App\Models\TravelClass;
-use App\Repository\TourRepository;
-use StringFormatter;
 
 interface TransportTransformsInterface {
     public static function getSelectTransportTypes($filter);
@@ -113,7 +111,7 @@ class TransportTransforms implements TransportTransformsInterface
     }
 
     public static function getSelectInventoryForTransport(TransportInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableTransportForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];
@@ -147,7 +145,7 @@ class TransportTransforms implements TransportTransformsInterface
                 $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
                     . ' - ' .
                     ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
-                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
+                        f_currency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

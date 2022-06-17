@@ -36,9 +36,9 @@
                 <tr>
                     <td>{{ $flightInventory->flight_number }}</td>
                     <td>{{ $flightInventory->travelClass->name }}</td>
-                    <td>{{ StringFormatter::formatDateTime($flightInventory->check_in) }}</td>
-                    <td>{{ StringFormatter::formatDateTime($flightInventory->departs_at) }}</td>
-                    <td>{{ StringFormatter::formatDateTime($flightInventory->arrives_at) }}</td>
+                    <td>{{ f_datetime($flightInventory->check_in) }}</td>
+                    <td>{{ f_datetime($flightInventory->departs_at) }}</td>
+                    <td>{{ f_datetime($flightInventory->arrives_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
                     </td>
@@ -46,8 +46,8 @@
                         {{$flightInventory->stock - $flightInventory->used_stock}}/{{ $flightInventory->stock }}<br/>
                         ({{$flightInventory->used_stock}} Sold)
                     </td>
-                    <td>{{ StringFormatter::formatCurrency($flightInventory->purchase_price) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($flightInventory->sales_price) }}</td>
+                    <td>{{ f_currency($flightInventory->purchase_price) }}</td>
+                    <td>{{ f_currency($flightInventory->sales_price) }}</td>
                     <td>{{ $flightInventory->notes }}</td>
                     <td class="actions-3">
                         @can('create', \App\Models\Flight\FlightInventory::class)

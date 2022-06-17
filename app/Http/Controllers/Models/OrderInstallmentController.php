@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
-use App\Repository\OrderRepository;
 use Illuminate\Http\Request;
 
 class OrderInstallmentController extends Controller
@@ -43,11 +42,7 @@ class OrderInstallmentController extends Controller
 
     public function resync(Order $order)
     {
-        foreach ($order->installments as $installment)
-        {
-            $installment->delete();
-        }
-        OrderRepository::cloneInstallments($order);
+        $order->repository->resetInstallments();
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

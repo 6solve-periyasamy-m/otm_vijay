@@ -6,7 +6,7 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Group;
-use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Order\Component\OrderAccommodationRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $tour_sales_price
  * @property-read Group $group
  * @property-read AccommodationInventoryTour $tourComponent
+ * @property-read OrderAccommodationRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderAccommodation newModelQuery()
  * @method static Builder|OrderAccommodation newQuery()
  * @method static QueryBuilder|OrderAccommodation onlyTrashed()
@@ -59,9 +60,20 @@ class OrderAccommodation extends Model
     protected $fillable = ['order_customer_id', 'accommodation_inventory_tour_id', 'cost', 'group_id'];
     protected $casts = ['cost' => 'double',];
 
+    private OrderAccommodationRepository $internal_repository;
+
     public static function findByOrderCustomer($orderCustomerId): Collection|array
     {
         return OrderAccommodation::where('order_customer_id', $orderCustomerId)->get();
+    }
+
+    public static function compare(OrderAccommodation $a, OrderAccommodation $b): int
+    {
+        $aStart = $a->tourComponent->inventory->check_in;
+        $bStart = $b->tourComponent->inventory->check_in;
+        if ($aStart->gt($bStart)) return 1;
+        if ($aStart->lt($bStart)) return -1;
+        return 0;
     }
 
     public function group(): BelongsTo
@@ -99,7 +111,6 @@ class OrderAccommodation extends Model
         return true;
     }
 
-
     public function getDetailsAttribute(): string
     {
         return "{$this->tourComponent->inventory} - {$this->tourComponent->booking_policy}";
@@ -115,19 +126,16 @@ class OrderAccommodation extends Model
         return $this->tourComponent->tour_sales_price;
     }
 
+    public function getRepositoryAttribute(): OrderAccommodationRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderAccommodationRepository($this);
+        return $this->internal_repository;
+    }
+
     public function swap(AccommodationInventoryTour $swap)
     {
         $this->accommodation_inventory_tour_id = $swap->id;
         $this->cost = $swap->tour_sales_price;
         $this->save();
-    }
-
-    public static function compare(OrderAccommodation $a, OrderAccommodation $b): int
-    {
-        $aStart = $a->tourComponent->inventory->check_in;
-        $bStart = $b->tourComponent->inventory->check_in;
-        if ($aStart->gt($bStart)) return 1;
-        if ($aStart->lt($bStart)) return -1;
-        return 0;
     }
 }

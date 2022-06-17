@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
-use App\Repository\OrderRepository;
+use App\Repository\Model\Order\AtolRepository;
 use App\Repository\TourRepository;
 use Illuminate\Http\Request;
 
@@ -59,7 +59,7 @@ class TourController extends Controller
     }
 
     public function exportAtol(Tour $tour) {
-        $asset = OrderRepository::generateAllAtolCertificates($tour->orders, $tour->name);
+        $asset = AtolRepository::generateAllAtolCertificates($tour->orders, $tour->name);
         if (!isset($asset)) {
             return back()->withErrors(['msg' => 'Something failed whilst trying to set this up, please try again later']);
         }

@@ -11,9 +11,9 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
-use App\Repository\AccommodationComponentRepository;
-use App\Repository\StockRepository;
-use App\Repository\TourRepository;
+use App\Repository\Model\Tour\TourRepository;
+use App\Repository\RoomingRepository;
+use Database\Factories\Tour\TourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -82,6 +82,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $transport_inventory_count
  * @property-read Collection|TransportInventoryTour[] $transportInventoryTours
  * @property-read int|null $transport_inventory_tours_count
+ * @property-read TourRepository $repository
+ * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
  * @method static QueryBuilder|Tour onlyTrashed()
@@ -119,8 +121,10 @@ class Tour extends Model
 
     protected $fillable = ['event_id', 'name', 'description', 'date_from', 'date_to', 'base_price_per_person', 'margin', 'single_occupancy_surcharge', 'stock_control_active', 'stock', 'deposit', 'booking_form_url', 'tour_category_id', 'is_active', 'notes', 'invoice_footer', 'final_payment', 'terms'];
     protected $casts = ['date_from' => 'date', 'date_to' => 'date', 'final_payment' => 'date', 'is_active' => 'boolean',
-        'base_price_per_person' => 'double','deposit' => 'double', 'margin' => 'double', 'stock_control_active' => 'boolean'];
+        'base_price_per_person' => 'double', 'deposit' => 'double', 'margin' => 'double', 'stock_control_active' => 'boolean'];
     protected array $cascadeDeletes = ['accommodationInventoryTours', 'activityInventoryTours', 'flightInventoryTours', 'transportInventoryTours', 'merchandise', 'paymentInstallments'];
+
+    private TourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -174,19 +178,9 @@ class Tour extends Model
         return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
     }
 
-    public function flightInventoryTours(): HasMany
-    {
-        return $this->hasMany(FlightInventoryTour::class, 'tour_id');
-    }
-
     public function transportInventoryTours(): HasMany
     {
         return $this->hasMany(TransportInventoryTour::class, 'tour_id');
-    }
-
-    public function paymentInstallments(): HasMany
-    {
-        return $this->hasMany(PaymentInstallment::class, 'tour_id');
     }
 
     public function orders(): HasMany
@@ -206,7 +200,7 @@ class Tour extends Model
 
     public function getUsedStock(): int
     {
-        return StockRepository::getTourStock($this);
+        return $this->repository->getUsedStock();
     }
 
     public function getRemainingInstallmentAttribute(): float
@@ -214,6 +208,11 @@ class Tour extends Model
         $cost = $this->base_price_per_person - $this->deposit;
         $cost -= $this->paymentInstallments()->sum('amount');
         return $cost;
+    }
+
+    public function paymentInstallments(): HasMany
+    {
+        return $this->hasMany(PaymentInstallment::class, 'tour_id');
     }
 
     public function getDepositPercentageAttribute(): float
@@ -231,18 +230,29 @@ class Tour extends Model
         return $this->flightInventoryTours()->count() > 0;
     }
 
+    public function flightInventoryTours(): HasMany
+    {
+        return $this->hasMany(FlightInventoryTour::class, 'tour_id');
+    }
+
     public function getAccommodationTemplateData(): array
     {
-        return TourRepository::getTemplateData($this);
+        return $this->repository->getTemplateData();
     }
 
     public function getTemplatesAttribute(): \Illuminate\Support\Collection
     {
-        return AccommodationComponentRepository::getTemplateTourInventory($this);
+        return RoomingRepository::getTemplateTourInventory($this);
     }
 
     public function clone(): Tour
     {
-        return TourRepository::clone($this);
+        return $this->repository->duplicate();
+    }
+
+    public function getRepositoryAttribute(): TourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new TourRepository($this);
+        return $this->internal_repository;
     }
 }

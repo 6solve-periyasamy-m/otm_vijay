@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Exports\BespokeReportExport;
 use App\Models\System\Report;
-use App\Repository\BespokeReportRepository;
-use App\Repository\ReportFieldRepository;
-use App\Repository\ReportRepository;
+use App\Repository\Reporting\BespokeReportRepository;
+use App\Repository\Reporting\ReportFieldRepository;
+use App\Repository\Reporting\ReportRepository;
 use Excel;
 use Illuminate\Http\Request;
 

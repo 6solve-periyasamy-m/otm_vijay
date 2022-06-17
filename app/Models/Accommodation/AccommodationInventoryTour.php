@@ -5,7 +5,8 @@ namespace App\Models\Accommodation;
 use App\Models\Customer\Group;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Tour\Tour;
-use App\Repository\AccommodationComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
+use Database\Factories\Accommodation\AccommodationInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use StringFormatter;
 
 /**
  * App\Models\Accommodation\AccommodationInventoryTour
@@ -46,6 +46,8 @@ use StringFormatter;
  * @property-read int|null $upgrade_parents_count
  * @property-read Collection|AccommodationInventoryTourUpgrade[] $upgrades
  * @property-read int|null $upgrades_count
+ * @property-read AccommodationInventoryTourRepository $repository
+ * @method static AccommodationInventoryTourFactory factory(...$parameters)
  * @method static Builder|AccommodationInventoryTour newModelQuery()
  * @method static Builder|AccommodationInventoryTour newQuery()
  * @method static QueryBuilder|AccommodationInventoryTour onlyTrashed()
@@ -75,6 +77,7 @@ class AccommodationInventoryTour extends Model
         'is_template' => 'boolean',
         'is_bookable' => 'boolean',
     ];
+    private AccommodationInventoryTourRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -114,11 +117,6 @@ class AccommodationInventoryTour extends Model
         return $this->hasMany(AccommodationInventoryTourUpgrade::class, 'upgrade_id');
     }
 
-    public function parent(): AccommodationInventoryTour
-    {
-        return AccommodationComponentRepository::getParentComponent($this);
-    }
-
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class, 'tour_id');
@@ -128,7 +126,7 @@ class AccommodationInventoryTour extends Model
     {
         $inventory = $this->accommodationInventory;
         $component = $inventory->accommodation;
-        return $component->name . ' (' . StringFormatter::formatDateTime($inventory->check_in) . ' to ' . StringFormatter::formatDateTime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
+        return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
     public function getTourNameAttribute(): string
@@ -138,7 +136,7 @@ class AccommodationInventoryTour extends Model
 
     public function getAvailableStockAttribute(): int
     {
-        return $this->inventory->stock - $this->inventory->used_stock;
+        return $this->inventory->available_stock;
     }
 
     public function addToOrder(Group $group): OrderAccommodation
@@ -157,18 +155,22 @@ class AccommodationInventoryTour extends Model
         $keys = [];
         if (empty($upgrades->all())) {
             $upgrades = $this->parent()->upgrades;
-            $included =  $this->parent();
+            $included = $this->parent();
         }
-        if ($included->available_stock > $required-1) {
-            $keys[0] = 'Included - ' . StringFormatter::formatCurrency(0);
+        if ($included->available_stock > $required - 1) {
+            $keys[0] = 'Included - ' . f_currency(0);
         }
         foreach ($upgrades as $upgrade) {
-            if ($upgrade->upgrade->available_stock <= $required-1) continue;
-            $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+            if ($upgrade->upgrade->available_stock <= $required - 1) continue;
+            $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
         }
         return $keys;
     }
 
+    public function parent(): AccommodationInventoryTour
+    {
+        return $this->repository->getUpgradeParent();
+    }
 
     public function getCustomerUpgradeKeyMap(): array
     {
@@ -183,7 +185,7 @@ class AccommodationInventoryTour extends Model
             if (!$upgrade->upgrade->is_bookable) continue;
             if ($upgrade->upgrade->available_stock <= 0) continue;
             if ($this->tour_component_type == 'Included' || $upgrade->upgrade->tour_sales_price >= $this->tour_sales_price) {
-                $keys[$upgrade->id] = $upgrade->description . ' - ' . StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price);
+                $keys[$upgrade->id] = $upgrade->description . ' - ' . f_currency($upgrade->upgrade->tour_sales_price);
             }
         }
         return $keys;
@@ -196,5 +198,11 @@ class AccommodationInventoryTour extends Model
             if (!$orderComponent->isCancelled()) $used++;
         }
         return $used;
+    }
+
+    public function getRepositoryAttribute(): AccommodationInventoryTourRepository
+    {
+        if (!isset($this->internal_repository)) $this->internal_repository = new AccommodationInventoryTourRepository($this);
+        return $this->internal_repository;
     }
 }

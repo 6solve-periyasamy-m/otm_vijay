@@ -31,11 +31,11 @@
             </div>
             <div class="col-12 col-xl-3">
                 <p>Check In</p>
-                <h6 class="fw-bold">{{ StringFormatter::formatDateTime($inventoryTour->flightInventory->check_in) }}</h6>
+                <h6 class="fw-bold">{{ f_datetime($inventoryTour->flightInventory->check_in) }}</h6>
             </div>
             <div class="col-12 col-xl-3">
                 <p>Arrives At</p>
-                <h6 class="fw-bold">{{ StringFormatter::formatDateTime($inventoryTour->flightInventory->arrives_at) }}</h6>
+                <h6 class="fw-bold">{{ f_datetime($inventoryTour->flightInventory->arrives_at) }}</h6>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
                                     <td>{{ $upgrade->upgrade->flightInventory->arrives_at }}</td>
                                     <td>{{ $upgrade->upgrade->flightInventory->stock }}</td>
                                     <td>{{ $upgrade->description }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
+                                    <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Flight\FlightInventoryTour::class)
                                             <a href="{{ route('flight-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

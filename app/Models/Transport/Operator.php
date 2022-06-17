@@ -3,7 +3,7 @@
 namespace App\Models\Transport;
 
 use App\Models\Helper\SimpleModel;
-use Database\Factories\OperatorFactory;
+use Database\Factories\Transport\OperatorFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

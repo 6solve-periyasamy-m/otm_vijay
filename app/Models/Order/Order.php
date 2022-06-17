@@ -3,14 +3,15 @@
 namespace App\Models\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
+use App\Models\Customer\OrderCustomerGroup;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Models\Tour\Tour;
-use App\Repository\OrderRepository;
-use App\Repository\SettingsRepository;
-use Database\Factories\OrderFactory;
+use App\Repository\Model\Order\OrderRepository;
+use Database\Factories\Order\OrderFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Order\Order
@@ -43,8 +46,10 @@ use Illuminate\Support\Carbon;
  * @property string|null $token The token used during the booking process
  * @property-read Collection|ManualAdjustment[] $adjustments The manual adjustments on the order
  * @property-read int|null $adjustments_count The amount of manual adjustments on the order
+ * @property-read int|null $days_until_next_payment The number of days until the next payment is due, or null if all installments are paid
  * @property-read Collection|Customer[] $customers The customers associated with this order
  * @property-read int|null $customers_count The amount of customers associated with this order
+ * @property-read OrderRepository $repository The repository used for calculations
  * @property-read float $calculated_deposit The calculated deposit based on customer count
  * @property-read float $cost The cost of the order before adjustments
  * @property-read int $customer_count The amount of customers on the order
@@ -56,8 +61,12 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining Remaining amount left to be paid
  * @property-read float $remaining_installment Remaining cost on the due installment
  * @property-read float $remaining_percentage Percentage of the total cost left to be paid after deposit and installments
+ * @property-read float $order_adjustment_total The sum of all order adjustments, not including customer adjustments
+ * @property-read float $total_adjustments The sum of all adjustments on the order and customers
  * @property-read OrderStatus $status The status of the order
+ * @property-read Collection|Group[] $groups List of groups
  * @property-read float $total The total cost of the order
+ * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
  * @property-read Collection|OrderInstallment[] $installments The installments for the order
  * @property-read int|null $installments_count The amount of installments for the order
  * @property-read Collection|Invoice[] $invoices The invoices for the order
@@ -95,12 +104,14 @@ use Illuminate\Support\Carbon;
  */
 class Order extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes, HasFactory;
+    use SoftDeletes, CascadeSoftDeletes, HasFactory, HasRelationships;
 
     protected $fillable = ['quote_id', 'tour_id', 'lead_booker_id', 'token', 'booking_reference', 'ordered_on', 'internal_notes', 'external_notes', 'deposit', 'invoice_footer'];
     protected $casts = ['ordered_on' => 'datetime', 'cancelled' => 'boolean', 'deposit' => 'double',];
 
-    protected $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
+    protected array $cascadeDeletes = ['orderCustomers', 'payments', 'adjustments', 'installments', 'invoices'];
+
+    private OrderRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -113,12 +124,14 @@ class Order extends Model
 
     public static function generateBookingReference(Order $order): string
     {
-        return SettingsRepository::get('booking.prefix')
+        return setting('booking.prefix')
             . str_pad($order->tour->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->id, 4, '0', STR_PAD_LEFT)
             . str_pad($order->leadBooker->id, 4, '0', STR_PAD_LEFT)
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
+
+    // Relationships
 
     public function tour(): BelongsTo
     {
@@ -130,19 +143,9 @@ class Order extends Model
         return $this->hasMany(OrderCustomer::class, 'order_id');
     }
 
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class, 'order_id');
-    }
-
     public function leadBooker(): BelongsTo
     {
         return $this->belongsTo(OrderCustomer::class, 'lead_booker_id');
-    }
-
-    public function adjustments(): HasMany
-    {
-        return $this->hasMany(ManualAdjustment::class, 'order_id');
     }
 
     public function reminders(): HasMany
@@ -155,11 +158,6 @@ class Order extends Model
         return $this->hasMany(Invoice::class, 'order_id');
     }
 
-    public function getAdjustmentValue(): float
-    {
-        return OrderRepository::getTotalAdjustedValue($this);
-    }
-
     public function installments(): HasMany
     {
         return $this->hasMany(OrderInstallment::class, 'order_id')->orderBy('due_on');
@@ -170,46 +168,85 @@ class Order extends Model
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
-    public function getNextInstallment(): array
+    public function groups(): HasManyDeep
     {
-        return OrderRepository::getNextPaymentDetails($this);
+        return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
     }
 
-    public function getAdditionals(): array
+    /**
+     * @return float The sum of all adjustments on the order and customers
+     */
+    public function getTotalAdjustmentsAttribute(): float
     {
-        return OrderRepository::getOrderAdditionals($this);
+        return $this->repository->getTotalAdjustedValue();
     }
 
+    /**
+     * @return OrderInstallment|null A temporary installment with details of the next payment, or null if all installments are paid
+     */
+    public function getNextInstallmentAttribute(): ?OrderInstallment
+    {
+        return $this->repository->getNextPaymentDetails();
+    }
+
+    // Attributes
+
+    /**
+     * @return string The full name of the lead booker
+     */
     public function getLeadBookerNameAttribute(): string
     {
         return $this->leadBooker->customer_name;
     }
 
+    /**
+     * @return OrderStatus The current status of the order
+     */
     public function getStatusAttribute(): OrderStatus
     {
-        return OrderRepository::getOrderStatus($this);
+        return $this->repository->getOrderStatus();
     }
 
+    /**
+     * @return float The total amount paid against the order
+     */
     public function getPaidAttribute(): float
     {
-        return OrderRepository::getTotalPaid($this);
+        return $this->payments()->sum('amount');
     }
 
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'order_id');
+    }
+
+    /**
+     * @return float The total cost of the order, or the amount paid if the order is cancelled
+     */
     public function getTotalAttribute(): float
     {
         return $this->cancelled ? $this->paid : $this->cost;
     }
 
+    /**
+     * @return float A summation of all components on the order that cost money (Not including adjustments)
+     */
     public function getCostAttribute(): float
     {
-        return OrderRepository::getCost($this);
+        return $this->repository->getCost();
     }
 
+    /**
+     * @return float The amount left to be paid on the order
+     */
     public function getRemainingAttribute(): float
     {
-        return $this->cancelled ? 0 : OrderRepository::getRemainingToPay($this);
+        return $this->cancelled ? 0 : $this->repository->getRemaining();
     }
 
+    /**
+     * @return float How much is left to be paid after the deposit and all installments
+     */
     public function getRemainingInstallmentAttribute(): float
     {
         $cost = $this->cost - $this->calculated_deposit;
@@ -219,47 +256,95 @@ class Order extends Model
         return $cost;
     }
 
+    /**
+     * @return int The amount of customers on the order
+     */
     public function getCustomerCountAttribute(): int
     {
         return $this->orderCustomers->count();
     }
 
+    /**
+     * @return float What percentage of the total cost is the deposit, or 0 if the cost is 0
+     */
     public function getDepositPercentageAttribute(): float
     {
         return $this->cost == 0 ? 0 : round(($this->calculated_deposit / $this->cost) * 100, 2);
     }
 
+    /**
+     * @return float What percentage of the total cost is the remaining installment, or 0 if the cost is 0
+     */
     public function getRemainingPercentageAttribute(): float
     {
         return $this->cost == 0 ? 0 : round(($this->remaining_installment / $this->cost) * 100, 2);
     }
 
+    /**
+     * @return float The required deposit, calculated from customer count
+     */
     public function getCalculatedDepositAttribute(): float
     {
         return $this->deposit * $this->customer_count;
     }
 
+    /**
+     * @return string Concatenated String of all customer names
+     */
     public function getCustomerNamesAttribute(): string
     {
         $names = "";
         foreach ($this->orderCustomers as $orderCustomer) {
-            $names .= $orderCustomer->customer_name . ', ';
+            $names .= "{$orderCustomer->customer_name}, ";
         }
         return substr($names, 0, -2);
     }
 
-    public function groups(): array
-    {
-        return OrderRepository::getOrderGroups($this);
-    }
-
+    /**
+     * @return bool Does this order contain any ATOL-protected flights?
+     */
     public function getHasAtolAttribute(): bool
     {
-        return OrderRepository::hasFlight($this);
+        return $this->repository->hasFlight();
     }
 
-    public function getAvailableAdditionals(): array
+    /**
+     * @return int|null Returns the days from now, or null if all installments are paid
+     */
+    public function getDaysUntilNextPaymentAttribute(): ?int
     {
-        return OrderRepository::getAllAdditionals($this);
+        $next = $this->next_installment?->due_on;
+        if (!isset($next)) return null;
+        $next = Carbon::parse($next);
+        return $next->isBefore(Carbon::now()) ? ($next->diffInDays(Carbon::now())) * -1 : ($next->diffInDays(Carbon::now()));
+    }
+
+    /**
+     * @return float The sum of all order adjustments, not including customer adjustments
+     */
+    public function getOrderAdjustmentTotalAttribute(): float
+    {
+        return $this->adjustments()->sum('amount');
+    }
+
+    public function adjustments(): HasMany
+    {
+        return $this->hasMany(ManualAdjustment::class, 'order_id');
+    }
+
+    public function getRepositoryAttribute(): OrderRepository
+    {
+        if (!isset ($this->internal_repository)) $this->internal_repository = new OrderRepository($this);
+        return $this->internal_repository;
+    }
+
+    // Functions
+
+    /**
+     * @return array List of all additional costs for the order
+     */
+    public function getAdditionalCosts(): array
+    {
+        return $this->repository->getAdditionalCosts();
     }
 }

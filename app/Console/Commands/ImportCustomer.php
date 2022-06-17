@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Imports\CustomerImport;
-use Illuminate\Console\Command;
 use Excel;
+use Illuminate\Console\Command;
 
 class ImportCustomer extends Command
 {

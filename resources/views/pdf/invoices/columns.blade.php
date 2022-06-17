@@ -32,7 +32,7 @@ $order = $invoice->order;
                 <div class="header">
                     <div class="flex-container titles">
                         <div class="flex-items site-info vert-align">
-                            <img src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ \App\Repository\SettingsRepository::get('company.name') }}" />
+                            <img src="{{ asset(setting('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ setting('company.name') }}" />
                         </div>
                         <div class="flex-items vert-align">
                             <h2 class="header-title tour-name">{{ $order->tour->name }}</h2>
@@ -43,12 +43,12 @@ $order = $invoice->order;
                     </div>
                     <div class="flex-container">
                         <div class="flex-items">
-                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ \App\Repository\SettingsRepository::getOrDefault('company.url', URL::to('/')) }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.url', URL::to('/')) }}</a>
-                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', 'Email not set') }}</a>
-                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}">{{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', 'Phone number not set') }}</a>
+                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ setting('company.url', URL::to('/')) }}">{{ setting('company.url', URL::to('/')) }}</a>
+                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ setting('company.contact.email', 'Email not set') }}">{{ setting('company.contact.email', 'Email not set') }}</a>
+                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ setting('company.contact.phone', 'Phone number not set') }}">{{ setting('company.contact.phone', 'Phone number not set') }}</a>
                         </div>
                         <div class="flex-items metadata-wrapper">
-                            <div class="metadata divider">Date<br /><span class="metadata-text">{{ StringFormatter::formatDate($invoice->generated) }}</span></div>
+                            <div class="metadata divider">Date<br /><span class="metadata-text">{{ f_date($invoice->generated) }}</span></div>
                             <div class="metadata divider">Invoice No.<br /><span class="metadata-text">{{ $invoice->number }}</span></div>
                             <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $order->booking_reference }}</span></div>
                         </div>
@@ -77,12 +77,12 @@ $order = $invoice->order;
                         <div class="billing-info">{{ $order->leadBooker->customer->billingAddress->postcode }}{!! isset($order->leadBooker->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
                     </div>
                     <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.city', 'Company City Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.region', 'Company Region Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.country', 'Company Country Not Set') }}</div>
-                        <div class="billing-info">{{ \App\Repository\SettingsRepository::getOrDefault('company.address.postcode', 'Company Postcode Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.city', 'Company City Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.region', 'Company Region Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.country', 'Company Country Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.postcode', 'Company Postcode Not Set') }}</div>
                     </div>
                 </div>
             </div>
@@ -106,11 +106,11 @@ $order = $invoice->order;
                                 <tr>
                                     <td class="description"><div class="order-table-description">{!! nl2br($billable['description']) !!}</div></td>
                                     <td class="quantity">1</td>
-                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency($billable['cost']) }}</td>
+                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ f_currency($billable['cost']) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ \f_currency($data['total_cost']) }}</td>
                             </tr>
                         @endforeach
                         @foreach($invoice->groups as $name => $data)
@@ -122,11 +122,11 @@ $order = $invoice->order;
                                 <tr>
                                     <td class="description">{!! nl2br($billable['description']) !!} </td>
                                     <td class="quantity">1</td>
-                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency($billable['cost']) }}</td>
+                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ f_currency($billable['cost']) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ \StringFormatter::formatCurrency($data['total_cost']) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ \f_currency($data['total_cost']) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -155,18 +155,18 @@ $order = $invoice->order;
                                 <tr>
                                     <td class="date"></td>
                                     <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                                    <td class="total {{ $billable['cost'] > 0  ? 'color red' : 'color green' }}">{{ f_currency( $billable['cost']) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="3" class="metadata right-text">Total: {{ StringFormatter::formatCurrency($invoice->adjustments['total_cost']) }}</td>
+                                <td colspan="3" class="metadata right-text">Total: {{ f_currency($invoice->adjustments['total_cost']) }}</td>
                             </tr>
                         @endif
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ StringFormatter::formatCurrency($order->cancelled ? 0 : $invoice->total_cost) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Total Amount Owed: {{ f_currency($order->cancelled ? 0 : $invoice->total_cost) }}</h1>
                     </div>
                 </div>
             </div>
@@ -189,20 +189,20 @@ $order = $invoice->order;
                         @else
                             @foreach($invoice->payments['billables'] as $billable)
                                 <tr>
-                                    <td class="date">{{ StringFormatter::formatDateTime($billable['date']) }}</td>
+                                    <td class="date">{{ f_datetime($billable['date']) }}</td>
                                     <td class="date-description">{!! nl2br($billable['description']) !!} </td>
-                                    <td class="total">{{ StringFormatter::formatCurrency( $billable['cost']) }}</td>
+                                    <td class="total">{{ f_currency( $billable['cost']) }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td class="metadata right-text" colspan="3">Total Paid: {{ StringFormatter::formatCurrency($invoice->payments['total_cost']) }}</td>
+                                <td class="metadata right-text" colspan="3">Total Paid: {{ f_currency($invoice->payments['total_cost']) }}</td>
                             </tr>
                         @endif
                     </tbody>
                 </table>
                 <div class="flex-container-reverse title">
                     <div class="flex-items">
-                        <h1 class="header-title" style="margin-top:5px">Remaining Amount: {{ StringFormatter::formatCurrency($order->cancelled ? 0 : ($invoice->total_cost - $invoice->payments['total_cost'])) }}</h1>
+                        <h1 class="header-title" style="margin-top:5px">Remaining Amount: {{ f_currency($order->cancelled ? 0 : ($invoice->total_cost - $invoice->payments['total_cost'])) }}</h1>
                     </div>
                 </div>
             </div>
@@ -225,9 +225,9 @@ $order = $invoice->order;
                             @else
                             @foreach($invoice->installments as $installment)
                                 <tr>
-                                    <td class="date">{{ StringFormatter::formatDate($installment['due']) }}</td>
-                                    <td class="amount">{!! array_key_exists('description',$installment) ? nl2br($installment['description']) : nl2br(StringFormatter::formatCurrency($installment['amount'])) !!} </td>
-                                    <td class="paid">{{ StringFormatter::formatBoolean($installment['paid']) }}</td>
+                                    <td class="date">{{ f_date($installment['due']) }}</td>
+                                    <td class="amount">{!! array_key_exists('description',$installment) ? nl2br($installment['description']) : nl2br(f_currency($installment['amount'])) !!} </td>
+                                    <td class="paid">{{ f_bool($installment['paid']) }}</td>
                                 </tr>
                             @endforeach
                         @endif

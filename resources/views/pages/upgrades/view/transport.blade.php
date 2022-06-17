@@ -76,16 +76,16 @@
                                     <td>{{ $upgrade->upgrade->transportInventory->transport->name }}</td>
                                     <td>{{ $upgrade->upgrade->transportInventory->travelClass->name }}</td>
                                     <td>
-                                        {{ StringFormatter::formatDateTime($upgrade->upgrade->transportInventory->departs_at) }}
+                                        {{ f_datetime($upgrade->upgrade->transportInventory->departs_at) }}
                                         <input type="checkbox" disabled @if($inventoryTour->departure_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>
-                                        {{ StringFormatter::formatDateTime($upgrade->upgrade->transportInventory->arrives_at) }}
+                                        {{ f_datetime($upgrade->upgrade->transportInventory->arrives_at) }}
                                         <input type="checkbox" disabled @if($inventoryTour->arrival_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>{{ $upgrade->upgrade->transportInventory->stock }}</td>
                                     <td>{{ $upgrade->description }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
+                                    <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
                                         @can('update', \App\Models\Transport\TransportInventoryTour::class)
                                             <a href="{{ route('transport-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>

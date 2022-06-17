@@ -6,7 +6,7 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Booking\Booking;
-use App\Models\Booking\BookingAccommodation;
+use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Tour\Tour;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -40,7 +40,7 @@ class AccommodationRepository implements AccommodationRepositoryInterface
      */
     public static function loadRoomsForTour(Tour $tour)
     {
-        $rooms = AccommodationComponentRepository::getAvailableRoomTypes($tour);
+        $rooms = RoomingRepository::getAvailableRoomTypes($tour);
 
         return $rooms;
     }
