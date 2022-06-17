@@ -274,6 +274,8 @@ class OrderRepository extends ModelRepository
     {
         if (!$this->shouldRemind($days, $minDays)) return;
         $nextInstallment = $this->order->next_installment;
+        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $nextInstallment->id)->first();
+        if (isset($reminder)) return;
         PaymentReminder::create([
             'order_id' => $this->order->id,
             'order_installment_id' => $nextInstallment->id,
