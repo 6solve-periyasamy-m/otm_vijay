@@ -67,6 +67,11 @@ return [
             'channel' => env('MAIL_LOG_CHANNEL'),
         ],
 
+        'minimal' => [
+            'transport' => 'minimal-log',
+            'channel' => env('MAIL_LOG_CHANNEL', 'mail'),
+        ],
+
         'array' => [
             'transport' => 'array',
         ],
