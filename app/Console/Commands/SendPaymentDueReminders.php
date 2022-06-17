@@ -39,7 +39,7 @@ class SendPaymentDueReminders extends Command
      */
     public function handle()
     {
-        if (Settings::authorized('authorization.reminders') || $this->hasOption('force')) {
+        if (Settings::authorized('authorization.reminders') || $this->option('force')) {
             $days = $this->argument('days') ?? 7;
             $min = $this->argument('min') ?? -1000;
             foreach (Order::where('cancelled',false)->get() as $order) {
