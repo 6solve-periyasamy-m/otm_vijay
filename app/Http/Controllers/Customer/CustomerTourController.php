@@ -81,7 +81,7 @@ class CustomerTourController extends Controller
 
         if (!isset($oCustomer)) abort(404);
 
-        $accommodation = collect($oCustomer->orderAccommodation())->getIterator();
+        $accommodation = collect($oCustomer->orderAccommodation)->getIterator();
         $accommodation->uasort([OrderAccommodation::class, 'compare']);
         $activities = $oCustomer->orderActivities->getIterator();
         $activities->uasort([OrderActivity::class, 'compare']);
