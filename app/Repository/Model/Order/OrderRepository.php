@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
+use App\Models\Customer\Group;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -12,6 +13,7 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
@@ -69,7 +71,7 @@ class OrderRepository extends ModelRepository
                 }
             }
         }
-        foreach ($this->order->groups()->with('rooms') as $group) {
+        foreach ($this->order->groups()->with('rooms')->get() as $group) {
             foreach ($group->rooms()->with('tourComponent')->get() as $orderComponent) {
                 if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
                 $total += $orderComponent->cost;
