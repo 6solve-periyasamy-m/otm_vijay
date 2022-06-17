@@ -32,4 +32,14 @@ class Settings
     {
         $this->repository->setAll($keys);
     }
+
+    public function authorize(string $key, int $seconds): void
+    {
+        $this->repository->authorize($key, $seconds);
+    }
+
+    public function authorized(string $key): bool
+    {
+        return $this->repository->authorized($key);
+    }
 }

@@ -72,6 +72,18 @@ class SettingsRepository
         return $this;
     }
 
+    public function authorize(string $key, int $seconds): SettingsRepository
+    {
+        return $this->set($key, now()->addSeconds($seconds)->unix());
+    }
+
+    public function authorized(string $key): bool
+    {
+        $time = $this->getOrDefault($key, 0);
+        if ($time == 0) return false;
+        return $time === -1 || Carbon::createFromTimestamp($time)->isAfter(now());
+    }
+
     public function verifyCache(): SettingsRepository
     {
         if (!isset($this->cacheTime) || $this->cacheTime->diffInMinutes(now()) > 15) {
