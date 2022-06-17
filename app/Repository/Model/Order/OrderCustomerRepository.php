@@ -140,31 +140,31 @@ class OrderCustomerRepository extends ModelRepository
     {
         $components = [];
         if ($accommodation) {
-            foreach ($this->orderCustomer->orderAccommodation as $orderComponent) {
+            foreach ($this->orderCustomer->orderAccommodation()->with('tourComponent')->get() as $orderComponent) {
                 if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($activities) {
-            foreach ($this->orderCustomer->orderActivities as $orderComponent) {
+            foreach ($this->orderCustomer->orderActivities()->with('tourComponent')->get() as $orderComponent) {
                 if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($flights) {
-            foreach ($this->orderCustomer->orderFlights as $orderComponent) {
+            foreach ($this->orderCustomer->orderFlights()->with('tourComponent')->get() as $orderComponent) {
                 if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($transport) {
-            foreach ($this->orderCustomer->orderTransports as $orderComponent) {
+            foreach ($this->orderCustomer->orderTransports()->with('tourComponent')->get() as $orderComponent) {
                 if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
         }
         if ($extras){
-            foreach ($this->orderCustomer->orderMerchandise as $orderComponent) {
+            foreach ($this->orderCustomer->orderMerchandise()->with('tourComponent')->get() as $orderComponent) {
                 if (!in_array($orderComponent->tourComponent->tour_component_type, $typeFilters)) continue;
                 $components[] = $orderComponent->repository;
             }
