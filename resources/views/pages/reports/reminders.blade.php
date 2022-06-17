@@ -34,4 +34,5 @@
             @include($tableView)
         </div>
     </div>
+    @include('partials.orders.reminder.authorize')
 @endsection

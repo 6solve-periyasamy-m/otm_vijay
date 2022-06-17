@@ -69,4 +69,5 @@
             </ul>
         </div>
     </div>
+    @include('partials.orders.reminder.authorize')
 @endsection

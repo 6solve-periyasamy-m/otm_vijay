@@ -74,7 +74,7 @@ class SettingsRepository
 
     public function authorize(string $key, int $seconds): SettingsRepository
     {
-        return $this->set($key, now()->addSeconds($seconds)->unix());
+        return $this->set($key, $seconds < 0 ? -1 : now()->addSeconds($seconds)->unix());
     }
 
     public function authorized(string $key): bool

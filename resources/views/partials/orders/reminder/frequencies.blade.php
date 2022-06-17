@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body row">
         <div class="form-group col-12 col-xl-2">
-            <a class="form-control mx-auto btn btn-block btn-primary text-white" href="{{ route($route, ['max' => 14, 'min' => 7]) }}">14 Days</a>
+            <a class="form-control mx-auto btn btn-block btn-primary text-white" href="{{ route($route, ['max' => 30, 'min' => 7]) }}">30 Days</a>
         </div>
         <div class="form-group col-12 col-xl-2">
             <a class="form-control mx-auto btn btn-block btn-primary text-white" href="{{ route($route, ['max' => 7, 'min' => 0]) }}">7 Days</a>

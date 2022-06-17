@@ -74,6 +74,12 @@ class SettingsController extends Controller
         return redirect()->route('dash');
     }
 
+    public function authorizeReminders(int $days)
+    {
+        Settings::authorize('authorization.reminders', $days < 0 ? -1 : $days * 24 * 60 * 60);
+        return back();
+    }
+
     private function saveImage($file) {
         return $file->storePublicly('uploads/images');
     }
