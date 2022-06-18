@@ -486,7 +486,7 @@ class ReportFieldRepository
                     ],
                     'created_at_system' => [
                         'name' => 'Created At',
-                        'field' => 'created_at'
+                        'method' => 'created_at'
                     ]
                 ],
             ],
