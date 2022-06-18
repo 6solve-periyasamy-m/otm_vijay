@@ -24,6 +24,30 @@ $order = $invoice->order;
                 background-size: 30em;
             }
         </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(() => {
+                let pageLoaded = localStorage.getItem("pageLoaded");
+                if(pageLoaded == "false") {
+                    localStorage.setItem("pageLoaded", true);
+                    printPdf(window.location.href);
+                    return;
+                }
+                else
+                    localStorage.setItem("pageLoaded", false);
+
+            });
+
+            printPdf = (pdf) => {
+                var iframe = document.createElement('iframe');
+                iframe.style.display = "none";
+                iframe.src = pdf;
+
+                document.body.appendChild(iframe);
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+            };
+        </script>
     </head>
     <body>
         <div class="background center-screen @if($order->cancelled) cancelled @endif">
@@ -242,5 +266,8 @@ $order = $invoice->order;
                 </div>
             </div>
         </div>
+
+
+
     </body>
 </html>
