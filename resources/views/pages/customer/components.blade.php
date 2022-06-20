@@ -223,6 +223,7 @@
                     </div>
                 </div>
                 {{-- Accommodation --}}
+                @if($orderCustomer->orderAccommodation()->count() > 0)
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
                         <div class="card-body accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseAccommodation" aria-expanded="true" aria-controls="collapseAccommodation">
@@ -292,6 +293,8 @@
                         </div>
                     </div>
                 </div>
+                @endif
+                @if($orderCustomer->orderActivities()->count() > 0)
                 {{-- Activities --}}
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
@@ -361,7 +364,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 {{-- Flights --}}
+                @if($orderCustomer->orderFlights()->count() > 0)
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
                         <div class="card-body accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseFlight" aria-expanded="true" aria-controls="collapseAccommodation">
@@ -430,7 +435,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 {{-- Transport --}}
+                @if($orderCustomer->orderTransports()->count() > 0)
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
                         <div class="card-body accordion-button" data-bs-toggle="collapse" data-bs-target="#collapseTransport" aria-expanded="true" aria-controls="collapseTransport">
@@ -501,6 +508,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 {{-- Add-ons and Extras --}}
                 <div class="accordion" style="box-shadow: none;">
                     <div class="card card-heading accordion-header">
