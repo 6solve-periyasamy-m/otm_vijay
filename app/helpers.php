@@ -81,3 +81,16 @@ if (!function_exists('f_bool')) {
         return StringFormatter::formatBoolean($value);
     }
 }
+
+if (!function_exists('camel_to_text')) {
+    /**
+     * Convert camel case text to regular strings
+     * @param string $text
+     * @return string
+     */
+    function camel_to_text(string $text): string
+    {
+        $arr = preg_split('/([A-Z]+[^A-Z]+)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        return implode(' ', $arr);
+    }
+}
