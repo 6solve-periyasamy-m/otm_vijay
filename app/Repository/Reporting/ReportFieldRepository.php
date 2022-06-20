@@ -58,7 +58,7 @@ class ReportFieldRepository
     {
         return [
             0 => [
-                'class' => 'Accommodation',
+                'class' => 'Accommodation\Accommodation',
                 'type' => 'component',
                 'fields' => [
                     'name' => [
@@ -90,7 +90,7 @@ class ReportFieldRepository
                 ],
             ],
             1 => [
-                'class' => 'AccommodationInventory',
+                'class' => 'Accommodation\AccommodationInventory',
                 'type' => 'inventory',
                 'fields' => array_merge([
                     'room_type' => [
@@ -123,7 +123,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('AccommodationInventoryTour'),
+            2 => self::getTourInventoryFooter('Accommodation\AccommodationInventoryTour'),
         ];
     }
 
@@ -131,7 +131,7 @@ class ReportFieldRepository
     {
         return [
             0 => [
-                'class' => 'Activity',
+                'class' => 'Activity\Activity',
                 'type' => 'component',
                 'fields' => [
                     'name' => [
@@ -166,7 +166,7 @@ class ReportFieldRepository
                 ],
             ],
             1 => [
-                'class' => 'ActivityInventory',
+                'class' => 'Activity\ActivityInventory',
                 'type' => 'inventory',
                 'fields' => array_merge([
                     'ticket_type' => [
@@ -185,7 +185,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('ActivityInventoryTour')
+            2 => self::getTourInventoryFooter('Activity\ActivityInventoryTour')
         ];
     }
 
@@ -193,7 +193,7 @@ class ReportFieldRepository
     {
         return [
             0 => [
-                'class' => 'Flight',
+                'class' => 'Flight\Flight',
                 'type' => 'component',
                 'fields' => [
                     'departure_airport' => [
@@ -229,7 +229,7 @@ class ReportFieldRepository
                 ],
             ],
             1 => [
-                'class' => 'FlightInventory',
+                'class' => 'Flight\FlightInventory',
                 'type' => 'inventory',
                 'fields' => array_merge([
                     'flight_number' => [
@@ -257,7 +257,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('FlightInventoryTour')
+            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour')
         ];
     }
 
@@ -265,7 +265,7 @@ class ReportFieldRepository
     {
         return [
             0 => [
-                'class' => 'Transport',
+                'class' => 'Transport\Transport',
                 'type' => 'component',
                 'fields' => [
                     'name' => [
@@ -313,7 +313,7 @@ class ReportFieldRepository
                 ],
             ],
             1 => [
-                'class' => 'TransportInventory',
+                'class' => 'Transport\TransportInventory',
                 'type' => 'inventory',
                 'fields' => array_merge([
                     'travel_class' => [
@@ -342,7 +342,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('TransportInventoryTour'),
+            2 => self::getTourInventoryFooter('Transport\TransportInventoryTour'),
         ];
     }
 
@@ -350,7 +350,7 @@ class ReportFieldRepository
     {
         return [
             0 => [
-                'class' => 'Customer',
+                'class' => 'Customer\Customer',
                 'type' => 'customer',
                 'fields' => [
                     'email' => [
@@ -475,7 +475,7 @@ class ReportFieldRepository
                 ],
             ],
             1 => [
-                'class' => 'OrderCustomer',
+                'class' => 'Order\OrderCustomer',
                 'type' => 'order-customer',
                 'fields' => [
                     'booking_reference' => [
@@ -576,7 +576,7 @@ class ReportFieldRepository
         return [
             0 => self::getOrderFields(),
             1 => [
-                'class' => 'OrderInstallment',
+                'class' => 'Order\OrderInstallment',
                 'type' => 'order-installment',
                 'fields' => [
                     'amount' => [
@@ -604,7 +604,7 @@ class ReportFieldRepository
         return [
             0 => self::getOrderFields(),
             1 => [
-                'class' => 'Payment',
+                'class' => 'Order\Payment\Payment',
                 'type' => 'payment',
                 'fields' => [
                     'payment_method' => [
@@ -633,7 +633,7 @@ class ReportFieldRepository
     private static function getOrderFields(): array
     {
         return [
-            'class' => 'Order',
+            'class' => 'Order\Order',
             'type' => 'order',
             'fields' => [
                 'booking_reference' => [
