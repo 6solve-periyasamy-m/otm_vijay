@@ -21,7 +21,7 @@
                         </center>
                     </div>
                 </div>
-                @if(sizeof($editable ?? []) > 0 || \App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                @if(sizeof($editable ?? []) > 0 || \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
                     <div class="accordion" id="accordionCustomers">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingCustomers">
@@ -33,7 +33,7 @@
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingCustomers"
                                  data-bs-parent="#accordionCustomers">
                                 <div class="accordion-body">
-                                    @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                                    @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
                                         <div class="card other-profile"
                                              onclick="window.location = '{{ route('customer.edit') }}';">
                                             <div class="card-body profile-card">
