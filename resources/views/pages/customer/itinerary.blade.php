@@ -76,63 +76,84 @@
                 </div>
             @endif
             <div class="col-sm-12 {{ sizeof($editable ?? []) > 1 ? 'col-md-9' : 'col-md-12' }}">
-            <div class="card">
-                <div class="card-body">
-                    <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
-                    <div class="col-12">
-                        <table class="table">
-                            <thead>
-                            <tr class="font-bold font-16">
-                                <td class="w-10">Start Time</td>
-                                <td class="w-20">Item</td>
-                                <td class="w-70">Description</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php $day = 1 @endphp
-                            @php $previousSlot = null @endphp
-                            @foreach($itinerary as $timeslot)
-                                @php $currentSlot = $timeslot['start']->copy()->setTime(0, 0, 0) @endphp
-                                @if (!isset($previousSlot))
-                                    <tr class="text-center font-bold bg-light-bluepagebreak-inside">
-                                        <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
+                <div class="card">
+                    <div class="card-body">
+                        <p class="heading">Your Itinerary for {{ $order->tour->name }} ({{ $order->booking_reference }})</p>
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr class="font-bold font-16">
+                                        <td class="w-10">Start Time</td>
+                                        <td class="w-20">Item</td>
+                                        <td class="w-70">Description</td>
                                     </tr>
-                                @elseif ($previousSlot->diffInDays($currentSlot) >= 1)
-                                    @php $day += $previousSlot->diffInDays($currentSlot) @endphp
-                                    <tr class="text-center font-bold bg-light-bluepagebreak-inside">
-                                        <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
-                                    </tr>
-                                @endif
-                                <tr class="bg-white">
-                                    <tddata-content="Start Time">{{ f_datetime($timeslot['start']) }}
-                                        @if(array_key_exists('end', $timeslot))
-                                            to {{ f_datetime($timeslot['end']) }}
+                                </thead>
+                                <tbody>
+                                    @php $day = 1 @endphp
+                                    @php $previousSlot = null @endphp
+                                    @foreach($itinerary as $timeslot)
+                                        @php $currentSlot = $timeslot['start']->copy()->setTime(0, 0, 0) @endphp
+                                        @if (!isset($previousSlot))
+                                            <tr class="text-center font-bold bg-light-blue pagebreak-inside">
+                                                <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
+                                            </tr>
+                                        @elseif ($previousSlot->diffInDays($currentSlot) >= 1)
+                                            @php $day += $previousSlot->diffInDays($currentSlot) @endphp
+                                            <tr class="text-center font-bold bg-light-blue pagebreak-inside">
+                                                <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
+                                            </tr>
                                         @endif
-                                    </td>
-                                    <tddata-content="Item">
-                                        {{ $timeslot['activity'] }}
-                                    </td>
-                                    <tddata-content="Description">{{ $timeslot['description'] }}</td>
-                                </tr>
-                                @php $previousSlot = $currentSlot @endphp
-                            @endforeach
-                            </tbody>
-                        </table>
+                                        <tr class="bg-white">
+                                            <td data-content="Start Time">{{ f_datetime($timeslot['start']) }}
+                                                @if(array_key_exists('end', $timeslot))
+                                                to {{ f_datetime($timeslot['end']) }}
+                                                @endif
+                                            </td>
+                                            <td data-content="Item">
+                                                {{ $timeslot['activity'] }}
+                                            </td>
+                                            <td data-content="Description">{{ $timeslot['description'] }}</td>
+                                        </tr>
+                                        @php $previousSlot = $currentSlot @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <hr class="splitter">
-                    <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}"
-                          method="post">
-                        @csrf
-                        @if($order->repository->isLeadBooker(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()))
-                            @include('partials.fields.textarea', ['name' => 'Order Notes', 'field' => 'order_notes', 'value' => $order->external_notes, 'rows' => 2])
-                        @endif
-                        @include('partials.fields.textarea', ['name' => 'Customer Specific Order Notes', 'field' => 'order_customer_notes', 'value' => $orderCustomer->external_notes, 'rows' => 2])
-                        @include('partials.fields.textarea', ['name' => 'Accommodation Notes', 'field' => 'accommodation_notes', 'value' => $orderCustomer->accommodation_notes, 'rows' => 2])
-                        @include('partials.fields.textarea', ['name' => 'Activity Notes', 'field' => 'activity_notes', 'value' => $orderCustomer->activity_notes, 'rows' => 2])
-                        @include('partials.fields.textarea', ['name' => 'Flight Notes', 'field' => 'flight_notes', 'value' => $orderCustomer->flight_notes, 'rows' => 2])
-                        @include('partials.fields.textarea', ['name' => 'Transport Notes', 'field' => 'transport_notes', 'value' => $orderCustomer->transport_notes, 'rows' => 2])
-                        @include('partials.fields.submit')
-                    </form>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="col-md-12 mb-0">Notes About Your Tour</h2>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material mx-2 row">
+                            @csrf
+                            @php $isLead = $order->repository->isLeadBooker(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()) @endphp
+                            @if($isLead)
+                            <x-customer.input.text-area name="order_notes" value="{{ $order->external_notes }}" width="6">
+                                Order Notes
+                            </x-customer.input.text-area>
+                            @endif
+                            <x-customer.input.text-area name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
+                                Customer Specific Order Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="accommodation_notes" value="{{ $orderCustomer->accommodation_notes }}" width="3">
+                                Accommodation Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="activity_notes" value="{{ $orderCustomer->activity_notes }}" width="3">
+                                Activity Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="flight_notes" value="{{ $orderCustomer->flight_notes }}" width="3">
+                                Flight Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="transport_notes" value="{{ $orderCustomer->transport_notes }}" width="3">
+                                Transport Notes
+                            </x-customer.input.text-area>
+                            @include('partials.fields.submit')
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
