@@ -68,7 +68,7 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
                 <input type="hidden" name="booking_reference" id="form-booking-reference">
                 <div class="form-material row">
                     <x-customer.input name="amount" value="{{ number_format($booking->tour->deposit * $booking->traveller_count) }}" width="10" required>
-                        How much do you want to pay today? (Minimum {{ f_currency(number_format($booking->tour->deposit * $booking->traveller_count)) }})
+                        How much do you want to pay today?
                     </x-customer.input>
                     <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">
                         <input class="form-control form-control-line" type="submit" value="Make Payment">
