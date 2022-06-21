@@ -71,7 +71,7 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
                         How much do you want to pay today?
                     </x-customer.input>
                     <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">
-                        <input class="form-control form-control-line" type="submit" value="Make Payment">
+                        <input class="btn btn-primary text-white" type="submit" value="Make Payment">
                     </div>
                 </div>
             </form>
