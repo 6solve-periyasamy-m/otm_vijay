@@ -112,17 +112,38 @@
                                 </tbody>
                             </table>
                         </div>
-                        <hr class="splitter">
-                        <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="col-md-12 mb-0">Notes About Your Tour</h2>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material mx-2 row">
                             @csrf
-                            @if(\App\Repository\OrderRepository::isLeadBooker($order, \App\Repository\CustomerAuthenticationRepository::getCustomer()))
-                            @include('partials.fields.textarea', ['name' => 'Order Notes', 'field' => 'order_notes', 'value' => $order->external_notes, 'rows' => 2])
+                            @php $isLead = \App\Repository\OrderRepository::isLeadBooker($order, \App\Repository\CustomerAuthenticationRepository::getCustomer()) @endphp
+                            @if($isLead)
+                            <x-customer.input.text-area name="order_notes" value="{{ $order->external_notes }}" width="6">
+                                Order Notes
+                            </x-customer.input.text-area>
                             @endif
-                            @include('partials.fields.textarea', ['name' => 'Customer Specific Order Notes', 'field' => 'order_customer_notes', 'value' => $orderCustomer->external_notes, 'rows' => 2])
-                            @include('partials.fields.textarea', ['name' => 'Accommodation Notes', 'field' => 'accommodation_notes', 'value' => $orderCustomer->accommodation_notes, 'rows' => 2])
-                            @include('partials.fields.textarea', ['name' => 'Activity Notes', 'field' => 'activity_notes', 'value' => $orderCustomer->activity_notes, 'rows' => 2])
-                            @include('partials.fields.textarea', ['name' => 'Flight Notes', 'field' => 'flight_notes', 'value' => $orderCustomer->flight_notes, 'rows' => 2])
-                            @include('partials.fields.textarea', ['name' => 'Transport Notes', 'field' => 'transport_notes', 'value' => $orderCustomer->transport_notes, 'rows' => 2])
+                            <x-customer.input.text-area name="order_customer_notes" value="{{ $orderCustomer->external_notes }}" width="{{ $isLead ? 6 : 12 }}">
+                                Customer Specific Order Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="accommodation_notes" value="{{ $orderCustomer->accommodation_notes }}" width="3">
+                                Accommodation Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="activity_notes" value="{{ $orderCustomer->activity_notes }}" width="3">
+                                Activity Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="flight_notes" value="{{ $orderCustomer->flight_notes }}" width="3">
+                                Flight Notes
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="transport_notes" value="{{ $orderCustomer->transport_notes }}" width="3">
+                                Transport Notes
+                            </x-customer.input.text-area>
                             @include('partials.fields.submit')
                         </form>
                     </div>
