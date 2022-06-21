@@ -69,6 +69,8 @@
     <hr class="splitter"/>
     @include('partials.fields.submit')
     <hr class="splitter"/>
+    <a href="{{ route('orders.reminders') }}" class="btn btn-success">View Due Reminders</a>
+    <hr class="splitter"/>
     <div class="col-sm-12">
         <table class="table table-striped">
             <thead>
