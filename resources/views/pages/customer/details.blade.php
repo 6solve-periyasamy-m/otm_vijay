@@ -21,7 +21,7 @@
                         </center>
                     </div>
                 </div>
-                @if(sizeof($editable ?? []) > 0 || \App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                @if(sizeof($editable ?? []) > 0 || \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
             <div class="accordion" id="accordionCustomers">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCustomers">

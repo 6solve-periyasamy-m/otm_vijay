@@ -21,7 +21,7 @@
                 <div>
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
-                    @if(\App\Repository\CustomerAuthenticationRepository::getCustomer() !== null)
+                    @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer() !== null)
                       <li class="nav-item">
                         <a href="{{ route('customer.portal') }}" class="nav-link link-dark" aria-current="page">
                           <span class="icon-home"></span>
