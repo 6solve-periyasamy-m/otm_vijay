@@ -30,10 +30,9 @@
                             {{ csrf_field() }}
                             <input type="hidden" name="booking_reference" id="form-booking-reference">
                             <div class="row">
-                                <div class="form-floating form-group col-12 col-xl-10">
-                                    <input type="text" class="form-control amount-input" id="floatingAmountInput" name="amount" placeholder="name@example.com">
-                                    <label for="floatingAmountInput">Enter Amount</label>
-                                </div>
+                                <x-customer.input name="amount" width="10">
+                                    Enter Amount
+                                </x-customer.input>
                                 <div class="col-12 col-xl-2 d-flex justify-content-center align-items-center">
                                     <button type="submit" class="btn btn-primary">Make Payment</button>
                                 </div>
