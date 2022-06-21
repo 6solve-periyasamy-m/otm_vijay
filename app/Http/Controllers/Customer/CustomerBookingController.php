@@ -18,6 +18,7 @@ use App\Repository\AccommodationComponentRepository;
 use App\Repository\CustomerAuthenticationRepository;
 use App\Repository\CustomerBookingRepository;
 use App\Repository\LocationsRepository;
+use App\Repository\SettingsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -256,7 +257,8 @@ class CustomerBookingController extends Controller
         $min = max($values['billing']['today'],0.3);
         $max = min($values['billing']['total'], 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
-        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id);
+        $redirect = SettingsRepository::getOrDefault('booking.success.redirect', route('payment.gateway.stripe.success'));
+        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id, $redirect);
     }
 
     private function getTour(string $bookingUrl): ?Tour
