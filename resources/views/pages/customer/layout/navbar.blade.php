@@ -6,14 +6,14 @@
           </button>
         <div class="navbar-brand" style="width: 100%; padding-right: 30px;">
           <div class="d-flex justify-content-center">
-            <img class="setting-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}">
+            <img class="setting-logo" src="{{ asset(setting('company.logo', '')) }}">
           </div>
         </div>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             <div style="width: 100%; display: flex; justify-content: center; align-items: center; ">
-                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('company.logo', '')) }}">
+                <img class="setting-logo sidebar-logo" style="margin-right: 20px;" src="{{ asset(setting('company.logo', '')) }}">
             </div>
           </div>
           <div class="offcanvas-body">
@@ -71,30 +71,30 @@
                 <div style="position: fixed; bottom: 0;">
                     <hr />
                     <div class="socials">
-                        @if(!empty(\App\Repository\SettingsRepository::get('social.facebook')))
+                        @if(!empty(setting('social.facebook')))
                           <div class="facebook">
-                              <a href="{{ \App\Repository\SettingsRepository::get('social.facebook') }}" class="icon-social-facebook"></a>
+                              <a href="{{ setting('social.facebook') }}" class="icon-social-facebook"></a>
                           </div>
                         @endif
-                        @if(!empty(\App\Repository\SettingsRepository::get('social.twitter')))
+                        @if(!empty(setting('social.twitter')))
                           <div class="twitter">
-                            <a href="{{ \App\Repository\SettingsRepository::get('social.twitter') }}" class="icon-social-twitter"></a>
+                            <a href="{{ setting('social.twitter') }}" class="icon-social-twitter"></a>
                           </div>
                         @endif
-                        @if(!empty(\App\Repository\SettingsRepository::get('social.instagram')))
+                        @if(!empty(setting('social.instagram')))
                             <div class="instagram">
-                                <a href="{{ \App\Repository\SettingsRepository::get('social.instagram') }}" class="icon-social-instagram"></a>
+                                <a href="{{ setting('social.instagram') }}" class="icon-social-instagram"></a>
                             </div>
                         @endif
                       </div>
                     <div class="d-flex justify-content-between align-items-center" style="font-size: 13px; font-weight: 600;">
                         <span class="p-3 pe-5 d-flex flex-column">
-                            <img class="stamp-logo sidebar-logo" src="{{ asset(\App\Repository\SettingsRepository::getOrDefault('atol.stamp', '')) }}" />
+                            <img class="stamp-logo sidebar-logo" src="{{ asset(setting('atol.stamp', '')) }}" />
                         </span>
                         <span class="p-3 d-flex flex-column">
-                            <span>{{ \App\Repository\SettingsRepository::getOrDefault('company.name', '') }}</span>
-                            <span><i class="icon-envelope"></i> {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.email', '') }}</span>
-                            <span><i class="icon-call-end"></i> {{ \App\Repository\SettingsRepository::getOrDefault('company.contact.phone', '') }}</span>
+                            <span>{{ setting('company.name', '') }}</span>
+                            <span><i class="icon-envelope"></i> {{ setting('company.contact.email', '') }}</span>
+                            <span><i class="icon-call-end"></i> {{ setting('company.contact.phone', '') }}</span>
                         </span>
                     </div>
                 </div>
