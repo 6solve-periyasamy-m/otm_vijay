@@ -18,17 +18,19 @@
          <tbody>
          @foreach($traveller->activities()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.activity', 'tourComponent.inventory.ticketType', 'tourComponent.inventory.activity.address')->get() as $component)
              <tr component="{{ $component->id }}">
-                 <td>{{ f_datetime($component->tourComponent->inventory->starts_at) . ' to ' . f_datetime($component->tourComponent->inventory->ends_at) }}</td>
-                 <td>
+                 <td data-content="Times">
+                     {{ f_datetime($component->tourComponent->inventory->starts_at) . ' to ' . f_datetime($component->tourComponent->inventory->ends_at) }}
+                 </td>
+                 <td data-content="Description">
                      {{ $component->tourComponent->inventory->activity->name }} ({{ $component->tourComponent->inventory->activity->address }}) ({{ $component->tourComponent->inventory->ticketType }})
                  </td>
                  @if($component->tourComponent->tour_component_type == 'Included')
-                     <td colspan="2">{{ $component->tourComponent->tour_component_type }}</td>
+                     <td colspan="2" data-content="Type">{{ $component->tourComponent->tour_component_type }}</td>
                  @else
-                     <td>{{ $component->tourComponent->tour_component_type }}</td>
-                     <td>{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
+                     <td data-content="Type">{{ $component->tourComponent->tour_component_type }}</td>
+                     <td data-content="Cost">{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
                  @endif
-                 <td>
+                 <td data-content="Upgrades">
                      @if(count($component->tourComponent->getBookingUpgradeKeyMap()) < 2)
                          @if($component->tourComponent->tour_component_type == 'Included')
                              No Upgrades Available

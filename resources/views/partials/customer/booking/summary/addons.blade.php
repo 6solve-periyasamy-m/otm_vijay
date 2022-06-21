@@ -21,20 +21,20 @@
         @foreach($addons as $addonRepository)
             @php $bookingComponent = $addonRepository->getBookingComponent($traveller) @endphp
             <tr>
-                <td>{{ $addonRepository->__toString() }}</td>
+                <td data-content="Name">{{ $addonRepository->__toString() }}</td>
                 @if($addonRepository->get()->tour_component_type === 'Included')
-                    <td colspan="2">
+                    <td colspan="2" data-content="Component Type">
                         {{ $addonRepository->getComponentType() }}
                     </td>
                 @else
-                    <td>
+                    <td data-content="Component Type">
                         {{ $addonRepository->getComponentType()  }}
                     </td>
-                    <td>
+                    <td data-content="Cost">
                         {{ f_currency($addonRepository->getCost()) }}
                     </td>
                 @endif
-                <td>
+                <td data-content="Actions">
                     @if(isset($bookingComponent))
                         <a href="{{ route('customer-booking.remove-addon',
                                         ['bookingUrl' => $booking->tour->booking_form_url,

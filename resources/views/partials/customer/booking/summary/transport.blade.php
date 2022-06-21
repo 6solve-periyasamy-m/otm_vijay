@@ -15,13 +15,13 @@
         <tbody>
         @foreach($traveller->transport()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.transport')->get() as $component)
             <tr>
-                <td>{{ f_datetime($component->tourComponent->inventory->departs_at) . ' to ' . f_datetime($component->tourComponent->inventory->arrives_at) }}</td>
-                <td>{{ $component->tourComponent->inventory->transport->name }}</td>
+                <td data-content="Times">{{ f_datetime($component->tourComponent->inventory->departs_at) . ' to ' . f_datetime($component->tourComponent->inventory->arrives_at) }}</td>
+                <td data-content="Description">{{ $component->tourComponent->inventory->transport->name }}</td>
                 @if($component->tourComponent->tour_component_type == 'Included')
-                    <td colspan="2">{{ $component->tourComponent->tour_component_type }}</td>
+                    <td colspan="2" data-content="Type">{{ $component->tourComponent->tour_component_type }}</td>
                 @else
-                    <td>{{ $component->tourComponent->tour_component_type }}</td>
-                    <td>{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
+                    <td data-content="Type">{{ $component->tourComponent->tour_component_type }}</td>
+                    <td data-content="Cost">{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
                 @endif
             </tr>
         @endforeach

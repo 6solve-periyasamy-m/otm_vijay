@@ -16,17 +16,19 @@
         <tbody>
         @foreach($traveller->accommodation()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.boardType', 'tourComponent.inventory.accommodation', 'tourComponent.inventory.accommodation.address')->get() as $component)
             <tr>
-                <td>{{ f_datetime($component->tourComponent->inventory->check_in) . ' to ' . f_datetime($component->tourComponent->inventory->check_out) }}</td>
-                <td>
+                <td data-content="Times">
+                    {{ f_datetime($component->tourComponent->inventory->check_in) . ' to ' . f_datetime($component->tourComponent->inventory->check_out) }}
+                </td>
+                <td data-content="Description">
                     {{ $component->tourComponent->inventory->accommodation->name }}
                     ({{ $component->tourComponent->inventory->accommodation->address->region . ', ' .  $component->tourComponent->inventory->accommodation->address->country->name}})
                     ({{ $component->tourComponent->inventory->boardType }})
                 </td>
                 @if($component->tourComponent->tour_component_type == 'Included')
-                    <td colspan="2">{{ $component->tourComponent->tour_component_type }}</td>
+                    <td colspan="2" data-content="Type">{{ $component->tourComponent->tour_component_type }}</td>
                 @else
-                    <td>{{ $component->tourComponent->tour_component_type }}</td>
-                    <td>{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
+                    <td data-content="Type">{{ $component->tourComponent->tour_component_type }}</td>
+                    <td data-content="Cost">{{ f_currency($component->tourComponent->tour_sales_price) }}</td>
                 @endif
             </tr>
         @endforeach

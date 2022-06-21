@@ -19,12 +19,12 @@
         <tbody>
         @foreach($booking->travellers as $traveller)
             <tr>
-                <td>{{ $traveller->first_name . ' ' . $traveller->last_name }}</td>
-                <td>{{ $traveller->primary_group?->name }} ({{ $traveller->roomType->name }})</td>
-                <td>{{ f_currency($traveller->base_cost) }}</td>
-                <td>{{ f_currency($traveller->additional_cost) }}</td>
-                <td>{{ f_currency($traveller->surcharge_amount) }}</td>
-                <td>{{ f_currency($traveller->total_cost) }}</td>
+                <td data-content="Name">{{ $traveller->first_name . ' ' . $traveller->last_name }}</td>
+                <td data-content="Room">{{ $traveller->primary_group?->name }} ({{ $traveller->roomType->name }})</td>
+                <td data-content="Base Cost">{{ f_currency($traveller->base_cost) }}</td>
+                <td data-content="Additional Costs">{{ f_currency($traveller->additional_cost) }}</td>
+                <td data-content="Single Occupancy Surcharge">{{ f_currency($traveller->surcharge_amount) }}</td>
+                <td data-content="Total Cost for Traveller">{{ f_currency($traveller->total_cost) }}</td>
             </tr>
         @endforeach
         </tbody>

@@ -9,7 +9,7 @@
         <h2 class="col-md-12 mb-0">Payment Schedule</h2>
     </x-slot:header>
 
-    <table class="table table-striped text-center">
+    <table class="table table-striped text-center table-mobile-sided">
         <thead>
         <tr>
             <th scope="col">Description</th>
@@ -21,11 +21,11 @@
         </thead>
         <tbody>
         <tr>
-            <td>Due with Order</td>
-            <td>{{ f_currency($booking->tour->deposit) }}</td>
-            <td>{{ $travellerCount }}</td>
-            <td>{{ f_currency($booking->tour->deposit * $travellerCount) }}</td>
-            <td>{{ f_currency($booking->tour->deposit * $travellerCount) }}</td>
+            <td data-content="Description">Due with Order</td>
+            <td data-content="Cost">{{ f_currency($booking->tour->deposit) }}</td>
+            <td data-content="Quantity">{{ $travellerCount }}</td>
+            <td data-content="Instalment total">{{ f_currency($booking->tour->deposit * $travellerCount) }}</td>
+            <td data-content="Total Owed">{{ f_currency($booking->tour->deposit * $travellerCount) }}</td>
         </tr>
         @php
             $cumulative = $booking->tour->deposit * $travellerCount;
@@ -33,23 +33,23 @@
         @foreach($booking->tour->paymentInstallments as $installment)
             @php $cumulative += ($installment->cost * $travellerCount) @endphp
             <tr @if ($installment->due_on->lt(now())) style="text-decoration: underline black;" @endif>
-                <td>
+                <td data-content="Description">
                     {{ f_date($installment->due_on) }}
 
                 </td>
-                <td>{{ f_currency($installment->cost) }}</td>
-                <td>{{ $travellerCount }}</td>
-                <td>{{ f_currency($installment->cost * $travellerCount) }}</td>
-                <td>{{ f_currency($cumulative) }}</td>
+                <td data-content="Cost">{{ f_currency($installment->cost) }}</td>
+                <td data-content="Quantity">{{ $travellerCount }}</td>
+                <td data-content="Instalment total">{{ f_currency($installment->cost * $travellerCount) }}</td>
+                <td data-content="Total Owed">{{ f_currency($cumulative) }}</td>
             </tr>
         @endforeach
         @php $cumulative += ($booking->tour->remaining_installment * $travellerCount) @endphp
         <tr>
-            <td>{{ f_date($booking->tour->final_payment) }}</td>
-            <td>{{ f_currency($booking->tour->remaining_installment) }}</td>
-            <td>{{ $travellerCount }}</td>
-            <td>{{ f_currency($booking->tour->remaining_installment * $travellerCount) }}</td>
-            <td>{{ f_currency($cumulative) }}</td>
+            <td data-content="Description">{{ f_date($booking->tour->final_payment) }}</td>
+            <td data-content="Cost">{{ f_currency($booking->tour->remaining_installment) }}</td>
+            <td data-content="Quantity">{{ $travellerCount }}</td>
+            <td data-content="Instalment total">{{ f_currency($booking->tour->remaining_installment * $travellerCount) }}</td>
+            <td data-content="Total Owed">{{ f_currency($cumulative) }}</td>
         </tr>
         </tbody>
     </table>

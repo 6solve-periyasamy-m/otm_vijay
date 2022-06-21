@@ -15,24 +15,24 @@
         <tbody>
         @foreach($traveller->flights()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.flight', 'tourComponent.inventory.flight.departureAirport', 'tourComponent.inventory.flight.arrivalAirport', 'tourComponent.inventory.flight.departureAirport.address', 'tourComponent.inventory.flight.arrivalAirport.address')->get() as $component)
             <tr>
-                <td>
+                <td data-content="Times">
                     {{ f_datetime($component->tourComponent->inventory->departs_at) . ' to ' . f_datetime($component->tourComponent->inventory->arrives_at) }}
                 </td>
-                <td>
+                <td data-content="Description">
                     {{ $component->tourComponent->inventory->flight->departureAirport }}
                     to
                     {{ $component->tourComponent->inventory->flight->arrivalAirport }}
                     ({{ $component->tourComponent->inventory->travelClass }})
                 </td>
                 @if($component->tourComponent->tour_component_type == 'Included')
-                    <td colspan="2">
+                    <td colspan="2" data-content="Type">
                         {{ $component->tourComponent->tour_component_type }}
                     </td>
                 @else
-                    <td>
+                    <td data-content="Type">
                         {{ $component->tourComponent->tour_component_type }}
                     </td>
-                    <td>
+                    <td data-content="Cost">
                         {{ f_currency($component->tourComponent->tour_sales_price) }}
                     </td>
                 @endif
