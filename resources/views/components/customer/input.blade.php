@@ -2,9 +2,10 @@
     <input type="{{ $attributes->get('type', 'text') }}"
            class="form-control {{ $attributes->get('name') }}-input" style="padding-top: 25px; padding-left: 5px;"
            id="{{ $attributes->get('name') }}"
-           name="amount"
+           name="{{ $attributes->get('name') }}"
            placeholder="placeholder"
            value="{{ $attributes->get('value', '') }}"
-           {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}>
+           {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}
+           {{ $attributes->has('required') ? 'required' :  ''}} >
     <label for="{{ $attributes->get('id') }}">{{ $slot }}</label>
 </div>
