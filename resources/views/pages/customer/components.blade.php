@@ -560,7 +560,7 @@
                                                     Owned
                                                 @else
                                                 <div style="display: flex; justify-content: center;" class="hide-on-mobile">
-                                                    @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+                                                    @if(!(flag('payment.required', true)))
                                                     <a href="{{ route('customer.extras.apply',
                                                         ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                                          'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
