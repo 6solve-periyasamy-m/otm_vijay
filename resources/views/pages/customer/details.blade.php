@@ -100,7 +100,7 @@
                                 Last Name
                             </x-customer.input>
 
-                            <x-customer.input type="date" name="date_of_birth" value="{{ $customer->date_of_birth?? '' }}" width="4" autocomplete="bday">
+                            <x-customer.input type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday">
                                 Date of Birth
                             </x-customer.input>
 
