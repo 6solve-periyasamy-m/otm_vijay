@@ -8,7 +8,7 @@ use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway
 {
-    public static function checkout(array $items, string $reference, string $paymentType, int $customerId, ?array $intentionData = null)
+    public static function checkout(array $items, string $reference, string $paymentType, int $customerId, string $redirect, ?array $intentionData = null)
     {
         $lineItems = [];
         foreach ($items as $item) {
@@ -35,7 +35,7 @@ class StripeGateway extends Gateway
             'metadata' => [
                 'intention_id' => $intention->id,
             ],
-            'success_url' => route('payment.gateway.stripe.success'),
+            'success_url' => $redirect,
             'cancel_url' => route('payment.gateway.stripe.cancelled'),
         ]);
 

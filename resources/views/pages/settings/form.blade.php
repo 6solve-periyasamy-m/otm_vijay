@@ -24,8 +24,12 @@
 @include('partials.fields.file', ['name' => 'ATOL Stamp', 'field' => 'atol_stamp', 'width' => 6])
 <hr class="splitter"/>
 @include('partials.fields.selector.default',
-    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies',])
-@include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => \App\Repository\SettingsRepository::getBoolean('payment.required', true),])
+    ['name' => 'System Currency', 'field' => 'currency_id', 'value' => \App\Repository\LocationsRepository::getCurrencyIdByCode(\App\Repository\SettingsRepository::getOrDefault('system.currency', '')) ?? null, 'route' => 'currencies', 'width' => 6,])
+@include('partials.fields.checkbox', ['name' => 'Require Immediate Payment For Upgrades/Add-ons', 'field' => 'payment_required', 'value' => \App\Repository\SettingsRepository::getBoolean('payment.required', true), 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Booking Success Page', 'field' => 'booking_redirect', 'value' => \App\Repository\SettingsRepository::getOrDefault('booking.success.redirect', ''), 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Installment Payment Success Page', 'field' => 'payment_redirect', 'value' => \App\Repository\SettingsRepository::getOrDefault('payment.success.redirect', ''), 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Add-on Purchase Success Page', 'field' => 'addon_redirect', 'value' => \App\Repository\SettingsRepository::getOrDefault('purchase.addon.success.redirect', ''), 'width' => 3,])
+@include('partials.fields.text', ['name' => 'Upgrade Purchase Success Page', 'field' => 'upgrade_redirect', 'value' => \App\Repository\SettingsRepository::getOrDefault('purchase.upgrade.success.redirect', ''), 'width' => 3,])
 <hr class="splitter"/>
 @include('partials.fields.dropdown', [
     'name' => 'Date Format',
