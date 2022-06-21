@@ -22,16 +22,18 @@
                     </div>
                 </div>
                 @if(sizeof($editable ?? []) > 0 || \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
-            <div class="accordion" id="accordionCustomers">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingCustomers">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    Additional Customers
-                  </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingCustomers" data-bs-parent="#accordionCustomers">
-                  <div class="accordion-body">
-                      @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                    <div class="accordion" id="accordionCustomers">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingCustomers">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Additional Customers
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingCustomers"
+                                 data-bs-parent="#accordionCustomers">
+                                <div class="accordion-body">
+                                    @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
                     <div class="card other-profile" onclick="window.location = '{{ route('customer.edit') }}';">
                         <div class="card-body profile-card">
                             <center class="mt-4">
@@ -81,284 +83,230 @@
                                 <h4 class=" mb-0">Basic Information</h4>
                             </div>
                             <hr class="splitter">
-                            <div class="form-group col-md-2">
-                                <label class=" mb-0">Title</label>
-                                <input type="text" name="title" id="title-input"
+
+                                <x-customer.input name="title"
                                            value="{{ $customer->title ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="honorific-prefix">
+                                           width="2" autocomplete="honorific-prefix">
 
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class=" mb-0">First Name</label>
-
-                                    <input type="text" name="first_name" id="first_name-input"
+                            Title
+                            </x-customer.input>
+                                <x-customer.input name="first_name"
                                            value="{{ $customer->first_name ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="given-name">
+                                           width="3" autocomplete="given-name">
 
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class=" mb-0">Middle Names</label>
-
-                                    <input type="text" name="middle_names" id="middle_names-input"
+                            First Name
+                            </x-customer.input>
+                                <x-customer.input name="middle_names"
                                            value="{{ $customer->middle_names ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="additional-name">
+                                           width="3" autocomplete="additional-name">
 
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Last Name</label>
+                            Middle Names
+                                </x-customer.input>
 
-                                    <input type="text" name="last_name" id="last_name-input"
+                                    <x-customer.input name="last_name"
                                            value="{{ $customer->last_name ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="family-name">
+                                           width="4" autocomplete="family-name">
+Last Name
+                            </x-customer.input>
+                            <x-customer.input type="date" name="date_of_birth"
 
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Date of Birth</label>
+                                           value="{{ $customer->date_of_birth?? '' }}" width="4" autocomplete="bday">
 
-                                    <input type="date" name="date_of_birth" id="date_of_birth-input"
-                                           value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="bday">
+                            Date of Birth
+                            </x-customer.input>
 
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Mobile Number</label>
 
-                                    <input type="text" name="mobile_number" id="mobile_number-input"
+                                    <x-customer.input name="mobile_number"
                                            value="{{ $customer->mobile_number ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="tel">
-                                </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Other Phone Number</label>
+                                           width="4" autocomplete="tel">
+                                Mobile Number
+                            </x-customer.input>
 
-                                    <input type="text" name="other_phone_number" id="other_phone_number-input"
-                                           value="{{ $customer->other_phone_number ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-                                </div>
+                                    <x-customer.input name="other_phone_number"
+
+                                           value="{{ $customer->other_phone_number ?? '' }}"width="4">
+                                           Other Phone Number
+                                </x-customer.input>
                             <hr class="splitter">
                             <div class=" col-md-6">
                                 <div class="form-group">
                                 <h4 class="mb-0">Home Address</h4>
                             </div>
                             <hr class="splitter">
-                            <div class="form-group ">
-                                <label class=" mb-0">Address Line 1</label>
 
-                                    <input type="text" name="home_address_line_1" id="home_address_line_1-input"
+
+                                    <x-customer.input name="home_address_line_1"
+
                                            value="{{ $customer->homeAddress->address_line_1 ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-line1">
-                                </div>
-                            <div class="form-group">
-                                <label class="mb-0">Address Line 2</label>
+                                            autocomplete="address-line1">
+                                Address Line 1
 
-                                    <input type="text" name="home_address_line_2" id="home_address_line_2-input"
+                                    </x-customer.input>
+                                <x-customer.input name="home_address_line_2"
+
                                            value="{{ $customer->homeAddress->address_line_2 ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-line2">
-                            </div>
-                            <div class="form-group ">
-                                <label class="mb-0">Town</label>
-
-                                    <input type="text" name="home_town" id="home_town-input"
+                                            autocomplete="address-line2">
+                                    Address Line 2
+                                </x-customer.input>
+                                <x-customer.input name="home_town"
                                            value="{{ $customer->homeAddress->town ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-level2">
-                            </div>
-                            <div class="form-group ">
-                                <label class="mb-0">Region</label>
-
-                                    <input type="text" name="home_region" id="home_region-input"
+                                            autocomplete="address-level2">
+                                    Town
+                                </x-customer.input>
+                                <x-customer.input name="home_town"
                                            value="{{ $customer->homeAddress->region ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-level1">
-                                </div>
-                            @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'home_country_id', 'value' => $customer->homeAddress->country_id ?? null, 'width' => 6, 'route' => 'countries', 'divClasses' => 'w-100'])
-                            <div class="form-group ">
-                                <label class="mb-0">Postcode</label>
+                                            autocomplete="address-level1">
+                                Region
+                                </x-customer.input>
 
-                                    <input type="text" name="home_postcode" id="home_postcode-input"
+                                @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'home_country_id', 'value' => $customer->homeAddress->country_id ?? null, 'width' => 6, 'route' => 'countries', 'divClasses' => 'w-100'])
+                                <x-customer.input name="home_postcode"
+
                                            value="{{ $customer->homeAddress->postcode ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="postcode">
-                                </div>
+                                            autocomplete="postcode">
+                                Postcode
+                                </x-customer.input>
                             </div>
                             <div class=" col-md-6">
                                 <div class="form-group"><h4 class="mb-0">Billing Address</h4></div>
                             <hr class="splitter">
-                                <div class="form-group">
-                                <label class="mb-0">Address Line 1</label>
-                                    <input type="text" name="billing_address_line_1" id="billing_address_line_1-input"
-                                           value="{{ $customer->billingAddress->address_line_1 ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-line1">
-                            </div>
-                            <div class="form-group ">
-                                <label class="mb-0">Address Line 2</label>
 
-                                    <input type="text" name="billing_address_line_2" id="billing_address_line_2-input"
-                                           value="{{ $customer->billingAddress->address_line_2 ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-line2">
-                            </div>
-                            <div class="form-group ">
-                                <label class="mb-0">Town</label>
+                                <x-customer.input name="billing_address_line_1"
+                                                  value="{{ $customer->billingAddress->address_line_1 ?? '' }}"
+                                                  autocomplete="address-line1">
+                                    Address Line 1
+                                    </x-customer.input>
+                                <x-customer.input name="billing_address_line_2"
+                                                  value="{{ $customer->billingAddress->address_line_2 ?? '' }}"
+                                                  autocomplete="address-line2">
+                                    Address Line 2
+                                </x-customer.input>
 
-                                    <input type="text" name="billing_town" id="billing_town-input"
-                                           value="{{ $customer->billingAddress->town ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-level2">
-                            </div>
-
-                            <div class="form-group ">
-                                <label class="mb-0">Region</label>
-
-                                    <input type="text" name="billing_region" id="billing_region-input"
+                                <x-customer.input name="billing_town"
+                                                  value="{{ $customer->billingAddress->town ?? '' }}"
+                                                  autocomplete="address-level2">
+                                    Town
+                                </x-customer.input>
+                                <x-customer.input name="billing_town"
                                            value="{{ $customer->billingAddress->region ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="address-level1">
-                                </div>
-                            @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'billing_country_id', 'value' => $customer->billingAddress->country_id ?? null, 'route' => 'countries', 'divClasses' => 'w-100'])
-                            <div class="form-group ">
-                                <label class=" mb-0">Postcode</label>
+                                            autocomplete="address-level1">
+                                    Region
+                                </x-customer.input>
 
-                                    <input type="text" name="billing_postcode" id="billing_postcode-input"
-                                           value="{{ $customer->billingAddress->postcode ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="postcode">
-                                </div>
+                                @include('partials.fields.selector.default', ['name' => 'Country', 'field' => 'billing_country_id', 'value' => $customer->billingAddress->country_id ?? null, 'width' => 6, 'route' => 'countries', 'divClasses' => 'w-100'])
+
+                                <x-customer.input name="billing_postcode"
+                                                  value="{{ $customer->billingAddress->postcode ?? '' }}"
+                                                  autocomplete="postcode">
+                                    Postcode
+                                </x-customer.input>
                             </div>
                             <hr class="splitter">
-                            <div class="form-group">
-                                <h4 class=" mb-0">Emergency Contact Details</h4>
-                            </div>
+                            <div class="form-group"><h4 class="mb-0">Emergency Contact Details</h4></div>
                             <hr class="splitter">
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Name</label>
 
-                                    <input type="text" name="emergency_contact_name" id="emergency_contact_name-input"
-                                           value="{{ $customer->emergency_contact_name ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-                                </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Relationship</label>
+                            <x-customer.input name="emergency_contact_name"
+                                              value="{{ $customer->emergency_contact_name ?? '' }}" width="4">
+                                Name
+                            </x-customer.input>
 
-                                    <input type="text" name="emergency_contact_relationship"
-                                           id="emergency_contact_relationship-input"
-                                           value="{{ $customer->emergency_contact_relationship ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-                                </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Telephone</label>
+                            <x-customer.input name="emergency_contact_relationship"
+                                              value="{{ $customer->emergency_contact_relationship ?? '' }}" width="4">
+                                Relationship
+                            </x-customer.input>
+                            <x-customer.input name="emergency_contact_telephone"
+                                              value="{{ $customer->emergency_contact_telephone ?? '' }}" width="4">
+                                Telephone
+                            </x-customer.input>
 
-                                    <input type="text" name="emergency_contact_telephone"
-                                           id="emergency_contact_telephone-input"
-                                           value="{{ $customer->emergency_contact_telephone ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-
-                            </div>
                             <hr class="splitter">
-                            <div class="form-group">
-                                <h4 class=" mb-0">Passport Details</h4>
-                            </div>
+                            <div class="form-group"><h4 class="mb-0">Passport Details</h4></div>
                             <hr class="splitter">
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">First Name</label>
 
-                                    <input type="text" name="passport_first_name" id="passport_first_name-input"
-                                           value="{{ $customer->passport_first_name ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="given-name">
+                            <x-customer.input name="passport_first_name"
+                                              value="{{ $customer->passport_first_name ?? '' }}"
+                                              width="4" autocomplete="given-name">
+                                First Name
+                            </x-customer.input>
+                            <x-customer.input name="passport_middle_name"
+                                              value="{{ $customer->passport_middle_name ?? '' }}"
+                                              width="4" autocomplete="additional-name">
+                                Middle Name
+                            </x-customer.input>
 
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Middle Name</label>
+                            <x-customer.input name="passport_last_name"
+                                              value="{{ $customer->passport_last_name ?? '' }}"
+                                              width="4" autocomplete="family-name">
+                                Last Name
+                            </x-customer.input>
+                            <x-customer.input name="gender" value="{{ $customer->gender ?? '' }}"
+                                              width="2" autocomplete="sex">
+                                Gender
+                            </x-customer.input>
+                            <x-customer.input name="passport_number" value="{{ $customer->passport_number ?? '' }}"
+                                              width="2">
+                                Number
+                            </x-customer.input>
+                            <x-customer.input name="passport_country"
+                                              value="{{ $customer->passport_country_of_issue ?? '' }}"
+                                              width="4">
+                                Country of Issue
+                            </x-customer.input>
 
-                                    <input type="text" name="passport_middle_name" id="passport_middle_name-input"
-                                           value="{{ $customer->passport_middle_name ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="additional-name">
-
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Last Name</label>
-
-                                    <input type="text" name="passport_last_name" id="passport_last_name-input"
-                                           value="{{ $customer->passport_last_name ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="family-name">
-                                </div>
-                            <div class="form-group col-md-2">
-                                <label class=" mb-0">Gender</label>
-
-                                    <input type="text" name="gender" id="gender-input"
-                                           value="{{ $customer->gender ?? '' }}"
-                                           class="form-control ps-0 form-control-line" autocomplete="sex">
-                                </div>
-                            <div class="form-group col-md-2">
-                                <label class=" mb-0">Number</label>
-
-                                    <input type="text" name="passport_number" id="passport_number-input"
-                                           value="{{ $customer->passport_number ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class=" mb-0">Country of Issue</label>
-
-                                    <input type="text" name="passport_country" id="passport_country-input"
-                                           value="{{ $customer->passport_country_of_issue ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class=" mb-0">Issue Date</label>
-
-                                    <input type="date" name="passport_issue_date" id="passport_issue_date-input"
-                                           value="{{ $customer?->passport_issue_date?->format('Y-m-d') ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class=" mb-0">Expiry Date</label>
-
-                                    <input type="date" name="passport_expiry_date" id="passport_expiry_date-input"
-                                           value="{{ $customer?->passport_expiry_date?->format('Y-m-d') ?? '' }}"
-                                           class="form-control ps-0 form-control-line">
-                                </div>
+                            <x-customer.input type="date" name="passport_issue_date"
+                                              value="{{ $customer->passport_issue_date?->format('Y-m-d') ?? '' }}"
+                                              width="2">
+                                Issue Date
+                            </x-customer.input>
+                            <x-customer.input type="date" name="passport_expiry_date"
+                                              value="{{ $customer->passport_expiry_date?->format('Y-m-d') ?? '' }}"
+                                              width="2">
+                                Expiry Date
+                            </x-customer.input>
                             <hr class="splitter">
-                            <div class="form-group">
-                                <h4 class=" mb-0">Merchandise Clothing Sizes</h4>
-                            </div>
+                            <div class="form-group"><h4 class="mb-0">Merchandise Clothing Sizes</h4></div>
                             <hr class="splitter">
+
                             @include('partials.fields.selector.default',
                                 ['name' => 'T-Shirt Size', 'field' => 't_shirt_size_id', 'value' => $customer->t_shirt_size_id ?? 0, 'route' => 't-shirt-size', 'width' => 6])
                             @include('partials.fields.selector.default',
                                 ['name' => 'Hat Size', 'field' => 'hat_size_id', 'value' => $customer->hat_size_id ?? 0, 'route' => 'hat-size', 'width' => 6])
                             <hr class="splitter">
-                            @include('partials.fields.textarea', ['name' => 'Dietary Requirements', 'field' => 'dietary_notes', 'value' => $customer->dietary_notes, 'rows' => 2])
-                            @include('partials.fields.textarea', ['name' => 'Mobility Requirements', 'field' => 'mobility_notes', 'value' => $customer->mobility_notes, 'rows' => 2])
-                            @include('partials.fields.textarea', ['name' => 'Other Notes', 'field' => 'other_notes', 'value' => $customer->external_notes, 'rows' => 2])
+                            <x-customer.input.text-area name="dietary_notes" value="{{ $customer->dietary_notes }}">
+                                Dietary Requirements
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="mobility_notes" value="{{ $customer->mobility_notes }}">
+                                Mobility Requirements
+                            </x-customer.input.text-area>
+                            <x-customer.input.text-area name="other_notes" value="{{ $customer->external_notes }}">
+                                Other Notes
+                            </x-customer.input.text-area>
                             <hr class="splitter">
                             @if(!isset($other))
                                 <div class="form-group">
                                     <h4 class="col-md-12 mb-0">Change your password</h4>
                                 </div>
                                 <hr class="splitter">
-                                <div class="form-group col-md-4">
-                                    <label class="col-md-12 mb-0">Current Password</label>
-                                    <div class="col-md-12">
-                                        <input type="password" name="current_password" id="current_password-input"
-                                               class="form-control ps-0 form-control-line"
-                                               autocomplete="current-password">
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="col-md-12 mb-0">New Password</label>
-                                    <div class="col-md-12">
-                                        <input type="password" name="new_password" id="new_password-input"
-                                               class="form-control ps-0 form-control-line" autocomplete="new-password">
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="col-md-12 mb-0">Confirm your new password</label>
-                                    <div class="col-md-12">
-                                        <input type="password" name="new_password_confirmation"
-                                               id="new_password_confirmation-input"
-                                               class="form-control ps-0 form-control-line" autocomplete="new-password">
-                                    </div>
-                                </div>
+
+                                <x-customer.input type="password" name="current_password" width="4"
+                                                  autocomplete="current-password">
+                                    Current Password
+                                </x-customer.input>
+                                <x-customer.input type="password" name="new_password" width="4"
+                                                  autocomplete="new-password">
+                                    New Password
+                                </x-customer.input>
+
+                                <x-customer.input type="password" name="new_password_confirmation" width="4"
+                                                  autocomplete="new-password">
+                                    Confirm your new password
+                                </x-customer.input>
+
                                 <hr class="splitter">
                             @endif
                             <div class="form-group">
-                                <div class="col-sm-12 d-flexjustify-content-end">
-                                    <button type="submit" class="btn btn-success  mx-md-0 text-white">
+                                <div class="col-sm-12 d-flex">
+                                    <button type="submit" class="btn btn-success mx-md-0 text-white">
                                         Update Profile
                                     </button>
                                 </div>
