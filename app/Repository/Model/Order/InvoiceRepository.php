@@ -6,6 +6,8 @@ use App\Models\Customer\Group;
 use App\Models\Order\Invoice;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use Spatie\Browsershot\Browsershot;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use function now;
 
 class InvoiceRepository
@@ -176,6 +178,13 @@ class InvoiceRepository
     {
         return "{$type}: {$order->customer_count} Customer" . ($order->customer_count > 1 ? 's' : '')
             . " x " . f_currency($amount) . " = " . f_currency($calculated);
+    }
+
+    public function getResponseStream(): StreamedResponse
+    {
+        $invoice = Browsershot::html(view('pdf.invoices.columns', ['invoice' => $this->invoice,])->render());
+        $invoice->showBackground()->margins(10, 2, 10, 2);
+        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
     }
 
     /**

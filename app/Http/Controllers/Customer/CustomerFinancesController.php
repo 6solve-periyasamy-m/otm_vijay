@@ -39,6 +39,6 @@ class CustomerFinancesController extends Controller
         if ($order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
             abort(404);
         }
-        return view('pdf.invoices.columns', ['invoice' => $order->repository->getInvoiceRepository()->get(),]);
+        return $order->repository->getInvoiceRepository()->getResponseStream();
     }
 }

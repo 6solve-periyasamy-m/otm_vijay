@@ -81,7 +81,7 @@ class OrderController extends Controller
 
     public function invoice(Order $order)
     {
-        return view('pdf.invoices.columns', ['invoice' => $order->repository->getInvoiceRepository()->get(),]);
+        return $order->repository->getInvoiceRepository()->getResponseStream();
     }
 
     public function atol(Order $order)
