@@ -20,7 +20,7 @@
            onclick="{{$onclickPurchase ?? ''}}">$</a>
         </span>
         <span class="show-on-mobile-block">
-            @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+            @if(!(flag('payment.required', true)))
             <a href="{{ $createRoute }}" target="{{ $target ?? '_blank' }}" class="btn btn-success" onclick="{{$onclick ?? ''}}">Add To Cart</a>
             @endif
             <a href="{{ $purchaseRoute }}" target="{{ $targetPurchase ?? '_blank' }}" class="btn btn-primary" onclick="{{$onclickPurchase ?? ''}}">Buy Now</a>
