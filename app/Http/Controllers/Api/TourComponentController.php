@@ -73,7 +73,7 @@ class TourComponentController extends Controller
     public function addTransportAddon(Request $request) {
         $request->validate(['customer_id' => 'required|exists:order_customers,id', 'transport_id' => 'required|exists:transport_inventory_tours,id']);
         $oCustomer = OrderCustomer::find($request->input('customer_id'));
-        $transportInventoryTour = TransportInventoryTour::find($request->input('flight_id'));
+        $transportInventoryTour = TransportInventoryTour::find($request->input('transport_id'));
         return $transportInventoryTour->addToOrder($oCustomer);
     }
 
