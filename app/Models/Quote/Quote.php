@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Models\Quote;
+
+use Database\Factories\Quote\QuoteFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
+
+/**
+ * App\Models\Quote\Quote
+ *
+ * @property int $id
+ * @property int $tour_id
+ * @property int|null $order_id
+ * @property int|null $lead_traveller_id
+ * @property int|null $default_traveller_id
+ * @property double|null $deposit
+ * @property Carbon|null $expires
+ * @property string|null $internal_notes
+ * @property string|null $external_notes
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read QuoteTraveller|null $defaultTraveller
+ * @property-read QuoteTraveller|null $leadTraveller
+ * @property-read Collection|QuoteTraveller[] $travellers
+ * @property-read int|null $travellers_count
+ * @method static QuoteFactory factory(...$parameters)
+ * @method static Builder|Quote newModelQuery()
+ * @method static Builder|Quote newQuery()
+ * @method static QueryBuilder|Quote onlyTrashed()
+ * @method static Builder|Quote query()
+ * @method static Builder|Quote whereCreatedAt($value)
+ * @method static Builder|Quote whereDefaultTravellerId($value)
+ * @method static Builder|Quote whereDeletedAt($value)
+ * @method static Builder|Quote whereDeposit($value)
+ * @method static Builder|Quote whereExpires($value)
+ * @method static Builder|Quote whereExternalNotes($value)
+ * @method static Builder|Quote whereId($value)
+ * @method static Builder|Quote whereInternalNotes($value)
+ * @method static Builder|Quote whereLeadTravellerId($value)
+ * @method static Builder|Quote whereOrderId($value)
+ * @method static Builder|Quote whereTourId($value)
+ * @method static Builder|Quote whereUpdatedAt($value)
+ * @method static QueryBuilder|Quote withTrashed()
+ * @method static QueryBuilder|Quote withoutTrashed()
+ * @mixin Eloquent
+ */
+class Quote extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
+    protected $casts = [
+        'deposit' => 'double',
+        'expires' => 'datetime'
+    ];
+
+    public function leadTraveller(): BelongsTo
+    {
+        return $this->belongsTo(QuoteTraveller::class, 'lead_traveller_id');
+    }
+
+    public function defaultTraveller(): BelongsTo
+    {
+        return $this->belongsTo(QuoteTraveller::class, 'default_traveller_id');
+    }
+
+    public function travellers(): HasMany
+    {
+        return $this->hasMany(QuoteTraveller::class);
+    }
+}

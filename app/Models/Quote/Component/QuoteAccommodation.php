@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Models\Quote\Component;
+
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Quote\QuoteTraveller;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
+
+/**
+ * App\Models\Quote\Component\QuoteAccommodation
+ *
+ * @property int $id
+ * @property int $quote_traveller_id
+ * @property int $accommodation_inventory_tour_id
+ * @property double $cost
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read AccommodationInventoryTour|null $tourComponent
+ * @property-read QuoteTraveller|null $traveller
+ * @method static Builder|QuoteAccommodation newModelQuery()
+ * @method static Builder|QuoteAccommodation newQuery()
+ * @method static QueryBuilder|QuoteAccommodation onlyTrashed()
+ * @method static Builder|QuoteAccommodation query()
+ * @method static Builder|QuoteAccommodation whereAccommodationInventoryTourId($value)
+ * @method static Builder|QuoteAccommodation whereCost($value)
+ * @method static Builder|QuoteAccommodation whereCreatedAt($value)
+ * @method static Builder|QuoteAccommodation whereDeletedAt($value)
+ * @method static Builder|QuoteAccommodation whereId($value)
+ * @method static Builder|QuoteAccommodation whereQuoteTravellerId($value)
+ * @method static Builder|QuoteAccommodation whereUpdatedAt($value)
+ * @method static QueryBuilder|QuoteAccommodation withTrashed()
+ * @method static QueryBuilder|QuoteAccommodation withoutTrashed()
+ * @mixin Eloquent
+ */
+class QuoteAccommodation extends Model
+{
+    use SoftDeletes;
+
+    protected $guarded = [];
+    protected $casts = ['cost' => 'double'];
+
+    public function traveller(): BelongsTo
+    {
+        return $this->belongsTo(QuoteTraveller::class);
+    }
+
+    public function tourComponent(): BelongsTo
+    {
+        return $this->belongsTo(AccommodationInventoryTour::class);
+    }
+}

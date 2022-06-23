@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('quote_accommodations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('quote_traveller_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('accommodation_inventory_tour_id')->constrained()->cascadeOnDelete();
+            $table->decimal('cost', 12);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('quote_accommodations');
+    }
+};
