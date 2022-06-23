@@ -3,9 +3,11 @@
 namespace App\Repository\Model\Quote;
 
 use App\Models\Quote\Quote;
+use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class QuoteRepository extends ModelRepository
@@ -25,6 +27,23 @@ class QuoteRepository extends ModelRepository
         ]);
         $this->quote->pricePoints()->save($pricePoint);
         return $pricePoint;
+    }
+
+    public function addInstallment(Carbon $due, float $amount): QuoteInstallment
+    {
+        $installment = QuoteInstallment::make([
+            'due_on' => $due,
+            'amount' => $amount
+        ]);
+        $this->quote->installments()->save($installment);
+        return $installment;
+    }
+
+    public function cloneInstallments()
+    {
+        foreach ($this->quote->tour->paymentInstallments as $installment) {
+            $this->addInstallment($installment->due_on, $installment->amount);
+        }
     }
 
     public function get(): Model
