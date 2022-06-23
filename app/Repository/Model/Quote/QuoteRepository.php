@@ -46,12 +46,12 @@ class QuoteRepository extends ModelRepository
         }
     }
 
-    public function get(): Model
+    public function get(): Quote
     {
         return $this->quote;
     }
 
-    public function update(array $data): Model
+    public function update(array $data): Quote
     {
         $this->quote->update($data);
         $this->save();
