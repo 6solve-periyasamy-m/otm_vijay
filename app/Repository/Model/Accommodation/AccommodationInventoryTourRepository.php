@@ -59,7 +59,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
             'group_id' => $group->id,
-            'accommodation_inventory_tour_id' => $this->tourComponent,
+            'accommodation_inventory_tour_id' => $this->tourComponent->id,
             'share_with_user_id' => null,
             'cost' => $this->tourComponent->tour_sales_price,
         ]);
