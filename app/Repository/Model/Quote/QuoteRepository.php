@@ -3,6 +3,8 @@
 namespace App\Repository\Model\Quote;
 
 use App\Models\Quote\Quote;
+use App\Models\Quote\QuotePricePoint;
+use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +15,16 @@ class QuoteRepository extends ModelRepository
     public function __construct(Quote $quote)
     {
         $this->quote = $quote;
+    }
+
+    public function addPricePoint(int $customerCount, float $pricePerPerson): QuotePricePoint
+    {
+        $pricePoint = QuotePricePoint::make([
+           'quantity' => $customerCount,
+           'price_per_person' => $pricePerPerson,
+        ]);
+        $this->quote->pricePoints()->save($pricePoint);
+        return $pricePoint;
     }
 
     public function get(): Model
