@@ -156,7 +156,9 @@ class BookingController extends Controller
         $bookingRepository->setStatusDepositCheckout($booking);
         Log::info('Booking: sending deposit request to StripeGateway:', [[['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token,'Deposit']);
 
-        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', $customer->id);
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+
+        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', $customer->id, $redirect);
     }
 
     /**
