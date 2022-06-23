@@ -79,4 +79,14 @@ class Quote extends Model
     {
         return $this->hasMany(QuoteTraveller::class);
     }
+
+    public function pricePoints(): HasMany
+    {
+        return $this->hasMany(QuotePricePoint::class);
+    }
+
+    public function installments(): HasMany
+    {
+        return $this->hasMany(QuoteInstallment::class);
+    }
 }
