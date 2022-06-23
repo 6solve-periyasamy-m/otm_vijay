@@ -2,6 +2,8 @@
 
 namespace App\Models\Quote;
 
+use App\Models\Order\Order;
+use App\Models\Tour\Tour;
 use Database\Factories\Quote\QuoteFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +24,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_id
  * @property int|null $lead_traveller_id
  * @property int|null $default_traveller_id
- * @propery string $reference
+ * @property string $reference
  * @property double|null $deposit
  * @property Carbon|null $expires
  * @property string|null $internal_notes
@@ -30,6 +32,13 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|QuoteInstallment[] $installments
+ * @property-read int|null $installments_count
+ * @property-read Order|null $order
+ * @property-read Collection|QuotePricePoint[] $pricePoints
+ * @property-read int|null $price_points_count
+ * @property-read Tour $tour
+ * @method static Builder|Quote whereReference($value)
  * @property-read QuoteTraveller|null $defaultTraveller
  * @property-read QuoteTraveller|null $leadTraveller
  * @property-read Collection|QuoteTraveller[] $travellers
@@ -54,6 +63,7 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|Quote withTrashed()
  * @method static QueryBuilder|Quote withoutTrashed()
  * @mixin Eloquent
+
  */
 class Quote extends Model
 {
@@ -88,5 +98,15 @@ class Quote extends Model
     public function installments(): HasMany
     {
         return $this->hasMany(QuoteInstallment::class);
+    }
+
+    public function tour(): BelongsTo
+    {
+        return $this->belongsTo(Tour::class);
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }
