@@ -117,7 +117,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository
             ' (' . $inventory->travelClass->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $bookingComponent = BookingFlight::create([
             'booking_traveller_id' => $traveller->id,

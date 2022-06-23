@@ -118,7 +118,7 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
         return $query->selectRaw("count(order_merchandises.id) as 'used_stock'")->first()->used_stock;
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         Log::info($traveller);
         $bookingComponent = BookingMerchandise::create([

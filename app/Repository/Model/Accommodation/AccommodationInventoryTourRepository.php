@@ -118,7 +118,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $component = BookingAccommodation::create([
             'booking_group_id' => $traveller->primary_group->id,

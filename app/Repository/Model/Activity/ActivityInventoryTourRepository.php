@@ -110,7 +110,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $component->name . ' (' . f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $bookingComponent = BookingActivity::create([
             'booking_traveller_id' => $traveller->id,

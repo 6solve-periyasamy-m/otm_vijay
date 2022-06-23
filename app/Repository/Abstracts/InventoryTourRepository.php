@@ -19,7 +19,7 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
 
     public abstract function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository;
 
-    public abstract function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
+    public abstract function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
 
     public abstract function getUpgradeParent(): Model;
 
