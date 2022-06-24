@@ -7,6 +7,7 @@ use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
+use App\Repository\Model\Quote\QuoteTravellerRepository;
 use Database\Factories\Quote\QuoteTravellerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read QuoteTravellerRepository $repository
  * @property-read QuoteProspect|null $prospect
  * @property-read Quote $quote
  * @property-read Collection|QuoteAccommodation[] $accommodation
@@ -102,5 +104,11 @@ class QuoteTraveller extends Model
     public function merchandise(): HasMany
     {
         return $this->hasMany(QuoteMerchandise::class);
+    }
+
+    public function getRepositoryAttribute(): QuoteTravellerRepository
+    {
+        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteTravellerRepository($this);
+        return $this->interal_repository;
     }
 }

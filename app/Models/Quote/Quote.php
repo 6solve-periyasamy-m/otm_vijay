@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read QuoteRepository $repository
  * @property-read Collection|QuoteInstallment[] $installments
  * @property-read int|null $installments_count
  * @property-read Order|null $order
@@ -109,5 +110,11 @@ class Quote extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function getRepositoryAttribute(): QuoteRepository
+    {
+        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteRepository($this);
+        return $this->interal_repository;
     }
 }
