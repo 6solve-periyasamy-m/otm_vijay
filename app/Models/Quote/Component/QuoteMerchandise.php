@@ -4,6 +4,7 @@ namespace App\Models\Quote\Component;
 
 use App\Models\Quote\QuoteTraveller;
 use App\Models\Tour\Merchandise;
+use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read QuoteMerchandiseRepository $repository
  * @property-read Merchandise|null $tourComponent
  * @property-read QuoteTraveller|null $traveller
  * @method static Builder|QuoteMerchandise newModelQuery()
@@ -54,5 +56,11 @@ class QuoteMerchandise extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(Merchandise::class);
+    }
+
+    public function getRepositoryAttribute(): QuoteMerchandiseRepository
+    {
+        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteMerchandiseRepository($this);
+        return $this->interal_repository;
     }
 }

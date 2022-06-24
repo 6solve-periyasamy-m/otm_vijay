@@ -4,6 +4,7 @@ namespace App\Models\Quote\Component;
 
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Quote\QuoteTraveller;
+use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read QuoteAccommodationRepository $repository
  * @property-read AccommodationInventoryTour|null $tourComponent
  * @property-read QuoteTraveller|null $traveller
  * @method static Builder|QuoteAccommodation newModelQuery()
@@ -54,5 +56,11 @@ class QuoteAccommodation extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(AccommodationInventoryTour::class);
+    }
+
+    public function getRepositoryAttribute(): QuoteAccommodationRepository
+    {
+        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteAccommodationRepository($this);
+        return $this->interal_repository;
     }
 }

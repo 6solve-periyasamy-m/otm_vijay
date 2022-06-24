@@ -4,6 +4,7 @@ namespace App\Models\Quote\Component;
 
 use App\Models\Quote\QuoteTraveller;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read QuoteTransportRepository $repository
  * @property-read TransportInventoryTour|null $tourComponent
  * @property-read QuoteTraveller|null $traveller
  * @method static Builder|QuoteTransport newModelQuery()
@@ -54,5 +56,11 @@ class QuoteTransport extends Model
     public function tourComponent(): BelongsTo
     {
         return $this->belongsTo(TransportInventoryTour::class);
+    }
+
+    public function getRepositoryAttribute(): QuoteTransportRepository
+    {
+        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteTransportRepository($this);
+        return $this->interal_repository;
     }
 }

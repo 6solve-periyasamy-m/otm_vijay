@@ -4,6 +4,7 @@ namespace App\Models\Quote;
 
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use App\Repository\Model\Quote\QuoteRepository;
 use Database\Factories\Quote\QuoteFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
