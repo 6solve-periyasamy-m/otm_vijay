@@ -178,7 +178,7 @@ class CustomerBookingController extends Controller
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
         $min = max($dueToday, 0.3);
-        $max = min($dueToday, 999999.99);
+        $max = min($booking->repository->getTotalCost(), 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
         return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id, $redirect);
