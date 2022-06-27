@@ -67,14 +67,11 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
                 {{ csrf_field() }}
                 <input type="hidden" name="booking_reference" id="form-booking-reference">
                 <div class="form-material row">
-                    <div class="form-group col-12 col-xl-3">
-                        <input class="form-control form-control-line" type="button" value="How much do you want to pay today?" disabled>
-                    </div>
-                    <div class="form-group col-12 col-xl-7">
-                        <input class="form-control form-control-line" name="amount" type="text" placeholder="Amount to Pay" value="{{ number_format($booking->tour->deposit * $booking->traveller_count) }}" required/>
-                    </div>
-                    <div class="form-group col-12 col-xl-2">
-                        <input class="form-control form-control-line" type="submit" value="Make Payment">
+                    <x-customer.input name="amount" value="{{ number_format($booking->tour->deposit * $booking->traveller_count) }}" width="10" required>
+                        How much do you want to pay today?
+                    </x-customer.input>
+                    <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">
+                        <input class="btn btn-primary text-white" type="submit" value="Make Payment">
                     </div>
                 </div>
             </form>
