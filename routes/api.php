@@ -212,6 +212,8 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
                 Route::post('/merchandise/add', [TourComponentController::class, 'addMerchandiseAddon'])->name('merchandise');
             });
         });
+        Route::post('upgrade', [CustomerComponentController::class, 'apply'])->name('customer.upgrade');
+        Route::post('upgrade/buy', [CustomerComponentController::class, 'purchase'])->name('customer.upgrade.purchase');
         Route::post('accommodation/upgrade', [CustomerComponentController::class, 'applyAccommodationUpgrade'])->name('customer.accommodation.upgrade');
         Route::post('accommodation/upgrade/buy', [CustomerComponentController::class, 'purchaseAccommodationUpgrade'])->name('customer.accommodation.upgrade.purchase');
         Route::post('activity/upgrade', [CustomerComponentController::class, 'applyActivityUpgrade'])->name('customer.activity.upgrade');

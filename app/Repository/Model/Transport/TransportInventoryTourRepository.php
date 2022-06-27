@@ -199,4 +199,13 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         return $this->tourComponent->inventory->repository;
     }
+
+    public function getUsedOnOrderCount(): int
+    {
+        $used = 0;
+        foreach ($this->tourComponent->orders as $orderComponent) {
+            if (!$orderComponent->cancelled) $used++;
+        }
+        return $used;
+    }
 }

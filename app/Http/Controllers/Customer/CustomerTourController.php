@@ -17,6 +17,7 @@ use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -115,7 +116,7 @@ class CustomerTourController extends Controller
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
-        $tourComponent = $this->getComponent($componentType, $componentId);
+        $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId)->get();
         if (!isset($tourComponent)) abort(404);
         if (!$tourComponent->is_bookable) abort(404);
 
@@ -128,7 +129,7 @@ class CustomerTourController extends Controller
                 'id' => $tourComponent->id,
         ],],];
 
-        $redirect = SettingsRepository::getOrDefault('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
+        $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
 
         return StripeGateway::checkout(
             [['name' => $tourComponent->__toString(), 'cost' => $tourComponent->tour_sales_price, 'quantity' => 1]],
@@ -147,11 +148,11 @@ class CustomerTourController extends Controller
         $orderCustomer = $order->repository->getOrderCustomer($customer);
         if (!isset($orderCustomer)) abort(404);
 
-        $tourComponent = $this->getComponent($componentType, $componentId);
+        $tourComponent = InventoryTourRepository::getComponent($componentType, $componentId)->get();
         if (!isset($tourComponent)) abort(404);
         if (!$tourComponent->is_bookable) abort(404);
 
-        if (!(flag('payment.required', true))) abort(404);
+        if (flag('payment.required', true)) abort(404);
 
         if ($tourComponent->available_stock <= 0) abort(404);
 
@@ -162,18 +163,6 @@ class CustomerTourController extends Controller
         }
 
         return redirect()->route('customer.extras', ['reference' => $reference,]);
-    }
-
-    private function getComponent(string $componentType, int $componentId): ?Model
-    {
-        return match ($componentType) {
-            'accommodation' => AccommodationInventoryTour::find($componentId),
-            'activity' => ActivityInventoryTour::find($componentId),
-            'flight' => FlightInventoryTour::find($componentId),
-            'transport' => TransportInventoryTour::find($componentId),
-            'extra' => Merchandise::find($componentId),
-            default => null,
-        };
     }
 
     public function updateNotes(Request $request, string $reference, OrderCustomer $orderCustomer)
