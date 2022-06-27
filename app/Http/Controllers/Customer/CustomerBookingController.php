@@ -25,6 +25,7 @@ class CustomerBookingController extends Controller
     private function getTour(string $bookingUrl, int $size = 1): ?Tour
     {
         $tour = Tour::where('booking_form_url', $bookingUrl)->where('is_active', true)->first();
+        if (!isset($tour)) return null;
         if ($tour->stock_control_active &&
             $tour->stock - $tour->getUsedStock() < $size) {
             return null;
@@ -180,6 +181,6 @@ class CustomerBookingController extends Controller
         $max = min($dueToday, 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id, $redirect);
+        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id, $redirect);
     }
 }

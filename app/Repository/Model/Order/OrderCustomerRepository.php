@@ -197,7 +197,7 @@ class OrderCustomerRepository extends ModelRepository
                 $addons[] = ['addon' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
             }
             if ($componentRepository->getTourComponentType() == 'Upgrade') {
-                $addons[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
+                $upgrades[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
             }
             $additionalValue += $componentRepository->getCost();
         }

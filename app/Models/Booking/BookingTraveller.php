@@ -51,6 +51,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read OrderCustomer|null $orderCustomer
  * @property-read Collection|BookingActivity[] $activities
  * @property-read int|null $activities_count
+ * @property-read string $full_name
  * @property-read Booking $booking
  * @property-read Customer|null $customer
  * @property-read Collection|BookingAccommodation[] $accommodation
@@ -195,5 +196,11 @@ class BookingTraveller extends Model
     public function getSurchargeAmountAttribute(): float
     {
         return $this->repository->getSingleOccupancy();
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        if (isset($this->customer)) return $this->customer->full_name;
+        return "{$this->first_name} {$this->last_name}";
     }
 }
