@@ -139,7 +139,7 @@ class BookingRepository extends ModelRepository
         $selected = $this?->booking->leadTraveller?->repository->getSelectedFlights() ?? ['outbound' => 0, 'inbound' => 0];
         $flights = ['outbound' => [], 'inbound' => [],];
         foreach ($this->booking->tour->flightInventoryTours as $flight) {
-            if ($flight->available_stock <= 0) continue;
+            //if ($flight->available_stock <= 0) continue; // Disabled due to lack of current requirement
             if (!$flight->is_bookable) continue;
             if ($flight->flight_type == 'Outbound') {
                 $flights['outbound'][] =
