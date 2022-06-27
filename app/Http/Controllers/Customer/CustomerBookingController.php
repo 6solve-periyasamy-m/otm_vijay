@@ -117,6 +117,8 @@ class CustomerBookingController extends Controller
             } else {
                 $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
                 $group->repository->addTravellerToGroup($traveller);
+                try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
+                catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
                 $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
             }
         }
