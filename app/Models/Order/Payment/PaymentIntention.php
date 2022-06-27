@@ -85,7 +85,7 @@ class PaymentIntention extends Model
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
     protected $casts = ['data' => 'array',];
 
-    public static function build(Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
+    public static function build(?Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
     {
         do {
             $key = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(32 / strlen($x)))), 1, 32);
@@ -93,7 +93,7 @@ class PaymentIntention extends Model
         return PaymentIntention::create([
             'id' => $key,
             'reference' => $reference,
-            'customer_id' => $customer->id,
+            'customer_id' => $customer?->id,
             'data' => $data,
             'type' => $type,
         ]);
