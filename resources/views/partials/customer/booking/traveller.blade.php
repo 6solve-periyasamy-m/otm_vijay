@@ -10,11 +10,11 @@
             First Name
         </x-customer.input>
 
-        <x-customer.input name="additional[{{ $number }}][middle_names]" value="{{ $traveller?->middle_names ?? '' }}" width="4" autocomplete="additional-name" required>
+        <x-customer.input name="additional[{{ $number }}][middle_names]" value="{{ $traveller?->middle_names ?? '' }}" width="4" autocomplete="additional-name">
             Middle Names
         </x-customer.input>
 
-        <x-customer.input name="additional[{{ $number }}][last_name]" value="{{ $traveller?->last_name ?? '' }}" width="4" autocomplete="family-name">
+        <x-customer.input name="additional[{{ $number }}][last_name]" value="{{ $traveller?->last_name ?? '' }}" width="4" autocomplete="family-name" required>
             Last Name
         </x-customer.input>
 
