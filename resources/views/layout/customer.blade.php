@@ -40,7 +40,7 @@
         @include('pages.customer.layout.navbar')
 
         @if ($errors->any())
-            <div class="container">
+            <div class="container topbar-padding">
                 @foreach ($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ $error }}
@@ -50,16 +50,11 @@
         @endif
 
         <!-- Main Body -->
-        <div class="container h-80" @if(isset($overflow) && !$overflow) style="overflow: hidden;" @endif>
-            <div class="page-breadcrumb">
-                <div class="row align-items-center">
-                    <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="page-title mb-0 p-0"></h3>
-                    </div>        
-                </div>
-            </div>
+        <div class="container h-80 {{ $errors->any() ? '' : 'topbar-padding' }}" @if(isset($overflow) && !$overflow) style="overflow: hidden;" @endif>
             @yield('content')
         </div>
+        @yield('footer')
+
     </div>
     <script src="{{ asset('js/customer/sidebarmenu.js') . '?' . date('U')  }}"></script>
     <script src="{{ asset('js/customer/customer.js') . '?' . date('U')  }}"></script>

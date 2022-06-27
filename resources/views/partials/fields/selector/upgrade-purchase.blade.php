@@ -3,15 +3,23 @@
 @endpush
 <div class="form-group col-12 {{ isset($width) ? 'col-xl-' . $width : '' }} {{ $divClasses ?? "" }}">
     @isset($name)<label for="{{ $field }}-input">{{ $name }}</label>@endisset
-    <div class="d-flex">
+    <div class="d-flex flex-wrap justify-content-center flex-column upgrade-wrapper" style="gap: 5px">
         <select class="form-control {{ $field }}-input" id="{{ $field }}-input" name="{{ $field }}">
             @foreach($options as $key => $value)
                 <option value="{{ $key }}" @if($selected == $key) selected @endif>{{ $value }}</option>
             @endforeach
         </select>
-        @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
-        <a href="{{ $createRoute }}" target="{{ $target ?? '_blank' }}" class="btn btn-success d-inline ms-1" onclick="{{$onclick ?? ''}}">+</a>
-        @endif
-        <a href="{{ $purchaseRoute }}" target="{{ $targetPurchase ?? '_blank' }}" class="btn btn-primary d-inline ms-1" onclick="{{$onclickPurchase ?? ''}}">$</a>
+        <span class="hide-on-mobile">
+            @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+            <a href="{{ $createRoute }}" target="{{ $target ?? '_blank' }}" class="btn btn-success" onclick="{{$onclick ?? ''}}">+</a>
+            @endif
+            <a href="{{ $purchaseRoute }}" target="{{ $targetPurchase ?? '_blank' }}" class="btn btn-primary" onclick="{{$onclickPurchase ?? ''}}">$</a>
+        </span>
+        <span class="show-on-mobile-block">
+            @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+            <a href="{{ $createRoute }}" target="{{ $target ?? '_blank' }}" class="btn btn-success" onclick="{{$onclick ?? ''}}">Add To Cart</a>
+            @endif
+            <a href="{{ $purchaseRoute }}" target="{{ $targetPurchase ?? '_blank' }}" class="btn btn-primary" onclick="{{$onclickPurchase ?? ''}}">Buy Now</a>
+        </span>
     </div>
 </div>

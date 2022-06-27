@@ -6,19 +6,19 @@
 <div class="row payment-balance">
     <div class="col-12">
         <form class="form-horizontal mx-2">
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group finances-select-wrapper">
                 <p class="mb-0  heading">Select Order</p>
                 <select class="form-select order-select" onchange="onOrderChange();" id="booking_reference">
-                    @foreach($orders as $order)
-                        <option value='{{ $order->booking_reference }}' @if($order->id == $order->id) selected @endif>{{ $order->booking_reference }} @if($order->cancelled) (Cancelled) @endif - {{ $order->tour->name }}</option>
+                    @foreach($orders as $selector)
+                        <option value='{{ $selector->booking_reference }}'>{{ $selector->tour->name }} ({{ $selector->booking_reference }}@if($selector->cancelled) (Cancelled)@endif&#41;</option>
                     @endforeach
                 </select>
-                <a href="#" target="_blank" class="invoice btn btn-primary m-l-20">View Invoice</a>
+                <a href="#" target="_blank" class="invoice btn btn-primary">View Invoice</a>
             </div>
         </form>
     </div>
-    @foreach($orders as $order)
-        @include('partials.customer.finances.block', ['order' => $order,])
+    @foreach($orders as $selector)
+        @include('partials.customer.finances.block', ['order' => $selector,])
     @endforeach
     <div class="col-12">
         <div class="card">
@@ -26,16 +26,15 @@
                 <div class="row">
                     <p class="heading">Make Payment</p>
                     <div class="col-md-12">
-                        <p class="sub-heading">Make Payment</p>
                         <form class="form-material" action="{{ route('customer.payment.make') }}" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="booking_reference" id="form-booking-reference">
-                            <div class="form-material row">
-                                <div class="form-group col-12 col-xl-10">
-                                    <input class="form-control form-control-line amount-input" name="amount" type="text" placeholder="Enter Amount to Pay Here"/>
-                                </div>
-                                <div class="form-group col-12 col-xl-2">
-                                    <input class="form-control form-control-line" type="submit" value="Make Payment">
+                            <div class="row">
+                                <x-customer.input name="amount" width="10">
+                                    Enter Amount
+                                </x-customer.input>
+                                <div class="col-12 col-xl-2 d-flex justify-content-center align-items-center">
+                                    <button type="submit" class="btn btn-primary">Make Payment</button>
                                 </div>
                             </div>
                         </form>
