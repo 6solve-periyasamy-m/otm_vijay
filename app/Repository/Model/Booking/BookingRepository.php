@@ -119,7 +119,7 @@ class BookingRepository extends ModelRepository
     /**
      * @throws NotOnTourException
      */
-    public function selectFlights(int $inbound, int $outbound)
+    public function selectFlights(?int $inbound, ?int $outbound)
     {
         $inboundFlight = FlightInventoryTour::find($inbound);
         $outboundFlight = FlightInventoryTour::find($outbound);
