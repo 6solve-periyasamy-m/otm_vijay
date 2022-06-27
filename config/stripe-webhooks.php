@@ -19,12 +19,6 @@ return [
         // 'charge_failed' => \App\Jobs\StripeWebhooks\HandleFailedCharge::class,
     ],
 
-    /*
-     * The classname of the model to be used. The class should equal or extend
-     * Spatie\StripeWebhooks\ProcessStripeWebhookJob.
-     */
-    'model' => \Spatie\StripeWebhooks\ProcessStripeWebhookJob::class,
-
     /**
      * This class determines if the webhook call should be stored and processed.
      */
