@@ -57,6 +57,7 @@ use App\Http\Controllers\OrderCustomerController;
 use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\Quote\QuoteController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
@@ -240,6 +241,18 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('flight/{id}/delete', [OrderComponentController::class, 'deleteFlight'])->name('orderFlightDelete')->middleware('bouncer:Order\OrderCustomer,update');
             Route::post('transport/{id}/delete', [OrderComponentController::class, 'deleteTransport'])->name('orderTransportDelete')->middleware('bouncer:Order\OrderCustomer,update');
             Route::post('merchandise/{id}/delete', [OrderComponentController::class, 'deleteMerchandise'])->name('orderMerchandiseDelete')->middleware('bouncer:Order\OrderCustomer,update');
+        });
+    });
+
+    Route::prefix('quotes')->name('quotes.')->group(function () {
+        Route::get('/', [QuoteController::class, 'index'])->name('all')->middleware('bouncer:Quote\Quote,read');
+        Route::get('/create', [QuoteController::class, 'create'])->name('create')->middleware('bouncer:Quote\Quote,create');
+        Route::post('/create', [QuoteController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,create');
+        Route::prefix('{quote}')->group(function () {
+            Route::get('/', [QuoteController::class, 'view'])->name('view')->middleware('bouncer:Quote\Quote,read');
+            Route::get('/update', [QuoteController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');
+            Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
+            Route::post('/delete', [QuoteController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
         });
     });
 

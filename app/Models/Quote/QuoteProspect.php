@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read string $name
  * @property-read Address|null $billingAddress
  * @property-read Customer|null $customer
  * @property-read Address|null $homeAddress
@@ -83,5 +84,11 @@ class QuoteProspect extends Model
     public function billingAddress(): BelongsTo
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
+    public function getNameAttribute(): string
+    {
+        $source = $this->customer ?? $this;
+        return "{$source->title} {$source->first_name} {$source->last_name}";
     }
 }

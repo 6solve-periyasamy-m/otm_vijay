@@ -31,6 +31,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read string $name
+ * @property-read string $email
  * @property-read QuoteTravellerRepository $repository
  * @property-read QuoteProspect|null $prospect
  * @property-read Quote $quote
@@ -104,6 +106,23 @@ class QuoteTraveller extends Model
     public function merchandise(): HasMany
     {
         return $this->hasMany(QuoteMerchandise::class);
+    }
+
+    public function getNameAttribute(): string
+    {
+        if (isset($this->prospect)) {
+            return $this->prospect->name;
+        }
+        return trans('quotes.traveller.prospect.unset');
+    }
+
+    public function getEmailAttribute(): string
+    {
+        if (isset($this->prospect)) {
+            $source = $this->prospect->customer ?? $this->prospect;
+            return $source->email_address ?? trans('quotes.traveller.prospect.unset');
+        }
+        return trans('quotes.traveller.prospect.unset');
     }
 
     public function getRepositoryAttribute(): QuoteTravellerRepository

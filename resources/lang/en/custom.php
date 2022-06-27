@@ -17,4 +17,7 @@ return [
             ]
         ]
     ],
+    'table' => [
+        'actions' => 'Actions',
+    ]
 ];
