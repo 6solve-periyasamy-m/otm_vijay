@@ -10,15 +10,18 @@ $next = $order->next_installment;
             <div class="card-body payment-balance">
                 <div class="row">
                     <p class="heading">Payment Balance</p>
-                    <div class="col-md-4 text-center">
+                    <div class="col-md-3 text-center">
+                        <p class="payment-value">{{ $order->tour->name }}</p>
+                    </div>
+                    <div class="col-md-3 text-center">
                         <p class="payment-value">{{ f_currency($order->total) }}</p>
                         <label class="payment-label">Total Order Value</label>
                     </div>
-                    <div class="col-md-4 text-center">
+                    <div class="col-md-3 text-center">
                         <p class="payment-value">{{ f_currency($order->remaining) }}</p>
                         <label class="payment-label">Balance Outstanding</label>
                     </div>
-                    <div class="col-md-4 text-center">
+                    <div class="col-md-3 text-center">
                         <p class="payment-value" id="order_status">{{ $order->status->description() }}</p>
                         <label class="payment-label">Order Status</label>
                     </div>

@@ -76,8 +76,10 @@ class CustomerComponentController extends Controller
         } else {
             $orderComponent->swap($upgrade->upgrade);
         }
+        $redirect = SettingsRepository::getOrDefault('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderComponent->orderCustomer->order->booking_reference, 'customer' => $orderComponent->orderCustomer->customer,]));
+
         $gateway = StripeGateway::checkout([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
-            $orderComponent->orderCustomer->order->booking_reference, 'Installment', $orderComponent->orderCustomer->customer->id, $data);
+            $orderComponent->orderCustomer->order->booking_reference, 'Installment', $orderComponent->orderCustomer->customer->id, $redirect, $data);
         return response()->json(['success' => true, 'location' => $gateway->headers->get('Location')]);
     }
 
@@ -168,8 +170,10 @@ class CustomerComponentController extends Controller
                 'to' => $upgrade->upgrade->id,
             ],],
         ];
+        $redirect = SettingsRepository::getOrDefault('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderComponent->orderCustomer->order->booking_reference, 'customer' => $orderComponent->orderCustomer->customer,]));
+
         $gateway = StripeGateway::checkout([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
-            $orderComponent->orderCustomer->order->booking_reference, 'Installment', $orderComponent->orderCustomer->customer->id, $data);
+            $orderComponent->orderCustomer->order->booking_reference, 'Installment', $orderComponent->orderCustomer->customer->id, $redirect, $data);
         return response()->json(['success' => true, 'location' => $gateway->headers->get('Location')]);
     }
 }

@@ -31,6 +31,10 @@ class ResetPasswordController extends Controller
 
     public function showResetForm(Request $request)
     {
-        return view('pages.auth.passwords.reset');
+        $token = $request->route()->parameter('token');
+
+        return view('pages.auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
     }
 }

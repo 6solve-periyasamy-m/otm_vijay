@@ -128,9 +128,11 @@ class CustomerTourController extends Controller
                 'id' => $tourComponent->id,
         ],],];
 
+        $redirect = SettingsRepository::getOrDefault('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
+
         return StripeGateway::checkout(
             [['name' => $tourComponent->__toString(), 'cost' => $tourComponent->tour_sales_price, 'quantity' => 1]],
-                $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $data);
+                $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect, $data);
     }
 
     public function addExtra(string $reference, string $componentType, int $componentId, ?Customer $customer = null)
