@@ -22,13 +22,14 @@
             Date of Birth
         </x-customer.input>
 
-        <x-customer.input name="additional[{{ $number }}][email_address]" value="{{ $traveller?->email_address }}" width="6" autocomplete="email" required>
+        <x-customer.input name="additional[{{ $number }}][email_address]" value="{{ $traveller?->email_address }}" width="6" autocomplete="email">
             Email Address
         </x-customer.input>
 
-        <x-customer.input name="additional[{{ $number }}][mobile_number]" value="{{ $traveller?->mobile_number ?? '' }}" width="3" autocomplete="tel" required>
+        <x-customer.input name="additional[{{ $number }}][mobile_number]" value="{{ $traveller?->mobile_number ?? '' }}" width="3" autocomplete="tel">
             Mobile Number
         </x-customer.input>
+
         <div class="form-group col-md-6">
             <label class="col-md-12 mb-0">Ideal Room Type</label>
             <select name="additional[{{ $number }}][room_type_id]" class="w-100">
@@ -39,6 +40,7 @@
                 @endforeach
             </select>
         </div>
+
         <div class="form-group col-md-6">
             <label class="col-md-12 mb-0">Room Sharing Group</label>
             <select name="additional[{{ $number }}][group_id]" class="w-100">
@@ -47,6 +49,7 @@
                 @endfor
             </select>
         </div>
+
         <a class="btn btn-danger float-end text-white" href="" onclick="event.preventDefault();removeCustomer(this)">
             <i class="icon-trash"></i>
             Remove Customer
