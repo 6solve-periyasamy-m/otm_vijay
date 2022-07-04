@@ -124,7 +124,8 @@ class Quote extends Model
             return QuoteStatus::CONVERTED;
         }
         $expired = now()->isAfter($this->expires);
-        return $this->quote_status < 2 && $expired ? QuoteStatus::EXPIRED : $this->quote_status;
+        // QuoteStatus -1, 0 and 1 should be overwritten by expired, but the others should not
+        return $this->quote_status->value < 2 && $expired ? QuoteStatus::EXPIRED : $this->quote_status;
     }
 
     public function getRepositoryAttribute(): QuoteRepository
