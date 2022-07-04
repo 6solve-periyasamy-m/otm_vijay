@@ -5,7 +5,6 @@ namespace App\Repository\Model\Quote\Component;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
-use Illuminate\Database\Eloquent\Model;
 
 class QuoteAccommodationRepository extends QuoteComponentRepository
 {
@@ -61,5 +60,10 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     public function __toString(): string
     {
         return $this->getTourComponent()->__toString();
+    }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->getTourComponent()->getInventory()->get()->purchase_price;
     }
 }

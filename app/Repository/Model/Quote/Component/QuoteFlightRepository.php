@@ -4,10 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteFlight;
 use App\Repository\Abstracts\QuoteComponentRepository;
-use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
-use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;
-use Illuminate\Database\Eloquent\Model;
 
 class QuoteFlightRepository extends QuoteComponentRepository
 {
@@ -63,5 +60,10 @@ class QuoteFlightRepository extends QuoteComponentRepository
     public function __toString(): string
     {
         return $this->getTourComponent()->__toString();
+    }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->getTourComponent()->getInventory()->get()->purchase_price;
     }
 }

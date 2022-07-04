@@ -45,6 +45,29 @@
         </x-admin.section.header.detail>
     </x-admin.section.header>
 
+    <div class="heading pt-2 pb-md-3 pb-2">
+        <h2 class="fw-bold">{{ __('quotes.view.cards.customers.header') }}</h2>
+    </div>
+
+    <x-admin.section.card>
+        @foreach($quote->travellers as $traveller)
+            <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+                <div class="otm-card">
+                    <p>{{ ($quote->lead_traveller_id == $traveller->id) ? 'Lead Booker' : ' Additional Traveller'}}</p>
+                    <h6 class="fw-bold">
+                        <a href="" class="link-info">
+                            {{ $traveller->name }}
+                        </a>
+                    </h6>
+                    <p>Email Address</p>
+                    <h6 class="fw-bold">{{ $traveller->email }}</h6>
+                    <p>Purchase Price of Components</p>
+                    <h6 class="fw-bold">{{ f_currency($traveller->repository->getPurchaseTotal()) }}</h6>
+                </div>
+            </div>
+        @endforeach
+    </x-admin.section.card>
+
     <div class="row">
         <div class="col-xl-6">
             <x-admin.section.card>

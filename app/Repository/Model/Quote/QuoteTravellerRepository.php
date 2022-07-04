@@ -7,6 +7,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteProspect;
 use App\Models\Quote\QuoteTraveller;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
 use Illuminate\Database\Eloquent\Model;
 
 class QuoteTravellerRepository extends ModelRepository
@@ -27,6 +28,56 @@ class QuoteTravellerRepository extends ModelRepository
         }
         $quote->travellers()->save($traveller);
         return $traveller;
+    }
+
+    /**
+     * @param bool $accommodation
+     * @param bool $activities
+     * @param bool $flights
+     * @param bool $transport
+     * @param bool $extras
+     * @param array $filter
+     * @return QuoteComponentRepository[]
+     */
+    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $extras = true, array $filter = ['Included', 'Upgrade', 'Add-on']): array
+    {
+        $components = [];
+        if ($accommodation) {
+            foreach ($this->traveller->accommodation()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($activities) {
+            foreach ($this->traveller->activities()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($flights) {
+            foreach ($this->traveller->flights()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($transport) {
+            foreach ($this->traveller->transport()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($extras) {
+            foreach ($this->traveller->merchandise()->with('tourComponent')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        return $components;
     }
 
     public function isDefault(): bool
@@ -71,5 +122,14 @@ class QuoteTravellerRepository extends ModelRepository
         }
         if ($this->isDefault()) $string .= ' (Default)';
         return $string;
+    }
+
+    public function getPurchaseTotal(): float
+    {
+        $total = 0;
+        foreach ($this->getComponents() as $component) {
+            $total += $component->getPurchasePrice();
+        }
+        return $total;
     }
 }

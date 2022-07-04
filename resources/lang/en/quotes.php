@@ -18,6 +18,11 @@ return [
         'starts' => 'Starts Date',
         'ends' => 'Ends Date',
         'cards' => [
+            'customers' => [
+                'header' => 'Travellers',
+                'default' => 'Default Traveller',
+                'lead' => 'Lead Traveller',
+            ],
             'installments' => [
                 'header' => 'Instalments',
                 'table' => [

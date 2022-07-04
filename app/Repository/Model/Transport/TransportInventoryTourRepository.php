@@ -12,7 +12,6 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
-use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
@@ -195,7 +194,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->is_bookable;
     }
 
-    public function getInventory(): ?InventoryRepository
+    public function getInventory(): ?TransportInventoryRepository
     {
         return $this->tourComponent->inventory->repository;
     }

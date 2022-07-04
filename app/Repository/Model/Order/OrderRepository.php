@@ -3,7 +3,6 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
-use App\Models\Customer\Group;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -13,7 +12,6 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use Cache;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository

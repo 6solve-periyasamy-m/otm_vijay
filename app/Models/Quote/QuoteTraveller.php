@@ -67,6 +67,8 @@ class QuoteTraveller extends Model
 {
     use HasFactory, SoftDeletes;
 
+    private QuoteTravellerRepository $internal_repository;
+
     protected $guarded = [];
     protected $casts = [
         'has_cost' => 'boolean',
@@ -127,7 +129,7 @@ class QuoteTraveller extends Model
 
     public function getRepositoryAttribute(): QuoteTravellerRepository
     {
-        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteTravellerRepository($this);
-        return $this->interal_repository;
+        if (!isset($this->internal_repository)) $this->internal_repository = new QuoteTravellerRepository($this);
+        return $this->internal_repository;
     }
 }
