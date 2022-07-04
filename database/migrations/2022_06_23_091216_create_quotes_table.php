@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('order_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('lead_traveller_id')->nullable();
             $table->foreignId('default_traveller_id')->nullable();
-            $table->string('reference', 64);
+            $table->string('reference', 64)->nullable();
             $table->decimal('deposit', 12)->nullable();
             $table->dateTime('expires')->nullable();
             $table->text('internal_notes')->nullable();

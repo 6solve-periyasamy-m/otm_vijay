@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_id
  * @property int|null $lead_traveller_id
  * @property int|null $default_traveller_id
- * @property string $reference
+ * @property string|null $reference
  * @property double|null $deposit
  * @property Carbon|null $expires
  * @property string|null $internal_notes
