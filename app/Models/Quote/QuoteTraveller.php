@@ -75,12 +75,12 @@ class QuoteTraveller extends Model
 
     public function quote(): BelongsTo
     {
-        return $this->belongsTo(Quote::class);
+        return $this->belongsTo(Quote::class, 'quote_id');
     }
 
     public function prospect(): BelongsTo
     {
-        return $this->belongsTo(QuoteProspect::class);
+        return $this->belongsTo(QuoteProspect::class, 'quote_prospect_id');
     }
 
     public function accommodation(): HasMany

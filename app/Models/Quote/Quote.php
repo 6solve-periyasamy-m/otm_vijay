@@ -71,6 +71,8 @@ class Quote extends Model
 {
     use HasFactory, SoftDeletes;
 
+    private QuoteRepository $internal_repository;
+
     protected $guarded = [];
     protected $casts = [
         'deposit' => 'double',
@@ -114,7 +116,7 @@ class Quote extends Model
 
     public function getRepositoryAttribute(): QuoteRepository
     {
-        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteRepository($this);
-        return $this->interal_repository;
+        if (!isset($this->internal_repository)) $this->internal_repository = new QuoteRepository($this);
+        return $this->internal_repository;
     }
 }

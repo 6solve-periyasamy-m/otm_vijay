@@ -25,6 +25,11 @@ class TourRepository extends ModelRepository implements HasStockControl
         $this->tour = $tour;
     }
 
+    public static function create(array $data): Tour
+    {
+        return Tour::create($data);
+    }
+
     public function update(array $data): Tour
     {
         $this->tour->update($data);

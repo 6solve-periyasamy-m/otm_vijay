@@ -2,6 +2,9 @@
 
 namespace App\Repository\Model\Quote;
 
+use App\Models\Customer\Customer;
+use App\Models\Quote\Quote;
+use App\Models\Quote\QuoteProspect;
 use App\Models\Quote\QuoteTraveller;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +16,17 @@ class QuoteTravellerRepository extends ModelRepository
     public function __construct(QuoteTraveller $traveller)
     {
         $this->traveller = $traveller;
+    }
+
+    public static function create(Quote $quote, ?Customer $customer = null, array $data = []): QuoteTraveller
+    {
+        $traveller = QuoteTraveller::make($data);
+        if (isset($customer)) {
+            $prospect = QuoteProspect::create(['customer_id' => $customer->id]);
+            $traveller->quote_prospect_id = $prospect->id;
+        }
+        $quote->travellers()->save($traveller);
+        return $traveller;
     }
 
     public function isDefault(): bool

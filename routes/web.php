@@ -246,8 +246,9 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     Route::prefix('quotes')->name('quotes.')->group(function () {
         Route::get('/', [QuoteController::class, 'index'])->name('all')->middleware('bouncer:Quote\Quote,read');
-        Route::get('/create', [QuoteController::class, 'create'])->name('create')->middleware('bouncer:Quote\Quote,create');
-        Route::post('/create', [QuoteController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,create');
+        Route::post('/create', [QuoteController::class, 'storeBespoke'])->name('store-bespoke')->middleware('bouncer:Quote\Quote,create');
+        Route::get('/create/{tour?}', [QuoteController::class, 'create'])->name('create')->middleware('bouncer:Quote\Quote,create');
+        Route::get('/create/{tour}', [QuoteController::class, 'storeBasic'])->name('store-basic')->middleware('bouncer:Quote\Quote,create');
         Route::prefix('{quote}')->group(function () {
             Route::get('/', [QuoteController::class, 'view'])->name('view')->middleware('bouncer:Quote\Quote,read');
             Route::get('/update', [QuoteController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');

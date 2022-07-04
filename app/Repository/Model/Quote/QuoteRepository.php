@@ -2,13 +2,14 @@
 
 namespace App\Repository\Model\Quote;
 
+use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
+use App\Models\Quote\QuoteTraveller;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
 class QuoteRepository extends ModelRepository
 {
@@ -17,6 +18,30 @@ class QuoteRepository extends ModelRepository
     public function __construct(Quote $quote)
     {
         $this->quote = $quote;
+    }
+
+    public static function create(Tour $tour, Customer $customer, array $data = [], array $leadData = []): Quote
+    {
+        $quote = Quote::create(array_merge(['tour_id' => $tour->id,], $data));
+        $lead = $quote->repository->addTraveller($customer, $leadData);
+        $quote->lead_traveller_id = $lead->id;
+        $quote->reference = $quote->repository->generateReference();
+        $quote->repository->save();
+        return $quote;
+    }
+
+    public function generateReference(): string
+    {
+        return setting('quote.prefix', 'OTMQ')
+            . str_pad($this->quote->tour->id, 4, '0', STR_PAD_LEFT)
+            . str_pad($this->quote->id, 4, '0', STR_PAD_LEFT)
+            . str_pad($this->quote->leadTraveller->id, 4, '0', STR_PAD_LEFT)
+            . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
+    }
+
+    public function addTraveller(Customer $customer, array $data = []): QuoteTraveller
+    {
+        return QuoteTravellerRepository::create($this->quote, $customer, $data);
     }
 
     public function addPricePoint(int $customerCount, float $pricePerPerson): QuotePricePoint
