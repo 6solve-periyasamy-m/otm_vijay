@@ -40,7 +40,7 @@ class QuoteController extends Controller
 
     public function view(Quote $quote)
     {
-        return redirect()->route('quotes.all');
+        return view('pages.admin.quote.view', ['quote' => $quote,]);
     }
 
     public function edit(Quote $quote)

@@ -58,6 +58,7 @@ use App\Http\Controllers\OrderSystemController;
 use App\Http\Controllers\PaymentScheduleController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\Quote\QuoteController;
+use App\Http\Controllers\Quote\QuoteInstallmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeController;
@@ -254,6 +255,11 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [QuoteController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');
             Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
             Route::post('/delete', [QuoteController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
+            Route::prefix('installment')->name('installments.')->group(function () {
+               Route::post('/create', [QuoteInstallmentController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');
+               Route::post('/{installment}/update', [QuoteInstallmentController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
+               Route::post('/{installment}/delete', [QuoteInstallmentController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,update');
+            });
         });
     });
 

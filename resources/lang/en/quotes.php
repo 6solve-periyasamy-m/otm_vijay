@@ -9,6 +9,36 @@ return [
         'status' => 'Quote Status',
         'notes' => 'Notes',
     ],
+    'view' => [
+        'title' => 'View Quote',
+        'reference' => 'Quote Reference',
+        'status' => 'Quote Status',
+        'name' => 'Quote Name',
+        'expires' => 'Expires At',
+        'starts' => 'Starts Date',
+        'ends' => 'Ends Date',
+        'cards' => [
+            'installments' => [
+                'header' => 'Instalments',
+                'table' => [
+                    'type' => 'Type',
+                    'due' => 'Due',
+                    'amount' => 'Amount',
+                ],
+                'form' => [
+                    'due' => 'Due On',
+                    'amount' => 'Amount',
+                    'create' => 'Create',
+                    'refresh' => 'Resync'
+                ],
+                'types' => [
+                    'deposit' => 'Deposit',
+                    'installment' => 'Instalment',
+                    'remaining' => 'Remaining Balance',
+                ]
+            ]
+        ]
+    ],
     'status' => [
         'expired' => 'Expired',
         'not_sent' => 'Not Sent',
