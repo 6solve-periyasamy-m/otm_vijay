@@ -2,6 +2,7 @@
 
 namespace App\Models\Quote;
 
+use App\Models\Helper\QuoteStatus;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $reference
  * @property double|null $deposit
  * @property Carbon|null $expires
+ * @property QuoteStatus $quote_status
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property Carbon|null $deleted_at
@@ -37,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|QuoteInstallment[] $installments
  * @property-read int|null $installments_count
  * @property-read Order|null $order
+ * @property-read QuoteStatus $status
  * @property-read Collection|QuotePricePoint[] $pricePoints
  * @property-read int|null $price_points_count
  * @property-read Tour $tour
@@ -76,7 +79,8 @@ class Quote extends Model
     protected $guarded = [];
     protected $casts = [
         'deposit' => 'double',
-        'expires' => 'datetime'
+        'expires' => 'datetime',
+        'quote_status' => QuoteStatus::class
     ];
 
     public function leadTraveller(): BelongsTo
@@ -112,6 +116,15 @@ class Quote extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function getStatusAttribute(): QuoteStatus
+    {
+        if (isset($this->order_id)) {
+            return QuoteStatus::CONVERTED;
+        }
+        $expired = now()->isAfter($this->expires);
+        return $this->quote_status < 2 && $expired ? QuoteStatus::EXPIRED : $this->quote_status;
     }
 
     public function getRepositoryAttribute(): QuoteRepository

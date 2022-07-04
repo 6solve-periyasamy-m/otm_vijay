@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('reference', 64)->nullable();
             $table->decimal('deposit', 12)->nullable();
             $table->dateTime('expires')->nullable();
+            $table->integer('quote_status')->default(0);
             $table->text('internal_notes')->nullable();
             $table->text('external_notes')->nullable();
             $table->softDeletes();
