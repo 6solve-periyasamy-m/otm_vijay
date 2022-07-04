@@ -11,11 +11,12 @@ return [
     ],
     'status' => [
         'expired' => 'Expired',
-        'not_sent' => 'Not Send',
+        'not_sent' => 'Not Sent',
         'awaiting' => 'Awaiting Response',
         'approved' => 'Approved - Pending Conversion',
         'converted' => 'Approved - Converted to Order',
-        'closed' => 'Closed'
+        'closed' => 'Closed',
+        'unknown' => 'Status Unknown'
     ],
     'traveller' => [
         'prospect' => [

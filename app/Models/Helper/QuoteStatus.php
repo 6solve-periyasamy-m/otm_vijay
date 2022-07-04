@@ -2,6 +2,10 @@
 
 namespace App\Models\Helper;
 
+use App\View\Components\Badge\Quote as QuoteBadge; // Prevents confusion
+use Closure;
+use Illuminate\Contracts\View\View;
+
 enum QuoteStatus: int
 {
 
@@ -11,6 +15,7 @@ enum QuoteStatus: int
     case APPROVED = 2;
     case CONVERTED = 3;
     case CLOSED = 4;
+    case UNKNOWN = 999;
 
     public function description(): string
     {
@@ -21,6 +26,25 @@ enum QuoteStatus: int
             self::APPROVED => trans('quotes.status.approved'),
             self::CONVERTED => trans('quotes.status.converted'),
             self::CLOSED => trans('quotes.status.closed'),
+            self::UNKNOWN => trans('quotes.status.unknown'),
         };
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::EXPIRED => 'danger',
+            self::NOT_SENT => 'info',
+            self::AWAITING => 'warning',
+            self::APPROVED => 'primary',
+            self::CONVERTED => 'success',
+            self::CLOSED => 'secondary',
+            self::UNKNOWN => 'dark',
+        };
+    }
+
+    public function badge(): View|Closure|string
+    {
+        return (new QuoteBadge($this))->render();
     }
 }

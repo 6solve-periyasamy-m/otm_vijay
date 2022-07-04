@@ -36,6 +36,7 @@
                     <th scope="col">{{ __('quotes.table.package') }}</th>
                     <th scope="col">{{ __('quotes.table.lead') }}</th>
                     <th scope="col">{{ __('quotes.table.email') }}</th>
+                    <th scope="col">{{ __('quotes.table.status') }}</th>
                     <th scope="col">{{ __('quotes.table.notes') }}</th>
                     <th scope="col">{{ __('custom.table.actions') }}</th>
                 </tr>
@@ -47,6 +48,7 @@
                         <td>{{ $quote->tour->name }}</td>
                         <td>{{ $quote->leadTraveller->name }}</td>
                         <td>{{ $quote->leadTraveller->email }}</td>
+                        <td>{{ $quote->status->badge() }}</td>
                         <td>{{ $quote->internal_notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Quote\Quote::class)
