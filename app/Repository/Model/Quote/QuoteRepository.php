@@ -102,4 +102,9 @@ class QuoteRepository extends ModelRepository
     {
         return $this->quote->reference;
     }
+
+    public function getPricePerPerson(int $count): ?QuotePricePoint
+    {
+        return QuotePricePoint::where('quote_id', $this->quote->id)->where('quantity', '<=', $count)->orderBy('quantity', 'desc')->first();
+    }
 }
