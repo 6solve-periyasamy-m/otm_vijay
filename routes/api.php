@@ -7,7 +7,6 @@
 
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
-use App\Repository\OrderRepository;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Api\TourController;
@@ -15,7 +14,6 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\SelectController;
 use App\Http\Controllers\Api\BookingController;
-use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AirlinesController;
 use App\Http\Controllers\Api\CustomerController;
@@ -26,7 +24,6 @@ use App\Http\Controllers\Api\CountryApiController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\AccommodationController;
 use App\Http\Controllers\Api\TourComponentController;
-use App\Http\Controllers\Api\ActivityBookingController;
 use App\Http\Controllers\Api\BookingActivityController;
 use App\Http\Controllers\Api\BookingCustomerController;
 use App\Http\Controllers\Api\CustomerComponentController;
@@ -215,6 +212,8 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
                 Route::post('/merchandise/add', [TourComponentController::class, 'addMerchandiseAddon'])->name('merchandise');
             });
         });
+        Route::post('upgrade', [CustomerComponentController::class, 'apply'])->name('customer.upgrade');
+        Route::post('upgrade/buy', [CustomerComponentController::class, 'purchase'])->name('customer.upgrade.purchase');
         Route::post('accommodation/upgrade', [CustomerComponentController::class, 'applyAccommodationUpgrade'])->name('customer.accommodation.upgrade');
         Route::post('accommodation/upgrade/buy', [CustomerComponentController::class, 'purchaseAccommodationUpgrade'])->name('customer.accommodation.upgrade.purchase');
         Route::post('activity/upgrade', [CustomerComponentController::class, 'applyActivityUpgrade'])->name('customer.activity.upgrade');

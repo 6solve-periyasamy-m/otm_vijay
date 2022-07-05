@@ -72,21 +72,21 @@
                             </thead>
                             @foreach($inventoryTour->upgrades as $upgrade)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($upgrade->upgrade->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($upgrade->upgrade->activityInventory->ends_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($upgrade->upgrade->activityInventory->starts_at) }} to {{ f_datetime($upgrade->upgrade->activityInventory->ends_at) }}</td>
                                     <td>{{ $upgrade->upgrade->activityInventory->activity->name }}</td>
                                     <td>{{ $upgrade->upgrade->activityInventory->ticketType->name }}</td>
                                     <td>{{ $upgrade->upgrade->activityInventory->stock }}</td>
                                     <td>{{ $upgrade->description }}</td>
-                                    <td>{{ StringFormatter::formatCurrency($upgrade->upgrade->tour_sales_price) }}</td>
+                                    <td>{{ f_currency($upgrade->upgrade->tour_sales_price) }}</td>
                                     <td class="actions">
-                                        @can('update', \App\Models\ActivityInventoryTour::class)
+                                        @can('update', \App\Models\Activity\ActivityInventoryTour::class)
                                             <a href="{{ route('activity-upgrade.edit', ['tour' => $tour, 'inventoryTour' => $inventoryTour,'upgrade'=>$upgrade]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                                         @else
                                             <span class="btn btn-outline-dark btn-sm mb-1">
                                                     <i class="icon-note"></i>
                                                 </span>
                                         @endcan
-                                        @can('delete', \App\Models\ActivityInventoryTour::class)
+                                        @can('delete', \App\Models\Activity\ActivityInventoryTour::class)
                                             <a href="#" onclick="$('#activity-{{$upgrade->upgrade->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                             <form action="{{ route('activity-upgrade.delete', ['tour' => $tour, 'inventoryTour' => $inventoryTour, 'upgrade' => $upgrade]) }}" method="post" id="activity-{{$upgrade->upgrade->id}}-delete">
                                                 @csrf

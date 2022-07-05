@@ -3,24 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\RoomingFailedException;
-use App\Models\Order;
-use App\Repository\OrderRepository;
-use App\Repository\TourRepository;
-use Exception;
-use App\Models\Tour;
-
+use App\Http\Controllers\ApiController;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Booking\AccommodationGroup;
+use App\Models\Order\Order;
+use App\Models\Tour\Tour;
+use App\Repository\AccommodationRepository;
+use App\Repository\BookingRepository;
+use App\Repository\BookingTravellerRepository;
+use App\Repository\RoomingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
-use App\Http\Controllers\ApiController;
-use App\Models\RoomType;
-use App\Models\AccommodationGroup;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
-
-use App\Repository\AccommodationRepository;
-use App\Repository\BookingTravellerRepository;
-use App\Repository\BookingRepository;
 
 class AccommodationController extends ApiController
 {
@@ -28,7 +22,7 @@ class AccommodationController extends ApiController
     private $debug = 0;
 
     /***
-     * this tour has a range of accommodation options: 
+     * this tour has a range of accommodation options:
      * @Param: Tour $tour
      * returns: data: room_types
      */
@@ -90,7 +84,7 @@ class AccommodationController extends ApiController
      * @param Tour $tour
      * returns JSON rooms availble for a tour
      */
-    public function loadRoomsForTour(Tour $tour) 
+    public function loadRoomsForTour(Tour $tour)
     {
         $rooms = AccommodationRepository::loadRoomsForTour($tour);
 
@@ -169,7 +163,7 @@ class AccommodationController extends ApiController
                     $tour->accommodationInventoryTours()->save($inventoryTour);
                 }
             }
-            TourRepository::autoAssignTemplating($tour);
+            $tour->repository->autoAssignTemplating();
             return response('Any listed components have been successfully added', 200);
         }
         abort(400, 'Invalid component type has been provided');
@@ -178,7 +172,7 @@ class AccommodationController extends ApiController
 
     public function saveRoomingData(Request $request, Order $order) {
         try {
-            OrderRepository::buildGroupRooming($order, $request->data);
+            RoomingRepository::buildGroupRooming($order, $request->data);
             return response('Building Saved', 200);
         } catch (RoomingFailedException $e) {
             abort(500, $e->getMessage());

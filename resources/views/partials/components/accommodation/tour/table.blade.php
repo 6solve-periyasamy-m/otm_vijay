@@ -3,7 +3,7 @@
     $(document).ready(function () {
         accommodationTable = $('.accommodation-inventory-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
     });
-    @can('create', \App\Models\AccommodationInventoryTour::class)
+    @can('create', \App\Models\Accommodation\AccommodationInventoryTour::class)
     function getSelectedAccommodationInventory() {
         let ids = [];
         accommodationTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -25,7 +25,7 @@
     }
     @endcan
 </script>
-@can('create', \App\Models\AccommodationInventoryTour::class)
+@can('create', \App\Models\Accommodation\AccommodationInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <select class="form-select accommodation-component-type-select">
         <option value="Included" selected>Included</option>
@@ -54,29 +54,29 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Repository\AccommodationComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(23, 59, 59)) as $inventory)
+    @foreach(\App\Repository\Model\Accommodation\AccommodationInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->component->name }}</td>
             <td>{{ $inventory->component->address }}</td>
             <td>{{ $inventory->roomType }}</td>
             <td>{{ $inventory->boardType }}</td>
             <td>
-                {{ StringFormatter::formatDateTime($inventory->check_in) }}&nbsp
+                {{ f_datetime($inventory->check_in) }}&nbsp
                 <input type="checkbox" disabled @if($inventory->check_in_time_confirmed == 1) checked @endif>
             </td>
             <td>
-                {{ StringFormatter::formatDateTime($inventory->check_out) }}&nbsp
+                {{ f_datetime($inventory->check_out) }}&nbsp
                 <input type="checkbox" disabled @if($inventory->check_out_time_confirmed == 1) checked @endif>
             </td>
             <td>
                 <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
             </td>
             <td>
-                {{$inventory->stock - $inventory->getUsedStock()}}/{{ $inventory->stock }}<br/>
-                ({{$inventory->getUsedStock()}} Sold)
+                {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
+                ({{$inventory->used_stock}} Sold)
             </td>
-            <td>{{ StringFormatter::formatCurrency($inventory->purchase_price) }}</td>
-            <td>{{ StringFormatter::formatCurrency($inventory->sales_price) }}</td>
+            <td>{{ f_currency($inventory->purchase_price) }}</td>
+            <td>{{ f_currency($inventory->sales_price) }}</td>
             <td>{{ $inventory->notes }}</td>
         </tr>
     @endforeach

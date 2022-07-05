@@ -18,12 +18,12 @@
                 <th scope="row">{{ $row->reference }}</th>
                 <td>{{ $row->customer }}</td>
                 <td>{{ $row->activity }}</td>
-                <td>{{ StringFormatter::formatDateTime($row->starts) }}</td>
-                <td>{{ StringFormatter::formatDateTime($row->ends) }}</td>
+                <td>{{ f_datetime($row->starts) }}</td>
+                <td>{{ f_datetime($row->ends) }}</td>
                 <td>{{ $row->ticket }}</td>
 
                 <td>{{ $row->purchased }}</td>
-                <td>{{ StringFormatter::formatCurrency($row->cost) }}</td>
+                <td>{{ f_currency($row->cost) }}</td>
                 <td>{{ $row->component }}</td>
             </tr>
         @endforeach

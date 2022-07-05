@@ -3,7 +3,7 @@
 namespace App\Events\Parent;
 
 use App\Events\Parent\Traits\ShouldInvoice;
-use App\Models\Payment;
+use App\Models\Order\Payment\Payment;
 
 abstract class PaymentEvent extends OrderEvent
 {

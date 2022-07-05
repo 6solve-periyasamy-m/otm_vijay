@@ -22,13 +22,13 @@
             <tr>
                 <th scope="row">{{ $row->flight_number }}</th>
                 <td>{{ $row->departs }}</td>
-                <td>{{ StringFormatter::formatDateTime($row->depart_time) }}</td>
+                <td>{{ f_datetime($row->depart_time) }}</td>
                 <td>{{ $row->arrival }}</td>
-                <td>{{ StringFormatter::formatDateTime($row->arrive_time) }}</td>
+                <td>{{ f_datetime($row->arrive_time) }}</td>
                 <td>{{ $row->reference }}</td>
                 <td>{{ $row->tour }}</td>
                 <td>{{ $row->customer }}</td>
-                <td>{{ StringFormatter::formatBoolean($row->is_lead) }}</td>
+                <td>{{ f_bool($row->is_lead) }}</td>
                 <td>{{ $row->flight_notes }}</td>
                 <td>{{ $row->order_customer_notes_internal }}</td>
                 <td>{{ $row->order_customer_notes_external }}</td>

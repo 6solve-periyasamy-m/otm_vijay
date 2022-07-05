@@ -2,8 +2,8 @@
 
 namespace App\Http\Gateways;
 
-use App\Models\Customer;
-use App\Models\PaymentIntention;
+use App\Models\Customer\Customer;
+use App\Models\Order\Payment\PaymentIntention;
 use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway

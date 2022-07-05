@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Repository\ReportRepository;
+use App\Repository\Reporting\ReportRepository;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 

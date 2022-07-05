@@ -2,7 +2,7 @@
     <textarea
            class="form-control {{ $attributes->get('name') }}-input" style="padding-top: 25px; padding-left: 5px;"
            id="{{ $attributes->get('name') }}"
-           name="amount"
+           name="{{ $attributes->get('name') }}"
            placeholder="placeholder"
            rows="{{ $attributes->get('rows', 3) }}"
             {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}>{{ $attributes->get('value', '') }}</textarea>

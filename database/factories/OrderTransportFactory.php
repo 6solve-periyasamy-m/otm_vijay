@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\OrderTransport;
+use App\Models\Order\Component\OrderTransport;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderTransportFactory extends Factory

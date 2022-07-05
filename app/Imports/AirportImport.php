@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Models\Address;
-use App\Models\AddressParent;
-use App\Models\Airport;
-use App\Models\Country;
-use App\Models\LocationType;
+use App\Models\Flight\Airport;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
+use App\Models\Location\Country;
+use App\Models\Location\LocationType;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class AirportImport implements ToModel
@@ -22,7 +22,7 @@ class AirportImport implements ToModel
         $address = Address::create([
             'name' => $row[0],
             'address_parent_id' => AddressParent::getParentId('Activity'),
-            'location_type_id' => LocationType::firstOrCreate('Airport')->id,
+            'location_type_id' => LocationType::findOrCreate('Airport')->id,
             'address_line_1' => trim($row[2]),
             'address_line_2' => trim($row[3]),
             'town' => trim($row[4]),

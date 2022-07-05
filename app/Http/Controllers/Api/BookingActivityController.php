@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Booking;
-use App\Models\Customer;
-use App\Models\Activity;
-use Illuminate\Http\Request;
-use App\Models\BookingActivity;
-use App\Models\ActivityInventory;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController;
-use App\Models\ActivityInventoryTour;
-use App\Models\ActivityInventoryTourUpgrade;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Booking;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Customer\Customer;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookingActivityController extends ApiController
 {
@@ -284,7 +283,7 @@ class BookingActivityController extends ApiController
             $bookingActivity->where('booking_id', $request->booking_id)
                 ->delete();
             return response()->json(['success' => true]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false]);
         }
     }

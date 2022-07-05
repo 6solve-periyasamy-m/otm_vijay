@@ -3,7 +3,7 @@
     $(document).ready(function () { $('#accommodationInventory').DataTable({fixedHeader: true}); });
 </script>
 @endsection
-@can('create', \App\Models\AccommodationInventory::class)
+@can('create', \App\Models\Accommodation\AccommodationInventory::class)
 <div class="card">
     <div class="card-body ">
         {{--<a href="#" class="btn btn-success float-end">Bulk Add Inventory</a>--}}
@@ -36,25 +36,25 @@
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
                     <td>
-                        {{ StringFormatter::formatDateTime($accommodationInventory->check_in) }}&nbsp
+                        {{ f_datetime($accommodationInventory->check_in) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_in_time_confirmed == 1) checked @endif>
                     </td>
                     <td>
-                        {{ StringFormatter::formatDateTime($accommodationInventory->check_out) }}&nbsp
+                        {{ f_datetime($accommodationInventory->check_out) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_out_time_confirmed == 1) checked @endif>
                     </td>
                     <td>
                         <input type="checkbox" disabled @if($accommodationInventory->fit_selectable == 1) checked @endif>
                     </td>
                     <td>
-                        {{$accommodationInventory->stock - $accommodationInventory->getUsedStock()}}/{{ $accommodationInventory->stock }}<br/>
-                        ({{$accommodationInventory->getUsedStock()}} Sold)
+                        {{$accommodationInventory->stock - $accommodationInventory->used_stock}}/{{ $accommodationInventory->stock }}<br/>
+                        ({{$accommodationInventory->used_stock}} Sold)
                     </td>
-                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->purchase_price) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($accommodationInventory->sales_price) }}</td>
+                    <td>{{ f_currency($accommodationInventory->purchase_price) }}</td>
+                    <td>{{ f_currency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
                     <td class="actions-3">
-                        @can('create', \App\Models\AccommodationInventory::class)
+                        @can('create', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                                 <i class="icon-layers"></i>
                             </a>
@@ -63,7 +63,7 @@
                                 <i class="icon-layers"></i>
                             </span>
                         @endcan
-                        @can('update', \App\Models\AccommodationInventory::class)
+                        @can('update', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}"
                                 class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -73,7 +73,7 @@
                                 <i class="icon-note"></i>
                             </span>
                         @endcan
-                        @can('delete', \App\Models\AccommodationInventory::class)
+                        @can('delete', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                             onclick="event.preventDefault();document.getElementById('accommodationInventory-{{ $accommodationInventory->id }}-delete').submit();">
                                 <i class="icon-trash"></i>

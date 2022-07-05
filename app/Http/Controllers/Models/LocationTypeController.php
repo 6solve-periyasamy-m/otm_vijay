@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\LocationType;
+use App\Models\Location\LocationType;
 use Illuminate\Http\Request;
 
 class LocationTypeController extends Controller

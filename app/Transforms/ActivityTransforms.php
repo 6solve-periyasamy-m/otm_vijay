@@ -2,14 +2,11 @@
 
 namespace App\Transforms;
 
-use App\Facades\StringFormatterFacade;
-use App\Models\ActivityInventory;
-use App\Models\ActivityInventoryTour;
-use App\Models\ActivityType;
-use App\Models\OrderCustomer;
-use App\Models\TicketType;
-use App\Repository\TourRepository;
-use StringFormatter;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityType;
+use App\Models\Activity\TicketType;
+use App\Models\Order\OrderCustomer;
 
 interface ActivityTransformsInterface {
     public static function getSelectActivityTypes($filter);
@@ -90,7 +87,7 @@ class ActivityTransforms implements ActivityTransformsInterface
     }
 
     public static function getSelectInventoryForActivity(ActivityInventoryTour $tourInventory, $filter) {
-        $available = TourRepository::getAvailableActivityForUpgrades($tourInventory);
+        $available = $tourInventory->repository->getAvailableForUpgrade();
         $data = [];
         foreach ($available as $id => $inventory) {
             $subData = [];
@@ -124,7 +121,7 @@ class ActivityTransforms implements ActivityTransformsInterface
                 $subData['text'] = $inventoryTour . " ({$inventoryTour->tour_component_type})"
                     . ' - ' .
                     ($inventoryTour->tour_component_type === 'Included' ? 'Included with Basic Package' :
-                        StringFormatter::formatCurrency($inventoryTour->tour_sales_price));
+                        f_currency($inventoryTour->tour_sales_price));
                 if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
             }
         }

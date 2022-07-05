@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Report;
-use App\Repository\BespokeReportRepository;
+use App\Models\System\Report;
+use App\Repository\Reporting\BespokeReportRepository;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 

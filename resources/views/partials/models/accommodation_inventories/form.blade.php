@@ -1,4 +1,4 @@
-@can('create', \App\Models\RoomType::class)
+@can('create', \App\Models\Accommodation\RoomType::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Room Type', 'field' => 'room_type_id', 'value' => $room_type_id ?? 0,
              'route' => 'room-types', 'createRoute' => route('room-types.create'),])
@@ -7,7 +7,7 @@
         ['name' => 'Room Type', 'field' => 'room_type_id', 'value' => $room_type_id ?? 0,
          'route' => 'room-types',])
 @endcan
-@can('create', \App\Models\BoardType::class)
+@can('create', \App\Models\Accommodation\BoardType::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Board Type', 'field' => 'board_type_id', 'value' => $board_type_id ?? 0,
              'route' => 'board-types', 'createRoute' => route('board-types.create'),])

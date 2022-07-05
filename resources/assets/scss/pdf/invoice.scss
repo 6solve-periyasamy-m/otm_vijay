@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
-
 :root {
     --lightgrey: #8a8a8a;
     --title-color: #7aadd4;
@@ -21,7 +19,7 @@
 }
 
 * {
-    font-family: 'Poppins';
+    font-family: Helvetica, Arial, sans-serif;
     font-size: var(--text-global);
 }
 

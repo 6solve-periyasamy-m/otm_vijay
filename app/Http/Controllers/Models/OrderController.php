@@ -8,10 +8,11 @@ use App\Events\Order\OrderCreatedEvent;
 use App\Events\Order\OrderEditedEvent;
 use App\Events\Order\OrderRestoredEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderCustomer;
-use App\Models\Tour;
-use App\Repository\OrderRepository;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Tour;
+use App\Repository\Reporting\ReportRepository;
+use App\Repository\RoomingRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -20,6 +21,11 @@ class OrderController extends Controller
     public function index()
     {
         return view('pages.models.orders.table', ['orders' => Order::all(),]);
+    }
+
+    public function reminders(int $max = 7, int $min = -1000)
+    {
+        return view('pages.orders.reminders', ['max' => $max, 'min' => $min, 'orders' => ReportRepository::getRemindersReport($max, $min),]);
     }
 
     public function create()
@@ -48,9 +54,9 @@ class OrderController extends Controller
         $order->lead_booker_id = $orderCustomer->id;
         $order->booking_reference = Order::generateBookingReference($order);
         $order->save();
-        OrderRepository::addIncludedToCustomer($orderCustomer);
-        OrderRepository::assignDefaultRooming($orderCustomer);
-        OrderRepository::cloneInstallments($order);
+        $orderCustomer->repository->addAllIncluded();
+        RoomingRepository::assignDefaultRooming($orderCustomer);
+        $order->repository->resetInstallments();
         event(new OrderCreatedEvent($order));
         event(new OrderCustomerCreatedEvent($orderCustomer, false));
         if (isset($request->customers)) {
@@ -61,8 +67,8 @@ class OrderController extends Controller
                     'single_occupancy_surcharge' => $order->tour->single_occupancy_surcharge,
                 ]);
                 $order->orderCustomers()->save($orderCustomer);
-                OrderRepository::addIncludedToCustomer($orderCustomer);
-                OrderRepository::assignDefaultRooming($orderCustomer);
+                $orderCustomer->repository->addAllIncluded();
+                RoomingRepository::assignDefaultRooming($orderCustomer);
             }
         }
         return redirect()->route('orders.view', ['order' => $order,]);
@@ -75,12 +81,17 @@ class OrderController extends Controller
 
     public function invoice(Order $order)
     {
-        return view('pdf.invoices.columns', ['invoice' => OrderRepository::generateInvoice($order),]);
+        return $order->repository->getInvoiceRepository()->getResponseStream();
     }
 
     public function atol(Order $order)
     {
-        return OrderRepository::showAtolCertificate($order);
+        return $order->repository->getAtolRepository()->showAtolCertificate();
+    }
+
+    public function occupancy(Order $order)
+    {
+        return view('pages.occupancy.manager', array_merge(RoomingRepository::exportRoomingData($order), ['order' => $order,]));
     }
 
     public function edit(Order $order)

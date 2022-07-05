@@ -3,34 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use App\Models\AccommodationInventoryTour;
-use App\Models\ActivityInventoryTour;
-use App\Models\FlightInventoryTour;
-use App\Models\Order;
-use App\Models\OrderCustomer;
-use App\Models\TransportInventoryTour;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Transport\TransportInventoryTour;
+use App\Transforms\AccommodationTransforms;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
+use App\Transforms\FlightTransforms;
+use App\Transforms\LocationsTransforms;
 use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
-use App\Transforms\FlightTransforms;
 use Illuminate\Http\Request;
-use App\Transforms\AccommodationTransforms;
-use App\Transforms\LocationsTransforms;
-use Log;
 
 class SelectController extends ApiController
 {
-    public function getLocations(Request $request) {
-        $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsTransforms::getAvailableSelectLocations($filter);
-    }
-
-    public function getRegions(Request $request) {
-        $filter = $request->has('filter') ? $request->input('filter') : "";
-        return LocationsTransforms::getAvailableSelectRegions($filter);
-    }
 
     public function getCountries(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
@@ -40,14 +30,6 @@ class SelectController extends ApiController
     public function getLocationTypes(Request $request) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return LocationsTransforms::getAvailableSelectLocationTypes($filter);
-    }
-
-    public function getSelectedLocation($id) {
-        return LocationsTransforms::getSelectedLocation($id);
-    }
-
-    public function getSelectedRegion($id) {
-        return LocationsTransforms::getSelectedRegion($id);
     }
 
     public function getSelectedCountry($id) {

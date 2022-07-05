@@ -27,7 +27,7 @@
             <p>Description</p>
             <h6 class="fw-bold">{{ $transport->description }}</h6>
         </div>
-        @can('update', \App\Models\Transport::class)
+        @can('update', \App\Models\Transport\Transport::class)
         <div class="col-12">
             <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">
                 <i class="icon-note"></i>

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Models\BookingActivity;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Booking\Component\BookingActivity;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ActivityBookingController extends Controller
 {

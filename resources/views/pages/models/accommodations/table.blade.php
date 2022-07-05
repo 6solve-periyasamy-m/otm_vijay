@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    @can('create', \App\Models\AccommodationInventory::class)
+    @can('create', \App\Models\Accommodation\AccommodationInventory::class)
     <div class="card">
         <div class="card-body">
             <a class="btn btn-primary float-end" href="{{ route('accommodations.create') }}">

@@ -1,5 +1,11 @@
 @extends('layout.customer')
 
+@php
+/**
+ * @var \App\Models\Order\OrderCustomer $orderCustomer
+ */
+@endphp
+
 @section('title', 'Your Extras')
 
 @php
@@ -15,67 +21,17 @@
         function onOrderChange(selector) {
             window.location = route + '/' + $(selector).val();
         }
-        @if(\App\Repository\SettingsRepository::getBoolean('payment.required', true))
-            function applyAccommodationUpgrade(selector, btn) {
+        @if(!flag('payment.required', true))
+            function applyUpgrade(selector, btn, model) {
                 let upgrade_id = $('#' + selector).find(':selected').val();
                 let component_id = $(btn).closest('tr').attr('component');
                 if (upgrade_id != null && component_id != null) {
-                    $.post('{{ route('api.order.customer.accommodation.upgrade') }}',
+                    $.post('{{ route('api.order.customer.upgrade') }}',
                         { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                             '_token': '{{ csrf_token() }}',
-                            'component_id': component_id,
-                            'upgrade_id': upgrade_id
-                        })
-                        .done(function (xhr, textStatus, errorThrown) {
-                            if (xhr.success) location.reload();
-                            else alert(xhr.message);
-                        })
-                        .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-                }
-            }
-            function applyActivityUpgrade(selector, btn) {
-                let upgrade_id = $('#' + selector).find(':selected').val();
-                let component_id = $(btn).closest('tr').attr('component');
-                if (upgrade_id != null && component_id != null) {
-                    $.post('{{ route('api.order.customer.activity.upgrade') }}',
-                        { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                            '_token': '{{ csrf_token() }}',
-                            'component_id': component_id,
-                            'upgrade_id': upgrade_id
-                        })
-                        .done(function (xhr, textStatus, errorThrown) {
-                            if (xhr.success) location.reload();
-                            else alert(xhr.message);
-                        })
-                        .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-                }
-            }
-            function applyFlightUpgrade(selector, btn) {
-                let upgrade_id = $('#' + selector).find(':selected').val();
-                let component_id = $(btn).closest('tr').attr('component');
-                if (upgrade_id != null && component_id != null) {
-                    $.post('{{ route('api.order.customer.flight.upgrade') }}',
-                        { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                            '_token': '{{ csrf_token() }}',
-                            'component_id': component_id,
-                            'upgrade_id': upgrade_id
-                        })
-                        .done(function (xhr, textStatus, errorThrown) {
-                            if (xhr.success) location.reload();
-                            else alert(xhr.message);
-                        })
-                        .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-                }
-            }
-            function applyTransportUpgrade(selector, btn) {
-                let upgrade_id = $('#' + selector).find(':selected').val();
-                let component_id = $(btn).closest('tr').attr('component');
-                if (upgrade_id != null && component_id != null) {
-                    $.post('{{ route('api.order.customer.transport.upgrade') }}',
-                        { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                            '_token': '{{ csrf_token() }}',
-                            'component_id': component_id,
-                            'upgrade_id': upgrade_id
+                            'component': component_id,
+                            'upgrade': upgrade_id,
+                            'model': model
                         })
                         .done(function (xhr, textStatus, errorThrown) {
                             if (xhr.success) location.reload();
@@ -85,66 +41,16 @@
                 }
             }
         @endif
-        function purchaseAccommodationUpgrade(selector, btn) {
+        function purchaseUpgrade(selector, btn, model) {
             let upgrade_id = $('#' + selector).find(':selected').val();
             let component_id = $(btn).closest('tr').attr('component');
             if (upgrade_id != null && component_id != null) {
-                $.post('{{ route('api.order.customer.accommodation.upgrade.purchase') }}',
+                $.post('{{ route('api.order.customer.upgrade.purchase') }}',
                     { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                         '_token': '{{ csrf_token() }}',
-                        'component_id': component_id,
-                        'upgrade_id': upgrade_id
-                    })
-                    .done(function (xhr, textStatus, errorThrown) {
-                        if (xhr.success) window.location = xhr.location;
-                        else alert(xhr.message);
-                    })
-                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-            }
-        }
-        function purchaseActivityUpgrade(selector, btn) {
-            let upgrade_id = $('#' + selector).find(':selected').val();
-            let component_id = $(btn).closest('tr').attr('component');
-            if (upgrade_id != null && component_id != null) {
-                $.post('{{ route('api.order.customer.activity.upgrade.purchase') }}',
-                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                        '_token': '{{ csrf_token() }}',
-                        'component_id': component_id,
-                        'upgrade_id': upgrade_id
-                    })
-                    .done(function (xhr, textStatus, errorThrown) {
-                        if (xhr.success) window.location = xhr.location;
-                        else alert(xhr.message);
-                    })
-                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-            }
-        }
-        function purchaseFlightUpgrade(selector, btn) {
-            let upgrade_id = $('#' + selector).find(':selected').val();
-            let component_id = $(btn).closest('tr').attr('component');
-            if (upgrade_id != null && component_id != null) {
-                $.post('{{ route('api.order.customer.flight.upgrade.purchase') }}',
-                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                        '_token': '{{ csrf_token() }}',
-                        'component_id': component_id,
-                        'upgrade_id': upgrade_id
-                    })
-                    .done(function (xhr, textStatus, errorThrown) {
-                        if (xhr.success) window.location = xhr.location;
-                        else alert(xhr.message);
-                    })
-                    .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
-            }
-        }
-        function purchaseTransportUpgrade(selector, btn) {
-            let upgrade_id = $('#' + selector).find(':selected').val();
-            let component_id = $(btn).closest('tr').attr('component');
-            if (upgrade_id != null && component_id != null) {
-                $.post('{{ route('api.order.customer.transport.upgrade.purchase') }}',
-                    { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
-                        '_token': '{{ csrf_token() }}',
-                        'component_id': component_id,
-                        'upgrade_id': upgrade_id
+                        'component': component_id,
+                        'upgrade': upgrade_id,
+                        'model': model,
                     })
                     .done(function (xhr, textStatus, errorThrown) {
                         if (xhr.success) window.location = xhr.location;
@@ -168,7 +74,7 @@
                     @endforeach
                 </select>
                 <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="nvoice btn btn-primary">Invoice</a>
-                @if ($orderCustomer->order->has_atol_certificate)
+                @if ($orderCustomer->order->has_atol)
                     <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-secondary">ATOL Certificate</a>
                 @endif
             </div>
@@ -251,9 +157,9 @@
                                         </thead>
                                         @foreach($accommodation as $orderComponent)
                                             <tr component="{{ $orderComponent->id }}">
-                                                <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderComponent->accommodationInventory->check_out) }}</td>
+                                                <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->accommodation_inventory->check_in) }} to {{ f_datetime($orderComponent->accommodation_inventory->check_out) }}</td>
                                                 <td data-content="Name">{{ $orderComponent->accommodation->name }}</td>
-                                                <td data-content="Room Info">{{ $orderComponent->accommodationInventory->roomType->name }}, {{ $orderComponent->accommodationInventory->boardType->name }}</td>
+                                                <td data-content="Room Info">{{ $orderComponent->accommodation_inventory->roomType->name }}, {{ $orderComponent->accommodation_inventory->boardType->name }}</td>
                                                 <td data-content="Shared With">{{ empty($orderComponent->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderComponent->group->getMembers($orderCustomer) }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                                     <td colspan="2" data-content="Component Type">
@@ -264,7 +170,7 @@
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
                                                     </td>
                                                     <td data-content="Cost">
-                                                        {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                        {{ f_currency($orderComponent->cost) }}
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
@@ -277,10 +183,10 @@
                                                             @include('partials.fields.selector.upgrade-purchase',
                                                                 ['field' => 'accommodation_' . $orderComponent->id . '_upgrade', 'preselect' => false,
                                                                 'createRoute' => '#', 'purchaseRoute' => '#',
-                                                                'onclick' => 'event.preventDefault();applyAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
-                                                                'onclickPurchase' => 'event.preventDefault();purchaseAccommodationUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this)',
+                                                                'onclick' => 'event.preventDefault();applyUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this, \'accommodation\')',
+                                                                'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("accommodation_' . $orderComponent->id . '_upgrade-input", this, \'accommodation\')',
                                                                 'target' => '',
-                                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderComponent->tourComponent),
+                                                                'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
                                                                 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                                         @endif
                                                     @endif
@@ -294,6 +200,7 @@
                     </div>
                 </div>
                 @endif
+                {{-- Activities --}}
                 @if($orderCustomer->orderActivities()->count() > 0)
                 {{-- Activities --}}
                 <div class="accordion" style="box-shadow: none;">
@@ -323,9 +230,9 @@
                                         <tbody>
                                         @foreach($activities as $orderComponent)
                                             <tr component="{{ $orderComponent->id }}">
-                                                <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderComponent->activityInventory->ends_at) }}</td>
+                                                <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->activity_inventory->starts_at) }} to {{ f_datetime($orderComponent->activity_inventory->ends_at) }}</td>
                                                 <td data-content="Name">{{ $orderComponent->activity->name }}</td>
-                                                <td data-content="Ticket Type">{{ $orderComponent->activityInventory->ticketType->name }}</td>
+                                                <td data-content="Ticket Type">{{ $orderComponent->activity_inventory->ticketType->name }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                                     <td colspan="2" data-content="Component Type">
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
@@ -335,7 +242,7 @@
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
                                                     </td>
                                                     <td data-content="Cost">
-                                                        {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                        {{ f_currency($orderComponent->cost) }}
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
@@ -348,10 +255,11 @@
                                                             @include('partials.fields.selector.upgrade-purchase',
                                                                 ['field' => 'activity_' . $orderComponent->id . '_upgrade', 'preselect' => false,
                                                                 'createRoute' => '', 'purchaseRoute' => '',
-                                                                'onclick' => 'event.preventDefault();applyActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
-                                                                'onclickPurchase' => 'event.preventDefault();purchaseActivityUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this)',
+                                                                'onclick' => 'event.preventDefault();applyUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this, \'activity\')',
+                                                                'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("activity_' . $orderComponent->id . '_upgrade-input", this, \'activity\')',
                                                                 'target' => '',
-                                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                                'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -394,10 +302,10 @@
                                         </thead>
                                         @foreach($flights as $orderComponent)
                                             <tr component="{{ $orderComponent->id }}">
-                                                <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->flightInventory->arrives_at) }}</td>
-                                                <td data-content="Flight Number">{{ $orderComponent->flightInventory->flight_number }}</td>
+                                                <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->flight_inventory->departs_at) }} to {{ f_datetime($orderComponent->flight_inventory->arrives_at) }}</td>
+                                                <td data-content="Flight Number">{{ $orderComponent->flight_inventory->flight_number }}</td>
                                                 <td data-content="Flight Details">{{ $orderComponent->flight->departureAirport->name }} to {{ $orderComponent->flight->arrivalAirport->name }}</td>
-                                                <td data-content="Travel Class">{{ $orderComponent->flightInventory->travelClass->name }}</td>
+                                                <td data-content="Travel Class">{{ $orderComponent->flight_inventory->travelClass->name }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                                     <td colspan="2" data-content="Component Type">
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
@@ -407,7 +315,7 @@
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
                                                     </td>
                                                     <td data-content="Cost">
-                                                        {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                        {{ f_currency($orderComponent->cost) }}
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
@@ -420,10 +328,11 @@
                                                             @include('partials.fields.selector.upgrade-purchase',
                                                                 ['field' => 'flight_' . $orderComponent->id . '_upgrade', 'preselect' => false,
                                                                 'createRoute' => '#', 'purchaseRoute' => '#',
-                                                                'onclick' => 'event.preventDefault();applyFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
-                                                                'onclickPurchase' => 'event.preventDefault();purchaseFlightUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this)',
+                                                                'onclick' => 'event.preventDefault();applyUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this, \'flight\')',
+                                                                'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("flight_' . $orderComponent->id . '_upgrade-input", this, \'flight\')',
                                                                 'target' => '',
-                                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                                'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -466,11 +375,11 @@
                                         </thead>
                                         @foreach($transports as $orderComponent)
                                             <tr component="{{ $orderComponent->id }}">
-                                                <td style="min-width: 200px" data-content="Date">{{ StringFormatter::formatDateTime($orderComponent->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderComponent->transportInventory->arrives_at) }}</td>
+                                                <td style="min-width: 200px" data-content="Date">{{ f_datetime($orderComponent->transport_inventory->departs_at) }} to {{ f_datetime($orderComponent->transport_inventory->arrives_at) }}</td>
                                                 <td data-content="Name">{{ $orderComponent->transport->name }}</td>
                                                 <td data-content="Transport Type">{{ $orderComponent->transport->transportType->name }}</td>
                                                 <td data-content="Transport Information">{{ $orderComponent->transport->departureAddress->name }} to {{ $orderComponent->transport->arrivalAddress->name }}</td>
-                                                <td data-content="Travel Class">{{ $orderComponent->transportInventory->travelClass->name }}</td>
+                                                <td data-content="Travel Class">{{ $orderComponent->transport_inventory->travelClass->name }}</td>
                                                 @if($orderComponent->tourComponent->tour_component_type === 'Included')
                                                     <td colspan="2" data-content="Component Type">
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
@@ -480,7 +389,7 @@
                                                         {{ $orderComponent->tourComponent->tour_component_type }}
                                                     </td>
                                                     <td data-content="Cost">
-                                                        {{ StringFormatter::formatCurrency($orderComponent->cost) }}
+                                                        {{ f_currency($orderComponent->cost) }}
                                                     </td>
                                                 @endif
                                                 <td data-content="Available Upgrades">
@@ -493,10 +402,11 @@
                                                             @include('partials.fields.selector.upgrade-purchase',
                                                                 ['field' => 'transport_' . $orderComponent->id . '_upgrade', 'preselect' => false,
                                                                 'createRoute' => '#', 'purchaseRoute' => '#',
-                                                                'onclick' => 'event.preventDefault();applyTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
-                                                                'onclickPurchase' => 'event.preventDefault();purchaseTransportUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this)',
+                                                                'onclick' => 'event.preventDefault();applyUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this, \'transport\')',
+                                                                'onclickPurchase' => 'event.preventDefault();purchaseUpgrade("transport_' . $orderComponent->id . '_upgrade-input", this, \'transport\')',
                                                                 'target' => '',
-                                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderComponent->tourComponent), 'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
+                                                                'selected' => $orderComponent->tourComponent->repository->getUpgradeId(),
+                                                    'options' => $orderComponent->tourComponent->getCustomerUpgradeKeyMap(),])
                                                         @endif
                                                     @endif
                                                 </td>
@@ -531,7 +441,7 @@
                                         <th scope="col">Actions</th>
                                     </tr>
                                     </thead>
-                                    @foreach(\App\Repository\OrderRepository::getOrderCustomerAdditionals($orderCustomer) as $orderComponent)
+                                    @foreach($orderCustomer->repository->getAvailableToAdd() as $orderComponent)
                                         <tr>
                                             <td data-content="Name">{{ $orderComponent['name'] }}</td>
                                             @if($orderComponent['type'] === 'Included')
@@ -543,7 +453,7 @@
                                                     {{ $orderComponent['type'] }}
                                                 </td>
                                                 <td data-content="Cost">
-                                                    {{ StringFormatter::formatCurrency($orderComponent['cost']) }}
+                                                    {{ f_currency($orderComponent['cost']) }}
                                                 </td>
                                             @endif
                                             <td data-content="Actions">
@@ -551,7 +461,7 @@
                                                     Owned
                                                 @else
                                                 <div style="display: flex; justify-content: center;" class="hide-on-mobile">
-                                                    @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+                                                    @if(!(flag('payment.required', true)))
                                                     <a href="{{ route('customer.extras.apply',
                                                         ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                                          'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"
@@ -563,7 +473,7 @@
                                                        class="btn btn-primary ms-1">$</a>
                                                 </div>
                                                 <div style="display: flex; justify-content: center;" class="show-on-mobile-flex">
-                                                    @if(!(\App\Repository\SettingsRepository::getBoolean('payment.required', true)))
+                                                    @if(!(flag('payment.required', true)))
                                                     <a href="{{ route('customer.extras.apply',
                                                         ['reference' => $order->booking_reference, 'componentType' => $orderComponent['component'],
                                                          'componentId' => $orderComponent['id'], 'customer' => $orderCustomer->customer,]) }}"

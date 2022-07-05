@@ -16,7 +16,7 @@
             <tr>
                 <th scope="row">{{ $row->name }}</th>
                 <td>{{ $row->event }}</td>
-                <td>{{ StringFormatter::formatBoolean($row->active) }}</td>
+                <td>{{ f_bool($row->active) }}</td>
                 <td>{{ $row->stock }}</td>
                 <td>{{ $row->booked }}</td>
                 <td>{{ $row->available }}</td>

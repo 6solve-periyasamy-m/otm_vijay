@@ -5,30 +5,36 @@
 @push('footer-stack')
     <script>
         const route = "{{ route('customer.itinerary') }}"
+
         function onOrderChange(selector) {
             window.location = route + '/' + $(selector).val();
         }
     </script>
 @endpush
 @section('content')
-<div class="row payment-balance">
-    <div class="col-12">
-        <form class="form-horizontal mx-2">
-            <div class="form-group order-select-wrapper">
-                <p class="mb-0 heading">Select Order</p>
-                <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
-                    @foreach($orders as $selector)
-                        <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected @endif @if($selector->cancelled) disabled @endif>{{ $selector->tour->name }} ({{ $selector->booking_reference }}@if($selector->cancelled) (Cancelled)@endif&#41;</option>
-                    @endforeach
-                </select>
-                <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-primary">Invoice</a>
-                @if ($order->has_atol_certificate)
-                    <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}" target="_blank" class="invoice btn btn-secondary">ATOL Certificate</a>
-                @endif
-            </div>
-        </form>
-    </div>
-    <div class="container">
+    <div class="row payment-balance">
+        <div class="col-12">
+            <form class="form-horizontal mx-2">
+                <div class="form-group order-select-wrapper">
+                    <p class="mb-0  heading">Select Order</p>
+                    <select class="form-select order-select" onchange="onOrderChange(this);" id="booking_reference">
+                        @foreach($orders as $selector)
+                            <option value='{{ $selector->booking_reference }}' @if($selector->id == $order->id) selected
+                                    @endif @if($selector->cancelled) disabled @endif>{{ $selector->tour->name }} ({{ $selector->booking_reference }} @if($selector->cancelled)
+                                    (Cancelled)
+                                @endif &#41;</option>
+                        @endforeach
+                    </select>
+                    <a href="{{ route('customer.invoice', ['reference' => $order->booking_reference]) }}"
+                       target="_blank" class=" invoice btn btn-primary">Invoice</a>
+                    @if ($order->has_atol)
+                        <a href="{{ route('customer.atol', ['reference' => $order->booking_reference]) }}"
+                           target="_blank" class=" invoice btn btn-secondary">ATOL Certificate</a>
+                    @endif
+                </div>
+            </form>
+        </div>
+        <div class="container">
         <div class="row">
             @if(sizeof($editable ?? []) > 1)
                 <div class="col-sm-12 col-md-3">
@@ -50,19 +56,20 @@
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="row">
-                                        @foreach($editable as $editableOrderCustomer)
-                                            @if ($editableOrderCustomer->id === $orderCustomer->id) @continue @endif
-                                            <div class="card other-profile col-md-12 col-xs-2" onclick="window.location = '{{ route('customer.itinerary', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
-                                                <div class="card-body profile-card">
-                                                    <center class="mt-4">
-                                                        <h4 class="card-title mt-2 additional-customer-title">{{ $editableOrderCustomer->customer->first_name }} {{ $editableOrderCustomer->customer->last_name }}</h4>
-                                                        <h6 class="card-subtitle additional-customer-subtitle">{{ $editableOrderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
-                                                    </center>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
+            @foreach($editable as $editableOrderCustomer)
+                @if ($editableOrderCustomer->id === $orderCustomer->id) @continue @endif
+                                            <div class="card other-profile col-md-12 col-xs-2"
+                     onclick="window.location = '{{ route('customer.itinerary', ['reference' => $order->booking_reference, 'customer' => $editableOrderCustomer->customer,]) }}'">
+                    <div class="card-body profile-card">
+                        <center class="mt-4">
+                            <h4 class="card-title mt-2additional-customer-title">{{ $editableOrderCustomer->customer->first_name }} {{ $editableOrderCustomer->customer->last_name }}</h4>
+                            <h6 class="card-subtitleadditional-customer-subtitle">{{ $editableOrderCustomer->customer?->email_address ?? "No Email Set" }}</h6>
+                        </center>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        </div>
                             </div>
                         </div>
                     </div>
@@ -88,18 +95,18 @@
                                         @php $currentSlot = $timeslot['start']->copy()->setTime(0, 0, 0) @endphp
                                         @if (!isset($previousSlot))
                                             <tr class="text-center font-bold bg-light-blue pagebreak-inside">
-                                                <td colspan="3">Day {{ $day }}: {{ StringFormatter::formatDate($currentSlot) }}</td>
+                                                <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
                                             </tr>
                                         @elseif ($previousSlot->diffInDays($currentSlot) >= 1)
                                             @php $day += $previousSlot->diffInDays($currentSlot) @endphp
                                             <tr class="text-center font-bold bg-light-blue pagebreak-inside">
-                                                <td colspan="3">Day {{ $day }}: {{ StringFormatter::formatDate($currentSlot) }}</td>
+                                                <td colspan="3">Day {{ $day }}: {{ f_date($currentSlot) }}</td>
                                             </tr>
                                         @endif
                                         <tr class="bg-white">
-                                            <td data-content="Start Time">{{ StringFormatter::formatDateTime($timeslot['start']) }}
+                                            <td data-content="Start Time">{{ f_datetime($timeslot['start']) }}
                                                 @if(array_key_exists('end', $timeslot))
-                                                to {{ StringFormatter::formatDateTime($timeslot['end']) }}
+                                                to {{ f_datetime($timeslot['end']) }}
                                                 @endif
                                             </td>
                                             <td data-content="Item">
@@ -123,7 +130,7 @@
                     <div class="card-body">
                         <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material mx-2 row">
                             @csrf
-                            @php $isLead = \App\Repository\OrderRepository::isLeadBooker($order, \App\Repository\CustomerAuthenticationRepository::getCustomer()) @endphp
+                            @php $isLead = $order->repository->isLeadBooker(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()) @endphp
                             @if($isLead)
                             <x-customer.input.text-area name="order_notes" value="{{ $order->external_notes }}" width="6">
                                 Order Notes
@@ -150,6 +157,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div></div>
 </div>
 @endsection

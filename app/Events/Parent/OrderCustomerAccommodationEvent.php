@@ -2,12 +2,8 @@
 
 namespace App\Events\Parent;
 
-use App\Models\OrderAccommodation;
-use App\Models\OrderActivity;
-use App\Models\OrderCustomer;
-use App\Models\OrderFlight;
-use App\Models\OrderMerchandise;
-use App\Models\OrderTransport;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\OrderCustomer;
 
 abstract class OrderCustomerAccommodationEvent extends OrderCustomerEvent
 {

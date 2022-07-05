@@ -2,13 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AccommodationInventoryTourUpgrade;
-use App\Models\AddressParent;
-use App\Models\Customer;
-use App\Models\FlightInventoryTourUpgrade;
-use App\Models\OrderMerchandise;
+use App\Models\Location\AddressParent;
 use Illuminate\Database\Seeder;
-use App\Models\Tour;
 use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
@@ -23,13 +18,16 @@ class DatabaseSeeder extends Seeder
         foreach (AddressParent::ID_MAP as $key => $value) {
             AddressParent::create(['id' => $key, 'name' => $value]);
         }
-        Artisan::call('countries:update');
+
         $this->call(UserSeeder::class);
         $this->call(PaymentMethodsTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
-        $this->call(AccommodationGroupTableSeeder::class);
 
         if (config('app.debug')) {
+            $this->call(CountriesTableSeeder::class);
+            $this->call(CurrenciesTableSeeder::class);
+            $this->call(CountryCurrenciesTableSeeder::class);
+
             $this->call(LocationTypesTableSeeder::class);
             $this->call(AddressesTableSeeder::class);
             $this->call(AirlinesTableSeeder::class);
@@ -80,6 +78,8 @@ class DatabaseSeeder extends Seeder
             $this->call(PaymentInstallmentsTableSeeder::class);
             $this->call(PaymentsTableSeeder::class);
             $this->call(OrderInstallmentsTableSeeder::class);
+        } else {
+            Artisan::call('countries:update');
         }
     }
 }

@@ -12,7 +12,9 @@
 /db
 .vscode
 .env
-.env.backup
+.env*
+.phpstorm.meta.php
+_ide_helper.php
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

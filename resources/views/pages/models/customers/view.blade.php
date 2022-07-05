@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-12">
                         <p>Passport Details</p>
-                        <h6 class="fw-bold">{{ $customer->passport_first_name }} {{ $customer->passport_middle_names }} {{ $customer->passport_last_name }}, {{ $customer->passport_number }}, Expires {{ StringFormatter::formatDate($customer->passport_expiry_date) }}</h6>
+                        <h6 class="fw-bold">{{ $customer->passport_first_name }} {{ $customer->passport_middle_names }} {{ $customer->passport_last_name }}, {{ $customer->passport_number }}, Expires {{ f_date($customer->passport_expiry_date) }}</h6>
                     </div>
                     <div class="col-12">
                         <p>Emergency Contact</p>
@@ -101,9 +101,9 @@
                     <tr>
                         <th scope="row"><a href="{{ route('orders.view', ['order' => $orderCustomer->order,]) }}">{{ $orderCustomer->order->booking_reference }}</a></th>
                         <td>{{ $orderCustomer->order->tour->name }}</td>
-                        <td>{{ StringFormatter::formatDateTime($orderCustomer->order->ordered_on) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($orderCustomer->tour_cost) }}</td>
-                        <td><h6 class="badge badge-{{ $orderCustomer->order->getStatus()['color'] }} fw-bold">{{ $orderCustomer->order->getStatus()['status'] }}</h6></td>
+                        <td>{{ f_datetime($orderCustomer->order->ordered_on) }}</td>
+                        <td>{{ f_currency($orderCustomer->tour_cost) }}</td>
+                        <td><h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6></td>
                     </tr>
                 @endforeach
             </table>

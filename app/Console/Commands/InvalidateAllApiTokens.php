@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\ApiToken;
+use App\Models\System\ApiToken;
 use App\Models\User;
 use Illuminate\Console\Command;
 

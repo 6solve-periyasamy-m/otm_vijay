@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Tour;
-use App\Repository\LocationsRepository;
-use App\Repository\TourRepository;
+use App\Models\Tour\Tour;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class RunUpgradeRetrospective extends Command
 {
@@ -43,7 +39,7 @@ class RunUpgradeRetrospective extends Command
     public function handle()
     {
         foreach (Tour::all() as $tour) {
-            TourRepository::fixUpgrades($tour);
+            $tour->repository->fixUpgrades();
         }
         return 0;
     }

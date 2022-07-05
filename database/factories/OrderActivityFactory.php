@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\OrderActivity;
+use App\Models\Order\Component\OrderActivity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderActivityFactory extends Factory

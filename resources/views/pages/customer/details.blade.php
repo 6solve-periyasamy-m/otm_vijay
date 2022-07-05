@@ -21,7 +21,7 @@
                         </center>
                     </div>
                 </div>
-                @if(sizeof($editable ?? []) > 0 || \App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                @if(sizeof($editable ?? []) > 0 || \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
                     <div class="accordion" id="accordionCustomers">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingCustomers">
@@ -33,13 +33,13 @@
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingCustomers"
                                  data-bs-parent="#accordionCustomers">
                                 <div class="accordion-body">
-                                    @if(\App\Repository\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
+                                    @if(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->id !== $customer->id)
                                         <div class="card other-profile"
                                              onclick="window.location = '{{ route('customer.edit') }}';">
                                             <div class="card-body profile-card">
                                                 <center class="mt-4">
-                                                    <h4 class="card-title mt-2 additional-customer-title">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
-                                                    <h6 class="card-subtitle additional-customer-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
+                                                    <h4 class="card-title mt-2 additional-customer-title">{{ \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
+                                                    <h6 class="card-subtitle additional-customer-subtitle">{{ \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
                                                 </center>
                                             </div>
                                         </div>

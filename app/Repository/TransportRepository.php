@@ -2,9 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\Tour;
-use App\Models\Transport;
-use Illuminate\Support\Facades\Log;
+use App\Models\Tour\Tour;
+use App\Models\Transport\Transport;
 
 interface TransportRepositoryInterface 
 {

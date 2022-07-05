@@ -1,8 +1,8 @@
 @php
 /**
- * @var \App\Models\Order $order
+ * @var \App\Models\Order\Order $order
  */
-$next = $order->getNextInstallment();
+$next = $order->next_installment;
 @endphp
 <div class="order order-{{ $order->booking_reference }}">
     <div class="col-12">
@@ -10,16 +10,19 @@ $next = $order->getNextInstallment();
             <div class="card-body payment-balance">
                 <div class="row">
                     <p class="heading">Payment Balance</p>
-                    <div class="col-md-4 text-center">
-                        <p class="payment-value">{{ StringFormatter::formatCurrency($order->total) }}</p>
+                    <div class="col-md-3 text-center">
+                        <p class="payment-value">{{ $order->tour->name }}</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <p class="payment-value">{{ f_currency($order->total) }}</p>
                         <label class="payment-label">Total Order Value</label>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <p class="payment-value">{{ StringFormatter::formatCurrency($order->remaining) }}</p>
+                    <div class="col-md-3 text-center">
+                        <p class="payment-value">{{ f_currency($order->remaining) }}</p>
                         <label class="payment-label">Balance Outstanding</label>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <p class="payment-value" id="order_status">{{ $order->status }}</p>
+                    <div class="col-md-3 text-center">
+                        <p class="payment-value" id="order_status">{{ $order->status->description() }}</p>
                         <label class="payment-label">Order Status</label>
                     </div>
                 </div>
@@ -44,9 +47,9 @@ $next = $order->getNextInstallment();
                     <tbody>
                         @foreach($order->payments as $payment)
                             <tr>
-                                <td data-content="Paid On" class="fw-bold">{{ StringFormatter::formatDate($payment->paid_on) }}</td>
+                                <td data-content="Paid On" class="fw-bold">{{ f_date($payment->paid_on) }}</td>
                                 <td data-content="Type">{{ $payment->payment_type }}</td>
-                                <td data-content="Amount Paid">{{ StringFormatter::formatCurrency($payment->amount) }}</td>
+                                <td data-content="Amount Paid">{{ f_currency($payment->amount) }}</td>
                                 <td data-content="Method">{{ $payment->paymentMethod }}</td>
                             </tr>
                         @endforeach
@@ -74,29 +77,29 @@ $next = $order->getNextInstallment();
                         <tr>
                             <td data-content="Due By" class="fw-bold">With Order</td>
                             <td data-content="Type">Deposit</td>
-                            <td data-content="Amount Due">{{ StringFormatter::formatCurrency($order->calculated_deposit) }}</td>
-                            <td data-content="Paid?">{{ StringFormatter::formatBoolean($order->calculated_deposit <= $order->paid) }}</td>
+                            <td data-content="Amount Due">{{ f_currency($order->calculated_deposit) }}</td>
+                            <td data-content="Paid?">{{ f_bool($order->calculated_deposit <= $order->paid) }}</td>
                         </tr>
                         @foreach($order->installments as $installment)
                             <tr>
-                                <td data-content="Due By" class="fw-bold">{{ StringFormatter::formatDate($installment->due_on) }}</td>
+                                <td data-content="Due By" class="fw-bold">{{ f_date($installment->due_on) }}</td>
                                 <td data-content="Type">Instalment</td>
-                                <td data-content="Amount Due">{{ StringFormatter::formatCurrency($installment->calculated_amount) }}</td>
-                                <td data-content="Paid?">{{ StringFormatter::formatBoolean($installment->paid) }}</td>
+                                <td data-content="Amount Due">{{ f_currency($installment->calculated_amount) }}</td>
+                                <td data-content="Paid?">{{ f_bool($installment->paid) }}</td>
                             </tr>
                         @endforeach
                         <tr>
-                            <td data-content="Due By" class="fw-bold">{{ StringFormatter::formatDate($order->tour->final_payment) }}</td>
+                            <td data-content="Due By" class="fw-bold">{{ f_date($order->tour->final_payment) }}</td>
                             <td data-content="Type">Remaining</td>
-                            <td data-content="Amount Due">{{ StringFormatter::formatCurrency($order->remaining_installment) }}</td>
-                            <td data-content="Paid?">{{ StringFormatter::formatBoolean($order->remaining <= 0) }}</td>
+                            <td data-content="Amount Due">{{ f_currency($order->remaining_installment) }}</td>
+                            <td data-content="Paid?">{{ f_bool($order->remaining <= 0) }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    @if($next['installment'] !== null && !$order->cancelled)
+    @if(isset($next) && !$order->cancelled)
     <div class="col-12">
         <div class="card">
             <div class="card-body payment-balance">
@@ -104,14 +107,14 @@ $next = $order->getNextInstallment();
                     <p class="heading">Next Payment Details</p>
                     <div class="col-md-6 text-center">
                         <p class="payment-value">
-                            <a href="" class="text-dark cursor-pointer payable-amount"  onclick="event.preventDefault();$('.amount-input').val({{$next['amount']}})">
-                                {{ StringFormatter::formatCurrency($next['amount']) }}
+                            <a href="" class="text-dark cursor-pointer payable-amount"  onclick="event.preventDefault();$('.amount-input').val({{$next->amount}})">
+                                {{ f_currency($next->amount) }}
                             </a>
                         </p>
                         <label class="payment-label">Amount due to fulfil next instalment</label>
                     </div>
                     <div class="col-md-6 text-center">
-                        <p class="payment-value">{{ StringFormatter::formatDate($next['due']) }}</p>
+                        <p class="payment-value">{{ f_date($next->due_on) }}</p>
                         <label class="payment-label">Due by</label>
                     </div>
                 </div>

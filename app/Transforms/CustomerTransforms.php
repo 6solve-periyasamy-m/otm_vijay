@@ -2,8 +2,8 @@
 
 namespace App\Transforms;
 
-use App\Models\HatSize;
-use App\Models\TShirtSize;
+use App\Models\Customer\HatSize;
+use App\Models\Customer\TShirtSize;
 
 interface CustomerTransformsInterface
 {

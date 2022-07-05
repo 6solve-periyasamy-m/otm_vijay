@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
-use App\Models\ActivityInventory;
+use App\Models\Activity\Activity;
+use App\Models\Activity\ActivityInventory;
 use Illuminate\Http\Request;
 
 class ActivityInventoryController extends Controller

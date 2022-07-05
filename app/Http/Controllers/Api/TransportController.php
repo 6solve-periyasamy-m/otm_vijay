@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Models\Tour;
-use Illuminate\Http\Request;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
 use App\Http\Controllers\ApiController;
+use App\Models\Tour\Tour;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use App\Repository\TransportRepository;
-use App\Repository\TransportBookingRepository;
+use Illuminate\Http\Request;
 
 class TransportController extends ApiController
 {

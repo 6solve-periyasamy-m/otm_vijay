@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transport;
-use App\Models\TransportInventory;
+use App\Models\Transport\Transport;
+use App\Models\Transport\TransportInventory;
 use Illuminate\Http\Request;
 
 class TransportInventoryController extends Controller

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\TicketType;
+use App\Models\Activity\TicketType;
 use Illuminate\Http\Request;
 
 class TicketTypeController extends Controller

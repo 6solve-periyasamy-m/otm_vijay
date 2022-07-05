@@ -2,14 +2,13 @@
 
 namespace App\Imports;
 
-use App\Models\Activity;
-use App\Models\ActivityType;
-use App\Models\Address;
-use App\Models\AddressParent;
-use App\Models\Country;
-use App\Models\Currency;
-use App\Models\LocationType;
-use Carbon\Carbon;
+use App\Models\Activity\Activity;
+use App\Models\Activity\ActivityType;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
+use App\Models\Location\Country;
+use App\Models\Location\Currency;
+use App\Models\Location\LocationType;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class ActivityImport implements ToModel
@@ -26,7 +25,7 @@ class ActivityImport implements ToModel
         $address = Address::create([
             'name' => $row[0],
             'address_parent_id' => AddressParent::getParentId('Activity'),
-            'location_type_id' => LocationType::firstOrCreate(trim($row[3]))->id,
+            'location_type_id' => LocationType::findOrCreate(trim($row[3]))->id,
             'address_line_1' => trim($row[4]),
             'address_line_2' => trim($row[5]),
             'town' => trim($row[6]),
@@ -37,7 +36,7 @@ class ActivityImport implements ToModel
         return new Activity([
             'name' => trim($row[0]),
             'description' => trim($row[1]),
-            'activity_type_id' => ActivityType::firstOrCreate(trim($row[2]))->id,
+            'activity_type_id' => ActivityType::findOrCreate(trim($row[2]))->id,
             'address_id' => $address->id,
             'currency_id' => $currency->id,
             'notes' => trim($row[11] ?? ''),

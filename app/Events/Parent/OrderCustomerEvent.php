@@ -2,7 +2,7 @@
 
 namespace App\Events\Parent;
 
-use App\Models\OrderCustomer;
+use App\Models\Order\OrderCustomer;
 
 abstract class OrderCustomerEvent extends OrderEvent
 {

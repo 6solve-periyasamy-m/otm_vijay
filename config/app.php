@@ -178,6 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\StringFormatProvider::class,
+        App\Providers\SettingsProvider::class,
 
     ],
 
@@ -233,6 +234,7 @@ return [
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'StringFormatter' => StringFormatterFacade::class,
+        'Settings' => \App\Facades\SettingsFacade::class,
 
     ],
     // this apps settings

@@ -9,7 +9,7 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>Booking URL</p>
-            <h6 class="fw-bold"><a href="{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}">{{ route('booking.url', ['url' => $tour->booking_form_url,]) }}</a></h6>
+            <h6 class="fw-bold"><a href="{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}">{{ route('customer-booking.index', ['bookingUrl' => $tour->booking_form_url,]) }}</a></h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Price per Person</p>
@@ -21,11 +21,11 @@
         </div>
         <div class="col-12 col-xl-6">
             <p>From</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_from) }}</h6>
+            <h6 class="fw-bold">{{ f_date($tour->date_from) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>To</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_to) }}</h6>
+            <h6 class="fw-bold">{{ f_date($tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Margin</p>

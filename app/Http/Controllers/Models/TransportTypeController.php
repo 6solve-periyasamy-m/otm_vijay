@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\TransportType;
+use App\Models\Transport\TransportType;
 use Illuminate\Http\Request;
 
 class TransportTypeController extends Controller

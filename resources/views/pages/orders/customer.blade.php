@@ -8,10 +8,7 @@ function addAccommodationAddon() {
     let id = $('#accommodation_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'accommodation_id': id})
-            .done(function (xhr, textStatus, errorThrown) {
-                if (xhr.success) location.reload();
-                else alert(xhr.message);
-            })
+            .done(function () { location.reload();})
             .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }
@@ -145,14 +142,14 @@ $(document).ready( function () {
         </div>
         <div class="col-12 col-xl-6">
             <p>Tour Date</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->order->tour->date_from) . " to " . StringFormatter::formatDate($orderCustomer->order->tour->date_to) }}</h6>
+            <h6 class="fw-bold">{{ f_date($orderCustomer->order->tour->date_from) . " to " . f_date($orderCustomer->order->tour->date_to) }}</h6>
         </div>
         <div class="col-12 col-xl-6">
             <p>Order Status</p>
-            <h6 class="badge badge-{{ $orderCustomer->order->getStatus()['color'] }} fw-bold">{{ $orderCustomer->order->getStatus()['status'] }}</h6>
+            <h6 class="badge badge-{{ $orderCustomer->order->status->color() }} fw-bold">{{ $orderCustomer->order->status->description() }}</h6>
         </div>
         <div class="col-12">
-            @can('update', \App\Models\Order::class)
+            @can('update', \App\Models\Order\Order::class)
                 <a href="{{ route('orders.edit', ['order' => $orderCustomer->order,]) }}" class="btn btn-success">
                     <i class="icon-note"></i>
                     Edit Order
@@ -176,11 +173,11 @@ $(document).ready( function () {
         </div>
         <div class="col-xl-4">
             <p>Date of Birth</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->date_of_birth) }}</h6>
+            <h6 class="fw-bold">{{ f_date($orderCustomer->customer->date_of_birth) }}</h6>
             <p>Passport Number</p>
             <h6 class="fw-bold">{{ $orderCustomer->customer->passport_number ?? 'Passport Number Not Set' }}</h6>
             <p>Passport Expiry Date</p>
-            <h6 class="fw-bold">{{ StringFormatter::formatDate($orderCustomer->customer->passport_expiry_date) ?? 'Expiry Date Not Set' }}</h6>
+            <h6 class="fw-bold">{{ f_date($orderCustomer->customer->passport_expiry_date) ?? 'Expiry Date Not Set' }}</h6>
             <p>Insurance Policy</p>
             <h6 class="fw-bold">{{ $orderCustomer->policy_number ?? 'No Insurance Policy' }} ({{ $orderCustomer->travel_insurer ?? 'Insurer Not Set' }})</h6>
         </div>
@@ -259,19 +256,19 @@ $(document).ready( function () {
             <h6 class="fw-bold">{{ $orderCustomer->external_notes }}</h6>
         </div>
         <div class="col-12">
-            @can('create', \App\Models\OrderCustomerAdjustment::class)
+            @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
             <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-success mb-1">
                 <i class="icon-plus"></i>
                 Add Adjustment
             </a>
             @endcan
-            @can('update', \App\Models\OrderCustomer::class)
+            @can('update', \App\Models\Order\OrderCustomer::class)
             <a href="{{ route('order-customers.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, ]) }}" class="btn btn-amber mb-1">
                 <i class="icon-note"></i>
                 Edit Order Customer
             </a>
             @endcan
-            @can('delete', \App\Models\OrderCustomer::class)
+            @can('delete', \App\Models\Order\OrderCustomer::class)
                 @if($orderCustomer->id !== $orderCustomer->order->lead_booker_id)
                     <a href="#" onclick="$('#customer-delete').submit()" class="btn btn-danger mb-1"><i class="icon-trash"></i>Remove Customer</a>
                     <form action="{{ route('order-customers.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" method="post" id="customer-delete">
@@ -279,7 +276,7 @@ $(document).ready( function () {
                     </form>
                 @endcan
             @endcan
-            @can('read', \App\Models\Customer::class)
+            @can('read', \App\Models\Customer\Customer::class)
                 <a href="{{ route('customers.view', ['customer' => $orderCustomer->customer, ]) }}" class="btn btn-info mb-1" target="_blank">
                     <i class="icon-user"></i>
                     View Customer
@@ -347,19 +344,19 @@ $(document).ready( function () {
                                 <th scope="col">Actions</th>
                             </tr>
                             </thead>
-                            @foreach($orderCustomer->orderAccommodation() as $orderAccommodation)
+                            @foreach($orderCustomer->orderAccommodation as $orderAccommodation)
                                 <tr component="{{ $orderAccommodation->id }}">
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_in) }} to {{ StringFormatter::formatDateTime($orderAccommodation->accommodationInventory->check_out) }}</td>
-                                    <td>{{ $orderAccommodation->accommodation->name }}</td>
-                                    <td>{{ $orderAccommodation->accommodationInventory->roomType->name }}</td>
-                                    <td>{{ $orderAccommodation->accommodationInventory->boardType->name }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($orderAccommodation->tourComponent->inventory->check_in) }} to {{ f_datetime($orderAccommodation->tourComponent->inventory->check_out) }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->accommodation->name }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->roomType->name }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->inventory->boardType->name }}</td>
                                     <td>{{ empty($orderAccommodation->group->getMembers($orderCustomer)) ? 'Not Shared' : $orderAccommodation->group->getMembers($orderCustomer) }}</td>
-                                    <td>{{ $orderAccommodation->accommodationInventoryTour->tour_component_type }}</td>
+                                    <td>{{ $orderAccommodation->tourComponent->tour_component_type }}</td>
                                     <td>
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Included')
-                                            {{ StringFormatter::formatCurrency(0) }}
+                                            {{ f_currency(0) }}
                                         @else
-                                            {{ StringFormatter::formatCurrency($orderAccommodation->cost) }}
+                                            {{ f_currency($orderAccommodation->cost) }}
                                         @endif
                                     </td>
                                     <td style="width: 20%">
@@ -372,7 +369,7 @@ $(document).ready( function () {
                                                 @include('partials.fields.selector.adder-preset',
                                                     ['field' => 'accommodation_' . $orderAccommodation->id . '_upgrade', 'preselect' => false,
                                                     'createRoute' => '#', 'onclick' => 'applyAccommodationUpgrade("accommodation_' . $orderAccommodation->id . '_upgrade-input", this)', 'target' => '',
-                                                    'selected' => \App\Repository\TourRepository::getUpgradeIdFromAccommodation($orderAccommodation->tourComponent), 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
+                                                    'selected' => $orderAccommodation->tourComponent->repository->getUpgradeId(), 'options' => $orderAccommodation->tourComponent->getUpgradeKeyMap(),])
                                             @endif
                                         @endif
                                     </td>
@@ -419,16 +416,16 @@ $(document).ready( function () {
                         </thead>
                         @foreach($orderCustomer->orderActivities as $orderActivity)
                             <tr component="{{ $orderActivity->id }}">
-                                <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderActivity->activityInventory->starts_at) }} to {{ StringFormatter::formatDateTime($orderActivity->activityInventory->ends_at) }}</td>
+                                <td style="min-width: 200px">{{ f_datetime($orderActivity->activity_inventory->starts_at) }} to {{ f_datetime($orderActivity->activity_inventory->ends_at) }}</td>
                                 <td>{{ $orderActivity->activity->name }}</td>
                                 <td>{{ $orderActivity->activity->activityType->name }}</td>
-                                <td>{{ $orderActivity->activityInventory->ticketType->name }}</td>
+                                <td>{{ $orderActivity->activity_inventory->ticketType->name }}</td>
                                 <td>{{ $orderActivity->tourComponent->tour_component_type }}</td>
                                 <td>
                                     @if($orderActivity->tourComponent->tour_component_type == 'Included')
-                                        {{ StringFormatter::formatCurrency(0) }}
+                                        {{ f_currency(0) }}
                                     @else
-                                        {{ StringFormatter::formatCurrency($orderActivity->cost) }}
+                                        {{ f_currency($orderActivity->cost) }}
                                     @endif
                                 </td>
                                 <td style="width: 20%">
@@ -441,7 +438,7 @@ $(document).ready( function () {
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'activity_' . $orderActivity->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyActivityUpgrade("activity_' . $orderActivity->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromActivity($orderActivity->tourComponent), 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderActivity->tourComponent->repository->getUpgradeId(), 'options' => $orderActivity->tourComponent->getUpgradeKeyMap(),])
                                         @endif
                                     @endif
                                 </td>
@@ -488,16 +485,16 @@ $(document).ready( function () {
                         </thead>
                         @foreach($orderCustomer->orderFlights as $orderFlight)
                             <tr component="{{ $orderFlight->id }}">
-                                <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderFlight->flightInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderFlight->flightInventory->arrives_at) }}</td>
-                                <td>{{ $orderFlight->flightInventory->flight_number }}</td>
+                                <td style="min-width: 200px">{{ f_datetime($orderFlight->flight_inventory->departs_at) }} to {{ f_datetime($orderFlight->flight_inventory->arrives_at) }}</td>
+                                <td>{{ $orderFlight->flight_inventory->flight_number }}</td>
                                 <td>{{ $orderFlight->flight->departureAirport->name }} to {{ $orderFlight->flight->arrivalAirport->name }}</td>
-                                <td>{{ $orderFlight->flightInventory->travelClass->name }}</td>
+                                <td>{{ $orderFlight->flight_inventory->travelClass->name }}</td>
                                 <td>{{ $orderFlight->flightInventoryTour->tour_component_type }}</td>
                                 <td>
                                     @if($orderFlight->tourComponent->tour_component_type == 'Included')
-                                        {{ StringFormatter::formatCurrency(0) }}
+                                        {{ f_currency(0) }}
                                     @else
-                                        {{ StringFormatter::formatCurrency($orderFlight->cost) }}
+                                        {{ f_currency($orderFlight->cost) }}
                                     @endif
                                 </td>
                                 <td style="width: 20%">
@@ -510,7 +507,7 @@ $(document).ready( function () {
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'flight_' . $orderFlight->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyFlightUpgrade("flight_' . $orderFlight->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromFlight($orderFlight->tourComponent), 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderFlight->tourComponent->repository->getUpgradeId(), 'options' => $orderFlight->tourComponent->getUpgradeKeyMap(),])
                                         @endif
                                     @endif
                                 </td>
@@ -558,17 +555,17 @@ $(document).ready( function () {
                         </thead>
                         @foreach($orderCustomer->orderTransports as $orderTransport)
                             <tr component="{{ $orderTransport->id }}">
-                                <td style="min-width: 200px">{{ StringFormatter::formatDateTime($orderTransport->transportInventory->departs_at) }} to {{ StringFormatter::formatDateTime($orderTransport->transportInventory->arrives_at) }}</td>
+                                <td style="min-width: 200px">{{ f_datetime($orderTransport->transport_inventory->departs_at) }} to {{ f_datetime($orderTransport->transport_inventory->arrives_at) }}</td>
                                 <td>{{ $orderTransport->transport->name }}</td>
                                 <td>{{ $orderTransport->transport->transportType->name }}</td>
                                 <td>{{ $orderTransport->transport->departureAddress->name }} to {{ $orderTransport->transport->arrivalAddress->name }}</td>
-                                <td>{{ $orderTransport->transportInventory->travelClass->name }}</td>
+                                <td>{{ $orderTransport->transport_inventory->travelClass->name }}</td>
                                 <td>{{ $orderTransport->transportInventoryTour->tour_component_type }}</td>
                                 <td>
                                     @if($orderTransport->tourComponent->tour_component_type == 'Included')
-                                        {{ StringFormatter::formatCurrency(0) }}
+                                        {{ f_currency(0) }}
                                     @else
-                                        {{ StringFormatter::formatCurrency($orderTransport->cost) }}
+                                        {{ f_currency($orderTransport->cost) }}
                                     @endif
                                 </td>
                                 <td style="width: 20%">
@@ -581,7 +578,7 @@ $(document).ready( function () {
                                             @include('partials.fields.selector.adder-preset',
                                                 ['field' => 'transport_' . $orderTransport->id . '_upgrade', 'preselect' => false,
                                                 'createRoute' => '#', 'onclick' => 'applyTransportUpgrade("transport_' . $orderTransport->id . '_upgrade-input", this)', 'target' => '',
-                                                'selected' => \App\Repository\TourRepository::getUpgradeIdFromTransport($orderTransport->tourComponent), 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
+                                                'selected' => $orderTransport->tourComponent->repository->getUpgradeId(), 'options' => $orderTransport->tourComponent->getUpgradeKeyMap(),])
                                         @endif
                                     @endif
                                 </td>
@@ -632,7 +629,7 @@ $(document).ready( function () {
                 @foreach($orderCustomer->orderMerchandise as $orderMerchandise)
                     <tr>
                         <td>{{ $orderMerchandise->merchandise->name }}</td>
-                        <td>{{ StringFormatter::formatCurrency($orderMerchandise->merchandise->tour_sales_price) }}</td>
+                        <td>{{ f_currency($orderMerchandise->merchandise->tour_sales_price) }}</td>
                         <td>{{ $orderMerchandise->merchandise->tour_component_type }}</td>
                         <td>
                             <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}" method="post">
@@ -652,7 +649,7 @@ $(document).ready( function () {
     <div class="card-body">
         <div class="card-title">
             <h4 class="fw-bold">Customer Adjustments</h4>
-            @can('create', \App\Models\OrderCustomerAdjustment::class)
+            @can('create', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
             <div class="pb-3 text-end">
                 <a href="{{ route('order-customer-adjustments.create', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer]) }}" class="btn btn-success text-white">
                     <i class="icon-plus"></i>
@@ -673,18 +670,18 @@ $(document).ready( function () {
                 </thead>
                 @foreach($orderCustomer->adjustments as $adjustment)
                     <tr>
-                        <td>{{ StringFormatter::formatCurrency($adjustment->amount) }}</td>
+                        <td>{{ f_currency($adjustment->amount) }}</td>
                         <td>{{ $adjustment->reason }}</td>
-                        <td>{{ StringFormatter::formatDate($adjustment->date) }}</td>
+                        <td>{{ f_date($adjustment->date) }}</td>
                         <td class="actions">
-                            @can('update', \App\Models\OrderCustomerAdjustment::class)
+                            @can('update', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                 <a href="{{ route('order-customer-adjustments.edit', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                                 <i class="icon-note"></i>
                                             </span>
                             @endcan
-                            @can('delete', \App\Models\OrderCustomerAdjustment::class)
+                            @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                 <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                 <form action="{{ route('order-customer-adjustments.delete', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}" method="post" id="oadjustment-{{$adjustment->id}}-delete">
                                     @csrf

@@ -2,11 +2,10 @@
 
 namespace App\Repository;
 
-use App\Models\Tour;
-use App\Models\Booking;
-use App\Models\Activity;
-use App\Models\BookingActivity;
-use Illuminate\Support\Facades\Log;
+use App\Models\Activity\Activity;
+use App\Models\Booking\Booking;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Tour\Tour;
 
 interface ActivityBookingRepositoryInterface {
     public function __construct();
@@ -34,7 +33,7 @@ class ActivityBookingRepository implements ActivityBookingRepositoryInterface
                     'activity_inventories.notes as activity_notes', 
                     'activity_inventory_tours.id as activity_inventory_tour_id', 
                     'activity_inventories.starts_at', 'activity_inventories.ends_at',
-                    'activity_inventories.sales_price', 
+                    'activity_inventories.sales_price',
                     'activity_inventory_tours.tour_sales_price',
                     'ticket_types.name as ticket_type_name',
                     'booking_activities.activity_inventory_tour_id')

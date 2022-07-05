@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Flight;
-use App\Models\FlightInventory;
+use App\Models\Flight\Flight;
+use App\Models\Flight\FlightInventory;
 use Illuminate\Http\Request;
 
 class FlightInventoryController extends Controller
