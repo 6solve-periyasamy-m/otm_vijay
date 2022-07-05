@@ -100,12 +100,12 @@ class Quote extends Model
 
     public function pricePoints(): HasMany
     {
-        return $this->hasMany(QuotePricePoint::class);
+        return $this->hasMany(QuotePricePoint::class, 'quote_id')->orderBy('quantity');
     }
 
     public function installments(): HasMany
     {
-        return $this->hasMany(QuoteInstallment::class);
+        return $this->hasMany(QuoteInstallment::class)->orderBy('due_on');
     }
 
     public function tour(): BelongsTo
