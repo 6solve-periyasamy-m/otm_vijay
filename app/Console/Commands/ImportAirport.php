@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Imports\ActivityImport;
 use App\Imports\AirportImport;
-use Illuminate\Console\Command;
 use Excel;
+use Illuminate\Console\Command;
 
 class ImportAirport extends Command
 {

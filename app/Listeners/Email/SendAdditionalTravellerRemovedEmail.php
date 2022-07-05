@@ -2,9 +2,8 @@
 
 namespace App\Listeners\Email;
 
-use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\Customer\OrderCustomerRemovedEvent;
-use App\Repository\MailRepository;
+use App\Repository\Mailing\MailRepository;
 
 class SendAdditionalTravellerRemovedEmail
 {

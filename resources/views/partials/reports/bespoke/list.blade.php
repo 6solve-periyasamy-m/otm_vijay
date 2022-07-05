@@ -15,15 +15,19 @@
     </thead>
     <tbody>
     @foreach($fieldList as $depth => $data)
+        @php
+            $class = explode('\\', $data['class']);
+            $className = camel_to_text(end($class));
+        @endphp
         <tr>
-            <td colspan="2"><h4 style="text-decoration: underline">{{ $data['class'] }}</h4></td>
+            <td colspan="2"><h4 style="text-decoration: underline">{{ $className }}</h4></td>
             <td>
                 {{ $depth }}
             </td>
         </tr>
         @foreach($data['fields'] as $field => $info)
             <tr>
-                <td>{{ $data['class'] }}</td>
+                <td>{{ $className }}</td>
                 <td>{{ $info['name'] }}</td>
                 <td>
                     <input type="checkbox" name="{{ $field }}" @if(old($field) || (isset($report) && in_array($field, $report->fields))) checked @endif>

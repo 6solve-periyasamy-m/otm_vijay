@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-
-use App\Models\Airline;
-use App\Models\Airport;
+use App\Models\Flight\Airline;
+use App\Models\Flight\Airport;
 
 
 class AirlinesController extends ApiController

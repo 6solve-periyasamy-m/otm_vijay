@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Imports\ActivityInventoryImport;
-use Illuminate\Console\Command;
 use Excel;
+use Illuminate\Console\Command;
 
 class ImportActivityInventory extends Command
 {

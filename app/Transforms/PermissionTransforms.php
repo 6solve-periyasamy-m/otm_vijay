@@ -2,8 +2,6 @@
 
 namespace App\Transforms;
 
-use App\Models\HatSize;
-use App\Models\TShirtSize;
 use Illuminate\Database\Eloquent\Collection;
 
 interface PermissionTransformsInterface
@@ -14,7 +12,7 @@ interface PermissionTransformsInterface
 class PermissionTransforms implements PermissionTransformsInterface
 {
 
-    public static function getRolesForDropdown(Collection $roles)
+    public static function getRolesForDropdown(Collection $roles): array
     {
         $data = [];
         foreach ($roles as $role) {

@@ -2,27 +2,27 @@
 
 namespace Database\Seeders;
 
-use App\Models\Accommodation;
-use App\Models\AccommodationInventory;
-use App\Models\AccommodationInventoryTour;
-use App\Models\Activity;
-use App\Models\ActivityInventory;
-use App\Models\ActivityInventoryTour;
-use App\Models\Address;
-use App\Models\Customer;
-use App\Models\FlightInventoryTour;
-use App\Models\Operator;
-use App\Models\Order;
-use App\Models\OrderAccommodation;
-use App\Models\OrderActivity;
-use App\Models\OrderCustomer;
-use App\Models\OrderFlight;
-use App\Models\OrderTransport;
-use App\Models\Payment;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Activity\Activity;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Customer\Customer;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Location\Address;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderTransport;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
+use App\Models\Order\Payment\Payment;
 use App\Models\Quote;
-use App\Models\Transport;
-use App\Models\TransportInventory;
-use App\Models\TransportInventoryTour;
+use App\Models\Transport\Operator;
+use App\Models\Transport\Transport;
+use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use Illuminate\Database\Seeder;
 
 class OrderSystemSeeder extends Seeder

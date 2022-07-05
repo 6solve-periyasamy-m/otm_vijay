@@ -1,4 +1,4 @@
-@can('create', \App\Models\Airline::class)
+@can('create', \App\Models\Flight\Airline::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Airline', 'field' => 'airline_id', 'value' => $airline_id ?? 0,
              'route' => 'airlines', 'createRoute' => route('airlines.create'),])
@@ -7,7 +7,7 @@
         ['name' => 'Airline', 'field' => 'airline_id', 'value' => $airline_id ?? 0,
          'route' => 'airlines'])
 @endcan
-@can('create', \App\Models\Airport::class)
+@can('create', \App\Models\Flight\Airport::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Departure Airport', 'field' => 'departure_airport_id', 'value' => $departure_airport_id ?? 0,
              'route' => 'airports', 'createRoute' => route('airports.create'),])
@@ -16,7 +16,7 @@
             ['name' => 'Departure Airport', 'field' => 'departure_airport_id', 'value' => $departure_airport_id ?? 0,
              'route' => 'airports',])
 @endcan
-@can('create', \App\Models\Airport::class)
+@can('create', \App\Models\Flight\Airport::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Arrival Airport', 'field' => 'arrival_airport_id', 'value' => $arrival_airport_id ?? 0,
              'route' => 'airports', 'createRoute' => route('airports.create'),])

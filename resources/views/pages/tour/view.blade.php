@@ -41,11 +41,11 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>From</p>
-                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_from) }}</h6>
+                <h6 class="fw-bold">{{ f_date($tour->date_from) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>To</p>
-                <h6 class="fw-bold">{{ StringFormatter::formatDate($tour->date_to) }}</h6>
+                <h6 class="fw-bold">{{ f_date($tour->date_to) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Margin</p>
@@ -64,13 +64,13 @@
                 <h6 class="fw-bold">{{ $tour->description }}</h6>
             </div>
             <div class="col-12">
-                @can('update', \App\Models\Tour::class)
+                @can('update', \App\Models\Tour\Tour::class)
                 <a class="btn btn-success" href="{{route('tours.edit', ['tour' => $tour,])}}">
                     <i class="icon-note"></i>
                     <span>Edit Tour</span>
                 </a>
                 @endcan
-                @if($tour->has_atol_certificate)
+                @if($tour->has_atol)
                 <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
                     <i class="icon-folder-alt"></i>
                     <span>Export ATOL Certificates</span>
@@ -137,16 +137,16 @@
                             @foreach($accommodation as $accommodationEntry)
                                 <tr>
                                     <td style="min-width: 200px">
-                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_in) }}
+                                        {{ f_datetime($accommodationEntry["inventory"]->check_in) }}
                                         <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_in_time_confirmed == 1) checked @endif>
                                         &nbspto&nbsp
-                                        {{ StringFormatter::formatDateTime($accommodationEntry["inventory"]->check_out) }}
+                                        {{ f_datetime($accommodationEntry["inventory"]->check_out) }}
                                         <input type="checkbox" disabled @if($accommodationEntry["inventory"]->check_out_time_confirmed == 1) checked @endif>
                                     </td>
                                     <td>{{ $accommodationEntry["component"]->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->roomType->name }}</td>
                                     <td>{{ $accommodationEntry["inventory"]->boardType->name }}</td>
-                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_template) }}</td>
+                                    <td>{{ f_bool($accommodationEntry["tour"]->is_template) }}</td>
                                     <td>
                                         @if($accommodationEntry["tour"]->tour_component_type == 'Upgrade')
                                             <abbr title="{{ $accommodationEntry["tour"]->parent() }}">
@@ -156,9 +156,9 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($accommodationEntry["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($accommodationEntry["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\AccommodationInventoryTour::class)
+                                        @can('update', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             @if($accommodationEntry["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('accommodation-upgrade.view', ['tour' => $tour, 'inventoryTour' => $accommodationEntry["tour"]->tour_component_type == 'Upgrade' ? $accommodationEntry["tour"]->parent() : $accommodationEntry["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -175,7 +175,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\AccommodationInventoryTour::class)
+                                        @can('delete', \App\Models\Accommodation\AccommodationInventoryTour::class)
                                             @if($accommodationEntry["tour"]->is_bookable)
                                                 <a href="#" onclick="$('#accommodation-{{$accommodationEntry["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                                 <form action="{{ route('accommodation-inventory-tours.delete', ['tour' => $tour, 'accommodationInventoryTour' => $accommodationEntry["tour"],]) }}" method="post" id="accommodation-{{$accommodationEntry["tour"]->id}}-delete">
@@ -215,7 +215,7 @@
                             </thead>
                             @foreach($activities as $activity)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($activity["inventory"]->starts_at) }} to {{ StringFormatter::formatDateTime($activity["inventory"]->ends_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($activity["inventory"]->starts_at) }} to {{ f_datetime($activity["inventory"]->ends_at) }}</td>
                                     <td>{{ $activity["component"]->name }}</td>
                                     <td>{{ $activity["component"]->activityType->name }}</td>
                                     <td>{{ $activity["inventory"]->ticketType->name }}</td>
@@ -228,9 +228,9 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($activity["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($activity["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\ActivityInventoryTour::class)
+                                        @can('update', \App\Models\Activity\ActivityInventoryTour::class)
                                             @if($activity["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('activity-upgrade.view', ['tour' => $tour, 'inventoryTour' => $activity["tour"]->tour_component_type == 'Upgrade' ? $activity["tour"]->parent() : $activity["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -247,7 +247,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\ActivityInventoryTour::class)
+                                        @can('delete', \App\Models\Activity\ActivityInventoryTour::class)
                                             @if($activity["tour"]->is_bookable)
                                                 <a href="#" onclick="$('#activity-{{$activity["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                                 <form action="{{ route('activity-inventory-tours.delete', ['tour' => $tour, 'activityInventoryTour' => $activity["tour"],]) }}" method="post" id="activity-{{$activity["tour"]->id}}-delete">
@@ -287,7 +287,7 @@
                             </thead>
                             @foreach($flights as $flight)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($flight["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($flight["inventory"]->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($flight["inventory"]->departs_at) }} to {{ f_datetime($flight["inventory"]->arrives_at) }}</td>
                                     <td>{{ $flight["inventory"]->flight_number }}</td>
                                     <td>{{ $flight["inventory"]->travelClass->name }}</td>
                                     <td>{{ $flight["tour"]->flight_type }}</td>
@@ -300,9 +300,9 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($flight["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($flight["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\FlightInventoryTour::class)
+                                        @can('update', \App\Models\Flight\FlightInventoryTour::class)
                                             @if($flight["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('flight-upgrade.view', ['tour' => $tour, 'inventoryTour' => $flight["tour"]->tour_component_type == 'Upgrade' ? $flight["tour"]->parent() : $flight["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -319,7 +319,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\FlightInventoryTour::class)
+                                        @can('delete', \App\Models\Flight\FlightInventoryTour::class)
                                             @if($flight["tour"]->is_bookable)
                                                 <a href="#" onclick="$('#flight-{{$flight["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                                 <form action="{{ route('flight-inventory-tours.delete', ['tour' => $tour, 'flightInventoryTour' => $flight["tour"],]) }}" method="post" id="flight-{{$flight["tour"]->id}}-delete">
@@ -358,7 +358,7 @@
                             </thead>
                             @foreach($transports as $transport)
                                 <tr>
-                                    <td style="min-width: 200px">{{ StringFormatter::formatDateTime($transport["inventory"]->departs_at) }} to {{ StringFormatter::formatDateTime($transport["inventory"]->arrives_at) }}</td>
+                                    <td style="min-width: 200px">{{ f_datetime($transport["inventory"]->departs_at) }} to {{ f_datetime($transport["inventory"]->arrives_at) }}</td>
                                     <td>{{ $transport["component"]->name }}</td>
                                     <td>{{ $transport["inventory"]->travelClass->name }}</td>
                                     <td>
@@ -370,9 +370,9 @@
                                             </abbr>
                                         @endif
                                     </td>
-                                    <td>{{ StringFormatter::formatBoolean($transport["tour"]->is_bookable) }}</td>
+                                    <td>{{ f_bool($transport["tour"]->is_bookable) }}</td>
                                     <td class="actions-3">
-                                        @can('update', \App\Models\TransportInventoryTour::class)
+                                        @can('update', \App\Models\Transport\TransportInventoryTour::class)
                                             @if($transport["tour"]->tour_component_type !== 'Add-on')
                                                 <a href="{{ route('transport-upgrade.view', ['tour' => $tour, 'inventoryTour' => $transport["tour"]->tour_component_type == 'Upgrade' ? $transport["tour"]->parent() : $transport["tour"],]) }}" class="btn btn-outline-success btn-sm mb-1"><i class="icon-arrow-up"></i></a>
                                             @else
@@ -389,7 +389,7 @@
                                                 <i class="icon-note"></i>
                                             </span>
                                         @endcan
-                                        @can('delete', \App\Models\TransportInventoryTour::class)
+                                        @can('delete', \App\Models\Transport\TransportInventoryTour::class)
                                             @if($transport["tour"]->is_bookable)
                                                 <a href="#" onclick="$('#transport-{{$transport["tour"]->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                                 <form action="{{ route('transport-inventory-tours.delete', ['tour' => $tour, 'transportInventoryTour' => $transport["tour"],]) }}" method="post" id="transport-{{$transport["tour"]->id}}-delete">
@@ -432,7 +432,7 @@
                 </thead>
                 @foreach($tour->getAccommodationTemplateData() as $templateData)
                     <tr>
-                        <th scope="row">{{ StringFormatter::formatDate($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
+                        <th scope="row">{{ f_date($templateData['template']->inventory->check_in->clone()->setTime(0,0,0)) }}</th>
                         <td>{{ $templateData['template'] }}</td>
                         <td>{{ implode(', ', $templateData['available']) }}</td>
                     </tr>
@@ -467,7 +467,7 @@
                 <tr>
                     <th scope="row">Deposit</th>
                     <td>With Order</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)</td>
+                    <td>{{ f_currency($tour->deposit) }} ({{ $tour->deposit_percentage }}%)</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>
@@ -477,8 +477,8 @@
                 @foreach($tour->paymentInstallments as $installment)
                     <tr>
                         <th scope="row">Installment</th>
-                        <td>{{ StringFormatter::formatDate($installment->due_on) }}</td>
-                        <td>{{ StringFormatter::formatCurrency($installment->cost) }} ({{ $installment->percentage }}%)</td>
+                        <td>{{ f_date($installment->due_on) }}</td>
+                        <td>{{ f_currency($installment->cost) }} ({{ $installment->percentage }}%)</td>
                         <td class="actions">
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -495,8 +495,8 @@
                 @endforeach
                 <tr>
                     <th scope="row">Remaining Balance</th>
-                    <td>{{ StringFormatter::formatDate($tour->final_payment) }}</td>
-                    <td>{{ StringFormatter::formatCurrency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)</td>
+                    <td>{{ f_date($tour->final_payment) }}</td>
+                    <td>{{ f_currency($tour->remaining_installment) }} ({{ $tour->remaining_percentage }}%)</td>
                     <td>
                         <a href="{{route('tours.edit', ['tour' => $tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                             <i class="icon-note"></i>
@@ -540,14 +540,14 @@
                         <td>{{ $merchandise->tour_sales_price }}</td>
                         <td>{{ $merchandise->notes }}</td>
                         <td class="actions">
-                            @can('update', \App\Models\Merchandise::class)
+                            @can('update', \App\Models\Tour\Merchandise::class)
                                 <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
                                             <i class="icon-trash"></i>
                                         </span>
                             @endcan
-                            @can('delete', \App\Models\Merchandise::class)
+                            @can('delete', \App\Models\Tour\Merchandise::class)
                                 <a href="#" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
                                 <form action="{{ route('merchandise.delete', ['tour' => $tour, 'merchandise' => $merchandise,]) }}" method="post" id="merchandise-{{$merchandise->id}}-delete">
                                     @csrf
@@ -584,7 +584,7 @@
                         <th scope="row"><a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a></th>
                         <td>{{ $order->leadBooker->customer->first_name . ' ' . $order->leadBooker->customer->last_name }}</td>
                         <td>{{ sizeof($order->orderCustomers) }}</td>
-                        <td><h6 class="badge badge-{{ $order->getStatus()['color'] }} fw-bold">{{ $order->getStatus()['status']  }}</h6></td>
+                        <td><h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6></td>
                         <td class="actions">
                             <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>

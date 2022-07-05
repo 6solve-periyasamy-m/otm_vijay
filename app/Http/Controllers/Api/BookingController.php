@@ -4,32 +4,29 @@
  */
 namespace App\Http\Controllers\Api;
 
-use Exception;
-use App\Models\Tour;
-use App\Models\Booking;
-use App\Models\Address;
-use App\Models\Customer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
-
-use App\Models\BookingTraveller;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Repository\BookingRepository;
-use App\Repository\CustomerRepository;
 use App\Http\Controllers\ApiController;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Customer\Customer;
+use App\Models\Location\Address;
+use App\Models\Tour\Tour;
 use App\Repository\AccommodationRepository;
-use App\Repository\FlightBookingRepository;
 use App\Repository\ActivityBookingRepository;
+use App\Repository\BookingRepository;
 use App\Repository\BookingTravellerRepository;
+use App\Repository\CustomerRepository;
+use App\Repository\FlightBookingRepository;
 use App\Repository\TransportBookingRepository;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends ApiController
 {
     protected $logging = '';
 
     /**
-     * get retrieve a booking 
+     * get retrieve a booking
      *
      * @param $token
      * @return void
@@ -67,7 +64,7 @@ class BookingController extends ApiController
         } else {
             return response()->json(['success' => false]);
         }
-        
+
     }
 
   /**
@@ -153,7 +150,7 @@ class BookingController extends ApiController
 
     /**
      * gatherDetails: gather all details related to the booking token
-     * 
+     *
      * @param STRING $token
      * @return JSON booking containing all comoponents
      */
@@ -184,7 +181,7 @@ class BookingController extends ApiController
         $transports = $transportBookingRepo->getBookingsForTour($tour, $booking);
         //dd($activities);
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'booking' => [
                 'tour' => $tour,
                 'customer' => $customer,
@@ -199,7 +196,7 @@ class BookingController extends ApiController
 
     /**
      * calculateDeposit
-     * @Param Request OBJECT 
+     * @Param Request OBJECT
      *    $tour INT the ID of the tour being booked
      *    $token STRING Booking unique token (browser cookie) for validation
      * @return JSON deposit

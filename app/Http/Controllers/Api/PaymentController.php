@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Facades\Log;
-
 use App\Http\Controllers\ApiController;
-use App\Models\PaymentSchedule;
+use App\Models\Booking\PaymentSchedule;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends ApiController
 {

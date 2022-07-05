@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\ApiToken;
-use App\Models\CustomerApiToken;
+use App\Models\System\ApiToken;
+use App\Models\System\CustomerApiToken;
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;

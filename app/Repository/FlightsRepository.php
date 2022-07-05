@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
+use App\Models\Flight\Airport;
+use App\Models\Flight\Flight;
 use Exception;
-use App\Models\Flight;
-use App\Models\Airport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -31,7 +31,7 @@ class FlightsRepository implements FlightsRepositoryInterface
      * @param [type] $tour_id
      * @return Flight collection
      */
-    public function getFlights($tour_id) 
+    public function getFlights($tour_id)
     {
 
         $flights = $this->model->join('airlines', 'airline_id', 'id')
@@ -58,14 +58,14 @@ class FlightsRepository implements FlightsRepositoryInterface
            ->join('flight_inventories', 'flight_inventories.flight_id', 'flights.id')
            ->join('travel_classes', 'flight_inventories.travel_class_id', 'travel_classes.id')
            ->join('flight_inventory_tours', 'flight_inventory_tours.flight_inventory_id', 'flight_inventories.id')
-          ->select('flight_inventory_tours.id as flight_id', 
-            'flight_inventory_tours.tour_component_type', 
-            'airlines.name as airline_name', 
-            'flight_inventories.*', 
-            'flight_inventory_tours.id as flight_inventory_tour_id', 'flight_inventory_tours.flight_type', 
-            'flights.departure_airport_id', 'flights.arrival_airport_id', 
-            'airlines.name', 
-            'travel_classes.name as travel_class', 
+          ->select('flight_inventory_tours.id as flight_id',
+            'flight_inventory_tours.tour_component_type',
+            'airlines.name as airline_name',
+            'flight_inventories.*',
+            'flight_inventory_tours.id as flight_inventory_tour_id', 'flight_inventory_tours.flight_type',
+            'flights.departure_airport_id', 'flights.arrival_airport_id',
+            'airlines.name',
+            'travel_classes.name as travel_class',
             'flight_inventory_tours.tour_component_type',
             'flights.available_from')
           ->whereNull('flight_inventory_tours.deleted_at')
@@ -95,7 +95,7 @@ class FlightsRepository implements FlightsRepositoryInterface
                 Log::debug('...flights Query: '. $flights->toSql());
                 Log::debug("\n".'...flightsAvaiableForTour:: flights  after:'.date('Y-m-d'). ' type:' . $flight_type .' tour_id:'.  $tour_id . ' : Recs : '. $flightData->count());
         }
-        
+
         return $flightData;
     }
 

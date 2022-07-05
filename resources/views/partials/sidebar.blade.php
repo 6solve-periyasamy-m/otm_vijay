@@ -13,7 +13,7 @@
                 @endif
             </a>
         </li>
-        @can('read', 'App\Models\Tour')
+        @can('read', 'App\Models\Tour\Tour')
         <li>
             @if(strpos(Request::path(), 'tours') !== false)
             <a href="{{ route('tours.all') }}" class="nav-link active">
@@ -28,7 +28,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Accommodation')
+        @can('read', 'App\Models\Accommodation\Accommodation')
         <li>
             @if(strpos(Request::path(), 'accommodation') !== false)
             <a href="{{ route('accommodations.all') }}" class="nav-link active">
@@ -43,7 +43,7 @@
             </a>
         </li>
             @endcan
-        @can('read', 'App\Models\Activity')
+        @can('read', 'App\Models\Activity\Activity')
         <li>
             @if(strpos(Request::path(), 'activities') !== false)
             <a href="{{ route('activities.all') }}" class="nav-link active">
@@ -58,7 +58,7 @@
             </a>
         </li>
                 @endcan
-        @can('read', 'App\Models\Flight')
+        @can('read', 'App\Models\Flight\Flight')
         <li>
             @if(strpos(Request::path(), 'flights') !== false)
             <a href="{{ route('flights.all') }}" class="nav-link active">
@@ -73,7 +73,7 @@
             </a>
         </li>
                 @endcan
-        @can('read', 'App\Models\Transport')
+        @can('read', 'App\Models\Transport\Transport')
         <li>
             @if(strpos(Request::path(), 'transports') !== false)
             <a href="{{ route('transports.all') }}" class="nav-link active">
@@ -88,7 +88,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Address')
+        @can('read', 'App\Models\Location\Address')
         <li>
             @if(strpos(Request::path(), 'addresses') !== false)
             <a href="{{ route('addresses.all') }}" class="nav-link active">
@@ -103,7 +103,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Order')
+        @can('read', 'App\Models\Order\Order')
         <li>
             @if(strpos(Request::path(), 'orders') !== false)
             <a href="{{ route('orders.all') }}" class="nav-link active">
@@ -118,7 +118,7 @@
             </a>
         </li>
         @endcan
-        @can('read', 'App\Models\Customer')
+        @can('read', 'App\Models\Customer\Customer')
         <li>
             @if(strpos(Request::path(), 'customers') !== false)
             <a href="{{ route('customers.all') }}" class="nav-link active">
@@ -133,7 +133,7 @@
             </a>
         </li>
         @endcan
-        @can('update', 'App\Models\Setting')
+        @can('update', 'App\Models\System\Setting')
             <li>
                 @if(strpos(Request::path(), 'settings') !== false)
                     <a href="{{ route('settings.edit') }}" class="nav-link active">
@@ -176,7 +176,7 @@
                 </a>
             </li>
         @endcan
-        @can('read', \App\Models\Report::class)
+        @can('read', \App\Models\System\Report::class)
             <li>
                 @if(strpos(Request::path(), 'reports') !== false)
                     <a href="{{ route('reports.bespoke.all') }}" class="nav-link active">

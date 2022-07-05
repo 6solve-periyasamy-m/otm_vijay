@@ -2,13 +2,12 @@
 
 namespace App\Imports;
 
-use App\Models\Accommodation;
-use App\Models\Address;
-use App\Models\AddressParent;
-use App\Models\Country;
-use App\Models\Currency;
-use App\Models\LocationType;
-use App\Repository\LocationsRepository;
+use App\Models\Accommodation\Accommodation;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
+use App\Models\Location\Country;
+use App\Models\Location\Currency;
+use App\Models\Location\LocationType;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
@@ -26,7 +25,7 @@ class AccommodationImport implements ToModel
         $address = Address::create([
             'name' => $row[0],
             'address_parent_id' => AddressParent::getParentId('Accommodation'),
-            'location_type_id' => LocationType::firstOrCreate('Hotel')->id,
+            'location_type_id' => LocationType::findOrCreate('Hotel')->id,
             'address_line_1' => trim($row[3]),
             'address_line_2' => trim($row[4]),
             'town' => trim($row[5]),

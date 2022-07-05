@@ -3,17 +3,14 @@
 namespace App\Repository;
 
 use App\Events\Order\Customer\OrderCustomerCreatedEvent;
-use App\Events\Order\OrderCreatedEvent;
 use App\Exceptions\RoomingFailedException;
-use App\Models\AccommodationGroup;
-use App\Models\Group;
-use App\Models\Order;
-use App\Models\OrderCustomer;
+use App\Models\Booking\AccommodationGroup;
+use App\Models\Booking\Booking;
+use App\Models\Customer\Group;
+use App\Models\Location\Address;
+use App\Models\Order\Order;
+use App\Models\Order\OrderCustomer;
 use Exception;
-use App\Models\Action;
-
-use App\Models\Address;
-use App\Models\Booking;
 use Illuminate\Support\Facades\Log;
 
 interface BookingRepositoryInterface {
@@ -127,7 +124,7 @@ class BookingRepository implements BookingRepositoryInterface
             'single_occupancy_surcharge' => $tour->single_occupancy_surcharge,
         ]);
 
-        OrderRepository::cloneInstallments($order);
+        $order->repository->resetInstallments();
 
         $customers = [];
         $order->orderCustomers()->save($leadBooker);
@@ -138,7 +135,7 @@ class BookingRepository implements BookingRepositoryInterface
         $order->save();
         //event(new OrderCreatedEvent($order));
 
-        OrderRepository::addIncludedToCustomer($leadBooker);
+        $leadBooker->repository->addAllIncluded();
         foreach ($booking->travellers as $traveller) {
             if (array_key_exists($traveller->customer_id, $customers)) continue;
             $customer = OrderCustomer::make([
@@ -149,7 +146,7 @@ class BookingRepository implements BookingRepositoryInterface
             $order->orderCustomers()->save($customer);
             $customers[$traveller->customer_id] = $customer;
             event(new OrderCustomerCreatedEvent($customer));
-            OrderRepository::addIncludedToCustomer($customer);
+            $customer->repository->addAllIncluded();
         }
 
         //self::processComponent($customers, 'activities', $booking);
@@ -187,7 +184,7 @@ class BookingRepository implements BookingRepositoryInterface
         }
         foreach ($groups as $group) {
             try {
-                OrderRepository::addRoomsToGroup($order, $group);
+                RoomingRepository::addRoomsToGroup($order, $group);
             } catch (RoomingFailedException $e) { Log::error($e); }
         }
     }

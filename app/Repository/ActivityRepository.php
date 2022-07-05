@@ -2,9 +2,8 @@
 
 namespace App\Repository;
 
-use App\Models\Tour;
-use App\Models\Activity;
-use Illuminate\Support\Facades\Log;
+use App\Models\Activity\Activity;
+use App\Models\Tour\Tour;
 
 interface ActivityRepositoryInterface 
 {

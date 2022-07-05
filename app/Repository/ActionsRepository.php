@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use Illuminate\Support\Facades\Log;
 use App\Models\Action;
+use Illuminate\Support\Facades\Log;
 
 interface ActionsRepositoryInterface {
     public static function log($action, $customer_id, $order_id, $reference = '', $detail = '');

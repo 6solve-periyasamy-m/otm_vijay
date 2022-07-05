@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Repository\CustomerAuthenticationRepository;
+use App\Models\Customer\Customer;
+use App\Repository\Authentication\CustomerAuthenticationRepository;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;

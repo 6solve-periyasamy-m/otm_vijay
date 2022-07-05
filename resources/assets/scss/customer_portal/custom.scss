@@ -18,12 +18,21 @@
 
 .order-select {
     width: fit-content;
-    margin-left: 1rem;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+.payable-amount:hover {
+    text-decoration: underline !important;
 }
 
 .splitter {
     border-bottom: 5px solid #cccccc;
     border-radius: 2px;
+}
+.overlay-container img {
+    width: 100%;
 }
 
 .overlay-container:hover .image-overlay {
@@ -49,7 +58,6 @@
 .hover-upload {
     opacity: 1;
     display: block;
-    width: 100%;
     height: auto;
     transition: .5s ease;
     backface-visibility: hidden;
@@ -183,11 +191,218 @@
         align-items: center;
     }
 }
+.pagebreak-inside {
+    page-break-inside: avoid;
+}
+
+
+.topbar {
+  position: fixed !important;
+  width: inherit;
+}
+
+.topbar-padding {
+    padding-top: 190px;
+}
 
 @media (max-width: 768px) {
+    .overlay-container img {
+        width: 35%;
+    }
     .col-md-6:last-child {
         .payment-record {
             margin-bottom: 0rem;
         }
-    }    
+    }
+    .topbar-padding {
+        padding-top: 87.39px;
+    }
+}
+
+.accordion {
+    box-shadow: 0px 2px 8px rgb(0 0 0 / 10%);
+}
+
+.accordion-button {
+    background-color: #ffffff;
+    border-radius: 4px;
+    color: #455a64;
+    &:not(.collapsed) {
+        color: #455a64;
+        background-color: #ffffff;
+        border-bottom-left-radius:0;
+        border-bottom-right-radius:0;
+    }
+}
+
+.accordion-item {
+    border: none;
+}
+
+.additional-customer-title {
+    font-size: 1.125rem !important;
+    line-height: 19.2px !important;
+}
+.additional-customer-subtitle {
+    font-size: 0.850rem !important;
+}
+.order-select-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-left: 125px;
+    align-items: center;
+    gap: 5px;
+}
+.finances-select-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+.no-header-line > :not(:first-child) {
+    border-top: none !important;
+}
+
+.show-on-mobile-flex,
+.show-on-mobile-block {
+    display: none !important;
+}
+
+.form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label {
+    transform: scale(0.85) translateY(-0.9rem) translateX(0.15rem);
+}
+
+/*-- ==============================================================
+ Screen smaller than 760px and also iPads specifically.
+ ============================================================== */
+
+@media only screen
+    and (max-width: 760px), (min-device-width: 768px)
+    and (max-device-width: 1024px) {
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    table.text-center {
+        text-align: left !important;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    .table > :not(:first-child) {
+        border-top: none;
+    }
+
+    tr:not(.bg-light-blue) {
+        border-bottom: 2px solid #3490dc;
+    }
+
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        padding-top: 1.5rem !important;
+    }
+
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #54667a;
+    }
+    td.text-center:before {
+        width: 100%;
+    }
+
+    /* Sided layout */
+    .table.table-mobile-sided> :not(:first-child) {
+        border-top: none;
+    }
+
+    .table.table-mobile-sided>:not(caption)>*>* {
+        border-color: var(--bs-table-border-color);
+    }
+    .table.table-mobile-sided td {
+          /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid var(--tmr-white);
+        position: relative;
+        padding-left: 50%;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .table.table-mobile-sided td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        white-space: nowrap;
+        font-weight: bold;
+        color: var(--tmr-table-header);
+    }
+    [data-content]:before {
+        content: attr(data-content);
+    }
+    .order-select {
+        width: 100%;
+        width: -moz-available;
+        width: -webkit-fill-available;
+        width: fill-available;
+    }
+    .order-select-wrapper {
+        justify-content: start;
+        padding-left: 0;
+    }
+    .finances-select-wrapper {
+        justify-content: start;
+        padding-left: 0;
+    }
+    .card-heading {
+        margin-bottom: 0 !important;
+    }
+    .hide-on-mobile {
+        display: none !important;
+    }
+    .show-on-mobile-block {
+        display: block !important;
+    }
+    .show-on-mobile-flex {
+        display: flex !important;
+    }
+    .upgrade-wrapper {
+        align-items: center !important;
+    }
+}
+
+@media print {
+    .col {
+        float: none;
+    }
+    .pagebreak-inside {
+        break-after: always;
+    }
 }

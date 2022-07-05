@@ -2,39 +2,59 @@
 
 namespace App\Repository;
 
-use App\Models\Setting;
+use App\Models\System\Setting;
+use Carbon\Carbon;
 
-interface SettingsRepositoryInterface {
-    public static function get($key);
-    public static function getOrDefault($key, $default);
-    public static function set($key, $value);
-    public static function setIfNotExists($key, $value);
-    public static function update($key, $value);
-    public static function setAll($array);
-}
-
-class SettingsRepository implements SettingsRepositoryInterface
+class SettingsRepository
 {
+    private static SettingsRepository $instance;
+    private array $cache;
+    private Carbon $cacheTime;
 
-    public static function get($key)
+    public function __construct()
     {
-        $setting = Setting::find($key);
-        return isset($setting) ? $setting->value : null;
+        $this->verifyCache();
     }
 
-    public static function getOrDefault($key, $default)
+    public static function getInstance(): SettingsRepository
     {
-        $setting = Setting::find($key);
-        return isset($setting) ? $setting->value : $default;
+        if (!isset(SettingsRepository::$instance)) SettingsRepository::$instance = new SettingsRepository();
+        return SettingsRepository::$instance;
     }
 
-    public static function getBoolean($key, $default = false)
+    public function get($key): ?string
     {
-        $setting = Setting::find($key);
-        return isset($setting) ? $setting->value == 1 : $default;
+        return $this->getOrDefault($key);
     }
 
-    public static function set($key, $value)
+    public function getOrDefault($key, $default = null): ?string
+    {
+        $this->verifyCache();
+        return array_key_exists($key, $this->cache) ? $this->cache[$key] : $default;
+    }
+
+    public function getBoolean($key, $default = false): bool
+    {
+        return $this->getOrDefault($key, ($default ? 1 : 0)) == 1;
+    }
+
+
+    public function set(string $key, ?string $value): SettingsRepository
+    {
+        return $this->internalSet($key, $value);
+    }
+
+    public function setAll(array $keys): SettingsRepository
+    {
+        foreach ($keys as $key => $value) {
+            $this->internalSet($key, $value, false);
+        }
+        $this->verifyCache();
+        return $this;
+    }
+
+
+    private function internalSet(string $key, ?string $value, bool $recache = true): SettingsRepository
     {
         $setting = Setting::find($key);
         if (isset($setting)) {
@@ -48,39 +68,31 @@ class SettingsRepository implements SettingsRepositoryInterface
                 Setting::create(['key' => $key, 'value' => $value]);
             }
         }
-        return $value;
+        if ($recache) $this->verifyCache();
+        return $this;
     }
 
-    public static function setIfNotExists($key, $value)
+    public function authorize(string $key, int $seconds): SettingsRepository
     {
-        $setting = Setting::find($key);
-        if (isset($setting)) {
-            return null;
-        } else {
-            if (isset($value)) {
-                Setting::create(['key' => $key, 'value' => $value]);
+        return $this->set($key, $seconds < 0 ? -1 : now()->addSeconds($seconds)->unix());
+    }
+
+    public function authorized(string $key): bool
+    {
+        $time = $this->getOrDefault($key, 0);
+        if ($time == 0) return false;
+        return $time === -1 || Carbon::createFromTimestamp($time)->isAfter(now());
+    }
+
+    public function verifyCache(): SettingsRepository
+    {
+        if (!isset($this->cacheTime) || $this->cacheTime->diffInMinutes(now()) > 15) {
+            $this->cache = [];
+            $this->cacheTime = now();
+            foreach (Setting::all() as $setting) {
+                $this->cache[$setting->key] = $setting->value;
             }
         }
-        return $value;
-    }
-
-    public static function update($key, $value)
-    {
-        $setting = Setting::find($key);
-        if (isset($setting)) {
-            if (isset($value)) {
-                $setting->update(['value' => $value,]);
-            } else {
-                $setting->delete();
-            }
-        }
-        return $value;
-    }
-
-    public static function setAll($array)
-    {
-        foreach ($array as $key => $value) {
-            SettingsRepository::set($key, $value);
-        }
+        return $this;
     }
 }

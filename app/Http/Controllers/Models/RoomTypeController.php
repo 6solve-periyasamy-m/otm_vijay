@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\RoomType;
+use App\Models\Accommodation\RoomType;
 use Illuminate\Http\Request;
 
 class RoomTypeController extends Controller

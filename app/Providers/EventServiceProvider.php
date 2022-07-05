@@ -21,18 +21,17 @@ use App\Events\Order\OrderRestoredEvent;
 use App\Events\Order\Payment\PaymentCreatedEvent;
 use App\Events\Order\Payment\PaymentEditedEvent;
 use App\Events\Order\Payment\PaymentRemovedEvent;
+use App\Listeners\CheckoutSuccessfulListener;
 use App\Listeners\Email\SendAdditionalTravellerAddedEmail;
 use App\Listeners\Email\SendAdditionalTravellerRemovedEmail;
+use App\Listeners\Email\SendBookingConfirmedEmail;
 use App\Listeners\Email\SendOrderCancelledEmail;
 use App\Listeners\Email\SendOrderChangedEmail;
-use App\Listeners\InvoiceUpdateListener;
-use App\Listeners\CheckoutSuccessfulListener;
-use App\Listeners\Email\SendBookingConfirmedEmail;
 use App\Listeners\Email\SendPaymentMadeEmail;
+use App\Listeners\InvoiceUpdateListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -62,15 +61,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         PaymentEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         PaymentRemovedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         AdjustmentCreatedEvent::class => [
             InvoiceUpdateListener::class,
@@ -91,7 +90,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderCustomerEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         OrderCustomerRemovedEvent::class => [
             InvoiceUpdateListener::class,
@@ -100,15 +99,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderCustomerComponentAddedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentEditedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         OrderCustomerComponentRemovedEvent::class => [
             InvoiceUpdateListener::class,
-            SendOrderChangedEmail::class,
+            //SendOrderChangedEmail::class,
         ],
         CustomerAdjustmentCreatedEvent::class => [
             InvoiceUpdateListener::class,

@@ -57,7 +57,7 @@
 @endpush
 
 @section('content')
-    @can('create', \App\Models\Report::class)
+    @can('create', \App\Models\System\Report::class)
         <div class="card">
             <div class="card-body">
                 <a class="btn btn-primary float-end" style="margin-right: 5px" href="{{ route('reports.bespoke.create', ['parent' => 'accommodation']) }}">
@@ -128,7 +128,7 @@
                         <td>
                             <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}" class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV"><i class="icon-list"></i></a>
                             <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}" class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX"><i class="icon-chart"></i></a>
-                            @can('update', \App\Models\Report::class)
+                            @can('update', \App\Models\System\Report::class)
                                 <a href="{{route('reports.bespoke.edit', ['report' => $report,])}}" class="btn btn-outline-success btn-sm mb-1">
                                     <i class="icon-note"></i>
                                 </a>
@@ -137,7 +137,7 @@
                                     <i class="icon-note"></i>
                                 </span>
                             @endcan
-                            @can('delete', \App\Models\Report::class)
+                            @can('delete', \App\Models\System\Report::class)
                                 <a href="#" class="btn btn-outline-danger btn-sm mb-1"
                                    onclick="event.preventDefault();document.getElementById('report-{{ $report->id }}-delete').submit();">
                                     <i class="icon-trash"></i>

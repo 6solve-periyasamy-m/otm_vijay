@@ -1,4 +1,4 @@
-@can('create', \App\Models\TransportType::class)
+@can('create', \App\Models\Transport\TransportType::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Transport Type', 'field' => 'transport_type_id', 'value' => $transport_type_id ?? 0,
              'route' => 'transport-types', 'createRoute' => route('transport-types.create'), 'width' => 6,])
@@ -7,7 +7,7 @@
         ['name' => 'Transport Type', 'field' => 'transport_type_id', 'value' => $transport_type_id ?? 0,
          'route' => 'transport-types', 'width' => 6,])
 @endcan
-@can('create', \App\Models\Operator::class)
+@can('create', \App\Models\Transport\Operator::class)
 @include('partials.fields.selector.adder',
             ['name' => 'Operator', 'field' => 'operator_id', 'value' => $operator_id ?? 0,
              'route' => 'operators', 'createRoute' => route('operators.create'), 'width' => 6,])

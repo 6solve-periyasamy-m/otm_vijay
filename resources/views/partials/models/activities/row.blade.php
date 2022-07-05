@@ -5,7 +5,7 @@
     <td>{{ $description }}</td>
     <td>{{ $notes }}</td>
     <td class="actions">
-        @can('update', \App\Models\Activity::class)
+        @can('update', \App\Models\Activity\Activity::class)
             <a href="{{route('activities.edit', ['activity' => $activity,])}}" class="btn btn-sm btn-outline-success mb-1">
                 <i class="icon-note"></i>
             </a>
@@ -14,7 +14,7 @@
             <i class="icon-note"></i>
         </span>
         @endcan
-        @can('delete', \App\Models\Activity::class)
+        @can('delete', \App\Models\Activity\Activity::class)
             <a href="#" class="btn btn-sm btn-outline-danger mb-1"
                onclick="event.preventDefault();document.getElementById('activity-{{ $activity->id }}-delete').submit();">
                 <i class="icon-trash"></i>

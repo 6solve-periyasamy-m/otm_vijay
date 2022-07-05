@@ -3,7 +3,7 @@
 namespace App\Listeners\Email;
 
 use App\Events\Order\Payment\PaymentCreatedEvent;
-use App\Repository\MailRepository;
+use App\Repository\Mailing\MailRepository;
 
 class SendPaymentMadeEmail
 {

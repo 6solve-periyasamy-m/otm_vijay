@@ -6,7 +6,7 @@
             select: { style: "multi+shift" },
         });
     });
-    @can('create', \App\Models\FlightInventoryTour::class)
+    @can('create', \App\Models\Flight\FlightInventoryTour::class)
     function getSelectedFlightInventory() {
         let ids = [];
         flightTable.rows({ selected: true, }).every((rowIdx, tableLoop, rowLoop) => {
@@ -30,7 +30,7 @@
     }
     @endcan
 </script>
-@can('create', \App\Models\FlightInventoryTour::class)
+@can('create', \App\Models\Flight\FlightInventoryTour::class)
 <div class="d-flex justify-content-between mb-3">
     <div class="d-inline-flex col-12 col-xl-10">
         <select class="form-select flight-component-type-select">
@@ -65,24 +65,24 @@
         <th scope="col">Notes</th>
     </tr>
     </thead>
-    @foreach(\App\Repository\FlightComponentRepository::getAvailableBetweenDates($tour, $tour->date_from, $tour->date_to->setTime(23, 59, 59)) as $inventory)
+    @foreach(\App\Repository\Model\Flight\FlightInventoryRepository::getBetweenDates($tour->date_from, $tour->date_to, $tour) as $inventory)
         <tr inventory_id="{{ $inventory->id }}">
             <td>{{ $inventory->flight_number }}</td>
             <td>{{ $inventory->travelClass }}</td>
             <td>{{ $inventory->component->departureAirport }}</td>
-            <td>{{ StringFormatter::formatDateTime($inventory->departs_at) }}</td>
+            <td>{{ f_datetime($inventory->departs_at) }}</td>
             <td>{{ $inventory->component->arrivalAirport }}</td>
-            <td>{{ StringFormatter::formatDateTime($inventory->arrives_at) }}</td>
-            <td>{{ StringFormatter::formatBoolean($inventory->component->is_domestic) }}</td>
+            <td>{{ f_datetime($inventory->arrives_at) }}</td>
+            <td>{{ f_bool($inventory->component->is_domestic) }}</td>
             <td>
                 <input type="checkbox" disabled @if($inventory->fit_selectable == 1) checked @endif>
             </td>
             <td>
-                {{$inventory->stock - $inventory->getUsedStock()}}/{{ $inventory->stock }}<br/>
-                ({{$inventory->getUsedStock()}} Sold)
+                {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
+                ({{$inventory->used_stock}} Sold)
             </td>
-            <td>{{ StringFormatter::formatCurrency($inventory->purchase_price) }}</td>
-            <td>{{ StringFormatter::formatCurrency($inventory->sales_price) }}</td>
+            <td>{{ f_currency($inventory->purchase_price) }}</td>
+            <td>{{ f_currency($inventory->sales_price) }}</td>
             <td>{{ $inventory->notes }}</td>
         </tr>
     @endforeach

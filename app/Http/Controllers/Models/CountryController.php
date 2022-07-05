@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
+use App\Models\Location\Country;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
