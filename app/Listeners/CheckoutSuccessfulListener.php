@@ -35,6 +35,8 @@ class CheckoutSuccessfulListener implements ShouldQueue
                 $booking = Booking::where('token', $intention->reference)->first();
                 if (isset($booking)) {
                     $order = $booking->repository->convertToOrder(now());
+                    $intention->customer_id = $order->leadBooker->customer_id;
+                    $intention->save();
                     $payment = $intention->makePayment($data['amount'] / 100, PaymentMethod::findOrCreate('Stripe'), $payload['created']);
                     $order->payments()->save($payment);
                     $intention->processed = true;

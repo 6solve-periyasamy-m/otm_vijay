@@ -39,7 +39,7 @@ class BespokeReportRepository
         if ($lowest['type'] == 'order-component') {
             $output['data'] = self::processOrderComponents($report->fields, $available, $format);
         } else {
-            foreach (app('\\App\\Models\\' . $lowest['class'])->all() as $row) {
+            foreach (app('\\App\\Models\\' . $lowest['class'])->with($lowest['eager'])->get() as $row) {
                 switch ($lowest['type']) {
                     case 'order':
                     case 'customer':

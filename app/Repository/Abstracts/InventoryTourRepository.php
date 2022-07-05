@@ -43,6 +43,8 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
 
     public abstract function getInventory(): ?InventoryRepository;
 
+    public abstract function getUsedOnOrderCount(): int;
+
     public static function getComponent(string $type, int $id): ?InventoryTourRepository
     {
         return match ($type) {
