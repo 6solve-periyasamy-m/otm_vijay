@@ -214,6 +214,7 @@ class ReportRepository
                 $row->order = $order;
                 $row->days = $order->days_until_next_payment;
                 $row->next = $order->next_installment;
+                $row->reminded = $order->repository->hasBeenReminded($row->next);
                 $data[] = $row;
             }
         }
