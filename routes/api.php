@@ -5,6 +5,7 @@
 |--------------------------------------------------------------------------
 */
 
+use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -225,6 +226,7 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
+    Route::get('quote/{quote}/cost', [QuoteController::class, 'getCost'])->name('quote.cost');
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
         Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');

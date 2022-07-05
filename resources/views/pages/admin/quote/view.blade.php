@@ -9,7 +9,58 @@
         $(document).ready(function () {
             $('#schedule-table').DataTable({fixedHeader: true,});
             $('#pricepoint-table').DataTable({fixedHeader: true,});
+            update(1);
         });
+        function getCounterAmount() {
+            let amount = parseInt($('.count-input').val());
+            return isNaN(amount) || amount < 1 ? 1 : amount;
+        }
+        function plus() {
+            update(getCounterAmount()+1);
+        }
+        function minus() {
+            let amount = getCounterAmount();
+            update(amount <= 1 ? 1 : amount-1);
+        }
+        function textUpdate() {
+            update(getCounterAmount());
+        }
+        function update(amount) {
+            $('.count-input').val(amount);
+            performRequest(amount);
+        }
+        function performRequest(amount) {
+            $.get('{{ route('api.quote.cost', ['quote' => $quote,]) }}', {
+                '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                '_token': '{{ csrf_token() }}',
+                'count': amount,
+            }).done(function (xhr, textStatus, errorThrown) {
+                if (xhr.success) {
+                    updateView(xhr.f_price, xhr.f_total);
+                } else {
+                    alert(xhr.message);
+                }
+            }).fail(function (xhr, textStatus, errorThrown) {
+                switch (xhr.status) {
+                    case 429:
+                        alert("You're doing this too quickly! Please wait a second before trying again!")
+                        break;
+                    case 422:
+                        alert("Looks like that isn't a number, please try again!")
+                        break;
+                    case 403:
+                        alert("Looks like that failed, we'll refresh the page for you to try again!")
+                        location.reload();
+                        break;
+                    default:
+                        console.log(xhr);
+                        alert('Something went wrong, please try again later');
+                }
+            });
+        }
+        function updateView(pricePerPerson, priceTotal) {
+            $('.text-updater').text(priceTotal + " (" + pricePerPerson + ")");
+        }
     </script>
 @endsection
 
@@ -51,6 +102,7 @@
     </div>
 
     <x-admin.section.card>
+        <div class="row">
         @foreach($quote->travellers as $traveller)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
@@ -60,13 +112,38 @@
                             {{ $traveller->name }}
                         </a>
                     </h6>
-                    <p>Email Address</p>
+                    <p>{{ __('quotes.view.cards.customers.customer.email') }}</p>
                     <h6 class="fw-bold">{{ $traveller->email }}</h6>
-                    <p>Purchase Price of Components</p>
+                    <p>{{ __('quotes.view.cards.customers.customer.purchase-cost') }}</p>
                     <h6 class="fw-bold">{{ f_currency($traveller->repository->getPurchaseTotal()) }}</h6>
                 </div>
             </div>
         @endforeach
+            <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+                <div class="otm-card">
+                    <p>{{ __('quotes.view.cards.customers.calculator.header')  }}</p>
+                    <h6 class="fw-bold">{{ __('quotes.view.cards.customers.calculator.description')  }}</h6>
+                    <p>{{ __('quotes.view.cards.customers.calculator.cost')  }}</p>
+                    <h6 class="fw-bold text-updater">Not Calculated Yet</h6>
+                    <p>{{ __('quotes.view.cards.customers.calculator.count') }}</p>
+                    <h6 class="fw-bold row">
+                        <div class="col-12 col-xl-3">
+                            <a href="javascript:plus()" class="btn btn-outline-primary btn-sm mb-1">
+                                <i class="icon-plus"></i>
+                            </a>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <x-admin.input name="count" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                        </div>
+                        <div class="col-12 col-xl-3">
+                            <a href="javascript:minus()" class="btn btn-outline-primary btn-sm mb-1">
+                                <i class="icon-minus"></i>
+                            </a>
+                        </div>
+                    </h6>
+                </div>
+            </div>
+        </div>
     </x-admin.section.card>
 
     <div class="row">

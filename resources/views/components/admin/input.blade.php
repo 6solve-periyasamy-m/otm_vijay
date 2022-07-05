@@ -7,6 +7,7 @@
            placeholder="placeholder"
            value="{{ old( $attributes->get('name')) ?? $attributes->get('value', '') }}"
            {{ $attributes->has('autocomplete') ? "autocomplete=\"{$attributes->get('autocomplete')}\"" : '' }}
-           {{ $attributes->has('required') ? 'required' :  ''}} @if($attributes->has('onchange')) onchange="{{ $onChange }}" @endif>
+           {{ $attributes->has('required') ? 'required' :  ''}}
+           @if($attributes->has('onchange')) onchange="{{ $attributes->get('onchange') }}" @endif>
     @if(!$attributes->has('nofloat'))<label for="{{ $attributes->get('name') }}" style="padding-top: 10px">{{ $slot }}</label>@endif
 </div>

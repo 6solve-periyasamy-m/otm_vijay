@@ -22,6 +22,16 @@ return [
                 'header' => 'Travellers',
                 'default' => 'Default Traveller',
                 'lead' => 'Lead Traveller',
+                'customer' => [
+                    'email' => 'Email Address',
+                    'purchase-cost' => 'Purchase Price of Components'
+                ],
+                'calculator' => [
+                    'header' => 'Cost Calculator',
+                    'description' => 'Calculate cost for X travellers',
+                    'cost' => 'Total (Price per Person)',
+                    'count' => 'Customer Count',
+                ],
             ],
             'installments' => [
                 'header' => 'Instalments',
@@ -43,7 +53,7 @@ return [
                 ]
             ],
             'price-points' => [
-                'header' => 'Price Points',
+                'header' => 'Price Matrix',
                 'table' => [
                     'quantity' => 'Quantity',
                     'cost' => 'Price Per Person',
