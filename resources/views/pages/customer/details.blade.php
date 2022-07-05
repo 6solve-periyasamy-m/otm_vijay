@@ -38,8 +38,8 @@
                                              onclick="window.location = '{{ route('customer.edit') }}';">
                                             <div class="card-body profile-card">
                                                 <center class="mt-4">
-                                                    <h4 class="card-title mt-2 additional-customer-title">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
-                                                    <h6 class="card-subtitle additional-customer-subtitle">{{ \App\Repository\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
+                                                    <h4 class="card-title mt-2 additional-customer-title">{{ \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->first_name }} {{ \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->last_name }}</h4>
+                                                    <h6 class="card-subtitle additional-customer-subtitle">{{ \App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()->email_address }}</h6>
                                                 </center>
                                             </div>
                                         </div>
