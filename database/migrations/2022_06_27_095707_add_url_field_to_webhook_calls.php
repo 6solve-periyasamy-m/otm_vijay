@@ -27,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('webhook_calls', function (Blueprint $table) {
-            //
+            $table->dropColumn('url');
+            $table->dropColumn('headers');
         });
     }
 };
