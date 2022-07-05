@@ -21,7 +21,7 @@ class TransportInventoryRepository extends InventoryRepository
     public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
     {
         $from->setTime(0, 0);
-        $to->setTime(11, 59, 59);
+        $to->setTime(23, 59, 59);
         $inventories = [];
         if (isset($tour)) {
             foreach ($tour->flightInventoryTours as $inventoryTour) {
