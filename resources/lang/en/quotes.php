@@ -41,6 +41,18 @@ return [
                     'installment' => 'Instalment',
                     'remaining' => 'Remaining Balance',
                 ]
+            ],
+            'price-points' => [
+                'header' => 'Price Points',
+                'table' => [
+                    'quantity' => 'Quantity',
+                    'cost' => 'Price Per Person',
+                ],
+                'form' => [
+                    'quantity' => 'Quantity',
+                    'cost' => 'Price Per Person',
+                    'create' => 'Create',
+                ],
             ]
         ]
     ],
