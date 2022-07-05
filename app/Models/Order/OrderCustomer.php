@@ -47,6 +47,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $activity_notes
  * @property string|null $flight_notes
  * @property string|null $transport_notes
+ * @property boolean $is_travelling
+ * @property boolean $is_charged
  * @property SupportCarbon|null $created_at
  * @property SupportCarbon|null $updated_at
  * @property SupportCarbon|null $deleted_at
