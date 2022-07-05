@@ -195,6 +195,7 @@ class BookingRepository extends ModelRepository
                 $group->repository->addRoomToGroup($room->tourComponent);
             }
         }
+        $order->repository->resetInstallments();
         return $order;
     }
 
