@@ -25,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('payment_intentions', function (Blueprint $table) {
+           $table->foreignId('customer_id')->nullable(false)->change();
+        });
     }
 };
