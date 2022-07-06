@@ -9,26 +9,19 @@
         $(document).ready(function () {
             $('#schedule-table').DataTable({fixedHeader: true,});
             $('#pricepoint-table').DataTable({fixedHeader: true,});
+            $('.summary').DataTable({fixedHeader: true,});
+            $('.accommodation').DataTable({fixedHeader: true,});
+            $('.activities').DataTable({fixedHeader: true,});
+            $('.flights').DataTable({fixedHeader: true,});
+            $('.transport').DataTable({fixedHeader: true,});
+            $('.extras').DataTable({fixedHeader: true,});
             update(1);
         });
-        function getCounterAmount() {
-            let amount = parseInt($('.count-input').val());
-            return isNaN(amount) || amount < 1 ? 1 : amount;
-        }
-        function plus() {
-            update(getCounterAmount()+1);
-        }
-        function minus() {
-            let amount = getCounterAmount();
-            update(amount <= 1 ? 1 : amount-1);
-        }
-        function textUpdate() {
-            update(getCounterAmount());
-        }
-        function update(amount) {
-            $('.count-input').val(amount);
-            performRequest(amount);
-        }
+        function getCounterAmount() { let amount = parseInt($('.count-input').val()); return isNaN(amount) || amount < 1 ? 1 : amount; }
+        function plus() { update(getCounterAmount()+1); }
+        function minus() { let amount = getCounterAmount(); update(amount <= 1 ? 1 : amount-1); }
+        function textUpdate() { update(getCounterAmount()); }
+        function update(amount) { $('.count-input').val(amount); performRequest(amount); }
         function performRequest(amount) {
             $.get('{{ route('api.quote.cost', ['quote' => $quote,]) }}', {
                 '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
@@ -58,9 +51,7 @@
                 }
             });
         }
-        function updateView(pricePerPerson, priceTotal) {
-            $('.text-updater').text(priceTotal + " (" + pricePerPerson + ")");
-        }
+        function updateView(pricePerPerson, priceTotal) { $('.text-updater').text(priceTotal + " (" + pricePerPerson + ")"); }
     </script>
 @endsection
 
@@ -142,6 +133,214 @@
     </x-admin.section.card>
 
     <div class="row">
+        <div class="col-xl-12">
+            <x-admin.section.card>
+                <ul class="nav nav-pills otm-tab">
+                    <li class="nav-item col-6 col-md-2">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary">
+                            <i class="icon-list"></i> {{ __('quotes.view.cards.components.tabs.summary') }}
+                        </button>
+                    </li>
+                    <li class="nav-item col-6 col-md-2">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#accommodation">
+                            <i class="icon-home"></i> {{ __('quotes.view.cards.components.tabs.accommodation') }}
+                        </button>
+                    </li>
+                    <li class="nav-item col-6 col-md-2">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
+                            <i class="icon-settings"></i> {{ __('quotes.view.cards.components.tabs.activities') }}
+                        </button>
+                    </li>
+                    <li class="nav-item col-6 col-md-2">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
+                            <i class="icon-plane"></i> {{ __('quotes.view.cards.components.tabs.flights') }}
+                        </button>
+                    </li>
+                    <li class="nav-item col-6 col-md-2">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
+                            <i class="icon-directions"></i> {{ __('quotes.view.cards.components.tabs.transport') }}
+                        </button>
+                    </li>
+                    <li class="nav-item col-6 col-md-2">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#extras">
+                            <i class="icon-briefcase"></i> {{ __('quotes.view.cards.components.tabs.extras') }}
+                        </button>
+                    </li>
+                </ul>
+                <div id="tables" class="tab-content otm-tab-content">
+                    <div id="summary" role="tabpanel" class="tab-pane fade show active">
+                        <table class="table table-striped summary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($quote->repository->getComponents() as $componentRepository)
+                                <tr>
+                                    <td>
+                                        {{ $componentRepository->getTourComponent()->getComponentString() }}
+                                    </td>
+                                    <td>
+                                        @if ($componentRepository->getTourComponent()->getComponentString() == 'extra')
+                                            {{ __('quotes.view.cards.components.common.na') }}
+                                        @else
+                                            {{ f_datetime($componentRepository->getTourComponent()->getInventory()->getStartTime()) }}
+                                             to
+                                            {{ f_datetime($componentRepository->getTourComponent()->getInventory()->getEndTime()) }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $componentRepository->getTourComponent()->__toString() }}
+                                    </td>
+                                    <td>
+                                        {{ f_currency($componentRepository->getPurchasePrice()) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="accommodation" role="tabpanel" class="tab-pane fade">
+                        <table class="table table-striped summary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($quote->accommodation()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                                <tr>
+                                    <td>
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
+                                         to
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                    </td>
+                                    <td>
+                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                    </td>
+                                    <td>
+                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="activities" role="tabpanel" class="tab-pane fade">
+                        <table class="table table-striped summary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($quote->activities()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                                <tr>
+                                    <td>
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
+                                         to
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                    </td>
+                                    <td>
+                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                    </td>
+                                    <td>
+                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="flights" role="tabpanel" class="tab-pane fade">
+                        <table class="table table-striped summary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($quote->flights()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                                <tr>
+                                    <td>
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
+                                         to
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                    </td>
+                                    <td>
+                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                    </td>
+                                    <td>
+                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="transport" role="tabpanel" class="tab-pane fade">
+                        <table class="table table-striped summary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($quote->transport()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                                <tr>
+                                    <td>
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
+                                         to
+                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                    </td>
+                                    <td>
+                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                    </td>
+                                    <td>
+                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="extras" role="tabpanel" class="tab-pane fade">
+                        <table class="table table-striped summary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($quote->merchandise()->with('tourComponent')->get() as $component)
+                                <tr>
+                                    <td>
+                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                    </td>
+                                    <td>
+                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+            </x-admin.section.card>
+        </div>
         <div class="col-xl-6">
             <x-admin.section.card>
                 <x-slot:header>{{ __('quotes.view.cards.installments.header') }}</x-slot:header>

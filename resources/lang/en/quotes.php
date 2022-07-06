@@ -61,6 +61,23 @@ return [
                     'cost' => 'Price Per Person',
                     'create' => 'Create',
                 ],
+            ],
+            'components' => [
+                'common' => [
+                    'type' => 'Type',
+                    'dates' => 'Dates',
+                    'details' => 'Description',
+                    'price' => 'Purchase Price',
+                    'na' => 'Not Applicable',
+                ],
+                'tabs' => [
+                    'accommodation' => 'Accommodation',
+                    'activities' => 'Activities',
+                    'flights' => 'Flights',
+                    'transport' => 'Transport',
+                    'extras' => 'Merchandise',
+                    'summary' => 'All Components',
+                ],
             ]
         ]
     ],
