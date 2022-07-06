@@ -27,6 +27,8 @@ return [
                 'calculator' => [
                     'header' => 'Cost Calculator',
                     'description' => 'Calculate cost for X travellers',
+                    'purchase' => 'Purchase Price of Components (Approximate)',
+                    'profit' => 'Profit (Per Person Profit) (Approximate)',
                     'cost' => 'Total (Price per Person)',
                     'count' => 'Customer Count',
                 ],

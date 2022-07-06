@@ -14,12 +14,17 @@ class QuoteController extends ApiController
         if ($cost === null) {
             return response()->json(['success' => false, 'message' => 'No price point exists for that few travellers']);
         }
+        $purchasePrice = $quote->repository->getPurchaseTotal();
         $data = [
             'success' => true,
             'price' => $cost->price_per_person,
             'f_price' => f_currency($cost->price_per_person),
             'total' => $cost->price_per_person * $request->count,
             'f_total' => f_currency($cost->price_per_person * $request->count),
+            'profit' => $cost->price_per_person - $purchasePrice,
+            'f_profit' => f_currency($cost->price_per_person - $purchasePrice),
+            'profit_total' => ($cost->price_per_person - $purchasePrice) * $request->count,
+            'f_profit_total' => f_currency(($cost->price_per_person - $purchasePrice) * $request->count),
         ];
         return response()->json($data);
     }

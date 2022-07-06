@@ -29,7 +29,7 @@
                 'count': amount,
             }).done(function (xhr, textStatus, errorThrown) {
                 if (xhr.success) {
-                    updateView(xhr.f_price, xhr.f_total);
+                    updateView(xhr.f_price, xhr.f_total, xhr.f_profit, xhr.f_profit_total);
                 } else {
                     alert(xhr.message);
                 }
@@ -51,7 +51,10 @@
                 }
             });
         }
-        function updateView(pricePerPerson, priceTotal) { $('.text-updater').text(priceTotal + " (" + pricePerPerson + ")"); }
+        function updateView(pricePerPerson, priceTotal, profitPerPerson, profitTotal) {
+            $('.cost-updater').text(priceTotal + " (" + pricePerPerson + ")");
+            $('.profit-updater').text(profitTotal + " (" + profitPerPerson  + ")");
+        }
     </script>
 @endsection
 
@@ -105,12 +108,16 @@
 
     <x-admin.section.card>
         <div class="row">
-            <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
+            <div class="col-xxl-3 col-xl-4 col-md-6 col-sm-12">
                 <div class="otm-card">
-                    <p>{{ __('quotes.view.cards.quick.calculator.header')  }}</p>
-                    <h6 class="fw-bold">{{ __('quotes.view.cards.quick.calculator.description')  }}</h6>
-                    <p>{{ __('quotes.view.cards.quick.calculator.cost')  }}</p>
-                    <h6 class="fw-bold text-updater">Not Calculated Yet</h6>
+                    <p>{{ __('quotes.view.cards.quick.calculator.header') }}</p>
+                    <h6 class="fw-bold">{{ __('quotes.view.cards.quick.calculator.description') }}</h6>
+                    <p>{{ __('quotes.view.cards.quick.calculator.purchase') }}</p>
+                    <h6 class="fw-bold">{{ f_currency($quote->repository->getPurchaseTotal()) }}</h6>
+                    <p>{{ __('quotes.view.cards.quick.calculator.profit') }}</p>
+                    <h6 class="fw-bold profit-updater">Not Calculated Yet</h6>
+                    <p>{{ __('quotes.view.cards.quick.calculator.cost') }}</p>
+                    <h6 class="fw-bold cost-updater">Not Calculated Yet</h6>
                     <p>{{ __('quotes.view.cards.quick.calculator.count') }}</p>
                     <h6 class="fw-bold row">
                         <div class="col-12 col-xl-3">
@@ -182,7 +189,7 @@
                             @foreach($quote->repository->getComponents() as $componentRepository)
                                 <tr>
                                     <td>
-                                        {{ $componentRepository->getTourComponent()->getComponentString() }}
+                                        {{ ucwords($componentRepository->getTourComponent()->getComponentString()) }}
                                     </td>
                                     <td>
                                         @if ($componentRepository->getTourComponent()->getComponentString() == 'extra')
