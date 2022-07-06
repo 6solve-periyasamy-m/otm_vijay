@@ -22,17 +22,19 @@ class CustomerBookingController extends Controller
         if (!isset($from) || $from->traveller->booking->id !== $booking->id) return response()->json(['success' => false, 'message' => 'That activity does not exist on that booking']);
         if ($request->input('upgrade_id') == 0) {
             $parent = $from->tourComponent->parent();
-            $to = $parent->upgrades()->first();
+            $toUpgrade = $parent->upgrades()->first();
+            $to = $parent->upgrades()->first()->base;
         } else {
-            $to = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
+            $toUpgrade = ActivityInventoryTourUpgrade::find($request->input('upgrade_id'));
+            $to = $toUpgrade->upgrade;
         }
         if (!isset($to)
-            || !$to->upgrade->is_bookable
-            || $to->upgrade->tour_id !== $booking->tour_id
-            || !$from->tourComponent->repository->onUpgradeTree($to->repository))
+            || !$to->is_bookable
+            || $to->tour_id !== $booking->tour_id
+            || !$from->tourComponent->repository->onUpgradeTree($toUpgrade->repository))
             return response()->json(['success' => false, 'message' => 'That upgrade does not exist on that activity tree']);
         try {
-            $success = $booking->repository->upgradeActivityForAll($from, $to);
+            $success = $booking->repository->upgradeActivityForAll($from->tourComponent, $to);
             if (!$success)
                 return response()->json(['success' => false, 'message' => 'Upgrade failed to apply, please try again later']);
             return response()->json(['success' => true, 'message' => 'Upgrade applied successfully']);

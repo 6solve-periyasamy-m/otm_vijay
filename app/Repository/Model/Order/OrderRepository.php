@@ -270,12 +270,17 @@ class OrderRepository extends ModelRepository
         return $this->order->save();
     }
 
+    public function hasBeenReminded(OrderInstallment $installment): bool
+    {
+        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $installment->id)->first();
+        return isset($reminder);
+    }
+
     public function sendReminderEmails(int $days, int $minDays = -1000): void
     {
         if (!$this->shouldRemind($days, $minDays)) return;
         $nextInstallment = $this->order->next_installment;
-        $reminder = PaymentReminder::where('order_id', $this->order->id)->where('order_installment_id', $nextInstallment->id)->first();
-        if (isset($reminder)) return;
+        if ($this->hasBeenReminded($nextInstallment)) return;
         PaymentReminder::create([
             'order_id' => $this->order->id,
             'order_installment_id' => $nextInstallment->id,

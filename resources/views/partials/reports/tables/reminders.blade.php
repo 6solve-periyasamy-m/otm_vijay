@@ -8,6 +8,7 @@
             <th scope="col">Days Until</th>
             <th scope="col">Due On</th>
             <th scope="col">Amount</th>
+            <th scope="col">Reminded?</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
                 <td>{{ $row->days }}</td>
                 <td>{{ f_date($row->next->due_on) }}</td>
                 <td>{{ f_currency($row->next->amount) }}</td>
+                <td>{{ f_bool($row->reminded) }}</td>
             </tr>
         @endforeach
     </tbody>

@@ -28,6 +28,7 @@ class ReportFieldRepository
                     $subData->name = $key;
                     $subData->class = $data['class'];
                     $subData->depth = $depth;
+                    $subData->eager = $data['eager'] ?? [];
                     $subData->description = $field['name'];
                     $subData->accessor = $field['method'];
                     $subData->type = $data['type'];
@@ -44,14 +45,16 @@ class ReportFieldRepository
         $lowestDepth = -1;
         $lowestClass = null;
         $lowestType = null;
+        $lowestEager = null;
         foreach ($available as $field => $data) {
             if (in_array($field, $used) && $lowestDepth < $data->depth) {
                 $lowestDepth = $data->depth;
                 $lowestClass = $data->class;
                 $lowestType = $data->type;
+                $lowestEager = $data->eager;
             }
         }
-        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType,];
+        return ['depth' => $lowestDepth, 'class' => $lowestClass, 'type' => $lowestType, 'eager' => $lowestEager];
     }
 
     public static function getAccommodationFields(): array
@@ -60,6 +63,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Accommodation\Accommodation',
                 'type' => 'component',
+                'eager' => ['address',],
                 'fields' => [
                     'name' => [
                         'name' => 'Name',
@@ -92,6 +96,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Accommodation\AccommodationInventory',
                 'type' => 'inventory',
+                'eager' => ['accommodation', 'roomType', 'boardType', 'accommodation.address'],
                 'fields' => array_merge([
                     'room_type' => [
                         'name' => 'Room Type',
@@ -123,7 +128,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Accommodation\AccommodationInventoryTour'),
+            2 => self::getTourInventoryFooter('Accommodation\AccommodationInventoryTour', ['inventory', 'inventory.accommodation', 'inventory.roomType', 'inventory.boardType', 'inventory.accommodation.address', 'tour']),
         ];
     }
 
@@ -133,6 +138,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Activity\Activity',
                 'type' => 'component',
+                'eager' => ['address', 'activityType'],
                 'fields' => [
                     'name' => [
                         'name' => 'Name',
@@ -168,6 +174,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Activity\ActivityInventory',
                 'type' => 'inventory',
+                'eager' => ['activity','activity.activityType','activity.address', 'ticketType'],
                 'fields' => array_merge([
                     'ticket_type' => [
                         'name' => 'Ticket Type',
@@ -185,7 +192,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Activity\ActivityInventoryTour')
+            2 => self::getTourInventoryFooter('Activity\ActivityInventoryTour', ['inventory', 'inventory.ticketType', 'inventory.activity', 'inventory.activity.address', 'inventory.activity.activityType', 'tour'])
         ];
     }
 
@@ -195,6 +202,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Flight\Flight',
                 'type' => 'component',
+                'eager' => ['departureAirport', 'departureAirport.address', 'arrivalAirport', 'arrivalAirport.address', ],
                 'fields' => [
                     'departure_airport' => [
                         'name' => 'Departure Airport',
@@ -231,6 +239,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Flight\FlightInventory',
                 'type' => 'inventory',
+                'eager' => ['travelClass', 'flight.departureAirport', 'flight.departureAirport.address', 'flight.arrivalAirport', 'flight.arrivalAirport.address', ],
                 'fields' => array_merge([
                     'flight_number' => [
                         'name' => 'Flight Number',
@@ -257,7 +266,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour')
+            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'],)
         ];
     }
 
@@ -267,6 +276,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Transport\Transport',
                 'type' => 'component',
+                'eager' => ['departureAddress', 'arrivalAddress', 'operator', 'transportType'],
                 'fields' => [
                     'name' => [
                         'name' => 'Name',
@@ -315,6 +325,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Transport\TransportInventory',
                 'type' => 'inventory',
+                'eager' => ['travelClass', 'transport.departureAddress', 'transport.arrivalAddress', 'transport.operator', 'transport.transportType'],
                 'fields' => array_merge([
                     'travel_class' => [
                         'name' => 'Travel Class',
@@ -342,7 +353,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Transport\TransportInventoryTour'),
+            2 => self::getTourInventoryFooter('Transport\TransportInventoryTour', ['inventory.travelClass', 'inventory.transport.departureAddress', 'inventory.transport.arrivalAddress', 'inventory.transport.operator', 'inventory.transport.transportType']),
         ];
     }
 
@@ -352,6 +363,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Customer\Customer',
                 'type' => 'customer',
+                'eager' => ['homeAddress', 'billingAddress', 'tShirtSize', 'hatSize'],
                 'fields' => [
                     'email' => [
                         'name' => 'Email',
@@ -477,6 +489,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Order\OrderCustomer',
                 'type' => 'order-customer',
+                'eager' => ['order', 'order.tour', 'customer', 'customer.homeAddress', 'customer.billingAddress', 'customer.tShirtSize', 'customer.hatSize'],
                 'fields' => [
                     'booking_reference' => [
                         'name' => 'Booking Reference',
@@ -552,6 +565,7 @@ class ReportFieldRepository
             2 => [
                 'class' => 'OrderComponent',
                 'type' => 'order-component',
+                'eager' => [],
                 'fields' => [
                     'details' => [
                         'name' => 'Details',
@@ -578,6 +592,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Order\OrderInstallment',
                 'type' => 'order-installment',
+                'eager' => ['order', 'order.leadBooker'],
                 'fields' => [
                     'amount' => [
                         'name' => 'Amount',
@@ -606,6 +621,7 @@ class ReportFieldRepository
             1 => [
                 'class' => 'Order\Payment\Payment',
                 'type' => 'payment',
+                'eager' => ['order', 'order.leadBooker', 'paymentMethod',],
                 'fields' => [
                     'payment_method' => [
                         'name' => 'Payment Method',
@@ -635,6 +651,7 @@ class ReportFieldRepository
         return [
             'class' => 'Order\Order',
             'type' => 'order',
+            'eager' => ['leadBooker'],
             'fields' => [
                 'booking_reference' => [
                     'name' => 'Booking Reference',
@@ -722,11 +739,12 @@ class ReportFieldRepository
         ];
     }
 
-    private static function getTourInventoryFooter(string $class): array
+    private static function getTourInventoryFooter(string $class, array $eager = []): array
     {
         return [
             'class' => $class,
             'type' => 'tour',
+            'eager' => $eager,
             'fields' => [
                 'tour_name' => [
                     'name' => 'Tour Name',

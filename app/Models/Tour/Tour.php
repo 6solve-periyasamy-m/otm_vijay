@@ -212,7 +212,7 @@ class Tour extends Model
 
     public function paymentInstallments(): HasMany
     {
-        return $this->hasMany(PaymentInstallment::class, 'tour_id');
+        return $this->hasMany(PaymentInstallment::class, 'tour_id')->orderBy('due_on');
     }
 
     public function getDepositPercentageAttribute(): float

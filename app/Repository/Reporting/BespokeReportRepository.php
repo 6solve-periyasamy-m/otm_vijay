@@ -2,6 +2,7 @@
 
 namespace App\Repository\Reporting;
 
+use App\Models\Helper\OrderStatus;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -38,7 +39,7 @@ class BespokeReportRepository
         if ($lowest['type'] == 'order-component') {
             $output['data'] = self::processOrderComponents($report->fields, $available, $format);
         } else {
-            foreach (app('\\App\\Models\\' . $lowest['class'])->all() as $row) {
+            foreach (app('\\App\\Models\\' . $lowest['class'])->with($lowest['eager'])->get() as $row) {
                 switch ($lowest['type']) {
                     case 'order':
                     case 'customer':
@@ -138,6 +139,7 @@ class BespokeReportRepository
             default:
                 break;
         }
+        if ($data instanceof OrderStatus) return $data->description();
         return $data ?? 'Not Set';
     }
 

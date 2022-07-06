@@ -25,6 +25,7 @@ class CustomerBookingController extends Controller
     private function getTour(string $bookingUrl, int $size = 1): ?Tour
     {
         $tour = Tour::where('booking_form_url', $bookingUrl)->where('is_active', true)->first();
+        if (!isset($tour)) return null;
         if ($tour->stock_control_active &&
             $tour->stock - $tour->getUsedStock() < $size) {
             return null;
@@ -116,6 +117,8 @@ class CustomerBookingController extends Controller
             } else {
                 $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
                 $group->repository->addTravellerToGroup($traveller);
+                try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
+                catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
                 $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
             }
         }
@@ -177,8 +180,9 @@ class CustomerBookingController extends Controller
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
         $min = max($dueToday, 0.3);
-        $max = min($dueToday, 999999.99);
+        $max = min($booking->repository->getTotalCost(), 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
-        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->customer->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', $booking->customer->id);
+        $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
+        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', 0, $redirect);
     }
 }

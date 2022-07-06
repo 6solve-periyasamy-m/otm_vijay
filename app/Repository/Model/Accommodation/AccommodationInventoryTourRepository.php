@@ -58,7 +58,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         if (!isset($group)) return null;
         $orderComponent = OrderAccommodation::create([
             'group_id' => $group->id,
-            'accommodation_inventory_tour_id' => $this->tourComponent,
+            'accommodation_inventory_tour_id' => $this->tourComponent->id,
             'share_with_user_id' => null,
             'cost' => $this->tourComponent->tour_sales_price,
         ]);
@@ -205,5 +205,14 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function getInventory(): ?AccommodationInventoryRepository
     {
         return $this->tourComponent->inventory->repository;
+    }
+
+    public function getUsedOnOrderCount(): int
+    {
+        $used = 0;
+        foreach ($this->tourComponent->orders as $orderComponent) {
+            if (!$orderComponent->cancelled) $used++;
+        }
+        return $used;
     }
 }

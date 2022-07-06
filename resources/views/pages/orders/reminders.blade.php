@@ -53,16 +53,17 @@
                             @if($row->days  > 0)
                                 <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due
                                     in {{ $row->days }} days ({{ f_date($row->next?->due_on) }})
-                                </div>
                             @elseif($row->days === 0)
                                 <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} is due today
                                     ({{ f_date($row->next?->due_on) }})
-                                </div>
                             @else
                                 <div class="col-4 text-center">{{ f_currency($row->next?->amount) }} was
                                     due {{ $row->days * -1 }} days ago ({{ f_date($row->next?->due_on) }})
-                                </div>
                             @endif
+                            @if($row->reminded)
+                                &nbsp;(Reminded)
+                            @endif
+                            </div>
                         </div>
                     </li>
                 @endforeach

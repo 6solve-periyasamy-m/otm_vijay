@@ -8,10 +8,7 @@ function addAccommodationAddon() {
     let id = $('#accommodation_id-input').find(':selected').val()
     if (id != null) {
         $.post('{{ route('api.order.addon.add.accommodation') }}', { '__api_token': '{{ Auth::user()->getCurrentToken()->token }}', '_token': '{{ csrf_token() }}', 'customer_id': '{{ $orderCustomer->id }}', 'accommodation_id': id})
-            .done(function (xhr, textStatus, errorThrown) {
-                if (xhr.success) location.reload();
-                else alert(xhr.message);
-            })
+            .done(function () { location.reload();})
             .fail(function (xhr, textStatus, errorThrown) { alert(xhr.responseText); });
     }
 }

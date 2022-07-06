@@ -142,7 +142,7 @@ class ReportRepository
     {
         $data = [];
         foreach (OrderFlight::all() as $orderFlight) {
-            if ($orderFlight->isCancelled()) {
+            if ($orderFlight->cancelled) {
                 continue;
             }
             $row = collect();
@@ -169,7 +169,7 @@ class ReportRepository
     {
         $data = [];
         foreach (OrderActivity::all() as $orderActivity) {
-            if ($orderActivity->isCancelled()) {
+            if ($orderActivity->cancelled) {
                 continue;
             }
             $row = collect();
@@ -214,6 +214,7 @@ class ReportRepository
                 $row->order = $order;
                 $row->days = $order->days_until_next_payment;
                 $row->next = $order->next_installment;
+                $row->reminded = $order->repository->hasBeenReminded($row->next);
                 $data[] = $row;
             }
         }

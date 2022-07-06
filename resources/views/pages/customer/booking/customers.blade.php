@@ -23,69 +23,38 @@
         <div class="card">
             <div class="card-body row">
                 @csrf
-                <div class="form-group col-md-1">
-                    <label class="col-md-12 mb-0">Title</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_title" id="lead_title-input" value="{{ $customer?->title ?? '' }}"
-                               class="form-control ps-0 form-control-line" autocomplete="honorific-prefix" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="col-md-12 mb-0">First Name</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_first_name" id="lead_first_name-input"
-                               value="{{ $customer?->first_name ?? '' }}"
-                               class="form-control ps-0 form-control-line" autocomplete="given-name" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-12 mb-0">Middle Names</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_middle_names" id="lead_middle_names-input"
-                               value="{{ $customer?->middle_names ?? '' }}"
-                               class="form-control ps-0 form-control-line" autocomplete="additional-name">
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-12 mb-0">Last Name</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_last_name" id="lead_last_name-input"
-                               value="{{ $customer?->last_name ?? '' }}"
-                               class="form-control ps-0 form-control-line" autocomplete="family-name" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-2">
-                    <label class="col-md-12 mb-0">Date of Birth</label>
-                    <div class="col-md-12">
-                        <input type="date" name="lead_date_of_birth" id="lead_date_of_birth-input"
-                               value="{{ $customer?->date_of_birth?->format('Y-m-d') ?? '' }}"
-                               class="form-control ps-0 form-control-line" autocomplete="bday" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-12 mb-0">Email Address</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_email_address" id="lead_email_address-input"
-                               value="{{ $customer?->email_address ?? '' }}"
-                               class="form-control ps-0 form-control-line v-email-validation-unique" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-12 mb-0">Confirm Your Email</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_email_address_confirmation"
-                               id="lead_email_address_confirmation-input" value="{{ $customer?->email_address ?? '' }}"
-                               class="form-control ps-0 form-control-line" required>
-                    </div>
-                </div>
-                <div class="form-group col-md-2">
-                    <label class="col-md-12 mb-0">Mobile Number</label>
-                    <div class="col-md-12">
-                        <input type="text" name="lead_mobile_number" id="lead_mobile_number-input"
-                               value="{{ $customer?->mobile_number ?? '' }}"
-                               class="form-control ps-0 form-control-line" autocomplete="tel" required>
-                    </div>
-                </div>
+                <x-customer.input name="lead_title" value="{{ $customer?->title ?? '' }}" width="1" autocomplete="honorific-prefix" required>
+                    Title
+                </x-customer.input>
+
+                <x-customer.input name="lead_first_name" value="{{ $customer?->first_name ?? '' }}" width="3" autocomplete="given-name" required>
+                    First Name
+                </x-customer.input>
+
+                <x-customer.input name="lead_middle_names" value="{{ $customer?->middle_names ?? '' }}" width="4" autocomplete="additional-name">
+                    Middle Names
+                </x-customer.input>
+
+                <x-customer.input name="lead_last_name" value="{{ $customer?->last_name ?? '' }}" width="4" autocomplete="family-name" required>
+                    Last Name
+                </x-customer.input>
+
+                <x-customer.input type="date" name="lead_date_of_birth" value="{{ $customer?->date_of_birth?->format('Y-m-d') ?? '' }}" width="3" autocomplete="bday" required>
+                    Date of Birth
+                </x-customer.input>
+
+                <x-customer.input name="lead_email_address" value="{{ $customer?->email_address }}" width="3" autocomplete="email" required>
+                    Email Address
+                </x-customer.input>
+
+                <x-customer.input name="lead_email_address_confirmation" value="{{ $customer?->email_address }}" width="3" autocomplete="email" required>
+                    Confirm your Email
+                </x-customer.input>
+
+                <x-customer.input name="lead_mobile_number" value="{{ $customer?->mobile_number ?? '' }}" width="3" autocomplete="tel" required>
+                    Mobile Number
+                </x-customer.input>
+
                 <div class="form-group col-md-12">
                     Sharing is designated by the selection of a room, selecting the same room as another traveller indicates that the room will be shared by those travellers
                 </div>
@@ -108,126 +77,85 @@
                     </select>
                 </div>
 
-                <div class="col-6">
-                    <hr class="splitter">
-                    <div class="form-group col-md-12">
-                        <h5 class="col-md-12 mb-0">Home Address</h5>
+                <hr class="splitter">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 class="mb-0">Home Address</h4>
                     </div>
                     <hr class="splitter">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Home Address Line 1</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_home_address_line_1" id="lead_home_address_line_1-input"
-                                   value="{{ $customer?->homeAddress?->address_line_1 ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-line1" required>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Home Address Line 2</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_home_address_line_2" id="lead_home_address_line_2-input"
-                                   value="{{ $customer?->homeAddress?->address_line_2 ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-line2">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Home Town</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_home_town" id="lead_home_town-input"
-                                   value="{{ $customer?->homeAddress?->town ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-level2">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Home Region</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_region" id="lead_region-input"
-                                   value="{{ $customer?->homeAddress?->region ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-level1">
-                        </div>
-                    </div>
+
+                    <x-customer.input name="lead_home_address_line_1" value="{{ $customer->homeAddress->address_line_1 ?? '' }}" autocomplete="address-line1" required>
+                        Address Line 1
+                    </x-customer.input>
+
+                    <x-customer.input name="lead_home_address_line_2" value="{{ $customer->homeAddress->address_line_2 ?? '' }}" autocomplete="address-line2">
+                        Address Line 2
+                    </x-customer.input>
+                    <x-customer.input name="lead_home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2">
+                        Town
+                    </x-customer.input>
+                    <x-customer.input name="lead_home_town" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1">
+                        Region
+                    </x-customer.input>
+
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Home Country</label>
                         <div class="col-md-12">
                             <select name="lead_home_country" class="w-100" required>
                                 <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
-                                    <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->homeAddress?->country_id == $country->id) selected @endif>
+                                    <option value="{{ $country->id }}" @if(isset($customer) && $customer?->homeAddress?->country_id == $country->id) selected @endif>
                                         {{ $country->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Home Postcode</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_home_postcode" id="lead_home_postcode-input"
-                                   value="{{ $customer?->homeAddress?->postcode ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="postcode" required>
-                        </div>
-                    </div>
+
+                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode" required>
+                        Postcode
+                    </x-customer.input>
                 </div>
-                <div class="col-6">
-                    <hr class="splitter">
-                    <div class="form-group col-md-12">
-                        <h5 class="col-md-12 mb-0">Billing Address</h5>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <h4 class="mb-0">Billing Address</h4>
                     </div>
                     <hr class="splitter">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Billing Address Line 1</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_billing_address_line_1" id="lead_billing_address_line_1-input"
-                                   value="{{ $customer?->billingAddress?->address_line_1 ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-line1" required>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Billing Address Line 2</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_billing_address_line_2" id="lead_billing_address_line_2-input"
-                                   value="{{ $customer?->billingAddress?->address_line_2 ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-line2">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Billing Town</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_billing_town" id="lead_billing_town-input"
-                                   value="{{ $customer?->billingAddress?->town ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-level2">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Billing Region</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_billing_region" id="lead_region-input"
-                                   value="{{ $customer?->billingAddress?->region ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="address-level1">
-                        </div>
-                    </div>
+
+                    <x-customer.input name="lead_billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" autocomplete="address-line1" required>
+                        Address Line 1
+                    </x-customer.input>
+
+                    <x-customer.input name="lead_billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" autocomplete="address-line2">
+                        Address Line 2
+                    </x-customer.input>
+
+                    <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2">
+                        Town
+                    </x-customer.input>
+                    <x-customer.input name="lead_billing_town" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1">
+                        Region
+                    </x-customer.input>
+
                     <div class="form-group col-md-12">
                         <label class="col-md-12 mb-0">Billing Country</label>
                         <div class="col-md-12">
                             <select name="lead_billing_country" class="w-100" required>
                                 <option value="" @if(!isset($leadTraveller)) selected @endif disabled>Please Select</option>
                                 @foreach(\App\Models\Location\Country::orderBy('name', 'asc')->get() as $country)
-                                    <option value="{{ $country->id }}" @if(isset($leadTraveller) && $leadTraveller?->billingAddress?->country_id == $country->id) selected @endif>
+                                    <option value="{{ $country->id }}" @if(isset($customer) && $customer?->billingAddress?->country_id === $country->id) selected @endif>
                                         {{ $country->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-md-12">
-                        <label class="col-md-12 mb-0">Billing Postcode</label>
-                        <div class="col-md-12">
-                            <input type="text" name="lead_billing_postcode" id="lead_billing_postcode-input"
-                                   value="{{ $customer?->billingAddress?->postcode ?? '' }}"
-                                   class="form-control ps-0 form-control-line" autocomplete="postcode" required>
-                        </div>
-                    </div>
+
+                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode" required>
+                        Postcode
+                    </x-customer.input>
                 </div>
+                <hr class="splitter">
             </div>
         </div>
         {{-- Flight Selection --}}

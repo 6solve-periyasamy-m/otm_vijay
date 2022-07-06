@@ -4,9 +4,8 @@ namespace App\View\Components\Customer;
 
 use Illuminate\View\Component;
 
-class Input extends Component
+class Accordion extends Component
 {
-
     /**
      * Get the view / contents that represent the component.
      *
@@ -14,6 +13,6 @@ class Input extends Component
      */
     public function render()
     {
-        return view('components.customer.input');
+        return view('components.customer.accordion');
     }
 }

@@ -174,4 +174,13 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     {
         return null;
     }
+
+    public function getUsedOnOrderCount(): int
+    {
+        $used = 0;
+        foreach ($this->tourComponent->orderMerchandise as $orderComponent) {
+            if (!$orderComponent->cancelled) $used++;
+        }
+        return $used;
+    }
 }

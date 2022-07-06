@@ -200,11 +200,7 @@ class FlightInventoryTour extends Model
 
     public function getUsedTourStockAttribute(): int
     {
-        $used = 0;
-        foreach ($this->orders as $orderComponent) {
-            if (!$orderComponent->isCancelled()) $used++;
-        }
-        return $used;
+        return $this->repository->getUsedOnOrderCount();
     }
 
     public function getRepositoryAttribute(): FlightInventoryTourRepository
