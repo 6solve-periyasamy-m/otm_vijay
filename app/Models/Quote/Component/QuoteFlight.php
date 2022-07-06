@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  * App\Models\Quote\Component\QuoteFlight
  *
  * @property int $id
- * @property int $quote_traveller_id
+ * @property int $quote_id
  * @property int $flight_inventory_tour_id
  * @property double $cost
  * @property Carbon|null $deleted_at
@@ -50,17 +50,17 @@ class QuoteFlight extends Model
 
     public function quote(): BelongsTo
     {
-        return $this->belongsTo(Quote::class);
+        return $this->belongsTo(Quote::class, 'quote_id');
     }
 
     public function tourComponent(): BelongsTo
     {
-        return $this->belongsTo(FlightInventoryTour::class);
+        return $this->belongsTo(FlightInventoryTour::class, 'flight_inventory_tour_id');
     }
 
     public function getRepositoryAttribute(): QuoteFlightRepository
     {
-        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteFlightRepository($this);
-        return $this->interal_repository;
+        if (!isset($this->internal_repository)) $this->internal_repository = new QuoteFlightRepository($this);
+        return $this->internal_repository;
     }
 }

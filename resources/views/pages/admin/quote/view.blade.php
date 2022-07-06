@@ -157,7 +157,7 @@
                         </button>
                     </li>
                     <li class="nav-item col-6 col-md-2">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transports">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transport">
                             <i class="icon-directions"></i> {{ __('quotes.view.cards.components.tabs.transport') }}
                         </button>
                     </li>

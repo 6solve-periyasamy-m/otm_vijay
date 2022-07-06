@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  * App\Models\Quote\Component\QuoteTransport
  *
  * @property int $id
- * @property int $quote_traveller_id
+ * @property int $quote_id
  * @property int $transport_inventory_tour_id
  * @property double $cost
  * @property Carbon|null $deleted_at
@@ -50,17 +50,17 @@ class QuoteTransport extends Model
 
     public function quote(): BelongsTo
     {
-        return $this->belongsTo(Quote::class);
+        return $this->belongsTo(Quote::class, 'quote_id');
     }
 
     public function tourComponent(): BelongsTo
     {
-        return $this->belongsTo(TransportInventoryTour::class);
+        return $this->belongsTo(TransportInventoryTour::class, 'transport_inventory_tour_id');
     }
 
     public function getRepositoryAttribute(): QuoteTransportRepository
     {
-        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteTransportRepository($this);
-        return $this->interal_repository;
+        if (!isset($this->internal_repository)) $this->internal_repository = new QuoteTransportRepository($this);
+        return $this->internal_repository;
     }
 }

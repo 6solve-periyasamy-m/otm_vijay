@@ -7,6 +7,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
@@ -20,6 +21,8 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
     public abstract function grantToCustomer(OrderCustomer $orderCustomer): ?OrderComponentRepository;
 
     public abstract function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
+
+    public abstract function addToQuote(Quote $quote): ?QuoteComponentRepository;
 
     public abstract function getUpgradeParent(): Model;
 

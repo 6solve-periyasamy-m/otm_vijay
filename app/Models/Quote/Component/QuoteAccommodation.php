@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  * App\Models\Quote\Component\QuoteAccommodation
  *
  * @property int $id
- * @property int $quote_traveller_id
+ * @property int $quote_id
  * @property int $accommodation_inventory_tour_id
  * @property double $cost
  * @property Carbon|null $deleted_at
@@ -50,17 +50,17 @@ class QuoteAccommodation extends Model
 
     public function quote(): BelongsTo
     {
-        return $this->belongsTo(Quote::class);
+        return $this->belongsTo(Quote::class, 'quote_id');
     }
 
     public function tourComponent(): BelongsTo
     {
-        return $this->belongsTo(AccommodationInventoryTour::class);
+        return $this->belongsTo(AccommodationInventoryTour::class, 'accommodation_inventory_tour_id');
     }
 
     public function getRepositoryAttribute(): QuoteAccommodationRepository
     {
-        if (!isset($this->interal_repository)) $this->internal_repository = new QuoteAccommodationRepository($this);
-        return $this->interal_repository;
+        if (!isset($this->internal_repository)) $this->internal_repository = new QuoteAccommodationRepository($this);
+        return $this->internal_repository;
     }
 }

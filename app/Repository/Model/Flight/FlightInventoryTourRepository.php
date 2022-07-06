@@ -9,12 +9,15 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
+use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 
 class FlightInventoryTourRepository extends InventoryTourRepository
 {
@@ -209,5 +212,14 @@ class FlightInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteFlightRepository
+    {
+        $component = QuoteFlight::create([
+            'flight_inventory_tour_id' => $this->tourComponent->id,
+            'quote_id' => $quote->id
+        ]);
+        return $component->repository;
     }
 }

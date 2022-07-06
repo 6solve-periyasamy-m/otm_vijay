@@ -9,12 +9,16 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
+use App\Repository\Model\Quote\Component\QuoteActivityRepository;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
 {
@@ -202,5 +206,14 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteActivityRepository
+    {
+        $component = QuoteActivity::create([
+            'quote_id' => $quote->id,
+            'activity_inventory_tour_id' => $this->tourComponent->id,
+        ]);
+        return $component->repository;
     }
 }

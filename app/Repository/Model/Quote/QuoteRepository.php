@@ -10,6 +10,7 @@ use App\Models\Quote\QuoteProspect;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\RoomingRepository;
 use Carbon\Carbon;
 
 class QuoteRepository extends ModelRepository
@@ -28,6 +29,16 @@ class QuoteRepository extends ModelRepository
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
         $quote->repository->save();
+        foreach ($tour->repository->getComponents(false, true, true, true, true, ['Included']) as $component) {
+            $component->addToQuote($quote);
+        }
+        $rooms = RoomingRepository::getAvailableRoomTypes($tour);
+        if (sizeof($rooms) > 0) {
+            $type = $rooms[0];
+            foreach (RoomingRepository::getTemplateTourInventory($tour) as $inventoryTour) {
+                RoomingRepository::getInventoryWithRoomType($inventoryTour, $type)->repository->addToQuote($quote);
+            }
+        }
         return $quote;
     }
 
@@ -91,35 +102,40 @@ class QuoteRepository extends ModelRepository
         $components = [];
         if ($accommodation) {
             foreach ($this->quote->accommodation()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
-                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                if (!isset($component->tourComponent)) dd($component);
+                if (in_array($component->tourComponent?->tour_component_type, $filter)) {
                     $components[] = $component->repository;
                 }
             }
         }
         if ($activities) {
             foreach ($this->quote->activities()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
-                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                if (!isset($component->tourComponent)) dd($component);
+                if (in_array($component->tourComponent?->tour_component_type, $filter)) {
                     $components[] = $component->repository;
                 }
             }
         }
         if ($flights) {
             foreach ($this->quote->flights()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
-                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                if (!isset($component->tourComponent)) dd($component);
+                if (in_array($component->tourComponent?->tour_component_type, $filter)) {
                     $components[] = $component->repository;
                 }
             }
         }
         if ($transport) {
             foreach ($this->quote->transport()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
-                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                if (!isset($component->tourComponent)) dd($component);
+                if (in_array($component->tourComponent?->tour_component_type, $filter)) {
                     $components[] = $component->repository;
                 }
             }
         }
         if ($extras) {
             foreach ($this->quote->merchandise()->with('tourComponent')->get() as $component) {
-                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                if (!isset($component->tourComponent)) dd($component);
+                if (in_array($component->tourComponent?->tour_component_type, $filter)) {
                     $components[] = $component->repository;
                 }
             }

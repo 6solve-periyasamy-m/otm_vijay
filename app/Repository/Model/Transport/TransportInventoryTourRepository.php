@@ -7,6 +7,8 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
@@ -14,7 +16,9 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
+use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 
 class TransportInventoryTourRepository extends InventoryTourRepository
 {
@@ -206,5 +210,14 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteTransportRepository
+    {
+        $component = QuoteTransport::create([
+            'transport_inventory_tour_id' => $this->tourComponent->id,
+            'quote_id' => $quote->id
+        ]);
+        return $component->repository;
     }
 }
