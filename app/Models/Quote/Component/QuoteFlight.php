@@ -3,7 +3,7 @@
 namespace App\Models\Quote\Component;
 
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Quote\QuoteTraveller;
+use App\Models\Quote\Quote;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read QuoteFlightRepository $repository
  * @property-read FlightInventoryTour|null $tourComponent
- * @property-read QuoteTraveller|null $traveller
+ * @property-read Quote|null $quote
  * @method static Builder|QuoteFlight newModelQuery()
  * @method static Builder|QuoteFlight newQuery()
  * @method static QueryBuilder|QuoteFlight onlyTrashed()
@@ -35,7 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteFlight whereDeletedAt($value)
  * @method static Builder|QuoteFlight whereFlightInventoryTourId($value)
  * @method static Builder|QuoteFlight whereId($value)
- * @method static Builder|QuoteFlight whereQuoteTravellerId($value)
+ * @method static Builder|QuoteFlight whereQuoteId($value)
  * @method static Builder|QuoteFlight whereUpdatedAt($value)
  * @method static QueryBuilder|QuoteFlight withTrashed()
  * @method static QueryBuilder|QuoteFlight withoutTrashed()
@@ -48,9 +48,9 @@ class QuoteFlight extends Model
     protected $guarded = [];
     protected $casts = ['cost' => 'double'];
 
-    public function traveller(): BelongsTo
+    public function quote(): BelongsTo
     {
-        return $this->belongsTo(QuoteTraveller::class);
+        return $this->belongsTo(Quote::class);
     }
 
     public function tourComponent(): BelongsTo

@@ -4,6 +4,11 @@ namespace App\Models\Quote;
 
 use App\Models\Helper\QuoteStatus;
 use App\Models\Order\Order;
+use App\Models\Quote\Component\QuoteAccommodation;
+use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use Database\Factories\Quote\QuoteFactory;
@@ -37,22 +42,25 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read QuoteRepository $repository
  * @property-read Collection|QuoteInstallment[] $installments
+ * @property-read Collection|QuoteAccommodation[] $accommodation
+ * @property-read Collection|QuoteActivity[] $activities
+ * @property-read Collection|QuoteFlight[] $flights
+ * @property-read Collection|QuoteTransport[] $transport
+ * @property-read Collection|QuoteMerchandise[] $merchandise
  * @property-read int|null $installments_count
  * @property-read Order|null $order
  * @property-read QuoteStatus $status
  * @property-read Collection|QuotePricePoint[] $pricePoints
  * @property-read int|null $price_points_count
  * @property-read Tour $tour
- * @method static Builder|Quote whereReference($value)
- * @property-read QuoteTraveller|null $defaultTraveller
- * @property-read QuoteTraveller|null $leadTraveller
- * @property-read Collection|QuoteTraveller[] $travellers
+ * @property-read QuoteProspect|null $leadTraveller
  * @property-read int|null $travellers_count
  * @method static QuoteFactory factory(...$parameters)
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
  * @method static QueryBuilder|Quote onlyTrashed()
  * @method static Builder|Quote query()
+ * @method static Builder|Quote whereReference($value)
  * @method static Builder|Quote whereCreatedAt($value)
  * @method static Builder|Quote whereDefaultTravellerId($value)
  * @method static Builder|Quote whereDeletedAt($value)
@@ -85,17 +93,7 @@ class Quote extends Model
 
     public function leadTraveller(): BelongsTo
     {
-        return $this->belongsTo(QuoteTraveller::class, 'lead_traveller_id');
-    }
-
-    public function defaultTraveller(): BelongsTo
-    {
-        return $this->belongsTo(QuoteTraveller::class, 'default_traveller_id');
-    }
-
-    public function travellers(): HasMany
-    {
-        return $this->hasMany(QuoteTraveller::class);
+        return $this->belongsTo(QuoteProspect::class, 'lead_traveller_id');
     }
 
     public function pricePoints(): HasMany
@@ -116,6 +114,31 @@ class Quote extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function accommodation(): HasMany
+    {
+        return $this->hasMany(QuoteAccommodation::class);
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(QuoteActivity::class);
+    }
+
+    public function flights(): HasMany
+    {
+        return $this->hasMany(QuoteFlight::class);
+    }
+
+    public function transport(): HasMany
+    {
+        return $this->hasMany(QuoteTransport::class);
+    }
+
+    public function merchandise(): HasMany
+    {
+        return $this->hasMany(QuoteMerchandise::class);
     }
 
     public function getStatusAttribute(): QuoteStatus

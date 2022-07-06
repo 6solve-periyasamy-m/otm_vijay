@@ -2,7 +2,7 @@
 
 namespace App\Models\Quote\Component;
 
-use App\Models\Quote\QuoteTraveller;
+use App\Models\Quote\Quote;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use Eloquent;
@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read QuoteTransportRepository $repository
  * @property-read TransportInventoryTour|null $tourComponent
- * @property-read QuoteTraveller|null $traveller
+ * @property-read Quote|null $quote
  * @method static Builder|QuoteTransport newModelQuery()
  * @method static Builder|QuoteTransport newQuery()
  * @method static QueryBuilder|QuoteTransport onlyTrashed()
@@ -34,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteTransport whereCreatedAt($value)
  * @method static Builder|QuoteTransport whereDeletedAt($value)
  * @method static Builder|QuoteTransport whereId($value)
- * @method static Builder|QuoteTransport whereQuoteTravellerId($value)
+ * @method static Builder|QuoteTransport whereQuoteId($value)
  * @method static Builder|QuoteTransport whereTransportInventoryTourId($value)
  * @method static Builder|QuoteTransport whereUpdatedAt($value)
  * @method static QueryBuilder|QuoteTransport withTrashed()
@@ -48,9 +48,9 @@ class QuoteTransport extends Model
     protected $guarded = [];
     protected $casts = ['cost' => 'double'];
 
-    public function traveller(): BelongsTo
+    public function quote(): BelongsTo
     {
-        return $this->belongsTo(QuoteTraveller::class);
+        return $this->belongsTo(Quote::class);
     }
 
     public function tourComponent(): BelongsTo

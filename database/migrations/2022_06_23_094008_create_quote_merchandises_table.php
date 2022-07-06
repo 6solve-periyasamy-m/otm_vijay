@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('quote_merchandises', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quote_traveller_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('quote_id')->constrained()->cascadeOnDelete();
             $table->foreignId('merchandise_id')->constrained()->cascadeOnDelete();
             $table->decimal('cost', 12);
             $table->softDeletes();

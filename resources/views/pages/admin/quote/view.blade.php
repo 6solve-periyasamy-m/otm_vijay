@@ -95,37 +95,32 @@
             <x-slot:title>{{ __('quotes.view.ends') }}</x-slot:title>
             {{ f_date($quote->tour->date_to) }}
         </x-admin.section.header.detail>
+
+        <x-admin.section.header.detail width="6">
+            <x-slot:title>{{ __('quotes.view.lead.name') }}</x-slot:title>
+            {{ $quote->leadTraveller->name }}
+        </x-admin.section.header.detail>
+
+        <x-admin.section.header.detail width="6">
+            <x-slot:title>{{ __('quotes.view.lead.contact') }}</x-slot:title>
+            <a href="mailto:{{ $quote->leadTraveller->email }}">{{ $quote->leadTraveller->email }}</a>
+            (<a href="tel:{{ $quote->leadTraveller->phone }}">{{ $quote->leadTraveller->phone }}</a>)
+        </x-admin.section.header.detail>
     </x-admin.section.header>
 
     <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">{{ __('quotes.view.cards.customers.header') }}</h2>
+        <h2 class="fw-bold">{{ __('quotes.view.cards.quick.header') }}</h2>
     </div>
 
     <x-admin.section.card>
         <div class="row">
-        @foreach($quote->travellers as $traveller)
             <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
                 <div class="otm-card">
-                    <p>{{ ($quote->lead_traveller_id == $traveller->id) ? 'Lead Booker' : ' Additional Traveller'}}</p>
-                    <h6 class="fw-bold">
-                        <a href="" class="link-info">
-                            {{ $traveller->name }}
-                        </a>
-                    </h6>
-                    <p>{{ __('quotes.view.cards.customers.customer.email') }}</p>
-                    <h6 class="fw-bold">{{ $traveller->email }}</h6>
-                    <p>{{ __('quotes.view.cards.customers.customer.purchase-cost') }}</p>
-                    <h6 class="fw-bold">{{ f_currency($traveller->repository->getPurchaseTotal()) }}</h6>
-                </div>
-            </div>
-        @endforeach
-            <div class="col-xxl-2 col-xl-3 col-md-4 col-sm-6">
-                <div class="otm-card">
-                    <p>{{ __('quotes.view.cards.customers.calculator.header')  }}</p>
-                    <h6 class="fw-bold">{{ __('quotes.view.cards.customers.calculator.description')  }}</h6>
-                    <p>{{ __('quotes.view.cards.customers.calculator.cost')  }}</p>
+                    <p>{{ __('quotes.view.cards.quick.calculator.header')  }}</p>
+                    <h6 class="fw-bold">{{ __('quotes.view.cards.quick.calculator.description')  }}</h6>
+                    <p>{{ __('quotes.view.cards.quick.calculator.cost')  }}</p>
                     <h6 class="fw-bold text-updater">Not Calculated Yet</h6>
-                    <p>{{ __('quotes.view.cards.customers.calculator.count') }}</p>
+                    <p>{{ __('quotes.view.cards.quick.calculator.count') }}</p>
                     <h6 class="fw-bold row">
                         <div class="col-12 col-xl-3">
                             <a href="javascript:plus()" class="btn btn-outline-primary btn-sm mb-1">

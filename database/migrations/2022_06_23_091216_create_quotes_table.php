@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tour_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('lead_traveller_id')->nullable();
-            $table->foreignId('default_traveller_id')->nullable();
+            $table->foreignId('lead_traveller_id')->nullable()->constrained('quote_prospects')->cascadeOnDelete();
+            $table->foreignId('default_traveller_id')->nullable()->constrained('quote_prospects')->cascadeOnDelete();
             $table->string('reference', 64)->nullable();
             $table->decimal('deposit', 12)->nullable();
             $table->dateTime('expires')->nullable();

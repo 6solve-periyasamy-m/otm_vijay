@@ -17,15 +17,13 @@ return [
         'expires' => 'Expires At',
         'starts' => 'Starts Date',
         'ends' => 'Ends Date',
+        'lead' => [
+            'name' => 'Lead Traveller Name',
+            'contact' => 'Lead Contact Information'
+        ],
         'cards' => [
-            'customers' => [
-                'header' => 'Travellers',
-                'default' => 'Default Traveller',
-                'lead' => 'Lead Traveller',
-                'customer' => [
-                    'email' => 'Email Address',
-                    'purchase-cost' => 'Purchase Price of Components'
-                ],
+            'quick' => [
+                'header' => 'Quick Information',
                 'calculator' => [
                     'header' => 'Cost Calculator',
                     'description' => 'Calculate cost for X travellers',

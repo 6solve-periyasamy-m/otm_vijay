@@ -33,10 +33,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $name
+ * @property-read string $email
+ * @property-read string $phone
  * @property-read Address|null $billingAddress
  * @property-read Customer|null $customer
  * @property-read Address|null $homeAddress
- * @property-read QuoteTraveller|null $traveller
+ * @property-read Quote|null $quote
  * @method static QuoteProspectFactory factory(...$parameters)
  * @method static Builder|QuoteProspect newModelQuery()
  * @method static Builder|QuoteProspect newQuery()
@@ -66,9 +68,9 @@ class QuoteProspect extends Model
 
     protected $guarded = [];
 
-    public function traveller(): HasOne
+    public function quote(): HasOne
     {
-        return $this->hasOne(QuoteTraveller::class);
+        return $this->hasOne(Quote::class);
     }
 
     public function customer(): BelongsTo
@@ -90,5 +92,17 @@ class QuoteProspect extends Model
     {
         $source = $this->customer ?? $this;
         return "{$source->title} {$source->first_name} {$source->last_name}";
+    }
+
+    public function getEmailAttribute(): string
+    {
+        $source = $this->customer ?? $this;
+        return "{$source->email_address}";
+    }
+
+    public function getPhoneAttribute(): string
+    {
+        $source = $this->customer ?? $this;
+        return "{$source->mobile_number}";
     }
 }

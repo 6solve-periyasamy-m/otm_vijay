@@ -2,7 +2,7 @@
 
 namespace App\Models\Quote\Component;
 
-use App\Models\Quote\QuoteTraveller;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Merchandise;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use Eloquent;
@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read QuoteMerchandiseRepository $repository
  * @property-read Merchandise|null $tourComponent
- * @property-read QuoteTraveller|null $traveller
+ * @property-read Quote|null $quote
  * @method static Builder|QuoteMerchandise newModelQuery()
  * @method static Builder|QuoteMerchandise newQuery()
  * @method static QueryBuilder|QuoteMerchandise onlyTrashed()
@@ -35,7 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteMerchandise whereDeletedAt($value)
  * @method static Builder|QuoteMerchandise whereId($value)
  * @method static Builder|QuoteMerchandise whereMerchandiseId($value)
- * @method static Builder|QuoteMerchandise whereQuoteTravellerId($value)
+ * @method static Builder|QuoteMerchandise whereQuoteId($value)
  * @method static Builder|QuoteMerchandise whereUpdatedAt($value)
  * @method static QueryBuilder|QuoteMerchandise withTrashed()
  * @method static QueryBuilder|QuoteMerchandise withoutTrashed()
@@ -48,9 +48,9 @@ class QuoteMerchandise extends Model
     protected $guarded = [];
     protected $casts = ['cost' => 'double'];
 
-    public function traveller(): BelongsTo
+    public function quote(): BelongsTo
     {
-        return $this->belongsTo(QuoteTraveller::class);
+        return $this->belongsTo(Quote::class);
     }
 
     public function tourComponent(): BelongsTo

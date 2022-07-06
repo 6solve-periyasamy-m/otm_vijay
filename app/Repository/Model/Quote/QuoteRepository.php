@@ -6,9 +6,10 @@ use App\Models\Customer\Customer;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
-use App\Models\Quote\QuoteTraveller;
+use App\Models\Quote\QuoteProspect;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
 use Carbon\Carbon;
 
 class QuoteRepository extends ModelRepository
@@ -20,10 +21,10 @@ class QuoteRepository extends ModelRepository
         $this->quote = $quote;
     }
 
-    public static function create(Tour $tour, Customer $customer, array $data = [], array $leadData = []): Quote
+    public static function create(Tour $tour, ?Customer $customer = null, array $data = [], array $leadData = []): Quote
     {
         $quote = Quote::create(array_merge(['tour_id' => $tour->id,], $data));
-        $lead = $quote->repository->addTraveller($customer, $leadData);
+        $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
         $quote->repository->save();
@@ -39,9 +40,14 @@ class QuoteRepository extends ModelRepository
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
     }
 
-    public function addTraveller(Customer $customer, array $data = []): QuoteTraveller
+    public function createProspect(?Customer $customer = null, array $data = []): QuoteProspect
     {
-        return QuoteTravellerRepository::create($this->quote, $customer, $data);
+        if (isset($customer)) {
+            $prospect = QuoteProspect::create(['customer_id' => $customer->id]);
+        } else {
+            $prospect = QuoteProspect::create($data);
+        }
+        return $prospect;
     }
 
     public function addPricePoint(int $customerCount, float $pricePerPerson): QuotePricePoint
@@ -69,6 +75,65 @@ class QuoteRepository extends ModelRepository
         foreach ($this->quote->tour->paymentInstallments as $installment) {
             $this->addInstallment($installment->due_on, $installment->amount);
         }
+    }
+
+    /**
+     * @param bool $accommodation
+     * @param bool $activities
+     * @param bool $flights
+     * @param bool $transport
+     * @param bool $extras
+     * @param array $filter
+     * @return QuoteComponentRepository[]
+     */
+    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $extras = true, array $filter = ['Included', 'Upgrade', 'Add-on']): array
+    {
+        $components = [];
+        if ($accommodation) {
+            foreach ($this->quote->accommodation()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($activities) {
+            foreach ($this->quote->activities()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($flights) {
+            foreach ($this->quote->flights()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($transport) {
+            foreach ($this->quote->transport()->with('tourComponent', 'tourComponent.inventory')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        if ($extras) {
+            foreach ($this->quote->merchandise()->with('tourComponent')->get() as $component) {
+                if (in_array($component->tourComponent->tour_component_type, $filter)) {
+                    $components[] = $component->repository;
+                }
+            }
+        }
+        return $components;
+    }
+
+    public function getPurchaseTotal(): float
+    {
+        $total = 0;
+        foreach ($this->getComponents() as $component) {
+            $total += $component->getPurchasePrice();
+        }
+        return $total;
     }
 
     public function get(): Quote
