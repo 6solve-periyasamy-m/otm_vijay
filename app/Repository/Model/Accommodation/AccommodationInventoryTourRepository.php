@@ -223,8 +223,10 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
     public function addToQuote(Quote $quote): ?QuoteAccommodationRepository
     {
         $component = QuoteAccommodation::create([
-            'accommodation_inventory_tour_id' => $this->tourComponent->id,
+            'accommodation_inventory_id' => $this->tourComponent->accommodation_inventory_id,
             'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
         ]);
         return $component->repository;
     }

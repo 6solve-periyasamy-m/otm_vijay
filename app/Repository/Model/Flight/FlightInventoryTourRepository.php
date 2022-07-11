@@ -217,8 +217,11 @@ class FlightInventoryTourRepository extends InventoryTourRepository
     public function addToQuote(Quote $quote): ?QuoteFlightRepository
     {
         $component = QuoteFlight::create([
-            'flight_inventory_tour_id' => $this->tourComponent->id,
-            'quote_id' => $quote->id
+            'flight_inventory_id' => $this->tourComponent->flight_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'flight_type' => $this->tourComponent->flight_type,
         ]);
         return $component->repository;
     }

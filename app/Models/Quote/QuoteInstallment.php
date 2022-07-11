@@ -18,7 +18,8 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $quote_id
  * @property Carbon $due_on
- * @property double $amount
+ * @property float $amount
+ * @property bool $percentage
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteInstallment whereDeletedAt($value)
  * @method static Builder|QuoteInstallment whereDueOn($value)
  * @method static Builder|QuoteInstallment whereId($value)
+ * @method static Builder|QuoteInstallment wherePercentage($value)
  * @method static Builder|QuoteInstallment whereQuoteId($value)
  * @method static Builder|QuoteInstallment whereUpdatedAt($value)
  * @method static QueryBuilder|QuoteInstallment withTrashed()
@@ -46,7 +48,8 @@ class QuoteInstallment extends Model
     protected $guarded = [];
     protected $casts = [
         'due_on' => 'date',
-        'amount' => 'double'
+        'amount' => 'double',
+        'percentage' => 'boolean'
     ];
 
     public function quote(): BelongsTo

@@ -9,6 +9,7 @@ use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use Database\Factories\Quote\QuoteFactory;
@@ -27,12 +28,18 @@ use Illuminate\Support\Carbon;
  * App\Models\Quote\Quote
  *
  * @property int $id
- * @property int $tour_id
+ * @property int|null $tour_id
  * @property int|null $order_id
  * @property int|null $lead_traveller_id
- * @property int|null $default_traveller_id
+ * @property int|null $event_id
  * @property string|null $reference
- * @property double|null $deposit
+ * @property float|null $deposit
+ * @property int $locked
+ * @property string $final_payment
+ * @property string $date_from
+ * @property string $date_to
+ * @property string $terms
+ * @property string $invoice_footer
  * @property Carbon|null $expires
  * @property QuoteStatus $quote_status
  * @property string|null $internal_notes
@@ -40,56 +47,73 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read QuoteRepository $repository
- * @property-read Collection|QuoteInstallment[] $installments
  * @property-read Collection|QuoteAccommodation[] $accommodation
+ * @property-read int|null $accommodation_count
  * @property-read Collection|QuoteActivity[] $activities
+ * @property-read int|null $activities_count
+ * @property-read Event|null $event
  * @property-read Collection|QuoteFlight[] $flights
- * @property-read Collection|QuoteTransport[] $transport
- * @property-read Collection|QuoteMerchandise[] $merchandise
- * @property-read int|null $installments_count
- * @property-read Order|null $order
+ * @property-read int|null $flights_count
+ * @property-read QuoteRepository $repository
  * @property-read QuoteStatus $status
+ * @property-read Collection|QuoteInstallment[] $installments
+ * @property-read int|null $installments_count
+ * @property-read QuoteProspect|null $leadTraveller
+ * @property-read Collection|QuoteMerchandise[] $merchandise
+ * @property-read int|null $merchandise_count
+ * @property-read Order|null $order
  * @property-read Collection|QuotePricePoint[] $pricePoints
  * @property-read int|null $price_points_count
- * @property-read Tour $tour
- * @property-read QuoteProspect|null $leadTraveller
- * @property-read int|null $travellers_count
+ * @property-read Tour|null $tour
+ * @property-read Collection|QuoteTransport[] $transport
+ * @property-read int|null $transport_count
  * @method static QuoteFactory factory(...$parameters)
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
  * @method static QueryBuilder|Quote onlyTrashed()
  * @method static Builder|Quote query()
- * @method static Builder|Quote whereReference($value)
  * @method static Builder|Quote whereCreatedAt($value)
- * @method static Builder|Quote whereDefaultTravellerId($value)
+ * @method static Builder|Quote whereDateFrom($value)
+ * @method static Builder|Quote whereDateTo($value)
  * @method static Builder|Quote whereDeletedAt($value)
  * @method static Builder|Quote whereDeposit($value)
+ * @method static Builder|Quote whereEventId($value)
  * @method static Builder|Quote whereExpires($value)
  * @method static Builder|Quote whereExternalNotes($value)
+ * @method static Builder|Quote whereFinalPayment($value)
  * @method static Builder|Quote whereId($value)
  * @method static Builder|Quote whereInternalNotes($value)
+ * @method static Builder|Quote whereInvoiceFooter($value)
  * @method static Builder|Quote whereLeadTravellerId($value)
+ * @method static Builder|Quote whereLocked($value)
  * @method static Builder|Quote whereOrderId($value)
+ * @method static Builder|Quote whereQuoteStatus($value)
+ * @method static Builder|Quote whereReference($value)
+ * @method static Builder|Quote whereTerms($value)
  * @method static Builder|Quote whereTourId($value)
  * @method static Builder|Quote whereUpdatedAt($value)
  * @method static QueryBuilder|Quote withTrashed()
  * @method static QueryBuilder|Quote withoutTrashed()
  * @mixin Eloquent
-
  */
 class Quote extends Model
 {
     use HasFactory, SoftDeletes;
 
-    private QuoteRepository $internal_repository;
-
     protected $guarded = [];
     protected $casts = [
         'deposit' => 'double',
         'expires' => 'datetime',
+        'date_from' => 'date',
+        'date_to' => 'date',
         'quote_status' => QuoteStatus::class
     ];
+    private QuoteRepository $internal_repository;
+
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class, 'event_id');
+    }
 
     public function leadTraveller(): BelongsTo
     {

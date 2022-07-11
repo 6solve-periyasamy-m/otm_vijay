@@ -190,8 +190,13 @@ class MerchandiseRepository extends InventoryTourRepository implements HasStockC
     public function addToQuote(Quote $quote): ?QuoteMerchandiseRepository
     {
         $component = QuoteMerchandise::create([
-            'merchandise_id' => $this->tourComponent->id,
-            'quote_id' => $quote->id
+            'name' => $this->tourComponent->name,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'purchase_price' => $this->tourComponent->purchase_price,
+            'image_url' => $this->tourComponent->image_url,
+            'stock' => $this->tourComponent->stock
         ]);
         return $component->repository;
     }

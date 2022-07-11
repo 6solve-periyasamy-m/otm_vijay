@@ -15,12 +15,18 @@ return new class extends Migration
     {
         Schema::create('quotes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tour_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tour_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('lead_traveller_id')->nullable()->constrained('quote_prospects')->cascadeOnDelete();
-            $table->foreignId('default_traveller_id')->nullable()->constrained('quote_prospects')->cascadeOnDelete();
+            $table->foreignId('event_id')->nullable()->constrained()->nullOnDelete();
             $table->string('reference', 64)->nullable();
             $table->decimal('deposit', 12)->nullable();
+            $table->boolean('locked')->default(true);
+            $table->date('final_payment');
+            $table->date('date_from');
+            $table->date('date_to');
+            $table->text('terms');
+            $table->text('invoice_footer');
             $table->dateTime('expires')->nullable();
             $table->integer('quote_status')->default(0);
             $table->text('internal_notes')->nullable();

@@ -211,8 +211,10 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
     public function addToQuote(Quote $quote): ?QuoteActivityRepository
     {
         $component = QuoteActivity::create([
+            'activity_inventory_id' => $this->tourComponent->activity_inventory_id,
             'quote_id' => $quote->id,
-            'activity_inventory_tour_id' => $this->tourComponent->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
         ]);
         return $component->repository;
     }

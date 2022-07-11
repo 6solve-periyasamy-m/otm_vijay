@@ -215,8 +215,10 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     public function addToQuote(Quote $quote): ?QuoteTransportRepository
     {
         $component = QuoteTransport::create([
-            'transport_inventory_tour_id' => $this->tourComponent->id,
-            'quote_id' => $quote->id
+            'transport_inventory_id' => $this->tourComponent->transport_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
         ]);
         return $component->repository;
     }

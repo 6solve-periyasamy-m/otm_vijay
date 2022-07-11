@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('quote_id')->constrained()->cascadeOnDelete();
             $table->date('due_on');
             $table->decimal('amount', 12);
+            $table->boolean('percentage');
             $table->softDeletes();
             $table->timestamps();
         });
