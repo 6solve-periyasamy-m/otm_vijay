@@ -47,7 +47,7 @@ class OrderInstallment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['id', 'amount', 'due_on',];
+    protected $fillable = ['id', 'amount', 'due_on','order_id'];
     protected $casts = ['due_on' => 'date', 'amount' => 'double',];
 
     private OrderInstallmentRepository $internal_repository;
