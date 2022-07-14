@@ -6,21 +6,16 @@ use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Models\Accommodation\AccommodationInventoryTour;
-use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Customer\Customer;
-use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Merchandise;
-use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class CustomerTourController extends Controller
@@ -156,7 +151,7 @@ class CustomerTourController extends Controller
 
         if ($tourComponent->available_stock <= 0) abort(404);
 
-        $orderComponent  = $tourComponent->addToOrder($orderCustomer);
+        $orderComponent  = $tourComponent->repository->grantToCustomer($orderCustomer);
 
         if (!($tourComponent instanceof AccommodationInventoryTour)) {
             event(new OrderCustomerComponentAddedEvent($orderComponent));

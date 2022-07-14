@@ -6,8 +6,8 @@ use Tests\DatabaseTestCase;
 use Tests\Traits\TestsOrder;
 
 /**
- * @covers \App\Models\Tour\Merchandise::getUsedStockAttribute
- * @covers \App\Repository\Model\Tour\MerchandiseRepository::getUsedStock
+ * @covers \App\Models\Merchandise\Merchandise::getUsedStockAttribute
+ * @covers \App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository::getUsedStock
  */
 class MerchandiseUsedStockTest extends DatabaseTestCase
 {
@@ -15,15 +15,15 @@ class MerchandiseUsedStockTest extends DatabaseTestCase
 
     public function testZeroIfUnused()
     {
-        $inventory = $this->generateMerchandise(null, 'Included', 100);
+        $inventory = $this->generateMerchandiseInventoryTour();
         $this->assertEquals(0, $inventory->used_stock);
     }
 
     public function testZeroIfCancelled()
     {
-        $tourInventory = $this->generateMerchandise(null, 'Included', 100);
+        $tourInventory = $this->generateMerchandiseInventoryTour();
         $order = $this->generateOrder(true, false);
-        $tourInventory->addToOrder($order->leadBooker);
+        $tourInventory->repository->grantToCustomer($order->leadBooker);
         $order->cancelled = true;
         $order->save();
         $this->assertEquals(0, $tourInventory->used_stock);
@@ -31,42 +31,42 @@ class MerchandiseUsedStockTest extends DatabaseTestCase
 
     public function testZeroIfDeleted()
     {
-        $tourInventory = $this->generateMerchandise(null, 'Included', 100);
+        $tourInventory = $this->generateMerchandiseInventoryTour();
         $order = $this->generateOrder(true, false);
-        $orderInventory = $tourInventory->addToOrder($order->leadBooker);
+        $orderInventory = $tourInventory->repository->grantToCustomer($order->leadBooker);
         $orderInventory->delete();
         $this->assertEquals(0, $tourInventory->used_stock);
     }
 
     public function testWithOneOrderCustomer()
     {
-        $tourInventory = $this->generateMerchandise(null, 'Included', 100);
+        $tourInventory = $this->generateMerchandiseInventoryTour();
         $order = $this->generateOrder(true, false);
-        $tourInventory->addToOrder($order->leadBooker);
+        $tourInventory->repository->grantToCustomer($order->leadBooker);
         $this->assertEquals(1, $tourInventory->used_stock);
     }
 
     public function testWithMultipleCustomersOnSingleOrder()
     {
-        $tourInventory = $this->generateMerchandise(null, 'Included', 100);
+        $tourInventory = $this->generateMerchandiseInventoryTour();
         $order = $this->generateOrder(true, false);
-        $tourInventory->addToOrder($order->leadBooker);
+        $tourInventory->repository->grantToCustomer($order->leadBooker);
         for ($i = 0; $i < 5; $i++) {
             $orderCustomer = $this->generateOrderCustomer(false, $order);
-            $tourInventory->addToOrder($orderCustomer);
+            $tourInventory->repository->grantToCustomer($orderCustomer);
         }
         $this->assertEquals(6, $tourInventory->used_stock);
     }
 
     public function testWithMultipleOrders()
     {
-        $tourInventory = $this->generateMerchandise(null, 'Included', 100);
+        $tourInventory = $this->generateMerchandiseInventoryTour();
         for ($i = 0; $i < 5; $i++) {
             $order = $this->generateOrder(true, false);
-            $tourInventory->addToOrder($order->leadBooker);
+            $tourInventory->repository->grantToCustomer($order->leadBooker);
             for ($ix = 0; $ix < 5; $ix++) {
                 $orderCustomer = $this->generateOrderCustomer(false, $order);
-                $tourInventory->addToOrder($orderCustomer);
+                $tourInventory->repository->grantToCustomer($orderCustomer);
             }
         }
         $this->assertEquals(30, $tourInventory->used_stock);
