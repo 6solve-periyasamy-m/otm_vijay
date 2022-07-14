@@ -2,8 +2,9 @@
 
 namespace App\Models\Order\Component;
 
+use App\Models\Merchandise\Merchandise;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Merchandise;
 use App\Repository\Model\Order\Component\OrderMerchandiseRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +20,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $order_customer_id
- * @property int $merchandise_id
+ * @property int $merchandise_inventory_tour_id
  * @property float $cost
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -28,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @property-read string $details
  * @property-read string $tour_component_type
  * @property-read float $tour_sales_price
- * @property-read Merchandise $merchandise
+ * @property-read MerchandiseInventoryTour $merchandise
  * @property-read OrderCustomer $orderCustomer
  * @property-read Merchandise $tourComponent
  * @property-read OrderMerchandiseRepository $repository The repository used for calculations and storage
@@ -40,7 +41,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|OrderMerchandise whereCreatedAt($value)
  * @method static Builder|OrderMerchandise whereDeletedAt($value)
  * @method static Builder|OrderMerchandise whereId($value)
- * @method static Builder|OrderMerchandise whereMerchandiseId($value)
+ * @method static Builder|OrderMerchandise whereMerchandiseInventoryTourId($value)
  * @method static Builder|OrderMerchandise whereOrderCustomerId($value)
  * @method static Builder|OrderMerchandise whereUpdatedAt($value)
  * @method static QueryBuilder|OrderMerchandise withTrashed()
@@ -51,7 +52,7 @@ class OrderMerchandise extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['merchandise_id', 'order_customer_id', 'cost'];
+    protected $guarded = [];
     protected $casts = ['cost' => 'double',];
 
     private OrderMerchandiseRepository $internal_repository;
@@ -63,12 +64,12 @@ class OrderMerchandise extends Model
 
     public function merchandise(): BelongsTo
     {
-        return $this->belongsTo(Merchandise::class, 'merchandise_id');
+        return $this->belongsTo(MerchandiseInventoryTour::class, 'merchandise_inventory_tour_id');
     }
 
     public function tourComponent(): BelongsTo
     {
-        return $this->belongsTo(Merchandise::class, 'merchandise_id');
+        return $this->belongsTo(MerchandiseInventoryTour::class, 'merchandise_inventory_tour_id');
     }
 
     public function getCancelledAttribute(): bool

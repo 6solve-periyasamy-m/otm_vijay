@@ -13,10 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('booking_merchandises', function (Blueprint $table) {
+        Schema::create('merchandise_inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('merchandise_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('booking_traveller_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('variant_id')->constrained()->cascadeOnDelete();
+            $table->boolean('fit_selectable')->default(true);
+            $table->integer('stock');
+            $table->decimal('purchase_price', 12);
+            $table->decimal('sales_price', 12);
+            $table->string('notes')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_merchandise');
+        Schema::dropIfExists('merchandise_inventories');
     }
 };

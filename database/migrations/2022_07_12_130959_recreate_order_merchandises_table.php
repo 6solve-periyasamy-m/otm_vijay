@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('booking_merchandises', function (Blueprint $table) {
+        Schema::create('order_merchandises', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('merchandise_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('booking_traveller_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_customer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('merchandise_inventory_tour_id')->constrained()->cascadeOnDelete();
+            $table->decimal('cost', 12);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_merchandise');
+        Schema::drop('order_merchandises');
     }
 };

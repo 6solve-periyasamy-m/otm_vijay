@@ -65,8 +65,6 @@ class DatabaseSeeder extends Seeder
             $this->call(TransportInventoryToursTableSeeder::class);
             $this->call(TransportInventoryTourUpgradesTableSeeder::class);
 
-            $this->call(MerchandisesTableSeeder::class);
-
             $this->call(OrdersTableSeeder::class);
             $this->call(ManualAdjustmentsTableSeeder::class);
             $this->call(OrderCustomerAdjustmentsTableSeeder::class);

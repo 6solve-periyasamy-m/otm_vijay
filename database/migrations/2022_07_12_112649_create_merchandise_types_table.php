@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('booking_merchandises', function (Blueprint $table) {
+        Schema::create('merchandise_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('merchandise_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('booking_traveller_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_merchandise');
+        Schema::dropIfExists('merchandise_types');
     }
 };

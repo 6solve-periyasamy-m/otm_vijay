@@ -8,6 +8,7 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
@@ -35,10 +36,10 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property string|null $notes
- * @property float $base_price_per_person
- * @property float $margin
- * @property float $single_occupancy_surcharge
- * @property float $deposit
+ * @property float|null $base_price_per_person
+ * @property float|null $margin
+ * @property float|null $single_occupancy_surcharge
+ * @property float|null $deposit
  * @property bool $stock_control_active
  * @property int|null $stock
  * @property string|null $booking_form_url
@@ -71,8 +72,9 @@ use Illuminate\Support\Carbon;
  * @property-read bool $has_atol_certificate
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
+ * @property-read TourRepository $repository
  * @property-read Collection $templates
- * @property-read Collection|Merchandise[] $merchandise
+ * @property-read Collection|MerchandiseInventoryTour[] $merchandise
  * @property-read int|null $merchandise_count
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
@@ -82,7 +84,6 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $transport_inventory_count
  * @property-read Collection|TransportInventoryTour[] $transportInventoryTours
  * @property-read int|null $transport_inventory_tours_count
- * @property-read TourRepository $repository
  * @method static TourFactory factory(...$parameters)
  * @method static Builder|Tour newModelQuery()
  * @method static Builder|Tour newQuery()
@@ -190,7 +191,7 @@ class Tour extends Model
 
     public function merchandise(): HasMany
     {
-        return $this->hasMany(Merchandise::class, 'tour_id');
+        return $this->hasMany(MerchandiseInventoryTour::class, 'tour_id');
     }
 
     public function category(): BelongsTo
