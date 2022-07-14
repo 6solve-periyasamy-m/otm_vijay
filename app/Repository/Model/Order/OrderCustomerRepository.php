@@ -31,7 +31,7 @@ class OrderCustomerRepository extends ModelRepository
             $owns = in_array($tourComponent->id, $owned['extras']);
             if (!$tourComponent->is_bookable) continue;
             if ($tourComponent->available_stock <= 0 && !$owned) continue;
-            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'extra', 'type' => $tourComponent->tour_component_type,
+            $data[] = ['id' => $tourComponent->id, 'name' => $tourComponent->name, 'component' => 'merchandise', 'type' => $tourComponent->tour_component_type,
                 'cost' => $tourComponent->tour_sales_price, 'date' => now()->unix(), 'owned' => $owns,];
         }
         foreach ($order->tour->accommodationInventoryTours as $tourComponent) {

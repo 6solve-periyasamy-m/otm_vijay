@@ -31,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Merchandise $component
+ * @property-read Variant $variant
  * @property-read int $available_stock
  * @property-read MerchandiseInventoryRepository $repository
  * @property-read int $used_stock
@@ -78,6 +79,11 @@ class MerchandiseInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(MerchandiseInventoryTour::class, 'merchandise_inventory_id');
+    }
+
+    public function variant(): BelongsTo
+    {
+        return $this->belongsTo(Variant::class, 'variant_id');
     }
 
     public function getRepositoryAttribute(): MerchandiseInventoryRepository

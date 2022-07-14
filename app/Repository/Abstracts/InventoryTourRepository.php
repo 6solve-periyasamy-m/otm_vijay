@@ -52,7 +52,7 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
             'activity' => ActivityInventoryTour::find($id)?->repository,
             'flight' => FlightInventoryTour::find($id)?->repository,
             'transport' => TransportInventoryTour::find($id)?->repository,
-            'extra' => MerchandiseInventoryTour::find($id)?->repository,
+            'merchandise' => MerchandiseInventoryTour::find($id)?->repository,
             default => null,
         };
     }

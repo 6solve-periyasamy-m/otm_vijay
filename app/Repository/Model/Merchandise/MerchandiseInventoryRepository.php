@@ -2,12 +2,12 @@
 
 namespace App\Repository\Model\Merchandise;
 
+use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use Carbon\Carbon;
 use DB;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class MerchandiseInventoryRepository extends InventoryRepository
@@ -53,46 +53,48 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function getStartTime(): Carbon
     {
-        // TODO: Implement getStartTime() method.
+        return now();
     }
 
     public function getEndTime(): Carbon
     {
-        // TODO: Implement getEndTime() method.
+        return now();
     }
 
     public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
     {
-        // TODO: Implement getBetweenDates() method.
+        return Merchandise::all();
     }
 
-    public function get(): Model
+    public function get(): MerchandiseInventory
     {
-        // TODO: Implement get() method.
+        return $this->inventory;
     }
 
-    public function update(array $data): Model
+    public function update(array $data): MerchandiseInventory
     {
-        // TODO: Implement update() method.
+        $this->inventory->update($data);
+        $this->save();
+        return $this->get();
     }
 
     public function save(): bool
     {
-        // TODO: Implement save() method.
+        return $this->inventory->save();
     }
 
     public function delete(): bool
     {
-        // TODO: Implement delete() method.
+        return $this->inventory->delete();
     }
 
     public function isDeleted(): bool
     {
-        // TODO: Implement isDeleted() method.
+        return $this->inventory->trashed();
     }
 
     public function __toString(): string
     {
-        // TODO: Implement __toString() method.
+        return "{$this->inventory->component->name}" . (isset($this->inventory->variant) ? " ({$this->inventory->variant->name})" : "");
     }
 }

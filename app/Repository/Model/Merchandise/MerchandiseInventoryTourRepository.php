@@ -118,7 +118,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getComponentString(): string
     {
-        return 'extra';
+        return 'merchandise';
     }
 
     public function getCost(): float
