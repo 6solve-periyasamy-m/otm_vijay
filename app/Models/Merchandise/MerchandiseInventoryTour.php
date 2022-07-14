@@ -3,7 +3,7 @@
 namespace App\Models\Merchandise;
 
 use App\Models\Order\Component\OrderMerchandise;
-use App\Repository\Model\Tour\MerchandiseInventoryTourRepository;
+use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 use Database\Factories\Merchandise\MerchandiseInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -29,7 +29,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read int $available_stock
  * @property-read MerchandiseInventoryTourRepository $repository
+ * @property-read int $used_stock
  * @property-read MerchandiseInventory $inventory
  * @property-read Collection|OrderMerchandise[] $orderComponents
  * @property-read int|null $order_components_count
@@ -55,6 +57,8 @@ class MerchandiseInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
+    private MerchandiseInventoryTourRepository $internal_repository;
+
     protected $guarded = [];
     protected $casts = [
         'tour_sales_price' => 'double',
@@ -75,5 +79,15 @@ class MerchandiseInventoryTour extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new MerchandiseInventoryTourRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getUsedStockAttribute(): int
+    {
+        return $this->repository->getUsedStock();
+    }
+
+    public function getAvailableStockAttribute(): int
+    {
+        return $this->repository->getAvailableStock();
     }
 }

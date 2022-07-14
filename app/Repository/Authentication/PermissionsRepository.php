@@ -55,7 +55,7 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 6,
             ],
-            'Tour\Merchandise' => [
+            'Merchandise\Merchandise' => [
                 'name' => 'Merchandise',
                 'group' => 'Tour and Components',
                 'order' => 7,
