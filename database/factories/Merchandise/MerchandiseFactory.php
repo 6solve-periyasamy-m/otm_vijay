@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories\Tour;
+namespace Database\Factories\Merchandise;
 
-use App\Models\Tour\Merchandise;
+use App\Models\Merchandise\Merchandise;
+use App\Models\Merchandise\MerchandiseType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MerchandiseFactory extends Factory
@@ -16,12 +17,10 @@ class MerchandiseFactory extends Factory
      */
     public function definition()
     {
+        $type = MerchandiseType::first() ?? MerchandiseType::factory()->create();
         return [
             'name' => implode(' ', $this->faker->words),
-            'purchase_price' => $this->faker->numberBetween(10, 100),
-            'tour_sales_price' => $this->faker->numberBetween(10, 100),
-            'stock' => $this->faker->numberBetween(10, 100),
-            'tour_component_type' => $this->faker->randomElement(['Included', 'Add-on']),
+            'merchandise_type_id' => $type->id,
         ];
     }
 }

@@ -2,28 +2,38 @@
 
 namespace App\Models\Merchandise;
 
+use Database\Factories\Merchandise\VariantFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Merchandise\Variant
  *
  * @property int $id
  * @property string $name
- * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Variant newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Variant newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Variant query()
- * @method static \Illuminate\Database\Eloquent\Builder|Variant whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Variant whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Variant whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Variant whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Variant whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static VariantFactory factory(...$parameters)
+ * @method static Builder|Variant newModelQuery()
+ * @method static Builder|Variant newQuery()
+ * @method static QueryBuilder|Variant onlyTrashed()
+ * @method static Builder|Variant query()
+ * @method static Builder|Variant whereCreatedAt($value)
+ * @method static Builder|Variant whereDeletedAt($value)
+ * @method static Builder|Variant whereId($value)
+ * @method static Builder|Variant whereName($value)
+ * @method static Builder|Variant whereUpdatedAt($value)
+ * @method static QueryBuilder|Variant withTrashed()
+ * @method static QueryBuilder|Variant withoutTrashed()
+ * @mixin Eloquent
  */
 class Variant extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 }

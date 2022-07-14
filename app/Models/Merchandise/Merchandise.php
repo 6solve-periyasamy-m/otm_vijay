@@ -4,9 +4,7 @@ namespace App\Models\Merchandise;
 
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Tour;
-use App\Repository\Model\Tour\MerchandiseInventoryTourRepository;
-use Database\Factories\Tour\MerchandiseFactory;
+use Database\Factories\Merchandise\MerchandiseFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,10 +28,11 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read MerchandiseInventoryTourRepository $repository
- * @property-read Collection|OrderMerchandise[] $orderMerchandise
- * @property-read int|null $order_merchandise_count
- * @property-read Tour $tour
+ * @property-read string $asset
+ * @property-read Collection|MerchandiseInventory[] $inventories
+ * @property-read int|null $inventories_count
+ * @property-read MerchandiseType|null $type
+ * @method static MerchandiseFactory factory(...$parameters)
  * @method static Builder|Merchandise newModelQuery()
  * @method static Builder|Merchandise newQuery()
  * @method static QueryBuilder|Merchandise onlyTrashed()

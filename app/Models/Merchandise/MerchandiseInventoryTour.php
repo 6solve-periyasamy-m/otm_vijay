@@ -4,14 +4,17 @@ namespace App\Models\Merchandise;
 
 use App\Models\Order\Component\OrderMerchandise;
 use App\Repository\Model\Tour\MerchandiseInventoryTourRepository;
+use Database\Factories\Merchandise\MerchandiseInventoryTourFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -21,13 +24,19 @@ use Illuminate\Support\Carbon;
  * @property int $merchandise_inventory_id
  * @property int $tour_id
  * @property string $tour_component_type
- * @property string $tour_sales_price
- * @property int $is_bookable
- * @property string|null $deleted_at
+ * @property float $tour_sales_price
+ * @property bool $is_bookable
+ * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read MerchandiseInventoryTourRepository $repository
+ * @property-read MerchandiseInventory $inventory
+ * @property-read Collection|OrderMerchandise[] $orderComponents
+ * @property-read int|null $order_components_count
+ * @method static MerchandiseInventoryTourFactory factory(...$parameters)
  * @method static Builder|MerchandiseInventoryTour newModelQuery()
  * @method static Builder|MerchandiseInventoryTour newQuery()
+ * @method static QueryBuilder|MerchandiseInventoryTour onlyTrashed()
  * @method static Builder|MerchandiseInventoryTour query()
  * @method static Builder|MerchandiseInventoryTour whereCreatedAt($value)
  * @method static Builder|MerchandiseInventoryTour whereDeletedAt($value)
@@ -38,11 +47,19 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MerchandiseInventoryTour whereTourId($value)
  * @method static Builder|MerchandiseInventoryTour whereTourSalesPrice($value)
  * @method static Builder|MerchandiseInventoryTour whereUpdatedAt($value)
+ * @method static QueryBuilder|MerchandiseInventoryTour withTrashed()
+ * @method static QueryBuilder|MerchandiseInventoryTour withoutTrashed()
  * @mixin Eloquent
  */
 class MerchandiseInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
+
+    protected $guarded = [];
+    protected $casts = [
+        'tour_sales_price' => 'double',
+        'is_bookable' => 'boolean'
+    ];
 
     public function inventory(): BelongsTo
     {

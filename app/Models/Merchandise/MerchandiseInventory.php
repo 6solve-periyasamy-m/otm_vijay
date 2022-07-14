@@ -2,14 +2,17 @@
 
 namespace App\Models\Merchandise;
 
+use Database\Factories\Merchandise\MerchandiseInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -18,16 +21,21 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $merchandise_id
  * @property int $variant_id
- * @property int $fit_selectable
+ * @property bool $fit_selectable
  * @property int $stock
- * @property string $purchase_price
- * @property string $sales_price
+ * @property float $purchase_price
+ * @property float $sales_price
  * @property string|null $notes
- * @property string|null $deleted_at
+ * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Merchandise $component
+ * @property-read Collection|MerchandiseInventoryTour[] $tourComponents
+ * @property-read int|null $tour_components_count
+ * @method static MerchandiseInventoryFactory factory(...$parameters)
  * @method static Builder|MerchandiseInventory newModelQuery()
  * @method static Builder|MerchandiseInventory newQuery()
+ * @method static QueryBuilder|MerchandiseInventory onlyTrashed()
  * @method static Builder|MerchandiseInventory query()
  * @method static Builder|MerchandiseInventory whereCreatedAt($value)
  * @method static Builder|MerchandiseInventory whereDeletedAt($value)
@@ -40,6 +48,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MerchandiseInventory whereStock($value)
  * @method static Builder|MerchandiseInventory whereUpdatedAt($value)
  * @method static Builder|MerchandiseInventory whereVariantId($value)
+ * @method static QueryBuilder|MerchandiseInventory withTrashed()
+ * @method static QueryBuilder|MerchandiseInventory withoutTrashed()
  * @mixin Eloquent
  */
 class MerchandiseInventory extends Model
