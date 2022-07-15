@@ -28,7 +28,7 @@ class MerchandiseController extends Controller
 
     public function show(Merchandise $merchandise)
     {
-        return redirect()->route('merchandise.all');
+        return view('pages.admin.merchandise.view', ['merchandise' => $merchandise,]);
     }
 
     public function edit(Merchandise $merchandise)

@@ -3,8 +3,10 @@
 namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\Merchandise;
+use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseType;
 use App\Repository\Abstracts\ModelRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 
 class MerchandiseRepository extends ModelRepository
@@ -14,6 +16,14 @@ class MerchandiseRepository extends ModelRepository
     public function __construct(Merchandise $component)
     {
         $this->component = $component;
+    }
+
+    /**
+     * @return Collection|MerchandiseInventory[]
+     */
+    public function getInventory(): Collection|array
+    {
+        return $this->component->inventories()->with('variant', 'tourComponents')->withCount('tourComponents')->get();
     }
 
     public static function create(array $data, ?UploadedFile $image = null): Merchandise
