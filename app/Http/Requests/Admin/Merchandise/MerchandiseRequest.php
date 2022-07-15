@@ -3,7 +3,14 @@
 namespace App\Http\Requests\Admin\Merchandise;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
+/**
+ * @property string $name
+ * @property int $type
+ * @property UploadedFile|null $image
+ * @property string|null $notes
+ */
 class MerchandiseRequest extends FormRequest
 {
     /**
@@ -14,7 +21,9 @@ class MerchandiseRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required',
+            'image' => 'nullable|image',
+            'type' => 'required|exists:merchandise_types,id'
         ];
     }
 }

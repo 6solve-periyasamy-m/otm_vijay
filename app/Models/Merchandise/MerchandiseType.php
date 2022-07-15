@@ -36,4 +36,6 @@ use Illuminate\Support\Carbon;
 class MerchandiseType extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
 }

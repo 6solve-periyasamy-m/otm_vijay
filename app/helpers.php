@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\UploadedFile;
+
 if (!function_exists('sigfig')) {
     function sigfig($number, $figures = 2): float
     {
@@ -92,5 +94,20 @@ if (!function_exists('camel_to_text')) {
     {
         $arr = preg_split('/([A-Z]+[^A-Z]+)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         return implode(' ', $arr);
+    }
+}
+
+if (!function_exists('store_file')) {
+    /**
+     * Store an uploaded file publicly, and delete the old one if provided
+     * @param UploadedFile $file
+     * @param string|null $old The storage location of the old file (if it needs deleting)
+     * @return string The location of the stored file
+     */
+    function store_file(UploadedFile $file, string $old = null): string
+    {
+        $path = $file->storePublicly('uploads/images');
+        isset($old) && Storage::delete($old);
+        return $path;
     }
 }

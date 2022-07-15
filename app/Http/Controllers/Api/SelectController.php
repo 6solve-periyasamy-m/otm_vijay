@@ -8,12 +8,14 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Transforms\AccommodationTransforms;
 use App\Transforms\ActivityTransforms;
 use App\Transforms\CustomerTransforms;
 use App\Transforms\FlightTransforms;
 use App\Transforms\LocationsTransforms;
+use App\Transforms\MerchandiseTransforms;
 use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
@@ -312,5 +314,27 @@ class SelectController extends ApiController
     public function getAvailableTransport(Request $request, OrderCustomer $orderCustomer) {
         $filter = $request->has('filter') ? $request->input('filter') : "";
         return TransportTransforms::getAvailableAddons($orderCustomer, $filter);
+    }
+
+    public function getAvailableMerchandiseTypes(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        return MerchandiseTransforms::getMerchandiseTypes($filter);
+    }
+    
+    public function getSelectedMerchandiseType($id)
+    {
+        return MerchandiseTransforms::getSelectedMerchandiseType($id);
+    }
+
+    public function getAvailableVariants(Request $request)
+    {
+        $filter = $request->has('filter') ? $request->filter : "";
+        return MerchandiseTransforms::getVariants($filter);
+    }
+    
+    public function getSelectedVariant($id)
+    {
+        return MerchandiseTransforms::getSelectedVariant($id);
     }
 }
