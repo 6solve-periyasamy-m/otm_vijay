@@ -79,7 +79,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('pages.otm');
+    return redirect()->route('customer.portal');
 })->name('homepage');
 
 Route::get('/homepage', function () {
