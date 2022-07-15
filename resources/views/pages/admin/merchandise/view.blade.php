@@ -14,8 +14,8 @@
             background-size: 200px;
         }
         .thumbnail {
-            max-width: 100px;
-            max-height: 100px;
+            max-width: 150px;
+            max-height: 150px;
             background-size: 150px;
         }
         .item {
@@ -30,12 +30,6 @@
             flex-direction: column;
             width: max-content;
             margin: 5px 10px;
-        }
-        .alternator {
-            display: flex !important;
-        }
-        .alternator:nth-child(evn) {
-            flex-direction: row-reverse;
         }
         .vertical-divider {
             width: 1px;
@@ -95,8 +89,18 @@
                         </div>
                         <hr class="splitter">
                         <div>
+                            Purchase: {{ f_currency($inventory->purchase_price) }} | Sales: {{ f_currency($inventory->sales_price) }}
+                        </div>
+                        <hr class="splitter">
+                        <div>
                             Stock: {{ $inventory->stock }} | Sold: {{ $inventory->used_stock }} | Available: {{ $inventory->available_stock }}
                         </div>
+                        @if(!empty($inventory->notes))
+                            <hr class="splitter">
+                            <div>
+                                {{ $inventory->notes }}
+                            </div>
+                        @endif
                         <hr class="splitter">
                         <div>
                             <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-success">
