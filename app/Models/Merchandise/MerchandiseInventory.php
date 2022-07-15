@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property int $merchandise_id
  * @property int $variant_id
  * @property bool $fit_selectable
+ * @property string $image_url
  * @property int $stock
  * @property float $purchase_price
  * @property float $sales_price
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Merchandise $component
+ * @property-read string $asset
  * @property-read Variant $variant
  * @property-read int $available_stock
  * @property-read MerchandiseInventoryRepository $repository
@@ -100,5 +102,10 @@ class MerchandiseInventory extends Model
     public function getAvailableStockAttribute(): int
     {
         return $this->repository->getAvailableStock();
+    }
+
+    public function getAssetAttribute(): string
+    {
+        return isset($this->image_url) ? asset($this->image_url) : $this->component->asset;
     }
 }
