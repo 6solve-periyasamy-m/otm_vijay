@@ -450,7 +450,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/create', [MerchandiseController::class, 'create'])->name('create');
         Route::post('/create', [MerchandiseController::class, 'store'])->name('store');
         Route::prefix('{merchandise}')->group(function () {
-            Route::get('/', [MerchandiseController::class, 'view'])->name('view');
+            Route::get('/', [MerchandiseController::class, 'show'])->name('view');
             Route::get('/update', [MerchandiseController::class, 'edit'])->name('edit');
             Route::post('/update', [MerchandiseController::class, 'update'])->name('update');
             Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('delete');

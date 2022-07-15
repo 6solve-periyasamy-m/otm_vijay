@@ -4,6 +4,7 @@ namespace App\Models\Merchandise;
 
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
+use App\Repository\Model\Merchandise\MerchandiseRepository;
 use Database\Factories\Merchandise\MerchandiseFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,7 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read string $asset
+ * @property-read MerchandiseRepository $repository
  * @property-read Collection|MerchandiseInventory[] $inventories
  * @property-read int|null $inventories_count
  * @property-read MerchandiseType|null $type
@@ -52,6 +54,8 @@ use Illuminate\Validation\Rule;
 class Merchandise extends Model
 {
     use HasFactory, SoftDeletes;
+
+    private MerchandiseRepository $internal_repository;
 
     protected $guarded = [];
 
@@ -98,5 +102,11 @@ class Merchandise extends Model
     public function getAssetAttribute(): string
     {
         return isset($this->image_url) ? asset($this->image_url) : "";
+    }
+
+    public function getRepositoryAttribute(): MerchandiseRepository
+    {
+        $this->internal_repository = $this->internal_repository ?? new MerchandiseRepository($this);
+        return $this->internal_repository;
     }
 }

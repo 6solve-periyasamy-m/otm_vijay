@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Repository\Model\Merchandise;
+
+use App\Models\Merchandise\Merchandise;
+use App\Models\Merchandise\MerchandiseType;
+use App\Repository\Abstracts\ModelRepository;
+use Illuminate\Http\UploadedFile;
+
+class MerchandiseRepository extends ModelRepository
+{
+    private Merchandise $component;
+
+    public function __construct(Merchandise $component)
+    {
+        $this->component = $component;
+    }
+
+    public static function create(array $data, ?UploadedFile $image = null): Merchandise
+    {
+        if ($image !== null) {
+            $data['image_url'] = store_file($image);
+        }
+        return Merchandise::create($data);
+    }
+
+    public function get(): Merchandise
+    {
+        return $this->component;
+    }
+
+    public function update(array $data): Merchandise
+    {
+        $this->component->update($data);
+        $this->save();
+        return $this->get();
+    }
+
+    public function updateWithImage(array $data, ?UploadedFile $image = null): Merchandise
+    {
+        if ($image !== null) {
+            $data['image_url'] = store_file($image, $this->component->image_url);
+        }
+        return $this->update($data);
+    }
+
+    public function save(): bool
+    {
+        return $this->component->save();
+    }
+
+    public function delete(): bool
+    {
+        foreach ($this->component->inventories()->withCount('tourComponents')->get() as $inventory) {
+            if ($inventory->tourComponents()->count() > 0) return false;
+        }
+        return $this->component->delete();
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->component->trashed();
+    }
+
+    public function __toString(): string
+    {
+        return $this->component->name;
+    }
+}

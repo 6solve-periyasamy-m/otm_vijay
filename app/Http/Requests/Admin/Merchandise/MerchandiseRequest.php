@@ -26,4 +26,13 @@ class MerchandiseRequest extends FormRequest
             'type' => 'required|exists:merchandise_types,id'
         ];
     }
+
+    public function getDataset(): array
+    {
+        return [
+            'name' => $this->name,
+            'merchandise_type_id' => $this->type,
+            'notes' => $this->notes,
+        ];
+    }
 }
