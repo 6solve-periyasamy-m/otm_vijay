@@ -74,36 +74,36 @@
     <hr class="splitter">
     <div class="card">
         <div class="card-body">
-            <a class="btn btn-primary float-end" href="merchandise.inventory.create">
+            <a class="btn btn-primary float-end" href="{{ route('merchandise.inventory.create', ['merchandise' => $merchandise,]) }}">
                 <i class="icon-plus"></i>
                 Create Inventory
             </a>
         </div>
     </div>
     <hr class="splitter">
-    <div class="d-flex inventory-container">
-        @foreach([1,2,3,4,5,6] as $v)
+    <div class="inventory-container">
+        @foreach($merchandise->repository->getInventory() as $inventory)
             <div class="card inventory">
-                <div class="card-body d-flex alternator">
+                <div class="card-body d-flex">
                     <div class="item">
-                        <img src="{{ $merchandise->asset }}" class="image thumbnail">
+                        <img src="{{ $inventory->asset }}" class="image thumbnail">
                     </div>
                     <div class="item vertical-divider"></div>
                     <div class="item">
                         <div>
-                            <h5 class="fw-bold">{{ $merchandise->name }}</h5>
+                            <h5 class="fw-bold">{{ $inventory->variant->name }}</h5>
                         </div>
                         <hr class="splitter">
                         <div>
-                            Stock: 100 | Sold: 50 | Available: 50
+                            Stock: {{ $inventory->stock }} | Sold: {{ $inventory->used_stock }} | Available: {{ $inventory->available_stock }}
                         </div>
                         <hr class="splitter">
                         <div>
-                            <a href="{{ route('merchandise.edit', ['merchandise' => $merchandise,]) }}" class="btn btn-success">
+                            <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-success">
                                 <i class="icon-note"></i>
                                 Edit Inventory
                             </a>
-                            <a href="{{ route('merchandise.edit', ['merchandise' => $merchandise,]) }}" class="btn btn-danger">
+                            <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-danger">
                                 <i class="icon-trash"></i>
                                 Delete Inventory
                             </a>

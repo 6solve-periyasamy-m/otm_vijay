@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
+use App\Http\Controllers\Admin\Merchandise\VariantController;
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
@@ -454,6 +456,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [MerchandiseController::class, 'edit'])->name('edit');
             Route::post('/update', [MerchandiseController::class, 'update'])->name('update');
             Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('delete');
+            Route::prefix('inventory')->name('inventory.')->group(function () {
+                Route::get('/create', [MerchandiseInventoryController::class, 'create'])->name('create');
+                Route::post('/create', [MerchandiseInventoryController::class, 'store'])->name('store');
+                Route::prefix('{inventory}')->group(function () {
+                    Route::get('/update', [MerchandiseInventoryController::class, 'edit'])->name('edit');
+                    Route::post('/update', [MerchandiseInventoryController::class, 'update'])->name('update');
+                });
+            });
         });
         Route::prefix('type')->name('type.')->group(function () {
             Route::get('/create', [MerchandiseTypeController::class, 'create'])->name('create');
@@ -463,12 +473,12 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/update', [MerchandiseTypeController::class, 'update'])->name('update');
             });
         });
-        Route::prefix('variant')->name('type.')->group(function () {
-            Route::get('/create', [MerchandiseTypeController::class, 'create'])->name('create');
-            Route::post('/create', [MerchandiseTypeController::class, 'store'])->name('store');
+        Route::prefix('variant')->name('variant.')->group(function () {
+            Route::get('/create', [VariantController::class, 'create'])->name('create');
+            Route::post('/create', [VariantController::class, 'store'])->name('store');
             Route::prefix('{type}')->group(function () {
-                Route::get('/update', [MerchandiseTypeController::class, 'edit'])->name('edit');
-                Route::post('/update', [MerchandiseTypeController::class, 'update'])->name('update');
+                Route::get('/update', [VariantController::class, 'edit'])->name('edit');
+                Route::post('/update', [VariantController::class, 'update'])->name('update');
             });
         });
     });

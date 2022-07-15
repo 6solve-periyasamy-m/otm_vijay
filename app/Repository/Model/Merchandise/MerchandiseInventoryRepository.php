@@ -8,6 +8,7 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 class MerchandiseInventoryRepository extends InventoryRepository
@@ -17,6 +18,16 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function __construct(MerchandiseInventory $inventory)
     {
         $this->inventory = $inventory;
+    }
+
+    public static function create(Merchandise $merchandise, array $data, ?UploadedFile $image = null): MerchandiseInventory
+    {
+        if ($image !== null) {
+            $data['image_url'] = store_file($image);
+        }
+        $inventory = MerchandiseInventory::make($data);
+        $merchandise->inventories()->save($inventory);
+        return $inventory;
     }
 
     /**
@@ -76,6 +87,14 @@ class MerchandiseInventoryRepository extends InventoryRepository
         $this->inventory->update($data);
         $this->save();
         return $this->get();
+    }
+
+    public function updateWithImage(array $data, ?UploadedFile $image = null): MerchandiseInventory
+    {
+        if ($image !== null) {
+            $data['image_url'] = store_file($image, $this->component->image_url);
+        }
+        return $this->update($data);
     }
 
     public function save(): bool

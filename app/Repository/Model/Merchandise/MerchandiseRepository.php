@@ -4,7 +4,6 @@ namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
-use App\Models\Merchandise\MerchandiseType;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
@@ -32,6 +31,11 @@ class MerchandiseRepository extends ModelRepository
             $data['image_url'] = store_file($image);
         }
         return Merchandise::create($data);
+    }
+
+    public function createInventory(array $data, ?UploadedFile $image = null): MerchandiseInventory
+    {
+        return MerchandiseInventoryRepository::create($this->component, $data, $image);
     }
 
     public function get(): Merchandise
