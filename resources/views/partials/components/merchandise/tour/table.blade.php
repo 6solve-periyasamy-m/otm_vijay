@@ -52,7 +52,7 @@
     <tbody>
     @foreach(\App\Models\Merchandise\Merchandise::all() as $merchandise)
         <tr inventory_id="{{ $merchandise->id }}">
-            <td><img src="{{ $merchandise->asset }}" style="max-width: 50px; max-height: 50px;"/></td>
+            <td><img src="{{ $merchandise->asset }}" class="image tiny"/></td>
             <td>{{$merchandise->name }}</td>
             <td>{{ $merchandise->inventory()->count() }}</td>
             <td>{{ $merchandise->notes }}</td>

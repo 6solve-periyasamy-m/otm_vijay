@@ -39,6 +39,12 @@
     }
 }
 
+.vertical-divider {
+    width: 1px;
+    border-right: 5px solid #cccccc;
+    border-radius: 2px;
+}
+
 .dp-down {
     position: relative;
     display: inline-block;

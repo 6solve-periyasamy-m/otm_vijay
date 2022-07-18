@@ -4,7 +4,7 @@
         <div class="card inventory">
             <div class="card-body d-flex">
                 <div class="item">
-                    <img src="{{ $inventory->asset }}" class="image thumbnail">
+                    <img src="{{ $inventory->asset }}" class="image medium">
                 </div>
                 <div class="item vertical-divider"></div>
                 <div class="item">

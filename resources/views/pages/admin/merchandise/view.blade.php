@@ -8,21 +8,6 @@
             background-image: url('{{ asset(setting('company.logo')) }}');
             background-repeat: no-repeat;
         }
-        .tiny {
-            max-width: 50px;
-            max-height: 50px;
-            background-size: 50px;
-        }
-        .icon {
-            max-width: 200px;
-            max-height: 200px;
-            background-size: 200px;
-        }
-        .thumbnail {
-            max-width: 150px;
-            max-height: 150px;
-            background-size: 150px;
-        }
         .item {
             margin: 5px;
         }
@@ -35,11 +20,6 @@
             flex-direction: column;
             width: max-content;
             margin: 5px 10px;
-        }
-        .vertical-divider {
-            width: 1px;
-            border-right: 5px solid #cccccc;
-            border-radius: 2px;
         }
     </style>
     <script>
@@ -65,7 +45,7 @@
     <div class="otm-callout">
         <div class="row">
             <div class="col-xl-2">
-                <img src="{{ $merchandise->asset }}" class="image icon">
+                <img src="{{ $merchandise->asset }}" class="image large">
             </div>
             <div class="col-xl-10">
                 <div class="row">
