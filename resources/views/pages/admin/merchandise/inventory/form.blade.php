@@ -11,10 +11,11 @@ $inventory = $inventory ?? null;
 @endphp
 
 @section('form-body')
-    @include('partials.fields.selector.adder', ['name' => 'Variant', 'field' => 'variant', 'width' => 11, 'route' => 'variants', 'createRoute' => route('merchandise.variant.create'), 'value' => $inventory?->variant_id ?? null])
-    @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 1])
+    @include('partials.fields.selector.adder', ['name' => 'Variant', 'field' => 'variant', 'route' => 'variants', 'createRoute' => route('merchandise.variant.create'), 'value' => $inventory?->variant_id ?? null, 'width' => 5])
+    @include('partials.fields.selector.adder', ['name' => 'Size', 'field' => 'size', 'route' => 'sizes', 'createRoute' => route('merchandise.size.create'), 'value' => $inventory?->merchandise_size_id ?? null, 'width' => 5])
+    @include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 2])
     @include('partials.fields.checkbox',
-    ['name' => 'FIT Selectable', 'field' => 'fit_selectable', 'value' => $inventory?->fit_selectable ?? null, ])
+        ['name' => 'FIT Selectable', 'field' => 'fit_selectable', 'value' => $inventory?->fit_selectable ?? null, ])
     @include('partials.fields.text',
         ['name' => 'Stock', 'field' => 'stock', 'value' => $inventory?->stock ?? null, ])
     @include('partials.fields.text',

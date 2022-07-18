@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('merchandise_id')->constrained()->cascadeOnDelete();
             $table->foreignId('variant_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('merchandise_size_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('image_url')->nullable();
             $table->boolean('fit_selectable')->default(true);
             $table->integer('stock');

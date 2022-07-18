@@ -253,6 +253,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
         Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchandiseTypes'])->name('merchandise-types.select');
         Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
+        Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
@@ -288,6 +289,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('tour-category/{id}', [SelectController::class, 'getSelectedTourCategory'])->name('tour-categories.selected');
             Route::post('merchandise-types/{id}', [SelectController::class, 'getSelectedMerchandiseType'])->name('merchandise-types.selected');
             Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
+            Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
             Route::prefix('inventory/{id}')->group(function () {
                 Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');

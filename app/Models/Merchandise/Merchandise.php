@@ -59,6 +59,8 @@ class Merchandise extends Model
 
     protected $guarded = [];
 
+    protected $with = ['type',];
+
     public static function getValidationRules(): array
     {
         return [

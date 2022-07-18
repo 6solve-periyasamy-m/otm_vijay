@@ -22,8 +22,9 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $merchandise_id
  * @property int $variant_id
+ * @property int|null $merchandise_size_id
+ * @property string|null $image_url
  * @property bool $fit_selectable
- * @property string $image_url
  * @property int $stock
  * @property float $purchase_price
  * @property float $sales_price
@@ -33,12 +34,13 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Merchandise $component
  * @property-read string $asset
- * @property-read Variant $variant
  * @property-read int $available_stock
  * @property-read MerchandiseInventoryRepository $repository
  * @property-read int $used_stock
+ * @property-read MerchandiseSize|null $size
  * @property-read Collection|MerchandiseInventoryTour[] $tourComponents
  * @property-read int|null $tour_components_count
+ * @property-read Variant $variant
  * @method static MerchandiseInventoryFactory factory(...$parameters)
  * @method static Builder|MerchandiseInventory newModelQuery()
  * @method static Builder|MerchandiseInventory newQuery()
@@ -48,7 +50,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MerchandiseInventory whereDeletedAt($value)
  * @method static Builder|MerchandiseInventory whereFitSelectable($value)
  * @method static Builder|MerchandiseInventory whereId($value)
+ * @method static Builder|MerchandiseInventory whereImageUrl($value)
  * @method static Builder|MerchandiseInventory whereMerchandiseId($value)
+ * @method static Builder|MerchandiseInventory whereMerchandiseSizeId($value)
  * @method static Builder|MerchandiseInventory whereNotes($value)
  * @method static Builder|MerchandiseInventory wherePurchasePrice($value)
  * @method static Builder|MerchandiseInventory whereSalesPrice($value)
@@ -66,6 +70,8 @@ class MerchandiseInventory extends Model
     private MerchandiseInventoryRepository $internal_repository;
 
     protected $guarded = [];
+
+    protected $with = ['variant', 'size'];
 
     protected $casts = [
         'fit_selectable' => 'boolean',
@@ -86,6 +92,11 @@ class MerchandiseInventory extends Model
     public function variant(): BelongsTo
     {
         return $this->belongsTo(Variant::class, 'variant_id');
+    }
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(MerchandiseSize::class, 'merchandise_size_id');
     }
 
     public function getRepositoryAttribute(): MerchandiseInventoryRepository

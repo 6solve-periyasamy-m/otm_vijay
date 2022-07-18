@@ -85,7 +85,7 @@
                     <div class="item vertical-divider"></div>
                     <div class="item">
                         <div>
-                            <h5 class="fw-bold">{{ $inventory->variant->name }}</h5>
+                            <h5 class="fw-bold">{{ $inventory->variant->name }} @isset($inventory->size) ({{ $inventory->size->name }}) @endif</h5>
                         </div>
                         <hr class="splitter">
                         <div>

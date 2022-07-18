@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
  * @property float $purchase_price
  * @property float $sales_price
  * @property int $variant
+ * @property int|null $size
  * @property string $notes
  * @property UploadedFile|null $image
  */
@@ -20,6 +21,7 @@ class MerchandiseInventoryRequest extends FormRequest
     {
         return [
             'variant_id' => $this->variant,
+            'merchandise_size_id' => $this->size,
             'fit_selectable' => $this->fit_selectable == 'on',
             'stock' => $this->stock,
             'purchase_price' => $this->purchase_price,
@@ -40,6 +42,7 @@ class MerchandiseInventoryRequest extends FormRequest
             'purchase_price' => 'required|numeric|min:0',
             'sales_price' => 'required|numeric|min:0',
             'variant' => 'required|exists:variants,id',
+            'size' => 'nullable|exists:merchandise_sizes,id',
         ];
     }
 }

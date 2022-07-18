@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
 use App\Http\Controllers\Admin\Merchandise\VariantController;
 use App\Http\Controllers\AtolController;
@@ -471,6 +472,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('{type}')->group(function () {
                 Route::get('/update', [MerchandiseTypeController::class, 'edit'])->name('edit');
                 Route::post('/update', [MerchandiseTypeController::class, 'update'])->name('update');
+            });
+        });
+        Route::prefix('size')->name('size.')->group(function () {
+            Route::get('/create', [MerchandiseSizeController::class, 'create'])->name('create');
+            Route::post('/create', [MerchandiseSizeController::class, 'store'])->name('store');
+            Route::prefix('{size}')->group(function () {
+                Route::get('/update', [MerchandiseSizeController::class, 'edit'])->name('edit');
+                Route::post('/update', [MerchandiseSizeController::class, 'update'])->name('update');
             });
         });
         Route::prefix('variant')->name('variant.')->group(function () {
