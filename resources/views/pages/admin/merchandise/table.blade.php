@@ -55,7 +55,7 @@
                     <tr>
                         <td><div class="merch-thumbnail-container"><img class="merch-thumbnail" src="{{ $merch->asset }}"></div></td>
                         <td>{{ $merch->name }}</td>
-                        <td>{{ $merch->inventories()->count() }}</td>
+                        <td>{{ $merch->inventory()->count() }}</td>
                         <td>0</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise\Merchandise::class)

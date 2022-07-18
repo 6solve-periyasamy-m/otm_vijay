@@ -15,7 +15,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($merchandise->inventories as $inventory)
+            @foreach($merchandise->inventory as $inventory)
                 <tr>
                     <td><img src="{{ $inventory->asset }}" class="image tiny"/></td>
                     <td>{{ $inventory->variant->name }}</td>

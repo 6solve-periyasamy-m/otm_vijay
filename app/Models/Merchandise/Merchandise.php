@@ -31,8 +31,8 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $deleted_at
  * @property-read string $asset
  * @property-read MerchandiseRepository $repository
- * @property-read Collection|MerchandiseInventory[] $inventories
- * @property-read int|null $inventories_count
+ * @property-read Collection|MerchandiseInventory[] $inventory
+ * @property-read int|null $inventory_count
  * @property-read MerchandiseType|null $type
  * @method static MerchandiseFactory factory(...$parameters)
  * @method static Builder|Merchandise newModelQuery()
@@ -77,7 +77,7 @@ class Merchandise extends Model
             'sales_price' => 'required|numeric',];
     }
 
-    public function inventories(): HasMany
+    public function inventory(): HasMany
     {
         return $this->hasMany(MerchandiseInventory::class, 'merchandise_id');
     }

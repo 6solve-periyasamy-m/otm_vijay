@@ -5,6 +5,7 @@
 |--------------------------------------------------------------------------
 */
 
+use App\Http\Controllers\Api\Admin\MerchandiseController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -325,6 +326,9 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             });
             Route::prefix('transport/inventory')->group(function() {
                 Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('tour.transport.inventory.add');
+            });
+            Route::prefix('merchandise/inventory')->group(function() {
+                Route::post('/add', [MerchandiseController::class, 'addMerchandiseToTour'])->name('tour.merchandise.inventory.add');
             });
         });
     });

@@ -576,9 +576,11 @@
             <table id="merchandise-table" class="table table-striped table-responsive-sm">
                 <thead>
                 <tr>
+                    <th scope="col">Icon</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Variant</th>
+                    <th scope="col">Size</th>
                     <th scope="col">Component Type</th>
-                    <th scope="col">Purchase Price</th>
                     <th scope="col">Sales Price</th>
                     <th scope="col">Notes</th>
                     <th scope="col">Actions</th>
@@ -586,10 +588,12 @@
                 </thead>
                 @foreach($tour->merchandise as $merchandise)
                     <tr>
-                        <td style="min-width: 200px">{{ $merchandise->name }}</td>
+                        <td><img src="{{ $merchandise->inventory->asset }}" class="image tiny"/></td>
+                        <td style="min-width: 100px">{{ $merchandise->inventory->component->name }}</td>
+                        <td>{{ $merchandise->inventory->variant->name }}</td>
+                        <td>{{ $merchandise->inventory->size->name }}</td>
                         <td>{{ $merchandise->tour_component_type }}</td>
-                        <td>{{ $merchandise->purchase_price }}</td>
-                        <td>{{ $merchandise->tour_sales_price }}</td>
+                        <td>{{ f_currency($merchandise->tour_sales_price) }}</td>
                         <td>{{ $merchandise->notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise\Merchandise::class)

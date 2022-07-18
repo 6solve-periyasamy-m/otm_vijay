@@ -11,6 +11,34 @@
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css');
 
+.image {
+    &.tiny {
+        max-width: 50px;
+        max-height: 50px;
+        background-size: 50px;
+    }
+    &.small {
+        max-width: 100px;
+        max-height: 100px;
+        background-size: 100px;
+    }
+    &.medium {
+        max-width: 150px;
+        max-height: 150px;
+        background-size: 150px;
+    }
+    &.large {
+        max-width: 200px;
+        max-height: 200px;
+        background-size: 200px;
+    }
+    &.xl {
+        max-width: 250px;
+        max-height: 250px;
+        background-size: 250px;
+    }
+}
+
 .dp-down {
     position: relative;
     display: inline-block;

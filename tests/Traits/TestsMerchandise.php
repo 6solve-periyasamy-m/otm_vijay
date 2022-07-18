@@ -16,7 +16,7 @@ trait TestsMerchandise
     {
         $merchandise = $merchandise ?? $this->generateMerchandise();
         $inventory = MerchandiseInventory::factory()->make($attributes);
-        $merchandise->inventories()->save($inventory);
+        $merchandise->inventory()->save($inventory);
         return $inventory;
     }
 }

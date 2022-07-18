@@ -4,8 +4,10 @@ namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\InventoryTourRepository;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\UploadedFile;
@@ -26,7 +28,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
             $data['image_url'] = store_file($image);
         }
         $inventory = MerchandiseInventory::make($data);
-        $merchandise->inventories()->save($inventory);
+        $merchandise->inventory()->save($inventory);
         return $inventory;
     }
 
@@ -123,5 +125,16 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component->name}" . (isset($this->inventory->variant) ? " ({$this->inventory->variant->name})" : "");
+    }
+
+    public function addToTour(Tour $tour, string $type): ?InventoryTourRepository
+    {
+        $mInvTour = MerchandiseInventoryTour::make([
+            'merchandise_inventory_id' => $this->inventory->id,
+            'tour_component_type' => $type,
+            'tour_sales_price' => $this->inventory->sales_price,
+        ]);
+        $tour->merchandise()->save($mInvTour);
+        return $mInvTour->repository;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
+use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
@@ -22,7 +23,14 @@ class MerchandiseRepository extends ModelRepository
      */
     public function getInventory(): Collection|array
     {
-        return $this->component->inventories()->groupBy('variant_id')->with('variant', 'tourComponents')->withCount('tourComponents')->get();
+        return $this->component->inventory()->groupBy('variant_id')->with('variant', 'tourComponents')->withCount('tourComponents')->get();
+    }
+    
+    public function addAllInventoryToTour(Tour $tour, string $type)
+    {
+        foreach ($this->component->inventory as $inventory) {
+            $inventory->repository->addToTour($tour, $type);
+        }
     }
 
     public static function create(array $data, ?UploadedFile $image = null): Merchandise
@@ -65,7 +73,7 @@ class MerchandiseRepository extends ModelRepository
 
     public function delete(): bool
     {
-        foreach ($this->component->inventories()->withCount('tourComponents')->get() as $inventory) {
+        foreach ($this->component->inventory()->withCount('tourComponents')->get() as $inventory) {
             if ($inventory->tourComponents()->count() > 0) return false;
         }
         return $this->component->delete();
