@@ -31,6 +31,11 @@ class MerchandiseController extends Controller
         return view('pages.admin.merchandise.view', ['merchandise' => $merchandise,]);
     }
 
+    public function detailed(Merchandise $merchandise)
+    {
+        return view('pages.admin.merchandise.view', ['merchandise' => $merchandise, 'detailed' => true]);
+    }
+
     public function edit(Merchandise $merchandise)
     {
         return view('pages.admin.merchandise.form', ['merchandise' => $merchandise,]);
