@@ -31,6 +31,14 @@ class MerchandiseInventoryRepository extends InventoryRepository
     }
 
     /**
+     * @return Collection|MerchandiseInventory[]
+     */
+    public function getSizeVariants(): Collection|array
+    {
+        return MerchandiseInventory::whereNot('id', '=', $this->inventory->id)->where('variant_id', '=', $this->inventory->variant_id)->where('merchandise_id', '=', $this->inventory->merchandise_id)->get();
+    }
+
+    /**
      * @inheritDoc
      */
     public function getUsedStock(): int

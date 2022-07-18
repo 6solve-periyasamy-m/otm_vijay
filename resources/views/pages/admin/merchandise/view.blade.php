@@ -37,6 +37,21 @@
             border-radius: 2px;
         }
     </style>
+    <script>
+        function update(selector) {
+            selector = $(selector);
+            let selected = selector.find(':selected');
+            let box = selector.closest('.inventory');
+            console.warn(selected.attr('purchase'));
+            box.find('.purchase').text(selected.attr('purchase'));
+            box.find('.sales').text(selected.attr('sales'));
+            box.find('.stock').text(selected.attr('stock'));
+            box.find('.used').text(selected.attr('used'));
+            box.find('.available').text(selected.attr('available'));
+            box.find('.edit-btn').attr('href', selected.attr('edit'));
+            box.find('.delete-btn').attr('href', selected.attr('delete'));
+        }
+    </script>
 @endpush
 
 @section('content')
@@ -85,15 +100,42 @@
                     <div class="item vertical-divider"></div>
                     <div class="item">
                         <div>
-                            <h5 class="fw-bold">{{ $inventory->variant->name }} @isset($inventory->size) ({{ $inventory->size->name }}) @endif</h5>
+                            <h5 class="fw-bold">{{ $inventory->variant->name }} @isset($inventory->size) @endif</h5>
+                        </div>
+                        <hr class="splitter">
+                        <select onchange="update(this)">
+                            <option selected value="{{ $inventory->id }}"
+                                    purchase="{{ f_currency($inventory->purchase_price) }}"
+                                    sales="{{ f_currency($inventory->sales_price) }}"
+                                    stock="{{ $inventory->stock }}"
+                                    available="{{ $inventory->available_stock }}"
+                                    used="{{ $inventory->used_stock }}"
+                                    edit="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
+                                    delete="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
+                            >
+                                {{ $inventory->size->name }} ({{ f_currency($inventory->sales_price) }})
+                            </option>
+                            @foreach($inventory->repository->getSizeVariants() as $sizeVariant)
+                                <option value="{{ $sizeVariant->id }}"
+                                        purchase="{{ f_currency($sizeVariant->purchase_price) }}"
+                                        sales="{{ f_currency($sizeVariant->sales_price) }}"
+                                        stock="{{ $sizeVariant->stock }}"
+                                        available="{{ $sizeVariant->available_stock }}"
+                                        used="{{ $sizeVariant->used_stock }}"
+                                        edit="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
+                                        delete="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
+                                >
+                                    {{ $sizeVariant->size->name }} ({{ f_currency($sizeVariant->sales_price) }})
+                                </option>
+                            @endforeach
+                        </select>
+                        <hr class="splitter">
+                        <div>
+                            Purchase: <span class="purchase">{{ f_currency($inventory->purchase_price) }}</span> | Sales: <span class="sales">{{ f_currency($inventory->sales_price) }}</span>
                         </div>
                         <hr class="splitter">
                         <div>
-                            Purchase: {{ f_currency($inventory->purchase_price) }} | Sales: {{ f_currency($inventory->sales_price) }}
-                        </div>
-                        <hr class="splitter">
-                        <div>
-                            Stock: {{ $inventory->stock }} | Sold: {{ $inventory->used_stock }} | Available: {{ $inventory->available_stock }}
+                            Stock: <span class="stock">{{ $inventory->stock }}</span> | Sold: <span class="used">{{ $inventory->used_stock }}</span> | Available: <span class="available">{{ $inventory->available_stock }}</span>
                         </div>
                         @if(!empty($inventory->notes))
                             <hr class="splitter">
@@ -103,11 +145,11 @@
                         @endif
                         <hr class="splitter">
                         <div>
-                            <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-success">
+                            <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-success edit-btn">
                                 <i class="icon-note"></i>
                                 Edit Inventory
                             </a>
-                            <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-danger">
+                            <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-danger delete-btn">
                                 <i class="icon-trash"></i>
                                 Delete Inventory
                             </a>

@@ -22,7 +22,7 @@ class MerchandiseRepository extends ModelRepository
      */
     public function getInventory(): Collection|array
     {
-        return $this->component->inventories()->with('variant', 'tourComponents')->withCount('tourComponents')->get();
+        return $this->component->inventories()->groupBy('variant_id')->with('variant', 'tourComponents')->withCount('tourComponents')->get();
     }
 
     public static function create(array $data, ?UploadedFile $image = null): Merchandise
