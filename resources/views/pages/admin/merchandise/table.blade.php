@@ -54,7 +54,7 @@
                     <tbody>
                     <tr>
                         <td><div class="merch-thumbnail-container"><img class="merch-thumbnail" src="{{ $merch->asset }}"></div></td>
-                        <td>{{ $merch->name }}</td>
+                        <td><a href="{{ route('merchandise.view', ['merchandise' => $merchandise,]) }}">{{ $merch->name }}</a></td>
                         <td>{{ $merch->inventory()->count() }}</td>
                         <td>0</td>
                         <td class="actions">
