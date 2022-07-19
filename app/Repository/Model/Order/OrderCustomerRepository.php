@@ -127,7 +127,7 @@ class OrderCustomerRepository extends ModelRepository
 
     public function addAllIncluded()
     {
-        foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, true, ['Included',]) as $inventoryTourRepository) {
+        foreach ($this->orderCustomer->order->tour->repository->getComponents(false, true, true, true, false, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
             $inventoryTourRepository->grantToCustomer($this->orderCustomer);
         }
