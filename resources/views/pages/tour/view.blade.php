@@ -592,7 +592,7 @@
                         <td><img src="{{ $merchandise->inventory->asset }}" class="image tiny"/></td>
                         <td style="min-width: 100px">{{ $merchandise->inventory->component->name }}</td>
                         <td>{{ $merchandise->inventory->variant->name }}</td>
-                        <td>{{ $merchandise->inventory->size->name }}</td>
+                        <td>{{ $merchandise->inventory->size?->name ?? 'No Size'  }}</td>
                         <td>{{ $merchandise->tour_component_type }}</td>
                         <td>{{ f_currency($merchandise->tour_sales_price) }}</td>
                         <td>{{ $merchandise->notes }}</td>

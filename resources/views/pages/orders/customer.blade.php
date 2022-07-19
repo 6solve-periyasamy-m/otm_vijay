@@ -630,7 +630,7 @@ $(document).ready( function () {
                 @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
                     <tr>
                         <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/></td>
-                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }} ({{ $orderMerchandise->tourComponent->inventory->variant->name }}) ({{ $orderMerchandise->tourComponent->inventory->size->name }})</td>
+                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }} ({{ $orderMerchandise->tourComponent->inventory->variant->name }}) ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})</td>
                         <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
                         <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                         <td>

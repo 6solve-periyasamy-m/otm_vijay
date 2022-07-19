@@ -22,7 +22,7 @@
                                 edit="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
                                 delete="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
                         >
-                            {{ $inventory->size->name }} ({{ f_currency($inventory->sales_price) }})
+                            {{ $inventory->size?->name ?? 'No Size' }} ({{ f_currency($inventory->sales_price) }})
                         </option>
                         @foreach($inventory->repository->getSizeVariants() as $sizeVariant)
                             <option value="{{ $sizeVariant->id }}"
@@ -34,7 +34,7 @@
                                     edit="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
                                     delete="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
                             >
-                                {{ $sizeVariant->size->name }} ({{ f_currency($sizeVariant->sales_price) }})
+                                {{ $sizeVariant->size?->name ?? 'No Size' }} ({{ f_currency($sizeVariant->sales_price) }})
                             </option>
                         @endforeach
                     </select>

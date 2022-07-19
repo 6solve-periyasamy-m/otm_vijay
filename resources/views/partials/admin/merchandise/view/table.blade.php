@@ -19,7 +19,7 @@
                 <tr>
                     <td><img src="{{ $inventory->asset }}" class="image tiny"/></td>
                     <td>{{ $inventory->variant->name }}</td>
-                    <td>{{ $inventory->size->name }}</td>
+                    <td>{{ $inventory->size?->name ?? 'No Size' }}</td>
                     <td>{{ f_bool($inventory->fit_selectable) }}</td>
                     <td>{{ f_currency($inventory->purchase_price) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>

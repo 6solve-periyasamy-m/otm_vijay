@@ -115,7 +115,7 @@ class OrderTransforms implements OrderTransformsInterface
             if (in_array($merch->id, $owned)) continue;
             $subData = [];
             $subData['id'] = $merch->id;
-            $subData['text'] = "{$merch->inventory->component->name} ({$merch->inventory->variant->name}) ({$merch->inventory->size->name}) - " . StringFormatterFacade::formatCurrency($merch->tour_sales_price);
+            $subData['text'] = "{$merch->inventory->component->name} ({$merch->inventory->variant->name}) (" . $merch->inventory->size?->name ?? 'No Size' .") - " . StringFormatterFacade::formatCurrency($merch->tour_sales_price);
             if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
