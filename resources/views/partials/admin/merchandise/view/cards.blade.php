@@ -38,6 +38,10 @@
                             </option>
                         @endforeach
                     </select>
+                    <a href="{{route('merchandise.inventory.duplicate', ['merchandise' => $merchandise, 'inventory' => $inventory,])}}" class="btn btn-info">
+                        <i class="icon-plus"></i>
+                        Add Size
+                    </a>
                     <hr class="splitter">
                     <div>
                         Purchase: <span class="purchase">{{ f_currency($inventory->purchase_price) }}</span> | Sales: <span class="sales">{{ f_currency($inventory->sales_price) }}</span>
