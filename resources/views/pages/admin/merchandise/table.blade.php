@@ -47,6 +47,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Variants</th>
                     <th scope="col">Orders</th>
+                    <th scope="col">Notes</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -57,6 +58,7 @@
                         <td><a href="{{ route('merchandise.view', ['merchandise' => $merch,]) }}">{{ $merch->name }}</a></td>
                         <td>{{ $merch->inventory()->count() }}</td>
                         <td>{{ $merch->repository->getOrderCount() }}</td>
+                        <td>{{ $merch->notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise\Merchandise::class)
                                 <a href="{{route('merchandise.edit', ['merchandise' => $merch,])}}" class="btn btn-outline-success btn-sm mb-1">

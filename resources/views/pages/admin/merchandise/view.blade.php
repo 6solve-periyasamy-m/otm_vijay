@@ -53,6 +53,12 @@
                         <p>Merchandise Name</p>
                         <h6 class="fw-bold">{{ $merchandise->name }} ({{ $merchandise->type->name }})</h6>
                     </div>
+                    @if(isset($merchandise->notes))
+                    <div class="col-12">
+                        <p>Notes</p>
+                        <h6 class="fw-bold">{{ $merchandise->notes }}</h6>
+                    </div>
+                    @endif
                     <div class="col-12">
                         @if(isset($detailed) && $detailed)
                             <a href="{{ route('merchandise.view', ['merchandise' => $merchandise,]) }}" class="btn btn-info">
