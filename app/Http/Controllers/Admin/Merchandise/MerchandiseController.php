@@ -11,7 +11,7 @@ class MerchandiseController extends Controller
 {
     public function index()
     {
-        $merch = Merchandise::withCount('inventories')->get();
+        $merch = Merchandise::withCount('inventory')->get();
         return view('pages.admin.merchandise.table', ['merchandise' => $merch,]);
     }
 
