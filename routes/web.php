@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
 use App\Http\Controllers\Admin\Merchandise\VariantController;
@@ -549,6 +550,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                             Route::post('/update', [UpgradeController::class, 'updateActivityUpgrade'])->name('activity-upgrade.update')->middleware('bouncer:Activity\ActivityInventoryTour,update');
                             Route::post('/delete', [UpgradeController::class, 'deleteActivityUpgrade'])->name('activity-upgrade.delete')->middleware('bouncer:Activity\ActivityInventoryTour,delete');
                         });
+                    });
+                });
+                Route::prefix('merchandise')->name('merchandise.inventory.tour.')->group(function () {
+                    Route::prefix('{inventoryTour}')->group(function () {
+                        Route::get('update', [MerchandiseInventoryTourController::class, 'edit'])->name('edit');
+                        Route::post('update', [MerchandiseInventoryTourController::class, 'update'])->name('update');
+                        Route::post('delete', [MerchandiseInventoryTourController::class, 'delete'])->name('delete');
+                        Route::post('restore', [MerchandiseInventoryTourController::class, 'restore'])->name('restore');
                     });
                 });
                 Route::prefix('flight')->group(function () {

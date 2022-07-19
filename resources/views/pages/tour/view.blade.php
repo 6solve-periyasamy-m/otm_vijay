@@ -530,6 +530,7 @@
                         <td>{{ f_date($installment->due_on) }}</td>
                         <td>{{ f_currency($installment->cost) }} ({{ $installment->percentage }}%)</td>
                         <td class="actions">
+
                             <a href="{{route('payment-installments.edit', ['tour' => $tour, 'paymentInstallment' => $installment,])}}"
                                class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-note"></i>
@@ -597,7 +598,7 @@
                         <td>{{ $merchandise->notes }}</td>
                         <td class="actions">
                             @can('update', \App\Models\Merchandise\Merchandise::class)
-                                <a href="{{ route('merchandise.edit', ['tour' => $tour, 'merchandise' => $merchandise,]) }}"
+                                <a href="{{ route('merchandise.inventory.tour.edit', ['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
                                    class="btn btn-outline-primary btn-sm mb-1"><i class="icon-note"></i></a>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
@@ -606,15 +607,17 @@
                             @endcan
                             @can('delete', \App\Models\Merchandise\Merchandise::class)
                                 <a href="#" onclick="$('#merchandise-{{$merchandise->id}}-delete').submit()"
-                                   class="btn btn-outline-danger btn-sm mb-1"><i class="icon-trash"></i></a>
-                                <form action="{{ route('merchandise.delete', ['tour' => $tour, 'merchandise' => $merchandise,]) }}"
+                                   class="btn btn-outline-{{ $merchandise->is_bookable ? 'danger' : 'warning' }} btn-sm mb-1">
+                                    <i class="icon-{{ $merchandise->is_bookable ? 'trash' : 'magic-wand' }}"></i>
+                                </a>
+                                <form action="{{ route($merchandise->is_bookable ? 'merchandise.inventory.tour.delete' : 'merchandise.inventory.tour.restore',['tour' => $tour, 'inventoryTour' => $merchandise,]) }}"
                                       method="post" id="merchandise-{{$merchandise->id}}-delete">
                                     @csrf
                                 </form>
                             @else
                                 <span class="btn btn-outline-dark btn-sm mb-1">
-                                            <i class="icon-trash"></i>
-                                        </span>
+                                    <i class="icon-trash"></i>
+                                </span>
                             @endcan
                         </td>
                     </tr>
