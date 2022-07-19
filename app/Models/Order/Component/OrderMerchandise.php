@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property int $order_customer_id
  * @property int $merchandise_inventory_tour_id
  * @property float $cost
+ * @property boolean $fulfilled
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -53,7 +54,7 @@ class OrderMerchandise extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['cost' => 'double',];
+    protected $casts = ['cost' => 'double', 'fulfilled' => 'boolean'];
 
     private OrderMerchandiseRepository $internal_repository;
 

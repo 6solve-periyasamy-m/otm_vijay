@@ -197,7 +197,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:Order\OrderCustomer,update');
                     Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
                     Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
-
+                    Route::get('/merchandise/{orderMerchandise}/fulfil', [OrderCustomerModelController::class, 'fulfil'])->name('merchandise.inventory.tour.order.fulfil')->middleware('bouncer:Order\OrderCustomer,update');
                     Route::prefix('adjustment')->group(function () {
                         Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,read');
                         Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,create');
