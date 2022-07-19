@@ -620,17 +620,19 @@ $(document).ready( function () {
             <table id="merchandise-table" class="table table-striped table-responsive-sm">
                 <thead>
                 <tr>
+                    <th scope="col">Image</th>
                     <th scope="col">Name</th>
                     <th scope="col">Cost</th>
                     <th scope="col">Component Type</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
-                @foreach($orderCustomer->orderMerchandise as $orderMerchandise)
+                @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
                     <tr>
-                        <td>{{ $orderMerchandise->merchandise->name }}</td>
-                        <td>{{ f_currency($orderMerchandise->merchandise->tour_sales_price) }}</td>
-                        <td>{{ $orderMerchandise->merchandise->tour_component_type }}</td>
+                        <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/></td>
+                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }} ({{ $orderMerchandise->tourComponent->inventory->variant->name }}) ({{ $orderMerchandise->tourComponent->inventory->size->name }})</td>
+                        <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
+                        <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
                         <td>
                             <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}" method="post">
                                 @csrf
