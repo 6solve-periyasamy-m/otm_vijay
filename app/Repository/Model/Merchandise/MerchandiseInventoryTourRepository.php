@@ -91,7 +91,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function __toString(): string
     {
-        return $this->tourComponent->name;
+        return "{$this->tourComponent->inventory->component->name} ({$this->tourComponent->inventory->variant->name}) ({$this->tourComponent->inventory->size->name})";
     }
 
     public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository

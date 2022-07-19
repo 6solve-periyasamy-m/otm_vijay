@@ -71,6 +71,16 @@ class MerchandiseRepository extends ModelRepository
         return $this->component->save();
     }
 
+    public function getOrderCount(): int
+    {
+        $count = 0;
+        /** @var MerchandiseInventory $inventory */
+        foreach ($this->component->inventory as $inventory) {
+            $count += $inventory->repository->getOrderCount();
+        }
+        return $count;
+    }
+
     public function delete(): bool
     {
         foreach ($this->component->inventory()->withCount('tourComponents')->get() as $inventory) {

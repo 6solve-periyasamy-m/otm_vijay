@@ -138,4 +138,13 @@ class MerchandiseInventoryRepository extends InventoryRepository
         $tour->merchandise()->save($mInvTour);
         return $mInvTour->repository;
     }
+
+    public function getOrderCount(): int
+    {
+        $count = 0;
+        foreach ($this->inventory->tourComponents()->withCount('orderComponents')->get() as $tourComponent) {
+            $count += $tourComponent->orderComponents()->count();
+        }
+        return $count;
+    }
 }
