@@ -49,6 +49,9 @@ class MerchandiseController extends Controller
 
     public function destroy(Merchandise $merchandise)
     {
-
+        if (!$merchandise->repository->delete()) {
+            return back()->withErrors(['msg' => 'Component is used on tours']);
+        }
+        return redirect()->route('merchandise.all');
     }
 }

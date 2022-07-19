@@ -34,7 +34,7 @@
             box.find('.used').text(selected.attr('used'));
             box.find('.available').text(selected.attr('available'));
             box.find('.edit-btn').attr('href', selected.attr('edit'));
-            box.find('.delete-btn').attr('href', selected.attr('delete'));
+            box.find('.delete-link').attr('action', selected.attr('delete'));
         }
     </script>
 @endpush

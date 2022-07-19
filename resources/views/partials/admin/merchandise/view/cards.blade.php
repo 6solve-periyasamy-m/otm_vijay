@@ -20,7 +20,7 @@
                                 available="{{ $inventory->available_stock }}"
                                 used="{{ $inventory->used_stock }}"
                                 edit="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
-                                delete="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
+                                delete="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}"
                         >
                             {{ $inventory->size->name }} ({{ f_currency($inventory->sales_price) }})
                         </option>
@@ -32,7 +32,7 @@
                                     available="{{ $sizeVariant->available_stock }}"
                                     used="{{ $sizeVariant->used_stock }}"
                                     edit="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
-                                    delete="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
+                                    delete="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $sizeVariant,]) }}"
                             >
                                 {{ $sizeVariant->size->name }} ({{ f_currency($sizeVariant->sales_price) }})
                             </option>
@@ -52,10 +52,13 @@
                             <i class="icon-note"></i>
                             Edit Inventory
                         </a>
-                        <a href="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" class="btn btn-danger delete-btn">
+                        <a href="javascript:$('#inventory-{{ $inventory->id }}-delete').submit();" class="btn btn-danger delete-btn">
                             <i class="icon-trash"></i>
                             Delete Inventory
                         </a>
+                        <form id="inventory-{{ $inventory->id }}-delete" class="delete-link"
+                              action="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" method="POST"
+                              style="display: none;">{{ csrf_field() }}</form>
                     </div>
                 </div>
             </div>

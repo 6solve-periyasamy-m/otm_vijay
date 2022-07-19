@@ -33,6 +33,9 @@ class MerchandiseInventoryController extends Controller
 
     public function delete(Merchandise $merchandise, MerchandiseInventory $inventory)
     {
-
+        if (!$inventory->repository->delete()) {
+            return back()->withErrors(['msg' => 'Component is used on tours']);
+        }
+        return redirect()->route('merchandise.view', ['merchandise' => $merchandise,]);
     }
 }

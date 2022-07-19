@@ -114,6 +114,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function delete(): bool
     {
+        if ($this->inventory->tourComponents()->count() > 0) return false;
         return $this->inventory->delete();
     }
 

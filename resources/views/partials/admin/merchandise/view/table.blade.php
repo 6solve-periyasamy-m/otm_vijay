@@ -32,7 +32,7 @@
                             <i class="icon-trash"></i>
                         </a>
                         <form id="inventory-{{ $inventory->id }}-delete"
-                              action="{{ route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" method="POST"
+                              action="{{ route('merchandise.inventory.delete', ['merchandise' => $merchandise, 'inventory' => $inventory,]) }}" method="POST"
                               style="display: none;">{{ csrf_field() }}</form>
                     </td>
                 </tr>
