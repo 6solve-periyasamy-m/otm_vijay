@@ -25,6 +25,9 @@
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->notes }}</td>
                     <td>
+                        <a href="{{route('merchandise.inventory.duplicate', ['merchandise' => $merchandise, 'inventory' => $inventory,])}}" class="btn btn-sm btn-outline-info mb-1">
+                            <i class="icon-layers"></i>
+                        </a>
                         <a href="{{route('merchandise.inventory.edit', ['merchandise' => $merchandise, 'inventory' => $inventory,])}}" class="btn btn-sm btn-outline-success mb-1">
                             <i class="icon-note"></i>
                         </a>

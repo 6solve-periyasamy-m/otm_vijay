@@ -466,6 +466,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::get('/update', [MerchandiseInventoryController::class, 'edit'])->name('edit');
                     Route::post('/update', [MerchandiseInventoryController::class, 'update'])->name('update');
                     Route::post('/delete', [MerchandiseInventoryController::class, 'delete'])->name('delete');
+                    Route::get('/duplicate', [MerchandiseInventoryController::class, 'duplicate'])->name('duplicate');
                 });
             });
         });

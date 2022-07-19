@@ -25,6 +25,13 @@ class MerchandiseInventoryController extends Controller
         return view('pages.admin.merchandise.inventory.form', ['merchandise' => $merchandise, 'inventory' => $inventory,]);
     }
 
+    public function duplicate(Merchandise $merchandise, MerchandiseInventory $inventory)
+    {
+        $clone = $inventory->replicate(['id']);
+        $clone->save();
+        return view('pages.admin.merchandise.inventory.form', ['merchandise' => $merchandise, 'inventory' => $clone,]);
+    }
+
     public function update(MerchandiseInventoryRequest $request, Merchandise $merchandise, MerchandiseInventory $inventory)
     {
         $inventory->repository->updateWithImage($request->getDataset(), $request->image);
