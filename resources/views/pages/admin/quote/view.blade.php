@@ -17,11 +17,30 @@
             $('.extras').DataTable({fixedHeader: true,});
             update(1);
         });
-        function getCounterAmount() { let amount = parseInt($('.count-input').val()); return isNaN(amount) || amount < 1 ? 1 : amount; }
-        function plus() { update(getCounterAmount()+1); }
-        function minus() { let amount = getCounterAmount(); update(amount <= 1 ? 1 : amount-1); }
-        function textUpdate() { update(getCounterAmount()); }
-        function update(amount) { $('.count-input').val(amount); performRequest(amount); }
+
+        function getCounterAmount() {
+            let amount = parseInt($('.count-input').val());
+            return isNaN(amount) || amount < 1 ? 1 : amount;
+        }
+
+        function plus() {
+            update(getCounterAmount() + 1);
+        }
+
+        function minus() {
+            let amount = getCounterAmount();
+            update(amount <= 1 ? 1 : amount - 1);
+        }
+
+        function textUpdate() {
+            update(getCounterAmount());
+        }
+
+        function update(amount) {
+            $('.count-input').val(amount);
+            performRequest(amount);
+        }
+
         function performRequest(amount) {
             $.get('{{ route('api.quote.cost', ['quote' => $quote,]) }}', {
                 '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
@@ -51,9 +70,10 @@
                 }
             });
         }
+
         function updateView(pricePerPerson, priceTotal, profitPerPerson, profitTotal) {
             $('.cost-updater').text(priceTotal + " (" + pricePerPerson + ")");
-            $('.profit-updater').text(profitTotal + " (" + profitPerPerson  + ")");
+            $('.profit-updater').text(profitTotal + " (" + profitPerPerson + ")");
         }
     </script>
 @endsection
@@ -178,30 +198,30 @@
                     <div id="summary" role="tabpanel" class="tab-pane fade show active">
                         <table class="table table-striped summary">
                             <thead>
-                                <tr>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.type') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
                             @foreach($quote->repository->getComponents() as $componentRepository)
                                 <tr>
                                     <td>
-                                        {{ ucwords($componentRepository->getTourComponent()->getComponentString()) }}
+                                        {{ ucwords($componentRepository->getComponentType()) }}
                                     </td>
                                     <td>
-                                        @if ($componentRepository->getTourComponent()->getComponentString() == 'extra')
+                                        @if ($componentRepository->getComponentType() == 'merchandise')
                                             {{ __('quotes.view.cards.components.common.na') }}
                                         @else
-                                            {{ f_datetime($componentRepository->getTourComponent()->getInventory()->getStartTime()) }}
-                                             to
-                                            {{ f_datetime($componentRepository->getTourComponent()->getInventory()->getEndTime()) }}
+                                            {{ f_datetime($componentRepository->getInventory()->getStartTime()) }}
+                                            to
+                                            {{ f_datetime($componentRepository->getInventory()->getEndTime()) }}
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $componentRepository->getTourComponent()->__toString() }}
+                                        {{ $componentRepository->getInventory()->__toString() }}
                                     </td>
                                     <td>
                                         {{ f_currency($componentRepository->getPurchasePrice()) }}
@@ -214,22 +234,22 @@
                     <div id="accommodation" role="tabpanel" class="tab-pane fade">
                         <table class="table table-striped summary">
                             <thead>
-                                <tr>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            @foreach($quote->accommodation()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                            @foreach($quote->accommodation()->with('inventory')->get() as $component)
                                 <tr>
                                     <td>
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
-                                         to
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                        {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                        to
+                                        {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
                                     </td>
                                     <td>
-                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                        {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
                                         {{ f_currency($component->repository->getPurchasePrice()) }}
@@ -242,22 +262,22 @@
                     <div id="activities" role="tabpanel" class="tab-pane fade">
                         <table class="table table-striped summary">
                             <thead>
-                                <tr>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            @foreach($quote->activities()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                            @foreach($quote->activities()->with('inventory')->get() as $component)
                                 <tr>
                                     <td>
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
-                                         to
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                        {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                        to
+                                        {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
                                     </td>
                                     <td>
-                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                        {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
                                         {{ f_currency($component->repository->getPurchasePrice()) }}
@@ -270,22 +290,22 @@
                     <div id="flights" role="tabpanel" class="tab-pane fade">
                         <table class="table table-striped summary">
                             <thead>
-                                <tr>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            @foreach($quote->flights()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                            @foreach($quote->flights()->with('inventory')->get() as $component)
                                 <tr>
                                     <td>
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
-                                         to
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                        {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                        to
+                                        {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
                                     </td>
                                     <td>
-                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                        {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
                                         {{ f_currency($component->repository->getPurchasePrice()) }}
@@ -298,22 +318,22 @@
                     <div id="transport" role="tabpanel" class="tab-pane fade">
                         <table class="table table-striped summary">
                             <thead>
-                                <tr>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            @foreach($quote->transport()->with('tourComponent', 'tourComponent.inventory')->get() as $component)
+                            @foreach($quote->transport()->with('inventory')->get() as $component)
                                 <tr>
                                     <td>
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getStartTime()) }}
-                                         to
-                                        {{ f_datetime($component->repository->getTourComponent()->getInventory()->getEndTime()) }}
+                                        {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                        to
+                                        {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
                                     </td>
                                     <td>
-                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                        {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
                                         {{ f_currency($component->repository->getPurchasePrice()) }}
@@ -326,16 +346,16 @@
                     <div id="extras" role="tabpanel" class="tab-pane fade">
                         <table class="table table-striped summary">
                             <thead>
-                                <tr>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
-                                    <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
+                                <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                            @foreach($quote->merchandise()->with('tourComponent')->get() as $component)
+                            @foreach($quote->merchandise()->with('inventory')->get() as $component)
                                 <tr>
                                     <td>
-                                        {{ $component->repository->getTourComponent()->__toString() }}
+                                        {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
                                         {{ f_currency($component->repository->getPurchasePrice()) }}
@@ -345,16 +365,19 @@
                             </tbody>
                         </table>
                     </div>
-                    </div>
+                </div>
             </x-admin.section.card>
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
                 <x-slot:header>{{ __('quotes.view.cards.installments.header') }}</x-slot:header>
-                <form class="form-group row installment-create" action="{{ route('quotes.installments.store', ['quote' => $quote]) }}" method="post">
+                <form class="form-group row installment-create"
+                      action="{{ route('quotes.installments.store', ['quote' => $quote]) }}" method="post">
                     @csrf
-                    <x-admin.input type="date" name="due" width="4">{{ __('quotes.view.cards.installments.form.due') }}</x-admin.input>
-                    <x-admin.input name="amount" width="4">{{ __('quotes.view.cards.installments.form.amount') }}</x-admin.input>
+                    <x-admin.input type="date" name="due"
+                                   width="4">{{ __('quotes.view.cards.installments.form.due') }}</x-admin.input>
+                    <x-admin.input name="amount"
+                                   width="4">{{ __('quotes.view.cards.installments.form.amount') }}</x-admin.input>
                     <x-admin.button href="javascript:$('.installment-create').submit()" width="2" color="primary">
                         <i class="icon-plus"></i>
                         <span>{{ __('quotes.view.cards.installments.form.create') }}</span>
@@ -366,37 +389,46 @@
                 </form>
                 <table class="table table-striped" id="schedule-table">
                     <thead>
-                        <tr>
-                            <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
-                            <th scope="col">{{ __('quotes.view.cards.installments.table.due') }}</th>
-                            <th scope="col">{{ __('quotes.view.cards.installments.table.amount') }}</th>
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.type') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.due') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.installments.table.amount') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach($quote->installments as $installment)
-                            <tr>
-                                <form class="installment-{{$installment->id}}" action="{{ route('quotes.installments.update', ['quote' => $quote, 'installment' => $installment,]) }}" method="post">
-                                    @csrf
-                                    <td>{{ __('quotes.view.cards.installments.types.installment') }}</td>
-                                    <td data-search="{{$installment->due_on->format('Y-m-d')}}" data-order="{{$installment->due_on->format('Y-m-d')}}">
-                                        <x-admin.input name="due" type="date" value="{{ $installment->due_on->format('Y-m-d') }}" nofloat></x-admin.input>
-                                    </td>
-                                    <td data-search="{{$installment->amount}}" data-order="{{$installment->amount}}">
-                                        <x-admin.input name="amount" value="{{ $installment->amount }}" nofloat></x-admin.input>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:$('.installment-{{$installment->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
-                                            <i class="icon-note"></i>
-                                        </a>
-                                        <a href="javascript:$('#installment-{{ $installment->id }}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                            <i class="icon-trash"></i>
-                                        </a>
-                                    </td>
-                                </form>
-                                <form id="installment-{{ $installment->id }}-delete" class="d-none" method="post" action="{{ route('quotes.installments.delete', ['quote' => $quote, 'installment' => $installment,]) }}">@csrf</form>
-                            </tr>
-                        @endforeach
+                    @foreach($quote->installments as $installment)
+                        <tr>
+                            <form class="installment-{{$installment->id}}"
+                                  action="{{ route('quotes.installments.update', ['quote' => $quote, 'installment' => $installment,]) }}"
+                                  method="post">
+                                @csrf
+                                <td>{{ __('quotes.view.cards.installments.types.installment') }}</td>
+                                <td data-search="{{$installment->due_on->format('Y-m-d')}}"
+                                    data-order="{{$installment->due_on->format('Y-m-d')}}">
+                                    <x-admin.input name="due" type="date"
+                                                   value="{{ $installment->due_on->format('Y-m-d') }}"
+                                                   nofloat></x-admin.input>
+                                </td>
+                                <td data-search="{{$installment->amount}}" data-order="{{$installment->amount}}">
+                                    <x-admin.input name="amount" value="{{ $installment->amount }}"
+                                                   nofloat></x-admin.input>
+                                </td>
+                                <td>
+                                    <a href="javascript:$('.installment-{{$installment->id}}').submit()"
+                                       class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                    <a href="javascript:$('#installment-{{ $installment->id }}-delete').submit()"
+                                       class="btn btn-outline-danger btn-sm mb-1">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </td>
+                            </form>
+                            <form id="installment-{{ $installment->id }}-delete" class="d-none" method="post"
+                                  action="{{ route('quotes.installments.delete', ['quote' => $quote, 'installment' => $installment,]) }}">@csrf</form>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </x-admin.section.card>
@@ -404,10 +436,13 @@
         <div class="col-xl-6">
             <x-admin.section.card>
                 <x-slot:header>{{ __('quotes.view.cards.price-points.header') }}</x-slot:header>
-                <form class="form-group row pricepoint-create" action="{{ route('quotes.price-points.store', ['quote' => $quote]) }}" method="post">
+                <form class="form-group row pricepoint-create"
+                      action="{{ route('quotes.price-points.store', ['quote' => $quote]) }}" method="post">
                     @csrf
-                    <x-admin.input name="quantity" width="5">{{ __('quotes.view.cards.price-points.form.quantity') }}</x-admin.input>
-                    <x-admin.input name="cost" width="5">{{ __('quotes.view.cards.price-points.form.cost') }}</x-admin.input>
+                    <x-admin.input name="quantity"
+                                   width="5">{{ __('quotes.view.cards.price-points.form.quantity') }}</x-admin.input>
+                    <x-admin.input name="cost"
+                                   width="5">{{ __('quotes.view.cards.price-points.form.cost') }}</x-admin.input>
                     <x-admin.button href="javascript:$('.pricepoint-create').submit()" width="2" color="primary">
                         <i class="icon-plus"></i>
                         <span>{{ __('quotes.view.cards.price-points.form.create') }}</span>
@@ -415,35 +450,43 @@
                 </form>
                 <table class="table table-striped" id="pricepoint-table">
                     <thead>
-                        <tr>
-                            <th scope="col">{{ __('quotes.view.cards.price-points.table.quantity') }}</th>
-                            <th scope="col">{{ __('quotes.view.cards.price-points.table.cost') }}</th>
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">{{ __('quotes.view.cards.price-points.table.quantity') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.price-points.table.cost') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach($quote->pricePoints as $pricePoint)
-                            <tr>
-                                <form class="pricepoint-{{$pricePoint->id}}" action="{{ route('quotes.price-points.update', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}" method="post">
-                                    @csrf
-                                    <td data-search="{{$pricePoint->quantity}}" data-order="{{$pricePoint->quantity}}">
-                                        <x-admin.input name="quantity" value="{{ $pricePoint->quantity }}" nofloat></x-admin.input>
-                                    </td>
-                                    <td data-search="{{$pricePoint->price_per_person}}" data-order="{{$pricePoint->price_per_person}}">
-                                        <x-admin.input name="cost" value="{{ $pricePoint->price_per_person }}" nofloat></x-admin.input>
-                                    </td>
-                                    <td>
-                                        <a href="javascript:$('.pricepoint-{{$pricePoint->id}}').submit()" class="btn btn-outline-success btn-sm mb-1">
-                                            <i class="icon-note"></i>
-                                        </a>
-                                        <a href="javascript:$('#pricepoint-{{ $pricePoint->id }}-delete').submit()" class="btn btn-outline-danger btn-sm mb-1">
-                                            <i class="icon-trash"></i>
-                                        </a>
-                                    </td>
-                                </form>
-                                <form id="pricepoint-{{ $pricePoint->id }}-delete" class="d-none" method="post" action="{{ route('quotes.price-points.delete', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}">@csrf</form>
-                            </tr>
-                        @endforeach
+                    @foreach($quote->pricePoints as $pricePoint)
+                        <tr>
+                            <form class="pricepoint-{{$pricePoint->id}}"
+                                  action="{{ route('quotes.price-points.update', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}"
+                                  method="post">
+                                @csrf
+                                <td data-search="{{$pricePoint->quantity}}" data-order="{{$pricePoint->quantity}}">
+                                    <x-admin.input name="quantity" value="{{ $pricePoint->quantity }}"
+                                                   nofloat></x-admin.input>
+                                </td>
+                                <td data-search="{{$pricePoint->price_per_person}}"
+                                    data-order="{{$pricePoint->price_per_person}}">
+                                    <x-admin.input name="cost" value="{{ $pricePoint->price_per_person }}"
+                                                   nofloat></x-admin.input>
+                                </td>
+                                <td>
+                                    <a href="javascript:$('.pricepoint-{{$pricePoint->id}}').submit()"
+                                       class="btn btn-outline-success btn-sm mb-1">
+                                        <i class="icon-note"></i>
+                                    </a>
+                                    <a href="javascript:$('#pricepoint-{{ $pricePoint->id }}-delete').submit()"
+                                       class="btn btn-outline-danger btn-sm mb-1">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </td>
+                            </form>
+                            <form id="pricepoint-{{ $pricePoint->id }}-delete" class="d-none" method="post"
+                                  action="{{ route('quotes.price-points.delete', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}">@csrf</form>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </x-admin.section.card>

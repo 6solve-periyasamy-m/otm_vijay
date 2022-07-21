@@ -13,7 +13,8 @@ abstract class QuoteComponentRepository extends ModelRepository
     public abstract function getTourComponentType(): string;
     public abstract function getCost(): float;
     public abstract function getPurchasePrice(): float;
-    public abstract function getTourComponent(): ?InventoryTourRepository;
+    public abstract function getInventory(): ?InventoryRepository;
+    public abstract function getComponentType(): string;
 
     public static function getComponent(string $type, int $id): ?QuoteComponentRepository
     {
@@ -22,7 +23,7 @@ abstract class QuoteComponentRepository extends ModelRepository
             'activity' => QuoteActivity::find($id)?->repository,
             'flight' => QuoteFlight::find($id)?->repository,
             'transport' => QuoteTransport::find($id)?->repository,
-            'extra' => QuoteMerchandise::find($id)?->repository,
+            'merchandise' => QuoteMerchandise::find($id)?->repository,
             default => null,
         };
     }

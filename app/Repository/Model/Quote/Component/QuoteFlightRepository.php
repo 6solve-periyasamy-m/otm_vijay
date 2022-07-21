@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteFlight;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Flight\FlightInventoryRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;
 
 class QuoteFlightRepository extends QuoteComponentRepository
@@ -25,9 +26,9 @@ class QuoteFlightRepository extends QuoteComponentRepository
         return $this->quoteComponent->cost;
     }
 
-    public function getTourComponent(): ?FlightInventoryTourRepository
+    public function getInventory(): ?FlightInventoryRepository
     {
-        return $this->quoteComponent->tourComponent->repository;
+        return $this->quoteComponent->inventory->repository;
     }
 
     public function get(): QuoteFlight
@@ -59,11 +60,16 @@ class QuoteFlightRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getTourComponent()->__toString();
+        return $this->getInventory()->__toString();
     }
 
     public function getPurchasePrice(): float
     {
-        return $this->getTourComponent()->getInventory()->get()->purchase_price;
+        return $this->getInventory()->get()->purchase_price;
+    }
+
+    public function getComponentType(): string
+    {
+        return 'flight';
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteTransport;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Transport\TransportInventoryRepository;
 use App\Repository\Model\Transport\TransportInventoryTourRepository;
 
 class QuoteTransportRepository extends QuoteComponentRepository
@@ -25,9 +26,9 @@ class QuoteTransportRepository extends QuoteComponentRepository
         return $this->quoteComponent->cost;
     }
 
-    public function getTourComponent(): ?TransportInventoryTourRepository
+    public function getInventory(): ?TransportInventoryRepository
     {
-        return $this->quoteComponent->tourComponent->repository;
+        return $this->quoteComponent->inventory->repository;
     }
 
     public function get(): QuoteTransport
@@ -59,11 +60,16 @@ class QuoteTransportRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getTourComponent()->__toString();
+        return $this->getInventory()->__toString();
     }
 
     public function getPurchasePrice(): float
     {
-        return $this->getTourComponent()->getInventory()->get()->purchase_price;
+        return $this->getInventory()->get()->purchase_price;
+    }
+
+    public function getComponentType(): string
+    {
+        return 'transport';
     }
 }

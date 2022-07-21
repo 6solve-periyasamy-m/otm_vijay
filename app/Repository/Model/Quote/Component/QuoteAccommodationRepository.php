@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
 
 class QuoteAccommodationRepository extends QuoteComponentRepository
@@ -17,17 +18,17 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
 
     public function getTourComponentType(): string
     {
-        return $this->quoteComponent->tourComponent->tour_component_type;
+        return $this->quoteComponent->tour_component_type;
     }
 
     public function getCost(): float
     {
-        return $this->quoteComponent->cost;
+        return $this->quoteComponent->tour_sales_price;
     }
 
-    public function getTourComponent(): ?AccommodationInventoryTourRepository
+    public function getInventory(): ?AccommodationInventoryRepository
     {
-        return $this->quoteComponent->tourComponent->repository;
+        return $this->quoteComponent->inventory->repository;
     }
 
     public function get(): QuoteAccommodation
@@ -59,11 +60,16 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getTourComponent()->__toString();
+        return $this->getInventory()->__toString();
     }
 
     public function getPurchasePrice(): float
     {
-        return $this->getTourComponent()->getInventory()->get()->purchase_price;
+        return $this->getInventory()->get()->purchase_price;
+    }
+
+    public function getComponentType(): string
+    {
+        return 'accommodation';
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote\Component;
 
 use App\Models\Quote\Component\QuoteActivity;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Activity\ActivityInventoryRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
 
 class QuoteActivityRepository extends QuoteComponentRepository
@@ -25,9 +26,9 @@ class QuoteActivityRepository extends QuoteComponentRepository
         return $this->quoteComponent->cost;
     }
 
-    public function getTourComponent(): ?ActivityInventoryTourRepository
+    public function getInventory(): ?ActivityInventoryRepository
     {
-        return $this->quoteComponent->tourComponent->repository;
+        return $this->quoteComponent->inventory->repository;
     }
 
     public function get(): QuoteActivity
@@ -59,11 +60,16 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getTourComponent()->__toString();
+        return $this->getInventory()->__toString();
     }
 
     public function getPurchasePrice(): float
     {
-        return $this->getTourComponent()->getInventory()->get()->purchase_price;
+        return $this->getInventory()->get()->purchase_price;
+    }
+
+    public function getComponentType(): string
+    {
+        return 'activity';
     }
 }
