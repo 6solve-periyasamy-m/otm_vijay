@@ -456,17 +456,17 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::prefix('{merchandise}')->group(function () {
             Route::get('/', [MerchandiseController::class, 'show'])->name('view');
             Route::get('/detailed', [MerchandiseController::class, 'detailed'])->name('detailed');
-            Route::get('/update', [MerchandiseController::class, 'edit'])->name('edit');
-            Route::post('/update', [MerchandiseController::class, 'update'])->name('update');
+            Route::get('/update/{view?}', [MerchandiseController::class, 'edit'])->name('edit');
+            Route::post('/update/{view?}', [MerchandiseController::class, 'update'])->name('update');
             Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('delete');
             Route::prefix('inventory')->name('inventory.')->group(function () {
-                Route::get('/create', [MerchandiseInventoryController::class, 'create'])->name('create');
-                Route::post('/create', [MerchandiseInventoryController::class, 'store'])->name('store');
+                Route::get('/create/{view?}', [MerchandiseInventoryController::class, 'create'])->name('create');
+                Route::post('/create/{view?}', [MerchandiseInventoryController::class, 'store'])->name('store');
                 Route::prefix('{inventory}')->group(function () {
-                    Route::get('/update', [MerchandiseInventoryController::class, 'edit'])->name('edit');
-                    Route::post('/update', [MerchandiseInventoryController::class, 'update'])->name('update');
-                    Route::post('/delete', [MerchandiseInventoryController::class, 'delete'])->name('delete');
-                    Route::get('/duplicate', [MerchandiseInventoryController::class, 'duplicate'])->name('duplicate');
+                    Route::get('/update/{view?}', [MerchandiseInventoryController::class, 'edit'])->name('edit');
+                    Route::post('/update/{view?}', [MerchandiseInventoryController::class, 'update'])->name('update');
+                    Route::post('/delete/{view?}', [MerchandiseInventoryController::class, 'delete'])->name('delete');
+                    Route::get('/duplicate/{view?}', [MerchandiseInventoryController::class, 'duplicate'])->name('duplicate');
                 });
             });
         });

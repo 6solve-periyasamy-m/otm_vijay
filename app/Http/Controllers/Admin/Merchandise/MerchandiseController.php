@@ -36,14 +36,17 @@ class MerchandiseController extends Controller
         return view('pages.admin.merchandise.view', ['merchandise' => $merchandise, 'detailed' => true]);
     }
 
-    public function edit(Merchandise $merchandise)
+    public function edit(Merchandise $merchandise, string $view = 'overview')
     {
-        return view('pages.admin.merchandise.form', ['merchandise' => $merchandise,]);
+        return view('pages.admin.merchandise.form', ['merchandise' => $merchandise, 'view' => $view,]);
     }
 
-    public function update(MerchandiseRequest $request, Merchandise $merchandise)
+    public function update(MerchandiseRequest $request, Merchandise $merchandise, string $view = 'overview')
     {
         $merchandise->repository->updateWithImage($request->getDataset(), $request->image);
+        if ($view == 'detailed') {
+            return redirect()->route('merchandise.detailed', ['merchandise' => $merchandise,]);
+        }
         return redirect()->route('merchandise.view', ['merchandise' => $merchandise,]);
     }
 

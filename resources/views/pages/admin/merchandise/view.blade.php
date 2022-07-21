@@ -73,7 +73,7 @@
                                 Detailed View
                             </a>
                         @endif
-                        <a href="{{ route('merchandise.edit', ['merchandise' => $merchandise,]) }}" class="btn btn-success">
+                        <a href="{{ route('merchandise.edit', ['merchandise' => $merchandise, 'view' => isset($detailed) && $detailed ? 'detailed' : 'overview']) }}" class="btn btn-success">
                             <i class="icon-note"></i>
                             Edit Merchandise
                         </a>

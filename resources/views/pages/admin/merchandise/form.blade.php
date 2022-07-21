@@ -1,4 +1,4 @@
-@extends('layout.form', ['action' => (isset($merchandise) ? route('merchandise.update', ['merchandise' => $merchandise,]) : route('merchandise.store')), 'multipart' => true,])
+@extends('layout.form', ['action' => (isset($merchandise) ? route('merchandise.update', ['merchandise' => $merchandise, 'view' => $view ?? 'overview',]) : route('merchandise.store')), 'multipart' => true,])
 
 @section('title', (isset($merchandise) ? 'Update' : 'Create New') . ' Merchandise')
 
