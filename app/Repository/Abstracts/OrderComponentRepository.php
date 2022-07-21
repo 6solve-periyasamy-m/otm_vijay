@@ -22,7 +22,7 @@ abstract class OrderComponentRepository extends ModelRepository
             'activity' => OrderActivity::find($id)?->repository,
             'flight' => OrderFlight::find($id)?->repository,
             'transport' => OrderTransport::find($id)?->repository,
-            'extra' => OrderMerchandise::find($id)?->repository,
+            'merchandise' => OrderMerchandise::find($id)?->repository,
             default => null,
         };
     }

@@ -4,8 +4,10 @@ namespace App\Repository\Reporting;
 
 use App\Helpers\QuarterHelper;
 use App\Models\Booking\Booking;
+use App\Models\Location\Address;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
+use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
 use Illuminate\Support\Collection;
@@ -61,6 +63,12 @@ class ReportRepository
                 'view' => 'reports.reminders',
                 'export' => 'reports.reminders.export',
             ],
+            [
+                'name' => 'Merchandise Orders',
+                'details' => 'Information and shipping details for Merchandise Orders',
+                'view' => 'reports.merchandise',
+                'export' => 'reports.merchandise.export',
+            ],
         ];
     }
 
@@ -89,6 +97,34 @@ class ReportRepository
             $data[$order->id] = $row;
         }
         return $data;
+    }
+
+    public static function getOrderMerchandiseReport(): array
+    {
+        $data = [];
+        foreach (OrderMerchandise::with('orderCustomer', 'orderCustomer.order', 'orderCustomer.customer', 'orderCustomer.order.leadBooker', 'orderCustomer.order.tour', 'orderCustomer.order.leadBooker.customer', 'tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise) {
+            $tourComponent = $orderMerchandise->tourComponent; $inventory = $tourComponent->inventory; $component = $inventory->component;
+            $row = collect();
+            $row->id = $orderMerchandise->id;
+            $row->name = "{$component->name} ({$component->type->name})";
+            $row->variant = $inventory->variant->name;
+            $row->size = $inventory->size->name;
+            $row->tour = $orderMerchandise->orderCustomer->order->tour->name;
+            $row->fulfilled = $orderMerchandise->fulfilled;
+            $row->fulfil_route = route('merchandise.inventory.tour.order.fulfil', ['order' => $orderMerchandise->orderCustomer->order, 'orderCustomer' => $orderMerchandise->orderCustomer, 'orderMerchandise' => $orderMerchandise]);
+            $row->customer = $orderMerchandise->orderCustomer->customer->full_name;
+            $row->has_address = isset($orderMerchandise->orderCustomer->customer->homeAddress);
+            $row->address = self::getShippingAddressForMerchandise($orderMerchandise->orderCustomer->customer->homeAddress, $orderMerchandise->orderCustomer->order->leadBooker->customer->homeAddress);
+            $row->cost = $tourComponent->tour_component_type == 'Included' ? 0 : $orderMerchandise->cost;
+            $row->ordered_on = $orderMerchandise->orderCustomer->order->ordered_on;
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    private static function getShippingAddressForMerchandise(Address $customerAddress, Address $leadAddress): Address
+    {
+        return isset($customerAddress->address_line_1) && isset($customerAddress->country_id) && isset($customerAddress->postcode) ? $customerAddress : $leadAddress;
     }
 
     /**

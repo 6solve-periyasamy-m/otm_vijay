@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Tour;
+namespace App\Models\Merchandise;
 
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
-use App\Repository\Model\Tour\MerchandiseRepository;
-use Database\Factories\Tour\MerchandiseFactory;
+use App\Repository\Model\Merchandise\MerchandiseRepository;
+use Database\Factories\Merchandise\MerchandiseFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,27 +19,21 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 /**
- * App\Models\Tour\Merchandise
+ * App\Models\Merchandise\Merchandise
  *
  * @property int $id
+ * @property int|null $merchandise_type_id
  * @property string $name
- * @property string $tour_component_type
- * @property int $tour_id
  * @property string|null $image_url
- * @property int $stock
- * @property float $purchase_price
- * @property float $tour_sales_price
- * @property bool $is_bookable
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read int $available_stock
- * @property-read int $used_stock
- * @property-read Collection|OrderMerchandise[] $orderMerchandise
- * @property-read int|null $order_merchandise_count
- * @property-read Tour $tour
+ * @property-read string $asset
  * @property-read MerchandiseRepository $repository
+ * @property-read Collection|MerchandiseInventory[] $inventory
+ * @property-read int|null $inventory_count
+ * @property-read MerchandiseType|null $type
  * @method static MerchandiseFactory factory(...$parameters)
  * @method static Builder|Merchandise newModelQuery()
  * @method static Builder|Merchandise newQuery()
@@ -49,13 +43,9 @@ use Illuminate\Validation\Rule;
  * @method static Builder|Merchandise whereDeletedAt($value)
  * @method static Builder|Merchandise whereId($value)
  * @method static Builder|Merchandise whereImageUrl($value)
+ * @method static Builder|Merchandise whereMerchandiseTypeId($value)
  * @method static Builder|Merchandise whereName($value)
  * @method static Builder|Merchandise whereNotes($value)
- * @method static Builder|Merchandise wherePurchasePrice($value)
- * @method static Builder|Merchandise whereStock($value)
- * @method static Builder|Merchandise whereTourComponentType($value)
- * @method static Builder|Merchandise whereTourId($value)
- * @method static Builder|Merchandise whereTourSalesPrice($value)
  * @method static Builder|Merchandise whereUpdatedAt($value)
  * @method static QueryBuilder|Merchandise withTrashed()
  * @method static QueryBuilder|Merchandise withoutTrashed()
@@ -65,10 +55,11 @@ class Merchandise extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'tour_component_type', 'stock', 'purchase_price', 'tour_sales_price', 'notes', 'image_url'];
-    protected $casts = ['purchase_price' => 'double', 'tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
-
     private MerchandiseRepository $internal_repository;
+
+    protected $guarded = [];
+
+    protected $with = ['type',];
 
     public static function getValidationRules(): array
     {
@@ -86,19 +77,19 @@ class Merchandise extends Model
             'sales_price' => 'required|numeric',];
     }
 
-    public function tour(): BelongsTo
+    public function inventory(): HasMany
     {
-        return $this->belongsTo(Tour::class, 'tour_id');
+        return $this->hasMany(MerchandiseInventory::class, 'merchandise_id');
     }
 
-    public function orderMerchandise(): HasMany
+    public function type(): BelongsTo
     {
-        return $this->hasMany(OrderMerchandise::class, 'merchandise_id');
+        return $this->belongsTo(MerchandiseType::class, 'merchandise_type_id');
     }
 
     public function __toString(): string
     {
-        return "{$this->name}";
+        return "{$this->name} ({$this->type->name})";
     }
 
     public function addToOrder(OrderCustomer $orderCustomer): OrderMerchandise
@@ -110,19 +101,14 @@ class Merchandise extends Model
         ]);
     }
 
-    public function getUsedStockAttribute(): int
+    public function getAssetAttribute(): string
     {
-        return $this->repository->getUsedStock();
-    }
-
-    public function getAvailableStockAttribute(): int
-    {
-        return $this->repository->getAvailableStock();
+        return isset($this->image_url) ? asset($this->image_url) : "";
     }
 
     public function getRepositoryAttribute(): MerchandiseRepository
     {
-        if (!isset($this->internal_repository)) $this->internal_repository = new MerchandiseRepository($this);
+        $this->internal_repository = $this->internal_repository ?? new MerchandiseRepository($this);
         return $this->internal_repository;
     }
 }

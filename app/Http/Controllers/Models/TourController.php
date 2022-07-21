@@ -47,6 +47,12 @@ class TourController extends Controller
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }
 
+    public function fulfil(Tour $tour)
+    {
+        $tour->repository->fulfilAll();
+        return redirect()->route('tours.view', ['tour' => $tour,]);
+    }
+
     public function view(Tour $tour)
     {
         return view('pages.tour.view', TourRepository::getTourDetails($tour->id));

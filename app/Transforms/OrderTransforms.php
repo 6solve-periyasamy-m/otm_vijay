@@ -2,6 +2,7 @@
 
 namespace App\Transforms;
 
+use App\Facades\StringFormatterFacade;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -110,14 +111,12 @@ class OrderTransforms implements OrderTransformsInterface
         $data = [];
         $owned = [];
         foreach ($orderCustomer->orderMerchandise as $orderMerch) $owned[] = $orderMerch->merchandise->id;
-        foreach ($tour->merchandise as $merch) {
-            if ($merch->tour_component_type === "Add-on") {
-                if (in_array($merch->id, $owned)) continue;
-                $subData = [];
-                $subData['id'] = $merch->id;
-                $subData['text'] = $merch->name . ' - ' . \App\Facades\StringFormatterFacade::formatCurrency($merch->tour_sales_price);
-                if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
-            }
+        foreach ($tour->merchandise()->with('inventory', 'inventory.component')->get() as $merch) {
+            if (in_array($merch->id, $owned)) continue;
+            $subData = [];
+            $subData['id'] = $merch->id;
+            $subData['text'] = "{$merch->inventory->component->name} ({$merch->inventory->variant->name}) (" . $merch->inventory->size?->name ?? 'No Size' .") - " . StringFormatterFacade::formatCurrency($merch->tour_sales_price);
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
         }
         return $data;
     }

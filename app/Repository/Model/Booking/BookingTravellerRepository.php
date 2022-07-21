@@ -130,7 +130,7 @@ class BookingTravellerRepository extends ModelRepository
     public function getAvailableAddons(bool $filter = false): array
     {
         $tour = $this->traveller->booking->tour;
-        $components = $tour->repository->getComponents(false, true, false, false, true, ['Add-on',]);
+        $components = $tour->repository->getComponents(false, true, false, false, false, ['Add-on',]);
         $available = [];
         if (!$filter) {
             return $components;

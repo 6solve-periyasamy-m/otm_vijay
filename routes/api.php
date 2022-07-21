@@ -6,6 +6,7 @@
 */
 
 use App\Http\Controllers\Api\Admin\QuoteController;
+use App\Http\Controllers\Api\Admin\MerchandiseController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -187,6 +188,7 @@ Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController:
 Route::post('/php/booking/customer/remove/{token}', [CustomerBookingController::class, 'removeCustomer'])->name('api.booking.remove-customer');
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
+
     Route::prefix('select')->group(function () {
 
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
@@ -227,6 +229,7 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 });
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
+    Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
     Route::get('quote/{quote}/cost', [QuoteController::class, 'getCost'])->name('quote.cost');
     Route::prefix('select')->group(function () {
@@ -253,6 +256,9 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         Route::post('customer/{order}', [SelectController::class, 'getAvailableCustomers'])->name('available-customers.select');
         Route::post('payment-method', [SelectController::class, 'getPaymentMethods'])->name('payment-method.select');
         Route::post('tour-category', [SelectController::class, 'getTourCategories'])->name('tour-categories.select');
+        Route::post('merchandise-types', [SelectController::class, 'getAvailableMerchandiseTypes'])->name('merchandise-types.select');
+        Route::post('variants', [SelectController::class, 'getAvailableVariants'])->name('variants.select');
+        Route::post('sizes', [SelectController::class, 'getAvailableSizes'])->name('sizes.select');
         Route::prefix('inventory')->group(function () {
             Route::post('accommodation', [SelectController::class, 'getAccommodationInventory'])->name('inventory.accommodation.select');
             Route::post('activity', [SelectController::class, 'getActivityInventory'])->name('inventory.activity.select');
@@ -286,6 +292,9 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             Route::post('customers/{id}', [SelectController::class, 'getSelectedCustomer'])->name('customers.selected');
             Route::post('payment-method/{id}', [SelectController::class, 'getSelectedPaymentMethod'])->name('payment-method.selected');
             Route::post('tour-category/{id}', [SelectController::class, 'getSelectedTourCategory'])->name('tour-categories.selected');
+            Route::post('merchandise-types/{id}', [SelectController::class, 'getSelectedMerchandiseType'])->name('merchandise-types.selected');
+            Route::post('variants/{id}', [SelectController::class, 'getSelectedVariant'])->name('variants.selected');
+            Route::post('sizes/{id}', [SelectController::class, 'getSelectedSize'])->name('sizes.selected');
             Route::prefix('inventory/{id}')->group(function () {
                 Route::post('accommodation', [SelectController::class, 'getSelectedAccommodationInventory'])->name('inventory.accommodation.selected');
                 Route::post('activity', [SelectController::class, 'getSelectedActivityInventory'])->name('inventory.activity.selected');
@@ -321,6 +330,9 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
             });
             Route::prefix('transport/inventory')->group(function() {
                 Route::post('/add', [TransportController::class, 'addTransportInventoryToTour'])->name('tour.transport.inventory.add');
+            });
+            Route::prefix('merchandise/inventory')->group(function() {
+                Route::post('/add', [MerchandiseController::class, 'addMerchandiseToTour'])->name('tour.merchandise.inventory.add');
             });
         });
     });

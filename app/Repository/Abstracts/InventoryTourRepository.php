@@ -6,6 +6,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\OrderCustomer;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Merchandise;
@@ -55,7 +56,7 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
             'activity' => ActivityInventoryTour::find($id)?->repository,
             'flight' => FlightInventoryTour::find($id)?->repository,
             'transport' => TransportInventoryTour::find($id)?->repository,
-            'extra' => Merchandise::find($id)?->repository,
+            'merchandise' => MerchandiseInventoryTour::find($id)?->repository,
             default => null,
         };
     }

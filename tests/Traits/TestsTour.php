@@ -8,7 +8,9 @@ use App\Models\Activity\ActivityInventory;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
-use App\Models\Tour\Merchandise;
+use App\Models\Merchandise\Merchandise;
+use App\Models\Merchandise\MerchandiseInventory;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
@@ -19,17 +21,19 @@ trait TestsTour
     use TestsActivity;
     use TestsFlight;
     use TestsTransport;
+    use TestsMerchandise;
 
     function generateTour(): Tour
     {
         return Tour::factory()->create();
     }
 
-    function generateMerchandise(?Tour $tour, string $tour_component_type, float $cost): Merchandise
+    function generateMerchandiseInventoryTour(?Tour $tour = null, string $componentType = 'Included', float $cost = 100, ?MerchandiseInventory $inventory = null): MerchandiseInventoryTour
     {
-        if (!isset($tour)) $tour = $this->generateTour();
-        $merchandise = Merchandise::factory()->make(['tour_component_type' => $tour_component_type, 'tour_sales_price' => $cost,]);
-        $tour->merchandise()->save($merchandise);
+        $tour = $tour ?? $this->generateTour();
+        $inventory = $inventory ?? $this->generateMerchandiseInventory();
+        $merchandise = MerchandiseInventoryTour::factory()->make(['tour_component_type' => $componentType, 'tour_sales_price' => $cost, 'tour_id' => $tour->id,]);
+        $inventory->tourComponents()->save($merchandise);
         return $merchandise;
     }
 

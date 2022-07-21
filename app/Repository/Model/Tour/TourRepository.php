@@ -8,6 +8,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
@@ -271,6 +272,16 @@ class TourRepository extends ModelRepository implements HasStockControl
         foreach ($dates as $inventoryTour) {
             $inventoryTour->is_template = true;
             $inventoryTour->save();
+        }
+    }
+
+    public function fulfilAll()
+    {
+        /** @var MerchandiseInventoryTour $merchandiseInventoryTour */
+        foreach ($this->tour->merchandise()->with('orderComponents')->get() as $merchandiseInventoryTour) {
+            foreach ($merchandiseInventoryTour->orderComponents as $orderComponent) {
+                $orderComponent->repository->update(['fulfilled' => true,]);
+            }
         }
     }
 }

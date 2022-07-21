@@ -205,7 +205,7 @@ class PaymentIntention extends Model
             case 'transport':
                 $model = TransportInventoryTour::class;
                 break;
-            case 'extra':
+            case 'merchandise':
                 $model = Merchandise::class;
                 break;
             default:
@@ -237,7 +237,7 @@ class PaymentIntention extends Model
                 $customer = 'order_customer_id';
                 $field = 'transport_inventory_tour_id';
                 break;
-            case 'extra':
+            case 'merchandise':
                 $model = OrderMerchandise::class;
                 $customer = 'order_customer_id';
                 $field = 'merchandise_id';
