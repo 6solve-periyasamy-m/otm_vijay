@@ -781,6 +781,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/abandoned-bookings/{extension}', [ReportController::class, 'exportAbandonedBookingsReport'])->name('reports.abandoned-bookings.export');
         Route::get('/reminders/export/{extension}/{max?}/{min?}', [ReportController::class, 'exportOrderRemindersReport'])->name('reports.reminders.export');
         Route::get('/reminders/{max?}/{min?}', [ReportController::class, 'getOrderRemindersReport'])->name('reports.reminders');
+        Route::get('/merchandise', [ReportController::class, 'getOrderMerchandiseReport'])->name('reports.merchandise');
+        Route::get('/merchandise/{extension}', [ReportController::class, 'exportOrderMerchandiseReport'])->name('reports.merchandise.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');

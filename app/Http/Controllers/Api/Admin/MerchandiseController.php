@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Models\Merchandise\Merchandise;
+use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Tour\Tour;
 use Illuminate\Http\Request;
 
@@ -22,5 +23,16 @@ class MerchandiseController extends \App\Http\Controllers\ApiController
         }
         abort(400, 'Invalid component type has been provided');
         return null;
+    }
+
+    public function fulfil(Request $request)
+    {
+        if ($request->has('ids')) {
+            foreach ($request->input('ids') as $id) {
+                $orderMerchandise = OrderMerchandise::find($id);
+                $orderMerchandise->repository->update(['fulfilled' => true,]);
+            }
+        }
+        return response('Any listed order merchandise have been fulfilled', 200);
     }
 }

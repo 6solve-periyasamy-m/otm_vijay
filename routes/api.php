@@ -187,6 +187,7 @@ Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController:
 Route::post('/php/booking/customer/remove/{token}', [CustomerBookingController::class, 'removeCustomer'])->name('api.booking.remove-customer');
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
+
     Route::prefix('select')->group(function () {
 
         Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
@@ -227,6 +228,7 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 });
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
+    Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');

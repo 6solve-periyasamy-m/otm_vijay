@@ -99,4 +99,16 @@ class ReportController extends Controller
     {
         return Excel::download(new OrderReminderReportExport($max, $min), 'reminders.' . $extension);
     }
+
+    public function getOrderMerchandiseReport() {
+        return view('pages.reports.merchandise', ['tableView' => 'partials.reports.tables.merchandise',
+            'data' => ReportRepository::getOrderMerchandiseReport(),'title' => 'Merchandise Orders',
+            'xlsxExport' => route('reports.merchandise.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.merchandise.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportOrderMerchandiseReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
+    }
 }
