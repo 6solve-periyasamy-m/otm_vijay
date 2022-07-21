@@ -72,6 +72,12 @@
                         <span>Edit Tour</span>
                     </a>
                 @endcan
+                @can('update', \App\Models\Merchandise\Merchandise::class)
+                    <a class="btn btn-primary" href="{{route('tours.fulfil', ['tour' => $tour,])}}">
+                        <i class="icon-action-redo"></i>
+                        <span>Fulfil Merchandise Orders</span>
+                    </a>
+                @endcan
                 @if($tour->has_atol_certificate)
                     <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
                         <i class="icon-folder-alt"></i>
