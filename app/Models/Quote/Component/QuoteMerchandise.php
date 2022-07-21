@@ -2,6 +2,7 @@
 
 namespace App\Models\Quote\Component;
 
+use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Quote\Quote;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use Eloquent;
@@ -17,11 +18,8 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $quote_id
- * @property string $name
+ * @property int $merchandise_inventory_id
  * @property string $tour_component_type
- * @property string|null $image_url
- * @property int $stock
- * @property float $purchase_price
  * @property float $tour_sales_price
  * @property string|null $notes
  * @property Carbon|null $deleted_at
@@ -29,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read float $margin
  * @property-read QuoteMerchandiseRepository $repository
+ * @property-read MerchandiseInventory $inventory
  * @property-read Quote $quote
  * @method static Builder|QuoteMerchandise newModelQuery()
  * @method static Builder|QuoteMerchandise newQuery()
@@ -37,12 +36,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteMerchandise whereCreatedAt($value)
  * @method static Builder|QuoteMerchandise whereDeletedAt($value)
  * @method static Builder|QuoteMerchandise whereId($value)
- * @method static Builder|QuoteMerchandise whereImageUrl($value)
- * @method static Builder|QuoteMerchandise whereName($value)
+ * @method static Builder|QuoteMerchandise whereMerchandiseInventoryId($value)
  * @method static Builder|QuoteMerchandise whereNotes($value)
- * @method static Builder|QuoteMerchandise wherePurchasePrice($value)
  * @method static Builder|QuoteMerchandise whereQuoteId($value)
- * @method static Builder|QuoteMerchandise whereStock($value)
  * @method static Builder|QuoteMerchandise whereTourComponentType($value)
  * @method static Builder|QuoteMerchandise whereTourSalesPrice($value)
  * @method static Builder|QuoteMerchandise whereUpdatedAt($value)
@@ -60,6 +56,11 @@ class QuoteMerchandise extends Model
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class, 'quote_id');
+    }
+
+    public function inventory(): BelongsTo
+    {
+        return $this->belongsTo(MerchandiseInventory::class, 'merchandise_inventory_id');
     }
 
     public function getRepositoryAttribute(): QuoteMerchandiseRepository

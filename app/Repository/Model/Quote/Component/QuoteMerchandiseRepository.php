@@ -2,9 +2,10 @@
 
 namespace App\Repository\Model\Quote\Component;
 
+
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Repository\Abstracts\QuoteComponentRepository;
-use App\Repository\Model\Tour\MerchandiseRepository;
+use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
 
 class QuoteMerchandiseRepository extends QuoteComponentRepository
 {
@@ -25,7 +26,7 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
         return $this->quoteComponent->cost;
     }
 
-    public function getTourComponent(): ?MerchandiseRepository
+    public function getTourComponent(): ?MerchandiseInventoryTourRepository
     {
         return $this->quoteComponent->tourComponent->repository;
     }
