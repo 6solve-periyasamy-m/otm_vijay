@@ -83,9 +83,9 @@ class ReportRepository
             $row->total_order_value = $order->total;
             $row->balance_outstanding = $order->remaining;
             $row->balance_paid = $order->paid;
-            $row->due_date = $nextPayment->due_on;
-            $row->due_amount = $nextPayment->calculated_amount;
-            $row->orderStatus = $order->status->description();
+            $row->due_date = $nextPayment?->due_on;
+            $row->due_amount = $nextPayment?->amount;
+            $row->orderStatus = $order->status;
             $data[$order->id] = $row;
         }
         return $data;
