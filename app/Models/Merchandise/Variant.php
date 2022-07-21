@@ -2,6 +2,7 @@
 
 namespace App\Models\Merchandise;
 
+use App\Models\Helper\SimpleModel;
 use Database\Factories\Merchandise\VariantFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|Variant withoutTrashed()
  * @mixin Eloquent
  */
-class Variant extends Model
+class Variant extends SimpleModel
 {
     use HasFactory, SoftDeletes;
 

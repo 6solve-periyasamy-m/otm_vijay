@@ -89,7 +89,7 @@ class Merchandise extends Model
 
     public function __toString(): string
     {
-        return "{$this->name}";
+        return "{$this->name} ({$this->type->name})";
     }
 
     public function addToOrder(OrderCustomer $orderCustomer): OrderMerchandise

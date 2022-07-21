@@ -2,6 +2,7 @@
 
 namespace App\Models\Merchandise;
 
+use App\Models\Helper\SimpleModel;
 use Database\Factories\Merchandise\MerchandiseTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|MerchandiseType withoutTrashed()
  * @mixin Eloquent
  */
-class MerchandiseType extends Model
+class MerchandiseType extends SimpleModel
 {
     use HasFactory, SoftDeletes;
 

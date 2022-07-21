@@ -2,11 +2,11 @@
 
 namespace App\Models\Merchandise;
 
+use App\Models\Helper\SimpleModel;
 use Database\Factories\Merchandise\MerchandiseSizeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static QueryBuilder|MerchandiseSize withoutTrashed()
  * @mixin Eloquent
  */
-class MerchandiseSize extends Model
+class MerchandiseSize extends SimpleModel
 {
     use HasFactory, SoftDeletes;
 

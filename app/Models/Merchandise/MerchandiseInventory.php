@@ -119,4 +119,9 @@ class MerchandiseInventory extends Model
     {
         return isset($this->image_url) ? asset($this->image_url) : $this->component->asset;
     }
+
+    public function __toString(): string
+    {
+        return "{$this->component} ({$this->variant->name}) ({$this->size->name})";
+    }
 }

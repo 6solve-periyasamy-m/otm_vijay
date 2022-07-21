@@ -90,4 +90,9 @@ class MerchandiseInventoryTour extends Model
     {
         return $this->repository->getAvailableStock();
     }
+
+    public function __toString(): string
+    {
+        return "{$this->inventory}";
+    }
 }
