@@ -19,7 +19,7 @@
             <td>{{ $row->variant }}</td>
             <td>{{ $row->size }}</td>
             <td>{{ $row->tour }}</td>
-            <td>{{ $row->ordered_on }}</td>
+            <td>{{ $row->customer }}</td>
             <td>@if(!$row->has_address)(Lead Address)@endif {{ $row->address }}</td>
             <td>{{ $row->cost }}</td>
             <td>{{ f_datetime($row->ordered_on) }}</td>
