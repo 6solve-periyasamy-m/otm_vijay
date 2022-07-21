@@ -2,6 +2,8 @@
 
 @php /** @var \App\Models\Merchandise\Merchandise $merchandise */ @endphp
 
+@section('title', 'View Merchandise')
+
 @push('header-stack')
     <style>
         .image {
