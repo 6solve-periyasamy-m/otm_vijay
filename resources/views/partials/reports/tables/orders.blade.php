@@ -27,7 +27,7 @@
                 <td>{{ $row->total_order_value }}</td>
                 <td>{{ $row->balance_paid }}</td>
                 <td>{{ $row->balance_outstanding }}</td>
-                <td class="bg-{{ $row->orderStatus['color'] }}">{{ $row->orderStatus['status'] }}</td>
+                <td class="bg-{{ $row->orderStatus->color() }}">{{ $row->orderStatus->description() }}</td>
                 <td>{{ $row->due_date ?? 'No Payment Due' }}</td>
                 <td>{{ $row->due_amount }}</td>
             </tr>
