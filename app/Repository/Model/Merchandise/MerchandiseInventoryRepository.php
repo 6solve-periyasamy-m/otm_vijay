@@ -130,6 +130,8 @@ class MerchandiseInventoryRepository extends InventoryRepository
 
     public function addToTour(Tour $tour, string $type): ?InventoryTourRepository
     {
+        $mInvTour = MerchandiseInventoryTour::where('tour_id', '=', $tour->id)->where('merchandise_inventory_id', '=', $this->inventory->id)->first();
+        if (isset($mInvTour)) return $mInvTour->repository;
         $mInvTour = MerchandiseInventoryTour::make([
             'merchandise_inventory_id' => $this->inventory->id,
             'tour_component_type' => $type,

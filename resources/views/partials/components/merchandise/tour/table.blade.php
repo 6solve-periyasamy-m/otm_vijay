@@ -45,16 +45,22 @@
     <tr>
         <th scope="col">Icon</th>
         <th scope="col">Name</th>
-        <th scope="col">Inventory Amount</th>
+        <th scope="col">Inventory Included</th>
         <th scope="col">Notes</th>
     </tr>
     </thead>
     <tbody>
+    @php /** @var \App\Models\Merchandise\Merchandise $merchandise */ @endphp
     @foreach(\App\Models\Merchandise\Merchandise::all() as $merchandise)
+        @php
+            /** @var \App\Models\Merchandise\Merchandise $merchandise */
+            $used = $merchandise->repository->getInventoryIncludedOnTourCount($tour);
+            $available = $merchandise->inventory()->count();
+         @endphp
         <tr inventory_id="{{ $merchandise->id }}">
             <td><img src="{{ $merchandise->asset }}" class="image tiny"/></td>
             <td>{{$merchandise->name }}</td>
-            <td>{{ $merchandise->inventory()->count() }}</td>
+            <td>{{ $used }}/{{ $available }} ({{ ($used/$available) * 100 }}%)</td>
             <td>{{ $merchandise->notes }}</td>
         </tr>
     @endforeach

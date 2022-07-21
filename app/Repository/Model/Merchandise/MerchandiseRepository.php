@@ -6,6 +6,7 @@ use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 
@@ -31,6 +32,18 @@ class MerchandiseRepository extends ModelRepository
         foreach ($this->component->inventory as $inventory) {
             $inventory->repository->addToTour($tour, $type);
         }
+    }
+
+    public function getInventoryIncludedOnTourCount(Tour $tour): int
+    {
+        $query = DB::table('merchandise_inventories');
+        $query->join('merchandises', 'merchandise_inventories.merchandise_id', '=', 'merchandises.id');
+        $query->join('merchandise_inventory_tours', 'merchandise_inventory_tours.merchandise_inventory_id', '=', 'merchandise_inventories.id');
+        $query->where('merchandise_inventory_tours.tour_id', '=', $tour->id);
+        $query->where('merchandises.id', '=', $this->component->id);
+        $query->select('merchandise_inventories.id');
+
+        return $query->get()->count();
     }
 
     public static function create(array $data, ?UploadedFile $image = null): Merchandise
