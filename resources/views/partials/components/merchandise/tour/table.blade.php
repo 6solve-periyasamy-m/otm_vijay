@@ -60,7 +60,7 @@
         <tr inventory_id="{{ $merchandise->id }}">
             <td><img src="{{ $merchandise->asset }}" class="image tiny"/></td>
             <td>{{$merchandise->name }}</td>
-            <td>{{ $used }}/{{ $available }} ({{ ($used/$available) * 100 }}%)</td>
+            <td>{{ $used }}/{{ $available }} ({{ $available > 0 ? ($used/$available) * 100 : 100 }}%)</td>
             <td>{{ $merchandise->notes }}</td>
         </tr>
     @endforeach
