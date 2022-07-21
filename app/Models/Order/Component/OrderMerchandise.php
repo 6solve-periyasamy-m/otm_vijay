@@ -2,7 +2,6 @@
 
 namespace App\Models\Order\Component;
 
-use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\OrderCustomer;
 use App\Repository\Model\Order\Component\OrderMerchandiseRepository;
