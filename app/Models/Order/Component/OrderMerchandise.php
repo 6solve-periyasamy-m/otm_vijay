@@ -32,7 +32,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $tour_sales_price
  * @property-read MerchandiseInventoryTour $merchandise
  * @property-read OrderCustomer $orderCustomer
- * @property-read Merchandise $tourComponent
+ * @property-read MerchandiseInventoryTour $tourComponent
  * @property-read OrderMerchandiseRepository $repository The repository used for calculations and storage
  * @method static Builder|OrderMerchandise newModelQuery()
  * @method static Builder|OrderMerchandise newQuery()
