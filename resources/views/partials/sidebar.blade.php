@@ -88,6 +88,21 @@
             </a>
         </li>
         @endcan
+        @can('read', 'App\Models\Merchandise\Merchandise')
+        <li>
+            @if(strpos(Request::path(), 'merchandise') !== false)
+            <a href="{{ route('merchandise.all') }}" class="nav-link active">
+            @else
+            <a href="{{ route('merchandise.all') }}" class="nav-link">
+            @endif
+                <i class="icon-badge"></i>
+                <span>Merchandise</span>
+                @if(strpos(Request::path(), 'merchandise') !== false)
+                <span class="selected"></span>
+                @endif
+            </a>
+        </li>
+        @endcan
         @can('read', 'App\Models\Location\Address')
         <li>
             @if(strpos(Request::path(), 'addresses') !== false)
