@@ -50,7 +50,6 @@
     </tr>
     </thead>
     <tbody>
-    @php /** @var \App\Models\Merchandise\Merchandise $merchandise */ @endphp
     @foreach(\App\Models\Merchandise\Merchandise::all() as $merchandise)
         @php
             /** @var \App\Models\Merchandise\Merchandise $merchandise */
