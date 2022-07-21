@@ -61,7 +61,7 @@ class MerchandiseRepository extends ModelRepository
     public function updateWithImage(array $data, ?UploadedFile $image = null): Merchandise
     {
         if ($image !== null) {
-            $data['image_url'] = store_file($image, $this->component->image_url);
+            $data['image_url'] = store_file($image);
         }
         return $this->update($data);
     }

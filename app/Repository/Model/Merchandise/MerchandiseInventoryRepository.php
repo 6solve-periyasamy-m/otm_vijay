@@ -102,7 +102,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function updateWithImage(array $data, ?UploadedFile $image = null): MerchandiseInventory
     {
         if ($image !== null) {
-            $data['image_url'] = store_file($image, $this->inventory->image_url);
+            $data['image_url'] = store_file($image);
         }
         return $this->update($data);
     }
