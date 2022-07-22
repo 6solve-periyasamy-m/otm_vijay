@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Quote;
 
 use App\Models\Customer\Customer;
+use App\Models\Order\Order;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
@@ -10,8 +11,10 @@ use App\Models\Quote\QuoteProspect;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
+use App\Repository\Storage\ConvertedCustomer;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,6 +38,29 @@ class QuoteRepository extends ModelRepository
             $component->addToQuote($quote);
         }
         return $quote;
+    }
+
+    /**
+     * @param ConvertedCustomer $lead
+     * @param ConvertedCustomer[] $travellers
+     * @return Order
+     */
+    public function convertToOrder(ConvertedCustomer $lead, array $travellers = []): Order
+    {
+        $paying = $lead->paying ? 1 : 0;
+        foreach ($travellers as $traveller) { $paying += $traveller->paying ? 1 : 0; }
+        $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person;
+        $lead->data['tour_cost'] = $pricePerPerson;
+        foreach ($travellers as $traveller) { $traveller->data['tour_cost'] = $pricePerPerson; }
+        $tour = $this->quote->tour ?? $this->convertToTour($paying);
+        $data = [
+            'deposit' => $this->quote->deposit,
+            'ordered_on' => now(),
+            'internal_notes' => $this->quote->internal_notes,
+            'external_notes' => $this->quote->external_notes,
+            'invoice_footer' => $this->quote->invoice_footer,
+        ];
+        return OrderRepository::create($tour, $data, $lead, $travellers);
     }
 
     public function convertToTour(int $customerCount = 1): Tour

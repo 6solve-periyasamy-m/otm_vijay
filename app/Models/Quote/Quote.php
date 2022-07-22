@@ -134,37 +134,37 @@ class Quote extends Model
 
     public function tour(): BelongsTo
     {
-        return $this->belongsTo(Tour::class);
+        return $this->belongsTo(Tour::class, 'tour_id');
     }
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     public function accommodation(): HasMany
     {
-        return $this->hasMany(QuoteAccommodation::class);
+        return $this->hasMany(QuoteAccommodation::class, 'quote_id');
     }
 
     public function activities(): HasMany
     {
-        return $this->hasMany(QuoteActivity::class);
+        return $this->hasMany(QuoteActivity::class, 'quote_id');
     }
 
     public function flights(): HasMany
     {
-        return $this->hasMany(QuoteFlight::class);
+        return $this->hasMany(QuoteFlight::class, 'quote_id');
     }
 
     public function transport(): HasMany
     {
-        return $this->hasMany(QuoteTransport::class);
+        return $this->hasMany(QuoteTransport::class, 'quote_id');
     }
 
     public function merchandise(): HasMany
     {
-        return $this->hasMany(QuoteMerchandise::class);
+        return $this->hasMany(QuoteMerchandise::class, 'quote_id');
     }
 
     public function getStatusAttribute(): QuoteStatus
