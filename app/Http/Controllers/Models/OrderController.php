@@ -76,6 +76,7 @@ class OrderController extends Controller
 
     public function view(Order $order)
     {
+        $order->repository->refresh();
         return view('pages.models.orders.view', ['order' => $order,]);
     }
 
