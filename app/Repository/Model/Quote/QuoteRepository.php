@@ -57,6 +57,8 @@ class QuoteRepository extends ModelRepository
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
         }
+        $this->update(['tour_id' => $tour->id, 'locked' => true,]);
+        $this->save();
         return $tour;
     }
 
