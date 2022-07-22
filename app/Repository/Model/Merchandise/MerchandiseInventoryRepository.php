@@ -128,14 +128,14 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return "{$this->inventory->component->name}" . (isset($this->inventory->variant) ? " ({$this->inventory->variant->name})" : "");
     }
 
-    public function addToTour(Tour $tour, string $type): ?InventoryTourRepository
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?InventoryTourRepository
     {
         $mInvTour = MerchandiseInventoryTour::where('tour_id', '=', $tour->id)->where('merchandise_inventory_id', '=', $this->inventory->id)->first();
         if (isset($mInvTour)) return $mInvTour->repository;
         $mInvTour = MerchandiseInventoryTour::make([
             'merchandise_inventory_id' => $this->inventory->id,
-            'tour_component_type' => $type,
-            'tour_sales_price' => $this->inventory->sales_price,
+            'tour_component_type' => $tourComponentType,
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
         ]);
         $tour->merchandise()->save($mInvTour);
         return $mInvTour->repository;

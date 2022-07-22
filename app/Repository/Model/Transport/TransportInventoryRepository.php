@@ -4,6 +4,7 @@ namespace App\Repository\Model\Transport;
 
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryRepository;
 use Carbon\Carbon;
 use DB;
@@ -94,5 +95,16 @@ class TransportInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component} - {$this->inventory->travelClass} (" . f_datetime($this->inventory->departs_at) . " to " . f_datetime($this->inventory->arrives_at) . ")";
+    }
+
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?TransportInventoryTourRepository
+    {
+        $inventoryTour = TransportInventoryTour::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour;
     }
 }

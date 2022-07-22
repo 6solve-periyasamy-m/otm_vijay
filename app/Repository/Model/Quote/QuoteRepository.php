@@ -10,8 +10,10 @@ use App\Models\Quote\QuoteProspect;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class QuoteRepository extends ModelRepository
 {
@@ -33,6 +35,29 @@ class QuoteRepository extends ModelRepository
             $component->addToQuote($quote);
         }
         return $quote;
+    }
+
+    public function convertToTour(int $customerCount = 1): Tour
+    {
+        $tour = TourRepository::create([
+            'is_active' => false,
+            'name' => $this->quote->reference,
+            'notes' => $this->quote->internal_notes,
+            'description' => $this->quote->external_notes,
+            'date_from' => $this->quote->date_from,
+            'date_to' => $this->quote->date_from,
+            'terms' => $this->quote->terms,
+            'final_payment' => $this->quote->final_payment,
+            'stock_control_active' => false,
+            'base_price_per_person' => $this->getPricePerPerson($customerCount),
+        ]);
+        foreach ($this->getComponents() as $repository) {
+            $repository->getInventory()->addToTour($tour, $repository->getTourComponentType(), $repository->getCost());
+        }
+        foreach ($this->quote->installments as $installment) {
+            $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
+        }
+        return $tour;
     }
 
     public function generateReference(): string

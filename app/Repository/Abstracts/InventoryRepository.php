@@ -14,4 +14,6 @@ abstract class InventoryRepository extends ModelRepository implements HasStockCo
     public abstract function getEndTime(): Carbon;
 
     public static abstract function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection;
+
+    public abstract function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?InventoryTourRepository;
 }

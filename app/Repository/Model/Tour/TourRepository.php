@@ -9,6 +9,7 @@ use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Tour\PaymentInstallment;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
@@ -16,6 +17,7 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\RoomingRepository;
+use Carbon\Carbon;
 
 class TourRepository extends ModelRepository implements HasStockControl
 {
@@ -283,5 +285,16 @@ class TourRepository extends ModelRepository implements HasStockControl
                 $orderComponent->repository->update(['fulfilled' => true,]);
             }
         }
+    }
+
+    public function addInstallment(Carbon $due, float $amount, bool $is_percentage = false): PaymentInstallment
+    {
+        $installment = PaymentInstallment::make([
+            'due_on' => $due,
+            'amount' => $amount,
+            'is_percentage' => $is_percentage,
+        ]);
+        $this->tour->paymentInstallments()->save($installment);
+        return $installment;
     }
 }

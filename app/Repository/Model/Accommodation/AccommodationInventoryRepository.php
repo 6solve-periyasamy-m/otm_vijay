@@ -3,8 +3,10 @@
 namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventory;
+use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\InventoryTourRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -91,5 +93,16 @@ class AccommodationInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component} - {$this->inventory->roomType} {$this->inventory->boardType} (" . f_datetime($this->inventory->check_in) . " to " . f_datetime($this->inventory->check_out) . ")";
+    }
+
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?AccommodationInventoryTourRepository
+    {
+        $inventoryTour = AccommodationInventoryTour::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Activity;
 
 use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use Carbon\Carbon;
@@ -94,5 +95,16 @@ class ActivityInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component} - {$this->inventory->ticketType} (" . f_datetime($this->inventory->starts_at) . " to " . f_datetime($this->inventory->ends_at) . ")";
+    }
+
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?ActivityInventoryTourRepository
+    {
+        $inventoryTour = ActivityInventoryTour::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour;
     }
 }
