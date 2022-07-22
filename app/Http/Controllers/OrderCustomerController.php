@@ -29,6 +29,7 @@ class OrderCustomerController extends Controller
     }
 
     public function show(Order $order, OrderCustomer $orderCustomer) {
+        $order->repository->refresh();
         return view('pages.orders.customer', ['orderCustomer' => $orderCustomer,]);
     }
 }
