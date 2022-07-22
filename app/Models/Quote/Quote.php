@@ -41,6 +41,7 @@ use Illuminate\Support\Carbon;
  * @property string $terms
  * @property string $invoice_footer
  * @property Carbon|null $expires
+ * @property Carbon|null $sent
  * @property QuoteStatus $quote_status
  * @property string|null $internal_notes
  * @property string|null $external_notes
@@ -106,6 +107,7 @@ class Quote extends Model
         'expires' => 'datetime',
         'date_from' => 'date',
         'date_to' => 'date',
+        'sent' => 'datetime',
         'quote_status' => QuoteStatus::class
     ];
     private QuoteRepository $internal_repository;

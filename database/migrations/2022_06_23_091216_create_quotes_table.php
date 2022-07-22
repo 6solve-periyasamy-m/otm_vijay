@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('terms');
             $table->text('invoice_footer');
             $table->dateTime('expires')->nullable();
+            $table->dateTime('sent')->nullable();
             $table->integer('quote_status')->default(0);
             $table->text('internal_notes')->nullable();
             $table->text('external_notes')->nullable();
