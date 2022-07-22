@@ -3,17 +3,16 @@
 namespace App\Repository\Model\Order;
 
 use App\Models\Customer\Customer;
-use App\Models\Customer\Group;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
+use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
 use Cache;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
@@ -53,6 +52,28 @@ class OrderRepository extends ModelRepository
     public function getAtolRepository(): AtolRepository
     {
         return $this->atolRepository;
+    }
+    
+    public function savePayment(Payment $payment): Payment
+    {
+        $this->order->payments()->save($payment);
+        $this->refresh();
+        return $payment;
+    }
+
+    public function addInstallment(Carbon $due, float $amount): OrderInstallment
+    {
+        $installment = OrderInstallment::create([
+            'due_on' => $due,
+            'amount' => $amount,
+        ]);
+        $this->refresh();
+        return $installment;
+    }
+
+    public function addAdjustment(float $amount, string $reason, Carbon $when)
+    {
+        
     }
 
     /**
@@ -260,6 +281,7 @@ class OrderRepository extends ModelRepository
             ]);
             $this->order->installments()->save($oInstallment);
         }
+        $this->refresh();
     }
 
     public function delete(): bool
@@ -316,5 +338,10 @@ class OrderRepository extends ModelRepository
     public function __toString(): string
     {
         return "Order {$this->order->booking_reference}: {$this->order->tour->name} ({$this->order->lead_booker_name})";
+    }
+
+    public function refresh()
+    {
+        $this->getOrderStatus(true);
     }
 }
