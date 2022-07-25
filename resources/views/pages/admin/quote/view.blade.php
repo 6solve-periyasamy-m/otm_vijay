@@ -15,40 +15,56 @@
             $('.flights').DataTable({fixedHeader: true,});
             $('.transport').DataTable({fixedHeader: true,});
             $('.extras').DataTable({fixedHeader: true,});
-            update(1);
+            update(0, 0);
         });
 
-        function getCounterAmount() {
-            let amount = parseInt($('.count-input').val());
-            return isNaN(amount) || amount < 1 ? 1 : amount;
+        function getPayingAmount() {
+            let amount = parseInt($('.paying-input').val());
+            return isNaN(amount) || amount < 0 ? 0 : amount;
         }
 
-        function plus() {
-            update(getCounterAmount() + 1);
+        function getTravellingAmount() {
+            let amount = parseInt($('.travelling-input').val());
+            return isNaN(amount) || amount < 0 ? 0 : amount;
         }
 
-        function minus() {
-            let amount = getCounterAmount();
-            update(amount <= 1 ? 1 : amount - 1);
+        function plusPaying() {
+            update(getPayingAmount() + 1, getTravellingAmount());
+        }
+
+        function minusPaying() {
+            let amount = getPayingAmount();
+            update(amount <= 0 ? 0 : amount - 1, getTravellingAmount());
+        }
+
+        function plusTravelling() {
+            update(getPayingAmount(), getTravellingAmount() + 1);
+        }
+
+        function minusTravelling() {
+            let amount = getTravellingAmount();
+            update(getPayingAmount(), amount <= 0 ? 0 : amount - 1);
         }
 
         function textUpdate() {
-            update(getCounterAmount());
+            update(getPayingAmount(), getTravellingAmount());
         }
 
-        function update(amount) {
-            $('.count-input').val(amount);
-            performRequest(amount);
+        function update(paying, travelling) {
+            $('.paying-input').val(paying);
+            $('.travelling-input').val(travelling);
+            performRequest(paying, travelling);
         }
 
-        function performRequest(amount) {
+        function performRequest(paying, travelling) {
             $.get('{{ route('api.quote.cost', ['quote' => $quote,]) }}', {
                 '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                 '_token': '{{ csrf_token() }}',
-                'count': amount,
+                'paying': paying,
+                'travelling': travelling,
             }).done(function (xhr, textStatus, errorThrown) {
                 if (xhr.success) {
-                    updateView(xhr.f_price, xhr.f_total, xhr.f_profit, xhr.f_profit_total);
+                    updateView(xhr.f_price, xhr.f_total, xhr.f_profit, xhr.f_profit_total, xhr.margin, xhr.f_ctc);
                 } else {
                     alert(xhr.message);
                 }
@@ -71,9 +87,10 @@
             });
         }
 
-        function updateView(pricePerPerson, priceTotal, profitPerPerson, profitTotal) {
+        function updateView(pricePerPerson, priceTotal, profitPerPerson, profitTotal, margin, costToCompany) {
+            $('.ctc-updater').text(costToCompany);
             $('.cost-updater').text(priceTotal + " (" + pricePerPerson + ")");
-            $('.profit-updater').text(profitTotal + " (" + profitPerPerson + ")");
+            $('.profit-updater').text(profitTotal + " (" + profitPerPerson + ") (" + margin + "%)");
         }
     </script>
 @endsection
@@ -128,34 +145,97 @@
 
     <x-admin.section.card>
         <div class="row">
-            <div class="col-xxl-3 col-xl-4 col-md-6 col-sm-12">
-                <div class="otm-card">
-                    <p>{{ __('quotes.view.cards.quick.calculator.header') }}</p>
-                    <h6 class="fw-bold">{{ __('quotes.view.cards.quick.calculator.description') }}</h6>
-                    <p>{{ __('quotes.view.cards.quick.calculator.purchase') }}</p>
-                    <h6 class="fw-bold">{{ f_currency($quote->repository->getPurchaseTotal()) }}</h6>
-                    <p>{{ __('quotes.view.cards.quick.calculator.profit') }}</p>
-                    <h6 class="fw-bold profit-updater">Not Calculated Yet</h6>
-                    <p>{{ __('quotes.view.cards.quick.calculator.cost') }}</p>
-                    <h6 class="fw-bold cost-updater">Not Calculated Yet</h6>
-                    <p>{{ __('quotes.view.cards.quick.calculator.count') }}</p>
-                    <h6 class="fw-bold row">
+            <x-admin.section.otm-card>
+                <x-admin.section.otm-text>
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.header') }}</x-slot:header>
+                    {{ __('quotes.view.cards.quick.calculator.description') }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text class="row">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.count') }}</x-slot:header>
+                    <div class="col-12 col-xl-5 gx-2 row">
+                        <div class="col-12 text-center">
+                            <p>{{ __('quotes.view.cards.quick.calculator.paying') }}</p>
+                        </div>
                         <div class="col-12 col-xl-3">
-                            <a href="javascript:minus()" class="btn btn-outline-danger btn-sm mb-1">
+                            <a href="javascript:minusPaying()" class="btn btn-outline-danger btn-sm mb-1">
+                                <i class="icon-minus"></i>
+                            </a>
+                        </div>
+                        <div class="col-12 col-xl-5">
+                            <x-admin.input name="paying" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                        </div>
+                        <div class="col-12 col-xl-3">
+                            <a href="javascript:plusPaying()" class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-6 row">
+                        <div class="col-12 text-center">
+                            <p>{{ __('quotes.view.cards.quick.calculator.travelling') }}</p>
+                        </div>
+                        <div class="col-12 col-xl-3">
+                            <a href="javascript:minusTravelling()" class="btn btn-outline-danger btn-sm mb-1">
                                 <i class="icon-minus"></i>
                             </a>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <x-admin.input name="count" value="1" onchange="textUpdate()" nofloat></x-admin.input>
+                            <x-admin.input name="travelling" value="1" onchange="textUpdate()" nofloat></x-admin.input>
                         </div>
                         <div class="col-12 col-xl-3">
-                            <a href="javascript:plus()" class="btn btn-outline-success btn-sm mb-1">
+                            <a href="javascript:plusTravelling()" class="btn btn-outline-success btn-sm mb-1">
                                 <i class="icon-plus"></i>
                             </a>
                         </div>
-                    </h6>
-                </div>
-            </div>
+                    </div>
+                </x-admin.section.otm-text>
+            </x-admin.section.otm-card>
+            <x-admin.section.otm-card row>
+                <x-admin.section.otm-text width="6">
+                    <x-slot:header>
+                        {{ __('quotes.view.cards.quick.calculator.components.accommodation') }}
+                        <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
+                    </x-slot:header>
+                    {{ f_currency($quote->repository->getAccommodationCost()) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="6">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.activities') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getActivityCost()) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="6">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.flights') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getFlightCost()) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="6">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.transport') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getTransportCost()) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="6">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.components.merchandise') }}</x-slot:header>
+                    {{ f_currency($quote->repository->getMerchandiseCost()) }}
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text width="6">
+                    <x-slot:header>
+                        {{ __('quotes.view.cards.quick.calculator.components.total') }}
+                        <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span>
+                    </x-slot:header>
+                    {{ f_currency($quote->repository->getPurchaseTotal()) }}
+                </x-admin.section.otm-text>
+            </x-admin.section.otm-card>
+            <x-admin.section.otm-card>
+                <x-admin.section.otm-text class="ctc-updater">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.ctc') }}</x-slot:header>
+                    Not Calculated Yet
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text class="profit-updater">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }}</x-slot:header>
+                    Not Calculated Yet
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text class="cost-updater">
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
+                    Not Calculated Yet
+                </x-admin.section.otm-text>
+            </x-admin.section.otm-card>
         </div>
     </x-admin.section.card>
 

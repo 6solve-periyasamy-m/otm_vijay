@@ -5,6 +5,10 @@ namespace App\Repository\Model\Quote;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
+use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
@@ -214,14 +218,7 @@ class QuoteRepository extends ModelRepository
 
     public function getPurchaseTotal(): float
     {
-        $total = 0;
-        foreach ($this->getComponents(false, true, true, true, true, ['Included',]) as $component) {
-            $total += $component->getPurchasePrice();
-        }
-        foreach ($this->getTemplates() as $template) {
-            $total += $template->purchase_price;
-        }
-        return $total;
+        return $this->getAccommodationCost() + $this->getActivityCost() + $this->getFlightCost() + $this->getTransportCost() + $this->getMerchandiseCost();
     }
 
     /**
@@ -288,5 +285,54 @@ class QuoteRepository extends ModelRepository
             $quoteComponent->is_template = true;
             $quoteComponent->save();
         }
+    }
+    
+    public function getAccommodationCost(): float
+    {
+        $cost = 0;
+        foreach ($this->getTemplates() as $template) {
+            $cost += $template->purchase_price;
+        }
+        return $cost;
+    }
+    
+    public function getActivityCost(): float
+    {
+        $cost = 0;
+        /** @var QuoteActivity $component */
+        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+            $cost += $component->inventory->purchase_price;
+        }
+        return $cost;
+    }
+    
+    public function getFlightCost(): float
+    {
+        $cost = 0;
+        /** @var QuoteFlight $component */
+        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+            $cost += $component->inventory->purchase_price;
+        }
+        return $cost;
+    }
+    
+    public function getTransportCost(): float
+    {
+        $cost = 0;
+        /** @var QuoteTransport $component */
+        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+            $cost += $component->inventory->purchase_price;
+        }
+        return $cost;
+    }
+    
+    public function getMerchandiseCost(): float
+    {
+        $cost = 0;
+        /** @var QuoteMerchandise $component */
+        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+            $cost += $component->inventory->purchase_price;
+        }
+        return $cost;
     }
 }

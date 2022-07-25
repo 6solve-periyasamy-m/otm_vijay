@@ -5,7 +5,8 @@ namespace App\Http\Requests\Api\Admin\Quote;
 use App\Http\Requests\Api\Admin\AuthorizedRequest;
 
 /**
- * @property int $count
+ * @property int $paying
+ * @property int $travelling
  */
 class QuoteCostRequest extends AuthorizedRequest
 {
@@ -17,7 +18,8 @@ class QuoteCostRequest extends AuthorizedRequest
     public function rules()
     {
         return [
-            'count' => 'required|numeric|min:1',
+            'paying' => 'required|numeric|min:0',
+            'travelling' => 'required|numeric|min:0'
         ];
     }
 }

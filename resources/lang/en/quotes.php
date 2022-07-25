@@ -25,12 +25,24 @@ return [
             'quick' => [
                 'header' => 'Quick Information',
                 'calculator' => [
+                    'components' => [
+                        'accommodation' => 'Accommodation',
+                        'activities' => 'Activities',
+                        'flights' => 'Flights',
+                        'transport' => 'Transport',
+                        'merchandise' => 'Merchandise',
+                        'total' => 'Total Per Person',
+                        'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
+                    ],
                     'header' => 'Cost Calculator',
                     'description' => 'Calculate cost for X travellers',
                     'purchase' => 'Purchase Price of Components (Approximate)',
+                    'ctc' => 'Cost to Company',
                     'profit' => 'Profit (Per Person Profit) (Approximate)',
                     'cost' => 'Total (Price per Person)',
-                    'count' => 'Customer Count',
+                    'count' => 'How many additional travellers?',
+                    'paying' => 'Paying',
+                    'travelling' => 'Non-paying'
                 ],
             ],
             'installments' => [
