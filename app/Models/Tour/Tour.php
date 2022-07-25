@@ -207,7 +207,9 @@ class Tour extends Model
     public function getRemainingInstallmentAttribute(): float
     {
         $cost = $this->base_price_per_person - $this->deposit;
-        $cost -= $this->paymentInstallments()->sum('amount');
+        foreach ($this->paymentInstallments as $installment) {
+            $cost -= $installment->cost;
+        }
         return $cost;
     }
 
