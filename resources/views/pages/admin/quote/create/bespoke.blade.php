@@ -10,6 +10,9 @@
         Lead Traveller
     </x-admin.input.selector.add>
     <hr class="splitter"/>
+    <x-admin.input.checkbox name="travelling" width="6" nofloat>Lead Travelling?</x-admin.input.checkbox >
+    <x-admin.input.checkbox name="paying" width="6" nofloat>Lead Paying?</x-admin.input.checkbox >
+    <hr class="splitter">
     <x-admin.input type="date" name="from" width="4">Date From</x-admin.input>
     <x-admin.input type="date" name="to" width="4">Date To</x-admin.input>
     <x-admin.input type="date" name="final" width="4">Final Payment</x-admin.input>

@@ -13,6 +13,8 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $final
  * @property string $footer
  * @property string $terms
+ * @property string $travelling
+ * @property string $paying
  * @property string $internal_notes
  * @property string $external_notes
  * @property float $cost
@@ -32,6 +34,14 @@ class CreateBespokeQuoteRequest extends FormRequest
             'expiry' => $this->expires,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
+        ];
+    }
+
+    public function getCustomerDataset(): array
+    {
+        return [
+            'travelling' => $this->travelling == 'on',
+            'paying' => $this->paying == 'on',
         ];
     }
 

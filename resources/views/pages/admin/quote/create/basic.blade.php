@@ -2,7 +2,7 @@
 
 @extends('layout.form', ['action' => route('quotes.store-basic', ['tour' => $tour,])])
 
-@section('title', 'Create Bespoke Quote')
+@section('title', 'Create Basic Quote for ' . $tour->name)
 
 @section('form-body')
     <x-admin.input.selector.add name="customer_id" route="customers" width="6">
@@ -10,6 +10,10 @@
         Lead Traveller
     </x-admin.input.selector.add>
     <x-admin.input type="date" name="expires" width="6">Expiry Date</x-admin.input>
+    <hr class="splitter">
+    <x-admin.input.checkbox name="travelling" value="1" width="6" nofloat>Lead Travelling?</x-admin.input.checkbox >
+    <x-admin.input.checkbox name="paying" value="1" width="6" nofloat>Lead Paying?</x-admin.input.checkbox >
+    <hr class="splitter">
     <x-admin.input.text-area name="internal_notes" width="6">Internal Notes</x-admin.input.text-area>
     <x-admin.input.text-area name="external_notes" width="6">External Notes</x-admin.input.text-area>
     <input type="submit" class="btn btn-primary text-white" name="Submit">
