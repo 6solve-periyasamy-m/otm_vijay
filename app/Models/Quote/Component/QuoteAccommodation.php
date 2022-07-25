@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $quote_id
  * @property int $accommodation_inventory_id
+ * @property boolean $is_template
  * @property string $tour_component_type
  * @property float|null $tour_sales_price
  * @property Carbon|null $deleted_at
@@ -52,7 +53,7 @@ class QuoteAccommodation extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['tour_sales_price' => 'double'];
+    protected $casts = ['tour_sales_price' => 'double', 'is_template' => 'boolean'];
 
     public function quote(): BelongsTo
     {

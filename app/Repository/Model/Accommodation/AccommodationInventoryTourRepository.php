@@ -227,6 +227,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             'quote_id' => $quote->id,
             'tour_component_type' => $this->tourComponent->tour_component_type,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'is_template' => $this->tourComponent->is_template,
         ]);
         return $component->repository;
     }

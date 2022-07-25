@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('quote_id')->constrained()->cascadeOnDelete();
             $table->foreignId('accommodation_inventory_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_template')->default(false);
             $table->string('tour_component_type')->default('Included');
             $table->decimal('tour_sales_price', 12)->nullable();
             $table->softDeletes();
