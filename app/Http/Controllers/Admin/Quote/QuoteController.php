@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Quote;
+namespace App\Http\Controllers\Admin\Quote;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
@@ -8,7 +8,6 @@ use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
-use App\Repository\Model\Tour\TourRepository;
 use Illuminate\Http\Request;
 
 class QuoteController extends Controller
