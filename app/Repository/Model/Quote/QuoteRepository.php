@@ -129,11 +129,12 @@ class QuoteRepository extends ModelRepository
         return $pricePoint;
     }
 
-    public function addInstallment(Carbon $due, float $amount): QuoteInstallment
+    public function addInstallment(Carbon $due, float $amount, bool $percentage = false): QuoteInstallment
     {
         $installment = QuoteInstallment::make([
             'due_on' => $due,
-            'amount' => $amount
+            'amount' => $amount,
+            'percentage' => $percentage,
         ]);
         $this->quote->installments()->save($installment);
         return $installment;
