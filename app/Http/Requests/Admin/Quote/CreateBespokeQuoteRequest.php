@@ -6,28 +6,28 @@ use App\Models\Customer\Customer;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property string $name
  * @property int $customer_id
  * @property string $from
  * @property string $to
+ * @property string $expires
  * @property string $final
  * @property string $footer
  * @property string $terms
+ * @property float $cost
  */
-class BespokeQuoteRequest extends FormRequest
+class CreateBespokeQuoteRequest extends FormRequest
 {
     private ?Customer $customer;
 
     public function getTourDetails(): array
     {
         return [
-            'name' => $this->name,
-            'stock_control_active' => false,
             'date_from' => $this->from,
             'date_to' => $this->to,
             'final_payment' => $this->final,
-            'invoice_footer' => $this->footer,
+            'invoice_footer' => $this->footer ?? "",
             'terms' => $this->terms ?? "",
+            'expiry' => $this->expires,
         ];
     }
 
@@ -47,11 +47,12 @@ class BespokeQuoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
             'customer_id' => 'required|exists:customers,id',
             'from' => 'required|date',
             'to' => 'required|date|after:from',
+            'expires' => 'required|date',
             'final' => 'required|date',
+            'cost' => 'required|numeric|min:0',
         ];
     }
 }

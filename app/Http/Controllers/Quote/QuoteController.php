@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Quote;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Quote\BespokeQuoteRequest;
+use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
@@ -26,10 +26,9 @@ class QuoteController extends Controller
         return view('pages.admin.quote.create.bespoke');
     }
 
-    public function storeBespoke(BespokeQuoteRequest $request)
+    public function storeBespoke(CreateBespokeQuoteRequest $request)
     {
-        $tour = TourRepository::create($request->getTourDetails());
-        $quote = QuoteRepository::create($tour, $request->getCustomer());
+        $quote = QuoteRepository::createBespoke($request->getCustomer(), $request->cost, $request->getTourDetails());
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
