@@ -27,7 +27,7 @@ class QuoteRepository extends ModelRepository
         $this->quote = $quote;
     }
 
-    public static function create(Tour $tour, ?Customer $customer = null, array $data = [], array $leadData = []): Quote
+    public static function createFromTour(Tour $tour, ?Customer $customer = null, array $data = [], array $leadData = []): Quote
     {
         $quote = Quote::create(array_merge(['tour_id' => $tour->id,], $data));
         $lead = $quote->repository->createProspect($customer, $leadData);
@@ -37,6 +37,18 @@ class QuoteRepository extends ModelRepository
         foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
             $component->addToQuote($quote);
         }
+        $quote->repository->addPricePoint(1, $tour->base_price_per_person);
+        return $quote;
+    }
+
+    public static function createBespoke(?Customer $customer = null, float $pricePerPerson = 0, array $data = [], array $leadData = []): Quote
+    {
+        $quote = Quote::create($data);
+        $lead = $quote->repository->createProspect($customer, $leadData);
+        $quote->lead_traveller_id = $lead->id;
+        $quote->reference = $quote->repository->generateReference();
+        $quote->repository->save();
+        $quote->repository->addPricePoint(1, $pricePerPerson);
         return $quote;
     }
 
