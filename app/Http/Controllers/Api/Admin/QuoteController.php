@@ -25,6 +25,7 @@ class QuoteController extends ApiController
             'f_profit' => f_currency($cost->price_per_person - $purchasePrice),
             'profit_total' => ($cost->price_per_person - $purchasePrice) * $request->count,
             'f_profit_total' => f_currency(($cost->price_per_person - $purchasePrice) * $request->count),
+            'margin' => $purchasePrice > 0 ? sigfig($cost->price_per_person / $purchasePrice) : 100,
         ];
         return response()->json($data);
     }
