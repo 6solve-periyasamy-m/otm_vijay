@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('email_address', 255)->nullable();
             $table->foreignId('home_address_id')->nullable()->constrained('addresses')->cascadeOnDelete();
             $table->foreignId('billing_address_id')->nullable()->constrained('addresses')->cascadeOnDelete();
+            $table->boolean('paying')->default(true);
+            $table->boolean('travelling')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

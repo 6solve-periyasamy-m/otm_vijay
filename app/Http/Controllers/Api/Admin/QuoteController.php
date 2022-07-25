@@ -10,6 +10,13 @@ class QuoteController extends ApiController
 {
     public function getCost(QuoteCostRequest $request, Quote $quote)
     {
+        if ($quote->leadTraveller->travelling) {
+            if ($quote->leadTraveller->paying) {
+                $request->paying++;
+            } else {
+                $request->travelling++;
+            }
+        }
         $customers = $request->paying + $request->travelling;
         $cost = $quote->repository->getPricePerPerson($request->paying);
         if ($cost === null && $request->paying > 0) {

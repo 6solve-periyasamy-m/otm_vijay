@@ -29,6 +29,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $email_address
  * @property int|null $home_address_id
  * @property int|null $billing_address_id
+ * @property bool $paying
+ * @property bool $travelling
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -67,6 +69,7 @@ class QuoteProspect extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+    protected $casts = ['paying' => 'boolean', 'travelling' => 'boolean'];
 
     public function quote(): HasOne
     {
