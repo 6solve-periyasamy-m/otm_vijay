@@ -236,6 +236,26 @@
                     Not Calculated Yet
                 </x-admin.section.otm-text>
             </x-admin.section.otm-card>
+            <x-admin.section.otm-card>
+                <x-admin.section.otm-text>
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.lead.header') }}</x-slot:header>
+                    @if(!$quote->leadTraveller->travelling)
+                        {{ __('quotes.view.cards.quick.calculator.lead.organizing') }}
+                    @elseif(!$quote->leadTraveller->paying)
+                        {{ __('quotes.view.cards.quick.calculator.lead.travelling') }}
+                    @else
+                        {{ __('quotes.view.cards.quick.calculator.lead.paying') }}
+                    @endif
+                </x-admin.section.otm-text>
+                <x-admin.section.otm-text>
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.convert') }}</x-slot:header>
+                    <form class="d-none convert-form" action="{{ route('dash') }}" method="post">
+                        <input type="hidden" name="paying" class="paying-input" value="0">
+                        <input type="hidden" name="travelling" class="travelling-input" value="0">
+                    </form>
+                    <a href="javascript:$('.convert-form').submit()" class="btn btn-success">{{ __('quotes.view.cards.quick.calculator.convert') }}</a>
+                </x-admin.section.otm-text>
+            </x-admin.section.otm-card>
         </div>
     </x-admin.section.card>
 

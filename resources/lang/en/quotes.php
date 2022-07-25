@@ -34,6 +34,12 @@ return [
                         'total' => 'Total Per Person',
                         'approximate' => 'Amount is based on the purchase price of template accommodation and may differ',
                     ],
+                    'lead' => [
+                        'header' => 'Lead Traveller Details',
+                        'paying' => 'Travelling (Paid)',
+                        'travelling' => 'Travelling (Free)',
+                        'organizing' => 'Not Travelling or Paying'
+                    ],
                     'header' => 'Cost Calculator',
                     'description' => 'Calculate cost for X travellers',
                     'purchase' => 'Purchase Price of Components (Approximate)',
@@ -42,7 +48,8 @@ return [
                     'cost' => 'Total (Price per Person)',
                     'count' => 'How many additional travellers?',
                     'paying' => 'Paying',
-                    'travelling' => 'Non-paying'
+                    'travelling' => 'Non-paying',
+                    'convert' => 'Convert to Order',
                 ],
             ],
             'installments' => [
