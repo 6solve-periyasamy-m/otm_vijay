@@ -224,11 +224,11 @@
             </x-admin.section.otm-card>
             <x-admin.section.otm-card>
                 <x-admin.section.otm-text class="ctc-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.ctc') }}</x-slot:header>
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.ctc') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
                     Not Calculated Yet
                 </x-admin.section.otm-text>
                 <x-admin.section.otm-text class="profit-updater">
-                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }}</x-slot:header>
+                    <x-slot:header>{{ __('quotes.view.cards.quick.calculator.profit') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
                     Not Calculated Yet
                 </x-admin.section.otm-text>
                 <x-admin.section.otm-text class="cost-updater">

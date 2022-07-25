@@ -44,7 +44,7 @@ return [
                     'description' => 'Calculate cost for X travellers',
                     'purchase' => 'Purchase Price of Components (Approximate)',
                     'ctc' => 'Cost to Company',
-                    'profit' => 'Profit (Per Person Profit) (Approximate)',
+                    'profit' => 'Profit (Per Person Profit) (Margin)',
                     'cost' => 'Total (Price per Person)',
                     'count' => 'How many additional travellers?',
                     'paying' => 'Paying',
