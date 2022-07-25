@@ -14,7 +14,7 @@ class QuoteController extends Controller
 {
     public function index()
     {
-        $quotes = Quote::with('leadTraveller', 'leadTraveller.prospect', 'tour')->get();
+        $quotes = Quote::with('leadTraveller', 'tour')->get();
         return view('pages.admin.quote.table', ['quotes' => $quotes,]);
     }
 
