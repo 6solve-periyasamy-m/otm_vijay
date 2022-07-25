@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Quote;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
 use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
@@ -32,9 +33,10 @@ class QuoteController extends Controller
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
-    public function storeBasic(Request $request)
+    public function storeBasic(CreateBasicQuoteRequest $request, Tour $tour)
     {
-        // TODO: Stub (Generated)
+        $quote = QuoteRepository::createFromTour($tour, $request->getCustomer(), $request->getDataset());
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
     public function view(Quote $quote)

@@ -29,7 +29,17 @@ class QuoteRepository extends ModelRepository
 
     public static function createFromTour(Tour $tour, ?Customer $customer = null, array $data = [], array $leadData = []): Quote
     {
-        $quote = Quote::create(array_merge(['tour_id' => $tour->id,], $data));
+        $quote = Quote::create([
+            'tour_id' => $tour->id,
+            'event_id' => $tour->event_id,
+            'deposit' => $tour->deposit,
+            'final_payment' => $tour->final_payment,
+            'date_from' => $tour->date_from,
+            'date_to' => $tour->date_to,
+            'terms' => $tour->terms,
+            'invoice_footer' => $tour->invoice_footer,
+            ...$data,
+        ]);
         $lead = $quote->repository->createProspect($customer, $leadData);
         $quote->lead_traveller_id = $lead->id;
         $quote->reference = $quote->repository->generateReference();
