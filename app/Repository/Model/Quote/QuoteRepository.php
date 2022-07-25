@@ -231,4 +231,25 @@ class QuoteRepository extends ModelRepository
     {
         return QuotePricePoint::where('quote_id', $this->quote->id)->where('quantity', '<=', $count)->orderBy('quantity', 'desc')->first();
     }
+
+    public function autoAssignTemplating(): void
+    {
+        $dates = [];
+        foreach ($this->quote->accommodation as $quoteComponent) {
+            if ($quoteComponent->tour_component_type !== 'Included') continue;
+            $start = $quoteComponent->inventory->check_in->clone();
+            $start->setTime(0, 0);
+            if (array_key_exists($start->unix(), $dates)) {
+                if ($quoteComponent->is_template && !$dates[$start->unix()]->is_template) {
+                    $dates[$start->unix()] = $quoteComponent;
+                }
+            } else {
+                $dates[$start->unix()] = $quoteComponent;
+            }
+        }
+        foreach ($dates as $quoteComponent) {
+            $quoteComponent->is_template = true;
+            $quoteComponent->save();
+        }
+    }
 }
