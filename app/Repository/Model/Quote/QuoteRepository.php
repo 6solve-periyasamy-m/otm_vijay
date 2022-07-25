@@ -310,7 +310,7 @@ class QuoteRepository extends ModelRepository
     {
         $cost = 0;
         /** @var QuoteFlight $component */
-        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+        foreach ($this->quote->flights()->with('inventory')->get() as $component) {
             $cost += $component->inventory->purchase_price;
         }
         return $cost;
@@ -320,7 +320,7 @@ class QuoteRepository extends ModelRepository
     {
         $cost = 0;
         /** @var QuoteTransport $component */
-        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+        foreach ($this->quote->transport()->with('inventory')->get() as $component) {
             $cost += $component->inventory->purchase_price;
         }
         return $cost;
@@ -330,7 +330,7 @@ class QuoteRepository extends ModelRepository
     {
         $cost = 0;
         /** @var QuoteMerchandise $component */
-        foreach ($this->quote->activities()->with('inventory')->get() as $component) {
+        foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
             $cost += $component->inventory->purchase_price;
         }
         return $cost;
