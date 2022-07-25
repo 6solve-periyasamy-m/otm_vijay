@@ -2,10 +2,14 @@
 
 namespace App\Repository\Model\Transport;
 
+use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
@@ -106,5 +110,16 @@ class TransportInventoryRepository extends InventoryRepository
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteTransportRepository
+    {
+        $inventoryTour = QuoteTransport::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
     }
 }

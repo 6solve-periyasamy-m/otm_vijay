@@ -4,8 +4,12 @@ namespace App\Repository\Model\Flight;
 
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteFlightRepository;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
@@ -106,5 +110,16 @@ class FlightInventoryRepository extends InventoryRepository
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteFlightRepository
+    {
+        $inventoryTour = QuoteFlight::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
     }
 }

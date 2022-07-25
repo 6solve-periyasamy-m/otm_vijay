@@ -5,9 +5,13 @@ namespace App\Repository\Model\Merchandise;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\UploadedFile;
@@ -148,5 +152,16 @@ class MerchandiseInventoryRepository extends InventoryRepository
             $count += $tourComponent->orderComponents()->count();
         }
         return $count;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteMerchandiseRepository
+    {
+        $inventoryTour = QuoteMerchandise::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
     }
 }

@@ -4,9 +4,13 @@ namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Quote\Component\QuoteAccommodation;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -101,6 +105,17 @@ class AccommodationInventoryRepository extends InventoryRepository
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,
             'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteAccommodationRepository
+    {
+        $inventoryTour = QuoteAccommodation::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
