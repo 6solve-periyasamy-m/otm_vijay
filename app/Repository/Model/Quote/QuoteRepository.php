@@ -37,6 +37,7 @@ class QuoteRepository extends ModelRepository
         foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
             $component->addToQuote($quote);
         }
+        $quote->repository->cloneInstallments();
         $quote->repository->addPricePoint(1, $tour->base_price_per_person);
         return $quote;
     }
