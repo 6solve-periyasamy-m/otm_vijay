@@ -13,6 +13,8 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $final
  * @property string $footer
  * @property string $terms
+ * @property string $internal_notes
+ * @property string $external_notes
  * @property float $cost
  */
 class CreateBespokeQuoteRequest extends FormRequest
@@ -28,6 +30,8 @@ class CreateBespokeQuoteRequest extends FormRequest
             'invoice_footer' => $this->footer ?? "",
             'terms' => $this->terms ?? "",
             'expiry' => $this->expires,
+            'internal_notes' => $this->internal_notes,
+            'external_notes' => $this->external_notes,
         ];
     }
 
