@@ -66,7 +66,7 @@
                         break;
                     default:
                         console.log(xhr);
-                        alert('Something went wrong, please try again later');
+                        alert('Something went wrong, please try again');
                 }
             });
         }
@@ -141,16 +141,16 @@
                     <p>{{ __('quotes.view.cards.quick.calculator.count') }}</p>
                     <h6 class="fw-bold row">
                         <div class="col-12 col-xl-3">
-                            <a href="javascript:plus()" class="btn btn-outline-primary btn-sm mb-1">
-                                <i class="icon-plus"></i>
+                            <a href="javascript:minus()" class="btn btn-outline-danger btn-sm mb-1">
+                                <i class="icon-minus"></i>
                             </a>
                         </div>
                         <div class="col-12 col-xl-6">
                             <x-admin.input name="count" value="1" onchange="textUpdate()" nofloat></x-admin.input>
                         </div>
                         <div class="col-12 col-xl-3">
-                            <a href="javascript:minus()" class="btn btn-outline-primary btn-sm mb-1">
-                                <i class="icon-minus"></i>
+                            <a href="javascript:plus()" class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-plus"></i>
                             </a>
                         </div>
                     </h6>
