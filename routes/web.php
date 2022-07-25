@@ -259,6 +259,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/', [QuoteController::class, 'view'])->name('view')->middleware('bouncer:Quote\Quote,read');
             Route::get('/update', [QuoteController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');
             Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
+            Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
+            Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
             Route::post('/delete', [QuoteController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
             Route::prefix('installment')->name('installments.')->group(function () {
                Route::post('/create', [QuoteInstallmentController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');

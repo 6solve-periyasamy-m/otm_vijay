@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin\Quote;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Quote\ConversionRequest;
 use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
 use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
+use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
+use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Http\Request;
 
 class QuoteController extends Controller
@@ -36,6 +39,21 @@ class QuoteController extends Controller
     {
         $quote = QuoteRepository::createFromTour($tour, $request->getCustomer(), $request->getDataset());
         return redirect()->route('quotes.view', ['quote' => $quote,]);
+    }
+
+    public function conversion(StartConversionRequest $request, Quote $quote)
+    {
+        if ($request->travelling == 0 && $request->paying == 0) {
+            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying));
+            return redirect()->route('orders.view', ['order' => $order,]);
+        }
+        return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying,]);
+    }
+
+    public function convert(ConversionRequest $request, Quote $quote)
+    {
+        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying), $request->getCustomers());
+        return redirect()->route('orders.view', ['order' => $order,]);
     }
 
     public function view(Quote $quote)

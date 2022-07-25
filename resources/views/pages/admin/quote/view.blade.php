@@ -249,7 +249,8 @@
                 </x-admin.section.otm-text>
                 <x-admin.section.otm-text>
                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.convert') }}</x-slot:header>
-                    <form class="d-none convert-form" action="{{ route('dash') }}" method="post">
+                    <form class="d-none convert-form" action="{{ route('quotes.conversion', ['quote' => $quote,]) }}" method="post">
+                        @csrf
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
