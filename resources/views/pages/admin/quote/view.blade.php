@@ -325,7 +325,7 @@
                                         {{ $componentRepository->getInventory()->__toString() }}
                                     </td>
                                     <td>
-                                        {{ f_currency($componentRepository->getPurchasePrice()) }}
+                                        {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -353,7 +353,7 @@
                                         {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
-                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                        {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -381,7 +381,7 @@
                                         {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
-                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                        {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -409,7 +409,7 @@
                                         {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
-                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                        {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -437,7 +437,7 @@
                                         {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
-                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                        {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -459,7 +459,7 @@
                                         {{ $component->repository->__toString() }}
                                     </td>
                                     <td>
-                                        {{ f_currency($component->repository->getPurchasePrice()) }}
+                                        {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                                     </td>
                                 </tr>
                             @endforeach

@@ -12,7 +12,7 @@ abstract class QuoteComponentRepository extends ModelRepository
 {
     public abstract function getTourComponentType(): string;
     public abstract function getCost(): float;
-    public abstract function getPurchasePrice(): float;
+    public abstract function getPurchasePrice(): ?float;
     public abstract function getInventory(): ?InventoryRepository;
     public abstract function getComponentType(): string;
 

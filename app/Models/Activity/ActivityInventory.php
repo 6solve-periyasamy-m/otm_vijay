@@ -27,8 +27,8 @@ use Illuminate\Support\Carbon;
  * @property bool|null $fit_selectable
  * @property int $ticket_type_id
  * @property int $stock
- * @property float $purchase_price
- * @property float $sales_price
+ * @property float|null $purchase_price
+ * @property float|null $sales_price
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -86,8 +86,8 @@ class ActivityInventory extends Model
             'starts_at' => 'date',
             'ends_at' => 'date',
             'stock' => 'required|numeric|integer',
-            'purchase_price' => 'required|numeric',
-            'sales_price' => 'required|numeric',
+            'purchase_price' => 'nullable|numeric',
+            'sales_price' => 'nullable|numeric',
         ];
     }
 

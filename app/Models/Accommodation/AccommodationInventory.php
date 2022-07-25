@@ -97,8 +97,8 @@ class AccommodationInventory extends Model
             'check_in' => 'date',
             'check_out' => 'date',
             'stock' => 'required|numeric|integer',
-            'purchase_price' => 'required|numeric',
-            'sales_price' => 'required|numeric',
+            'purchase_price' => 'nullable|numeric',
+            'sales_price' => 'nullable|numeric',
         ];
     }
 

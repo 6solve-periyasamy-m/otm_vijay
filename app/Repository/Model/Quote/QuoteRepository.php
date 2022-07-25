@@ -291,7 +291,7 @@ class QuoteRepository extends ModelRepository
     {
         $cost = 0;
         foreach ($this->getTemplates() as $template) {
-            $cost += $template->purchase_price;
+            $cost += $template->purchase_price ?? 0;
         }
         return $cost;
     }
@@ -301,7 +301,7 @@ class QuoteRepository extends ModelRepository
         $cost = 0;
         /** @var QuoteActivity $component */
         foreach ($this->quote->activities()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price;
+            $cost += $component->inventory->purchase_price ?? 0;
         }
         return $cost;
     }
@@ -311,7 +311,7 @@ class QuoteRepository extends ModelRepository
         $cost = 0;
         /** @var QuoteFlight $component */
         foreach ($this->quote->flights()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price;
+            $cost += $component->inventory->purchase_price ?? 0;
         }
         return $cost;
     }
@@ -321,7 +321,7 @@ class QuoteRepository extends ModelRepository
         $cost = 0;
         /** @var QuoteTransport $component */
         foreach ($this->quote->transport()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price;
+            $cost += $component->inventory->purchase_price ?? 0;
         }
         return $cost;
     }
@@ -331,7 +331,7 @@ class QuoteRepository extends ModelRepository
         $cost = 0;
         /** @var QuoteMerchandise $component */
         foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
-            $cost += $component->inventory->purchase_price;
+            $cost += $component->inventory->purchase_price ?? 0;
         }
         return $cost;
     }
