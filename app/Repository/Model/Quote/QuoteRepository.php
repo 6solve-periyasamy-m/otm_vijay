@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote;
 
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
+use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
@@ -16,6 +17,7 @@ use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class QuoteRepository extends ModelRepository
@@ -213,10 +215,21 @@ class QuoteRepository extends ModelRepository
     public function getPurchaseTotal(): float
     {
         $total = 0;
-        foreach ($this->getComponents() as $component) {
+        foreach ($this->getComponents(false, true, true, true, true, ['Included',]) as $component) {
             $total += $component->getPurchasePrice();
         }
+        foreach ($this->getTemplates() as $template) {
+            $total += $template->purchase_price;
+        }
         return $total;
+    }
+
+    /**
+     * @return Collection|QuoteAccommodation[]
+     */
+    public function getTemplates(): Collection|array
+    {
+        return $this->quote->accommodation()->where('is_template', '=', true)->get();
     }
 
     public function get(): Quote
