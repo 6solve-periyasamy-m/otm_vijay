@@ -7,8 +7,8 @@ use App\Repository\Storage\ConvertedCustomer;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property int[] $travelling
- * @property int[] $paying
+ * @property int[]|null $travelling
+ * @property int[]|null $paying
  */
 class ConversionRequest extends FormRequest
 {
@@ -18,24 +18,12 @@ class ConversionRequest extends FormRequest
     public function getCustomers(): array
     {
         $customers = [];
-        foreach ($this->travelling as $id) {
+        foreach ($this->travelling ?? [] as $id) {
             $customers[] = new ConvertedCustomer(Customer::find($id), false, true);
         }
-        foreach ($this->paying as $id) {
+        foreach ($this->paying ?? []  as $id) {
             $customers[] = new ConvertedCustomer(Customer::find($id), true, true);
         }
         return $customers;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function rules()
-    {
-        return [
-            //
-        ];
     }
 }
