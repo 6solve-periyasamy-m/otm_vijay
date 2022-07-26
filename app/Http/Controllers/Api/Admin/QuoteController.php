@@ -37,7 +37,7 @@ class QuoteController extends ApiController
             'f_profit' => f_currency($customers == 0 ? 0 : $cost - $purchasePrice),
             'profit_total' => $profit,
             'f_profit_total' => f_currency($profit),
-            'margin' => $purchasePrice > 0 && $costToCompany > 0 ? sigfig((($costToCustomer - $costToCompany) / $costToCustomer)*100) : ($costToCustomer <= 0 ? 0 : 100),
+            'margin' => $costToCustomer > 0 && $costToCompany > 0 ? sigfig((($costToCustomer - $costToCompany) / $costToCustomer)*100) : ($costToCustomer <= 0 ? 0 : 100),
             'ctc' => $costToCompany,
             'f_ctc' => f_currency($costToCompany),
         ];
