@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\Merchandise\MerchandiseController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
+use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
+use App\Http\Controllers\Admin\Merchandise\VariantController;
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
@@ -33,7 +39,6 @@ use App\Http\Controllers\Models\FlightInventoryTourController;
 use App\Http\Controllers\Models\HatSizeController;
 use App\Http\Controllers\Models\LocationTypeController;
 use App\Http\Controllers\Models\ManualAdjustmentController;
-use App\Http\Controllers\Models\MerchandiseController;
 use App\Http\Controllers\Models\OperatorController;
 use App\Http\Controllers\Models\OrderController;
 use App\Http\Controllers\Models\OrderCustomerAdjustmentController;
@@ -192,7 +197,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::get('/update', [OrderCustomerModelController::class, 'edit'])->name('order-customers.edit')->middleware('bouncer:Order\OrderCustomer,update');
                     Route::post('/update', [OrderCustomerModelController::class, 'update'])->name('order-customers.update')->middleware('bouncer:Order\OrderCustomer,update');
                     Route::post('/delete', [OrderCustomerModelController::class, 'destroy'])->name('order-customers.delete')->middleware('bouncer:Order\OrderCustomer,delete');
-
+                    Route::get('/merchandise/{orderMerchandise}/fulfil', [OrderCustomerModelController::class, 'fulfil'])->name('merchandise.inventory.tour.order.fulfil')->middleware('bouncer:Order\OrderCustomer,update');
                     Route::prefix('adjustment')->group(function () {
                         Route::get('/', [OrderCustomerAdjustmentController::class, 'index'])->name('order-customer-adjustments.all')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,read');
                         Route::get('/create', [OrderCustomerAdjustmentController::class, 'create'])->name('order-customer-adjustments.create')->middleware('bouncer:Order\Adjustment\OrderCustomerAdjustment,create');
@@ -444,6 +449,53 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         });
     });
 
+    Route::prefix('merchandise')->name('merchandise.')->group(function () {
+        Route::get('/', [MerchandiseController::class, 'index'])->name('all');
+        Route::get('/create', [MerchandiseController::class, 'create'])->name('create');
+        Route::post('/create', [MerchandiseController::class, 'store'])->name('store');
+        Route::prefix('{merchandise}')->group(function () {
+            Route::get('/', [MerchandiseController::class, 'show'])->name('view');
+            Route::get('/detailed', [MerchandiseController::class, 'detailed'])->name('detailed');
+            Route::get('/update/{view?}', [MerchandiseController::class, 'edit'])->name('edit');
+            Route::post('/update/{view?}', [MerchandiseController::class, 'update'])->name('update');
+            Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('delete');
+            Route::prefix('inventory')->name('inventory.')->group(function () {
+                Route::get('/create/{view?}', [MerchandiseInventoryController::class, 'create'])->name('create');
+                Route::post('/create/{view?}', [MerchandiseInventoryController::class, 'store'])->name('store');
+                Route::prefix('{inventory}')->group(function () {
+                    Route::get('/update/{view?}', [MerchandiseInventoryController::class, 'edit'])->name('edit');
+                    Route::post('/update/{view?}', [MerchandiseInventoryController::class, 'update'])->name('update');
+                    Route::post('/delete/{view?}', [MerchandiseInventoryController::class, 'delete'])->name('delete');
+                    Route::get('/duplicate/{view?}', [MerchandiseInventoryController::class, 'duplicate'])->name('duplicate');
+                });
+            });
+        });
+        Route::prefix('type')->name('type.')->group(function () {
+            Route::get('/create', [MerchandiseTypeController::class, 'create'])->name('create');
+            Route::post('/create', [MerchandiseTypeController::class, 'store'])->name('store');
+            Route::prefix('{type}')->group(function () {
+                Route::get('/update', [MerchandiseTypeController::class, 'edit'])->name('edit');
+                Route::post('/update', [MerchandiseTypeController::class, 'update'])->name('update');
+            });
+        });
+        Route::prefix('size')->name('size.')->group(function () {
+            Route::get('/create', [MerchandiseSizeController::class, 'create'])->name('create');
+            Route::post('/create', [MerchandiseSizeController::class, 'store'])->name('store');
+            Route::prefix('{size}')->group(function () {
+                Route::get('/update', [MerchandiseSizeController::class, 'edit'])->name('edit');
+                Route::post('/update', [MerchandiseSizeController::class, 'update'])->name('update');
+            });
+        });
+        Route::prefix('variant')->name('variant.')->group(function () {
+            Route::get('/create', [VariantController::class, 'create'])->name('create');
+            Route::post('/create', [VariantController::class, 'store'])->name('store');
+            Route::prefix('{type}')->group(function () {
+                Route::get('/update', [VariantController::class, 'edit'])->name('edit');
+                Route::post('/update', [VariantController::class, 'update'])->name('update');
+            });
+        });
+    });
+
     Route::prefix('tours')->group(function () {
         Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'index'])->name('tours.all')->middleware('bouncer:Tour\Tour,read');
         Route::get('/create', [\App\Http\Controllers\Models\TourController::class, 'create'])->name('tours.create')->middleware('bouncer:Tour\Tour,create');
@@ -458,6 +510,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/add', function (Tour $tour) {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
             })->name('tours.add')->middleware('bouncer:Tour\Tour,update');
+            Route::get('/fulfil', [\App\Http\Controllers\Models\TourController::class, 'fulfil'])->name('tours.fulfil')->middleware('bouncer:Merchandise\Merchandise,update');
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {
                     Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('bouncer:Accommodation\AccommodationInventoryTour,create');
@@ -499,6 +552,14 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                             Route::post('/update', [UpgradeController::class, 'updateActivityUpgrade'])->name('activity-upgrade.update')->middleware('bouncer:Activity\ActivityInventoryTour,update');
                             Route::post('/delete', [UpgradeController::class, 'deleteActivityUpgrade'])->name('activity-upgrade.delete')->middleware('bouncer:Activity\ActivityInventoryTour,delete');
                         });
+                    });
+                });
+                Route::prefix('merchandise')->name('merchandise.inventory.tour.')->group(function () {
+                    Route::prefix('{inventoryTour}')->group(function () {
+                        Route::get('update', [MerchandiseInventoryTourController::class, 'edit'])->name('edit');
+                        Route::post('update', [MerchandiseInventoryTourController::class, 'update'])->name('update');
+                        Route::post('delete', [MerchandiseInventoryTourController::class, 'delete'])->name('delete');
+                        Route::post('restore', [MerchandiseInventoryTourController::class, 'restore'])->name('restore');
                     });
                 });
                 Route::prefix('flight')->group(function () {
@@ -552,18 +613,6 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::get('/update', [PaymentInstallmentController::class, 'edit'])->name('payment-installments.edit')->middleware('bouncer:Tour\Tour,update');
                     Route::post('/update', [PaymentInstallmentController::class, 'update'])->name('payment-installments.update')->middleware('bouncer:Tour\Tour,update');
                     Route::post('/delete', [PaymentInstallmentController::class, 'destroy'])->name('payment-installments.delete')->middleware('bouncer:Tour\Tour,update');
-                });
-            });
-            Route::prefix('merchandise')->group(function () {
-                Route::get('/', [MerchandiseController::class, 'index'])->name('merchandise.all');
-                Route::get('/create', [MerchandiseController::class, 'create'])->name('merchandise.create');
-                Route::post('/create', [MerchandiseController::class, 'store'])->name('merchandise.store');
-                Route::prefix('{merchandise}')->group(function () {
-                    Route::get('/', [MerchandiseController::class, 'view'])->name('merchandise.view');
-                    Route::get('/update', [MerchandiseController::class, 'edit'])->name('merchandise.edit');
-                    Route::post('/update', [MerchandiseController::class, 'update'])->name('merchandise.update');
-                    Route::post('/delete', [MerchandiseController::class, 'destroy'])->name('merchandise.delete');
-                    Route::post('/restore', [MerchandiseController::class, 'restore'])->name('merchandise.delete');
                 });
             });
         });
@@ -733,6 +782,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/abandoned-bookings/{extension}', [ReportController::class, 'exportAbandonedBookingsReport'])->name('reports.abandoned-bookings.export');
         Route::get('/reminders/export/{extension}/{max?}/{min?}', [ReportController::class, 'exportOrderRemindersReport'])->name('reports.reminders.export');
         Route::get('/reminders/{max?}/{min?}', [ReportController::class, 'getOrderRemindersReport'])->name('reports.reminders');
+        Route::get('/merchandise', [ReportController::class, 'getOrderMerchandiseReport'])->name('reports.merchandise');
+        Route::get('/merchandise/{extension}', [ReportController::class, 'exportOrderMerchandiseReport'])->name('reports.merchandise.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');

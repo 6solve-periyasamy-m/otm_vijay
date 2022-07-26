@@ -9,12 +9,13 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Merchandise\Merchandise;
+use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
-use App\Models\Tour\Merchandise;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
@@ -78,10 +79,11 @@ class TourComponentController extends Controller
     }
 
     public function addMerchandiseAddon(Request $request) {
-        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:merchandises,id']);
+        $request->validate(['customer_id' => 'required|exists:order_customers,id', 'merchandise_id' => 'required|exists:merchandise_inventory_tours,id']);
         $oCustomer = OrderCustomer::find($request->input('customer_id'));
-        $merchandise = Merchandise::find($request->input('merchandise_id'));
-        return $merchandise->repository->grantToCustomer($oCustomer);
+        $merchandise = MerchandiseInventoryTour::find($request->input('merchandise_id'));
+        $oRepo = $merchandise->repository->grantToCustomer($oCustomer);
+        return isset($oRepo) ? response()->json(['success' => true, 'message' => 'Added component successfully']) : response()->json(['success' => false, 'message' => 'Failed to add component']);
     }
 
     public function applyAccommodationUpgrade(Request $request): JsonResponse

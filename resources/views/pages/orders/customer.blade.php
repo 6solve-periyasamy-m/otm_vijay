@@ -620,22 +620,30 @@ $(document).ready( function () {
             <table id="merchandise-table" class="table table-striped table-responsive-sm">
                 <thead>
                 <tr>
+                    <th scope="col">Image</th>
                     <th scope="col">Name</th>
                     <th scope="col">Cost</th>
                     <th scope="col">Component Type</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col">Fulfilled</th>
+                    <th scope="col" class="actions">Actions</th>
                 </tr>
                 </thead>
-                @foreach($orderCustomer->orderMerchandise as $orderMerchandise)
+                @foreach($orderCustomer->orderMerchandise()->with('tourComponent', 'tourComponent.inventory', 'tourComponent.inventory.component')->get() as $orderMerchandise)
                     <tr>
-                        <td>{{ $orderMerchandise->merchandise->name }}</td>
-                        <td>{{ f_currency($orderMerchandise->merchandise->tour_sales_price) }}</td>
-                        <td>{{ $orderMerchandise->merchandise->tour_component_type }}</td>
-                        <td>
-                            <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}" method="post">
+                        <td><img src="{{ $orderMerchandise->tourComponent->inventory->asset }}" class="image tiny"/></td>
+                        <td>{{ $orderMerchandise->tourComponent->inventory->component->name }} ({{ $orderMerchandise->tourComponent->inventory->variant->name }}) ({{ $orderMerchandise->tourComponent->inventory->size?->name ?? 'No Size'  }})</td>
+                        <td>{{ f_currency($orderMerchandise->tourComponent->tour_sales_price) }}</td>
+                        <td>{{ $orderMerchandise->tourComponent->tour_component_type }}</td>
+                        <td>{{ f_bool($orderMerchandise->fulfilled) }}</td>
+                        <td class="actions">
+                            <a href="{{ route('merchandise.inventory.tour.order.fulfil', ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer, 'orderMerchandise' => $orderMerchandise]) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="icon-action-redo"></i>
+                            </a>
+                            <a href="javascript:$('#m-{{$orderMerchandise->id}}-delete').submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+                            <form action="{{ route('orderMerchandiseDelete', ['id' => $orderMerchandise->id,]) }}" method="post" id="m-{{$orderMerchandise->id}}-delete" class="d-none">
                                 @csrf
                                 <input type="hidden" name="redirect" value="{{ route(Route::currentRouteName(), ['order' => $orderCustomer->order, 'orderCustomer' => $orderCustomer,]) }}" />
-                                <a href="#" onclick="this.parentNode.submit()" class="btn btn-outline-danger btn-sm"><i class="icon-trash"></i></a>
+
                             </form>
                         </td>
                     </tr>

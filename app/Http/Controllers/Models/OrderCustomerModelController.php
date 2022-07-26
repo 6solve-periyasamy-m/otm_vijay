@@ -6,6 +6,7 @@ use App\Events\Order\Customer\OrderCustomerCreatedEvent;
 use App\Events\Order\Customer\OrderCustomerEditedEvent;
 use App\Events\Order\Customer\OrderCustomerRemovedEvent;
 use App\Http\Controllers\Controller;
+use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Repository\RoomingRepository;
@@ -44,6 +45,12 @@ class OrderCustomerModelController extends Controller
         $orderCustomer->repository->addAllIncluded();;
         RoomingRepository::assignDefaultRooming($orderCustomer);
         event(new OrderCustomerCreatedEvent($orderCustomer));
+        return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
+    }
+
+    public function fulfil(Order $order, OrderCustomer $orderCustomer, OrderMerchandise $orderMerchandise)
+    {
+        $orderMerchandise->repository->update(['fulfilled' => !$orderMerchandise->fulfilled,]);
         return redirect()->route('order-customers.view', ['order' => $order, 'orderCustomer' => $orderCustomer,]);
     }
 

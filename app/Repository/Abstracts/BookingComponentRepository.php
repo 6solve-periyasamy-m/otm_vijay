@@ -21,7 +21,7 @@ abstract class BookingComponentRepository
             'activity' => BookingActivity::find($id)?->repository,
             'flight' => BookingFlight::find($id)?->repository,
             'transport' => BookingTransport::find($id)?->repository,
-            'extra' => BookingMerchandise::find($id)?->repository,
+            'merchandise' => BookingMerchandise::find($id)?->repository,
             default => null,
         };
     }
