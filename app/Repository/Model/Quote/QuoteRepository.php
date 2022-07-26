@@ -80,7 +80,11 @@ class QuoteRepository extends ModelRepository
         foreach ($travellers as $traveller) { $paying += $traveller->paying ? 1 : 0; }
         $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person;
         $lead->data['tour_cost'] = $pricePerPerson;
-        foreach ($travellers as $traveller) { $traveller->data['tour_cost'] = $pricePerPerson; }
+        $lead->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
+        foreach ($travellers as $traveller) {
+            $traveller->data['tour_cost'] = $pricePerPerson;
+            $traveller->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
+        }
         $tour = $this->quote->tour ?? $this->convertToTour($paying);
         $data = [
             'deposit' => $this->quote->deposit,
@@ -105,6 +109,7 @@ class QuoteRepository extends ModelRepository
             'final_payment' => $this->quote->final_payment,
             'stock_control_active' => false,
             'base_price_per_person' => $this->getPricePerPerson($customerCount),
+            'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
         ]);
         foreach ($this->getComponents() as $repository) {
             $repository->getInventory()->addToTour($tour, $repository->getTourComponentType(), $repository->getCost());

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int $customer_id
+ * @property float $single_occupancy_surcharge
  * @property string $travelling
  * @property string $paying
  * @property string $expires
@@ -25,6 +26,7 @@ class CreateBasicQuoteRequest extends FormRequest
     {
         return [
             'expires' => $this->expires,
+            'single_occupancy_surcharge' => $this->single_occupancy_surcharge ?? 0,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
         ];

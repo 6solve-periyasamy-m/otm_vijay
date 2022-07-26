@@ -34,10 +34,11 @@ use Illuminate\Support\Carbon;
  * @property int|null $event_id
  * @property string|null $reference
  * @property float|null $deposit
- * @property int $locked
- * @property string $final_payment
- * @property string $date_from
- * @property string $date_to
+ * @property float $single_occupancy_surcharge
+ * @property bool $locked
+ * @property Carbon $final_payment
+ * @property Carbon $date_from
+ * @property Carbon $date_to
  * @property string $terms
  * @property string $invoice_footer
  * @property Carbon|null $expires
@@ -104,6 +105,8 @@ class Quote extends Model
     protected $guarded = [];
     protected $casts = [
         'deposit' => 'double',
+        'single_occupancy_surcharge' => 'double',
+        'locked' => 'boolean',
         'expires' => 'datetime',
         'date_from' => 'date',
         'date_to' => 'date',

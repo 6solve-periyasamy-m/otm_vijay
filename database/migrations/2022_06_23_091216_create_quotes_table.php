@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('reference', 64)->nullable();
             $table->decimal('deposit', 12)->nullable();
             $table->boolean('locked')->default(true);
+            $table->decimal('single_occupancy_surcharge', 12)->default(0);
             $table->date('final_payment');
             $table->date('date_from');
             $table->date('date_to');

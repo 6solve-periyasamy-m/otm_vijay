@@ -15,6 +15,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $terms
  * @property string $travelling
  * @property string $paying
+ * @property float|null $single_occupancy_surcharge
  * @property string $internal_notes
  * @property string $external_notes
  * @property float $cost
@@ -32,6 +33,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'invoice_footer' => $this->footer ?? "",
             'terms' => $this->terms ?? "",
             'expiry' => $this->expires,
+            'single_occupancy_surcharge' => $this->single_occupancy_surcharge ?? 0,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
         ];
@@ -67,6 +69,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'expires' => 'required|date',
             'final' => 'required|date',
             'cost' => 'required|numeric|min:0',
+            'single_occupancy_surcharge' => 'nullable|numeric|min:0',
         ];
     }
 }
