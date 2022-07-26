@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Quote\ConversionRequest;
 use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
 use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
+use App\Http\Requests\Admin\Quote\QuoteEditRequest;
 use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
@@ -63,12 +64,14 @@ class QuoteController extends Controller
 
     public function edit(Quote $quote)
     {
-        // TODO: Stub (Generated)
+        return view('pages.admin.quote.edit', ['quote' => $quote,]);
     }
 
-    public function update(Request $request, Quote $quote)
+    public function update(QuoteEditRequest $request, Quote $quote)
     {
-        // TODO: Stub (Generated)
+        $quote->repository->update($request->getDataset());
+        $quote->repository->updateLead($request->getCustomerDataset());
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
     }
 
     public function delete(Quote $quote)

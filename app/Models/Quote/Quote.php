@@ -110,6 +110,7 @@ class Quote extends Model
         'expires' => 'datetime',
         'date_from' => 'date',
         'date_to' => 'date',
+        'final_payment' => 'date',
         'sent' => 'datetime',
         'quote_status' => QuoteStatus::class
     ];

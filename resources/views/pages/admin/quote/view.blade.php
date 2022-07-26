@@ -137,6 +137,28 @@
             <a href="mailto:{{ $quote->leadTraveller->email }}">{{ $quote->leadTraveller->email }}</a>
             (<a href="tel:{{ $quote->leadTraveller->phone }}">{{ $quote->leadTraveller->phone }}</a>)
         </x-admin.section.header.detail>
+
+        <div class="col-12">
+            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-success">
+                <i class="icon-note"></i>
+                {{ __('quotes.view.buttons.edit') }}
+            </a>
+            @if($quote->locked)
+            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-warning">
+                <i class="icon-key"></i>
+                {{ __('quotes.view.buttons.unlock') }}
+            </a>
+            @else
+            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-danger">
+                <i class="icon-lock"></i>
+                {{ __('quotes.view.buttons.lock') }}
+            </a>
+            @endif
+            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-info">
+                <i class="icon-envelope-letter"></i>
+                {{ __('quotes.view.buttons.send') }}
+            </a>
+        </div>
     </x-admin.section.header>
 
     <div class="heading pt-2 pb-md-3 pb-2">

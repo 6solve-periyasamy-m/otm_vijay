@@ -21,6 +21,12 @@ return [
             'name' => 'Lead Traveller Name',
             'contact' => 'Lead Contact Information'
         ],
+        'buttons' => [
+            'edit' => 'Edit Quote',
+            'lock' => 'Lock Quote',
+            'unlock' => 'Unlock Quote',
+            'send' => 'Send Quote',
+        ],
         'cards' => [
             'quick' => [
                 'header' => 'Quick Information',

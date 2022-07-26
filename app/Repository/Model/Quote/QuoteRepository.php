@@ -221,6 +221,14 @@ class QuoteRepository extends ModelRepository
         return $components;
     }
 
+    public function updateLead(array $data): QuoteProspect
+    {
+        $lead = $this->quote->leadTraveller;
+        $lead->update($data);
+        $lead->save();
+        return $lead;
+    }
+
     public function getPurchaseTotal(): float
     {
         return $this->getAccommodationCost() + $this->getActivityCost() + $this->getFlightCost() + $this->getTransportCost() + $this->getMerchandiseCost();
