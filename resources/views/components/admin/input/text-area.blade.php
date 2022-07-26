@@ -1,4 +1,4 @@
-<div class="form-group form-floating col-12-{{ $attributes->get('width', 12) }} {{ $divClasses ?? "" }}" style="padding-left: 5px;">
+<div class="form-group form-floating col-12 col-xl-{{ $attributes->get('width', 12) }} {{ $divClasses ?? "" }}" style="padding-left: 5px;">
     <textarea class="form-control {{ $attributes->get('name') }}-input"
               id="{{ $attributes->get('name') }}"
               name="{{ $attributes->get('name') }}"
