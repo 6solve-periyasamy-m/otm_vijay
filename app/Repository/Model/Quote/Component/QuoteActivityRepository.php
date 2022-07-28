@@ -72,4 +72,26 @@ class QuoteActivityRepository extends QuoteComponentRepository
     {
         return 'activity';
     }
+
+    public function getShortDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$component->activityType}) ({$inventory->ticketType})";
+    }
+
+    public function getItineraryTitle(): string
+    {
+        return $this->getShortDescription();
+    }
+
+    public function getItineraryDescription(): string
+    {
+        return $this->getInventory()->get()->component->description;
+    }
+
+    public function getItineraryAsset(): string
+    {
+        return asset($this->getInventory()->get()->component->image_url);
+    }
 }

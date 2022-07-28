@@ -251,7 +251,7 @@ class QuoteRepository extends ModelRepository
      */
     public function getTemplates(): Collection|array
     {
-        return $this->quote->accommodation()->where('is_template', '=', true)->get();
+        return $this->quote->accommodation()->where('is_template', '=', true)->with('inventory')->get();
     }
 
     public function get(): Quote
@@ -376,5 +376,119 @@ class QuoteRepository extends ModelRepository
             $cost -= $installment->amount;
         }
         return $cost * $paying;
+    }
+
+    /**
+     * @return QuoteComponentRepository[]
+     */
+    public function getAccommodationForInvoice(bool $sort = true): array
+    {
+        $data = [];
+        foreach ($this->getTemplates() as $template) {
+            $time = $template->repository->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $template->repository;
+        }
+        if ($sort) ksort($data);
+        return $data;
+    }
+
+    /**
+     * @return QuoteComponentRepository[]
+     */
+    public function getActivitiesForInvoice(bool $sort = true): array
+    {
+        $data = [];
+        foreach ($this->quote->activities()->with('inventory')->get() as $template) {
+            $time = $template->repository->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $template->repository;
+        }
+        if ($sort) ksort($data);
+        return $data;
+    }
+
+    /**
+     * @return QuoteComponentRepository[]
+     */
+    public function getFlightsForInvoice(bool $sort = true): array
+    {
+        $data = [];
+        foreach ($this->quote->flights()->with('inventory')->get() as $template) {
+            $time = $template->repository->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $template->repository;
+        }
+        if ($sort) ksort($data);
+        return $data;
+    }
+
+    /**
+     * @return QuoteComponentRepository[]
+     */
+    public function getTransportForInvoice(bool $sort = true): array
+    {
+        $data = [];
+        foreach ($this->quote->transport()->with('inventory')->get() as $template) {
+            $time = $template->repository->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $template->repository;
+        }
+        if ($sort) ksort($data);
+        return $data;
+    }
+
+    /**
+     * @return QuoteComponentRepository[]
+     */
+    public function getItinerary(): array
+    {
+        $data = [];
+        foreach ($this->getAccommodationForInvoice(false) as $component) {
+            $time = $component->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $component;
+        }
+        foreach ($this->getActivitiesForInvoice(false) as $component) {
+            $time = $component->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $component;
+        }
+        foreach ($this->getFlightsForInvoice(false) as $component) {
+            $time = $component->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $component;
+        }
+        foreach ($this->getTransportForInvoice(false) as $component) {
+            $time = $component->getInventory()->getStartTime()->unix();
+            do {
+                $exists = array_key_exists($time, $data);
+                if ($exists) $time++;
+            } while ($exists);
+            $data[$time] = $component;
+        }
+        ksort($data);
+        return $data;
     }
 }

@@ -91,21 +91,49 @@ use App\Models\Helper\QuoteStatus;
                 <table class="order-table center">
                     <thead>
                         <tr>
-                            <td class="order-table-title date">Due Date</td>
-                            <td class="order-table-title description">Description</td>
+                            <td class="order-table-title date-double">Dates</td>
+                            <td class="order-table-title short-description">Description</td>
                             <td class="order-table-title quantity">Quantity</td>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($quote->repository->getTemplates() as $component)
+                        <tr>
+                            <td colspan="3" class="metadata center-text pagebreak">Accommodation</td>
+                        </tr>
+                        @foreach($quote->repository->getAccommodationForInvoice() as $component)
                             <tr>
-                                <td class="double-description"><div class="order-table-description">{{ $component->inventory->__toString() }} ({{ $component->tour_component_type }})</div></td>
+                                <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
                                 <td class="quantity">{{ $paying + $travelling }}</td>
                             </tr>
                         @endforeach
-                        @foreach($quote->repository->getComponents(false) as $component)
+                        <tr>
+                            <td colspan="3" class="metadata center-text pagebreak">Activities</td>
+                        </tr>
+                        @foreach($quote->repository->getActivitiesForInvoice() as $component)
                             <tr>
-                                <td class="double-description"><div class="order-table-description">{{ $component->getInventory()->__toString() }} ({{ $component->getTourComponentType() }})</div></td>
+                                <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
+                                <td class="quantity">{{ $paying + $travelling }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="3" class="metadata center-text pagebreak">Flights</td>
+                        </tr>
+                        @foreach($quote->repository->getFlightsForInvoice() as $component)
+                            <tr>
+                                <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
+                                <td class="quantity">{{ $paying + $travelling }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="3" class="metadata center-text pagebreak">Transport</td>
+                        </tr>
+                        @foreach($quote->repository->getTransportForInvoice() as $component)
+                            <tr>
+                                <td class="date-double"><div class="order-table-description">{{ f_datetime($component->getInventory()->getStartTime()) }} to {{ f_datetime($component->getInventory()->getEndTime()) }}</div></td>
+                                <td class="short-description"><div class="order-table-description">{{ $component->getShortDescription() }}</div></td>
                                 <td class="quantity">{{ $paying + $travelling }}</td>
                             </tr>
                         @endforeach

@@ -238,8 +238,18 @@ a {
             padding-left: var(--table-cell-padding);
         }
 
+        .short-description {
+            width: calc(var(--table-description-column) - (var(--table-date-column) * 0.5));
+            padding-left: var(--table-cell-padding);
+        }
+
         .date-description {
             width: var(--table-date-description-column);
+            padding-left: var(--table-cell-padding);
+        }
+
+        .date-double {
+            width: calc(var(--table-date-column) * 1.5);
             padding-left: var(--table-cell-padding);
         }
 
@@ -399,8 +409,16 @@ a {
                 width: calc(var(--table-description-column) + var(--table-date-column));
             }
 
+            .short-description {
+                width: calc(var(--table-description-column) - (var(--table-date-column) * 0.5));
+            }
+
             .date-description {
                 width: var(--table-date-description-column);
+            }
+
+            .date-double {
+                width: calc(var(--table-date-column) * 1.5);
             }
 
             .amount {

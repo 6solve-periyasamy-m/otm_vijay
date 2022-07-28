@@ -6,6 +6,7 @@ use App\Models\Quote\Component\QuoteAccommodation;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
+use Carbon\Carbon;
 
 class QuoteAccommodationRepository extends QuoteComponentRepository
 {
@@ -71,5 +72,27 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     public function getComponentType(): string
     {
         return 'accommodation';
+    }
+
+    public function getShortDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$inventory->boardType})";
+    }
+
+    public function getItineraryTitle(): string
+    {
+        return $this->getShortDescription();
+    }
+
+    public function getItineraryDescription(): string
+    {
+        return $this->getInventory()->get()->component->description;
+    }
+
+    public function getItineraryAsset(): string
+    {
+        return asset($this->getInventory()->get()->component->image_url);
     }
 }

@@ -72,4 +72,28 @@ class QuoteFlightRepository extends QuoteComponentRepository
     {
         return 'flight';
     }
+
+    public function getShortDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->departureAirport->name} to {$component->arrivalAirport->name} ({$inventory->travelClass})";
+    }
+
+    public function getItineraryTitle(): string
+    {
+        return $this->getShortDescription();
+    }
+
+    public function getItineraryDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "A flight from {$component->departureAirport->name} to {$component->arrivalAirport->name}, with {$inventory->travelClass} seating.";
+    }
+
+    public function getItineraryAsset(): string
+    {
+        return asset($this->getInventory()->get()->component->image_url);
+    }
 }

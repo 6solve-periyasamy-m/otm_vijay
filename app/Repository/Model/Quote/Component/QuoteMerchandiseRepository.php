@@ -73,4 +73,28 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
     {
         return 'merchandise';
     }
+
+    public function getShortDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$inventory->variant->name}) ({$inventory->size->name})";
+    }
+
+    public function getItineraryTitle(): string
+    {
+        return $this->getShortDescription();
+    }
+
+    public function getItineraryDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "A {$inventory->variant->name} {$component->name}, in {$inventory->size->name}";
+    }
+
+    public function getItineraryAsset(): string
+    {
+        return $this->getInventory()->get()->asset;
+    }
 }
