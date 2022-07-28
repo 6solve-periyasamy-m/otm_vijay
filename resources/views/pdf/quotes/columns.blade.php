@@ -49,7 +49,7 @@ use App\Models\Helper\QuoteStatus;
                         </div>
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
-                            <div class="metadata divider">Free Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
+                            <div class="metadata divider">Non-Paying Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
                             <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $quote->reference }}</span></div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@ use App\Models\Helper\QuoteStatus;
                 </div>
                 <div class="flex-container">
                     <div class="flex-items billing-info-wrapper">
-                        <div class="billing-info">{{ $quote->leadTraveller->customer_name }}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->name }}</div>
                         <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_1 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_1) ? "<br />" : "" !!}</div>
                         <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_2 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_2) ? "<br />" : "" !!}</div>
                         <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_3 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_3) ? "<br />" : "" !!}</div>
