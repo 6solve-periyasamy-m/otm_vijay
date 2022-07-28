@@ -233,6 +233,11 @@ a {
             padding-left: var(--table-cell-padding);
         }
 
+        .double-description {
+            width: calc(var(--table-description-column) + var(--table-date-column));
+            padding-left: var(--table-cell-padding);
+        }
+
         .date-description {
             width: var(--table-date-description-column);
             padding-left: var(--table-cell-padding);
@@ -388,6 +393,10 @@ a {
 
             .description {
                 width: var(--table-description-column);
+            }
+
+            .double-description {
+                width: calc(var(--table-description-column) + var(--table-date-column));
             }
 
             .date-description {

@@ -861,6 +861,10 @@ Route::prefix('customer')->name('customer.')->group(function () {
     });
 });
 
+Route::prefix('quotes')->name('customer.quote.')->group(function () {
+    Route::get('/view/{reference}/{paying}/{travelling}', [QuoteController::class, 'document'])->name('view');
+});
+
 Route::prefix('payment')->name('payment.')->group(function () {
     Route::prefix('gateway')->name('gateway.')->group(function () {
         Route::prefix('stripe')->name('stripe.')->group(function () {

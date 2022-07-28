@@ -23,6 +23,8 @@ use App\Repository\Storage\ConvertedCustomer;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Browsershot\Browsershot;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class QuoteRepository extends ModelRepository
 {
@@ -357,5 +359,22 @@ class QuoteRepository extends ModelRepository
             $cost += $component->inventory->purchase_price ?? 0;
         }
         return $cost;
+    }
+
+    public function getResponseStream(int $paying, int $travelling): StreamedResponse
+    {
+        $invoice = Browsershot::html(view('pdf.quotes.columns', ['quote' => $this->quote, 'paying' => $paying, 'travelling' => $travelling,])->render());
+        $invoice->showBackground()->margins(10, 2, 10, 2);
+        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+    }
+
+    public function getRemaining(int $paying = 1): float
+    {
+        $cost = $this->getTotalCost(1);
+        $cost -= $this->quote->deposit;
+        foreach ($this->quote->installments as $installment) {
+            $cost -= $installment->amount;
+        }
+        return $cost * $paying;
     }
 }

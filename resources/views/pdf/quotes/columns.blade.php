@@ -1,0 +1,164 @@
+@php
+/**
+ * @var \App\Models\Quote\Quote $quote
+ * @var int $travelling
+ * @var int $paying
+ */
+use App\Models\Helper\QuoteStatus;
+@endphp
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quote - {{ $quote->reference }}</title>
+        <link rel="stylesheet" href="{{ asset('css/invoice.css') }}">
+        <style>
+            .cancelled {
+                background-image: url('{{ asset('images/rubberstamp.svg') }}') !important;
+                background-repeat: no-repeat !important;
+                background-position-x: calc(50% + 3em) !important;
+                background-position-y: 8em;
+                background-size: 30em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="background center-screen @if($quote->status == QuoteStatus::CLOSED || $quote->status == QuoteStatus::EXPIRED) cancelled @endif">
+            <!-- Header Section -->
+            <div class="section">
+                <div class="header">
+                    <div class="flex-container titles">
+                        <div class="flex-items site-info vert-align">
+                            <img src="{{ asset(setting('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ setting('company.name') }}" />
+                        </div>
+                        <div class="flex-items vert-align">
+                            <h2 class="header-title tour-name">{{ $quote->reference }}</h2>
+                        </div>
+                        <div class="flex-items vert-align">
+                            <h1 class="header-title">Quote</h1>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <div class="flex-items">
+                            <span class="metadata">Website:</span> <a class="site-info-padding" href="{{ setting('company.url', URL::to('/')) }}">{{ setting('company.url', URL::to('/')) }}</a>
+                            <br /><span class="metadata">Email:</span> <a class="site-info-padding" href="mailto:{{ setting('company.contact.email', 'Email not set') }}">{{ setting('company.contact.email', 'Email not set') }}</a>
+                            <br /><span class="metadata">Telephone:</span> <a class="site-info-padding" href="tel:{{ setting('company.contact.phone', 'Phone number not set') }}">{{ setting('company.contact.phone', 'Phone number not set') }}</a>
+                        </div>
+                        <div class="flex-items metadata-wrapper">
+                            <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
+                            <div class="metadata divider">Free Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
+                            <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $quote->reference }}</span></div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+            <!-- Billing Section -->
+            <div class="section">
+                <div class="flex-container">
+                <div class="flex-items billing-info-wrapper">
+                        <div class="metadata divider"><span class="metadata-title">Billing Address</span></div>
+                    </div>
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="metadata divider"><span class="metadata-title">Supplier Address</span></div>
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="billing-info">{{ $quote->leadTraveller->customer_name }}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_1 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_1) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_2 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_2) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->address_line_3 }}{!! isset($quote->leadTraveller->customer->billingAddress->address_line_3) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->town }}{!! isset($quote->leadTraveller->customer->billingAddress->town) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->region }}{!! isset($quote->leadTraveller->customer->billingAddress->region) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->country }}{!! isset($quote->leadTraveller->customer->billingAddress->country) ? "<br />" : "" !!}</div>
+                        <div class="billing-info">{{ $quote->leadTraveller->customer->billingAddress->postcode }}{!! isset($quote->leadTraveller->customer->billingAddress->postcode) ? "<br />" : "" !!}</div>
+                    </div>
+                    <div class="flex-items billing-info-wrapper">
+                        <div class="billing-info">{{ setting('company.address.line_1', 'Company Address Line 1 Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.line_2', 'Company Address Line 2 Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.city', 'Company City Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.region', 'Company Region Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.country', 'Company Country Not Set') }}</div>
+                        <div class="billing-info">{{ setting('company.address.postcode', 'Company Postcode Not Set') }}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Order Section -->
+            <div class="section">
+                <table class="order-table center">
+                    <thead>
+                        <tr>
+                            <td class="order-table-title date">Due Date</td>
+                            <td class="order-table-title description">Description</td>
+                            <td class="order-table-title quantity">Quantity</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($quote->repository->getTemplates() as $component)
+                            <tr>
+                                <td class="double-description"><div class="order-table-description">{{ $component->inventory->__toString() }} ({{ $component->tour_component_type }})</div></td>
+                                <td class="quantity">{{ $paying + $travelling }}</td>
+                            </tr>
+                        @endforeach
+                        @foreach($quote->repository->getComponents(false) as $component)
+                            <tr>
+                                <td class="double-description"><div class="order-table-description">{{ $component->getInventory()->__toString() }} ({{ $component->getTourComponentType() }})</div></td>
+                                <td class="quantity">{{ $paying + $travelling }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="3" class="metadata right-text">Total: {{ f_currency($quote->repository->getTotalCost($paying)) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagebreak"></div>
+            <div class="pageborder"></div>
+            <!-- Installments Section -->
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Installments</h2>
+                <table class="order-table center">
+                    <thead>
+                        <tr>
+                            <td class="order-table-title date">Due Date</td>
+                            <td class="order-table-title amount">Type</td>
+                            <td class="order-table-title paid">Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="date">With Order</td>
+                            <td class="amount">Deposit</td>
+                            <td class="paid">{{ f_currency($quote->deposit * $paying) }}</td>
+                        </tr>
+                        @foreach($quote->installments as $installment)
+                            <tr>
+                                <td class="date">{{ f_date($installment->due_on) }}</td>
+                                <td class="amount">Instalment</td>
+                                <td class="paid">{{ f_currency($installment->amount * $paying) }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td class="date">{{ f_date($quote->final_payment) }}</td>
+                            <td class="amount">Remaining</td>
+                            <td class="paid">{{ f_currency($quote->repository->getRemaining($paying)) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Notes Section -->
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Notes</h2>
+                <div class="notes">
+                    <div style="margin-top: 0">{!! $quote->invoice_footer !!}</div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </body>
+</html>
