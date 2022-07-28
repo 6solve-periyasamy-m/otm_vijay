@@ -55,6 +55,7 @@ class QuoteController extends Controller
     {
         $quote = QuoteRepository::getFromReference($reference);
         if (!isset($quote)) abort(404);
+        $quote = QuoteRepository::deserialize($quote->repository->serialize());
         return $quote->repository->getResponseStream($paying, $travelling);
     }
 

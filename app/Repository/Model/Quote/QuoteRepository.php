@@ -16,6 +16,7 @@ use App\Models\Quote\QuoteProspect;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class QuoteRepository extends ModelRepository
+class QuoteRepository extends ModelRepository implements SerializesToJson
 {
     private Quote $quote;
 
@@ -251,9 +252,17 @@ class QuoteRepository extends ModelRepository
     /**
      * @return Collection|QuoteAccommodation[]
      */
-    public function getTemplates(): Collection|array
+    public function getTemplates(bool $sql = true): Collection|array
     {
-        return $this->quote->accommodation()->where('is_template', '=', true)->with('inventory')->get();
+        if ($sql) {
+            return $this->quote->accommodation()->where('is_template', '=', true)->with('inventory')->get();
+        } else {
+            $array = [];
+            foreach ($this->quote->accommodation as $accommodation) {
+                if ($accommodation->is_template) $array[] = $accommodation;
+            }
+            return $array;
+        }
     }
 
     public function get(): Quote
@@ -290,7 +299,18 @@ class QuoteRepository extends ModelRepository
 
     public function getPricePerPerson(int $count): ?QuotePricePoint
     {
-        return QuotePricePoint::where('quote_id', $this->quote->id)->where('quantity', '<=', $count)->orderBy('quantity', 'desc')->first();
+        $price = QuotePricePoint::where('quote_id', $this->quote->id)->where('quantity', '<=', $count)->orderBy('quantity', 'desc')->first();
+        if (!isset($price)) {
+            $highest = null;
+            foreach ($this->quote->pricePoints as $pricePoint) {
+                if ($pricePoint->quantity == $count) return $pricePoint;
+                if ($pricePoint->quantity < $count && ($highest == null || $highest->quantity < $pricePoint->quantity)) {
+                    $highest = $pricePoint;
+                }
+            }
+            $price = $highest;
+        }
+        return $price;
     }
 
     public function autoAssignTemplating(): void
@@ -386,7 +406,7 @@ class QuoteRepository extends ModelRepository
     public function getAccommodationForInvoice(bool $sort = true): array
     {
         $data = [];
-        foreach ($this->getTemplates() as $template) {
+        foreach ($this->getTemplates(false) as $template) {
             $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
@@ -404,7 +424,7 @@ class QuoteRepository extends ModelRepository
     public function getActivitiesForInvoice(bool $sort = true): array
     {
         $data = [];
-        foreach ($this->quote->activities()->with('inventory')->get() as $template) {
+        foreach ($this->quote->activities as $template) {
             $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
@@ -422,7 +442,7 @@ class QuoteRepository extends ModelRepository
     public function getFlightsForInvoice(bool $sort = true): array
     {
         $data = [];
-        foreach ($this->quote->flights()->with('inventory')->get() as $template) {
+        foreach ($this->quote->flights as $template) {
             $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
@@ -440,7 +460,7 @@ class QuoteRepository extends ModelRepository
     public function getTransportForInvoice(bool $sort = true): array
     {
         $data = [];
-        foreach ($this->quote->transport()->with('inventory')->get() as $template) {
+        foreach ($this->quote->transport as $template) {
             $time = $template->repository->getInventory()->getStartTime()->unix();
             do {
                 $exists = array_key_exists($time, $data);
@@ -492,5 +512,112 @@ class QuoteRepository extends ModelRepository
         }
         ksort($data);
         return $data;
+    }
+
+    public function serialize(): string
+    {
+        $quote = $this->quote->makeHidden('id', 'lead_traveller_id', 'order_id', 'locked', 'created_at', 'updated_at', 'deleted_at')->toArray();
+        $quote['lead'] = ['customer_id' => $this->quote->leadTraveller->customer_id, 'travelling' => $this->quote->leadTraveller->travelling, 'paying' => $this->quote->leadTraveller->paying,];
+        $components = ['accommodation' => [], 'activity' => [], 'flight' => [], 'transport' => [], 'merchandise' => []];
+        foreach ($this->getComponents() as $component) {
+            $data = [
+                'inventory' => $component->getInventory()->get()->id,
+                'tour_component_type' => $component->getTourComponentType(),
+                'tour_sales_price' => $component->get()->tour_sales_price
+            ];
+            switch ($component->getComponentType()) {
+                case 'accommodation':
+                    $data['is_template'] = $component->get()->is_template;
+                    break;
+                case 'flight':
+                    $data['flight_type'] = $component->get()->flight_type;
+                    break;
+            }
+            $components[$component->getComponentType()][] = $data;
+        }
+        $quote = array_merge($quote, $components);
+        $installments = [];
+        $pricepoints = [];
+        foreach ($this->quote->installments as $installment) { $installments[] = ['due_on' => $installment->due_on->format('Y-m-d'), 'amount' => $installment->amount,]; }
+        foreach ($this->quote->pricePoints as $pricePoint) { $pricepoints[$pricePoint->quantity] = $pricePoint->price_per_person; }
+        $quote['installments'] = $installments;
+        $quote['pricepoints'] = $pricepoints;
+        return json_encode($quote);
+    }
+
+    public static function deserialize(string $json): Quote
+    {
+        $data = json_decode($json, true);
+        $lead = QuoteProspect::make($data['lead']);
+        unset($data['lead']);
+        $accommodation = [];
+        foreach ($data['accommodation'] as $datum) {
+            $accommodation[] = QuoteAccommodation::make([
+                'accommodation_inventory_id' => $datum['inventory'],
+                'tour_component_type' => $datum['tour_component_type'],
+                'tour_sales_price' => $datum['tour_sales_price'],
+                'is_template' => $datum['is_template'],
+            ]);
+        }
+        $activity = [];
+        foreach ($data['activity'] as $datum) {
+            $activity[] = QuoteActivity::make([
+                'activity_inventory_id' => $datum['inventory'],
+                'tour_component_type' => $datum['tour_component_type'],
+                'tour_sales_price' => $datum['tour_sales_price'],
+            ]);
+        }
+        $flight = [];
+        foreach ($data['flight'] as $datum) {
+            $flight[] = QuoteFlight::make([
+                'flight_inventory_id' => $datum['inventory'],
+                'tour_component_type' => $datum['tour_component_type'],
+                'tour_sales_price' => $datum['tour_sales_price'],
+                'flight_type' => $datum['flight_type'],
+            ]);
+        }
+        $transport = [];
+        foreach ($data['transport'] as $datum) {
+            $transport[] = QuoteTransport::make([
+                'transport_inventory_id' => $datum['inventory'],
+                'tour_component_type' => $datum['tour_component_type'],
+                'tour_sales_price' => $datum['tour_sales_price'],
+            ]);
+        }
+        $merchandise = [];
+        foreach ($data['merchandise'] as $datum) {
+            $merchandise[] = QuoteMerchandise::make([
+                'merchandise_inventory_id' => $datum['inventory'],
+                'tour_component_type' => $datum['tour_component_type'],
+                'tour_sales_price' => $datum['tour_sales_price'],
+            ]);
+        }
+        unset($data['accommodation']);
+        unset($data['activity']);
+        unset($data['flight']);
+        unset($data['transport']);
+        unset($data['merchandise']);
+        $installments = [];
+        foreach ($data['installments'] as $installment) {
+            $installments[] = QuoteInstallment::make(['due_on' => Carbon::parse($installment['due_on']), 'amount' => $installment['amount']]);
+        }
+        unset($data['installments']);
+        $pricepoints = [];
+        foreach ($data['pricepoints'] as $quantity => $price) {
+            $pricepoints[] = QuotePricePoint::make(['quantity' => $quantity, 'price_per_person' => $price]);
+        }
+        unset($data['pricepoints']);
+        $quote = Quote::make($data);
+        $quote->setRelations([
+            'pricePoints' => $pricepoints,
+            'installments' => $installments,
+            'accommodation' => $accommodation,
+            'activities' => $activity,
+            'flights' => $flight,
+            'transport' => $transport,
+            'merchandise' => $merchandise,
+            'leadTraveller' => $lead,
+        ]);
+        return $quote;
     }
 }

@@ -5,6 +5,8 @@
  * @var int $paying
  */
 use App\Models\Helper\QuoteStatus;
+$paying = $paying ?? $quote->paying ?? 1;
+$travelling = $travelling ?? $quote->travelling ?? 0;
 @endphp
 
 <!DOCTYPE html>
@@ -202,7 +204,7 @@ use App\Models\Helper\QuoteStatus;
                         @php $pp = $quote->repository->getPricePerPerson($paying); @endphp
                         @foreach($quote->pricePoints as $point)
                             <tr>
-                                <td class="date">{{ $point->id == $pp->id ? 'Active' : '' }}</td>
+                                <td class="date">{{ $point->quantity == $pp->quantity ? 'Active' : '' }}</td>
                                 <td class="amount">{{ $point->quantity }}</td>
                                 <td class="paid">{{ f_currency($point->price_per_person) }}</td>
                             </tr>
