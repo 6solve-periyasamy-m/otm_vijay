@@ -189,7 +189,7 @@ use App\Models\Helper\QuoteStatus;
             <div class="pageborder"></div>
             <!-- Installments Section -->
             <div class="section pagebreak-inside">
-                <h2 class="section-title header-title">Price Matrix</h2>
+                <h2 class="section-title header-title">Price per Traveller Matrix</h2>
                 <table class="order-table center">
                     <thead>
                         <tr>
@@ -217,9 +217,26 @@ use App\Models\Helper\QuoteStatus;
                     <div style="margin-top: 0">{!! $quote->invoice_footer !!}</div>
                 </div>
             </div>
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Itinerary</h2>
+                <div class="cards">
+                    @foreach($quote->repository->getItinerary() as $repository)
+                    <div class="card">
+                        <div class="item">
+                            <img src="{{ $repository->getItineraryAsset() }}" />
+                        </div>
+                        <div class="item">
+                            <div style="display:inline-block">
+                                <h4>{{ $repository->getItineraryTitle() }}</h4>
+                                {{ $repository->getItineraryDescription() }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagebreak"></div>
+                    <div class="pageborder"></div>
+                    @endforeach
+                </div>
+            </div>
         </div>
-
-
-
     </body>
 </html>
