@@ -32,6 +32,7 @@ class QuoteEditRequest extends FormRequest
             'date_from' => $this->from,
             'date_to' => $this->to,
             'final_payment' => $this->final,
+            'expires' => $this->expires,
             'terms' => $this->terms ?? "",
             'invoice_footer' => $this->footer,
             'internal_notes' => $this->internal_notes,
