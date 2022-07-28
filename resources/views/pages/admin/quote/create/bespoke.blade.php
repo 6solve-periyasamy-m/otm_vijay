@@ -5,11 +5,14 @@
 @section('title', 'Create Bespoke Quote')
 
 @section('form-body')
-    <x-admin.input.selector.add name="customer_id" route="customers" width="6">
+    <x-admin.input name="name" width="8">Name</x-admin.input>
+    <x-admin.input.selector.add name="customer_id" route="customers" width="4">
         <x-slot:create>{{ route('customers.create') }}</x-slot:create>
         Lead Traveller
     </x-admin.input.selector.add>
+    <x-admin.input name="deposit" width="6">Deposit</x-admin.input>
     <x-admin.input name="single_occupancy_surcharge" width="6">Single Occupancy Surcharge</x-admin.input>
+    <x-admin.input.text-area name="description">Description</x-admin.input.text-area>
     <hr class="splitter"/>
     <x-admin.input.checkbox name="travelling" width="6" nofloat>Lead Travelling?</x-admin.input.checkbox >
     <x-admin.input.checkbox name="paying" width="6" nofloat>Lead Paying?</x-admin.input.checkbox >

@@ -7,6 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int $customer_id
+ * @property string $name
+ * @property string|null $description
  * @property string $from
  * @property string $to
  * @property string $expires
@@ -36,6 +38,8 @@ class CreateBespokeQuoteRequest extends FormRequest
             'single_occupancy_surcharge' => $this->single_occupancy_surcharge ?? 0,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
+            'name' => $this->name,
+            'description' => $this->description,
         ];
     }
 
@@ -70,6 +74,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'final' => 'required|date',
             'cost' => 'required|numeric|min:0',
             'single_occupancy_surcharge' => 'nullable|numeric|min:0',
+            'name' => 'required',
         ];
     }
 }

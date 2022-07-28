@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property int $customer_id
+ * @property string $name
+ * @property string|null $description
  * @property float $deposit
  * @property float $single_occupancy_surcharge
  * @property string $travelling
@@ -34,6 +36,8 @@ class QuoteEditRequest extends FormRequest
             'invoice_footer' => $this->footer,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,
+            'name' => $this->name,
+            'description' => $this->description,
         ];
     }
 
@@ -61,6 +65,7 @@ class QuoteEditRequest extends FormRequest
             'to' => 'required|date',
             'final' => 'required|date',
             'expires' => 'nullable|date',
+            'name' => 'required',
         ];
     }
 }

@@ -46,6 +46,8 @@ class QuoteRepository extends ModelRepository
             'date_to' => $tour->date_to,
             'terms' => $tour->terms,
             'invoice_footer' => $tour->invoice_footer,
+            'name' => $tour->name,
+            'description' => $tour->description,
             ...$data,
         ]);
         $lead = $quote->repository->createProspect($customer, $leadData);
@@ -107,9 +109,9 @@ class QuoteRepository extends ModelRepository
     {
         $tour = TourRepository::create([
             'is_active' => false,
-            'name' => $this->quote->reference,
+            'name' => $this->quote->name,
             'notes' => $this->quote->internal_notes,
-            'description' => $this->quote->external_notes,
+            'description' => $this->quote->description,
             'date_from' => $this->quote->date_from,
             'date_to' => $this->quote->date_from,
             'terms' => $this->quote->terms,

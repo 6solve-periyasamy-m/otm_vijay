@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('lead_traveller_id')->nullable()->constrained('quote_prospects')->cascadeOnDelete();
             $table->foreignId('event_id')->nullable()->constrained()->nullOnDelete();
             $table->string('reference', 64)->nullable();
+            $table->string('name');
+            $table->text('description')->nullable();
             $table->decimal('deposit', 12)->nullable();
             $table->boolean('locked')->default(true);
             $table->decimal('single_occupancy_surcharge', 12)->default(0);

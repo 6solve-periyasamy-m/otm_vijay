@@ -33,6 +33,8 @@ use Illuminate\Support\Carbon;
  * @property int|null $lead_traveller_id
  * @property int|null $event_id
  * @property string|null $reference
+ * @property string $name
+ * @property string|null $description
  * @property float|null $deposit
  * @property float $single_occupancy_surcharge
  * @property bool $locked
