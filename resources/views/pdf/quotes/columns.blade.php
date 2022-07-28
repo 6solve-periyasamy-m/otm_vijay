@@ -217,6 +217,7 @@ use App\Models\Helper\QuoteStatus;
                     <div style="margin-top: 0">{!! $quote->invoice_footer !!}</div>
                 </div>
             </div>
+            @if((isset($extended) && $extended) || $quote->extended ?? false)
             <div class="section pagebreak-inside">
                 <h2 class="section-title header-title">Itinerary</h2>
                 <div class="cards">
@@ -237,6 +238,7 @@ use App\Models\Helper\QuoteStatus;
                     @endforeach
                 </div>
             </div>
+            @endif
         </div>
     </body>
 </html>
