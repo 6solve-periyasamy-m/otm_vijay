@@ -19,12 +19,12 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
 
     public function getTourComponentType(): string
     {
-        return $this->quoteComponent->tourComponent->tour_component_type;
+        return $this->quoteComponent->tour_component_type;
     }
 
     public function getCost(): float
     {
-        return $this->quoteComponent->cost;
+        return $this->quoteComponent->tour_sales_price;
     }
 
     public function getInventory(): ?MerchandiseInventoryRepository

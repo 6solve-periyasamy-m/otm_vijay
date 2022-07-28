@@ -18,7 +18,7 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function getTourComponentType(): string
     {
-        return $this->quoteComponent->tourComponent->tour_component_type;
+        return $this->quoteComponent->tour_component_type;
     }
 
     public function getCost(): float

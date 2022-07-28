@@ -69,6 +69,11 @@ class QuoteRepository extends ModelRepository
         return $quote;
     }
 
+    public static function getFromReference(string $reference): ?Quote
+    {
+        return Quote::where('reference', '=', $reference)->first();
+    }
+
     /**
      * @param ConvertedCustomer $lead
      * @param ConvertedCustomer[] $travellers
@@ -167,6 +172,11 @@ class QuoteRepository extends ModelRepository
         foreach ($this->quote->tour->paymentInstallments as $installment) {
             $this->addInstallment($installment->due_on, $installment->amount);
         }
+    }
+
+    public function getTotalCost(int $paying): float
+    {
+        return $this->getPricePerPerson($paying)->price_per_person * $paying;
     }
 
     /**
