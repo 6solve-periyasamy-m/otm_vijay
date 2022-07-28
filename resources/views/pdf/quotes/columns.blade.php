@@ -35,7 +35,7 @@ use App\Models\Helper\QuoteStatus;
                             <img src="{{ asset(setting('company.logo', 'images/octlogo.png')) }}" class="header-logo" alt="{{ setting('company.name') }}" />
                         </div>
                         <div class="flex-items vert-align">
-                            <h2 class="header-title tour-name">{{ $quote->reference }}</h2>
+                            <h2 class="header-title tour-name">{{ $quote->name }}</h2>
                         </div>
                         <div class="flex-items vert-align">
                             <h1 class="header-title">Quote</h1>
@@ -50,7 +50,7 @@ use App\Models\Helper\QuoteStatus;
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
                             <div class="metadata divider">Non-Paying Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
-                            <div class="metadata divider">Booking Ref.<br /><span class="metadata-text">{{ $quote->reference }}</span></div>
+                            <div class="metadata divider">Quote Ref.<br /><span class="metadata-text">{{ $quote->reference }}</span></div>
                         </div>
                     </div>
                 </div>   
@@ -86,8 +86,16 @@ use App\Models\Helper\QuoteStatus;
                     </div>
                 </div>
             </div>
+            <!-- Description Section -->
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Description</h2>
+                <div class="notes">
+                    <div style="margin-top: 0">{!! $quote->description !!}</div>
+                </div>
+            </div>
             <!-- Order Section -->
             <div class="section">
+                <h2 class="section-title header-title">What's Included</h2>
                 <table class="order-table center">
                     <thead>
                         <tr>
@@ -174,6 +182,31 @@ use App\Models\Helper\QuoteStatus;
                             <td class="amount">Remaining</td>
                             <td class="paid">{{ f_currency($quote->repository->getRemaining($paying)) }}</td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagebreak"></div>
+            <div class="pageborder"></div>
+            <!-- Installments Section -->
+            <div class="section pagebreak-inside">
+                <h2 class="section-title header-title">Price Matrix</h2>
+                <table class="order-table center">
+                    <thead>
+                        <tr>
+                            <td class="order-table-title date">Active?</td>
+                            <td class="order-table-title amount">Paying Travellers</td>
+                            <td class="order-table-title paid">Price</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $pp = $quote->repository->getPricePerPerson($paying); @endphp
+                        @foreach($quote->pricePoints as $point)
+                            <tr>
+                                <td class="date">{{ $point->id == $pp->id ? 'Active' : '' }}</td>
+                                <td class="amount">{{ $point->quantity }}</td>
+                                <td class="paid">{{ f_currency($point->price_per_person) }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
