@@ -15,6 +15,7 @@
             $('.flights').DataTable({fixedHeader: true,});
             $('.transport').DataTable({fixedHeader: true,});
             $('.extras').DataTable({fixedHeader: true,});
+            $('.sent-quotes').DataTable({fixedHeader: true,});
             update(0, 0);
         });
 
@@ -608,6 +609,38 @@
                             </form>
                             <form id="pricepoint-{{ $pricePoint->id }}-delete" class="d-none" method="post"
                                   action="{{ route('quotes.price-points.delete', ['quote' => $quote, 'pricePoint' => $pricePoint,]) }}">@csrf</form>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </x-admin.section.card>
+        </div>
+        <div class="col-xl-6">
+            <x-admin.section.card>
+                <x-slot:header>{{ __('quotes.view.cards.sent.header') }}</x-slot:header>
+                <table class="table table-striped sent-quotes" id="sent-quotes-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('quotes.view.cards.sent.when') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.email') }}</th>
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($quote->sentQuotes as $sent)
+                        <tr>
+                            <td>{{ f_datetime($sent->sent) }}</td>
+                            <td>{{ $sent->recipient }}</td>
+                            <td>
+                                <a href="{{ route('quotes.sent.resent', ['quote' => $quote, 'sent' => $sent,]) }}"
+                                   class="btn btn-outline-success btn-sm mb-1">
+                                    <i class="icon-envelope"></i>
+                                </a>
+                                <a href="{{ route('quotes.sent.rebuild', ['quote' => $quote, 'sent' => $sent,]) }}"
+                                   class="btn btn-outline-danger btn-sm mb-1">
+                                    <i class="icon-layers"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

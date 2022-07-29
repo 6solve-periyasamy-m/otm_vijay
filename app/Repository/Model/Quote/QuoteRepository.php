@@ -21,12 +21,10 @@ use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
 use App\Repository\Model\Tour\TourRepository;
-use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Log;
 use Spatie\Browsershot\Browsershot;
@@ -633,6 +631,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
     public function generateSent(string $email, int $paying, int $travelling): ?SentQuote
     {
         return SentQuote::create([
+            'quote_id' => $this->quote->id,
             'sent' => now(),
             'recipient' => $email,
             'travelling' => $travelling,
@@ -675,6 +674,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
         $quote->transport()->saveMany($transport);
         $quote->installments()->saveMany($installments);
         $quote->pricePoints()->saveMany($pricepoints);
+        $quote->sentQuotes()->saveMany($sent->quote->sentQuotes);
         return $quote;
     }
 }

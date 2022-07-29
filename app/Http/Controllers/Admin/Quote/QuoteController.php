@@ -8,7 +8,9 @@ use App\Http\Requests\Admin\Quote\CreateBasicQuoteRequest;
 use App\Http\Requests\Admin\Quote\CreateBespokeQuoteRequest;
 use App\Http\Requests\Admin\Quote\QuoteEditRequest;
 use App\Http\Requests\Admin\Quote\StartConversionRequest;
+use App\Models\Helper\QuoteStatus;
 use App\Models\Quote\Quote;
+use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use App\Repository\Storage\ConvertedCustomer;
@@ -62,6 +64,19 @@ class QuoteController extends Controller
     {
         $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying), $request->getCustomers());
         return redirect()->route('orders.view', ['order' => $order,]);
+    }
+
+    public function resend(Quote $quote, SentQuote $sent)
+    {
+        $quote->repository->resend($sent);
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
+    }
+
+    public function rebuild(Quote $quote, SentQuote $sent)
+    {
+        $newQuote = QuoteRepository::deserializeAndSave($sent);
+        $quote->repository->update(['quote_status' => QuoteStatus::CLOSED->value]);
+        return redirect()->route('quotes.view', ['quote' => $newQuote,]);
     }
 
     public function view(Quote $quote)

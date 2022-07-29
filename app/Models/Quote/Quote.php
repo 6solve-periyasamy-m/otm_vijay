@@ -68,8 +68,8 @@ use Illuminate\Support\Carbon;
  * @property-read Order|null $order
  * @property-read Collection|QuotePricePoint[] $pricePoints
  * @property-read int|null $price_points_count
- * @property-read Collection|SentQuote[] $sent
- * @property-read int|null $sent_count
+ * @property-read Collection|SentQuote[] $sentQuotes
+ * @property-read int|null $sentQuotes_count
  * @property-read Tour|null $tour
  * @property-read Collection|QuoteTransport[] $transport
  * @property-read int|null $transport_count
@@ -123,7 +123,7 @@ class Quote extends Model
     ];
     private QuoteRepository $internal_repository;
 
-    public function sent(): HasMany
+    public function sentQuotes(): HasMany
     {
         return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent');
     }

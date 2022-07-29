@@ -105,7 +105,12 @@ return [
                     'extras' => 'Merchandise',
                     'summary' => 'All Components',
                 ],
-            ]
+            ],
+            'sent' => [
+                'header' => 'Sent Versions',
+                'when' => 'When',
+                'email' => 'Sent to',
+            ],
         ]
     ],
     'status' => [
