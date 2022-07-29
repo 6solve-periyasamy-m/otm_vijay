@@ -38,14 +38,12 @@ use Illuminate\Support\Carbon;
  * @property float|null $deposit
  * @property bool $locked
  * @property float $single_occupancy_surcharge
- * @property bool $locked
  * @property Carbon $final_payment
  * @property Carbon $date_from
  * @property Carbon $date_to
  * @property string $terms
  * @property string $invoice_footer
  * @property Carbon|null $expires
- * @property Carbon|null $sent
  * @property QuoteStatus $quote_status
  * @property string|null $internal_notes
  * @property string|null $external_notes
@@ -69,6 +67,8 @@ use Illuminate\Support\Carbon;
  * @property-read Order|null $order
  * @property-read Collection|QuotePricePoint[] $pricePoints
  * @property-read int|null $price_points_count
+ * @property-read Collection|SentQuote[] $sent
+ * @property-read int|null $sent_count
  * @property-read Tour|null $tour
  * @property-read Collection|QuoteTransport[] $transport
  * @property-read int|null $transport_count
@@ -121,6 +121,11 @@ class Quote extends Model
         'quote_status' => QuoteStatus::class
     ];
     private QuoteRepository $internal_repository;
+
+    public function sent(): HasMany
+    {
+        return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent');
+    }
 
     public function event(): BelongsTo
     {
