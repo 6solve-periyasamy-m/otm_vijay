@@ -1,12 +1,11 @@
 @php
 /**
- * @var \App\Models\Quote\Quote $quote
- * @var int $travelling
- * @var int $paying
+ * @var \App\Models\Quote\SentQuote $sent
  */
 use App\Models\Helper\QuoteStatus;
-$paying = $paying ?? $quote->paying ?? 1;
-$travelling = $travelling ?? $quote->travelling ?? 0;
+$quote = $sent->built;
+$travelling = $sent->free;
+$paying = $sent->paid;
 @endphp
 
 <!DOCTYPE html>

@@ -2,6 +2,7 @@
 
 namespace App\Models\Quote;
 
+use App\Repository\Model\Quote\QuoteRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +18,13 @@ use Illuminate\Support\Carbon;
  * @property string $recipient
  * @property int $travelling
  * @property int $paying
- * @property array $data
+ * @property string $data
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Quote|null $quote
+ * @property-read Quote $built
+ * @property-read int $free Calculated number of free travellers
+ * @property-read int $paid Calculated number of paid travellers
  * @method static Builder|SentQuote newModelQuery()
  * @method static Builder|SentQuote newQuery()
  * @method static Builder|SentQuote query()
@@ -37,10 +41,30 @@ use Illuminate\Support\Carbon;
  */
 class SentQuote extends Model
 {
-    protected $casts = ['data' => 'array',];
+    protected $guarded = [];
+
+    private Quote $builtData;
 
     public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class, 'quote_id');
+    }
+
+    public function getBuiltAttribute(): Quote
+    {
+        if (!isset($builtData)) $builtData = QuoteRepository::deserialize(json_decode($this->data, true));
+        return $builtData;
+    }
+
+    public function getFreeAttribute(): int
+    {
+        $bool = $this->built->leadTraveller->travelling && !$this->built->leadTraveller->paying;
+        return $this->paying + ($bool ? 1 : 0);
+    }
+
+    public function getPaidAttribute(): int
+    {
+        $bool = $this->built->leadTraveller->paying;
+        return $this->paying + ($bool ? 1 : 0);
     }
 }

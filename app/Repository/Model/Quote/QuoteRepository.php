@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Quote;
 
+use App\Mail\TemplatedMailable;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
@@ -13,6 +14,7 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
+use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -22,8 +24,11 @@ use App\Repository\Model\Tour\TourRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
+use Log;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -383,11 +388,16 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
         return $cost;
     }
 
-    public function getResponseStream(int $paying, int $travelling): StreamedResponse
+    public function getResponseStream(SentQuote $sent): StreamedResponse
     {
-        $invoice = Browsershot::html(view('pdf.quotes.columns', ['quote' => $this->quote, 'paying' => $paying, 'travelling' => $travelling,])->render());
+        return response()->stream(function () use ($sent) { echo $this->getStream($sent); }, 200, ['Content-Type' => 'application/pdf']);
+    }
+
+    public function getStream(SentQuote $sent): string
+    {
+        $invoice = Browsershot::html(view('pdf.quotes.columns', ['sent' => $sent,])->render());
         $invoice->showBackground()->margins(10, 2, 10, 2);
-        return response()->stream(function () use ($invoice) { echo $invoice->pdf(); }, 200, ['Content-Type' => 'application/pdf']);
+        return $invoice->pdf();
     }
 
     public function getRemaining(int $paying = 1): float
@@ -618,5 +628,29 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
             'leadTraveller' => $lead,
         ]);
         return $quote;
+    }
+
+    public function generateSent(string $email, int $paying, int $travelling): ?SentQuote
+    {
+        return SentQuote::create([
+            'sent' => now(),
+            'recipient' => $email,
+            'travelling' => $travelling,
+            'paying' => $paying,
+            'data' => $this->serialize(),
+        ]);
+    }
+
+    public function resend(SentQuote $sent, string $email = null): void
+    {
+        $mailable = new TemplatedMailable(setting('mail.quote.subject', 'Template Quote'), setting('mail.quote.body', 'Template Quote Body'));
+        try {
+            $mail = Mail::to($email);
+            if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
+            $mailable->attachData($this->getStream($sent), $this->quote->reference . '.pdf', ['mime' => 'application/pdf',]);
+            $mail->send($mailable);
+        } catch (Exception $e) {
+            Log::error($e);
+        }
     }
 }
