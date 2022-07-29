@@ -133,6 +133,21 @@
             </a>
         </li>
         @endcan
+        @can('read', 'App\Models\Quote\Quote')
+        <li>
+            @if(strpos(Request::path(), 'quotes') !== false)
+            <a href="{{ route('quotes.all') }}" class="nav-link active">
+            @else
+            <a href="{{ route('quotes.all') }}" class="nav-link">
+            @endif
+                <i class="icon-wallet"></i>
+                <span>Quotes</span>
+                @if(strpos(Request::path(), 'quotes') !== false)
+                <span class="selected"></span>
+                @endif
+            </a>
+        </li>
+        @endcan
         @can('read', 'App\Models\Customer\Customer')
         <li>
             @if(strpos(Request::path(), 'customers') !== false)
