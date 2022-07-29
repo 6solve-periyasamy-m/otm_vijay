@@ -545,9 +545,8 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
         return json_encode($quote);
     }
 
-    public static function deserialize(string $json): Quote
+    public static function deserialize(array $data): Quote
     {
-        $data = json_decode($json, true);
         $lead = QuoteProspect::make($data['lead']);
         unset($data['lead']);
         $accommodation = [];

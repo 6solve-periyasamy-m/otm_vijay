@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 interface SerializesToJson
 {
     public function serialize(): string;
-    public static function deserialize(string $json): Model;
+    public static function deserialize(array $data): Model;
 }
