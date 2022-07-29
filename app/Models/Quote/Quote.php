@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $order_id
  * @property int|null $lead_traveller_id
  * @property int|null $event_id
+ * @property int $revision
  * @property string|null $reference
  * @property string $name
  * @property string|null $description
@@ -196,5 +197,10 @@ class Quote extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new QuoteRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getRefAttribute(): string
+    {
+        return $this->reference . '-' . $this->revision;
     }
 }

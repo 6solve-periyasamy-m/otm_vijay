@@ -667,6 +667,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
         $lead->save();
         $quote->internal_notes .= "\nRebuilt from Quote sent at " . f_datetime($sent->sent);
         $quote->lead_traveller_id = $lead->id;
+        $quote->revision++;
         $quote->save();
         $quote->accommodation()->saveMany($accommodation);
         $quote->activities()->saveMany($activities);
