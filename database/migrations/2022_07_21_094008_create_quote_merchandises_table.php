@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('merchandise_inventory_id')->constrained()->cascadeOnDelete();
             $table->string('tour_component_type')->default('Included');
             $table->decimal('tour_sales_price', 12);
-            $table->text('notes')->nullable();
+            $table->integer('quantity')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

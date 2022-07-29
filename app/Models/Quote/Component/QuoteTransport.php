@@ -20,8 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int $quote_id
  * @property int $transport_inventory_id
  * @property string $tour_component_type
- * @property float|null $tour_sales_price
- * @property string $cost
+ * @property float $tour_sales_price
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -36,7 +35,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteTransport newQuery()
  * @method static QueryBuilder|QuoteTransport onlyTrashed()
  * @method static Builder|QuoteTransport query()
- * @method static Builder|QuoteTransport whereCost($value)
  * @method static Builder|QuoteTransport whereCreatedAt($value)
  * @method static Builder|QuoteTransport whereDeletedAt($value)
  * @method static Builder|QuoteTransport whereId($value)

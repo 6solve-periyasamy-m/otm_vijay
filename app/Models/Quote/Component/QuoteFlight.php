@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int $quote_id
  * @property int $flight_inventory_id
  * @property string $tour_component_type
- * @property float|null $tour_sales_price
+ * @property float $tour_sales_price
  * @property string|null $flight_type
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at

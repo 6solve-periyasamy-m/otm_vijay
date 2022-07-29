@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property float|null $deposit
+ * @property bool $locked
  * @property float $single_occupancy_surcharge
  * @property bool $locked
  * @property Carbon $final_payment
@@ -81,6 +82,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Quote whereDateTo($value)
  * @method static Builder|Quote whereDeletedAt($value)
  * @method static Builder|Quote whereDeposit($value)
+ * @method static Builder|Quote whereDescription($value)
  * @method static Builder|Quote whereEventId($value)
  * @method static Builder|Quote whereExpires($value)
  * @method static Builder|Quote whereExternalNotes($value)
@@ -90,9 +92,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Quote whereInvoiceFooter($value)
  * @method static Builder|Quote whereLeadTravellerId($value)
  * @method static Builder|Quote whereLocked($value)
+ * @method static Builder|Quote whereName($value)
  * @method static Builder|Quote whereOrderId($value)
  * @method static Builder|Quote whereQuoteStatus($value)
  * @method static Builder|Quote whereReference($value)
+ * @method static Builder|Quote whereSingleOccupancySurcharge($value)
  * @method static Builder|Quote whereTerms($value)
  * @method static Builder|Quote whereTourId($value)
  * @method static Builder|Quote whereUpdatedAt($value)

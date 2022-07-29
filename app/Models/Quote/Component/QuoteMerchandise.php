@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property int $merchandise_inventory_id
  * @property string $tour_component_type
  * @property float $tour_sales_price
- * @property string|null $notes
+ * @property int $quantity
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -37,7 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteMerchandise whereDeletedAt($value)
  * @method static Builder|QuoteMerchandise whereId($value)
  * @method static Builder|QuoteMerchandise whereMerchandiseInventoryId($value)
- * @method static Builder|QuoteMerchandise whereNotes($value)
+ * @method static Builder|QuoteMerchandise whereQuantity($value)
  * @method static Builder|QuoteMerchandise whereQuoteId($value)
  * @method static Builder|QuoteMerchandise whereTourComponentType($value)
  * @method static Builder|QuoteMerchandise whereTourSalesPrice($value)

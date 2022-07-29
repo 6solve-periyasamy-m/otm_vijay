@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('quote_flights', function (Blueprint $table) {
             $table->id();
             $table->foreignId('quote_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('flight_inventory_id')->constrained()->onDelete('cascade');
+            $table->foreignId('flight_inventory_id')->constrained()->cascadeOnDelete();
             $table->string('tour_component_type')->default('Included');
-            $table->decimal('tour_sales_price', 12)->nullable();
+            $table->decimal('tour_sales_price', 12);
             $table->string('flight_type', 20)->nullable();
             $table->softDeletes();
             $table->timestamps();

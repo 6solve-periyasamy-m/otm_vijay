@@ -19,9 +19,9 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $quote_id
  * @property int $accommodation_inventory_id
- * @property boolean $is_template
+ * @property bool $is_template
  * @property string $tour_component_type
- * @property float|null $tour_sales_price
+ * @property float $tour_sales_price
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -40,6 +40,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QuoteAccommodation whereCreatedAt($value)
  * @method static Builder|QuoteAccommodation whereDeletedAt($value)
  * @method static Builder|QuoteAccommodation whereId($value)
+ * @method static Builder|QuoteAccommodation whereIsTemplate($value)
  * @method static Builder|QuoteAccommodation whereQuoteId($value)
  * @method static Builder|QuoteAccommodation whereTourComponentType($value)
  * @method static Builder|QuoteAccommodation whereTourSalesPrice($value)
