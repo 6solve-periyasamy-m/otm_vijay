@@ -644,7 +644,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
 
     public function resend(SentQuote $sent, string $email = null): void
     {
-        $mailable = new TemplatedMailable(setting('mail.quote.subject', 'Template Quote'), setting('mail.quote.body', 'Template Quote Body'));
+        $mailable = new TemplatedMailable(setting('email.quote.subject', 'Template Quote'), setting('email.quote.template', 'Template Quote Body'));
         try {
             $mail = Mail::to($email);
             if (config('mail.bcc') !== null) { $mail->bcc(config('mail.bcc')); }
