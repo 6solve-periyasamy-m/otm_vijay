@@ -66,6 +66,12 @@ class QuoteController extends Controller
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 
+    public function send(StartConversionRequest $request, Quote $quote)
+    {
+        $quote->repository->resend($quote->repository->generateSent($quote->leadTraveller->email, $request->paying, $request->travelling));
+        return redirect()->route('quotes.view', ['quote' => $quote,]);
+    }
+
     public function resend(Quote $quote, SentQuote $sent)
     {
         $quote->repository->resend($sent);

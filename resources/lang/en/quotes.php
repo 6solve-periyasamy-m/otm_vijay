@@ -56,6 +56,7 @@ return [
                     'paying' => 'Paying',
                     'travelling' => 'Non-paying',
                     'convert' => 'Convert to Order',
+                    'send' => 'Send to Customer'
                 ],
             ],
             'installments' => [
