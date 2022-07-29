@@ -60,6 +60,11 @@ class PermissionsRepository
                 'group' => 'Tour and Components',
                 'order' => 7,
             ],
+            'Quote\Quote' => [
+                'name' => 'Quote',
+                'group' => 'Tour and Components',
+                'order' => 8,
+            ],
             // Accommodations
             'Accommodation\Accommodation' => [
                 'name' => 'Accommodation',
