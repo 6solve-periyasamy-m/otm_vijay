@@ -100,7 +100,7 @@
     <x-admin.section.header>
         <x-admin.section.header.detail width="6">
             <x-slot:title>{{ __('quotes.view.reference') }}</x-slot:title>
-            {{ $quote->reference }}
+            {{ $quote->ref }}
         </x-admin.section.header.detail>
 
         <x-admin.section.header.detail width="6" raw>

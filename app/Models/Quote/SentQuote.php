@@ -61,7 +61,7 @@ class SentQuote extends Model
     public function getFreeAttribute(): int
     {
         $bool = $this->built->leadTraveller->travelling && !$this->built->leadTraveller->paying;
-        return $this->paying + ($bool ? 1 : 0);
+        return $this->travelling + ($bool ? 1 : 0);
     }
 
     public function getPaidAttribute(): int

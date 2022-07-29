@@ -51,7 +51,7 @@ $paying = $sent->paid;
                         <div class="flex-items metadata-wrapper">
                             <div class="metadata divider">Paying Travellers<br /><span class="metadata-text">{{ $paying }}</span></div>
                             <div class="metadata divider">Non-Paying Travellers<br /><span class="metadata-text">{{ $travelling }}</span></div>
-                            <div class="metadata divider">Quote Ref.<br /><span class="metadata-text">{{ $quote->reference }}</span></div>
+                            <div class="metadata divider">Quote Ref.<br /><span class="metadata-text">{{ $quote->ref }}</span></div>
                         </div>
                     </div>
                 </div>   

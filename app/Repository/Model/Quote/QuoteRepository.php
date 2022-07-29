@@ -630,7 +630,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
 
     public function generateSent(string $email, int $paying, int $travelling): ?SentQuote
     {
-        return SentQuote::create([
+        $sent = SentQuote::create([
             'quote_id' => $this->quote->id,
             'sent' => now(),
             'recipient' => $email,
@@ -638,6 +638,8 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
             'paying' => $paying,
             'data' => $this->serialize(),
         ]);
+        $this->quote->repository->update(['revision' => $this->quote->revision + 1,]);
+        return $sent;
     }
 
     public function resend(SentQuote $sent, string $email = null): void
