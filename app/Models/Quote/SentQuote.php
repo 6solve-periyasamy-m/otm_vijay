@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int|null $quote_id
- * @property string $sent
+ * @property Carbon $sent
  * @property string $recipient
  * @property int $travelling
  * @property int $paying
@@ -42,6 +42,8 @@ use Illuminate\Support\Carbon;
 class SentQuote extends Model
 {
     protected $guarded = [];
+
+    protected $casts = ['sent' => 'datetime'];
 
     private Quote $builtData;
 

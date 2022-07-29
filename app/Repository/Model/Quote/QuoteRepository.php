@@ -653,4 +653,27 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
             Log::error($e);
         }
     }
+
+    public static function deserializeAndSave(SentQuote $sent): Quote
+    {
+        $quote = QuoteRepository::deserialize(json_decode($sent->data, true));
+        $accommodation = $quote->accommodation;
+        $activities = $quote->activities;
+        $flights = $quote->flights;
+        $transport = $quote->transport;
+        $installments = $quote->installments;
+        $pricepoints = $quote->pricePoints;
+        $lead = $quote->leadTraveller;
+        $lead->save();
+        $quote->internal_notes .= "\nRebuilt from Quote sent at " . f_datetime($sent->sent);
+        $quote->lead_traveller_id = $lead->id;
+        $quote->save();
+        $quote->accommodation()->saveMany($accommodation);
+        $quote->activities()->saveMany($activities);
+        $quote->flights()->saveMany($flights);
+        $quote->transport()->saveMany($transport);
+        $quote->installments()->saveMany($installments);
+        $quote->pricePoints()->saveMany($pricepoints);
+        return $quote;
+    }
 }
