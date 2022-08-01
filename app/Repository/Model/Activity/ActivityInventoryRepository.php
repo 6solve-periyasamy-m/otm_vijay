@@ -113,7 +113,7 @@ class ActivityInventoryRepository extends InventoryRepository
             'tour_id' => $tour->id,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
-        return $inventoryTour;
+        return $inventoryTour->repository;
     }
 
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteActivityRepository

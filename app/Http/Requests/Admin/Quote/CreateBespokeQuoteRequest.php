@@ -34,7 +34,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'final_payment' => $this->final,
             'invoice_footer' => $this->footer ?? "",
             'terms' => $this->terms ?? "",
-            'expiry' => $this->expires,
+            'expires' => $this->expires,
             'single_occupancy_surcharge' => $this->single_occupancy_surcharge ?? 0,
             'internal_notes' => $this->internal_notes,
             'external_notes' => $this->external_notes,

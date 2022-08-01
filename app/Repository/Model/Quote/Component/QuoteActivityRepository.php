@@ -26,7 +26,7 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function getCost(): float
     {
-        return $this->quoteComponent->cost;
+        return $this->quoteComponent->tour_sales_price;
     }
 
     public function getInventory(): ?ActivityInventoryRepository

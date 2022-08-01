@@ -138,7 +138,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function generateReference(): string
     {
         return setting('quote.prefix', 'OTMQ')
-            . str_pad($this->quote->tour->id, 4, '0', STR_PAD_LEFT)
+            . str_pad($this->quote->tour?->id ?? 0, 4, '0', STR_PAD_LEFT)
             . str_pad($this->quote->id, 4, '0', STR_PAD_LEFT)
             . str_pad($this->quote->leadTraveller->id, 4, '0', STR_PAD_LEFT)
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4);
