@@ -16,7 +16,7 @@ use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
-use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Interfaces\SerializesToJson;
 use App\Repository\Model\Order\OrderRepository;
@@ -30,7 +30,7 @@ use Log;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class QuoteRepository extends ModelRepository implements SerializesToJson
+class QuoteRepository extends ComponentPackageRepository implements SerializesToJson
 {
     private Quote $quote;
 
@@ -196,7 +196,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
      * @param array $filter
      * @return QuoteComponentRepository[]
      */
-    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $extras = true, array $filter = ['Included', 'Upgrade', 'Add-on']): array
+    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $merchandise = true, array $filter = ['Included', 'Upgrade', 'Add-on']): array
     {
         $components = [];
         if ($accommodation) {
@@ -228,7 +228,7 @@ class QuoteRepository extends ModelRepository implements SerializesToJson
                 }
             }
         }
-        if ($extras) {
+        if ($merchandise) {
             foreach ($this->quote->merchandise()->with('inventory')->get() as $component) {
                 if (!isset($component)) dd($component);
                 if (in_array($component?->tour_component_type, $filter)) {

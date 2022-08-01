@@ -7,6 +7,7 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
@@ -26,14 +27,14 @@ class FlightInventoryRepository extends InventoryRepository
         $this->inventory = $inventory;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
         $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->flightInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
+        if (isset($repository)) {
+            foreach ($repository->getComponents(false, false, true, false, false) as $inventoryTour) {
+                $inventories[] = $inventoryTour->getInventory()->id;
             }
         }
         return FlightInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();

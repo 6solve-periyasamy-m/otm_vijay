@@ -7,6 +7,7 @@ use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
@@ -26,14 +27,14 @@ class AccommodationInventoryRepository extends InventoryRepository
         $this->inventory = $inventory;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
         $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->accommodationInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
+        if (isset($repository)) {
+            foreach ($repository->getComponents(true, false, false, false, false) as $inventoryTour) {
+                $inventories[] = $inventoryTour->getInventory()->id;
             }
         }
         return AccommodationInventory::whereBetween('check_in', [$from, $to])->whereBetween('check_out', [$from, $to])->whereNotIn('id', $inventories)->get();
