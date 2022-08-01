@@ -318,6 +318,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
     });
 
     Route::prefix('component')->group(function() {
+    Route::post('/quote/{quote}/{type}/add', [QuoteController::class, 'addComponents'])->name('quote.components.add');
         Route::prefix('tour/{tour}')->group(function() {
             Route::prefix('accommodation/inventory')->group(function() {
                 Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('tour.accommodation.inventory.add');

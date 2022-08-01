@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Api\Admin\Quote\AddComponentRequest;
 use App\Http\Requests\Api\Admin\Quote\QuoteCostRequest;
 use App\Models\Quote\Quote;
+use App\Repository\Abstracts\InventoryRepository;
 
 class QuoteController extends ApiController
 {
@@ -42,5 +44,13 @@ class QuoteController extends ApiController
             'f_ctc' => f_currency($costToCompany),
         ];
         return response()->json($data);
+    }
+
+    public function addComponents(AddComponentRequest $request, Quote $quote, string $component)
+    {
+        foreach ($request->ids as $id) {
+            InventoryRepository::getComponent($component, $id)?->addToQuote($quote, $request->type);
+        }
+        return response()->json(['success' => true, 'message' => 'Components added successfully']);
     }
 }
