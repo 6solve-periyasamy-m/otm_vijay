@@ -26,4 +26,6 @@ class ConversionRequest extends FormRequest
         }
         return $customers;
     }
+
+    public function rules(): array { return []; }
 }
