@@ -14,6 +14,6 @@ trait TestsQuote
     {
         $tour = $this->generateTour();
         $customer = Customer::factory()->create();
-        return QuoteRepository::create($tour, $customer);
+        return QuoteRepository::createFromTour($tour, $customer);
     }
 }

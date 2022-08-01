@@ -5,10 +5,13 @@ namespace App\Repository\Model\Order\Component;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderMerchandiseRepository extends OrderComponentRepository
 {
+    use IsMerchandise;
+
     private OrderMerchandise $orderComponent;
 
     public function __construct(OrderMerchandise $orderComponent)

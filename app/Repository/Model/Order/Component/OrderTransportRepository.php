@@ -5,9 +5,12 @@ namespace App\Repository\Model\Order\Component;
 use App\Models\Order\Component\OrderTransport;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Traits\Component\IsTransport;
 
 class OrderTransportRepository extends OrderComponentRepository
 {
+    use IsTransport;
+
     private OrderTransport $orderComponent;
 
     public function __construct(OrderTransport $orderComponent)
