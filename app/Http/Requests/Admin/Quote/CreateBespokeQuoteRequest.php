@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $travelling
  * @property string $paying
  * @property float|null $single_occupancy_surcharge
+ * @property float $deposit
  * @property string $internal_notes
  * @property string $external_notes
  * @property float $cost
@@ -40,6 +41,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'external_notes' => $this->external_notes,
             'name' => $this->name,
             'description' => $this->description,
+            'deposit' => $this->deposit,
         ];
     }
 
@@ -73,6 +75,7 @@ class CreateBespokeQuoteRequest extends FormRequest
             'expires' => 'required|date',
             'final' => 'required|date',
             'cost' => 'required|numeric|min:0',
+            'deposit' => 'required|numeric|min:0',
             'single_occupancy_surcharge' => 'nullable|numeric|min:0',
             'name' => 'required',
         ];
