@@ -228,7 +228,7 @@
                                 <th scope="col">Value</th>
                             </tr>
                             </thead>
-                            @foreach($order->orderCustomers as $ordersCustomer)
+                            @foreach($order->orderCustomers()->where('is_charged', '=', 1)->get() as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
                                 <td>{{ f_currency($ordersCustomer->tour_cost) }}</td>

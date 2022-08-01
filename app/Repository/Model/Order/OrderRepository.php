@@ -127,7 +127,7 @@ class OrderRepository extends ModelRepository
     public function getCost(): float
     {
         $total = 0;
-        foreach ($this->order->orderCustomers as $orderCustomer) {
+        foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
             foreach ($orderCustomer->repository->getComponents(false) as $component) {
@@ -154,7 +154,7 @@ class OrderRepository extends ModelRepository
         $addons = [];
         $upgrades = [];
         $additionalValue = 0;
-        foreach ($this->order->orderCustomers as $orderCustomer) {
+        foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $data = $orderCustomer->getAdditionalCosts();
             $addons = array_merge($addons, $data['addons']);
             $upgrades = array_merge($upgrades, $data['upgrades']);
