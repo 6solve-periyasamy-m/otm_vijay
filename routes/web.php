@@ -262,6 +262,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
             Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
             Route::post('/send', [QuoteController::class, 'send'])->name('send')->middleware('bouncer:Quote\Quote,update');
+            Route::get('/add', [QuoteController::class, 'add'])->name('add')->middleware('bouncer:Quote\Quote,update');
             Route::post('/delete', [QuoteController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
             Route::prefix('sent/{sent}')->name('sent.')->group(function () {
                 Route::get('/resend', [QuoteController::class, 'resend'])->name('resend')->middleware('bouncer:Quote\Quote,update');

@@ -34,7 +34,7 @@ class TransportInventoryRepository extends InventoryRepository
         $inventories = [];
         if (isset($repository)) {
             foreach ($repository->getComponents(false, false, false, true, false) as $inventoryTour) {
-                $inventories[] = $inventoryTour->getInventory()->id;
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return TransportInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();

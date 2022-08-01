@@ -90,6 +90,11 @@ class QuoteController extends Controller
         return view('pages.admin.quote.view', ['quote' => $quote,]);
     }
 
+    public function add(Quote $quote)
+    {
+        return view('pages.admin.quote.components.add', ['quote' => $quote,]);
+    }
+
     public function edit(Quote $quote)
     {
         return view('pages.admin.quote.edit', ['quote' => $quote,]);

@@ -34,7 +34,7 @@ class ActivityInventoryRepository extends InventoryRepository
         $inventories = [];
         if (isset($repository)) {
             foreach ($repository->getComponents(false, true, false, false, false) as $inventoryTour) {
-                $inventories[] = $inventoryTour->getInventory()->id;
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return ActivityInventory::whereBetween('starts_at', [$from, $to])->whereBetween('ends_at', [$from, $to])->whereNotIn('id', $inventories)->get();

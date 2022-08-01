@@ -34,7 +34,7 @@ class FlightInventoryRepository extends InventoryRepository
         $inventories = [];
         if (isset($repository)) {
             foreach ($repository->getComponents(false, false, true, false, false) as $inventoryTour) {
-                $inventories[] = $inventoryTour->getInventory()->id;
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return FlightInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();

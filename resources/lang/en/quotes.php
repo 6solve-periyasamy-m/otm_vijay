@@ -23,6 +23,7 @@ return [
         ],
         'buttons' => [
             'edit' => 'Edit Quote',
+            'add' => 'Add Components',
             'lock' => 'Lock Quote',
             'unlock' => 'Unlock Quote',
             'send' => 'Send Quote',

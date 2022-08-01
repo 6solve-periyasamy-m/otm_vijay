@@ -34,7 +34,7 @@ class AccommodationInventoryRepository extends InventoryRepository
         $inventories = [];
         if (isset($repository)) {
             foreach ($repository->getComponents(true, false, false, false, false) as $inventoryTour) {
-                $inventories[] = $inventoryTour->getInventory()->id;
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return AccommodationInventory::whereBetween('check_in', [$from, $to])->whereBetween('check_out', [$from, $to])->whereNotIn('id', $inventories)->get();
