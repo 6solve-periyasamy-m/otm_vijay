@@ -10,12 +10,15 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Traits\Component\IsFlight;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
 class FlightInventoryRepository extends InventoryRepository
 {
+    use IsFlight;
+
     private FlightInventory $inventory;
 
     public function __construct(FlightInventory $inventory)

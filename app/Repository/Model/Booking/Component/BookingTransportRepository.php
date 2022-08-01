@@ -5,9 +5,12 @@ namespace App\Repository\Model\Booking\Component;
 use App\Models\Booking\Component\BookingTransport;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Model\Transport\TransportInventoryTourRepository;
+use App\Repository\Traits\Component\IsTransport;
 
 class BookingTransportRepository extends BookingComponentRepository
 {
+    use IsTransport;
+
     private BookingTransport $bookingComponent;
 
     public function __construct(BookingTransport $bookingComponent)

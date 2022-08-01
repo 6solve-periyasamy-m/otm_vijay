@@ -6,10 +6,13 @@ use App\Models\Quote\Component\QuoteAccommodation;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
+use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 
 class QuoteAccommodationRepository extends QuoteComponentRepository
 {
+    use IsAccommodation;
+
     private QuoteAccommodation $quoteComponent;
 
     public function __construct(QuoteAccommodation $quoteComponent)
@@ -62,11 +65,6 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
     public function __toString(): string
     {
         return $this->getInventory()->__toString();
-    }
-
-    public function getComponentType(): string
-    {
-        return 'accommodation';
     }
 
     public function getShortDescription(): string

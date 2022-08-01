@@ -19,9 +19,12 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Traits\Component\IsTransport;
 
 class TransportInventoryTourRepository extends InventoryTourRepository
 {
+    use IsTransport;
+
     private TransportInventoryTour $tourComponent;
 
     public function __construct(TransportInventoryTour $tourComponent)
@@ -151,11 +154,6 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     {
         $component = $traveller->transport()->where('transport_inventory_tour_id', $this->tourComponent->id)->first();
         return $component?->repository;
-    }
-
-    public function getComponentType(): string
-    {
-        return 'transport';
     }
 
     public function getCost(): float

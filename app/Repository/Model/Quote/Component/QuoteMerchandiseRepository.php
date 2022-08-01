@@ -7,9 +7,12 @@ use App\Models\Quote\Component\QuoteMerchandise;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 
 class QuoteMerchandiseRepository extends QuoteComponentRepository
 {
+    use IsMerchandise;
+
     private QuoteMerchandise $quoteComponent;
 
     public function __construct(QuoteMerchandise $quoteComponent)
@@ -91,10 +94,5 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return $this->getInventory()->get()->asset;
-    }
-
-    public function getComponentType(): string
-    {
-        return "merchandise";
     }
 }

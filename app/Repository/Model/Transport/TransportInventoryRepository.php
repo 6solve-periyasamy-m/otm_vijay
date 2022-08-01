@@ -10,12 +10,15 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
 class TransportInventoryRepository extends InventoryRepository
 {
+    use IsTransport;
+
     private TransportInventory $inventory;
 
     public function __construct(TransportInventory $inventory)

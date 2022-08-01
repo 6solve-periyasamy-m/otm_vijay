@@ -11,11 +11,14 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
+use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class AccommodationInventoryRepository extends InventoryRepository
 {
+    use IsAccommodation;
+
     private AccommodationInventory $inventory;
 
     public function __construct(AccommodationInventory $inventory)

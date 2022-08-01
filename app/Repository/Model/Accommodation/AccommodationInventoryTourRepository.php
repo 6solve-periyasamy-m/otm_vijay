@@ -17,9 +17,12 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
+use App\Repository\Traits\Component\IsAccommodation;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
 {
+    use IsAccommodation;
+
     private AccommodationInventoryTour $tourComponent;
 
     public function __construct(AccommodationInventoryTour $tourComponent)
@@ -159,11 +162,6 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             if ($accommodation->accommodation_inventory_tour_id == $this->tourComponent->id) return $accommodation->repository;
         }
         return null;
-    }
-
-    public function getComponentType(): string
-    {
-        return 'accommodation';
     }
 
     public function getCost(): float

@@ -6,8 +6,9 @@ use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Transport\TransportInventoryTourUpgrade;
+use App\Repository\Interfaces\HasComponentType;
 
-abstract class ComponentUpgradeRepository extends ModelRepository
+abstract class ComponentUpgradeRepository extends ModelRepository implements HasComponentType
 {
     public static function getComponent(string $type, int $id): ?ComponentUpgradeRepository
     {

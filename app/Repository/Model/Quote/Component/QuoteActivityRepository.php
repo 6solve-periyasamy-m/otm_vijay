@@ -6,9 +6,12 @@ use App\Models\Quote\Component\QuoteActivity;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Activity\ActivityInventoryRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
+use App\Repository\Traits\Component\IsActivity;
 
 class QuoteActivityRepository extends QuoteComponentRepository
 {
+    use IsActivity;
+
     private QuoteActivity $quoteComponent;
 
     public function __construct(QuoteActivity $quoteComponent)
@@ -61,11 +64,6 @@ class QuoteActivityRepository extends QuoteComponentRepository
     public function __toString(): string
     {
         return $this->getInventory()->__toString();
-    }
-
-    public function getComponentType(): string
-    {
-        return 'activity';
     }
 
     public function getShortDescription(): string

@@ -2,14 +2,14 @@
 
 namespace App\Repository\Abstracts;
 
+use App\Repository\Interfaces\HasComponentType;
 use Carbon\Carbon;
 
-abstract class InventoryContainerRepository extends ModelRepository
+abstract class InventoryContainerRepository extends ModelRepository implements HasComponentType
 {
     public abstract function getTourComponentType(): string;
     public abstract function getCost(): float;
     public abstract function getInventory(): ?InventoryRepository;
-    public abstract function getComponentType(): string;
 
     public function getPurchasePrice(): ?float
     {

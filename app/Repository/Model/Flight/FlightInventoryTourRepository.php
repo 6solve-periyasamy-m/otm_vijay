@@ -18,9 +18,12 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
 use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Traits\Component\IsFlight;
 
 class FlightInventoryTourRepository extends InventoryTourRepository
 {
+    use IsFlight;
+
     private FlightInventoryTour $tourComponent;
 
     public function __construct(FlightInventoryTour $tourComponent)
@@ -153,11 +156,6 @@ class FlightInventoryTourRepository extends InventoryTourRepository
     {
         $component = $traveller->flights()->where('flight_inventory_tour_id', $this->tourComponent->id)->first();
         return $component?->repository;
-    }
-
-    public function getComponentType(): string
-    {
-        return 'flight';
     }
 
     public function getCost(): float

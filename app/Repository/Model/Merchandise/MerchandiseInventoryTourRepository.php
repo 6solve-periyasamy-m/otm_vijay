@@ -18,11 +18,14 @@ use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 use DB;
 use Log;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
+    use IsMerchandise;
+
     private MerchandiseInventoryTour $tourComponent;
 
     public function __construct(MerchandiseInventoryTour $tourComponent)
@@ -120,11 +123,6 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     {
         $component = $traveller->merchandise()->where('merchandise_id', $this->tourComponent->id)->first();
         return $component?->repository;
-    }
-
-    public function getComponentType(): string
-    {
-        return 'merchandise';
     }
 
     public function getCost(): float

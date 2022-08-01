@@ -7,8 +7,9 @@ use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Component\OrderTransport;
+use App\Repository\Interfaces\HasComponentType;
 
-abstract class OrderComponentRepository extends ModelRepository
+abstract class OrderComponentRepository extends ModelRepository implements HasComponentType
 {
     public abstract function getTourComponentType(): string;
     public abstract function getCost(): float;

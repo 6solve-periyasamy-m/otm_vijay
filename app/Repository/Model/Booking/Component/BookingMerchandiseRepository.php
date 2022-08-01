@@ -5,9 +5,12 @@ namespace App\Repository\Model\Booking\Component;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Model\Merchandise\MerchandiseInventoryTourRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 
 class BookingMerchandiseRepository extends BookingComponentRepository
 {
+    use IsMerchandise;
+
     private BookingMerchandise $bookingComponent;
 
     public function __construct(BookingMerchandise $bookingComponent)

@@ -9,11 +9,12 @@ use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
+use App\Repository\Interfaces\HasComponentType;
 use App\Repository\Interfaces\HasStockControl;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-abstract class InventoryRepository extends ModelRepository implements HasStockControl
+abstract class InventoryRepository extends ModelRepository implements HasStockControl, HasComponentType
 {
     public abstract function getStartTime(): Carbon;
 

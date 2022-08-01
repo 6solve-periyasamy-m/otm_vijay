@@ -6,9 +6,12 @@ use App\Models\Quote\Component\QuoteFlight;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Flight\FlightInventoryRepository;
 use App\Repository\Model\Flight\FlightInventoryTourRepository;
+use App\Repository\Traits\Component\IsFlight;
 
 class QuoteFlightRepository extends QuoteComponentRepository
 {
+    use IsFlight;
+
     private QuoteFlight $quoteComponent;
 
     public function __construct(QuoteFlight $quoteComponent)
@@ -61,11 +64,6 @@ class QuoteFlightRepository extends QuoteComponentRepository
     public function __toString(): string
     {
         return $this->getInventory()->__toString();
-    }
-
-    public function getComponentType(): string
-    {
-        return 'flight';
     }
 
     public function getShortDescription(): string

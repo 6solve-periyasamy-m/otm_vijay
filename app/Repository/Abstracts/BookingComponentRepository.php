@@ -7,8 +7,9 @@ use App\Models\Booking\Component\BookingActivity;
 use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
+use App\Repository\Interfaces\HasComponentType;
 
-abstract class BookingComponentRepository
+abstract class BookingComponentRepository implements HasComponentType
 {
     public abstract function getTourComponentType(): string;
     public abstract function getCost(): float;

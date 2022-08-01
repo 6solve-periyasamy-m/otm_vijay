@@ -6,9 +6,12 @@ use App\Models\Quote\Component\QuoteTransport;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Transport\TransportInventoryRepository;
 use App\Repository\Model\Transport\TransportInventoryTourRepository;
+use App\Repository\Traits\Component\IsTransport;
 
 class QuoteTransportRepository extends QuoteComponentRepository
 {
+    use IsTransport;
+
     private QuoteTransport $quoteComponent;
 
     public function __construct(QuoteTransport $quoteComponent)
@@ -61,11 +64,6 @@ class QuoteTransportRepository extends QuoteComponentRepository
     public function __toString(): string
     {
         return $this->getInventory()->__toString();
-    }
-
-    public function getComponentType(): string
-    {
-        return 'transport';
     }
 
     public function getShortDescription(): string

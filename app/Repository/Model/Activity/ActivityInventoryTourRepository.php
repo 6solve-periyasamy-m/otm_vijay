@@ -19,9 +19,12 @@ use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Traits\Component\IsActivity;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
 {
+    use IsActivity;
+
     private ActivityInventoryTour $tourComponent;
 
     public function __construct(ActivityInventoryTour $tourComponent)
@@ -147,11 +150,6 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
     {
         $component = $traveller->activities()->where('activity_inventory_tour_id', $this->tourComponent->id)->first();
         return $component?->repository;
-    }
-
-    public function getComponentType(): string
-    {
-        return 'activity';
     }
 
     public function getCost(): float

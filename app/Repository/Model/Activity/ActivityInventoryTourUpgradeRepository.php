@@ -4,9 +4,12 @@ namespace App\Repository\Model\Activity;
 
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
+use App\Repository\Traits\Component\IsActivity;
 
 class ActivityInventoryTourUpgradeRepository extends ComponentUpgradeRepository
 {
+    use IsActivity;
+
     private ActivityInventoryTourUpgrade $upgrade;
 
     public function __construct(ActivityInventoryTourUpgrade $upgrade)

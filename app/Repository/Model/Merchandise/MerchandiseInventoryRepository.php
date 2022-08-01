@@ -12,6 +12,7 @@ use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\UploadedFile;
@@ -19,6 +20,8 @@ use Illuminate\Support\Collection;
 
 class MerchandiseInventoryRepository extends InventoryRepository
 {
+    use IsMerchandise;
+
     private MerchandiseInventory $inventory;
 
     public function __construct(MerchandiseInventory $inventory)

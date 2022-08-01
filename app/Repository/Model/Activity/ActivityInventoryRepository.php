@@ -10,12 +10,15 @@ use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
 class ActivityInventoryRepository extends InventoryRepository
 {
+    use IsActivity;
+
     private ActivityInventory $inventory;
 
     public function __construct(ActivityInventory $inventory)
