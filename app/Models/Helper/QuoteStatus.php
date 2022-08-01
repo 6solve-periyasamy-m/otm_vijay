@@ -12,9 +12,10 @@ enum QuoteStatus: int
     case EXPIRED = -1;
     case NOT_SENT = 0;
     case AWAITING = 1;
-    case APPROVED = 2;
-    case CONVERTED = 3;
-    case CLOSED = 4;
+    case CHANGES = 2;
+    case APPROVED = 3;
+    case CONVERTED = 4;
+    case CLOSED = 5;
     case UNKNOWN = 999;
 
     public function description(): string
@@ -22,6 +23,7 @@ enum QuoteStatus: int
         return match ($this) {
             self::EXPIRED => trans('quotes.status.expired'),
             self::NOT_SENT => trans('quotes.status.not_sent'),
+            self::CHANGES => trans('quotes.status.changes'),
             self::AWAITING => trans('quotes.status.awaiting'),
             self::APPROVED => trans('quotes.status.approved'),
             self::CONVERTED => trans('quotes.status.converted'),
@@ -35,7 +37,8 @@ enum QuoteStatus: int
         return match ($this) {
             self::EXPIRED => 'danger',
             self::NOT_SENT => 'info',
-            self::AWAITING => 'warning',
+            self::AWAITING => 'light',
+            self::CHANGES => 'warning',
             self::APPROVED => 'primary',
             self::CONVERTED => 'success',
             self::CLOSED => 'secondary',
