@@ -122,7 +122,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $component?->repository;
     }
 
-    public function getComponentString(): string
+    public function getComponentType(): string
     {
         return 'merchandise';
     }
@@ -132,7 +132,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function getComponentType(): string
+    public function getTourComponentType(): string
     {
         return $this->tourComponent->tour_component_type;
     }

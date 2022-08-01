@@ -90,7 +90,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         $newTour->save();
         foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
             $inventoryTour = $inventoryTourRepository->get();
-            if ($inventoryTourRepository->getComponentType() == 'Upgrade') continue;
+            if ($inventoryTourRepository->getTourComponentType() == 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();

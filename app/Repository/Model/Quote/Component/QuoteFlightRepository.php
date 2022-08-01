@@ -63,11 +63,6 @@ class QuoteFlightRepository extends QuoteComponentRepository
         return $this->getInventory()->__toString();
     }
 
-    public function getPurchasePrice(): ?float
-    {
-        return $this->getInventory()->get()->purchase_price;
-    }
-
     public function getComponentType(): string
     {
         return 'flight';

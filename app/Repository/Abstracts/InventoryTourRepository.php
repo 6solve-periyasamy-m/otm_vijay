@@ -15,7 +15,7 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Interfaces\HasStockControl;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class InventoryTourRepository extends ModelRepository implements HasStockControl
+abstract class InventoryTourRepository extends InventoryContainerRepository implements HasStockControl
 {
     public static abstract function getAvailableAddons(Tour $tour, OrderCustomer $orderCustomer = null): array;
 
@@ -37,15 +37,7 @@ abstract class InventoryTourRepository extends ModelRepository implements HasSto
 
     public abstract function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository;
 
-    public abstract function getComponentString(): string;
-
-    public abstract function getCost(): float;
-
-    public abstract function getComponentType(): string;
-
     public abstract function isBookable(): bool;
-
-    public abstract function getInventory(): ?InventoryRepository;
 
     public abstract function getUsedOnOrderCount(): int;
 

@@ -24,11 +24,11 @@
                 <td data-content="Name">{{ $addonRepository->__toString() }}</td>
                 @if($addonRepository->get()->tour_component_type === 'Included')
                     <td colspan="2" data-content="Component Type">
-                        {{ $addonRepository->getComponentType() }}
+                        {{ $addonRepository->getTourComponentType() }}
                     </td>
                 @else
                     <td data-content="Component Type">
-                        {{ $addonRepository->getComponentType()  }}
+                        {{ $addonRepository->getTourComponentType()  }}
                     </td>
                     <td data-content="Cost">
                         {{ f_currency($addonRepository->getCost()) }}
@@ -39,14 +39,14 @@
                         <a href="{{ route('customer-booking.remove-addon',
                                         ['bookingUrl' => $booking->tour->booking_form_url,
                                          'token' => $booking->token,
-                                         'type' => $addonRepository->getComponentString(),
+                                         'type' => $addonRepository->getComponentType(),
                                          'id' => $addonRepository->get()->id,]) }}"
                            class="btn btn-danger ms-1">-</a>
                     @else
                         <a href="{{ route('customer-booking.purchase-addon',
                                         ['bookingUrl' => $booking->tour->booking_form_url,
                                          'token' => $booking->token,
-                                         'type' => $addonRepository->getComponentString(),
+                                         'type' => $addonRepository->getComponentType(),
                                          'id' => $addonRepository->get()->id,]) }}"
                            class="btn btn-success ms-1">+</a>
                     @endif

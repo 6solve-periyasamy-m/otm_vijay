@@ -164,4 +164,9 @@ class MerchandiseInventoryRepository extends InventoryRepository
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;
     }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->inventory->purchase_price;
+    }
 }

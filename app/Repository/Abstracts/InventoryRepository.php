@@ -25,6 +25,8 @@ abstract class InventoryRepository extends ModelRepository implements HasStockCo
 
     public abstract function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteComponentRepository;
 
+    public abstract function getPurchasePrice(): float;
+
     public static function getComponent(string $type, int $id): ?InventoryRepository
     {
         return match ($type) {

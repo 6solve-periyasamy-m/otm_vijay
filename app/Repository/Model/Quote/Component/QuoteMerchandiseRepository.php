@@ -69,11 +69,6 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
         return $this->getInventory()->get()->purchase_price;
     }
 
-    public function getComponentType(): string
-    {
-        return 'merchandise';
-    }
-
     public function getShortDescription(): string
     {
         $inventory = $this->getInventory()->get();
@@ -96,5 +91,10 @@ class QuoteMerchandiseRepository extends QuoteComponentRepository
     public function getItineraryAsset(): string
     {
         return $this->getInventory()->get()->asset;
+    }
+
+    public function getComponentType(): string
+    {
+        return "merchandise";
     }
 }
