@@ -118,6 +118,7 @@ return [
     'status' => [
         'expired' => 'Expired',
         'not_sent' => 'Not Sent',
+        'changes' => 'Requires Changes',
         'awaiting' => 'Awaiting Response',
         'approved' => 'Approved - Pending Conversion',
         'converted' => 'Approved - Converted to Order',
