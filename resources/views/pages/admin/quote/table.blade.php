@@ -45,7 +45,7 @@
                 @foreach($quotes as $quote)
                     <tr>
                         <td><a href="{{ route('quotes.view', ['quote' => $quote,]) }}">{{ $quote->ref }}</a></td>
-                        <td>{{ $quote->tour->name }}</td>
+                        <td>{{ $quote->name }}</td>
                         <td>{{ $quote->leadTraveller->name }}</td>
                         <td>{{ $quote->leadTraveller->email }}</td>
                         <td>{{ $quote->status->badge() }}</td>
