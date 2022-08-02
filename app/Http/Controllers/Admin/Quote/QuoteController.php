@@ -46,6 +46,11 @@ class QuoteController extends Controller
 
     public function conversion(StartConversionRequest $request, Quote $quote)
     {
+        $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
+        $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
+        if (!isset($pricePoint)) {
+            return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
+        }
         if ($request->travelling == 0 && $request->paying == 0) {
             $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying));
             return redirect()->route('orders.view', ['order' => $order,]);
@@ -58,6 +63,16 @@ class QuoteController extends Controller
         return $quote->repository->getResponseStream($sent);
     }
 
+    public function preview(StartConversionRequest $request, Quote $quote)
+    {
+        $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
+        $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
+        if (!isset($pricePoint)) {
+            return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
+        }
+        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling));
+    }
+
     public function convert(ConversionRequest $request, Quote $quote)
     {
         $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying), $request->getCustomers());
@@ -66,6 +81,11 @@ class QuoteController extends Controller
 
     public function send(StartConversionRequest $request, Quote $quote)
     {
+        $paying = $request->paying + ($quote->leadTraveller->paying ? 1 : 0);
+        $pricePoint = $quote->repository->getPricePerPerson($request->paying + ($quote->leadTraveller->paying ? 1 : 0));
+        if (!isset($pricePoint)) {
+            return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
+        }
         $quote->repository->resend($quote->repository->generateSent($quote->leadTraveller->email, $request->paying, $request->travelling));
         return redirect()->route('quotes.view', ['quote' => $quote,]);
     }

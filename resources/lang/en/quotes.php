@@ -56,8 +56,9 @@ return [
                     'count' => 'How many additional travellers?',
                     'paying' => 'Paying',
                     'travelling' => 'Non-paying',
-                    'convert' => 'Convert to Order',
-                    'send' => 'Send to Customer'
+                    'convert' => 'Convert',
+                    'send' => 'Send',
+                    'preview' => 'Preview',
                 ],
             ],
             'installments' => [

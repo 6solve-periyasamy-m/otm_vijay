@@ -628,9 +628,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $quote;
     }
 
-    public function generateSent(string $email, int $paying, int $travelling): ?SentQuote
+    public function makeSent(string $email, int $paying, int $travelling): ?SentQuote
     {
-        $sent = SentQuote::create([
+        return SentQuote::make([
             'quote_id' => $this->quote->id,
             'sent' => now(),
             'recipient' => $email,
@@ -638,6 +638,12 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'paying' => $paying,
             'data' => $this->serialize(),
         ]);
+    }
+
+    public function generateSent(string $email, int $paying, int $travelling): ?SentQuote
+    {
+        $sent = $this->makeSent($email, $paying, $travelling);
+        $sent->save();
         $this->quote->repository->update(['revision' => $this->quote->revision + 1,]);
         return $sent;
     }

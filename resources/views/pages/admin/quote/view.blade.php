@@ -236,18 +236,33 @@
                 </x-admin.section.otm-text>
                 <x-admin.section.otm-text>
                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.convert') }}</x-slot:header>
+                    <form class="d-none preview-form" action="{{ route('quotes.preview', ['quote' => $quote,]) }}" method="post">
+                        @csrf
+                        <input type="hidden" name="paying" class="paying-input" value="0">
+                        <input type="hidden" name="travelling" class="travelling-input" value="0">
+                    </form>
+                    <a href="javascript:$('.preview-form').submit();" class="btn btn-info">
+                        <i class="icon-magnifier"></i>
+                        {{ __('quotes.view.cards.quick.calculator.preview') }}
+                    </a>
                     <form class="d-none send-form" action="{{ route('quotes.send', ['quote' => $quote,]) }}" method="post">
                         @csrf
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
-                    <a href="javascript:$('.send-form').submit()" class="btn btn-success">{{ __('quotes.view.cards.quick.calculator.send') }}</a>
+                    <a href="javascript:$('.send-form').submit()" class="btn btn-success">
+                        <i class="icon-envelope"></i>
+                        {{ __('quotes.view.cards.quick.calculator.send') }}
+                    </a>
                     <form class="d-none convert-form" action="{{ route('quotes.conversion', ['quote' => $quote,]) }}" method="post">
                         @csrf
                         <input type="hidden" name="paying" class="paying-input" value="0">
                         <input type="hidden" name="travelling" class="travelling-input" value="0">
                     </form>
-                    <a href="javascript:$('.convert-form').submit()" class="btn btn-warning">{{ __('quotes.view.cards.quick.calculator.convert') }}</a>
+                    <a href="javascript:$('.convert-form').submit()" class="btn btn-warning">
+                        <i class="icon-bag"></i>
+                        {{ __('quotes.view.cards.quick.calculator.convert') }}
+                    </a>
                 </x-admin.section.otm-text>
             </x-admin.section.otm-card>
         </div>
