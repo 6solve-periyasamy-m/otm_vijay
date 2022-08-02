@@ -49,7 +49,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'date_from' => $tour->date_from,
             'date_to' => $tour->date_to,
             'terms' => $tour->terms,
-            'invoice_footer' => $tour->invoice_footer,
+            'invoice_footer' => $tour->invoice_footer ?? "",
             'name' => $tour->name,
             'description' => $tour->description,
             ...$data,
