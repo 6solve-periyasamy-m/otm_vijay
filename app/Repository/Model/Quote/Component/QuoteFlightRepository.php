@@ -63,7 +63,9 @@ class QuoteFlightRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getInventory()->__toString();
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->departureAirport->name} to {$component->arrivalAirport->name} ({$inventory->travelClass})";
     }
 
     public function getShortDescription(): string

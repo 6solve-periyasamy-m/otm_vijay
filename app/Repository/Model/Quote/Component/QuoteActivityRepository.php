@@ -63,7 +63,9 @@ class QuoteActivityRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getInventory()->__toString();
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$component->activityType}) ({$component->address->region}, {$component->address->country}) - {$inventory->ticketType}";
     }
 
     public function getShortDescription(): string

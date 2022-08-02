@@ -64,7 +64,9 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
 
     public function __toString(): string
     {
-        return $this->getInventory()->__toString();
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$component->address->region}, {$component->address->country}) - {$inventory->roomType} {$inventory->boardType}";
     }
 
     public function getShortDescription(): string

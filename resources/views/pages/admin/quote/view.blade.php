@@ -330,7 +330,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $componentRepository->getInventory()->__toString() }}
+                                        {{ $componentRepository->__toString() }}
                                     </td>
                                     <td>
                                         {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
