@@ -21,11 +21,12 @@ return [
             'name' => 'Lead Traveller Name',
             'contact' => 'Lead Contact Information'
         ],
+        'locked' => 'This quote is currently linked to a tour, and has been locked to prevent editing an active package. If you wish to edit the components, please click the unlink button below.',
         'buttons' => [
             'edit' => 'Edit Quote',
             'add' => 'Add Components',
             'lock' => 'Lock Quote',
-            'unlock' => 'Unlock Quote',
+            'unlock' => 'Unlink Quote',
             'send' => 'Send Quote',
         ],
         'cards' => [

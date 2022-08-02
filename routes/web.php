@@ -260,6 +260,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/', [QuoteController::class, 'view'])->name('view')->middleware('bouncer:Quote\Quote,read');
             Route::get('/update', [QuoteController::class, 'edit'])->name('edit')->middleware('bouncer:Quote\Quote,update');
             Route::post('/update', [QuoteController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
+            Route::get('/unlink', [QuoteComponentController::class, 'unlink'])->name('unlink')->middleware('bouncer:Quote\Quote,update');
             Route::post('/preview', [QuoteController::class, 'preview'])->name('preview')->middleware('bouncer:Quote\Quote,read');
             Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
             Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
@@ -282,7 +283,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             });
             Route::prefix('component')->name('components.')->group(function () {
                 Route::get('/add', [QuoteComponentController::class, 'add'])->name('add')->middleware('bouncer:Quote\Quote,update');
-                Route::post('/delete', [QuoteComponentController::class, 'delete'])->name('add')->middleware('bouncer:Quote\Quote,update');
+                Route::post('/{type}/{id}/delete', [QuoteComponentController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,update');
             });
         });
     });
