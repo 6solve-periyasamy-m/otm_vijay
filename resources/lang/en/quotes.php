@@ -18,6 +18,8 @@ return [
         'expires' => 'Expires At',
         'starts' => 'Starts Date',
         'ends' => 'Ends Date',
+        'description' => 'Description',
+        'notes' => 'Internal Notes',
         'lead' => [
             'name' => 'Lead Traveller Name',
             'contact' => 'Lead Contact Information'
@@ -83,7 +85,8 @@ return [
                     'deposit' => 'Deposit',
                     'installment' => 'Instalment',
                     'remaining' => 'Remaining Balance',
-                ]
+                ],
+                'with-order' => 'With Order',
             ],
             'price-points' => [
                 'header' => 'Price Matrix',

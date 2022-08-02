@@ -39,3 +39,13 @@
     <a href="mailto:{{ $quote->leadTraveller->email }}">{{ $quote->leadTraveller->email }}</a>
     (<a href="tel:{{ $quote->leadTraveller->phone }}">{{ $quote->leadTraveller->phone }}</a>)
 </x-admin.section.header.detail>
+
+<x-admin.section.header.detail width="6">
+    <x-slot:title>{{ __('quotes.view.description') }}</x-slot:title>
+    {{ $quote->description }}
+</x-admin.section.header.detail>
+
+<x-admin.section.header.detail width="6">
+    <x-slot:title>{{ __('quotes.view.notes') }}</x-slot:title>
+    {{ $quote->internal_notes }}
+</x-admin.section.header.detail>

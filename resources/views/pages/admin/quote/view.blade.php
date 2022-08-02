@@ -555,16 +555,12 @@
                       action="{{ route('quotes.installments.store', ['quote' => $quote]) }}" method="post">
                     @csrf
                     <x-admin.input type="date" name="due"
-                                   width="4">{{ __('quotes.view.cards.installments.form.due') }}</x-admin.input>
+                                   width="5">{{ __('quotes.view.cards.installments.form.due') }}</x-admin.input>
                     <x-admin.input name="amount"
-                                   width="4">{{ __('quotes.view.cards.installments.form.amount') }}</x-admin.input>
+                                   width="5">{{ __('quotes.view.cards.installments.form.amount') }}</x-admin.input>
                     <x-admin.button href="javascript:$('.installment-create').submit()" width="2" color="primary">
                         <i class="icon-plus"></i>
                         <span>{{ __('quotes.view.cards.installments.form.create') }}</span>
-                    </x-admin.button>
-                    <x-admin.button href="#" width="2" color="warning">
-                        <i class="icon-refresh"></i>
-                        <span>{{ __('quotes.view.cards.installments.form.refresh') }}</span>
                     </x-admin.button>
                 </form>
                 <table class="table table-striped" id="schedule-table">
@@ -577,6 +573,17 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>{{ __('quotes.view.cards.installments.types.deposit') }}</td>
+                        <td data-order="0000-00-00">{{ __('quotes.view.cards.installments.with-order') }}</td>
+                        <td>{{ f_currency($quote->deposit) }}</td>
+                        <td>
+                            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}"
+                               class="btn btn-outline-success btn-sm mb-1">
+                                <i class="icon-note"></i>
+                            </a>
+                        </td>
+                    </tr>
                     @foreach($quote->installments as $installment)
                         <tr>
                             <form class="installment-{{$installment->id}}"
