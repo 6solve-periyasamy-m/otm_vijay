@@ -51,6 +51,7 @@ class QuoteController extends ApiController
         foreach ($request->ids as $id) {
             InventoryRepository::getComponent($component, $id)?->addToQuote($quote, $request->type);
         }
+        $quote->repository->autoAssignTemplating();
         return response()->json(['success' => true, 'message' => 'Components added successfully']);
     }
 }
