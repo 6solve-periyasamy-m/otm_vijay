@@ -6,6 +6,7 @@ return [
         'package' => 'Tour',
         'lead' => 'Lead Traveller',
         'email' => 'Email Address',
+        'expiry' => 'Expiry Date',
         'status' => 'Quote Status',
         'notes' => 'Notes',
     ],
