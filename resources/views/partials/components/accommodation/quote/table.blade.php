@@ -21,17 +21,14 @@
                 400: function () { alert('An incorrect component type has been provided'); },
                 403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
-            data: { "type": $(".accommodation-component-type-select").find(":selected").val(), "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
+            data: { "type": "Included", "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
     }
     @endcan
 </script>
 @can('create', \App\Models\Quote\Quote::class)
 <div class="d-flex justify-content-between mb-3">
-    <select class="form-select accommodation-component-type-select">
-        <option value="Included" selected>Included</option>
-        <option value="Add-on">Add-on</option>
-    </select>
+    <div></div>
     <a href="javascript:getSelectedAccommodationInventory()" class="btn btn-primary ms-3 text-white">
         <i class="icon-plus"></i>
         <span>Add Selected Rows</span>

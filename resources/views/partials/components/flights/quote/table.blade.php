@@ -24,7 +24,7 @@
                 400: function () { alert('An incorrect component type has been provided'); },
                 403: function () { alert('Authentication has expired. Please refresh the page'); }
             },
-            data: { "type": $(".flight-component-type-select").find(":selected").val(),
+            data: { "type": "Included",
                 "direction": $(".flight-direction-select").find(":selected").val(),
                 "ids": ids, "__api_token": '{{ Auth::user()->getCurrentToken()->token }}', },
         });
@@ -34,10 +34,6 @@
 @can('update', \App\Models\Quote\Quote::class)
 <div class="d-flex justify-content-between mb-3">
     <div class="d-inline-flex col-12 col-xl-10">
-        <select class="form-select flight-component-type-select">
-            <option value="Included" selected>Included</option>
-            <option value="Add-on">Add-on</option>
-        </select>
         <select class="form-select flight-direction-select">
             <option value="Outbound" selected>Outbound</option>
             <option value="Inbound">Inbound</option>
