@@ -42,7 +42,7 @@ class InvoiceRepository
         $adjustments = [];
         $payments = [];
         foreach ($order->orderCustomers as $customer) {
-            $customers[$customer->customer_name] = InvoiceRepository::processCustomerComponentsForInvoice($customer);
+            $customers[($customer->customer_name . ($customer->is_charged ? "" : " (Non-Paying)"))] = InvoiceRepository::processCustomerComponentsForInvoice($customer);
             foreach ($customer->adjustments as $adjustment) {
                 $adjustments[] = ['description' => "Customer Adjustment ({$customer->customer_name}): {$adjustment->reason}", 'cost' => $adjustment->amount,];
             }
@@ -122,7 +122,7 @@ class InvoiceRepository
             }
         }
         $totalCost += $orderCustomer->tour_cost;
-        return ['total_cost' => $totalCost, 'billables' => array_merge([['description' => $included, 'cost' => $orderCustomer->tour_cost,]], $data),];
+        return ['total_cost' => $orderCustomer->is_charged ? $totalCost : 0, 'billables' => array_merge([['description' => $included, 'cost' => $orderCustomer->is_charged ? $orderCustomer->tour_cost : 0,]], $data),];
     }
 
     /**
@@ -176,7 +176,7 @@ class InvoiceRepository
 
     private static function buildInstallmentString(string $type, Order $order, float $amount, float $calculated): string
     {
-        return "{$type}: {$order->customer_count} Customer" . ($order->customer_count > 1 ? 's' : '')
+        return "{$type}: {$order->paying_customers} Customer" . ($order->paying_customers > 1 ? 's' : '')
             . " x " . f_currency($amount) . " = " . f_currency($calculated);
     }
 

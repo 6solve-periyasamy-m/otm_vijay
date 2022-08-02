@@ -53,6 +53,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read float $calculated_deposit The calculated deposit based on customer count
  * @property-read float $cost The cost of the order before adjustments
  * @property-read int $customer_count The amount of customers on the order
+ * @property-read int $paying_customers The amount of customers on the order that are paying
  * @property-read string $customer_names String list of all customer full names
  * @property-read float $deposit_percentage What percentage of the total cost is the deposit
  * @property-read bool $has_atol Whether this order has an ATOL certificate
@@ -251,7 +252,7 @@ class Order extends Model
     {
         $cost = $this->cost - $this->calculated_deposit;
         foreach ($this->installments as $installment) {
-            $cost -= ($installment->amount) * $this->customer_count;
+            $cost -= $installment->calculated_amount;
         }
         return $cost;
     }
@@ -285,7 +286,7 @@ class Order extends Model
      */
     public function getCalculatedDepositAttribute(): float
     {
-        return $this->deposit * $this->customer_count;
+        return $this->deposit * $this->paying_customers;
     }
 
     /**
@@ -336,6 +337,11 @@ class Order extends Model
     {
         if (!isset ($this->internal_repository)) $this->internal_repository = new OrderRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getPayingCustomersAttribute(): int
+    {
+        return $this->orderCustomers()->where('is_charged', '=', true)->count();
     }
 
     // Functions
