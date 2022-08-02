@@ -12,8 +12,11 @@ trait TestsQuote
 
     public function generateQuote(): Quote
     {
-        $tour = $this->generateTour();
         $customer = Customer::factory()->create();
-        return QuoteRepository::createFromTour($tour, $customer);
+        $quote = Quote::factory()->create();
+        $lead = $quote->repository->createProspect($customer);
+        $quote->lead_traveller_id = $lead->id;
+        $quote->save();
+        return $quote;
     }
 }

@@ -28,6 +28,15 @@ class QuoteFactory extends Factory
             'reference' => 'OTMQ' . $this->faker->numberBetween(100000000000, 999999999999) . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(4 / strlen($x)))), 1, 4),
             'deposit' => $this->faker->numberBetween(100, 300),
             'expires' => $this->faker->dateTimeBetween('now', '+6 months'),
+            'name' => $this->faker->word,
+            'quote_status' => 0,
+            'single_occupancy_surcharge' => 0,
+            'final_payment' => now(),
+            'date_from' => now(),
+            'date_to' => now(),
+            'terms' => "",
+            'invoice_footer' => "",
+            'revision' => 1,
         ];
     }
 }
