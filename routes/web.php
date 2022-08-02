@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Merchandise\MerchandiseInventoryTourController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseSizeController;
 use App\Http\Controllers\Admin\Merchandise\MerchandiseTypeController;
 use App\Http\Controllers\Admin\Merchandise\VariantController;
+use App\Http\Controllers\Admin\Quote\QuoteComponentController;
 use App\Http\Controllers\Admin\Quote\QuoteController;
 use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
 use App\Http\Controllers\Admin\Quote\QuotePricePointController;
@@ -262,7 +263,6 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::post('/conversion', [QuoteController::class, 'conversion'])->name('conversion')->middleware('bouncer:Quote\Quote,update');
             Route::post('/convert', [QuoteController::class, 'convert'])->name('convert')->middleware('bouncer:Quote\Quote,update');
             Route::post('/send', [QuoteController::class, 'send'])->name('send')->middleware('bouncer:Quote\Quote,update');
-            Route::get('/add', [QuoteController::class, 'add'])->name('add')->middleware('bouncer:Quote\Quote,update');
             Route::post('/delete', [QuoteController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
             Route::prefix('sent/{sent}')->name('sent.')->group(function () {
                 Route::get('/resend', [QuoteController::class, 'resend'])->name('resend')->middleware('bouncer:Quote\Quote,update');
@@ -277,6 +277,10 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::post('/create', [QuotePricePointController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');
                 Route::post('/{pricePoint}/update', [QuotePricePointController::class, 'update'])->name('update')->middleware('bouncer:Quote\Quote,update');
                 Route::post('/{pricePoint}/delete', [QuotePricePointController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,update');
+            });
+            Route::prefix('component')->name('components.')->group(function () {
+                Route::get('/add', [QuoteComponentController::class, 'add'])->name('add')->middleware('bouncer:Quote\Quote,update');
+                Route::post('/delete', [QuoteComponentController::class, 'delete'])->name('add')->middleware('bouncer:Quote\Quote,update');
             });
         });
     });

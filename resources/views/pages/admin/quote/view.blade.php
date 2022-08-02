@@ -104,7 +104,7 @@
                 <i class="icon-note"></i>
                 {{ __('quotes.view.buttons.edit') }}
             </a>
-            <a href="{{ route('quotes.add', ['quote' => $quote,]) }}" class="btn btn-success">
+            <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-success">
                 <i class="icon-plus"></i>
                 {{ __('quotes.view.buttons.add') }}
             </a>
