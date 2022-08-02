@@ -16,8 +16,8 @@
     @include('partials.fields.text', ['name' => 'Company Address Country', 'field' => 'country', 'value' => setting('company.address.country', ''), 'width' => 6])
     @include('partials.fields.text', ['name' => 'Company Address Postcode', 'field' => 'postcode', 'value' => setting('company.address.postcode', ''), 'width' => 6])
     <hr class="splitter"/>
-    @include('partials.fields.text', ['name' => 'Booking Reference Prefix', 'field' => 'booking_prefix', 'value' => setting('quote.prefix', 'OTMQ'), 'width' => 3])
     @include('partials.fields.text', ['name' => 'Booking Reference Prefix', 'field' => 'booking_prefix', 'value' => setting('booking.prefix', ''), 'width' => 3])
+    @include('partials.fields.text', ['name' => 'Quote Prefix', 'field' => 'quote_prefix', 'value' => setting('quote.prefix', 'OTMQ'), 'width' => 3])
     @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 3])
     @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 3])
     <hr class="splitter"/>
