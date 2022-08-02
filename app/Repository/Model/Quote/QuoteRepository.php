@@ -614,6 +614,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $pricepoints[] = QuotePricePoint::make(['quantity' => $quantity, 'price_per_person' => $price]);
         }
         unset($data['pricepoints']);
+        unset($data['lead_traveller']);
         $quote = Quote::make($data);
         $quote->setRelations([
             'pricePoints' => $pricepoints,
@@ -674,7 +675,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $lead->save();
         $quote->internal_notes .= "\nRebuilt from Quote sent at " . f_datetime($sent->sent);
         $quote->lead_traveller_id = $lead->id;
-        $quote->revision++;
+        $quote->revision += 1;
         $quote->save();
         $quote->accommodation()->saveMany($accommodation);
         $quote->activities()->saveMany($activities);
