@@ -126,7 +126,7 @@ class Quote extends Model
 
     public function sentQuotes(): HasMany
     {
-        return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent');
+        return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent', 'desc');
     }
 
     public function event(): BelongsTo

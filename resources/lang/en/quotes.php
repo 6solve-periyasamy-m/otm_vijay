@@ -112,6 +112,9 @@ return [
                 'header' => 'Sent Versions',
                 'when' => 'When',
                 'email' => 'Sent to',
+                'paying' => 'Paying Travellers',
+                'travelling' => 'Non-Paying Travellers',
+                'reference' => 'Reference'
             ],
         ]
     ],

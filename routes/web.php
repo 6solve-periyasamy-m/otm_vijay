@@ -267,6 +267,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('sent/{sent}')->name('sent.')->group(function () {
                 Route::get('/resend', [QuoteController::class, 'resend'])->name('resend')->middleware('bouncer:Quote\Quote,update');
                 Route::get('/rebuild', [QuoteController::class, 'rebuild'])->name('rebuild')->middleware('bouncer:Quote\Quote,update');
+                Route::get('/document', [QuoteController::class, 'document'])->name('view')->middleware('bouncer:Quote\Quote,read');
             });
             Route::prefix('installment')->name('installments.')->group(function () {
                Route::post('/create', [QuoteInstallmentController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');
@@ -869,10 +870,6 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('reset');
         Route::post('/reset', [CustomerResetPasswordController::class, 'reset'])->name('update');
     });
-});
-
-Route::prefix('quotes')->name('customer.quote.')->group(function () {
-    Route::get('/view/{reference}/{paying}/{travelling}', [QuoteController::class, 'document'])->name('view');
 });
 
 Route::prefix('payment')->name('payment.')->group(function () {

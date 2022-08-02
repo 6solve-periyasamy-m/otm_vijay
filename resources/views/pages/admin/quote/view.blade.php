@@ -15,7 +15,7 @@
             $('.flights').DataTable({fixedHeader: true,});
             $('.transport').DataTable({fixedHeader: true,});
             $('.extras').DataTable({fixedHeader: true,});
-            $('.sent-quotes').DataTable({fixedHeader: true,});
+            $('.sent-quotes').DataTable({fixedHeader: true, order: [[0, 'desc'],]});
             update(0, 0);
         });
 
@@ -585,7 +585,7 @@
                 </table>
             </x-admin.section.card>
         </div>
-        <div class="col-xl-6">
+        <div class="col-xl-12">
             <x-admin.section.card>
                 <x-slot:header>{{ __('quotes.view.cards.sent.header') }}</x-slot:header>
                 <table class="table table-striped sent-quotes" id="sent-quotes-table">
@@ -593,15 +593,25 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.sent.when') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sent.email') }}</th>
-                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.reference') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.paying') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.travelling') }}</th>
+                        <th scope="col">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($quote->sentQuotes as $sent)
                         <tr>
-                            <td>{{ f_datetime($sent->sent) }}</td>
+                            <td data-order="{{ $sent->sent->unix() }}">{{ f_datetime($sent->sent) }}</td>
                             <td>{{ $sent->recipient }}</td>
-                            <td>
+                            <td>{{ $sent->built->ref }}</td>
+                            <td>{{ $sent->paid }}</td>
+                            <td>{{ $sent->free }}</td>
+                            <td class="actions-3">
+                                <a href="{{ route('quotes.sent.view', ['quote' => $quote, 'sent' => $sent,]) }}"
+                                   class="btn btn-outline-info btn-sm mb-1">
+                                    <i class="icon-magnifier"></i>
+                                </a>
                                 <a href="{{ route('quotes.sent.resend', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1">
                                     <i class="icon-envelope"></i>

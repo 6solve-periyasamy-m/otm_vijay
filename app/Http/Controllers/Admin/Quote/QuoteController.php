@@ -53,11 +53,9 @@ class QuoteController extends Controller
         return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying,]);
     }
 
-    public function document(string $reference, int $paying, int $travelling)
+    public function document(Quote $quote, SentQuote $sent)
     {
-        $quote = QuoteRepository::getFromReference($reference);
-        if (!isset($quote)) abort(404);
-        return $quote->repository->getResponseStream($quote->repository->generateSent('test', $paying, $travelling));
+        return $quote->repository->getResponseStream($sent);
     }
 
     public function convert(ConversionRequest $request, Quote $quote)
