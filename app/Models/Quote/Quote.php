@@ -37,7 +37,6 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string|null $description
  * @property float|null $deposit
- * @property bool $locked
  * @property float $single_occupancy_surcharge
  * @property Carbon $final_payment
  * @property Carbon $date_from
@@ -93,7 +92,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Quote whereInternalNotes($value)
  * @method static Builder|Quote whereInvoiceFooter($value)
  * @method static Builder|Quote whereLeadTravellerId($value)
- * @method static Builder|Quote whereLocked($value)
  * @method static Builder|Quote whereName($value)
  * @method static Builder|Quote whereOrderId($value)
  * @method static Builder|Quote whereQuoteStatus($value)
@@ -114,7 +112,6 @@ class Quote extends Model
     protected $casts = [
         'deposit' => 'double',
         'single_occupancy_surcharge' => 'double',
-        'locked' => 'boolean',
         'expires' => 'datetime',
         'date_from' => 'date',
         'date_to' => 'date',

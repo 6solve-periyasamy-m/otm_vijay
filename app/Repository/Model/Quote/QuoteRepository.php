@@ -130,7 +130,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
         }
-        $this->update(['tour_id' => $tour->id, 'locked' => true,]);
+        $this->update(['tour_id' => $tour->id, ]);
         $this->save();
         return $tour;
     }
@@ -524,7 +524,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function serialize(): string
     {
-        $quote = $this->quote->makeHidden('id', 'lead_traveller_id', 'order_id', 'locked', 'created_at', 'updated_at', 'deleted_at')->toArray();
+        $quote = $this->quote->makeHidden('id', 'lead_traveller_id', 'order_id', 'created_at', 'updated_at', 'deleted_at')->toArray();
         $quote['lead'] = ['customer_id' => $this->quote->leadTraveller->customer_id, 'travelling' => $this->quote->leadTraveller->travelling, 'paying' => $this->quote->leadTraveller->paying,];
         $components = ['accommodation' => [], 'activity' => [], 'flight' => [], 'transport' => [], 'merchandise' => []];
         foreach ($this->getComponents() as $component) {
