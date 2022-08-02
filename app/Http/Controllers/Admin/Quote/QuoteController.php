@@ -122,6 +122,7 @@ class QuoteController extends Controller
 
     public function delete(Quote $quote)
     {
-        // TODO: Stub (Generated)
+        $quote->delete();
+        return redirect()->route('quotes.all');
     }
 }
