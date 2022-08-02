@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Quote\QuoteComponentController;
 use App\Http\Controllers\Admin\Quote\QuoteController;
 use App\Http\Controllers\Admin\Quote\QuoteInstallmentController;
 use App\Http\Controllers\Admin\Quote\QuotePricePointController;
+use App\Http\Controllers\Admin\Quote\QuoteStatusController;
 use App\Http\Controllers\AtolController;
 use App\Http\Controllers\BespokeReportController;
 use App\Http\Controllers\BookingController;
@@ -270,6 +271,11 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 Route::get('/resend', [QuoteController::class, 'resend'])->name('resend')->middleware('bouncer:Quote\Quote,update');
                 Route::get('/rebuild', [QuoteController::class, 'rebuild'])->name('rebuild')->middleware('bouncer:Quote\Quote,update');
                 Route::get('/document', [QuoteController::class, 'document'])->name('view')->middleware('bouncer:Quote\Quote,read');
+            });
+            Route::prefix('status')->name('status.')->group(function () {
+                Route::get('/changes', [QuoteStatusController::class, 'changes'])->name('changes')->middleware('bouncer:Quote\Quote,update');
+                Route::get('/approve', [QuoteStatusController::class, 'approve'])->name('approve')->middleware('bouncer:Quote\Quote,update');
+                Route::get('/close', [QuoteStatusController::class, 'close'])->name('close')->middleware('bouncer:Quote\Quote,read');
             });
             Route::prefix('installment')->name('installments.')->group(function () {
                Route::post('/create', [QuoteInstallmentController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');

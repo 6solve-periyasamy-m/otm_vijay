@@ -29,6 +29,9 @@ return [
             'lock' => 'Lock Quote',
             'unlock' => 'Unlink Quote',
             'send' => 'Send Quote',
+            'close' => 'Close Quote',
+            'change' => 'Changes Required',
+            'approve' => 'Approved',
         ],
         'cards' => [
             'quick' => [

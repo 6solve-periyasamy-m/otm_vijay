@@ -4,6 +4,7 @@ namespace App\Repository\Model\Quote;
 
 use App\Mail\TemplatedMailable;
 use App\Models\Customer\Customer;
+use App\Models\Helper\QuoteStatus;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -105,6 +106,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
         ];
+        $this->update(['quote_status' => QuoteStatus::CONVERTED->value,]);
         return OrderRepository::create($tour, $data, $lead, $travellers);
     }
 
@@ -190,7 +192,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
      * @param bool $activities
      * @param bool $flights
      * @param bool $transport
-     * @param bool $extras
+     * @param bool $merchandise
      * @param array $filter
      * @return QuoteComponentRepository[]
      */
@@ -642,7 +644,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $sent = $this->makeSent($email, $paying, $travelling);
         $sent->save();
-        $this->quote->repository->update(['revision' => $this->quote->revision + 1,]);
+        $this->quote->repository->update(['revision' => $this->quote->revision + 1, 'quote_status' => QuoteStatus::AWAITING->value]);
         return $sent;
     }
 

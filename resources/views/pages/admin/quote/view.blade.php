@@ -100,13 +100,27 @@
     <x-admin.section.header>
         @include('partials.admin.quote.details', ['quote' => $quote])
         <div class="col-12">
-            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-success">
+            <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-warning">
                 <i class="icon-note"></i>
                 {{ __('quotes.view.buttons.edit') }}
             </a>
             <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary">
                 <i class="icon-plus"></i>
                 {{ __('quotes.view.buttons.add') }}
+            </a>
+            @if($quote->status == \App\Models\Helper\QuoteStatus::AWAITING)
+                <a href="{{ route('quotes.status.approve', ['quote' => $quote,]) }}" class="btn btn-success">
+                    <i class="icon-paper-plane"></i>
+                    {{ __('quotes.view.buttons.approve') }}
+                </a>
+                <a href="{{ route('quotes.status.changes', ['quote' => $quote,]) }}" class="btn btn-info">
+                    <i class="icon-refresh"></i>
+                    {{ __('quotes.view.buttons.change') }}
+                </a>
+            @endif
+            <a href="{{ route('quotes.status.close', ['quote' => $quote,]) }}" class="btn btn-danger">
+                <i class="icon-minus"></i>
+                {{ __('quotes.view.buttons.close') }}
             </a>
         </div>
     </x-admin.section.header>
