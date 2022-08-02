@@ -52,7 +52,7 @@ class QuoteController extends Controller
             return back()->withErrors(['msg' => "No price points exist for {$paying} paying travellers",]);
         }
         if ($request->travelling == 0 && $request->paying == 0) {
-            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying));
+            $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling));
             return redirect()->route('orders.view', ['order' => $order,]);
         }
         return view('pages.admin.quote.convert', ['quote' => $quote, 'travelling' => $request->travelling, 'paying' => $request->paying,]);
@@ -75,7 +75,7 @@ class QuoteController extends Controller
 
     public function convert(ConversionRequest $request, Quote $quote)
     {
-        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->travelling, $quote->leadTraveller->paying), $request->getCustomers());
+        $order = $quote->repository->convertToOrder(new ConvertedCustomer($quote->leadTraveller->customer, $quote->leadTraveller->paying, $quote->leadTraveller->travelling), $request->getCustomers());
         return redirect()->route('orders.view', ['order' => $order,]);
     }
 

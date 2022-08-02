@@ -115,7 +115,7 @@ class OrderCustomer extends Model
 
     protected $guarded = [];
     protected array $cascadeDeletes = ['orderCustomerGroups', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
-    protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double',];
+    protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double', 'is_charged' => 'boolean', 'is_travelling' => 'boolean'];
     private OrderCustomerRepository $internal_repository;
 
     public static function getValidationRules(): array
