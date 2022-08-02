@@ -99,27 +99,15 @@
 @section('content')
     <x-admin.section.header>
         @include('partials.admin.quote.details', ['quote' => $quote])
-        @if(isset($quote->tour_id))
-        <div class="col-12">
-            <h6 class="fw-bold">{{ __('quotes.view.locked') }}</h6>
-        </div>
-        @endif
         <div class="col-12">
             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-success">
                 <i class="icon-note"></i>
                 {{ __('quotes.view.buttons.edit') }}
             </a>
-            @if(isset($quote->tour_id))
-            <a href="{{ route('quotes.unlink', ['quote' => $quote,]) }}" class="btn btn-warning">
-                <i class="icon-key"></i>
-                {{ __('quotes.view.buttons.unlock') }}
+            <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary">
+                <i class="icon-plus"></i>
+                {{ __('quotes.view.buttons.add') }}
             </a>
-            @else
-                <a href="{{ route('quotes.components.add', ['quote' => $quote,]) }}" class="btn btn-primary">
-                    <i class="icon-plus"></i>
-                    {{ __('quotes.view.buttons.add') }}
-                </a>
-            @endif
         </div>
     </x-admin.section.header>
 
@@ -309,9 +297,7 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                        @if(!isset($quote->tour_id))
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        @endif
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -335,18 +321,16 @@
                             <td>
                                 {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
                             </td>
-                            @if(!isset($quote->tour_id))
-                                <td>
-                                    <form class="d-none all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                          action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                          method="post">
-                                        @csrf
-                                    </form>
-                                    <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                        <i class="icon-trash"></i>
-                                    </a>
-                                </td>
-                            @endif
+                            <td>
+                                <form class="d-none all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                      action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                      method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.all-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -359,9 +343,7 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                        @if(!isset($quote->tour_id))
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        @endif
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -378,19 +360,16 @@
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                             </td>
-
-                            @if(!isset($quote->tour_id))
-                                <td>
-                                    <form class="d-none accommodation-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                          action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                          method="post">
-                                        @csrf
-                                    </form>
-                                    <a href="javascript:$('.accommodation-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                        <i class="icon-trash"></i>
-                                    </a>
-                                </td>
-                            @endif
+                            <td>
+                                <form class="d-none accommodation-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                      action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                      method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.accommodation-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -403,9 +382,7 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                        @if(!isset($quote->tour_id))
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        @endif
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -422,19 +399,16 @@
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                             </td>
-
-                            @if(!isset($quote->tour_id))
-                                <td>
-                                    <form class="d-none activity-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                          action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                          method="post">
-                                        @csrf
-                                    </form>
-                                    <a href="javascript:$('.activity-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                        <i class="icon-trash"></i>
-                                    </a>
-                                </td>
-                            @endif
+                            <td>
+                                <form class="d-none activity-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                      action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                      method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.activity-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -447,9 +421,9 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                        @if(!isset($quote->tour_id))
+
                             <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        @endif
+
                     </tr>
                     </thead>
                     <tbody>
@@ -466,18 +440,16 @@
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                             </td>
-                            @if(!isset($quote->tour_id))
-                                <td>
-                                    <form class="d-none flight-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                          action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                          method="post">
-                                        @csrf
-                                    </form>
-                                    <a href="javascript:$('.flight-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                        <i class="icon-trash"></i>
-                                    </a>
-                                </td>
-                            @endif
+                            <td>
+                                <form class="d-none flight-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                      action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                      method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.flight-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -490,9 +462,9 @@
                         <th scope="col">{{ __('quotes.view.cards.components.common.dates') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                        @if(!isset($quote->tour_id))
+
                             <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        @endif
+
                     </tr>
                     </thead>
                     <tbody>
@@ -509,19 +481,16 @@
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                             </td>
-
-                            @if(!isset($quote->tour_id))
-                                <td>
-                                    <form class="d-none transport-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                          action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                          method="post">
-                                        @csrf
-                                    </form>
-                                    <a href="javascript:$('.transport-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                        <i class="icon-trash"></i>
-                                    </a>
-                                </td>
-                            @endif
+                            <td>
+                                <form class="d-none transport-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                      action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                      method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.transport-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -533,9 +502,7 @@
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.components.common.details') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.components.common.price') }}</th>
-                        @if(!isset($quote->tour_id))
-                            <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
-                        @endif
+                        <th scope="col" class="actions">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -547,18 +514,16 @@
                             <td>
                                 {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
                             </td>
-                            @if(!isset($quote->tour_id))
-                                <td>
-                                    <form class="d-none merchandise-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
-                                          action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
-                                          method="post">
-                                        @csrf
-                                    </form>
-                                    <a href="javascript:$('.merchandise-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
-                                        <i class="icon-trash"></i>
-                                    </a>
-                                </td>
-                            @endif
+                            <td>
+                                <form class="d-none merchandise-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}"
+                                      action="{{ route('quotes.components.delete', ['quote' => $quote, 'type' => $componentRepository->getComponentType(), 'id' => $componentRepository->get()->id]) }}"
+                                      method="post">
+                                    @csrf
+                                </form>
+                                <a href="javascript:$('.merchandise-{{$componentRepository->getComponentType()}}-{{$componentRepository->get()->id}}').submit()" class="btn btn-sm btn-outline-danger mb-1">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

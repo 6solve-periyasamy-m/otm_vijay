@@ -42,7 +42,6 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public static function createFromTour(Tour $tour, ?Customer $customer = null, array $data = [], array $leadData = []): Quote
     {
         $quote = Quote::create([
-            'tour_id' => $tour->id,
             'event_id' => $tour->event_id,
             'deposit' => $tour->deposit,
             'final_payment' => $tour->final_payment,
@@ -61,7 +60,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($tour->repository->getComponents(true, true, true, true, true, ['Included']) as $component) {
             $component->addToQuote($quote);
         }
-        $quote->repository->cloneInstallments();
+        $quote->repository->cloneInstallments($tour);
         $quote->repository->addPricePoint(1, $tour->base_price_per_person);
         return $quote;
     }
@@ -98,7 +97,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $traveller->data['tour_cost'] = $pricePerPerson;
             $traveller->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
         }
-        $tour = $this->quote->tour ?? $this->convertToTour($paying);
+        $tour = $this->convertToTour($paying);
         $data = [
             'deposit' => $this->quote->deposit,
             'ordered_on' => now(),
@@ -130,7 +129,6 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         foreach ($this->quote->installments as $installment) {
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
         }
-        $this->update(['tour_id' => $tour->id, ]);
         $this->save();
         return $tour;
     }
@@ -175,9 +173,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         return $installment;
     }
 
-    public function cloneInstallments()
+    public function cloneInstallments(Tour $tour)
     {
-        foreach ($this->quote->tour->paymentInstallments as $installment) {
+        foreach ($tour->paymentInstallments as $installment) {
             $this->addInstallment($installment->due_on, $installment->amount);
         }
     }
