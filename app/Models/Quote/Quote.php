@@ -13,6 +13,7 @@ use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
 use Database\Factories\Quote\QuoteFactory;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -106,7 +107,7 @@ use Illuminate\Support\Carbon;
  */
 class Quote extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [];
     protected $casts = [

@@ -5,6 +5,7 @@ namespace App\Models\Customer;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\QuoteProspect;
 use App\Models\System\ApiToken;
 use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
@@ -85,6 +86,7 @@ use Laravel\Cashier\Subscription;
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications System notifications for customer
  * @property-read int|null $notifications_count Amount of system notifications for customer
  * @property-read Collection|OrderCustomer[] $orderCustomers OrderCustomers for this customer
+ * @property-read Collection|QuoteProspect[] $quoteProspects
  * @property-read int|null $order_customers_count Amount of OrderCustomers for this customer
  * @property-read Collection|Order[] $orders Orders for this customer
  * @property-read int|null $orders_count Amount of orders for this customer
@@ -194,6 +196,11 @@ class Customer extends Authenticatable
                 Rule::unique('customers', 'email_address')->ignore($this->id),
             ],
         ];
+    }
+
+    public function quoteProspects(): HasMany
+    {
+        return $this->hasMany(QuoteProspect::class, 'customer_id');
     }
 
     public function getCustomerFullNameAttribute(): string

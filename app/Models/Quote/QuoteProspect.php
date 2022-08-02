@@ -55,7 +55,7 @@ class QuoteProspect extends Model
 
     public function quote(): HasOne
     {
-        return $this->hasOne(Quote::class);
+        return $this->hasOne(Quote::class, 'lead_traveller_id');
     }
 
     public function customer(): BelongsTo
