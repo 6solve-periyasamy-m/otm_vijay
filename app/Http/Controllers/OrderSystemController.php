@@ -23,6 +23,7 @@ class OrderSystemController extends Controller
 
     public function show(Order $order)
     {
+        $order->repository->refresh();
         return view('pages.orders.view', ['order' => $order,]);
     }
 
