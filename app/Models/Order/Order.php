@@ -9,6 +9,7 @@ use App\Models\Helper\OrderStatus;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
 use Database\Factories\Order\OrderFactory;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -65,6 +67,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read float $order_adjustment_total The sum of all order adjustments, not including customer adjustments
  * @property-read float $total_adjustments The sum of all adjustments on the order and customers
  * @property-read OrderStatus $status The status of the order
+ * @property-read Quote|null $quote The quote the order was built from
  * @property-read Collection|Group[] $groups List of groups
  * @property-read float $total The total cost of the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
@@ -167,6 +170,12 @@ class Order extends Model
     public function customers(): HasManyThrough
     {
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
+    }
+
+    public function quote(): HasOne
+    {
+
+        return $this->hasOne(Quote::class, 'order_id');
     }
 
     public function groups(): HasManyDeep

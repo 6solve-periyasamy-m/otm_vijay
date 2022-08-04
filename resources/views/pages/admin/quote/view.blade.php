@@ -100,6 +100,13 @@
     <x-admin.section.header>
         @include('partials.admin.quote.details', ['quote' => $quote])
         <div class="col-12">
+
+            @if(isset($quote->order))
+                <a href="{{ route('orders.view', ['order' => $quote->order,]) }}" class="btn btn-warning">
+                    <i class="icon-credit-card"></i>
+                    View Order
+                </a>
+            @endif
             <a href="{{ route('quotes.edit', ['quote' => $quote,]) }}" class="btn btn-warning">
                 <i class="icon-note"></i>
                 {{ __('quotes.view.buttons.edit') }}

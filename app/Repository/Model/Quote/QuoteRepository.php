@@ -108,8 +108,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'external_notes' => $this->quote->external_notes,
             'invoice_footer' => $this->quote->invoice_footer,
         ];
-        $this->update(['quote_status' => QuoteStatus::CONVERTED->value,]);
-        return OrderRepository::create($tour, $data, $lead, $travellers);
+        $order = OrderRepository::create($tour, $data, $lead, $travellers);
+        $this->update(['quote_status' => QuoteStatus::CONVERTED->value, 'order_id' => $order->id]);
+        return $order;
     }
 
     public function convertToTour(int $customerCount = 1): Tour
