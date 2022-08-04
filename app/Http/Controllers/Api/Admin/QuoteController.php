@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Api\Admin\Quote\AddComponentRequest;
 use App\Http\Requests\Api\Admin\Quote\QuoteCostRequest;
+use App\Http\Requests\Api\Admin\Quote\UnknownTravellerRequest;
 use App\Models\Quote\Quote;
 use App\Repository\Abstracts\InventoryRepository;
 
@@ -53,5 +54,11 @@ class QuoteController extends ApiController
         }
         $quote->repository->autoAssignTemplating();
         return response()->json(['success' => true, 'message' => 'Components added successfully']);
+    }
+
+    public function getUnknownTraveller(UnknownTravellerRequest $request, Quote $quote)
+    {
+        $customer = $quote->repository->generateGenericCustomer($request->paying);
+        return response()->json(['success' => true, 'id' => $customer->id, 'text' => $customer->first_name . ' ' . $customer->last_name,]);
     }
 }

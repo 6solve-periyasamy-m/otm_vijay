@@ -5,6 +5,8 @@ namespace App\Repository\Model\Quote;
 use App\Mail\TemplatedMailable;
 use App\Models\Customer\Customer;
 use App\Models\Helper\QuoteStatus;
+use App\Models\Location\Address;
+use App\Models\Location\AddressParent;
 use App\Models\Order\Order;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Component\QuoteActivity;
@@ -685,5 +687,21 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $quote->pricePoints()->saveMany($pricepoints);
         $quote->sentQuotes()->saveMany($sent->quote->sentQuotes);
         return $quote;
+    }
+
+    public function generateGenericCustomer(bool $paying): Customer
+    {
+        $homeAddress = Address::create([
+            'name' => 'Generic Customer Address',
+            'address_parent_id' => AddressParent::getParentId('customer'),
+        ]);
+        $billingAddress = $homeAddress->repository->cloneToNew(AddressParent::getParentId('customer'));
+        return Customer::create([
+            'first_name' => "Unknown " . ($paying ? "Paying" : "Non-Paying") . " Traveller",
+            'last_name' => $this->quote->reference,
+            'home_address_id' => $homeAddress->id,
+            'billing_address_id' => $billingAddress->id,
+            'date_of_birth' => now(),
+        ]);
     }
 }

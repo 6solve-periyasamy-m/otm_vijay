@@ -12,7 +12,6 @@
 <script type="text/javascript">
     $(document).ready(function () {
         let {{ $sanitizedName }}Select = $('#{{$sanitizedName}}');
-        console.log({{ $sanitizedName }}Select);
         {{ $sanitizedName }}Select.select2({
             placeholder: "Please Select a Value",
             ajax: {
