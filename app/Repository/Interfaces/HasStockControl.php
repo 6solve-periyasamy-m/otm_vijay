@@ -28,5 +28,5 @@ interface HasStockControl
      * @param int $amount The amount of stock that wishes to be used
      * @return bool Whether there is enough stock, or if stock control is inactive
      */
-    public function hasEnoughStock(int $amount): bool;
+    public function hasEnoughStock(int $amount = 1): bool;
 }

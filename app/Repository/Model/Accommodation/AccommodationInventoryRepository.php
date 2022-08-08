@@ -133,7 +133,7 @@ class AccommodationInventoryRepository extends InventoryRepository
         return false;
     }
 
-    public function hasEnoughStock(int $amount): bool
+    public function hasEnoughStock(int $amount = 1): bool
     {
         return true;
     }

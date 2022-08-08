@@ -221,7 +221,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->stock_control_active;
     }
 
-    public function hasEnoughStock(int $amount): bool
+    public function hasEnoughStock(int $amount = 1): bool
     {
         return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
     }
