@@ -27,6 +27,7 @@ class TransportInventoryTourController extends Controller
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'tour_sales_price' => $request->input('tour_sales_price'),
+            'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
         ]);
         $tour->transportInventoryTours()->save($transportInventoryTour);
         return redirect()->route('tours.view', ['tour' => $tour,]);
@@ -49,6 +50,7 @@ class TransportInventoryTourController extends Controller
             'transport_inventory_id' => $request->input('transport_inventory_id'),
             'tour_component_type' => $request->input('tour_component_type'),
             'tour_sales_price' => $request->input('tour_sales_price'),
+            'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }

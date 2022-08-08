@@ -25,5 +25,7 @@
         ['name' => 'Tour Sales Price', 'field' => 'tour_sales_price', 'value' => $inventoryTour?->tour_sales_price ?? null, 'width' => 6,])
     @include('partials.fields.checkbox',
         ['name' => 'Bookable?', 'field' => 'is_bookable', 'value' => $inventoryTour?->is_bookable ?? false, ])
+    @include('partials.fields.checkbox',
+        ['name' => 'Stock Controlled?', 'field' => 'stock_control_active', 'value' => $inventoryTour?->stock_control_active ?? false, ])
     @include('partials.fields.submit')
 @endsection

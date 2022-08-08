@@ -107,6 +107,7 @@ class AccommodationInventoryRepository extends InventoryRepository
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,
             'tour_id' => $tour->id,
+            'stock_control_active' => $tour->accommodation_stock_control,
         ]);
         $this->inventory->tourComponents()->save($inventoryTour);
         return $inventoryTour->repository;

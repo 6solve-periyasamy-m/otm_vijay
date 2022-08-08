@@ -143,6 +143,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
             'merchandise_inventory_id' => $this->inventory->id,
             'tour_component_type' => $tourComponentType,
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'stock_control_active' => $tour->merchandise_stock_control,
         ]);
         $tour->merchandise()->save($mInvTour);
         return $mInvTour->repository;

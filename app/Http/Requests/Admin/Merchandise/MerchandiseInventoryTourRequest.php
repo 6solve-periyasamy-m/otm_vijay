@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
  * @property string $tour_component_type
  * @property float $tour_sales_price
  * @property string|null $is_bookable
+ * @property string|null $stock_control_active
  */
 class MerchandiseInventoryTourRequest extends FormRequest
 {
@@ -18,6 +19,7 @@ class MerchandiseInventoryTourRequest extends FormRequest
             'tour_component_type' => $this->tour_component_type,
             'tour_sales_price' => $this->tour_sales_price,
             'is_bookable' => $this->is_bookable == 'on',
+            'stock_control_active' => $this->stock_control_active == 'on',
         ];
     }
 

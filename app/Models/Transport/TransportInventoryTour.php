@@ -69,7 +69,7 @@ class TransportInventoryTour extends Model
 {
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
-    protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
+    protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type', 'stock_control_active'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
     protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean','stock_control_active' => 'boolean',];
 

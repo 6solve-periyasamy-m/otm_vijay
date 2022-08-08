@@ -1,46 +1,54 @@
-@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $name ?? null,])
-@include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $description ?? null,])
+@php /** @var \App\Models\Tour\Tour|null $tour */ @endphp
+@include('partials.fields.text', ['name' => 'Name', 'field' => 'name', 'value' => $tour?->name,])
+@include('partials.fields.text', ['name' => 'Description', 'field' => 'description', 'value' => $tour?->description,])
 @can('create', \App\Models\Tour\Event::class)
 @include('partials.fields.selector.adder',
-            ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
+            ['name' => 'Event', 'field' => 'event_id', 'value' => $tour?->event_id ?? 0,
              'route' => 'events', 'createRoute' => route('events.create'), 'width' => 6,])
 @else
 @include('partials.fields.selector.default',
-            ['name' => 'Event', 'field' => 'event_id', 'value' => $event_id ?? 0,
+            ['name' => 'Event', 'field' => 'event_id', 'value' => $tour?->event_id ?? 0,
              'route' => 'events', 'width' => 6,])
 @endcan
 @can('create', \App\Models\Tour\TourCategory::class)
 @include('partials.fields.selector.adder',
-            ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
+            ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour?->tour_category_id,
              'route' => 'tour-categories', 'createRoute' => route('tour-categories.create'), 'width' => 6,])
 @else
 @include('partials.fields.selector.default',
-        ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour_category_id ?? null,
+        ['name' => 'Tour Category', 'field' => 'tour_category_id', 'value' => $tour?->tour_category_id,
          'route' => 'tour-categories', 'width' => 6,])
 @endcan
 <hr class="splitter"/>
 @include('partials.fields.date',
-            ['name' => 'Start Date', 'field' => 'date_from', 'value' => $date_from ?? null,
+            ['name' => 'Start Date', 'field' => 'date_from', 'value' => $tour?->date_from->format('Y-m-d'),
              'onChange' => 'changeDate($(\'#date_from-input\'), $(\'#date_to-input\'))', 'width' => 4, ])
-@include('partials.fields.date', ['name' => 'Final Payment Date', 'field' => 'final_payment', 'value' => isset($tour) ? $tour->final_payment : null, 'width' => 4])
+@include('partials.fields.date', ['name' => 'Final Payment Date', 'field' => 'final_payment', 'value' => $tour?->final_payment, 'width' => 4])
 @include('partials.fields.date',
-            ['name' => 'End Date', 'field' => 'date_to', 'value' => $date_to ?? null,
+            ['name' => 'End Date', 'field' => 'date_to', 'value' => $tour?->date_to->format('Y-m-d'),
              'onChange' => 'removeAutoset($(\'#date_from-input\'), $(\'#date_to-input\'));', 'classes' => 'autoset', 'width' => 4,])
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $base_price_per_person ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $margin ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $deposit ?? null, 'width' => 6,])
-@include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $single_occupancy_surcharge ?? null, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Base Price Per Person', 'field' => 'base_price_per_person', 'value' => $tour?->base_price_per_person, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Margin', 'field' => 'margin', 'value' => $tour?->margin, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Deposit', 'field' => 'deposit', 'value' => $tour?->deposit, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Single Occupancy Surcharge', 'field' => 'single_occupancy_surcharge', 'value' => $tour?->single_occupancy_surcharge, 'width' => 6,])
 <hr class="splitter"/>
-@include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'value' => $stock_control_active ?? null,])
-@include('partials.fields.text', ['name' => 'Stock', 'field' => 'stock', 'value' => $stock ?? null,])
+<h6 class="fw-bold">Warning: Updating this does not update existing components</h6>
+@include('partials.fields.checkbox', ['name' => 'Tour Stock Control', 'field' => 'stock_control_active', 'value' => $tour?->stock_control_active, 'width' => 2,])
+@include('partials.fields.checkbox', ['name' => 'Accommodation Stock Control', 'field' => 'accommodation_stock_control', 'value' => $tour?->accommodation_stock_control, 'width' => 2,])
+@include('partials.fields.checkbox', ['name' => 'Activity Stock Control', 'field' => 'activity_stock_control', 'value' => $tour?->activity_stock_control, 'width' => 2,])
+@include('partials.fields.checkbox', ['name' => 'Flight Stock Control', 'field' => 'flight_stock_control', 'value' => $tour?->flight_stock_control, 'width' => 2,])
+@include('partials.fields.checkbox', ['name' => 'Transport Stock Control', 'field' => 'transport_stock_control', 'value' => $tour?->transport_stock_control, 'width' => 2,])
+@include('partials.fields.checkbox', ['name' => 'Merchandise Stock Control', 'field' => 'merchandise_stock_control', 'value' => $tour?->merchandise_stock_control, 'width' => 2,])
 <hr class="splitter"/>
-@include('partials.fields.checkbox', ['name' => 'Is Active', 'field' => 'is_active', 'value' => $is_active ?? null,])
-@include('partials.fields.text', ['name' => 'Booking Form Url', 'field' => 'booking_form_url', 'value' => $booking_form_url ?? null,])
+@include('partials.fields.text', ['name' => 'Stock', 'field' => 'stock', 'value' => $tour?->stock,])
 <hr class="splitter"/>
-@include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => isset($tour) ? $tour->invoice_footer : null, ])
+@include('partials.fields.checkbox', ['name' => 'Is Active', 'field' => 'is_active', 'value' => $tour?->is_active,])
+@include('partials.fields.text', ['name' => 'Booking Form Url', 'field' => 'booking_form_url', 'value' => $tour?->booking_form_url,])
 <hr class="splitter"/>
-@include('partials.fields.ckeditor', ['name' => 'Terms and Conditions', 'field' => 'terms', 'value' => isset($tour) ? $tour->terms : null, ])
+@include('partials.fields.ckeditor', ['name' => 'Invoice Footer', 'field' => 'invoice_footer', 'value' => $tour?->invoice_footer,])
+<hr class="splitter"/>
+@include('partials.fields.ckeditor', ['name' => 'Terms and Conditions', 'field' => 'terms', 'value' => $tour?->terms,])
 <hr class="splitter"/>
 @include('partials.fields.prefab.notes')
 @include('partials.fields.submit')
