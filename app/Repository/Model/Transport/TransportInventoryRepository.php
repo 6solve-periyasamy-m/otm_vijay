@@ -9,7 +9,6 @@ use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteTransportRepository;
 use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
@@ -130,5 +129,15 @@ class TransportInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return false;
+    }
+
+    public function hasEnoughStock(int $amount): bool
+    {
+        return true;
     }
 }

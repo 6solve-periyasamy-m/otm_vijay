@@ -223,4 +223,14 @@ class FlightInventoryTourRepository extends InventoryTourRepository
         ]);
         return $component->repository;
     }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
 }

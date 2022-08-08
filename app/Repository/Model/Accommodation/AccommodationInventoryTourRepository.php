@@ -15,7 +15,6 @@ use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
-use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
 
@@ -228,5 +227,15 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             'is_template' => $this->tourComponent->is_template,
         ]);
         return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
     }
 }

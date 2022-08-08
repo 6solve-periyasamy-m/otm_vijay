@@ -15,7 +15,6 @@ use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
-use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
@@ -297,5 +296,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         ]);
         $this->tour->paymentInstallments()->save($installment);
         return $installment;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tour->stock_control_active;
+    }
+
+    public function hasEnoughStock(int $amount): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
     }
 }
