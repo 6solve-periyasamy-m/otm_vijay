@@ -29,6 +29,7 @@ use Illuminate\Validation\Rule;
  * @property float|null $tour_sales_price
  * @property bool $is_template
  * @property bool $is_bookable
+ * @property bool $stock_control_active
  * @property string $tour_component_type
  * @property string $booking_policy
  * @property Carbon|null $created_at
@@ -65,6 +66,8 @@ use Illuminate\Validation\Rule;
  * @method static QueryBuilder|AccommodationInventoryTour withTrashed()
  * @method static QueryBuilder|AccommodationInventoryTour withoutTrashed()
  * @mixin Eloquent
+ * @method static Builder|AccommodationInventoryTour whereIsBookable($value)
+ * @method static Builder|AccommodationInventoryTour whereStockControlActive($value)
  */
 class AccommodationInventoryTour extends Model
 {
@@ -76,6 +79,7 @@ class AccommodationInventoryTour extends Model
         'tour_sales_price' => 'double',
         'is_template' => 'boolean',
         'is_bookable' => 'boolean',
+        'stock_control_active' => 'boolean',
     ];
     private AccommodationInventoryTourRepository $internal_repository;
 

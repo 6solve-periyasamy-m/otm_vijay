@@ -28,6 +28,7 @@ use Illuminate\Validation\Rule;
  * @property int $transport_inventory_id
  * @property string $tour_component_type
  * @property float $tour_sales_price
+ * @property bool $stock_control_active
  * @property bool $is_bookable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -55,6 +56,8 @@ use Illuminate\Validation\Rule;
  * @method static Builder|TransportInventoryTour whereId($value)
  * @method static Builder|TransportInventoryTour whereTourComponentType($value)
  * @method static Builder|TransportInventoryTour whereTourId($value)
+ * @method static Builder|TransportInventoryTour whereIsBookable($value)
+ * @method static Builder|TransportInventoryTour whereStockControlActive($value)
  * @method static Builder|TransportInventoryTour whereTourSalesPrice($value)
  * @method static Builder|TransportInventoryTour whereTransportInventoryId($value)
  * @method static Builder|TransportInventoryTour whereUpdatedAt($value)
@@ -68,7 +71,7 @@ class TransportInventoryTour extends Model
 
     protected $fillable = ['tour_id', 'transport_inventory_id', 'tour_sales_price', 'tour_component_type'];
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
-    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean',];
+    protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean','stock_control_active' => 'boolean',];
 
     private TransportInventoryTourRepository $internal_repository;
 
