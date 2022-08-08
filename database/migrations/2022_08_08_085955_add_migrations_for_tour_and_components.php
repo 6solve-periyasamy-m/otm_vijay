@@ -24,7 +24,7 @@ return new class extends Migration
            $table->boolean('stock_control_active')->default(0);
         });
         Schema::table('activity_inventory_tours', function (Blueprint $table) {
-           $table->boolean('stock_control_active')->default(0);
+           $table->boolean('stock_control_active')->default(1);
         });
         Schema::table('flight_inventory_tours', function (Blueprint $table) {
            $table->boolean('stock_control_active')->default(0);
