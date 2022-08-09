@@ -231,6 +231,7 @@ class ReportRepository
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
             $row->name = $cDetailsSource->title . ' ' . $cDetailsSource->first_name . ' ' . $cDetailsSource->last_name;
             $row->tour = $booking->tour->name;
+            $row->date = $booking->created_at;
             $row->travellers = $booking->travellers()->count();
             $row->expected = $booking->repository->getTotalCost();
             $row->contact_email = $cDetailsSource->email_address;
