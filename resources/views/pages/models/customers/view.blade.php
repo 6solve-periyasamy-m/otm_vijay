@@ -109,4 +109,26 @@
             </table>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped order-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Quote Reference</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Expiry Date</th>
+                        <th scope="col">Quote Status</th>
+                    </tr>
+                </thead>
+                @foreach($customer->quoteProspects as $prospect)
+                    <tr>
+                        <th scope="row"><a href="{{ route('quotes.view', ['quote' => $prospect->quote,]) }}">{{ $prospect->quote->ref }}</a></th>
+                        <td>{{ $prospect->quote->name }}</td>
+                        <td>{{ f_date($prospect->quote->expires) }}</td>
+                        <td>{{ $prospect->quote->status->badge() }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
 @endsection

@@ -60,7 +60,7 @@ class BookingRepository extends ModelRepository
     public function addComponentToAll(InventoryTourRepository $repository): void
     {
         foreach ($this->booking->travellers as $traveller) {
-            $repository->grantToTraveller($traveller);
+            $repository->grantToBookingTraveller($traveller);
         }
     }
 

@@ -18,7 +18,6 @@ use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\Payment;
-use App\Models\Quote;
 use App\Models\Transport\Operator;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportInventory;
@@ -38,7 +37,6 @@ class OrderSystemSeeder extends Seeder
     {
         Address::factory()->count($this->seedCount)->create();
         Customer::factory()->count($this->seedCount)->create();
-        Quote::factory()->count($this->seedCount)->create();
         Order::factory()->count($this->seedCount)->create()->each(function($order) {
             $orderCustomers = OrderCustomer::factory()->count($this->seedCount)->make();
             $order->orderCustomers()->saveMany($orderCustomers);

@@ -9,6 +9,7 @@ use App\Models\Helper\OrderStatus;
 use App\Models\Order\Adjustment\ManualAdjustment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\OrderRepository;
 use Database\Factories\Order\OrderFactory;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -53,6 +55,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read float $calculated_deposit The calculated deposit based on customer count
  * @property-read float $cost The cost of the order before adjustments
  * @property-read int $customer_count The amount of customers on the order
+ * @property-read int $paying_customers The amount of customers on the order that are paying
  * @property-read string $customer_names String list of all customer full names
  * @property-read float $deposit_percentage What percentage of the total cost is the deposit
  * @property-read bool $has_atol Whether this order has an ATOL certificate
@@ -64,6 +67,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read float $order_adjustment_total The sum of all order adjustments, not including customer adjustments
  * @property-read float $total_adjustments The sum of all adjustments on the order and customers
  * @property-read OrderStatus $status The status of the order
+ * @property-read Quote|null $quote The quote the order was built from
  * @property-read Collection|Group[] $groups List of groups
  * @property-read float $total The total cost of the order
  * @property-read OrderInstallment|null $next_installment A temporary installment with details of the next payment, or null if all installments are paid
@@ -168,6 +172,12 @@ class Order extends Model
         return $this->hasManyThrough(Customer::class, OrderCustomer::class, 'order_id', 'id', 'id', 'customer_id');
     }
 
+    public function quote(): HasOne
+    {
+
+        return $this->hasOne(Quote::class, 'order_id');
+    }
+
     public function groups(): HasManyDeep
     {
         return $this->hasManyDeep(Group::class, [OrderCustomer::class, OrderCustomerGroup::class,])->groupBy('groups.id');
@@ -251,7 +261,7 @@ class Order extends Model
     {
         $cost = $this->cost - $this->calculated_deposit;
         foreach ($this->installments as $installment) {
-            $cost -= ($installment->amount) * $this->customer_count;
+            $cost -= $installment->calculated_amount;
         }
         return $cost;
     }
@@ -285,7 +295,7 @@ class Order extends Model
      */
     public function getCalculatedDepositAttribute(): float
     {
-        return $this->deposit * $this->customer_count;
+        return $this->deposit * $this->paying_customers;
     }
 
     /**
@@ -336,6 +346,11 @@ class Order extends Model
     {
         if (!isset ($this->internal_repository)) $this->internal_repository = new OrderRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getPayingCustomersAttribute(): int
+    {
+        return $this->orderCustomers()->where('is_charged', '=', true)->count();
     }
 
     // Functions

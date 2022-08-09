@@ -83,6 +83,12 @@
                 <i class="icon-globe"></i>
                 View Tour
             </a>
+            @if(isset($order->quote))
+            <a href="{{ route('quotes.view', ['quote' => $order->quote,]) }}" class="btn btn-warning">
+                <i class="icon-wallet"></i>
+                View Quote
+            </a>
+            @endif
             @if($order->has_atol && !$order->cancelled)
             <a href="{{ route('orders.atol', ['order' => $order,]) }}" class="btn btn-secondary">
                 <i class="icon-plane"></i>
@@ -228,7 +234,7 @@
                                 <th scope="col">Value</th>
                             </tr>
                             </thead>
-                            @foreach($order->orderCustomers as $ordersCustomer)
+                            @foreach($order->orderCustomers()->where('is_charged', '=', 1)->get() as $ordersCustomer)
                             <tr>
                                 <td>Base: {{ $ordersCustomer->customer->first_name . ' ' . $ordersCustomer->customer->last_name }}</td>
                                 <td>{{ f_currency($ordersCustomer->tour_cost) }}</td>

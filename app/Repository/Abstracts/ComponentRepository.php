@@ -2,6 +2,8 @@
 
 namespace App\Repository\Abstracts;
 
-abstract class ComponentRepository extends ModelRepository
+use App\Repository\Interfaces\HasComponentType;
+
+abstract class ComponentRepository extends ModelRepository implements HasComponentType
 {
 }

@@ -3,14 +3,23 @@
 namespace App\Repository\Model\Activity;
 
 use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Traits\Component\IsActivity;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
 class ActivityInventoryRepository extends InventoryRepository
 {
+    use IsActivity;
+
     private ActivityInventory $inventory;
 
     public function __construct(ActivityInventory $inventory)
@@ -18,14 +27,14 @@ class ActivityInventoryRepository extends InventoryRepository
         $this->inventory = $inventory;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
         $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->activityInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
+        if (isset($repository)) {
+            foreach ($repository->getComponents(false, true, false, false, false) as $inventoryTour) {
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return ActivityInventory::whereBetween('starts_at', [$from, $to])->whereBetween('ends_at', [$from, $to])->whereNotIn('id', $inventories)->get();
@@ -94,5 +103,32 @@ class ActivityInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component} - {$this->inventory->ticketType} (" . f_datetime($this->inventory->starts_at) . " to " . f_datetime($this->inventory->ends_at) . ")";
+    }
+
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?ActivityInventoryTourRepository
+    {
+        $inventoryTour = ActivityInventoryTour::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteActivityRepository
+    {
+        $inventoryTour = QuoteActivity::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->inventory->purchase_price;
     }
 }

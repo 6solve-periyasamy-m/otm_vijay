@@ -93,6 +93,32 @@ a {
     max-width: 800px;
 }
 
+.cards {
+    display:flex;
+    flex-direction: column;
+}
+.card {
+    width: 95%;
+    height: 10rem;
+    border: 1px solid black;
+    padding: 0.25rem;
+    margin: 0.25rem 0.25rem 10px;
+    border-radius: 5px;
+    display:flex;
+    position: relative;
+    page-break-inside: avoid;
+}
+
+.card:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+img {
+    width: 7.5rem;
+    height: 7.5rem;
+    margin: 0.25rem;
+}
+
 .section {
     padding-left: var(--inner-padding);
     padding-right: var(--inner-padding);
@@ -228,13 +254,28 @@ a {
             padding-top: 1.2rem
         }
 
-        .descrition {
+        .description {
             width: var(--table-description-column);
+            padding-left: var(--table-cell-padding);
+        }
+
+        .double-description {
+            width: calc(var(--table-description-column) + var(--table-date-column));
+            padding-left: var(--table-cell-padding);
+        }
+
+        .short-description {
+            width: calc(var(--table-description-column) - (var(--table-date-column) * 0.5));
             padding-left: var(--table-cell-padding);
         }
 
         .date-description {
             width: var(--table-date-description-column);
+            padding-left: var(--table-cell-padding);
+        }
+
+        .date-double {
+            width: calc(var(--table-date-column) * 1.5);
             padding-left: var(--table-cell-padding);
         }
 
@@ -386,12 +427,24 @@ a {
                 padding-top: 1.2rem
             }
 
-            .descrition {
+            .description {
                 width: var(--table-description-column);
+            }
+
+            .double-description {
+                width: calc(var(--table-description-column) + var(--table-date-column));
+            }
+
+            .short-description {
+                width: calc(var(--table-description-column) - (var(--table-date-column) * 0.5));
             }
 
             .date-description {
                 width: var(--table-date-description-column);
+            }
+
+            .date-double {
+                width: calc(var(--table-date-column) * 1.5);
             }
 
             .amount {

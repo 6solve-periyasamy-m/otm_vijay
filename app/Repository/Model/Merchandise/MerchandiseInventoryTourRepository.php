@@ -7,16 +7,25 @@ use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Quote\Quote;
+use App\Models\Tour\Merchandise;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Interfaces\HasStockControl;
+use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Traits\Component\IsMerchandise;
+use DB;
 use Log;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
+    use IsMerchandise;
+
     private MerchandiseInventoryTour $tourComponent;
 
     public function __construct(MerchandiseInventoryTour $tourComponent)
@@ -94,7 +103,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return "{$this->tourComponent->inventory->component->name} ({$this->tourComponent->inventory->variant->name}) (" . $this->tourComponent->inventory->size?->name ?? 'No Size'  . ")";
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         Log::info($traveller);
         $bookingComponent = BookingMerchandise::create([
@@ -116,17 +125,12 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $component?->repository;
     }
 
-    public function getComponentString(): string
-    {
-        return 'merchandise';
-    }
-
     public function getCost(): float
     {
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function getComponentType(): string
+    public function getTourComponentType(): string
     {
         return $this->tourComponent->tour_component_type;
     }
@@ -173,5 +177,16 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getAvailableStock(): int
     {
         return $this->tourComponent->inventory->repository->getAvailableStock();
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteMerchandiseRepository
+    {
+        $component = QuoteMerchandise::create([
+            'quote_id' => $quote->id,
+            'merchandise_inventory_id' => $this->tourComponent->merchandise_inventory_id,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+        ]);
+        return $component->repository;
     }
 }

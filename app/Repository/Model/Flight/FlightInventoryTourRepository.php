@@ -9,16 +9,21 @@ use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
-use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
 use App\Repository\Model\Order\Component\OrderFlightRepository;
+use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Traits\Component\IsFlight;
 
 class FlightInventoryTourRepository extends InventoryTourRepository
 {
+    use IsFlight;
+
     private FlightInventoryTour $tourComponent;
 
     public function __construct(FlightInventoryTour $tourComponent)
@@ -117,7 +122,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository
             ' (' . $inventory->travelClass->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $bookingComponent = BookingFlight::create([
             'booking_traveller_id' => $traveller->id,
@@ -153,17 +158,12 @@ class FlightInventoryTourRepository extends InventoryTourRepository
         return $component?->repository;
     }
 
-    public function getComponentString(): string
-    {
-        return 'flight';
-    }
-
     public function getCost(): float
     {
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function getComponentType(): string
+    public function getTourComponentType(): string
     {
         return $this->tourComponent->tour_component_type;
     }
@@ -198,7 +198,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->is_bookable;
     }
 
-    public function getInventory(): ?InventoryRepository
+    public function getInventory(): ?FlightInventoryRepository
     {
         return $this->tourComponent->inventory->repository;
     }
@@ -210,5 +210,17 @@ class FlightInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteFlightRepository
+    {
+        $component = QuoteFlight::create([
+            'flight_inventory_id' => $this->tourComponent->flight_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'flight_type' => $this->tourComponent->flight_type,
+        ]);
+        return $component->repository;
     }
 }

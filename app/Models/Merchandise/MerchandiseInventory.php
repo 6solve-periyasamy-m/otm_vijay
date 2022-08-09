@@ -26,8 +26,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $image_url
  * @property bool $fit_selectable
  * @property int $stock
- * @property float $purchase_price
- * @property float $sales_price
+ * @property float|null $purchase_price
+ * @property float|null $sales_price
  * @property string|null $notes
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at

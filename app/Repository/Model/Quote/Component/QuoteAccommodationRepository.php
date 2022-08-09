@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Repository\Model\Quote\Component;
+
+use App\Models\Quote\Component\QuoteAccommodation;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
+use App\Repository\Model\Accommodation\AccommodationInventoryTourRepository;
+use App\Repository\Traits\Component\IsAccommodation;
+use Carbon\Carbon;
+
+class QuoteAccommodationRepository extends QuoteComponentRepository
+{
+    use IsAccommodation;
+
+    private QuoteAccommodation $quoteComponent;
+
+    public function __construct(QuoteAccommodation $quoteComponent)
+    {
+        $this->quoteComponent = $quoteComponent;
+    }
+
+    public function getTourComponentType(): string
+    {
+        return $this->quoteComponent->tour_component_type;
+    }
+
+    public function getCost(): float
+    {
+        return $this->quoteComponent->tour_sales_price;
+    }
+
+    public function getInventory(): ?AccommodationInventoryRepository
+    {
+        return $this->quoteComponent->inventory->repository;
+    }
+
+    public function get(): QuoteAccommodation
+    {
+        return $this->quoteComponent;
+    }
+
+    public function update(array $data): QuoteAccommodation
+    {
+        $this->quoteComponent->update($data);
+        $this->save();
+        return $this->get();
+    }
+
+    public function save(): bool
+    {
+        return $this->quoteComponent->save();
+    }
+
+    public function delete(): bool
+    {
+        return $this->quoteComponent->delete();
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->quoteComponent->trashed();
+    }
+
+    public function __toString(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$component->address->region}, {$component->address->country}) - {$inventory->roomType} {$inventory->boardType}";
+    }
+
+    public function getShortDescription(): string
+    {
+        $inventory = $this->getInventory()->get();
+        $component = $inventory->component;
+        return "{$component->name} ({$inventory->boardType})";
+    }
+
+    public function getItineraryTitle(): string
+    {
+        return $this->getShortDescription();
+    }
+
+    public function getItineraryDescription(): string
+    {
+        return $this->getInventory()->get()->component->description;
+    }
+
+    public function getItineraryAsset(): string
+    {
+        return asset($this->getInventory()->get()->component->image_url);
+    }
+}

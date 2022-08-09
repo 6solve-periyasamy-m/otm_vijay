@@ -4,9 +4,12 @@ namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
+use App\Repository\Traits\Component\IsAccommodation;
 
 class AccommodationInventoryTourUpgradeRepository extends ComponentUpgradeRepository
 {
+    use IsAccommodation;
+
     private AccommodationInventoryTourUpgrade $upgrade;
 
     public function __construct(AccommodationInventoryTourUpgrade $upgrade)

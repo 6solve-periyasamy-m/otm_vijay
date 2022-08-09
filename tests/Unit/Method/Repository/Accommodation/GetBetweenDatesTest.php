@@ -62,7 +62,7 @@ class GetBetweenDatesTest extends DatabaseTestCase
         $accommodation = $this->generateAccommodation();
         $inventory = $this->generateAccommodationInventory($accommodation, null, null, ['check_in' => now()->subDays(5), 'check_out' => now()->addDays(5)]);
         $tour = $this->generateAccommodationInventoryTour(null, 'Included', 100, $inventory)->tour;
-        $between = AccommodationInventoryRepository::getBetweenDates(now()->subDays(10), now()->addDays(10), $tour);
+        $between = AccommodationInventoryRepository::getBetweenDates(now()->subDays(10), now()->addDays(10), $tour->repository);
         $this->assertEquals(0, $between->count());
     }
 
@@ -72,7 +72,7 @@ class GetBetweenDatesTest extends DatabaseTestCase
         $inventory = $this->generateAccommodationInventory($accommodation, null, null, ['check_in' => now()->subDays(5), 'check_out' => now()->addDays(5)]);
         $this->generateAccommodationInventory($accommodation, null, null, ['check_in' => now()->subDays(4), 'check_out' => now()->addDays(6)]);
         $tour = $this->generateAccommodationInventoryTour(null, 'Included', 100, $inventory)->tour;
-        $between = AccommodationInventoryRepository::getBetweenDates(now()->subDays(10), now()->addDays(10), $tour);
+        $between = AccommodationInventoryRepository::getBetweenDates(now()->subDays(10), now()->addDays(10), $tour->repository);
         $this->assertEquals(1, $between->count());
     }
 }

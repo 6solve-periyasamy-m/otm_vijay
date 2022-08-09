@@ -39,8 +39,8 @@ class MerchandiseInventoryRequest extends FormRequest
     {
         return [
             'stock' => 'required|integer|min:0',
-            'purchase_price' => 'required|numeric|min:0',
-            'sales_price' => 'required|numeric|min:0',
+            'purchase_price' => 'nullable|numeric|min:0',
+            'sales_price' => 'nullable|numeric|min:0',
             'variant' => 'required|exists:variants,id',
             'size' => 'nullable|exists:merchandise_sizes,id',
         ];

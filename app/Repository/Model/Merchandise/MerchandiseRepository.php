@@ -6,12 +6,15 @@ use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 use DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 
 class MerchandiseRepository extends ModelRepository
 {
+    use IsMerchandise;
+
     private Merchandise $component;
 
     public function __construct(Merchandise $component)

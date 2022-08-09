@@ -5,9 +5,15 @@ namespace App\Repository\Model\Merchandise;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Quote\Component\QuoteMerchandise;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteMerchandiseRepository;
+use App\Repository\Traits\Component\IsMerchandise;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\UploadedFile;
@@ -15,6 +21,8 @@ use Illuminate\Support\Collection;
 
 class MerchandiseInventoryRepository extends InventoryRepository
 {
+    use IsMerchandise;
+
     private MerchandiseInventory $inventory;
 
     public function __construct(MerchandiseInventory $inventory)
@@ -82,7 +90,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return now();
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         return Merchandise::all();
     }
@@ -128,14 +136,14 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return "{$this->inventory->component->name}" . (isset($this->inventory->variant) ? " ({$this->inventory->variant->name})" : "");
     }
 
-    public function addToTour(Tour $tour, string $type): ?InventoryTourRepository
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?InventoryTourRepository
     {
         $mInvTour = MerchandiseInventoryTour::where('tour_id', '=', $tour->id)->where('merchandise_inventory_id', '=', $this->inventory->id)->first();
         if (isset($mInvTour)) return $mInvTour->repository;
         $mInvTour = MerchandiseInventoryTour::make([
             'merchandise_inventory_id' => $this->inventory->id,
-            'tour_component_type' => $type,
-            'tour_sales_price' => $this->inventory->sales_price,
+            'tour_component_type' => $tourComponentType,
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
         ]);
         $tour->merchandise()->save($mInvTour);
         return $mInvTour->repository;
@@ -148,5 +156,21 @@ class MerchandiseInventoryRepository extends InventoryRepository
             $count += $tourComponent->orderComponents()->count();
         }
         return $count;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteMerchandiseRepository
+    {
+        $inventoryTour = QuoteMerchandise::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->inventory->purchase_price;
     }
 }

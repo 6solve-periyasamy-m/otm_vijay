@@ -4,9 +4,12 @@ namespace App\Repository\Model\Flight;
 
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
+use App\Repository\Traits\Component\IsFlight;
 
 class FlightInventoryTourUpgradeRepository extends ComponentUpgradeRepository
 {
+    use IsFlight;
+
     private FlightInventoryTourUpgrade $upgrade;
 
     public function __construct(FlightInventoryTourUpgrade $upgrade)

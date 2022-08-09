@@ -9,16 +9,22 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
-use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderActivityRepository;
+use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Traits\Component\IsActivity;
 
 class ActivityInventoryTourRepository extends InventoryTourRepository
 {
+    use IsActivity;
+
     private ActivityInventoryTour $tourComponent;
 
     public function __construct(ActivityInventoryTour $tourComponent)
@@ -110,7 +116,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $component->name . ' (' . f_datetime($inventory->starts_at) . ' to ' . f_datetime($inventory->ends_at) . ') (' . $inventory->ticketType->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $bookingComponent = BookingActivity::create([
             'booking_traveller_id' => $traveller->id,
@@ -146,17 +152,12 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $component?->repository;
     }
 
-    public function getComponentString(): string
-    {
-        return 'activity';
-    }
-
     public function getCost(): float
     {
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function getComponentType(): string
+    public function getTourComponentType(): string
     {
         return $this->tourComponent->tour_component_type;
     }
@@ -191,7 +192,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->is_bookable;
     }
 
-    public function getInventory(): ?InventoryRepository
+    public function getInventory(): ?ActivityInventoryRepository
     {
         return $this->tourComponent->inventory->repository;
     }
@@ -203,5 +204,16 @@ class ActivityInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteActivityRepository
+    {
+        $component = QuoteActivity::create([
+            'activity_inventory_id' => $this->tourComponent->activity_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+        ]);
+        return $component->repository;
     }
 }

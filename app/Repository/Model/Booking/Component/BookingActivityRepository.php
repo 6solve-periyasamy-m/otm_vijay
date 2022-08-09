@@ -5,9 +5,12 @@ namespace App\Repository\Model\Booking\Component;
 use App\Models\Booking\Component\BookingActivity;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Model\Activity\ActivityInventoryTourRepository;
+use App\Repository\Traits\Component\IsActivity;
 
 class BookingActivityRepository extends BookingComponentRepository
 {
+    use IsActivity;
+
     private BookingActivity $bookingComponent;
 
     public function __construct(BookingActivity $bookingComponent)

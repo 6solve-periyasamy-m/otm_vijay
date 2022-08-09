@@ -7,7 +7,7 @@ use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
 use App\Models\Order\Payment\PaymentMethod;
-use App\Models\Quote;
+use App\Models\Quote\Quote;
 
 interface OrderTransformsInterface
 {

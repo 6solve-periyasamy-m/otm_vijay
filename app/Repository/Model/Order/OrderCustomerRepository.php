@@ -192,14 +192,16 @@ class OrderCustomerRepository extends ModelRepository
         $addons = [];
         $additionalValue = 0;
         // Accommodation Additionals are going to be calculated per group (A:Celeste Gateley)
-        foreach ($this->orderCustomer->repository->getComponents(false, true, true, true, true, ['Add-on', 'Upgrade']) as $componentRepository) {
-            if ($componentRepository->getTourComponentType() == 'Add-on') {
-                $addons[] = ['addon' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
+        if ($this->orderCustomer->is_charged) {
+            foreach ($this->orderCustomer->repository->getComponents(false, true, true, true, true, ['Add-on', 'Upgrade']) as $componentRepository) {
+                if ($componentRepository->getTourComponentType() == 'Add-on') {
+                    $addons[] = ['addon' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
+                }
+                if ($componentRepository->getTourComponentType() == 'Upgrade') {
+                    $upgrades[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
+                }
+                $additionalValue += $componentRepository->getCost();
             }
-            if ($componentRepository->getTourComponentType() == 'Upgrade') {
-                $upgrades[] = ['upgrade' => $componentRepository->get(), 'description' => "{$componentRepository->getTourComponent()}  ({$this->orderCustomer->customer_name})",];
-            }
-            $additionalValue += $componentRepository->getCost();
         }
         return ['addons' => $addons, 'upgrades' => $upgrades, 'additionalValue' => $additionalValue,];
     }

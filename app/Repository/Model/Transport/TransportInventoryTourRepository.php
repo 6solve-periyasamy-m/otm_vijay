@@ -7,18 +7,24 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
-use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
 use App\Repository\Model\Order\Component\OrderTransportRepository;
+use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Traits\Component\IsTransport;
 
 class TransportInventoryTourRepository extends InventoryTourRepository
 {
+    use IsTransport;
+
     private TransportInventoryTour $tourComponent;
 
     public function __construct(TransportInventoryTour $tourComponent)
@@ -114,7 +120,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             ' (' . $inventory->travelClass->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $bookingComponent = BookingTransport::create([
             'booking_traveller_id' => $traveller->id,
@@ -150,17 +156,12 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $component?->repository;
     }
 
-    public function getComponentString(): string
-    {
-        return 'transport';
-    }
-
     public function getCost(): float
     {
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function getComponentType(): string
+    public function getTourComponentType(): string
     {
         return $this->tourComponent->tour_component_type;
     }
@@ -195,7 +196,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->is_bookable;
     }
 
-    public function getInventory(): ?InventoryRepository
+    public function getInventory(): ?TransportInventoryRepository
     {
         return $this->tourComponent->inventory->repository;
     }
@@ -207,5 +208,16 @@ class TransportInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteTransportRepository
+    {
+        $component = QuoteTransport::create([
+            'transport_inventory_id' => $this->tourComponent->transport_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+        ]);
+        return $component->repository;
     }
 }

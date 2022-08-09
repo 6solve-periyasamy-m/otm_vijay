@@ -4,9 +4,12 @@ namespace App\Repository\Model\Transport;
 
 use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
+use App\Repository\Traits\Component\IsTransport;
 
 class TransportInventoryTourUpgradeRepository extends ComponentUpgradeRepository
 {
+    use IsTransport;
+
     private TransportInventoryTourUpgrade $upgrade;
 
     public function __construct(TransportInventoryTourUpgrade $upgrade)

@@ -43,8 +43,8 @@ class BookingTravellerRepository extends ModelRepository
 
     public function selectFlights(?FlightInventoryTour $inbound, ?FlightInventoryTour $outbound): void
     {
-        $inbound?->repository->grantToTraveller($this->traveller);
-        $outbound?->repository->grantToTraveller($this->traveller);
+        $inbound?->repository->grantToBookingTraveller($this->traveller);
+        $outbound?->repository->grantToBookingTraveller($this->traveller);
     }
 
     /**
@@ -76,7 +76,7 @@ class BookingTravellerRepository extends ModelRepository
                 if (!$found) return false;
             }
         }
-        $component = $tourComponentRepository->grantToTraveller($this->traveller);
+        $component = $tourComponentRepository->grantToBookingTraveller($this->traveller);
         return isset($component);
     }
 

@@ -2,15 +2,24 @@
 
 namespace App\Repository\Model\Transport;
 
+use App\Models\Quote\Component\QuoteTransport;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventory;
+use App\Models\Transport\TransportInventoryTour;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteTransportRepository;
+use App\Repository\Traits\Component\IsTransport;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
 class TransportInventoryRepository extends InventoryRepository
 {
+    use IsTransport;
+
     private TransportInventory $inventory;
 
     public function __construct(TransportInventory $inventory)
@@ -18,14 +27,14 @@ class TransportInventoryRepository extends InventoryRepository
         $this->inventory = $inventory;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
         $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->flightInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
+        if (isset($repository)) {
+            foreach ($repository->getComponents(false, false, false, true, false) as $inventoryTour) {
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return TransportInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();
@@ -94,5 +103,32 @@ class TransportInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component} - {$this->inventory->travelClass} (" . f_datetime($this->inventory->departs_at) . " to " . f_datetime($this->inventory->arrives_at) . ")";
+    }
+
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?TransportInventoryTourRepository
+    {
+        $inventoryTour = TransportInventoryTour::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteTransportRepository
+    {
+        $inventoryTour = QuoteTransport::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->inventory->purchase_price;
     }
 }

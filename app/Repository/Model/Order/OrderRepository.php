@@ -2,6 +2,7 @@
 
 namespace App\Repository\Model\Order;
 
+use App\Events\Order\OrderCreatedEvent;
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
@@ -9,8 +10,11 @@ use App\Models\Order\OrderCustomer;
 use App\Models\Order\OrderInstallment;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentReminder;
+use App\Models\Tour\Tour;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Mailing\MailRepository;
+use App\Repository\RoomingRepository;
+use App\Repository\Storage\ConvertedCustomer;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +29,46 @@ class OrderRepository extends ModelRepository
     {
         $this->order = $order;
         $this->atolRepository = new AtolRepository($order);
+    }
+
+    /**
+     * @param Tour $tour
+     * @param array $data
+     * @param ConvertedCustomer $lead
+     * @param ConvertedCustomer[] $customers
+     * @return Order
+     */
+    public static function create(Tour $tour, array $data, ConvertedCustomer $lead, array $customers = []): Order
+    {
+        $order = Order::make($data);
+        $tour->orders()->save($order);
+        $leadBooker = $order->repository->addCustomer($lead);
+        $order->repository->update(['lead_booker_id' => $leadBooker->id,]);
+        $order->repository->update(['booking_reference' => Order::generateBookingReference($order),]); // Merging will lead to lead booker id not being set at generation
+        $leadBooker->repository->addAllIncluded();
+        RoomingRepository::assignDefaultRooming($leadBooker);
+        $order->repository->resetInstallments();
+        foreach ($customers as $customer) {
+            $orderCustomer = $order->repository->addCustomer($customer);
+            $orderCustomer->repository->addAllIncluded();
+            RoomingRepository::assignDefaultRooming($orderCustomer);
+        }
+        //event(new OrderCreatedEvent($order));
+        return $order;
+    }
+
+    public function addCustomer(ConvertedCustomer $customer): OrderCustomer
+    {
+        $orderCustomer = OrderCustomer::make([
+            'is_travelling' => $customer->travelling,
+            'is_charged' => $customer->paying,
+            'customer_id' => $customer->customer->id,
+            'tour_cost' => $this->order->tour->base_price_per_person,
+            'single_occupancy_surcharge' => $this->order->tour->single_occupancy_surcharge,
+            ...$customer->data,
+        ]);
+        $this->order->orderCustomers()->save($orderCustomer);
+        return $orderCustomer;
     }
 
     /**
@@ -83,7 +127,7 @@ class OrderRepository extends ModelRepository
     public function getCost(): float
     {
         $total = 0;
-        foreach ($this->order->orderCustomers as $orderCustomer) {
+        foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
             foreach ($orderCustomer->repository->getComponents(false) as $component) {
@@ -110,7 +154,7 @@ class OrderRepository extends ModelRepository
         $addons = [];
         $upgrades = [];
         $additionalValue = 0;
-        foreach ($this->order->orderCustomers as $orderCustomer) {
+        foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $data = $orderCustomer->getAdditionalCosts();
             $addons = array_merge($addons, $data['addons']);
             $upgrades = array_merge($upgrades, $data['upgrades']);

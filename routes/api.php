@@ -5,6 +5,7 @@
 |--------------------------------------------------------------------------
 */
 
+use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
@@ -230,6 +231,7 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
+
     Route::prefix('select')->group(function () {
         Route::post('locations', [SelectController::class, 'getLocations'])->name('locations.select');
         Route::post('addresses', [SelectController::class, 'getAddresses'])->name('addresses.select');
@@ -316,6 +318,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
     });
 
     Route::prefix('component')->group(function() {
+    Route::post('/quote/{quote}/{type}/add', [QuoteController::class, 'addComponents'])->name('quote.components.add');
         Route::prefix('tour/{tour}')->group(function() {
             Route::prefix('accommodation/inventory')->group(function() {
                 Route::post('/add', [AccommodationController::class, 'addAccommodationInventoryToTour'])->name('tour.accommodation.inventory.add');
@@ -351,6 +354,13 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
         // Hack method to get route in order screen. TODO: Better solution?
         Route::post('/status/{order}', [OrderController::class, 'getOrderStatus'])->name('status');
         Route::get('/status', function(){})->name('status.stub');
+    });
+
+    Route::prefix('quotes')->name('quote.')->group(function () {
+        Route::prefix('{quote}')->group(function () {
+            Route::get('/cost', [QuoteController::class, 'getCost'])->name('cost');
+            Route::post('/unknown', [QuoteController::class, 'getUnknownTraveller'])->name('unknown-traveller');
+        });
     });
 
     Route::prefix('reports')->name('reports.')->group(function() {

@@ -3,14 +3,23 @@
 namespace App\Repository\Model\Flight;
 
 use App\Models\Flight\FlightInventory;
+use App\Models\Flight\FlightInventoryTour;
+use App\Models\Quote\Component\QuoteFlight;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteFlightRepository;
+use App\Repository\Traits\Component\IsFlight;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
 
 class FlightInventoryRepository extends InventoryRepository
 {
+    use IsFlight;
+
     private FlightInventory $inventory;
 
     public function __construct(FlightInventory $inventory)
@@ -18,14 +27,14 @@ class FlightInventoryRepository extends InventoryRepository
         $this->inventory = $inventory;
     }
 
-    public static function getBetweenDates(Carbon $from, Carbon $to, Tour $tour = null): Collection
+    public static function getBetweenDates(Carbon $from, Carbon $to, ComponentPackageRepository $repository = null): Collection
     {
         $from->setTime(0, 0);
         $to->setTime(23, 59, 59);
         $inventories = [];
-        if (isset($tour)) {
-            foreach ($tour->flightInventoryTours as $inventoryTour) {
-                $inventories[] = $inventoryTour->inventory->id;
+        if (isset($repository)) {
+            foreach ($repository->getComponents(false, false, true, false, false) as $inventoryTour) {
+                $inventories[] = $inventoryTour->getInventory()->get()->id;
             }
         }
         return FlightInventory::whereBetween('departs_at', [$from, $to])->whereBetween('arrives_at', [$from, $to])->whereNotIn('id', $inventories)->get();
@@ -94,5 +103,32 @@ class FlightInventoryRepository extends InventoryRepository
     public function __toString(): string
     {
         return "{$this->inventory->component} - {$this->inventory->flight_number} ({$this->inventory->travelClass}) (" . f_datetime($this->inventory->departs_at) . " to " . f_datetime($this->inventory->arrives_at) . ")";
+    }
+
+    public function addToTour(Tour $tour, string $tourComponentType, float $price = -1): ?FlightInventoryTourRepository
+    {
+        $inventoryTour = FlightInventoryTour::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'tour_id' => $tour->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteFlightRepository
+    {
+        $inventoryTour = QuoteFlight::make([
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_component_type' => $tourComponentType,
+            'quote_id' => $quote->id,
+        ]);
+        $this->inventory->tourComponents()->save($inventoryTour);
+        return $inventoryTour->repository;
+    }
+
+    public function getPurchasePrice(): float
+    {
+        return $this->inventory->purchase_price;
     }
 }

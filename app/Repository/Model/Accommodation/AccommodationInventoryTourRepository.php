@@ -8,15 +8,21 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Booking\Component\BookingAccommodation;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteAccommodation;
+use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\BookingComponentRepository;
 use App\Repository\Abstracts\ComponentUpgradeRepository;
-use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
+use App\Repository\Traits\Component\IsAccommodation;
 
 class AccommodationInventoryTourRepository extends InventoryTourRepository
 {
+    use IsAccommodation;
+
     private AccommodationInventoryTour $tourComponent;
 
     public function __construct(AccommodationInventoryTour $tourComponent)
@@ -118,7 +124,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $component->name . ' (' . f_datetime($inventory->check_in) . ' to ' . f_datetime($inventory->check_out) . ') (' . $inventory->roomType->name . ', ' . $inventory->boardType->name . ')';
     }
 
-    public function grantToTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
     {
         $component = BookingAccommodation::create([
             'booking_group_id' => $traveller->primary_group->id,
@@ -158,17 +164,12 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return null;
     }
 
-    public function getComponentString(): string
-    {
-        return 'accommodation';
-    }
-
     public function getCost(): float
     {
         return $this->tourComponent->tour_sales_price;
     }
 
-    public function getComponentType(): string
+    public function getTourComponentType(): string
     {
         return $this->tourComponent->tour_component_type;
     }
@@ -203,7 +204,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent->is_bookable;
     }
 
-    public function getInventory(): ?InventoryRepository
+    public function getInventory(): ?AccommodationInventoryRepository
     {
         return $this->tourComponent->inventory->repository;
     }
@@ -215,5 +216,17 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             if (!$orderComponent->cancelled) $used++;
         }
         return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteAccommodationRepository
+    {
+        $component = QuoteAccommodation::create([
+            'accommodation_inventory_id' => $this->tourComponent->accommodation_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'is_template' => $this->tourComponent->is_template,
+        ]);
+        return $component->repository;
     }
 }

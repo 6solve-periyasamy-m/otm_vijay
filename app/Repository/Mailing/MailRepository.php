@@ -66,6 +66,7 @@ class MailRepository
             'additional-traveller-removed' => 'order-customer',
             'order-changed' => 'order',
             'order-cancelled' => 'order',
+            'quote' => 'settings',
         ];
     }
 

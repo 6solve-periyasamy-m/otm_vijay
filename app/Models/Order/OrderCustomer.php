@@ -47,6 +47,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property string|null $activity_notes
  * @property string|null $flight_notes
  * @property string|null $transport_notes
+ * @property boolean $is_travelling
+ * @property boolean $is_charged
  * @property SupportCarbon|null $created_at
  * @property SupportCarbon|null $updated_at
  * @property SupportCarbon|null $deleted_at
@@ -111,10 +113,9 @@ class OrderCustomer extends Model
     use SoftDeletes, CascadeSoftDeletes;
     use HasRelationships;
 
-    protected $fillable = ['order_id', 'customer_id', 'tour_cost', 'single_occupancy_surcharge', 'travel_insurer', 'policy_number',
-        'internal_notes', 'external_notes', 'accommodation_notes', 'activity_notes', 'flight_notes', 'transport_notes',];
+    protected $guarded = [];
     protected array $cascadeDeletes = ['orderCustomerGroups', 'orderActivities', 'orderFlights', 'orderTransports', 'adjustments'];
-    protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double',];
+    protected $casts = ['tour_cost' => 'double', 'single_occupancy_surcharge' => 'double', 'is_charged' => 'boolean', 'is_travelling' => 'boolean'];
     private OrderCustomerRepository $internal_repository;
 
     public static function getValidationRules(): array

@@ -9,21 +9,29 @@ use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Tour\PaymentInstallment;
 use App\Models\Tour\Tour;
 use App\Models\Transport\TransportInventoryTour;
 use App\Models\Transport\TransportInventoryTourUpgrade;
+use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\RoomingRepository;
+use Carbon\Carbon;
 
-class TourRepository extends ModelRepository implements HasStockControl
+class TourRepository extends ComponentPackageRepository implements HasStockControl
 {
     private Tour $tour;
 
     public function __construct(Tour $tour)
     {
         $this->tour = $tour;
+    }
+
+    public static function create(array $data): Tour
+    {
+        return Tour::create($data);
     }
 
     public function update(array $data): Tour
@@ -83,7 +91,7 @@ class TourRepository extends ModelRepository implements HasStockControl
         $newTour->save();
         foreach ($this->getComponents(true, true, true, true, false, ['Included', 'Add-on']) as $inventoryTourRepository) {
             $inventoryTour = $inventoryTourRepository->get();
-            if ($inventoryTourRepository->getComponentType() == 'Upgrade') continue;
+            if ($inventoryTourRepository->getTourComponentType() == 'Upgrade') continue;
             $newInventoryTour = $inventoryTour->replicate();
             $newInventoryTour->tour_id = $newTour->id;
             $newInventoryTour->save();
@@ -115,11 +123,11 @@ class TourRepository extends ModelRepository implements HasStockControl
      * @param bool $activities Should activities be included
      * @param bool $flights Should flights be included
      * @param bool $transport Should transport be included
-     * @param bool $extras Should merchandise/extras be included
+     * @param bool $merchandise Should merchandise/extras be included
      * @param array $filter Filter for component types
      * @return InventoryTourRepository[]
      */
-    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $extras = true, array $filter = ['Included', 'Add-on', 'Upgrade']): array
+    public function getComponents(bool $accommodation = true, bool $activities = true, bool $flights = true, bool $transport = true, bool $merchandise = true, array $filter = ['Included', 'Add-on', 'Upgrade']): array
     {
         $components = [];
         if ($accommodation) {
@@ -142,7 +150,7 @@ class TourRepository extends ModelRepository implements HasStockControl
                 $components[] = $inventoryTour->repository;
             }
         }
-        if ($extras) {
+        if ($merchandise) {
             foreach ($this->tour->merchandise()->whereIn('tour_component_type', $filter)->get() as $inventoryTour) {
                 $components[] = $inventoryTour->repository;
             }
@@ -278,5 +286,16 @@ class TourRepository extends ModelRepository implements HasStockControl
                 $orderComponent->repository->update(['fulfilled' => true,]);
             }
         }
+    }
+
+    public function addInstallment(Carbon $due, float $amount, bool $is_percentage = false): PaymentInstallment
+    {
+        $installment = PaymentInstallment::make([
+            'due_on' => $due,
+            'amount' => $amount,
+            'is_percentage' => $is_percentage,
+        ]);
+        $this->tour->paymentInstallments()->save($installment);
+        return $installment;
     }
 }

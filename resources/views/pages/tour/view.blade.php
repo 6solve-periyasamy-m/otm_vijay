@@ -78,6 +78,12 @@
                         <span>Fulfil Merchandise Orders</span>
                     </a>
                 @endcan
+                @can('create', \App\Models\Quote\Quote::class)
+                    <a class="btn btn-primary" href="{{route('quotes.create', ['tour' => $tour,])}}">
+                        <i class="icon-wallet"></i>
+                        <span>Create Quote</span>
+                    </a>
+                @endcan
                 @if($tour->has_atol_certificate)
                     <a class="btn btn-info" href="{{route('tours.atol', ['tour' => $tour,])}}">
                         <i class="icon-folder-alt"></i>

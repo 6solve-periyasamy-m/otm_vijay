@@ -99,8 +99,8 @@ class FlightInventory extends Model
             'departs_at' => 'date',
             'arrives_at' => 'date',
             'stock' => 'required|numeric|integer',
-            'purchase_price' => 'required|numeric',
-            'sales_price' => 'required|numeric',
+            'purchase_price' => 'nullable|numeric',
+            'sales_price' => 'nullable|numeric',
         ];
     }
 
