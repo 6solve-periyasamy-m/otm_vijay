@@ -149,6 +149,11 @@ class PermissionsRepository
                 'group' => 'Transport',
                 'order' => 3,
             ],
+            'Location\LocationType' => [
+                'name' => 'Location Type',
+                'group' => 'Transport',
+                'order' => 4,
+            ],
             // Orders
             'Order\Order' => [
                 'name' => 'Order',
