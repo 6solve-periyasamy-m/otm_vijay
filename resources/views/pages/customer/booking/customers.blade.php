@@ -112,7 +112,7 @@
                         </div>
                     </div>
 
-                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode" required>
+                    <x-customer.input name="lead_home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode">
                         Postcode
                     </x-customer.input>
                 </div>
@@ -151,7 +151,7 @@
                         </div>
                     </div>
 
-                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode" required>
+                    <x-customer.input name="lead_billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode">
                         Postcode
                     </x-customer.input>
                 </div>
