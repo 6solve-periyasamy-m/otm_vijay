@@ -266,7 +266,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'],)
+            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'inventory.flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'],)
         ];
     }
 
