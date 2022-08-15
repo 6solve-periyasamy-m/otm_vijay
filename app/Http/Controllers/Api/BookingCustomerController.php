@@ -74,7 +74,6 @@ class BookingCustomerController extends ApiController
                 'address_line_1' => 'required',
                 'town' => 'required',
                 'country_id' => 'required | integer | exists:countries,id',
-                'postcode' => 'required'
             ]);
             if (!$request->same_address) {
                 Log::info('validation of billing address', [$request->billing_address_line_1]);
