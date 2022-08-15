@@ -72,7 +72,6 @@ class Address extends Model
             $prefix . 'location_type_id' => 'required|exists:location_types,id',
             $prefix . 'address_line_1' => 'required',
             $prefix . 'country_id' => 'required|exists:countries,id',
-            $prefix . 'postcode' => 'required',
         ];
     }
 
