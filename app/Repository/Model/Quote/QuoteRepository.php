@@ -135,6 +135,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $tour->repository->addInstallment($installment->due_on, $installment->amount, $installment->percentage);
         }
         $this->save();
+        $tour->repository->autoAssignTemplating();
         return $tour;
     }
 

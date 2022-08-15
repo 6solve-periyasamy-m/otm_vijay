@@ -3,6 +3,7 @@
         <tr>
             <th scope="col">Customer Name</th>
             <th scope="col">Tour</th>
+            <th scope="col">Date Created</th>
             <th scope="col">Travellers</th>
             <th scope="col">Expected Cost</th>
             <th scope="col">Contact Email</th>
@@ -15,18 +16,19 @@
             <tr>
                 <th scope="row">{{ $row->name }}</th>
                 <td>{{ $row->tour }}</td>
+                <td>{{ $row->date }}</td>
                 <td>{{ $row->travellers }}</td>
                 <td>{{ f_currency($row->expected) }}</td>
                 <td>{{ $row->contact_email }}</td>
                 <td>{{ $row->contact_number }}</td>
-                <td><a href="{{ $row->continue }}" onclick="event.preventDefault();toClipboard(this);">{{ $row->continue }}</a></td>
+                <td><a href="javascript:toClipboard('{{ $row->continue }}');">Copy to Clipboard</a></td>
             </tr>
         @endforeach
     </tbody>
 </table>
 <script>
     function toClipboard(tag) {
-        navigator.clipboard.writeText($(tag).prop('href'));
+        navigator.clipboard.writeText(tag);
         alert('Copied to Clipboard')
     }
 </script>
