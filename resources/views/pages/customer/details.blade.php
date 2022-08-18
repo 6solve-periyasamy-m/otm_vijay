@@ -12,7 +12,7 @@
                         <center class="mt-4">
                             <div class="overlay-container">
                                 <label for="profile_picture">
-                                    <img src="{{ $customer->avatar_url }}" class="rounded-circle hover-upload"/>
+                                    <img src="{{ $customer->avatar_url }}" class="rounded-circle hover-upload" alt="{{ $customer->full_name }}"/>
                                     <div class="image-overlay">Upload new picture</div>
                                 </label>
                             </div>
@@ -129,7 +129,7 @@
                                 <x-customer.input name="home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2">
                                     Town
                                 </x-customer.input>
-                                <x-customer.input name="home_town" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1">
+                                <x-customer.input name="home_region" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1">
                                     Region
                                 </x-customer.input>
 
@@ -156,7 +156,7 @@
                                 <x-customer.input name="billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2">
                                     Town
                                 </x-customer.input>
-                                <x-customer.input name="billing_town" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1">
+                                <x-customer.input name="billing_region" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1">
                                     Region
                                 </x-customer.input>
 

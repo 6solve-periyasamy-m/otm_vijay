@@ -48,7 +48,7 @@ class AddressRepository extends ModelRepository
 
     public function update(array $data): Address
     {
-        $this->address->updateOrCreate($data);
+        $this->address->update($data);
         $this->save();
         return $this->get();
     }
