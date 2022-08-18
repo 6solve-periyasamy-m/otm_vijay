@@ -136,7 +136,6 @@ class DetailsRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
-            'mobile_number' => 'required',
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',
             'emergency_contact_telephone' => 'required',
