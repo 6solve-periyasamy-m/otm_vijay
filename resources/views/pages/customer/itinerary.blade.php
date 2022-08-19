@@ -121,16 +121,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="col-md-12 mb-0">Notes About Your Tour</h2>
+                <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
+                    @csrf
+                    @php $isLead = $order->repository->isLeadBooker(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()) @endphp
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="col-md-12 mb-0">Travel Insurance</h2>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material mx-2 row">
-                            @csrf
-                            @php $isLead = $order->repository->isLeadBooker(\App\Repository\Authentication\CustomerAuthenticationRepository::getCustomer()) @endphp
+                    <div class="card">
+                        <div class="card-body row">
+                            <x-customer.input name="travel_insurer" value="{{ $orderCustomer->travel_insurer }}" width="6">
+                                Travel Insurer
+                            </x-customer.input>
+                            <x-customer.input name="policy_number" value="{{ $orderCustomer->policy_number }}" width="6">
+                                Policy Number
+                            </x-customer.input>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="col-md-12 mb-0">Notes About Your Tour</h2>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body row">
                             @if($isLead)
                             <x-customer.input.text-area name="order_notes" value="{{ $order->external_notes }}" width="6">
                                 Order Notes
@@ -152,9 +167,9 @@
                                 Transport Notes
                             </x-customer.input.text-area>
                             @include('partials.fields.submit')
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div></div>

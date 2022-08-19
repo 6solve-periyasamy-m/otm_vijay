@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Gateways\StripeGateway;
+use App\Http\Requests\Customer\TourDetailsRequest;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Customer\Customer;
 use App\Models\Order\Component\OrderAccommodation;
@@ -160,27 +161,21 @@ class CustomerTourController extends Controller
         return redirect()->route('customer.extras', ['reference' => $reference,]);
     }
 
-    public function updateNotes(Request $request, string $reference, OrderCustomer $orderCustomer)
+    public function updateNotes(TourDetailsRequest $request, string $reference, OrderCustomer $orderCustomer)
     {
         $customer = CustomerAuthenticationRepository::getCustomer();
         if (!isset($customer)) abort(404);
         $order = OrderRepository::getFromBookingReference($reference);
+
         if (!isset($order) || $order->cancelled) abort(404);
         if (!$order->repository->isLeadBooker($customer)) abort(404);
+
         if ($order->repository->isLeadBooker(CustomerAuthenticationRepository::getCustomer())) {
-            $order->update([
-                'external_notes' => $request->input('order_notes'),
-            ]);
+            $order->update(['external_notes' => $request->order_notes,]);
             $order->save();
         }
-        $orderCustomer->update([
-            'external_notes' => $request->input('order_customer_notes'),
-            'accommodation_notes' => $request->input('accommodation_notes'),
-            'activity_notes' => $request->input('activity_notes'),
-            'flight_notes' => $request->input('flight_notes'),
-            'transport_notes' => $request->input('transport_notes'),
-        ]);
-        $orderCustomer->save();
+
+        $orderCustomer->repository->update($request->getOrderCustomerDetails());
         return redirect()->route('customer.itinerary', ['reference' => $reference,]);
     }
 
