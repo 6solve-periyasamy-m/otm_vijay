@@ -9,7 +9,7 @@ class RevenueHelper
 {
     public static function getExpectedRevenue(Carbon $start, Carbon $end): array
     {
-        $installments = OrderInstallment::whereDate('due_on', '>=', $start)->whereDate('due_on', '<', $end)->with('order')->get();
+        $installments = OrderInstallment::whereDate('due_on', '>=', $start)->whereDate('due_on', '<=', $end)->with('order')->get();
         $expected = 0;
         $paid = 0;
         $count = 0;
