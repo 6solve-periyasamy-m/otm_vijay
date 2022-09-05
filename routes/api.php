@@ -7,6 +7,7 @@
 
 use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
+use App\Http\Controllers\Api\Admin\RevenueController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -182,6 +183,7 @@ Route::middleware('auth:api')->group(function() {
         return $request->user();
     });   
 });
+Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('api.booking.upgrade-activity');
@@ -229,6 +231,9 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 });
 
 Route::middleware('api.token.auth')->name('api.')->group(function () {
+    Route::prefix('/costing')->name('costing.')->group(function () {
+       Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
+    });
     Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
 
