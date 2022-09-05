@@ -5,8 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <img src="{{ asset(setting('company.logo', 'images/octlogo.png')) }}"
-                 alt="Dummy Data">
+            <x-loading-spinner></x-loading-spinner>
         </div>
     </div>
 @endsection
