@@ -232,6 +232,7 @@ Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(functio
 Route::middleware('api.token.auth')->name('api.')->group(function () {
     Route::prefix('/costing')->name('costing.')->group(function () {
        Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
+       Route::get('/revenue/set', [RevenueController::class, 'revenueSet'])->name('revenue.set');
     });
     Route::post('/merchandise/fulfil', [MerchandiseController::class, 'fulfil'])->name('merchandise.fulfil');
     Route::post('accommodation/rooming/{order}/save', [AccommodationController::class, 'saveRoomingData'])->name('roomings.save');
