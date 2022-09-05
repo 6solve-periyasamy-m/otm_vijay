@@ -25,8 +25,10 @@ class RevenueBetweenDatesRequest extends FormRequest
         try {
             if (isset($this->to)) {
                 return Carbon::createFromFormat('Y-m-d', $this->to);
-            } else {
+            } elseif (isset($this->period)) {
                 return $this->getFromDate()?->addDays($this->period);
+            } else {
+                return $this->getFromDate()->addMonth()->subDay();
             }
         } catch (Exception) { return null; }
     }
@@ -41,7 +43,7 @@ class RevenueBetweenDatesRequest extends FormRequest
         return [
             'from' => 'required|date|date_format:Y-m-d',
             'to' => 'nullable|date|date_format:Y-m-d',
-            'period' => 'required_without:to|integer'
+            'period' => 'nullable|integer'
         ];
     }
 }

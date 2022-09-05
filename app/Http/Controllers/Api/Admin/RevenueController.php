@@ -14,6 +14,6 @@ class RevenueController extends ApiController
         $to = $request->getToDate();
         if (!(isset($from) && isset($to))) return response()->json(['success' => false, 'message' => 'Failed to parse dates']);
         $data = RevenueHelper::getExpectedRevenue($from, $to);
-        return response()->json(['success' => true, ...$data]);
+        return response()->json(['success' => true, 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d'), ...$data]);
     }
 }
