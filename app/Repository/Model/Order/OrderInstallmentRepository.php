@@ -14,18 +14,6 @@ class OrderInstallmentRepository extends ModelRepository
         $this->installment = $installment;
     }
 
-    public function getOldAmountPaid(): float
-    {
-        $order = $this->installment->order;
-        $paid = sigfig(($order->total_adjustments * -1) + $order->paid - $order->calculated_deposit);
-        foreach ($order->installments as $orderInstallment) {
-            $paid = sigfig($paid - $orderInstallment->calculated_amount);
-            if ($paid < 0 && $orderInstallment->id !== $this->installment->id) return 0;
-            if ($orderInstallment->id == $this->installment->id) return $paid < 0 ? 0 : $this->installment->amount - $paid;
-        }
-        return $paid;
-    }
-
     public function getAmountPaid(): float
     {
         $order = $this->installment->order;
@@ -37,7 +25,7 @@ class OrderInstallmentRepository extends ModelRepository
             $paid -= $installment->calculated_amount;
             if ($paid <= 0) return 0;
         }
-        dd($paid);
+        return 0; // Happens if the id is mis-set somewhere
     }
 
     public function isInstallmentPaid(): bool

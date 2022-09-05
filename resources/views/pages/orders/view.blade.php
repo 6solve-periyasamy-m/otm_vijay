@@ -286,7 +286,7 @@
                                 <th scope="col">Type</th>
                                 <th scope="col">Due</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col">Paid</th>
+                                <th scope="col">Outstanding</th>
                                 <th scope="col" class="actions">Actions</th>
                             </tr>
                             </thead>
@@ -294,7 +294,14 @@
                                 <th scope="row">Deposit</th>
                                 <td>With Order</td>
                                 <td>{{ f_currency($order->calculated_deposit) }} ({{ $order->deposit_percentage }}%)</td>
-                                <td>{{ f_bool($order->calculated_deposit <= $order->paid) }}</td>
+                                <td>
+                                    @php $amount = $order->calculated_deposit - min($order->paid, $order->calculated_deposit); @endphp
+                                    @if($amount <= 0)
+                                        Paid
+                                    @else
+                                        {{ f_currency($amount) }}
+                                    @endif
+                                </td>
                                 <td class="actions">
                                     <a href="{{route('orders.edit', ['order' => $order,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         <i class="icon-note"></i>
@@ -302,11 +309,17 @@
                                 </td>
                             </tr>
                             @foreach($order->installments as $installment)
+                                @php $paid = $installment->repository->getAmountPaid(); @endphp
                                 <tr>
                                     <th scope="row">Installment</th>
                                     <td>{{ f_date($installment->due_on) }}</td>
                                     <td>{{ f_currency($installment->calculated_amount) }} ({{ $installment->percentage }}%)</td>
-                                    <td>{{ f_bool($installment->paid) }}</td>
+                                    <td>                                    @php $amount = $installment->calculated_amount - $installment->repository->getAmountPaid(); @endphp
+                                        @if($amount <= 0)
+                                            Paid
+                                        @else
+                                            {{ f_currency($amount) }}
+                                        @endif</td>
                                     <td class="actions">
                                         <a href="{{route('order-installments.edit', ['order' => $order, 'orderInstallment' => $installment,])}}" class="btn btn-outline-success btn-sm mb-1">
                                             <i class="icon-note"></i>
@@ -325,7 +338,14 @@
                                 <th scope="row">Remaining Balance</th>
                                 <td>{{ f_date($order->tour->final_payment) }}</td>
                                 <td>{{ f_currency($order->remaining_installment) }} ({{ $order->remaining_percentage }}%)</td>
-                                <td>{{ f_bool($order->remaining <= 0) }}</td>
+                                <td>
+                                    @php $amount = min($order->remaining, $order->remaining_installment); @endphp
+                                    @if($amount <= 0)
+                                        Paid
+                                    @else
+                                        {{ f_currency($amount) }}
+                                    @endif
+                                </td>
                                 <td class="actions">
                                     <a href="{{route('tours.edit', ['tour' => $order->tour,])}}" class="btn btn-outline-success btn-sm mb-1">
                                         <i class="icon-note"></i>
