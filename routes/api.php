@@ -183,7 +183,6 @@ Route::middleware('auth:api')->group(function() {
         return $request->user();
     });   
 });
-Route::get('/revenue', [RevenueController::class, 'revenue'])->name('revenue');
 
 Route::post('/dual/select/countries', [SelectController::class, 'getCountries'])->name('api.countries.select');
 Route::post('/php/booking/upgrade/activity/{token}', [CustomerBookingController::class, 'upgradeActivity'])->name('api.booking.upgrade-activity');
