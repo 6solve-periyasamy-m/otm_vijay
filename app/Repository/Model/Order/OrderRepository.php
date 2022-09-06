@@ -2,7 +2,6 @@
 
 namespace App\Repository\Model\Order;
 
-use App\Events\Order\OrderCreatedEvent;
 use App\Models\Customer\Customer;
 use App\Models\Helper\OrderStatus;
 use App\Models\Order\Order;
@@ -17,6 +16,7 @@ use App\Repository\RoomingRepository;
 use App\Repository\Storage\ConvertedCustomer;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
@@ -130,18 +130,8 @@ class OrderRepository extends ModelRepository
         foreach ($this->order->orderCustomers()->where('is_charged', '=', 1)->get() as $orderCustomer) {
             $total += $orderCustomer->tour_cost;
             if ($orderCustomer->has_surcharge) $total += $orderCustomer->single_occupancy_surcharge;
-            foreach ($orderCustomer->repository->getComponents(false) as $component) {
-                if ($component->getTourComponentType() !== "Included") {
-                    $total += $component->getCost();
-                }
-            }
         }
-        foreach ($this->order->groups()->with('rooms')->get() as $group) {
-            foreach ($group->rooms()->with('tourComponent')->get() as $orderComponent) {
-                if ($orderComponent->tourComponent->tour_component_type == 'Included') continue;
-                $total += $orderComponent->cost;
-            }
-        }
+        $total += $this->getAdditionalComponentTotal();
         return $total;
     }
 
@@ -387,5 +377,52 @@ class OrderRepository extends ModelRepository
     public function refresh()
     {
         $this->getOrderStatus(true);
+    }
+
+    public function getAdditionalComponentTotal():float
+    {
+        $query = DB::query();
+        $query->from(function ($query) {
+            $query->from($this->getAccommodationQuery())
+                ->union($this->getSingleOwnedTableQuery('activity', 'activities'))
+                ->union($this->getSingleOwnedTableQuery('flight', 'flights'))
+                ->union($this->getSingleOwnedTableQuery('transport', 'transports'))
+                ->union($this->getSingleOwnedTableQuery('merchandise', 'merchandises'))
+                ->select('table', 'id', 'cost', 'type');
+        });
+        $query->select(DB::raw('SUM(`cost`) as total'));
+        return $query->first()?->total ?? 0;
+    }
+
+    private function getAccommodationQuery(): Builder
+    {
+        $query = DB::table('order_accommodations');
+        $query->join('accommodation_inventory_tours', 'order_accommodations.accommodation_inventory_tour_id', '=', 'accommodation_inventory_tours.id');
+        $query->join('groups', 'order_accommodations.group_id', '=', 'groups.id');
+        $query->join('order_customer_group', 'order_customer_group.group_id', '=', 'groups.id');
+        $query->join('order_customers', 'order_customers.id', '=', 'order_customer_group.order_customer_id');
+        $query->where('order_customers.order_id', '=', $this->order->id);
+        $query->whereNull('groups.deleted_at');
+        $query->whereNull('order_customer_group.deleted_at');
+        $query->whereNull('order_customers.deleted_at');
+        $query->whereNull('order_accommodations.deleted_at');
+        $query->where('accommodation_inventory_tours.tour_component_type', '!=', 'Included');
+        $query->groupBy('order_accommodations.id');
+        $query->select(DB::raw("'accommodation' as 'table'"), 'order_accommodations.id as id', 'order_accommodations.cost as cost', 'accommodation_inventory_tours.tour_component_type as type');
+        return $query;
+    }
+
+    public function getSingleOwnedTableQuery(string $single, string $plural): Builder
+    {
+        $query = DB::table("order_{$plural}");
+        $query->join("{$single}_inventory_tours", "order_{$plural}.{$single}_inventory_tour_id", '=', "{$single}_inventory_tours.id");
+        $query->join('order_customers', 'order_customers.id', '=', "order_{$plural}.order_customer_id");
+        $query->where('order_customers.order_id', '=', $this->order->id);
+        $query->whereNull('order_customers.deleted_at');
+        $query->whereNull("order_{$plural}.deleted_at");
+        $query->where('order_customers.is_charged', '=', 1);
+        $query->where("{$single}_inventory_tours.tour_component_type", '!=', 'Included');
+        $query->select(DB::raw("'{$single}' as 'table'"), "order_{$plural}.id as id", "order_{$plural}.cost as cost", "{$single}_inventory_tours.tour_component_type as type");
+        return $query;
     }
 }
