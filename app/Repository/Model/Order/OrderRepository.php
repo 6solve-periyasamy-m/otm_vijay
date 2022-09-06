@@ -17,6 +17,7 @@ use App\Repository\Storage\ConvertedCustomer;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends ModelRepository
@@ -78,6 +79,21 @@ class OrderRepository extends ModelRepository
     public static function getFromBookingReference(string $reference): ?Order
     {
         return Order::whereBookingReference($reference)->first();
+    }
+
+    /**
+     * Return the installments with calculated remaining field
+     * @return Collection|OrderInstallment[]
+     */
+    public function getInstallments(): Collection|array
+    {
+        $customers = $this->order->orderCustomers()->count();
+        $paid = $this->order->paid - ($this->order->deposit * $customers);
+        DB::statement("SET @total:={$paid};");
+        $installments = OrderInstallment::where('order_id', '=', $this->order->id)
+            ->orderBy('due_on')
+            ->selectRaw("*, GREATEST((GREATEST(@total,0)-(amount*{$customers}))*-1,0) as remaining, (@total := @total - (amount*{$customers})) AS rt");
+        return $installments->get();
     }
 
     /**
