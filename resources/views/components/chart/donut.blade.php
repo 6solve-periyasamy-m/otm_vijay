@@ -1,4 +1,6 @@
-<canvas id="{{ str_replace(' ', '', $name) }}" width="400" height="400"></canvas>
+<div style="height: {{$size??400}}px;">
+    <canvas id="{{ str_replace(' ', '', $name) }}"></canvas>
+</div>
 <script type="text/javascript" defer>
     new Chart(document.getElementById('{{ str_replace(' ', '', $name) }}').getContext('2d'), {
         type: 'doughnut',
@@ -7,8 +9,15 @@
             datasets: [{
                 label: 'Revenue by date',
                 data: [@foreach ($values as $value) '{{$value}}', @endforeach],
-                backgroundColor: [@foreach (random_colors(sizeof($labels)) as $color) '{{$color}}', @endforeach],
+                backgroundColor: [@foreach ($colors as $color) '{{$color}}', @endforeach],
             }]
         },
+        options: {
+            circumference: {{$half??false ? 180 : 360}},
+            rotation: {{$half??false ? 90 : 0}},
+            borderWidth: 5,
+            responsive: true,
+            maintainAspectRatio: false,
+        }
     });
 </script>
