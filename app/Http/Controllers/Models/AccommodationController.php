@@ -7,6 +7,7 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Location\Address;
 use App\Models\Location\AddressParent;
 use App\Repository\Model\Location\AddressRepository;
+use App\Repository\Reporting\RoomingReportRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -51,6 +52,16 @@ class AccommodationController extends Controller
     public function view(Accommodation $accommodation)
     {
         return view('pages.components.accommodation', ['accommodation' => $accommodation,]);
+    }
+
+    public function rooming(Accommodation $accommodation)
+    {
+        return RoomingReportRepository::viewReport($accommodation->repository, 'accommodations.rooming.export', ['accommodation' => $accommodation,]);
+    }
+
+    public function exportRooming(Accommodation $accommodation, string $extension)
+    {
+        return RoomingReportRepository::exportReport($accommodation->repository, $extension);
     }
 
     public function edit(Accommodation $accommodation)

@@ -304,6 +304,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation\Accommodation,update');
             Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation\Accommodation,update');
             Route::post('/delete', [AccommodationController::class, 'destroy'])->name('accommodations.delete')->middleware('bouncer:Accommodation\Accommodation,delete');
+            Route::get('/rooming', [AccommodationController::class, 'rooming'])->name('accommodations.rooming')->middleware('bouncer:Accommodation\Accommodation,read');
+            Route::get('/rooming/{extension}', [AccommodationController::class, 'exportRooming'])->name('accommodations.rooming.export')->middleware('bouncer:Accommodation\Accommodation,read');
 
             Route::prefix('inventory')->group(function () {
                 Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create')->middleware('bouncer:Accommodation\AccommodationInventory,create');
