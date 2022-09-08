@@ -105,7 +105,7 @@
                     <div class="card-title">
                         <h4 class="fw-bold">Revenue over 7 days</h4>
                     </div>
-                    {{ (new \App\View\Components\Chart\Donut('Tour Stock', ['Sold', 'Unsold'], [150, 50], ['#A00', '#AAA']))->render() }}
+                    {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7)) }}
                 </div>
             </div>
         </div>

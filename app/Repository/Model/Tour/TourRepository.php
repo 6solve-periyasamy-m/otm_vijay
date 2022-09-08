@@ -298,4 +298,27 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $this->tour->paymentInstallments()->save($installment);
         return $installment;
     }
+
+    public function getPotentialRevenue(): float
+    {
+        return $this->tour->stock_control_active ? $this->tour->base_price_per_person * $this->tour->stock : -1;
+    }
+
+    public function getReceivedRevenue(): float
+    {
+        $total = 0;
+        foreach ($this->tour->orders as $order) {
+            $total += $order->paid;
+        }
+        return $total;
+    }
+
+    public function getRemainingRevenue(): float
+    {
+        $total = 0;
+        foreach ($this->tour->orders as $order) {
+            $total += $order->remaining;
+        }
+        return $total;
+    }
 }

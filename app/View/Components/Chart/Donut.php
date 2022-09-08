@@ -18,7 +18,7 @@ class Donut extends Component
         $this->values = $values;
         $missing = sizeof($labels) - sizeof($colors);
         if ($missing > 0) {
-            $colors = [...$colors, random_colors($missing)];
+            $colors = [...$colors, ...random_colors($missing)];
         }
         $this->colors = $colors;
         $this->half = $half;
