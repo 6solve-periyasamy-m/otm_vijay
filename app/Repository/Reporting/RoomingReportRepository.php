@@ -2,7 +2,6 @@
 
 namespace App\Repository\Reporting;
 
-use App\Exports\OrderReminderReportExport;
 use App\Exports\RoomingReportExport;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Interfaces\HasRoomingList;
@@ -11,7 +10,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use PhpOffice\PhpSpreadsheet\Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RoomingReportRepository implements HasRoomingList
@@ -48,12 +46,15 @@ class RoomingReportRepository implements HasRoomingList
 
     /**
      * @param HasRoomingList $roomingList
-     * @return array
+     * @return Collection
      */
-    public static function generateRoomingList(HasRoomingList $roomingList): array
+    public static function generateRoomingList(HasRoomingList $roomingList): Collection
     {
+        $largest = 0;
         $data = [];
         foreach ($roomingList->getRoomingList() as $orderAccommodation) {
+            $occupancy = $orderAccommodation->accommodation_inventory->roomType->maximum_occupancy;
+            if ($largest < $occupancy) $largest = $occupancy;
             $row = collect();
             $row->tour = $orderAccommodation->accommodationInventoryTour->tour->name;
             $row->hotel = $orderAccommodation->accommodation->name;
@@ -62,9 +63,14 @@ class RoomingReportRepository implements HasRoomingList
             $row->room = $orderAccommodation->accommodation_inventory->roomType->name;
             $row->board = $orderAccommodation->accommodation_inventory->boardType->name;
             $row->travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
+            $row->occupancy = $occupancy;
             $row->occupants = $orderAccommodation->group->orderCustomers()->count();
+            $row->empty_beds = $occupancy - $row->occupants;
             $data[] = $row;
         }
-        return $data;
+        $dCol = collect();
+        $dCol->data = $data;
+        $dCol->largest = $largest;
+        return $dCol;
     }
 }

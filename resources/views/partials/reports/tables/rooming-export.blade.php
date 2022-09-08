@@ -10,7 +10,7 @@
             <th scope="col">Check Out</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
-            <th scope="col">Occupants</th>
+            <th scope="col" colspan="{{$data->largest}}">Occupants</th>
         </tr>
     </thead>
     <tbody>
@@ -24,14 +24,12 @@
                 <td>{{ $row->board }}</td>
                 <td>{{ $row->from }}</td>
                 <td>{{ $row->to }}</td>
-                <td>{{ $row->occupants }}</td>
-                <td>{{ $row->empty_beds }}</td>
-                <td>
-                    @php /** @var \App\Models\Order\OrderCustomer $traveller */ @endphp
-                    @foreach($row->travellers as $traveller)
-                        {{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }},
-                    @endforeach
-                </td>
+                {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
+                <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
+                <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>
+                @foreach($row->travellers as $traveller)
+                    <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
+                @endforeach
             </tr>
         @endforeach
     </tbody>
