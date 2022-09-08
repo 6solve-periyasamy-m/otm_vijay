@@ -13,11 +13,10 @@
         </tr>
     </thead>
     <tbody>
-        @php $count = 0; @endphp
+        @php $count = 1; @endphp
         @foreach($data as $row)
-            @php $count++; @endphp
             <tr>
-                <td>{{ $count }}</td>
+                <td>{{ $count++ }}</td>
                 <td>{{ $row->tour }}</td>
                 <td>{{ $row->hotel }}</td>
                 <td>{{ $row->room }}</td>
