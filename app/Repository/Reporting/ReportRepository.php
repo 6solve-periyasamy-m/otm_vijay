@@ -5,6 +5,7 @@ namespace App\Repository\Reporting;
 use App\Helpers\QuarterHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
@@ -297,5 +298,27 @@ class ReportRepository
     public static function getOrdersDepartingAfterQuarterReport(int $year, int $quarter): Collection
     {
         return self::generateAtolReport(QuarterHelper::getOrdersFromToursAfterQuarter($year, $quarter));
+    }
+
+    /**
+     * @param Collection|OrderAccommodation[] $orderAccommodations
+     * @return array
+     */
+    public static function generateRoomingList(Collection|array $orderAccommodations): array
+    {
+        $data = [];
+        foreach ($orderAccommodations as $orderAccommodation) {
+            $row = collect();
+            $row->tour = $orderAccommodation->accommodationInventoryTour->tour->name;
+            $row->hotel = $orderAccommodation->accommodation->name;
+            $row->from = $orderAccommodation->accommodation_inventory->check_in;
+            $row->to = $orderAccommodation->accommodation_inventory->check_out;
+            $row->room = $orderAccommodation->accommodation_inventory->roomType->name;
+            $row->board = $orderAccommodation->accommodation_inventory->boardType->name;
+            $row->travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
+            $row->occupants = $orderAccommodation->group->orderCustomers()->count();
+            $data[] = $row;
+        }
+        return $data;
     }
 }

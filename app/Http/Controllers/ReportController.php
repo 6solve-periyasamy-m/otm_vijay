@@ -9,6 +9,7 @@ use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Reporting\ReportRepository;
 use Excel;
 
@@ -110,5 +111,22 @@ class ReportController extends Controller
     public function exportOrderMerchandiseReport(string $extension = 'xlsx')
     {
         return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
+    }
+
+    public function getRoomingReport() {
+        $data = OrderAccommodation::with(
+            'group',
+            'group.orderCustomers',
+            'group.orderCustomers.customer',
+            'accommodationInventoryTour',
+            'accommodationInventoryTour.inventory',
+            'accommodationInventoryTour.accommodationInventory.accommodation',
+            'accommodationInventoryTour.accommodationInventory.roomType',
+            'accommodationInventoryTour.accommodationInventory.boardType',
+        )->get();
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.rooming',
+            'data' => ReportRepository::generateRoomingList($data),'title' => 'Merchandise Orders',
+            'xlsxExport' => route('reports.merchandise.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.merchandise.export', ['extension' => 'csv']),]);
     }
 }
