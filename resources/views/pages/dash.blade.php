@@ -71,35 +71,6 @@
     </script>
 @endpush
 
-@push('footer-stack')
-    <script type="text/javascript" defer>
-        @php $revenue = \App\Helpers\RevenueHelper::getRevenue(now()->subDays(30)); @endphp
-        const chart = document.getElementById('revenueChart').getContext('2d');
-        const myChart = new Chart(chart, {
-            type: 'line',
-            data: {
-                labels: [
-                    @foreach ($revenue as $point) '{{$point->date}}', @endforeach
-                ],
-                datasets: [{
-                    label: 'Revenue by date',
-                    data: [@foreach ($revenue as $point) '{{$point->amount}}', @endforeach],
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-@endpush
-
 @section('content')
     <div class="row">
         <div class="col-xl-6">
@@ -132,9 +103,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <h4 class="fw-bold">Revenue over 30 days</h4>
+                        <h4 class="fw-bold">Revenue over 7 days</h4>
                     </div>
-                    <canvas id="revenueChart"></canvas>
+                    {{ \App\Repository\ChartRepository::getRevenueChart(now()->subDays(7))->render() }}
                 </div>
             </div>
         </div>
