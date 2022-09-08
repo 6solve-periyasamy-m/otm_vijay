@@ -4,6 +4,8 @@ namespace App\Helpers;
 
 use App\Models\Order\OrderInstallment;
 use Carbon\Carbon;
+use DB;
+use Illuminate\Support\Collection;
 
 class RevenueHelper
 {
@@ -24,6 +26,20 @@ class RevenueHelper
             'expected' => sigfig($expected),
             'paid' => sigfig($paid),
         ];
+    }
+
+    public static function getRevenue(Carbon $start = null, Carbon $end = null): Collection|array
+    {
+        $query = DB::table('payments');
+        if (isset($start)) {
+            $query->whereRaw("DATE(`paid_on`) > '{$start->format('Y-m-d')}'");
+        }
+        if (isset($end)) {
+            $query->whereRaw("DATE(`paid_on`) < '{$end->format('Y-m-d')}'");
+        }
+        $query->groupBy(DB::raw('DATE(`paid_on`)'));
+        $query->select(DB::raw('DATE(`paid_on`) as date'), DB::raw('SUM(`amount`) as amount'));
+        return $query->get();
     }
 
 }

@@ -31,7 +31,7 @@
         }
         function addRow(from, to, total, paid, count) {
             datatable.row.add([
-                from,
+                from + ' to ' + to,
                 formatCurrency(total),
                 formatCurrency(paid),
                 formatCurrency(total - paid),
@@ -61,27 +61,71 @@
     </script>
 @endpush
 
+@push('footer-stack')
+    <script type="text/javascript" defer>
+        @php $revenue = \App\Helpers\RevenueHelper::getRevenue(now()->subDays(30)); @endphp
+        const chart = document.getElementById('revenueChart').getContext('2d');
+        const myChart = new Chart(chart, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach ($revenue as $point) '{{$point->date}}', @endforeach
+                ],
+                datasets: [{
+                    label: 'Revenue by date',
+                    data: [@foreach ($revenue as $point) '{{$point->amount}}', @endforeach],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+@endpush
+
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <div class="card-title">
-                <h4 class="fw-bold">Expected Revenue</h4>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Expected Revenue</h4>
+                    </div>
+                    <x-loading-spinner></x-loading-spinner>
+                    <div class="revenue-container" style="display: none;">
+                        <table class="revenue-table table table-striped">
+                            <thead>
+                            <tr>
+                                <td style="width: 30%">Dates</td>
+                                <td>Expected Total Revenue</td>
+                                <td>Received Revenue</td>
+                                <td>Remaining Revenue</td>
+                                <td>Percentage Paid</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <x-loading-spinner></x-loading-spinner>
-            <div class="revenue-container" style="display: none;">
-                <table class="revenue-table table table-striped">
-                    <thead>
-                    <tr>
-                        <td style="width: 30%">Dates</td>
-                        <td>Expected Total Revenue</td>
-                        <td>Received Revenue</td>
-                        <td>Remaining Revenue</td>
-                        <td>Percentage Paid</td>
-                    </tr>
-                    </thead>
-                    <tbody c>
-                    </tbody>
-                </table>
+        </div>
+
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Revenue over 30 days</h4>
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
