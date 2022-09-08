@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
+use App\Repository\Reporting\RoomingReportRepository;
 use Illuminate\Http\Request;
 
 class AccommodationInventoryController extends Controller
@@ -43,6 +44,16 @@ class AccommodationInventoryController extends Controller
     public function view(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
     {
         return view('pages.models.accommodation_inventories.view', ['accommodationInventory' => $accommodationInventory,]);
+    }
+
+    public function rooming(Accommodation $accommodation, AccommodationInventory $accommodationInventory)
+    {
+        return RoomingReportRepository::viewReport($accommodationInventory->repository, 'accommodation-inventories.rooming.export', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,]);
+    }
+
+    public function exportRooming(Accommodation $accommodation, AccommodationInventory $accommodationInventory, string $extension)
+    {
+        return RoomingReportRepository::exportReport($accommodationInventory->repository, $extension);
     }
 
     public function edit(Accommodation $accommodation, AccommodationInventory $accommodationInventory)

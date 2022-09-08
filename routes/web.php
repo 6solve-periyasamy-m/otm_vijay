@@ -316,6 +316,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:Accommodation\AccommodationInventory,update');
                     Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:Accommodation\AccommodationInventory,delete');
                     Route::get('/duplicate', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate')->middleware('bouncer:Accommodation\AccommodationInventory,create');
+                    Route::get('/rooming', [AccommodationInventoryController::class, 'rooming'])->name('accommodation-inventories.rooming')->middleware('bouncer:Accommodation\AccommodationInventory,read');
+                    Route::get('/rooming/{extension}', [AccommodationInventoryController::class, 'exportRooming'])->name('accommodation-inventories.rooming.export')->middleware('bouncer:Accommodation\AccommodationInventory,read');
                 });
 
             });
