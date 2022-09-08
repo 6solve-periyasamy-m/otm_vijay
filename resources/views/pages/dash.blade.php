@@ -8,15 +8,15 @@
         let rows = 0;
         $(document).ready(function () {
             datatable = $('.revenue-table').DataTable({fixedHeader: true, autoWidth: false, columnDefs: [{target: 0, visible: false, searchable: false,},]});
-            getBetweenDates();
+            initDates();
         });
-        function getBetweenDates() {
+        function initDates() {
             rows++;
             $.get('{{ route('api.costing.revenue.set') }}', {
                 '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
                 'data': [
                     @php $date = now()->subMonth()->firstOfMonth(); @endphp
-                    @for($x = 0; $x < 10; $x++)
+                    @for($x = 0; $x < 4; $x++)
                     {
                         'from': '{{$date->addMonth()->firstOfMonth()->format('Y-m-d')}}'
                     },
@@ -27,6 +27,16 @@
                 for (let datum in data.data) {
                     addRow(data.data[datum].from, data.data[datum].to, data.data[datum].expected, data.data[datum].paid, data.data[datum].count)
                 }
+            });
+        }
+        function getBetweenDates(start, end)
+        {
+            $.get('{{ route('api.costing.revenue.set') }}', {
+                '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+                'from': start,
+                'to': end,
+            }).done(function (data) {
+                addRow(data.from, data.to, data.expected, data.paid, data.count)
             });
         }
         function addRow(from, to, total, paid, count) {
