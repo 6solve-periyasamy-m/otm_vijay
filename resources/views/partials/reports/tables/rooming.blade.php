@@ -28,7 +28,7 @@
                 <td>
                     @php /** @var \App\Models\Order\OrderCustomer $traveller */ @endphp
                     @foreach($row->travellers as $traveller)
-                        {{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}@isset($traveller->customer?->email_address) ({{ $traveller->customer?->email_address }})@endisset,
+                        {{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }},
                     @endforeach
                 </td>
             </tr>
