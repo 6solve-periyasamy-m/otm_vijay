@@ -94,6 +94,10 @@
                         <span>Export ATOL Certificates</span>
                     </a>
                 @endif
+                <a class="btn btn-secondary" href="{{route('tours.rooming', ['tour' => $tour,])}}">
+                    <i class="icon-list"></i>
+                    <span>View Rooming</span>
+                </a>
             </div>
         </div>
     </div>
