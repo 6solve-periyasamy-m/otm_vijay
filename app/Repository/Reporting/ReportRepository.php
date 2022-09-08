@@ -11,6 +11,7 @@ use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use App\Repository\Interfaces\HasRoomingList;
 use Illuminate\Support\Collection;
 
 class ReportRepository
@@ -301,13 +302,13 @@ class ReportRepository
     }
 
     /**
-     * @param Collection|OrderAccommodation[] $orderAccommodations
+     * @param HasRoomingList $roomingList
      * @return array
      */
-    public static function generateRoomingList(Collection|array $orderAccommodations): array
+    public static function generateRoomingList(HasRoomingList $roomingList): array
     {
         $data = [];
-        foreach ($orderAccommodations as $orderAccommodation) {
+        foreach ($roomingList->getRoomingList() as $orderAccommodation) {
             $row = collect();
             $row->tour = $orderAccommodation->accommodationInventoryTour->tour->name;
             $row->hotel = $orderAccommodation->accommodation->name;

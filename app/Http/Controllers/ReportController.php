@@ -113,19 +113,10 @@ class ReportController extends Controller
         return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
     }
 
-    public function getRoomingReport() {
-        $data = OrderAccommodation::with(
-            'group',
-            'group.orderCustomers',
-            'group.orderCustomers.customer',
-            'accommodationInventoryTour',
-            'accommodationInventoryTour.inventory',
-            'accommodationInventoryTour.accommodationInventory.accommodation',
-            'accommodationInventoryTour.accommodationInventory.roomType',
-            'accommodationInventoryTour.accommodationInventory.boardType',
-        )->get();
+    public function getRoomingReport()
+    {
         return view('pages.reports.view', ['tableView' => 'partials.reports.tables.rooming',
-            'data' => ReportRepository::generateRoomingList($data),'title' => 'Merchandise Orders',
+            'data' => ReportRepository::generateRoomingList(\App\Models\Tour\Tour::find(1)->repository),'title' => 'Merchandise Orders',
             'xlsxExport' => route('reports.merchandise.export', ['extension' => 'xlsx']),
             'csvExport' => route('reports.merchandise.export', ['extension' => 'csv']),]);
     }
