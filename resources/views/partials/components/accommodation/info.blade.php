@@ -29,7 +29,7 @@
             @endcan
             <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
                 <i class="icon-list"></i>
-                <span>View Rooming</span>
+                <span>View Rooming List</span>
             </a>
         </div>
     </div>

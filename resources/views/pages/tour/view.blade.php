@@ -96,7 +96,7 @@
                 @endif
                 <a class="btn btn-secondary" href="{{route('tours.rooming', ['tour' => $tour,])}}">
                     <i class="icon-list"></i>
-                    <span>View Rooming</span>
+                    <span>View Rooming List</span>
                 </a>
             </div>
         </div>
