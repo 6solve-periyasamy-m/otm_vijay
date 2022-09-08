@@ -11,6 +11,7 @@ use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Reporting\ReportRepository;
+use App\Repository\Reporting\RoomingReportRepository;
 use Excel;
 
 class ReportController extends Controller
@@ -115,9 +116,11 @@ class ReportController extends Controller
 
     public function getRoomingReport()
     {
-        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.rooming',
-            'data' => ReportRepository::generateRoomingList(\App\Models\Tour\Tour::find(1)->repository),'title' => 'Merchandise Orders',
-            'xlsxExport' => route('reports.merchandise.export', ['extension' => 'xlsx']),
-            'csvExport' => route('reports.merchandise.export', ['extension' => 'csv']),]);
+        return RoomingReportRepository::viewReport(new RoomingReportRepository(), 'reports.rooming.export');
+    }
+
+    public function exportRoomingReport(string $extension = 'xlsx')
+    {
+        return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension);
     }
 }
