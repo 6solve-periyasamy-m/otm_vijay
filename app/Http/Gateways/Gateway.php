@@ -2,17 +2,30 @@
 
 namespace App\Http\Gateways;
 
+use App\Http\Gateways\Storage\LineItem;
+use App\Models\Order\Payment\PaymentIntention;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 abstract class Gateway
 {
-    public static abstract function checkout(array $items, string $reference, string $paymentType, int $customerId, string $redirect, ?array $intentionData = null);
+    /**
+     * @param LineItem[] $items
+     * @param PaymentIntention $intention
+     * @param string|null $success The redirect URL for
+     * @return string The URL for the checkout gateway
+     */
+    public abstract function checkout(array $items, PaymentIntention $intention, string $success = null): string;
 
-    public static function success(Request $request) {
+    public function success(Request $request): Factory|View|Application
+    {
         return view('pages.payments.success');
     }
 
-    public static function cancelled(Request $request) {
+    public function cancelled(Request $request): Factory|View|Application
+    {
         return view('pages.payments.cancelled');
     }
 }
