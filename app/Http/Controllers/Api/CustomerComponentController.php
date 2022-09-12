@@ -104,7 +104,7 @@ class CustomerComponentController extends Controller
         $redirect = setting('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer,]));
 
         $item = new LineItem($upgrade->description, $upgrade->upgrade->tour_sales_price);
-        $intention = PaymentIntention::build($orderCustomer->customer, $orderCustomer->order->booking_reference, 'Installment');
+        $intention = PaymentIntention::build($orderCustomer->customer, $orderCustomer->order->booking_reference, 'Installment', $data);
 
         return response()->json(['success' => true, 'location' => (new StripeGateway($redirect))->checkout([$item,], $intention, $redirect)]);
     }
