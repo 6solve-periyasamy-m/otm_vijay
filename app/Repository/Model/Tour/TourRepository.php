@@ -16,6 +16,7 @@ use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
@@ -23,10 +24,12 @@ use Carbon\Carbon;
 class TourRepository extends ComponentPackageRepository implements HasStockControl
 {
     private Tour $tour;
+    private TourCostingRepository $costing;
 
     public function __construct(Tour $tour)
     {
         $this->tour = $tour;
+        $this->costing = new TourCostingRepository($tour);
     }
 
     public static function create(array $data): Tour
@@ -320,5 +323,10 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $total += $order->remaining;
         }
         return $total;
+    }
+
+    public function getCosting(): TourCostingRepository
+    {
+        return $this->costing;
     }
 }

@@ -548,6 +548,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::post('/create', [\App\Http\Controllers\Models\TourController::class, 'store'])->name('tours.store')->middleware('bouncer:Tour\Tour,create');
         Route::prefix('{tour}')->group(function () {
             Route::get('/', [\App\Http\Controllers\Models\TourController::class, 'view'])->name('tours.view')->middleware('bouncer:Tour\Tour,read');
+            Route::get('/costing', [\App\Http\Controllers\Models\TourController::class, 'costing'])->name('tours.costing')->middleware('bouncer:Tour\Tour,read');
             Route::get('/update', [\App\Http\Controllers\Models\TourController::class, 'edit'])->name('tours.edit')->middleware('bouncer:Tour\Tour,update');
             Route::post('/update', [\App\Http\Controllers\Models\TourController::class, 'update'])->name('tours.update')->middleware('bouncer:Tour\Tour,update');
             Route::get('/duplicate', [\App\Http\Controllers\Models\TourController::class, 'duplicate'])->name('tours.duplicate')->middleware('bouncer:Tour\Tour,create');

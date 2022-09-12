@@ -58,6 +58,11 @@ class TourController extends Controller
         return view('pages.tour.view', TourRepository::getTourDetails($tour->id));
     }
 
+    public function costing(Tour $tour)
+    {
+        return view('pages.tour.costing', ['tour' => $tour,]);
+    }
+
     public function duplicate(Tour $tour)
     {
         $newTour = $tour->clone();

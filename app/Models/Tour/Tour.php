@@ -73,7 +73,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $remaining_installment
  * @property-read float $remaining_percentage
  * @property-read TourRepository $repository
- * @property-read Collection $templates
+ * @property-read Collection|AccommodationInventoryTour[] $templates
  * @property-read Collection|MerchandiseInventoryTour[] $merchandise
  * @property-read int|null $merchandise_count
  * @property-read Collection|Order[] $orders
