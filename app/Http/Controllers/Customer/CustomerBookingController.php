@@ -183,6 +183,6 @@ class CustomerBookingController extends Controller
         $max = min($booking->repository->getTotalCost(), 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', 0, $redirect);
+        return StripeGateway::checkoutOld([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', 0, $redirect);
     }
 }

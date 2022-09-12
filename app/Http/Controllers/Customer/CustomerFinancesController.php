@@ -29,7 +29,7 @@ class CustomerFinancesController extends Controller
         }
         $redirect = setting('payment.success.redirect', url()->previous(route('customer.finances')));
 
-        return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect);
+        return StripeGateway::checkoutOld([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect);
     }
 
     public function showInvoice(string $reference)

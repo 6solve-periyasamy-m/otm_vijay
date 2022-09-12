@@ -101,7 +101,7 @@ class CustomerComponentController extends Controller
         ];
         $redirect = setting('purchase.upgrade.success.redirect', route('customer.extras', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer,]));
 
-        $gateway = StripeGateway::checkout([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
+        $gateway = StripeGateway::checkoutOld([['name' => $upgrade->description, 'cost' => $upgrade->upgrade->tour_sales_price, 'quantity' => 1],],
             $orderCustomer->order->booking_reference, 'Installment', $orderCustomer->customer->id, $redirect, $data);
         return response()->json(['success' => true, 'location' => $gateway->headers->get('Location')]);
     }

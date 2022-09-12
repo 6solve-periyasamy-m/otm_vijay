@@ -158,7 +158,7 @@ class BookingController extends Controller
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
 
-        return StripeGateway::checkout([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', $customer->id, $redirect);
+        return StripeGateway::checkoutOld([['name' => "Deposit for Booking from $customer->full_name", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', $customer->id, $redirect);
     }
 
     /**

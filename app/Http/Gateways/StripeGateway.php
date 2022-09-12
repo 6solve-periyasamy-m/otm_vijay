@@ -8,7 +8,7 @@ use Stripe\Checkout\Session;
 
 class StripeGateway
 {
-    public static function checkout(array $items, string $reference, string $paymentType, int $customerId, string $redirect, ?array $intentionData = null)
+    public static function checkoutOld(array $items, string $reference, string $paymentType, int $customerId, string $redirect, ?array $intentionData = null)
     {
         $lineItems = [];
         foreach ($items as $item) {

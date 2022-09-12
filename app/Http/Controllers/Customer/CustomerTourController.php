@@ -127,7 +127,7 @@ class CustomerTourController extends Controller
 
         $redirect = setting('purchase.addon.success.redirect', url()->previous(route('customer.extras', ['reference' => $reference, 'customer' => $customer,])));
 
-        return StripeGateway::checkout(
+        return StripeGateway::checkoutOld(
             [['name' => $tourComponent->__toString(), 'cost' => $tourComponent->tour_sales_price, 'quantity' => 1]],
                 $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect, $data);
     }
