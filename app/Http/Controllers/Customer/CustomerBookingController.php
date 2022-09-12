@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Customer;
 use App\Exceptions\NotOnTourException;
 use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\Controller;
+use App\Http\Gateways\Storage\LineItem;
 use App\Http\Gateways\StripeGateway;
 use App\Http\Requests\Booking\BookingCustomerRequest;
 use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingGroup;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
@@ -182,7 +184,11 @@ class CustomerBookingController extends Controller
         $min = max($dueToday, 0.3);
         $max = min($booking->repository->getTotalCost(), 999999.99);
         $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
+
+        $item = new LineItem("Deposit for Booking from {$booking->leadTraveller->full_name}", $request->amount);
+        $intention = PaymentIntention::build($booking->leadTraveller->customer, $booking->token, 'Deposit');
+
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return StripeGateway::checkoutOld([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', 0, $redirect);
+        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, $redirect));
     }
 }

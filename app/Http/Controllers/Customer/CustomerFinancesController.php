@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Gateways\Storage\LineItem;
 use App\Http\Gateways\StripeGateway;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
 use Illuminate\Http\Request;
@@ -29,7 +31,10 @@ class CustomerFinancesController extends Controller
         }
         $redirect = setting('payment.success.redirect', url()->previous(route('customer.finances')));
 
-        return StripeGateway::checkoutOld([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect);
+        $item = new LineItem("Installment Payment ({$order->booking_reference})", $amount);
+        $intention = PaymentIntention::build(CustomerAuthenticationRepository::getCustomer(), $order->booking_reference, 'Installment');
+
+        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, $redirect));
     }
 
     public function showInvoice(string $reference)
