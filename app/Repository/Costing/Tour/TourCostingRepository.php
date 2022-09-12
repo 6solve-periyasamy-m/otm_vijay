@@ -4,6 +4,9 @@ namespace App\Repository\Costing\Tour;
 
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\CostingRepository;
+use App\View\Components\Chart\Donut;
+use Closure;
+use Illuminate\Contracts\View\View;
 
 class TourCostingRepository extends CostingRepository
 {
@@ -82,5 +85,42 @@ class TourCostingRepository extends CostingRepository
     public function getBaseProfit(): float
     {
         return $this->tour->base_price_per_person - $this->getCostOfComponents(['Included']);
+    }
+    
+    public function getInstallmentData(): array
+    {
+        $data = [];
+        foreach ($this->tour->orderInstallments as $orderInstallment) {
+            $date = $orderInstallment->due_on->format('Y-m-d');
+            if (!array_key_exists($date, $data)) {
+                $row = collect();
+                $row->date = $orderInstallment->due_on;
+                $row->count = 0;
+                $row->expected = 0;
+                $row->received = 0;
+                $data[$date] = $row;
+            }
+            $data[$date]->count = $data[$date]->count + 1;
+            $data[$date]->expected = $data[$date]->expected + $orderInstallment->calculated_amount;
+            $data[$date]->received = $data[$date]->received + $orderInstallment->repository->getAmountPaid();
+        }
+        ksort($data);
+        return $data;
+    }
+
+    public function getTourRevenueDonut(): Closure|View|string
+    {
+        $potential = $this->tour->repository->getPotentialRevenue();
+        $received = $this->tour->repository->getReceivedRevenue();
+        $remaining = $this->tour->repository->getRemainingRevenue();
+        $labels = ['Received', 'Remaining',];
+        $values = [$received, $remaining,];
+        $colors = ['#090', '#900',];
+        if ($potential > -1) {
+            $labels[] = 'Potential';
+            $values[] = $potential-$remaining-$received;
+            $colors[] = '#AAA';
+        }
+        return (new Donut($this->tour->name . ' Revenue', $labels, $values, $colors))->render();
     }
 }

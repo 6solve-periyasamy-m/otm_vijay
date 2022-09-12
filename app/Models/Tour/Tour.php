@@ -10,6 +10,7 @@ use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Order;
+use App\Models\Order\OrderInstallment;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
 use App\Repository\Model\Tour\TourRepository;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -75,6 +77,7 @@ use Illuminate\Support\Carbon;
  * @property-read TourRepository $repository
  * @property-read Collection|AccommodationInventoryTour[] $templates
  * @property-read Collection|MerchandiseInventoryTour[] $merchandise
+ * @property-read Collection|OrderInstallment[] $orderInstallments All order-installments from non-cancelled orders
  * @property-read int|null $merchandise_count
  * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
@@ -197,6 +200,11 @@ class Tour extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
+    }
+
+    public function orderInstallments(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderInstallment::class, Order::class, 'tour_id', 'order_id')->where('cancelled', '=', false);
     }
 
     public function getUsedStock(): int

@@ -15,7 +15,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
 @section('header-script')
     <script>
         $(document).ready(function () {
-
+            $('.installment-revenue-table').DataTable({fixedHeader: true,});
         });
     </script>
 @endsection
@@ -62,37 +62,81 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <td></td>
-                    <th scope="col" class="fw-bold">Cost to Company</th>
-                    <th scope="col" class="fw-bold">Margin</th>
-                    <th scope="col" class="fw-bold">Cost to Customer</th>
-                    <th scope="col" class="fw-bold">Profit</th>
+                    <td style="width: 20%"></td>
+                    <th scope="col" class="fw-bold text-center" style="width: 20%">Cost to Company</th>
+                    <th scope="col" class="fw-bold text-center" style="width: 20%">Margin</th>
+                    <th scope="col" class="fw-bold text-center" style="width: 20%">Cost to Customer</th>
+                    <th scope="col" class="fw-bold text-center" style="width: 20%">Profit</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <th scope="row">Base Package</th>
-                    <td>{{ f_currency($basicCtC) }}</td>
-                    <td>{{ $basicCtC > 0 ? sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) . '%' : 'No Cost'}}</td>
-                    <td>{{ f_currency($tour->base_price_per_person) }}</td>
-                    <td>{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
+                    <th scope="row" style="width: 20%">Base Package</th>
+                    <td class="text-center" style="width: 20%">{{ f_currency($basicCtC) }}</td>
+                    <td class="text-center" style="width: 20%">{{ $basicCtC > 0 ? sigfig((($tour->base_price_per_person-$basicCtC)/$basicCtC)*100) . '%' : 'No Cost'}}</td>
+                    <td class="text-center" style="width: 20%">{{ f_currency($tour->base_price_per_person) }}</td>
+                    <td class="text-center" style="width: 20%">{{ f_currency($tour->base_price_per_person - $basicCtC) }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Average (Approx.)</th>
-                    <td>{{ f_currency($averageCtC) }}</td>
-                    <td>{{$averageCtC > 0 ? sigfig((($averageCustomer - $averageCtC)/$averageCtC)*100) . '%' : 'No Cost' }}</td>
-                    <td>{{ f_currency($averageCustomer) }}</td>
-                    <td>{{ f_currency($averageCustomer - $averageCtC) }}</td>
+                    <th scope="row" style="width: 20%">Full Package - All add-ons & Upgrades</th>
+                    <td class="text-center" style="width: 20%">{{ f_currency($fullCtC) }}</td>
+                    <td class="text-center" style="width: 20%">{{ $fullCtC > 0 ? sigfig((($fullCustomer-$fullCtC)/$fullCtC)*100) . '%' : 'No Cost' }}</td>
+                    <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer) }}</td>
+                    <td class="text-center" style="width: 20%">{{ f_currency($fullCustomer - $fullCtC) }}</td>
                 </tr>
                 <tr>
-                    <th scope="row">Full Package</th>
-                    <td>{{ f_currency($fullCtC) }}</td>
-                    <td>{{ $fullCtC > 0 ? sigfig((($fullCustomer-$fullCtC)/$fullCtC)*100) . '%' : 'No Cost' }}</td>
-                    <td>{{ f_currency($fullCustomer) }}</td>
-                    <td>{{ f_currency($fullCustomer - $fullCtC) }}</td>
+                    <th scope="row" style="width: 20%">Average (Median)</th>
+                    <td class="text-center" style="width: 20%">{{ f_currency($averageCtC) }}</td>
+                    <td class="text-center" style="width: 20%">{{$averageCtC > 0 ? sigfig((($averageCustomer - $averageCtC)/$averageCtC)*100) . '%' : 'No Cost' }}</td>
+                    <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer) }}</td>
+                    <td class="text-center" style="width: 20%">{{ f_currency($averageCustomer - $averageCtC) }}</td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <hr class="splitter"/>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Expected Installment Revenue</h4>
+                    </div>
+                    <table class="table table-striped installment-revenue-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Count</th>
+                            <th scope="col">Expected</th>
+                            <th scope="col">Paid</th>
+                            <th scope="col">Remaining</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($tour->repository->getCosting()->getInstallmentData() as $row)
+                            <tr>
+                                <td data-order="{{ $row->date->unix() }}">{{ f_date($row->date) }}</td>
+                                <td>{{ $row->count }}</td>
+                                <td>{{ f_currency($row->expected) }}</td>
+                                <td>{{ f_currency($row->received) }}</td>
+                                <td>{{ f_currency($row->expected - $row->received) }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Potential Revenue</h4>
+                    </div>
+                    {{ $tour->repository->getCosting()->getTourRevenueDonut() }}
+                </div>
+            </div>
         </div>
     </div>
 @endsection

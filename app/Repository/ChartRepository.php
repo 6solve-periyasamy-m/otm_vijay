@@ -27,20 +27,4 @@ class ChartRepository
         }
         return (new Line($name, $labels, $values))->render();
     }
-
-    public static function getTourRevenueDonut(Tour $tour): Closure|View|string
-    {
-        $potential = $tour->repository->getPotentialRevenue();
-        $received = $tour->repository->getReceivedRevenue();
-        $remaining = $tour->repository->getRemainingRevenue();
-        $labels = ['Received', 'Remaining',];
-        $values = [$received, $remaining,];
-        $colors = ['#090', '#900',];
-        if ($potential > -1) {
-            $labels[] = 'Potential';
-            $values[] = $potential-$remaining-$received;
-            $colors[] = '#AAA';
-        }
-        return (new Donut($tour->name . ' Revenue', $labels, $values, $colors))->render();
-    }
 }
