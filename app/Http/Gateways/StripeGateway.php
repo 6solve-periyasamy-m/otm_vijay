@@ -6,7 +6,7 @@ use App\Models\Customer\Customer;
 use App\Models\Order\Payment\PaymentIntention;
 use Stripe\Checkout\Session;
 
-class StripeGateway extends Gateway
+class StripeGateway
 {
     public static function checkout(array $items, string $reference, string $paymentType, int $customerId, string $redirect, ?array $intentionData = null)
     {
