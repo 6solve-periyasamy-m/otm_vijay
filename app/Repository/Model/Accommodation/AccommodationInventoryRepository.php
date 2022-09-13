@@ -11,12 +11,13 @@ use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\QuoteComponentRepository;
+use App\Repository\Interfaces\HasRoomingList;
 use App\Repository\Model\Quote\Component\QuoteAccommodationRepository;
 use App\Repository\Traits\Component\IsAccommodation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class AccommodationInventoryRepository extends InventoryRepository
+class AccommodationInventoryRepository extends InventoryRepository implements HasRoomingList
 {
     use IsAccommodation;
 
@@ -128,5 +129,19 @@ class AccommodationInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price;
+    }
+
+    public function getRoomingList(): Collection|array
+    {
+        return $this->inventory->orderComponents()->with(
+            'group',
+            'group.orderCustomers',
+            'group.orderCustomers.customer',
+            'accommodationInventoryTour',
+            'accommodationInventoryTour.inventory',
+            'accommodationInventoryTour.accommodationInventory.accommodation',
+            'accommodationInventoryTour.accommodationInventory.roomType',
+            'accommodationInventoryTour.accommodationInventory.boardType'
+        )->get();
     }
 }

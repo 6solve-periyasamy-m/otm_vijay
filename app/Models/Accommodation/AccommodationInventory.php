@@ -2,6 +2,7 @@
 
 namespace App\Models\Accommodation;
 
+use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Model\Accommodation\AccommodationInventoryRepository;
 use Database\Factories\Accommodation\AccommodationInventoryFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -12,9 +13,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * App\Models\Accommodation\AccommodationInventory
@@ -45,6 +48,7 @@ use Illuminate\Support\Carbon;
  * @property-read int $available_stock The amount of stock that is available to be sold
  * @property-read RoomType $roomType
  * @property-read Collection|AccommodationInventoryTour[] $tourComponents
+ * @property-read Collection|OrderAccommodation[] $orderComponents
  * @property-read int|null $tour_components_count
  * @property-read AccommodationInventoryRepository $repository
  * @method static AccommodationInventoryFactory factory(...$parameters)
@@ -74,7 +78,7 @@ use Illuminate\Support\Carbon;
  */
 class AccommodationInventory extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
     protected $fillable = ['accommodation_id', 'room_type_id', 'board_type_id', 'check_in', 'check_in_time_confirmed', 'check_out', 'check_out_time_confirmed', 'fit_selectable', 'stock', 'purchase_price', 'sales_price', 'notes', 'currency_id'];
     protected array $cascadeDeletes = ['tourComponents'];
@@ -155,6 +159,11 @@ class AccommodationInventory extends Model
     public function tourComponents(): HasMany
     {
         return $this->hasMany(AccommodationInventoryTour::class, 'accommodation_inventory_id');
+    }
+
+    public function orderComponents(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'accommodation_inventory_id', 'accommodation_inventory_tour_id');
     }
 
     public function __toString(): string

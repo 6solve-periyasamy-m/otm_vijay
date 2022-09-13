@@ -53,7 +53,16 @@
                     <td>{{ f_currency($accommodationInventory->purchase_price) }}</td>
                     <td>{{ f_currency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
-                    <td class="actions-3">
+                    <td class="actions-4">
+                        @can('read', \App\Models\Accommodation\AccommodationInventory::class)
+                            <a href="{{route('accommodation-inventories.rooming', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
+                                <i class="icon-list"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-list"></i>
+                            </span>
+                        @endcan
                         @can('create', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                                 <i class="icon-layers"></i>
