@@ -19,6 +19,8 @@ abstract class Gateway
      */
     public abstract function checkout(array $items, PaymentIntention $intention, string $success = null): string;
 
+    public abstract function process(string $reference, float $amount, string $created = null): void;
+
     public function success(Request $request): Factory|View|Application
     {
         return view('pages.payments.success');
