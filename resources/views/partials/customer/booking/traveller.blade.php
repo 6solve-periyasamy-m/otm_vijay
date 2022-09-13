@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group col-md-6">
-            <label class="col-md-12 mb-0">Room Sharing Group</label>
+            <label class="col-md-12 mb-0">Room</label>
             <select name="additional[{{ $number }}][group_id]" class="w-100">
                 @for($group = 1; $group < 31; $group++)
                     <option value="{{ $group }}">Room {{ $group }}</option>

@@ -18,6 +18,7 @@
                     <script>alert('Since you are logged into the dashboard, we have filled your details for you :)');</script>
                 @endif
                 <h2 class="col-md-12 mb-0">Lead Booker Details</h2>
+                Having trouble with this form? You can find our contact details by clicking the <span class="icon-menu"></span> icon in the top left corner
             </div>
         </div>
         <div class="card">
@@ -56,7 +57,9 @@
                 </x-customer.input>
 
                 <div class="form-group col-md-12">
-                    Sharing is designated by the selection of a room, selecting the same room as another traveller indicates that the room will be shared by those travellers
+                    Selecting the same room as another traveller indicates that the room will be shared by those individuals.
+                    <br />
+                    For example, two people sharing a twin/double room should select <span class="fw-bold">Ideal Room Type</span> followed by <span class="fw-bold">Room 1</span>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="col-md-12 mb-0">Ideal Room Type</label>
@@ -69,7 +72,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="col-md-12 mb-0">Room Sharing Group</label>
+                    <label class="col-md-12 mb-0">Room</label>
                     <select name="lead_group" class="w-100">
                         @for($group = 1; $group < 31; $group++)
                             <option value="{{ $group }}">Room {{ $group }}</option>
