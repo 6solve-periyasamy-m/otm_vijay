@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Models;
 use App\Http\Controllers\Controller;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Order\AtolRepository;
+use App\Repository\Reporting\RoomingReportRepository;
 use App\Repository\TourRepository;
 use Illuminate\Http\Request;
 
@@ -61,6 +62,16 @@ class TourController extends Controller
     public function costing(Tour $tour)
     {
         return view('pages.tour.costing', ['tour' => $tour,]);
+    }
+
+    public function rooming(Tour $tour)
+    {
+        return RoomingReportRepository::viewReport($tour->repository, 'tours.rooming.export', ['tour' => $tour,]);
+    }
+
+    public function exportRooming(Tour $tour, string $extension)
+    {
+        return RoomingReportRepository::exportReport($tour->repository, $extension);
     }
 
     public function duplicate(Tour $tour)

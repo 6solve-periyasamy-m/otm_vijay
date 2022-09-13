@@ -4,6 +4,8 @@ namespace App\Models\Accommodation;
 
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
+use App\Models\Order\Component\OrderAccommodation;
+use App\Repository\Model\Accommodation\AccommodationRepository;
 use Database\Factories\Accommodation\AccommodationFactory;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 
 /**
@@ -33,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property-read Address $address
  * @property-read Currency|null $currency
+ * @property-read AccommodationRepository $repository
  * @property-read Collection|AccommodationInventory[] $inventory List of inventory items for this accommodation
  * @property-read int|null $inventory_count
  * @method static AccommodationFactory factory(...$parameters)
@@ -56,11 +61,13 @@ use Illuminate\Support\Carbon;
  */
 class Accommodation extends Model
 {
-    use HasFactory, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes, HasRelationships;
 
     protected $fillable = ['name', 'description', 'audit_date', 'address_id', 'currency_id', 'image_url'];
     protected array $cascadeDeletes = ['inventory'];
     protected $casts = ['audit_date' => 'date',];
+
+    private AccommodationRepository $internal_repository;
 
     public static function getValidationRules(): array
     {
@@ -87,8 +94,19 @@ class Accommodation extends Model
         return $this->belongsTo(Currency::class, 'currency_id');
     }
 
+    public function orderComponents(): HasManyDeep
+    {
+        return $this->hasManyDeep(OrderAccommodation::class, [AccommodationInventory::class, AccommodationInventoryTour::class], ['accommodation_id', 'accommodation_inventory_id', 'accommodation_inventory_tour_id']);
+    }
+
+    public function getRepositoryAttribute(): AccommodationRepository
+    {
+        isset($this->internal_repository) || $this->internal_repository = new AccommodationRepository($this);
+        return $this->internal_repository;
+    }
+
     public function __toString(): string
     {
-        return "{$this->name} ({$this->address->region}, {$this->address->country})";
+        return $this->repository->__toString();
     }
 }

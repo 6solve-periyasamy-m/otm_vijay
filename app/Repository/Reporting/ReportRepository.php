@@ -5,11 +5,13 @@ namespace App\Repository\Reporting;
 use App\Helpers\QuarterHelper;
 use App\Models\Booking\Booking;
 use App\Models\Location\Address;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Order\Component\OrderMerchandise;
 use App\Models\Order\Order;
 use App\Models\Tour\Tour;
+use App\Repository\Interfaces\HasRoomingList;
 use Illuminate\Support\Collection;
 
 class ReportRepository

@@ -16,12 +16,14 @@ use App\Models\Transport\TransportInventoryTourUpgrade;
 use App\Repository\Abstracts\ComponentPackageRepository;
 use App\Repository\Abstracts\InventoryTourRepository;
 use App\Repository\Abstracts\ModelRepository;
+use App\Repository\Interfaces\HasRoomingList;
 use App\Repository\Costing\Tour\TourCostingRepository;
 use App\Repository\Interfaces\HasStockControl;
 use App\Repository\RoomingRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
-class TourRepository extends ComponentPackageRepository implements HasStockControl
+class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList
 {
     private Tour $tour;
     private TourCostingRepository $costing;
@@ -300,6 +302,20 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         ]);
         $this->tour->paymentInstallments()->save($installment);
         return $installment;
+    }
+
+    public function getRoomingList(): Collection|array
+    {
+        return $this->tour->orderAccommodation()->with(
+            'group',
+            'group.orderCustomers',
+            'group.orderCustomers.customer',
+            'accommodationInventoryTour',
+            'accommodationInventoryTour.inventory',
+            'accommodationInventoryTour.accommodationInventory.accommodation',
+            'accommodationInventoryTour.accommodationInventory.roomType',
+            'accommodationInventoryTour.accommodationInventory.boardType'
+        )->get();
     }
 
     public function getPotentialRevenue(): float

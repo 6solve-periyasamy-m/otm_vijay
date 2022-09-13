@@ -9,6 +9,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Models\Transport\TransportInventory;
@@ -180,6 +181,11 @@ class Tour extends Model
     public function activityInventoryTours(): HasMany
     {
         return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
+    }
+
+    public function orderAccommodation(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'tour_id', 'accommodation_inventory_tour_id');
     }
 
     public function transportInventoryTours(): HasMany

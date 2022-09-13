@@ -304,6 +304,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation\Accommodation,update');
             Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation\Accommodation,update');
             Route::post('/delete', [AccommodationController::class, 'destroy'])->name('accommodations.delete')->middleware('bouncer:Accommodation\Accommodation,delete');
+            Route::get('/rooming', [AccommodationController::class, 'rooming'])->name('accommodations.rooming')->middleware('bouncer:Accommodation\Accommodation,read');
+            Route::get('/rooming/{extension}', [AccommodationController::class, 'exportRooming'])->name('accommodations.rooming.export')->middleware('bouncer:Accommodation\Accommodation,read');
 
             Route::prefix('inventory')->group(function () {
                 Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create')->middleware('bouncer:Accommodation\AccommodationInventory,create');
@@ -314,6 +316,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                     Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:Accommodation\AccommodationInventory,update');
                     Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:Accommodation\AccommodationInventory,delete');
                     Route::get('/duplicate', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate')->middleware('bouncer:Accommodation\AccommodationInventory,create');
+                    Route::get('/rooming', [AccommodationInventoryController::class, 'rooming'])->name('accommodation-inventories.rooming')->middleware('bouncer:Accommodation\AccommodationInventory,read');
+                    Route::get('/rooming/{extension}', [AccommodationInventoryController::class, 'exportRooming'])->name('accommodation-inventories.rooming.export')->middleware('bouncer:Accommodation\AccommodationInventory,read');
                 });
 
             });
@@ -558,6 +562,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
                 return view('pages.tour.components.add', ['tour' => $tour,]);
             })->name('tours.add')->middleware('bouncer:Tour\Tour,update');
             Route::get('/fulfil', [\App\Http\Controllers\Models\TourController::class, 'fulfil'])->name('tours.fulfil')->middleware('bouncer:Merchandise\Merchandise,update');
+            Route::get('/rooming', [\App\Http\Controllers\Models\TourController::class, 'rooming'])->name('tours.rooming')->middleware('bouncer:Tour\Tour,read');
+            Route::get('/rooming/{extension}', [\App\Http\Controllers\Models\TourController::class, 'exportRooming'])->name('tours.rooming.export')->middleware('bouncer:Tour\Tour,read');
             Route::prefix('inventory')->group(function () {
                 Route::prefix('accommodation')->group(function () {
                     Route::get('/create', [AccommodationInventoryTourController::class, 'create'])->name('accommodation-inventory-tours.create')->middleware('bouncer:Accommodation\AccommodationInventoryTour,create');
@@ -831,6 +837,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         Route::get('/reminders/{max?}/{min?}', [ReportController::class, 'getOrderRemindersReport'])->name('reports.reminders');
         Route::get('/merchandise', [ReportController::class, 'getOrderMerchandiseReport'])->name('reports.merchandise');
         Route::get('/merchandise/{extension}', [ReportController::class, 'exportOrderMerchandiseReport'])->name('reports.merchandise.export');
+        Route::get('/rooming', [ReportController::class, 'getRoomingReport'])->name('reports.rooming');
+        Route::get('/rooming/{extension}', [ReportController::class, 'exportRoomingReport'])->name('reports.rooming.export');
         Route::prefix('atol')->name('reports.atol.')->group(function () {
             Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
             Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');

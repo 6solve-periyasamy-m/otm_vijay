@@ -19,13 +19,18 @@
             <p>Currency</p>
             <h6 class="fw-bold">{{ $accommodation->currency }}</h6>
         </div>
-        @can('update', \App\Models\Accommodation\Accommodation::class)
+
         <div class="col-12">
+            @can('update', \App\Models\Accommodation\Accommodation::class)
             <a class="btn btn-success" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
                 <i class="icon-note"></i>
                 <span>Edit Accommodation</span>
             </a>
+            @endcan
+            <a class="btn btn-secondary" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
+                <i class="icon-list"></i>
+                <span>View Rooming List</span>
+            </a>
         </div>
-        @endcan
     </div>
 </div>
