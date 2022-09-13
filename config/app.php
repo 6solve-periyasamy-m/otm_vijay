@@ -249,7 +249,13 @@ return [
         'stripe' => [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
-        ]
+        ],
+        'felloh' => [
+            'public' => env('FELLOH_PUBLIC_KEY'),
+            'private' => env('FELLOH_PRIVATE_KEY'),
+            'organisation' => env('FELLOH_ORGANISATION'),
+            'env' => env('FELLOH_ENVIRONMENT', 'api')
+        ],
     ],
 
     'user-limit' => env('USER_LIMIT', 0),
