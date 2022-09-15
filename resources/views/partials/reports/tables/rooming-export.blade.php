@@ -11,6 +11,7 @@
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
             <th scope="col" colspan="{{$data->largest}}">Occupants</th>
+            <th scope="col" colspan="{{$data->largest}}">Accommodation Notes</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,9 @@
                 {{-- Exporter strips 0 values for some reason, hence formatting with decimal place --}}
                 <td>{{ $row->occupants == 0 ? number_format(0, 2) : $row->occupants }}</td>
                 <td>{{ $row->empty_beds == 0 ? number_format(0, 2) : $row->empty_beds }}</td>
+                @foreach($row->travellers as $traveller)
+                    <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
+                @endforeach
                 @foreach($row->travellers as $traveller)
                     <td>{{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }}</td>
                 @endforeach
