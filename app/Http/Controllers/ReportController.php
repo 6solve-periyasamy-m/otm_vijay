@@ -92,8 +92,8 @@ class ReportController extends Controller
     public function getOrderRemindersReport(int $max = 7, int $min = -1000) {
         return view('pages.reports.reminders', ['tableView' => 'partials.reports.tables.reminders',
             'data' => ReportRepository::getRemindersReport($max, $min),'title' => 'Order Reminders',
-            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx']),
-            'csvExport' => route('reports.reminders.export', ['extension' => 'csv']),
+            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx', 'max' => $max, 'min' => $min,]),
+            'csvExport' => route('reports.reminders.export', ['extension' => 'csv', 'max' => $max, 'min' => $min,]),
             'min' => $min, 'max' => $max,]);
     }
 
