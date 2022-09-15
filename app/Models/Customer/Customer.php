@@ -11,6 +11,7 @@ use App\Models\System\CustomerApiToken;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use Database\Factories\Customer\CustomerFactory;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Eloquent;
 use Gravatar;
 use Illuminate\Database\Eloquent\Builder;
@@ -152,6 +153,7 @@ class Customer extends Authenticatable
     use HasFactory;
     use Notifiable;
     use Billable;
+    use CascadeSoftDeletes;
 
     protected string $guard = 'customer';
 
@@ -164,6 +166,7 @@ class Customer extends Authenticatable
     protected $casts = ['date_of_birth' => 'date', 'passport_issue_date' => 'date', 'passport_expiry_date' => 'date',];
 
     protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
+    protected array $cascadeDeletes = ['quoteProspects',];
 
     public static function getValidationRules(): array
     {
