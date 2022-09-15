@@ -119,7 +119,7 @@ class FlightInventoryRepository extends InventoryRepository
     public function addToQuote(Quote $quote, string $tourComponentType, float $price = -1): ?QuoteFlightRepository
     {
         $inventoryTour = QuoteFlight::make([
-            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
+            'tour_sales_price' => $price == -1 ? $this->inventory->sales_price ?? 0 : $price,
             'tour_component_type' => $tourComponentType,
             'quote_id' => $quote->id,
         ]);
