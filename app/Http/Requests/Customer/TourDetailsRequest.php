@@ -21,7 +21,7 @@ class TourDetailsRequest extends FormRequest
         return [
             'travel_insurer' => $this->travel_insurer,
             'policy_number' => $this->policy_number,
-            'order_customer_notes' => $this->order_customer_notes,
+            'external_notes' => $this->order_customer_notes,
             'accommodation_notes' => $this->accommodation_notes,
             'activity_notes' => $this->activity_notes,
             'flight_notes' => $this->flight_notes,
