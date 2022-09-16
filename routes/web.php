@@ -88,7 +88,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('customer.portal');
+    return redirect()->route('dash');
 })->name('homepage');
 
 Route::get('/homepage', function () {
