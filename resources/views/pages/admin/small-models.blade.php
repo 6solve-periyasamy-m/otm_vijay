@@ -1,12 +1,6 @@
 @extends('layout.master')
 
-@php
-    /**
-     * @var \App\Models\Quote\Quote[] $quotes
-     */
-@endphp
-
-@section('title', 'All Quotes')
+@section('title', 'Small Model Manager')
 
 @section('footer-script')
     <script type="text/javascript">
@@ -20,6 +14,11 @@
     <div class="row">
         <div class="col-xl-6">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Accommodation\RoomTypeRepository::class])
+            <hr class="splitter">
+        </div>
+        <div class="col-xl-6">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Accommodation\BoardTypeRepository::class])
+            <hr class="splitter">
         </div>
     </div>
 @endsection

@@ -12,6 +12,11 @@ use Illuminate\Support\Collection;
  */
 class RoomTypeRepository extends SmallModelRepository
 {
+    public static function getName(): string
+    {
+        return 'Room Type';
+    }
+
     /**
      * @param bool $trashed
      * @return RoomType[]|Collection

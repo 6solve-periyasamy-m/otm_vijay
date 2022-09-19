@@ -56,6 +56,7 @@ abstract class SmallModelRepository extends ModelRepository
 
     public static abstract function getCreateUrl(): string|null;
     public static abstract function getAll(bool $trashed = false): array|Collection;
+    public static abstract function getName(): string;
     public abstract function getEditUrl(): string|null;
     public abstract function getDeleteUrl(): string|null;
     public abstract function getRelatedCount(): int;
