@@ -722,6 +722,10 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         return view('pages.dash');
     })->name('dash');
 
+    Route::get('/small-models', function () {
+       return view('pages.admin.small-models');
+    });
+
     Route::prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('events.all')->middleware('bouncer:Tour\Event,read');
         Route::get('/create', [EventController::class, 'create'])->name('events.create')->middleware('bouncer:Tour\Event,create');
