@@ -3,13 +3,17 @@
 namespace App\Models\Activity;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Activity\ActivityTypeRepository;
 use Database\Factories\Activity\ActivityTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -20,6 +24,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|Activity[] $inventories
+ * @property-read ActivityTypeRepository $repository
  * @method static ActivityTypeFactory factory(...$parameters)
  * @method static Builder|ActivityType newModelQuery()
  * @method static Builder|ActivityType newQuery()
@@ -36,12 +42,18 @@ use Illuminate\Support\Carbon;
  */
 class ActivityType extends SimpleModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name',];
+    protected string $repositoryClass = ActivityTypeRepository::class;
 
     public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:activity_types,name',];
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'activity_type_id');
     }
 }

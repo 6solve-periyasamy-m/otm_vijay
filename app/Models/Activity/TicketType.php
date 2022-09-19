@@ -3,10 +3,13 @@
 namespace App\Models\Activity;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Activity\TicketTypeRepository;
 use Database\Factories\Activity\TicketTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -35,12 +38,18 @@ use Illuminate\Support\Carbon;
  */
 class TicketType extends SimpleModel
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRepository;
 
     protected $fillable = ['name',];
+    protected string $repositoryClass = TicketTypeRepository::class;
 
     public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:ticket_types,name',];
+    }
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(ActivityInventory::class, 'ticket_type_id');
     }
 }
