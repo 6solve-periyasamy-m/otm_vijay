@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Merchandise\Variant
@@ -20,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|MerchandiseInventory[] $inventories
  * @method static VariantFactory factory(...$parameters)
  * @method static Builder|Variant newModelQuery()
  * @method static Builder|Variant newQuery()
