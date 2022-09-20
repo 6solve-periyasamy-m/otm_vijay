@@ -19,6 +19,8 @@
             <hr class="splitter">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Transport\OperatorRepository::class])
             <hr class="splitter">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\HatSizeRepository::class])
+            <hr class="splitter">
         </div>
         <div class="col-xl-4 v-splitter-r">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\TicketTypeRepository::class])
@@ -26,6 +28,8 @@
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\ActivityTypeRepository::class])
             <hr class="splitter">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Transport\TransportTypeRepository::class])
+            <hr class="splitter">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\TShirtSizeRepository::class])
             <hr class="splitter">
         </div>
         <div class="col-xl-4">
