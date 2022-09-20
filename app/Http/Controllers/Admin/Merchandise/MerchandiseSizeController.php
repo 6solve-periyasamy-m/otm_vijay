@@ -31,4 +31,13 @@ class MerchandiseSizeController extends Controller
         $size->save();
         return view('pages.close');
     }
+
+    public function delete(MerchandiseSize $size)
+    {
+        $deleted = $size->repository->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Cannot delete a size that is in-use',]);
+        }
+        return back();
+    }
 }
