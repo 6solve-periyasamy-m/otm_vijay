@@ -3,6 +3,8 @@
 namespace App\Models\Merchandise;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Merchandise\VariantRepository;
 use Database\Factories\Merchandise\VariantFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +24,7 @@ use Illuminate\Support\Collection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|MerchandiseInventory[] $inventories
+ * @property-read VariantRepository $repository
  * @method static VariantFactory factory(...$parameters)
  * @method static Builder|Variant newModelQuery()
  * @method static Builder|Variant newQuery()
@@ -38,7 +41,7 @@ use Illuminate\Support\Collection;
  */
 class Variant extends SimpleModel
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRepository;
 
     protected $guarded = [];
 

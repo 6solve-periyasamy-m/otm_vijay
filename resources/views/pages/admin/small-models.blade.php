@@ -95,7 +95,13 @@
     </div>
     <div class="row collapse show" id="merchandise">
         <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Merchandise\MerchandiseTypeRepository::class])
+        </div>
+        <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Merchandise\MerchandiseSizeRepository::class])
+        </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Merchandise\VariantRepository::class])
         </div>
     </div>
     <div class="card">

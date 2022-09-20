@@ -3,6 +3,8 @@
 namespace App\Models\Merchandise;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Merchandise\MerchandiseTypeRepository;
 use Database\Factories\Merchandise\MerchandiseTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +24,7 @@ use Illuminate\Support\Collection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Merchandise[] $merchandise
+ * @property-read MerchandiseTypeRepository $repository
  * @method static MerchandiseTypeFactory factory(...$parameters)
  * @method static Builder|MerchandiseType newModelQuery()
  * @method static Builder|MerchandiseType newQuery()
@@ -38,7 +41,7 @@ use Illuminate\Support\Collection;
  */
 class MerchandiseType extends SimpleModel
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRepository;
 
     protected $guarded = [];
 
