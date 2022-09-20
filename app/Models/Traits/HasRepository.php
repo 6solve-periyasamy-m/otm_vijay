@@ -10,7 +10,8 @@ trait HasRepository
 
     public function getRepositoryAttribute()
     {
-        isset($this->internal_repository) || $this->internal_repository = new $this->repositoryClass($this);
+        $repo = $this->repositoryClass ?? '\\App\\Repository\\Model\\' . str_replace('App\\Models\\', '', self::class) . 'Repository';
+        isset($this->internal_repository) || $this->internal_repository = new $repo($this);
         return $this->internal_repository;
     }
 }

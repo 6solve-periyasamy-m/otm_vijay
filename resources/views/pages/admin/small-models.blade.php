@@ -25,6 +25,10 @@
             <hr class="splitter">
         </div>
         <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Flight\AirlineRepository::class])
+            <hr class="splitter">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Flight\AirportRepository::class])
+            <hr class="splitter">
         </div>
     </div>
 @endsection
