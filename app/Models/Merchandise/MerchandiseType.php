@@ -7,6 +7,7 @@ use Database\Factories\Merchandise\MerchandiseTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -38,4 +39,9 @@ class MerchandiseType extends SimpleModel
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function merchandise(): HasMany
+    {
+        return $this->hasMany(Merchandise::class, 'merchandise_type_id');
+    }
 }

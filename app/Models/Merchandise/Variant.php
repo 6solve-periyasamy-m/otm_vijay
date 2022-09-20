@@ -7,6 +7,7 @@ use Database\Factories\Merchandise\VariantFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -38,4 +39,9 @@ class Variant extends SimpleModel
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(MerchandiseInventory::class, 'variant_id');
+    }
 }
