@@ -32,10 +32,7 @@ class MerchandiseSizeRepository extends SmallModelRepository
 
     public static function getCreateUrl(): string|null
     {
-        if (PermissionsRepository::canCurrentUser('create', MerchandiseSize::class)) {
-            return route('merchandise.size.create');
-        }
-        return null;
+        return route('merchandise.size.create');
     }
 
     public function getEditUrl(): string|null
