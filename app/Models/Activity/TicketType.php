@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\TicketType
@@ -22,6 +23,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|ActivityInventory[] $inventories
+ * @property-read TicketTypeRepository $repository
  * @method static TicketTypeFactory factory(...$parameters)
  * @method static Builder|TicketType newModelQuery()
  * @method static Builder|TicketType newQuery()

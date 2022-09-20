@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Collection|Activity[] $inventories
+ * @property-read Collection|Activity[] $activities
  * @property-read ActivityTypeRepository $repository
  * @method static ActivityTypeFactory factory(...$parameters)
  * @method static Builder|ActivityType newModelQuery()
