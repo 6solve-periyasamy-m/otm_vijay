@@ -178,6 +178,19 @@
                             </a>
             </li>
         @endcan
+        <li>
+            @if(strpos(Request::path(), 'attributes') !== false)
+                <a href="{{ route('attributes.edit') }}" class="nav-link active">
+            @else
+                <a href="{{ route('attributes.edit') }}" class="nav-link ">
+            @endif
+                    <i class="icon-flag"></i>
+                    <span>Attributes Manager</span>
+                    @if(strpos(Request::path(), 'attributes') !== false)
+                        <span class="selected"></span>
+                    @endif
+                </a>
+        </li>
         @can('read', 'App\Models\User')
             <li>
                 @if(strpos(Request::path(), 'users') !== false)

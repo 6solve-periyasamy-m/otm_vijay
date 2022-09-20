@@ -723,9 +723,9 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
         return view('pages.dash');
     })->name('dash');
 
-    Route::get('/small-models', function () {
+    Route::get('/attributes', function () {
        return view('pages.admin.small-models');
-    });
+    })->name('attributes.edit');
 
     Route::prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('events.all')->middleware('bouncer:Tour\Event,read');
