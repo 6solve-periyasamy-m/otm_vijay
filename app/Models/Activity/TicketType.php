@@ -44,7 +44,6 @@ class TicketType extends SimpleModel
     use HasFactory, SoftDeletes, HasRepository;
 
     protected $fillable = ['name',];
-    protected string $repositoryClass = TicketTypeRepository::class;
 
     public static function getValidationRules(): array
     {

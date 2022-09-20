@@ -45,7 +45,6 @@ class ActivityType extends SimpleModel
     use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name',];
-    protected string $repositoryClass = ActivityTypeRepository::class;
 
     public static function getValidationRules(): array
     {

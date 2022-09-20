@@ -45,7 +45,6 @@ class BoardType extends SimpleModel
     use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name',];
-    protected string $repositoryClass = BoardTypeRepository::class;
 
     public static function getValidationRules(): array
     {

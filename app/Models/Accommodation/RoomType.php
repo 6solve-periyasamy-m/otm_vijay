@@ -47,7 +47,6 @@ class RoomType extends Model
     use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name', 'maximum_occupancy',];
-    protected string $repositoryClass = RoomTypeRepository::class;
 
     public static function getValidationRules(): array
     {

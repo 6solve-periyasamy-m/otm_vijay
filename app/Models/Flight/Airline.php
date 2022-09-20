@@ -45,7 +45,6 @@ class Airline extends SimpleModel
     use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name',];
-    protected string $repositoryClass = AirlineRepository::class;
 
     public static function getValidationRules(): array
     {
