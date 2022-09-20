@@ -33,6 +33,8 @@
             <hr class="splitter">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Flight\AirportRepository::class])
             <hr class="splitter">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\TravelClassRepository::class])
+            <hr class="splitter">
         </div>
     </div>
 @endsection
