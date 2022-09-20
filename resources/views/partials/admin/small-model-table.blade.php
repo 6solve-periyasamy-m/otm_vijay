@@ -20,7 +20,7 @@
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Details</th>
-                <th scope="col">Related Count</th>
+                <th scope="col">Related</th>
                 <th scope="col">{{ __('custom.table.actions') }}</th>
             </tr>
             </thead>
