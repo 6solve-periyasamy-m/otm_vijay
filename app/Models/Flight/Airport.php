@@ -6,6 +6,7 @@ use App\Models\Activity\Activity;
 use App\Models\Location\Address;
 use App\Models\Traits\HasRepository;
 use App\Repository\Model\Activity\ActivityTypeRepository;
+use App\Repository\Model\Flight\AirportRepository;
 use Database\Factories\Flight\AirportFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read ActivityTypeRepository $repository
+ * @property-read AirportRepository $repository
  * @property-read Address $address
  * @property-read Collection|Flight[] $departingFlights
  * @property-read Collection|Flight[] $arrivingFlights

@@ -58,4 +58,9 @@ class AirportRepository extends SmallModelRepository
     {
         return $this->model->departingFlights()->count() + $this->model->arrivingFlights()->count();
     }
+
+    public function __toString(): string
+    {
+        return "{$this->model->name} ({$this->model->iata_code}) - {$this->model->address->country}";
+    }
 }
