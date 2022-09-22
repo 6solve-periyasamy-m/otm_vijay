@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Transport;
 
 use App\Models\Transport\Operator;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read Operator $model
  */
-class OperatorRepository extends SmallModelRepository
+class OperatorRepository extends AttributeRepository
 {
     public static function getName(): string
     {

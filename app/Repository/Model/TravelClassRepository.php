@@ -3,14 +3,14 @@
 namespace App\Repository\Model;
 
 use App\Models\TravelClass;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read TravelClass $model
  */
-class TravelClassRepository extends SmallModelRepository
+class TravelClassRepository extends AttributeRepository
 {
     public static function getName(): string
     {

@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\BoardType;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read BoardType $model
  */
-class BoardTypeRepository extends SmallModelRepository
+class BoardTypeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

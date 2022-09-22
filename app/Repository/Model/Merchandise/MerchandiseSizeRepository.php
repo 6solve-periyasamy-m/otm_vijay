@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\MerchandiseSize;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read MerchandiseSize $model
  */
-class MerchandiseSizeRepository extends SmallModelRepository
+class MerchandiseSizeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

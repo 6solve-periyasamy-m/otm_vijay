@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Customer;
 
 use App\Models\Customer\TShirtSize;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read TShirtSize $model
  */
-class TShirtSizeRepository extends SmallModelRepository
+class TShirtSizeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

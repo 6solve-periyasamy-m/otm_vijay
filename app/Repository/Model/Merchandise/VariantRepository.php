@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\Variant;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read Variant $model
  */
-class VariantRepository extends SmallModelRepository
+class VariantRepository extends AttributeRepository
 {
     public static function getName(): string
     {

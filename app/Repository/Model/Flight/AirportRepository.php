@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Flight;
 
 use App\Models\Flight\Airport;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read Airport $model
  */
-class AirportRepository extends SmallModelRepository
+class AirportRepository extends AttributeRepository
 {
     public static function getName(): string
     {

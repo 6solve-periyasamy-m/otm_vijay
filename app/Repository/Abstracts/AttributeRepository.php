@@ -5,7 +5,7 @@ namespace App\Repository\Abstracts;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-abstract class SmallModelRepository extends ModelRepository
+abstract class AttributeRepository extends ModelRepository
 {
     protected Model $model;
 

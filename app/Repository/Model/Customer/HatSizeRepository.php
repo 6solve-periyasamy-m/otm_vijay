@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Customer;
 
 use App\Models\Customer\HatSize;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read HatSize $model
  */
-class HatSizeRepository extends SmallModelRepository
+class HatSizeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

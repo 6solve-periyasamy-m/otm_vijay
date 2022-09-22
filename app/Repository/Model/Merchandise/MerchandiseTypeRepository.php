@@ -3,13 +3,13 @@
 namespace App\Repository\Model\Merchandise;
 
 use App\Models\Merchandise\MerchandiseType;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read MerchandiseType $model
  */
-class MerchandiseTypeRepository extends SmallModelRepository
+class MerchandiseTypeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

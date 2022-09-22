@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Transport;
 
 use App\Models\Transport\TransportType;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read TransportType $model
  */
-class TransportTypeRepository extends SmallModelRepository
+class TransportTypeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

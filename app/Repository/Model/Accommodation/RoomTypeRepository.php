@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Accommodation;
 
 use App\Models\Accommodation\RoomType;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read RoomType $model
  */
-class RoomTypeRepository extends SmallModelRepository
+class RoomTypeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Activity;
 
 use App\Models\Activity\ActivityType;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read ActivityType $model
  */
-class ActivityTypeRepository extends SmallModelRepository
+class ActivityTypeRepository extends AttributeRepository
 {
     public static function getName(): string
     {

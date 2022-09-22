@@ -3,14 +3,14 @@
 namespace App\Repository\Model\Activity;
 
 use App\Models\Activity\TicketType;
-use App\Repository\Abstracts\SmallModelRepository;
+use App\Repository\Abstracts\AttributeRepository;
 use App\Repository\Authentication\PermissionsRepository;
 use Illuminate\Support\Collection;
 
 /**
  * @property-read TicketType $model
  */
-class TicketTypeRepository extends SmallModelRepository
+class TicketTypeRepository extends AttributeRepository
 {
     public static function getName(): string
     {
