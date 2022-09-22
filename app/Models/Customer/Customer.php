@@ -175,7 +175,6 @@ class Customer extends Authenticatable
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
-            'mobile_number' => 'required',
             'email_address' => 'nullable|email|unique:customers,email_address',
         ];
     }
