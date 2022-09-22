@@ -4,7 +4,7 @@
      */
     $travellerCount = $booking->traveller_count; // Stored to reduce query count
 @endphp
-<x-customer.accordion id="cost-collapse" nobg>
+<x-customer.accordion id="cost-collapse" nobg hide>
     <x-slot:header>
         <h2 class="col-md-12 mb-0">Cost Summary</h2>
     </x-slot:header>
