@@ -2,13 +2,19 @@
 
 namespace App\Http\Gateways;
 
+use App\Http\Requests\Gateway\Felloh\WebhookRequest;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\GatewayPaymentLink;
 use Carbon\Carbon;
+use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
 use Http;
+use Log;
 
 class FellohGateway extends Gateway
 {
@@ -18,8 +24,7 @@ class FellohGateway extends Gateway
 
     public function __construct()
     {
-        $this->url = 'https://' . config('app.gateways.felloh.env', 'api') . '.fellow.com';
-        $this->renewToken();
+        $this->url = 'https://' . config('app.gateways.felloh.env', 'api') . '.felloh.org';
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
@@ -28,77 +33,57 @@ class FellohGateway extends Gateway
         $cost = 0;
         $description = "";
         foreach ($items as $item) {
-            $cost += $item->cost * 100;
+            $cost += $item->cost;
             $description .= $item->name . ", ";
         }
         $description = substr($description, 0, -2);
-
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->post($this->url . '/agent/payment-links', [
-            'customer_name' => "{$customer->first_name} {$customer->last_name}",
-            'email' => $customer->email_address,
-            'organisation' => config('app.gateways.felloh.organisation'),
+        $order = Order::where('booking_reference', '=', $intention->reference)->first();
+        $body = [
+            'connectedAccountId' => config('app.gateways.felloh.connected'),
+            'merchantRequestId' => $intention->reference,
             'amount' => $cost,
-            'open_banking_enabled' => true,
-            'card_enabled' => true,
-            'description' => $description,
-        ]);
-        $id = $response->json('data.id');
+            'merchantName' => setting('company.name'),
+            'logoUrl' => asset(setting('company.logo')),
+            'paymentDescription' => substr($description, 0, 100),
+            'successUrl' => $success ?? route('payment.gateway.stripe.success'),
+            'cancelUrl' => route('payment.gateway.stripe.cancelled'),
+            'isTemporaryRequestId' => isset($order),
+            'currency' => setting('system.currency'),
+            'customer' => [
+                'name' => "$customer->first_name $customer->last_name",
+                'email' => $customer->email_address,
+                'address' => [
+                    'addressLine1' => $customer->billingAddress->address_line_1,
+                    'postCode' => $customer->billingAddress->postcode,
+                ],
+            ]
+        ];
+        $response = Http::withHeaders([
+            'Account-ID' => config('app.gateways.felloh.account'),
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->post($this->url . '/felloh-checkout-service/v1/checkout-payment', $body);
         GatewayPaymentLink::create([
             'gateway' => self::$GATEWAY,
-            'payment_reference' => $id,
+            'payment_reference' => $response->json('transactionId'),
             'payment_intention_id' => $intention->id,
         ]);
-        return "https://pay.felloh.com/{$id}";
+        return $response->json('paymentRedirectUrl');
     }
 
     public function process(string $reference, float $amount, string $created = null): void
     {
         $intention = GatewayPaymentLink::get(self::$GATEWAY, $reference)?->intention;
         if (!isset($intention)) return;
-        $order = $this->processIntention($intention, $amount, self::$GATEWAY, $created);
-        $this->linkPayment($order, $reference);
+        $this->processIntention($intention, $amount, self::$GATEWAY, $created);
     }
 
-    /**
-     * @param string $from Should be passed as Y-m-d
-     * @return void
-     */
-    public function fetchSince(string $from): void
+    public function webhook(WebhookRequest $request)
     {
-        $this->renewToken();
-        $fetch = $this->performFetch($from);
-        foreach ($fetch['items'] as $id => $data) {
-            $this->process($id, $data['amount'], $data['date']);
+        if ($request->eventType === "PaymentCompleted") {
+            $amount = $this->getTransactionAmount($request->transactionId);
+            if ($amount === null) return;
+            $this->process($request->transactionId, $amount, Carbon::createFromTimestamp($request->eventTimestamp));
         }
-        for ($x = 100; $x < $fetch['count']; $x = $x+100) {
-            $fetch = $this->performFetch($from);
-            foreach ($fetch['items'] as $id => $data) {
-                $this->process($id, $data['amount'], $data['date']);
-            }
-        }
-    }
-
-    private function performFetch(string $from, int $start = 0): array
-    {
-
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->post("{$this->url}/agent/transactions ", [
-            'organisation' => config('app.gateways.felloh.organisation'),
-            'date_from' => $from,
-            'skip' => $start,
-            'take' => 100,
-            'statuses' => ['COMPLETED',]
-        ]);
-        $data = [];
-        foreach ($response->json('data') as $item) {
-            $data[$item['payment_link']['id']] = ['amount' => $item['amount'], 'date' => Carbon::parse($item['completed_at']),];
-        }
-        return ['count' => $response->json('meta.count'), 'start' => $start, 'items' => $data,];
     }
 
     private function renewToken(): void
@@ -112,59 +97,67 @@ class FellohGateway extends Gateway
 
     private function getApiToken(): array
     {
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post("{$this->url}/token", [
-            'public_key' => config('app.gateways.felloh.public'),
-            'private_key' => config('app.gateways.felloh.private'),
-        ]);
-        return ['token' => $response->json('data.token'), 'expiry' => $response->json('data.expiry'),];
+        $response = $this->makePostRequest(
+            "{$this->url}/felloh-checkout-service/v1/token",
+            [],
+            ['clientId' => config('app.gateways.felloh.client'), 'clientSecret' => config('app.gateways.felloh.secret'),],
+        false);
+        return ['token' => $response->accessToken, 'expiry' => $response->expiryTime,];
     }
 
-    private function createBooking(Order $order): string
+    private function makePostRequest(string $url, array $headers, array $bodyArray, bool $token = true)
     {
-        $this->renewToken();
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->put($this->url . '/agent/bookings', [
-            'organisation' => config('app.gateways.felloh.organisation'),
-            'customer_name' => "{$order->leadBooker->customer->first_name} {$order->leadBooker->customer->last_name}",
-            'email' => $order->leadBooker->customer->email_address,
-            'booking_reference' => $order->booking_reference,
-            'departure_date' => $order->tour->date_from->format('Y-m-d'),
-            'return_date' => $order->tour->date_to->format('Y-m-d'),
-            'gross_amount' => $order->cost,
-        ]);
-        return $response->json('data.id');
-    }
-
-    private function getBooking(Order $order): ?string
-    {
-        $this->renewToken();
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->post("{$this->url}/agent/bookings", [
-            'booking_reference' => $order->booking_reference,
-        ]);
-        $data = $response->json('data');
-        if (sizeof($data) === 0) return null;
-        return $data[0]['id'];
-    }
-
-    private function linkPayment(Order $order, string $payment): void
-    {
-        $this->renewToken();
-        $booking = $this->getBooking($order);
-        if (!isset($booking)) {
-            $booking = $this->createBooking($order);
+        if ($token) $this->renewToken();
+        $client = new Client();
+        $headers = [
+            'Account-ID' => config('app.gateways.felloh.account'),
+            ...$headers,
+        ];
+        if ($token) $headers['Authorization'] = 'Bearer ' . $this->token;
+        try {
+            $request = new Request('POST', $url, $headers, $this->encode_array($bodyArray));
+            $res = $client->send($request);
+            return json_decode($res->getBody());
+        } catch (Exception $e) {
+            Log::error($e);
         }
+        return null;
+    }
+
+    private function getTransactionAmount(string $transactionId): ?float
+    {
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
+            'Account-ID' => config('app.gateways.felloh.account'),
             'Authorization' => 'Bearer ' . $this->token,
-        ])->post("{$this->url}/agent/payment-links/{$payment}/assign", [
-            'booking_id' => $booking,
+        ])->get($this->url . '/felloh-checkout-service/v1/checkout-payment/status/' . $transactionId);
+        if ($response->status() !== 200) {
+            return null;
+        }
+        return $response->json('amount');
+    }
+
+    private function updateMerchantRequestId(string $transactionId, string $oldReference, Order $order)
+    {
+        $response = Http::withHeaders([
+            'Account-ID' => config('app.gateways.felloh.account'),
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->put($this->url . '/felloh-checkout-service/v1/checkout-payment', [
+            'transactionId' => $transactionId,
+            'oldMerchantRequestId' => $oldReference,
+            'newMerchantRequestId' => $order->booking_reference,
         ]);
+    }
+
+    // Yes I know json_encode exists. Tell Felloh that
+    private function encode_array(array $array): string
+    {
+        $body = "{";
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->encode_array($value);
+            }
+            $body .= "\"$key\": \"{$value}\",";
+        }
+        return substr($body, 0, -1) . "}";
     }
 }

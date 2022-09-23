@@ -253,9 +253,10 @@ return [
             'secret' => env('STRIPE_SECRET'),
         ],
         'felloh' => [
-            'public' => env('FELLOH_PUBLIC_KEY'),
-            'private' => env('FELLOH_PRIVATE_KEY'),
-            'organisation' => env('FELLOH_ORGANISATION'),
+            'client' => env('FELLOH_CLIENT'),
+            'secret' => env('FELLOH_SECRET'),
+            'account' => env('FELLOH_ACCOUNT'),
+            'connected' => env('FELLOH_CONNECTED'),
             'env' => env('FELLOH_ENVIRONMENT', 'api')
         ],
     ],
