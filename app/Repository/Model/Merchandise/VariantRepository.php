@@ -37,13 +37,13 @@ class VariantRepository extends AttributeRepository
 
     public function getEditUrl(): string|null
     {
-        return route('merchandise.variant.update', ['size' => $this->model,]);
+        return route('merchandise.variant.update', ['type' => $this->model,]);
     }
 
     public function getDeleteUrl(): string|null
     {
         if ($this->canDelete()) {
-            return route('merchandise.variant.delete', ['size' => $this->model,]);
+            return route('merchandise.variant.delete', ['type' => $this->model,]);
         }
         return null;
     }
