@@ -46,7 +46,7 @@ class FellohGateway extends Gateway
             'successUrl' => $success ?? route('payment.gateway.stripe.success'),
             'cancelUrl' => route('payment.gateway.stripe.cancelled'),
             'isTemporaryRequestId' => isset($order),
-            'currency' => setting('system.currency'),
+            'currency' => setting('system.currency', 'GBP'),
             'customer' => [
                 'name' => "$customer->first_name $customer->last_name",
                 'email' => $customer->email_address,
