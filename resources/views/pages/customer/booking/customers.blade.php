@@ -5,6 +5,7 @@
      * @var \App\Models\Tour\Tour $tour
      * @var \App\Models\Booking\BookingTraveller|null $customer
      */
+    $shouldRooming = $tour->templates->count();
 @endphp
 
 @section('title', 'Booking for ' . $tour->name)
@@ -55,7 +56,7 @@
                 <x-customer.input name="lead_mobile_number" value="{{ $customer?->mobile_number ?? '' }}" width="3" autocomplete="tel" required>
                     Mobile Number
                 </x-customer.input>
-
+                @if($shouldRooming)
                 <div class="form-group col-md-12">
                     Selecting the same room as another traveller indicates that the room will be shared by those individuals.
                     <br />
@@ -79,7 +80,7 @@
                         @endfor
                     </select>
                 </div>
-
+                @endif
                 <hr class="splitter">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -222,7 +223,7 @@
         @php $additionals = 0 @endphp
         @foreach($additionalTravellers ?? [] as $traveller)
             @if(!isset($traveller)) @continue @endif
-            @include('partials.customer.booking.traveller', ['number' => $additionals, 'traveller' => $traveller,])
+            @include('partials.customer.booking.traveller', ['number' => $additionals, 'traveller' => $traveller, 'shouldRooming' => $shouldRooming])
             @php $additionals++ @endphp
         @endforeach
         <div class="card customer-before">
@@ -235,7 +236,7 @@
 
 @section('footer-script')
     <script type="text/javascript">
-        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null,])`;
+        const customerSection = `@include('partials.customer.booking.traveller', ['number' => '%NUMBER%', 'traveller' => null, 'shouldRooming' => $shouldRooming])`;
         additional = {{ $additionals ?? 0 }};
         available = {{ $available - $additionals - 1}};
 

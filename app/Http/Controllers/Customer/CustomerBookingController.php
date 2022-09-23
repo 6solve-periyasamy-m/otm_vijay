@@ -61,7 +61,7 @@ class CustomerBookingController extends Controller
     {
 
         $tour = $this->getTour($bookingUrl, 1 + sizeof($request->input('additional') ?? []));
-
+        $shouldRooming = $tour->templates->count() > 0;
         if (!isset($tour)) abort(404);
 
         if (!CustomerAuthenticationRepository::verifyForBooking($request->lead_email_address)) {
@@ -81,45 +81,47 @@ class CustomerBookingController extends Controller
 
         $booking = BookingRepository::create($tour, BookingTravellerRepository::make($request->getLeadTravellerDetails()));
 
-        $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group", 'booking_id' => $booking->id]);
+        if ($shouldRooming) {
+            $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group", 'booking_id' => $booking->id]);
+            $leadRoomType = RoomType::find($request->lead_room_type);
 
-        $leadRoomType = RoomType::find($request->lead_room_type);
+            try { $leadGroup->repository->addTemplatesOfTypeToGroup($tour, $leadRoomType); }
+            catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
 
-        try { $leadGroup->repository->addTemplatesOfTypeToGroup($tour, $leadRoomType); }
-        catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
-
-        $leadGroup->repository->addTravellerToGroup($booking->leadTraveller);
-
-        $grouping = [$request->lead_group => ['group' => $leadGroup, 'roomType' => $leadRoomType,]];
+            $leadGroup->repository->addTravellerToGroup($booking->leadTraveller);
+            $grouping = [$request->lead_group => ['group' => $leadGroup, 'roomType' => $leadRoomType,]];
+        }
 
         foreach ($request->additional ?? [] as $additional) {
 
             $traveller = BookingTravellerRepository::create($booking, $additional);
 
-            $roomType = $traveller->roomType;
-            $groupNumber = $traveller->group_id;
+            if ($shouldRooming) {
+                $roomType = $traveller->roomType;
+                $groupNumber = $traveller->group_id;
 
-            do {
-                if (key_exists($groupNumber, $grouping) &&
-                    ($grouping[$groupNumber]['roomType']->id !== $roomType->id ||
-                        $grouping[$groupNumber]['group']->travellers()->count() + 1 > $grouping[$groupNumber]['roomType']->maximum_occupancy)) {
-                    $groupNumber++;
-                    continue;
+                do {
+                    if (key_exists($groupNumber, $grouping) &&
+                        ($grouping[$groupNumber]['roomType']->id !== $roomType->id ||
+                            $grouping[$groupNumber]['group']->travellers()->count() + 1 > $grouping[$groupNumber]['roomType']->maximum_occupancy)) {
+                        $groupNumber++;
+                        continue;
+                    }
+                    break;
+                } while (true);
+
+                $traveller->group_id = $groupNumber;
+                $traveller->save();
+
+                if (key_exists($groupNumber, $grouping)) {
+                    $grouping[$groupNumber]['group']->repository->addTravellerToGroup($traveller);
+                } else {
+                    $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
+                    $group->repository->addTravellerToGroup($traveller);
+                    try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
+                    catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
+                    $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
                 }
-                break;
-            } while (true);
-
-            $traveller->group_id = $groupNumber;
-            $traveller->save();
-
-            if (key_exists($groupNumber, $grouping)) {
-                $grouping[$groupNumber]['group']->repository->addTravellerToGroup($traveller);
-            } else {
-                $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
-                $group->repository->addTravellerToGroup($traveller);
-                try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
-                catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
-                $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
             }
         }
 

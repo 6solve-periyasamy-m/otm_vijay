@@ -6,6 +6,7 @@
  */
 $lead = $booking->leadTraveller;
 $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
+$shouldRooming = $tour->templates->count();
 @endphp
 
 @push('header-stack')
@@ -44,7 +45,7 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
 @endsection
 
 @section('booking-body')
-    @include('partials.customer.booking.summary.travellers', ['booking' => $booking,])
+    @include('partials.customer.booking.summary.travellers', ['booking' => $booking, 'shouldRooming' => $shouldRooming])
 
     @if($lead->accommodation()->count() > 0)
         @include('partials.customer.booking.summary.accommodation', ['traveller' => $lead,])
@@ -92,7 +93,7 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
                 {{ csrf_field() }}
                 <input type="hidden" name="booking_reference" id="form-booking-reference">
                 <div class="form-material row">
-                    <x-customer.input name="amount" value="{{ number_format($booking->tour->deposit * $booking->traveller_count) }}" width="10" required>
+                    <x-customer.input name="amount" value="{{ $booking->tour->deposit * $booking->traveller_count }}" width="10" required>
                         How much do you want to pay today?
                     </x-customer.input>
                     <div class="form-group col-12 col-xl-2" style="padding-top: 19px;">

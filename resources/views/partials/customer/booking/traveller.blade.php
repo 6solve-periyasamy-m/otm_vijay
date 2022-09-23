@@ -29,7 +29,7 @@
         <x-customer.input name="additional[{{ $number }}][mobile_number]" value="{{ $traveller?->mobile_number ?? '' }}" width="3" autocomplete="tel">
             Mobile Number
         </x-customer.input>
-
+        @if($shouldRooming)
         <div class="form-group col-md-6">
             <label class="col-md-12 mb-0">Ideal Room Type</label>
             <select name="additional[{{ $number }}][room_type_id]" class="w-100">
@@ -49,7 +49,7 @@
                 @endfor
             </select>
         </div>
-
+        @endif
         <a class="btn btn-danger float-end text-white" href="" onclick="event.preventDefault();removeCustomer(this)">
             <i class="icon-trash"></i>
             Remove Customer
