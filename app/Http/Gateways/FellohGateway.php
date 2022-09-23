@@ -101,6 +101,7 @@ class FellohGateway extends Gateway
 
     private function getTransactionAmount(string $transactionId): ?float
     {
+        $this->renewToken();
         $response = Http::withHeaders([
             'Account-ID' => config('app.gateways.felloh.account'),
             'Authorization' => 'Bearer ' . $this->token,
@@ -113,6 +114,7 @@ class FellohGateway extends Gateway
 
     private function updateMerchantRequestId(string $transactionId, string $oldReference, Order $order)
     {
+        $this->renewToken();
         $response = Http::withHeaders([
             'Account-ID' => config('app.gateways.felloh.account'),
             'Authorization' => 'Bearer ' . $this->token,
