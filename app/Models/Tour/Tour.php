@@ -9,6 +9,7 @@ use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Merchandise\MerchandiseInventoryTour;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Order\Order;
 use App\Models\Transport\TransportInventory;
 use App\Models\Transport\TransportInventoryTour;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -177,6 +179,11 @@ class Tour extends Model
     public function activityInventoryTours(): HasMany
     {
         return $this->hasMany(ActivityInventoryTour::class, 'tour_id');
+    }
+
+    public function orderAccommodation(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderAccommodation::class, AccommodationInventoryTour::class, 'tour_id', 'accommodation_inventory_tour_id');
     }
 
     public function transportInventoryTours(): HasMany

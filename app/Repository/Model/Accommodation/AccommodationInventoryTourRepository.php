@@ -67,7 +67,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             'group_id' => $group->id,
             'accommodation_inventory_tour_id' => $this->tourComponent->id,
             'share_with_user_id' => null,
-            'cost' => $this->tourComponent->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ]);
         //event(new OrderCustomerAccommodationAddedEvent($orderComponent));
         return $orderComponent->repository;

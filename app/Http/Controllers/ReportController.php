@@ -9,7 +9,9 @@ use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
+use App\Models\Order\Component\OrderAccommodation;
 use App\Repository\Reporting\ReportRepository;
+use App\Repository\Reporting\RoomingReportRepository;
 use Excel;
 
 class ReportController extends Controller
@@ -90,8 +92,8 @@ class ReportController extends Controller
     public function getOrderRemindersReport(int $max = 7, int $min = -1000) {
         return view('pages.reports.reminders', ['tableView' => 'partials.reports.tables.reminders',
             'data' => ReportRepository::getRemindersReport($max, $min),'title' => 'Order Reminders',
-            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx']),
-            'csvExport' => route('reports.reminders.export', ['extension' => 'csv']),
+            'xlsxExport' => route('reports.reminders.export', ['extension' => 'xlsx', 'max' => $max, 'min' => $min,]),
+            'csvExport' => route('reports.reminders.export', ['extension' => 'csv', 'max' => $max, 'min' => $min,]),
             'min' => $min, 'max' => $max,]);
     }
 
@@ -110,5 +112,15 @@ class ReportController extends Controller
     public function exportOrderMerchandiseReport(string $extension = 'xlsx')
     {
         return Excel::download(new OrderReminderReportExport(), 'reminders.' . $extension);
+    }
+
+    public function getRoomingReport()
+    {
+        return RoomingReportRepository::viewReport(new RoomingReportRepository(), 'reports.rooming.export');
+    }
+
+    public function exportRoomingReport(string $extension = 'xlsx')
+    {
+        return RoomingReportRepository::exportReport(new RoomingReportRepository(), $extension);
     }
 }

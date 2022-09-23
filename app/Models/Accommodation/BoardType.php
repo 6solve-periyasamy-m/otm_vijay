@@ -3,14 +3,18 @@
 namespace App\Models\Accommodation;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Accommodation\BoardTypeRepository;
+use App\Repository\Model\Accommodation\RoomTypeRepository;
 use Database\Factories\Accommodation\BoardTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\BoardType
@@ -20,6 +24,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|AccommodationInventory[] $inventories
+ * @property-read BoardTypeRepository $repository
  * @method static BoardTypeFactory factory(...$parameters)
  * @method static Builder|BoardType newModelQuery()
  * @method static Builder|BoardType newQuery()
@@ -36,12 +42,17 @@ use Illuminate\Support\Carbon;
  */
 class BoardType extends SimpleModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name',];
 
     public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:board_types,name',];
+    }
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(AccommodationInventory::class, 'board_type_id');
     }
 }

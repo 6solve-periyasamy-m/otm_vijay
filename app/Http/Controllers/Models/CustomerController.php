@@ -34,8 +34,6 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->validate(Customer::getValidationRules());
-        $request->validate(self::HOME_RULES);
-        $request->validate(self::BILLING_RULES);
         $customer = Customer::make([
             'title' => $request->input('title'),
             'first_name' => $request->input('first_name'),

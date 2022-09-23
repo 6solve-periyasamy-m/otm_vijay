@@ -3,13 +3,17 @@
 namespace App\Models\Merchandise;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Merchandise\VariantRepository;
 use Database\Factories\Merchandise\VariantFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Merchandise\Variant
@@ -19,6 +23,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|MerchandiseInventory[] $inventories
+ * @property-read VariantRepository $repository
  * @method static VariantFactory factory(...$parameters)
  * @method static Builder|Variant newModelQuery()
  * @method static Builder|Variant newQuery()
@@ -35,7 +41,12 @@ use Illuminate\Support\Carbon;
  */
 class Variant extends SimpleModel
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRepository;
 
     protected $guarded = [];
+
+    public function inventories(): HasMany
+    {
+        return $this->hasMany(MerchandiseInventory::class, 'variant_id');
+    }
 }

@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Accommodation\Accommodation $accommodation */ @endphp
 @section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () { $('#accommodationInventory').DataTable({fixedHeader: true}); });
@@ -35,11 +36,11 @@
                 <tr>
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
-                    <td>
+                    <td data-sort="{{$accommodationInventory->check_in->unix()}}">
                         {{ f_datetime($accommodationInventory->check_in) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_in_time_confirmed == 1) checked @endif>
                     </td>
-                    <td>
+                    <td data-sort="{{$accommodationInventory->check_out->unix()}}">
                         {{ f_datetime($accommodationInventory->check_out) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_out_time_confirmed == 1) checked @endif>
                     </td>
@@ -53,7 +54,16 @@
                     <td>{{ f_currency($accommodationInventory->purchase_price) }}</td>
                     <td>{{ f_currency($accommodationInventory->sales_price) }}</td>
                     <td>{{ $accommodationInventory->notes }}</td>
-                    <td class="actions-3">
+                    <td class="actions-4">
+                        @can('read', \App\Models\Accommodation\AccommodationInventory::class)
+                            <a href="{{route('accommodation-inventories.rooming', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-secondary btn-sm mb-1">
+                                <i class="icon-list"></i>
+                            </a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1">
+                                <i class="icon-list"></i>
+                            </span>
+                        @endcan
                         @can('create', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'accommodationInventory' => $accommodationInventory,])}}" class="btn btn-outline-blue btn-sm mb-1">
                                 <i class="icon-layers"></i>

@@ -9,10 +9,14 @@
         <thead>
         <tr>
             <th scope="col">Name</th>
+            @if($shouldRooming)
             <th scope="col">Room</th>
+            @endif
             <th scope="col">Base Cost</th>
             <th scope="col">Additional Costs</th>
-            <th scope="col">Single Occupancy Surcharge</th>
+            @if($shouldRooming)
+                <th scope="col">Single Occupancy Surcharge</th>
+            @endif
             <th scope="col">Total Cost for Traveller</th>
         </tr>
         </thead>
@@ -20,10 +24,14 @@
         @foreach($booking->travellers as $traveller)
             <tr>
                 <td data-content="Name">{{ $traveller->first_name . ' ' . $traveller->last_name }}</td>
-                <td data-content="Room">{{ $traveller->primary_group?->name }} ({{ $traveller->roomType->name }})</td>
+                @if($shouldRooming)
+                    <td data-content="Room">{{ $traveller->primary_group?->name }} ({{ $traveller->roomType->name }})</td>
+                @endif
                 <td data-content="Base Cost">{{ f_currency($traveller->base_cost) }}</td>
                 <td data-content="Additional Costs">{{ f_currency($traveller->additional_cost) }}</td>
-                <td data-content="Single Occupancy Surcharge">{{ f_currency($traveller->surcharge_amount) }}</td>
+                @if($shouldRooming)
+                    <td data-content="Single Occupancy Surcharge">{{ f_currency($traveller->surcharge_amount) }}</td>
+                @endif
                 <td data-content="Total Cost for Traveller">{{ f_currency($traveller->total_cost) }}</td>
             </tr>
         @endforeach

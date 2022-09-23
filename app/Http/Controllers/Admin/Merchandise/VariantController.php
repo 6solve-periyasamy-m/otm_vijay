@@ -30,4 +30,13 @@ class VariantController extends Controller
         $variant->save();
         return view('pages.close');
     }
+
+    public function delete(Variant $variant)
+    {
+        $deleted = $variant->repository->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Cannot delete a type that is in-use',]);
+        }
+        return back();
+    }
 }

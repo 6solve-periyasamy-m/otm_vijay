@@ -63,7 +63,7 @@ class CustomerBookingController extends Controller
     {
 
         $tour = $this->getTour($bookingUrl, 1 + sizeof($request->input('additional') ?? []));
-
+        $shouldRooming = $tour->templates->count() > 0;
         if (!isset($tour)) abort(404);
 
         if (!CustomerAuthenticationRepository::verifyForBooking($request->lead_email_address)) {
@@ -83,45 +83,47 @@ class CustomerBookingController extends Controller
 
         $booking = BookingRepository::create($tour, BookingTravellerRepository::make($request->getLeadTravellerDetails()));
 
-        $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group", 'booking_id' => $booking->id]);
+        if ($shouldRooming) {
+            $leadGroup = BookingGroup::create(['name' => "Room $request->lead_group", 'booking_id' => $booking->id]);
+            $leadRoomType = RoomType::find($request->lead_room_type);
 
-        $leadRoomType = RoomType::find($request->lead_room_type);
+            try { $leadGroup->repository->addTemplatesOfTypeToGroup($tour, $leadRoomType); }
+            catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
 
-        try { $leadGroup->repository->addTemplatesOfTypeToGroup($tour, $leadRoomType); }
-        catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
-
-        $leadGroup->repository->addTravellerToGroup($booking->leadTraveller);
-
-        $grouping = [$request->lead_group => ['group' => $leadGroup, 'roomType' => $leadRoomType,]];
+            $leadGroup->repository->addTravellerToGroup($booking->leadTraveller);
+            $grouping = [$request->lead_group => ['group' => $leadGroup, 'roomType' => $leadRoomType,]];
+        }
 
         foreach ($request->additional ?? [] as $additional) {
 
             $traveller = BookingTravellerRepository::create($booking, $additional);
 
-            $roomType = $traveller->roomType;
-            $groupNumber = $traveller->group_id;
+            if ($shouldRooming) {
+                $roomType = $traveller->roomType;
+                $groupNumber = $traveller->group_id;
 
-            do {
-                if (key_exists($groupNumber, $grouping) &&
-                    ($grouping[$groupNumber]['roomType']->id !== $roomType->id ||
-                        $grouping[$groupNumber]['group']->travellers()->count() + 1 > $grouping[$groupNumber]['roomType']->maximum_occupancy)) {
-                    $groupNumber++;
-                    continue;
+                do {
+                    if (key_exists($groupNumber, $grouping) &&
+                        ($grouping[$groupNumber]['roomType']->id !== $roomType->id ||
+                            $grouping[$groupNumber]['group']->travellers()->count() + 1 > $grouping[$groupNumber]['roomType']->maximum_occupancy)) {
+                        $groupNumber++;
+                        continue;
+                    }
+                    break;
+                } while (true);
+
+                $traveller->group_id = $groupNumber;
+                $traveller->save();
+
+                if (key_exists($groupNumber, $grouping)) {
+                    $grouping[$groupNumber]['group']->repository->addTravellerToGroup($traveller);
+                } else {
+                    $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
+                    $group->repository->addTravellerToGroup($traveller);
+                    try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
+                    catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
+                    $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
                 }
-                break;
-            } while (true);
-
-            $traveller->group_id = $groupNumber;
-            $traveller->save();
-
-            if (key_exists($groupNumber, $grouping)) {
-                $grouping[$groupNumber]['group']->repository->addTravellerToGroup($traveller);
-            } else {
-                $group = BookingGroup::create(['name' => "Room $groupNumber", 'booking_id' => $booking->id]);
-                $group->repository->addTravellerToGroup($traveller);
-                try { $group->repository->addTemplatesOfTypeToGroup($tour, $roomType); }
-                catch (RoomingFailedException) { /* Exception only thrown when using strict typing */ }
-                $grouping[$groupNumber] = ['group' => $group, 'roomType' => $roomType,];
             }
         }
 
@@ -181,14 +183,17 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
-        $min = max($dueToday, 0.3);
-        $max = min($booking->repository->getTotalCost(), 999999.99);
-        $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
+        $amount = sigfig(preg_replace('/[^0-9.]/', '', $request->amount));
 
-        $item = new LineItem("Deposit for Booking from {$booking->leadTraveller->full_name}", $request->amount);
+        if ($amount > $booking->repository->getTotalCost()) return back()->withErrors('You cannot pay more than you owe');
+        if ($amount < $dueToday) return back()->withErrors('You must pay the minimum deposit');
+        if ($amount >= 1_000_000) return back()->withErrors('We cannot process payments that large');
+        if ($amount <= 0.3) return back()->withErrors('We cannot process payments that small');
+
+        $item = new LineItem("Deposit for Booking from {$booking->leadTraveller->full_name}", $amount);
         $intention = PaymentIntention::build($booking->leadTraveller->customer, $booking->token, 'Deposit');
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, $redirect));
+        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer()));
     }
 }

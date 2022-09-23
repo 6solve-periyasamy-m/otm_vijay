@@ -79,7 +79,7 @@ class InvoiceRepository
             $data[] = ['description' => 'Single Occupancy Surcharge', 'cost' => $orderCustomer->single_occupancy_surcharge,];
             $totalCost += $orderCustomer->single_occupancy_surcharge;
         }
-        foreach ($orderCustomer->orderAccommodation() as $orderInventory) {
+        foreach ($orderCustomer->orderAccommodation as $orderInventory) {
             $tourInventory = $orderInventory->tourComponent;
             if ($tourInventory->tour_component_type == 'Included') {
                 $included .= $tourInventory . "\n";

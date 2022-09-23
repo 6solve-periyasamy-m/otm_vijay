@@ -3,12 +3,15 @@
 namespace App\Models\Customer;
 
 use App\Models\Helper\SimpleModel;
+use App\Repository\Model\Customer\TShirtSizeRepository;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\TShirtSize
@@ -18,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|Customer[] $customers
+ * @property-read TShirtSizeRepository $repository
  * @method static Builder|TShirtSize newModelQuery()
  * @method static Builder|TShirtSize newQuery()
  * @method static QueryBuilder|TShirtSize onlyTrashed()
@@ -41,5 +46,10 @@ class TShirtSize extends SimpleModel
     public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:t_shirt_sizes,name',];
+    }
+
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 't_shirt_size_id');
     }
 }

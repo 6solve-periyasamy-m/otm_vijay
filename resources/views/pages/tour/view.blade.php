@@ -94,6 +94,10 @@
                         <span>Export ATOL Certificates</span>
                     </a>
                 @endif
+                <a class="btn btn-secondary" href="{{route('tours.rooming', ['tour' => $tour,])}}">
+                    <i class="icon-list"></i>
+                    <span>View Rooming List</span>
+                </a>
             </div>
         </div>
     </div>
@@ -579,14 +583,6 @@
     <hr class="splitter"/>
     <div class="heading pt-2 pb-md-3 pb-2">
         <h2 class="fw-bold">Merchandise</h2>
-    </div>
-    <div class="card">
-        <div class="card-body text-end">
-            <a href="{{ route('merchandise.create', ['tour' => $tour,]) }}" class="btn btn-primary">
-                <i class="icon-plus"></i>
-                <span>Create</span>
-            </a>
-        </div>
     </div>
     <div class="card">
         <div class="card-body">

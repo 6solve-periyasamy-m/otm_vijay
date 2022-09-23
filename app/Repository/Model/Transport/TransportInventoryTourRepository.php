@@ -59,7 +59,7 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         $orderComponent = OrderTransport::create([
             'order_customer_id' => $orderCustomer->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price ?? 0
         ]);
         event(new OrderCustomerComponentAddedEvent($orderComponent));
         return $orderComponent->repository;

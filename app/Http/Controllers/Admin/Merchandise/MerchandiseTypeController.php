@@ -30,4 +30,13 @@ class MerchandiseTypeController extends Controller
         $type->save();
         return view('pages.close');
     }
+
+    public function delete(MerchandiseType $type)
+    {
+        $deleted = $type->repository->delete();
+        if (!$deleted) {
+            return back()->withErrors(['msg' => 'Cannot delete a type that is in-use',]);
+        }
+        return back();
+    }
 }
