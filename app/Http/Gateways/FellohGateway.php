@@ -52,7 +52,9 @@ class FellohGateway extends Gateway
                     'addressLine1' => $customer->billingAddress->address_line_1,
                     'postCode' => $customer->billingAddress->postcode,
                 ],
-            ]
+            ],
+            'paymentStatusCallbackUrl' => route('api.felloh.webhook'),
+            'allowedPaymentMethods' => 'CARD',
         ];
         $response = Http::withHeaders([
             'Account-ID' => config('app.gateways.felloh.account'),
