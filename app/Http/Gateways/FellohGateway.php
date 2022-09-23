@@ -12,6 +12,7 @@ use App\Models\System\GatewayPaymentLink;
 use Carbon\Carbon;
 use Http;
 use Illuminate\Http\JsonResponse;
+use Log;
 
 class FellohGateway extends Gateway
 {
@@ -61,6 +62,10 @@ class FellohGateway extends Gateway
             'Account-ID' => config('app.gateways.felloh.account'),
             'Authorization' => 'Bearer ' . $this->token,
         ])->post($this->url . '/felloh-checkout-service/v1/checkout-payment', $body);
+        if ($response->status() !== 201) {
+            Log::error("Failed fetching felloh gateway: \n" . $response->body());
+            return back()->getTargetUrl();
+        }
         GatewayPaymentLink::create([
             'gateway' => self::$GATEWAY,
             'payment_reference' => $response->json('transactionId'),
