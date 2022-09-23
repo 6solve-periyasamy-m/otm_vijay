@@ -181,10 +181,14 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
-        $min = max($dueToday, 0.3);
-        $max = min($booking->repository->getTotalCost(), 999999.99);
-        $request->validate(['amount' => 'required|numeric|min:' . $min . '|max:' . $max]);
+        $amount = sigfig(preg_replace('/[^0-9.]/', '', $request->amount));
+
+        if ($amount > $booking->repository->getTotalCost()) return back()->withErrors('You cannot pay more than you owe');
+        if ($amount < $dueToday) return back()->withErrors('You must pay the minimum deposit');
+        if ($amount >= 1_000_000) return back()->withErrors('We cannot process payments that large');
+        if ($amount <= 0.3) return back()->withErrors('We cannot process payments that small');
+
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $request->amount]], $booking->token, 'Deposit', 0, $redirect);
+        return StripeGateway::checkout([['name' => "Deposit for Booking from {$booking->leadTraveller->full_name}", 'quantity' => 1, 'cost' => $amount]], $booking->token, 'Deposit', 0, $redirect);
     }
 }
