@@ -79,6 +79,16 @@ a {
   border-radius: 2px;
 }
 
+.v-splitter-r {
+    border-right: 5px solid #cccccc;
+    border-radius: 2px;
+}
+
+.v-splitter-l {
+    border-left: 5px solid #cccccc;
+    border-radius: 2px;
+}
+
 .otm-navbar {
     min-height: 4rem;
     background-color: $primaryColor;
@@ -206,7 +216,7 @@ a {
         height: calc(100vh - 4rem);                       
     }
 
-    .collapse:not(.show) {
+    .collapse.otm-sidebar:not(.show) {
         display: block;
     }
 }

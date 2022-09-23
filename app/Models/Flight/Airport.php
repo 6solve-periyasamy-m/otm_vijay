@@ -2,7 +2,11 @@
 
 namespace App\Models\Flight;
 
+use App\Models\Activity\Activity;
 use App\Models\Location\Address;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Activity\ActivityTypeRepository;
+use App\Repository\Model\Flight\AirportRepository;
 use Database\Factories\Flight\AirportFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,9 +31,10 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read AirportRepository $repository
  * @property-read Address $address
- * @property-read Collection|Flight[] $flight
- * @property-read int|null $flight_count
+ * @property-read Collection|Flight[] $departingFlights
+ * @property-read Collection|Flight[] $arrivingFlights
  * @property-read Collection|FlightInventory[] $flightInventory
  * @property-read int|null $flight_inventory_count
  * @method static AirportFactory factory(...$parameters)
@@ -50,7 +55,7 @@ use Illuminate\Support\Carbon;
  */
 class Airport extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name', 'iata_code', 'address_id'];
 
@@ -69,9 +74,14 @@ class Airport extends Model
         return $this->belongsTo(Address::class, 'address_id');
     }
 
-    public function flight(): HasMany
+    public function departingFlights(): HasMany
     {
-        return $this->hasMany(Flight::class, 'airport_id');
+        return $this->hasMany(Flight::class, 'departure_airport_id');
+    }
+
+    public function arrivingFlights(): HasMany
+    {
+        return $this->hasMany(Flight::class, 'arrival_airport_id');
     }
 
     public function __toString()

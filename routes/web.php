@@ -534,6 +534,7 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
             Route::prefix('{size}')->group(function () {
                 Route::get('/update', [MerchandiseSizeController::class, 'edit'])->name('edit');
                 Route::post('/update', [MerchandiseSizeController::class, 'update'])->name('update');
+                Route::post('/delete', [MerchandiseSizeController::class, 'delete'])->name('delete');
             });
         });
         Route::prefix('variant')->name('variant.')->group(function () {
@@ -721,6 +722,10 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('pages.dash');
     })->name('dash');
+
+    Route::get('/attributes', function () {
+       return view('pages.admin.small-models');
+    })->name('attributes.edit');
 
     Route::prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('events.all')->middleware('bouncer:Tour\Event,read');

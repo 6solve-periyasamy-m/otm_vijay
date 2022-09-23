@@ -3,13 +3,17 @@
 namespace App\Models\Transport;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Transport\TransportTypeRepository;
 use Database\Factories\Transport\TransportTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -20,6 +24,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Collection|Transport[] $transports
+ * @property-read TransportTypeRepository $repository
  * @method static TransportTypeFactory factory(...$parameters)
  * @method static Builder|TransportType newModelQuery()
  * @method static Builder|TransportType newQuery()
@@ -36,12 +42,17 @@ use Illuminate\Support\Carbon;
  */
 class TransportType extends SimpleModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name',];
 
     public static function getValidationRules(): array
     {
         return ['name' => 'required|unique:transport_types,name',];
+    }
+
+    public function transports(): HasMany
+    {
+        return $this->hasMany(Transport::class, 'transport_type_id');
     }
 }

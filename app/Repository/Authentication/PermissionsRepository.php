@@ -246,6 +246,7 @@ class PermissionsRepository
 
     public static function canCurrentUser(string $action, string $class): bool
     {
+        $class = str_replace('App\\Models\\', '', $class);
         return Bouncer::can($action, '\\App\\Models\\' . $class);
     }
 
