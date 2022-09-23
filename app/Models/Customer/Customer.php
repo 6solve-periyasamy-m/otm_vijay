@@ -171,7 +171,6 @@ class Customer extends Authenticatable
     public static function getValidationRules(): array
     {
         return [
-            'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
@@ -187,11 +186,9 @@ class Customer extends Authenticatable
     public function getUpdateValidationRules(): array
     {
         return [
-            'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'date_of_birth' => 'required|date',
-            'mobile_number' => 'required',
             'email_address' => [
                 'nullable',
                 'email',
