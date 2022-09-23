@@ -38,7 +38,7 @@ class FellohGateway extends Gateway
         $order = Order::where('booking_reference', '=', $intention->reference)->first();
         $body = [
             'connectedAccountId' => config('app.gateways.felloh.connected'),
-            'merchantRequestId' => $intention->reference,
+            'merchantRequestId' => substr($intention->reference, 0, 40),
             'amount' => $cost,
             'merchantName' => setting('company.name'),
             'logoUrl' => asset(setting('company.logo')),
@@ -87,7 +87,6 @@ class FellohGateway extends Gateway
 
     public function webhook(WebhookRequest $request): JsonResponse
     {
-        \Log::info($request);
         if ($request->eventType === " PaymentAuthorised"
             || $request->eventType === "PaymentReceived"
             || $request->eventType === "PaymentCompleted") {
@@ -136,8 +135,9 @@ class FellohGateway extends Gateway
             'Account-ID' => config('app.gateways.felloh.account'),
             'Authorization' => 'Bearer ' . $this->token,
         ])->put($this->url . '/felloh-checkout-service/v1/checkout-payment', [
+            'connectedAccountId' => config('app.gateways.felloh.connected'),
             'transactionId' => $transactionId,
-            'oldMerchantRequestId' => $oldReference,
+            'oldMerchantRequestId' => substr($oldReference, 0, 40),
             'newMerchantRequestId' => $order->booking_reference,
         ]);
     }
