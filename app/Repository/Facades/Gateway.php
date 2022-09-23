@@ -22,11 +22,18 @@ class Gateway
             && config('app.gateways.felloh.account') != null) {
             $this->gateways['felloh'] = new FellohGateway();
         }
-        $this->gateways['demo'] = new DemoGateway();
     }
 
-    public function getDefaultGateway(): \App\Http\Gateways\Gateway
+    public function getDefaultGateway(): ?\App\Http\Gateways\Gateway
     {
-        return sizeof($this->gateways) > 0 ? $this->gateways[array_key_first($this->gateways)] : new DemoGateway();
+        return sizeof($this->gateways) > 0 ? $this->gateways[array_key_first($this->gateways)] : null;
+    }
+
+    public function getPaymentGateway(string $name): ?\App\Http\Gateways\Gateway
+    {
+        if (array_key_exists($name, $this->gateways)) {
+            return $this->gateways[$name];
+        }
+        return null;
     }
 }
