@@ -11,6 +11,7 @@ use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\GatewayPaymentLink;
 use Carbon\Carbon;
 use Http;
+use Illuminate\Http\JsonResponse;
 
 class FellohGateway extends Gateway
 {
@@ -32,7 +33,7 @@ class FellohGateway extends Gateway
             $cost += $item->cost;
             $description .= $item->name . ", ";
         }
-        $description = substr($description, 0, -2);
+        $description = preg_replace('/[^a-zA-Z0-9]/', '', substr($description, 0, -2));
         $order = Order::where('booking_reference', '=', $intention->reference)->first();
         $body = [
             'connectedAccountId' => config('app.gateways.felloh.connected'),
@@ -40,7 +41,7 @@ class FellohGateway extends Gateway
             'amount' => $cost,
             'merchantName' => setting('company.name'),
             'logoUrl' => asset(setting('company.logo')),
-            'paymentDescription' => substr($description, 0, 100),
+            'paymentDescription' => substr($description, 0, 99),
             'successUrl' => $success ?? route('payment.gateway.stripe.success'),
             'cancelUrl' => route('payment.gateway.stripe.cancelled'),
             'isTemporaryRequestId' => isset($order),
@@ -73,19 +74,23 @@ class FellohGateway extends Gateway
         $intention = GatewayPaymentLink::get(self::$GATEWAY, $reference)?->intention;
         if (!isset($intention)) return;
         $booking = Booking::where('token', '=', $intention->reference)->first();
-        $order = $this->processIntention($intention, $amount, self::$GATEWAY, $created);
+        $order = $this->processIntention($intention, $amount * 100, self::$GATEWAY, $created);
         if (isset($booking)) {
             $this->updateMerchantRequestId($reference, $intention->reference, $order);
         }
     }
 
-    public function webhook(WebhookRequest $request)
+    public function webhook(WebhookRequest $request): JsonResponse
     {
-        if ($request->eventType === "PaymentCompleted") {
+        \Log::info($request);
+        if ($request->eventType === " PaymentAuthorised"
+            || $request->eventType === "PaymentReceived"
+            || $request->eventType === "PaymentCompleted") {
             $amount = $this->getTransactionAmount($request->transactionId);
-            if ($amount === null) return;
-            $this->process($request->transactionId, $amount, Carbon::createFromTimestamp($request->eventTimestamp));
+            if ($amount === null) response()->json(['success' => true,]);
+            $this->process($request->transactionId, $amount, Carbon::createFromTimestamp($request->eventTimestamp/1000));
         }
+        return response()->json(['success' => true,]);
     }
 
     private function renewToken(): void

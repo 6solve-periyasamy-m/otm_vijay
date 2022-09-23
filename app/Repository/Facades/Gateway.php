@@ -12,10 +12,14 @@ class Gateway
 
     public function __construct()
     {
-        if (config('app.gateways.stripe.secret') != null && config('app.gateways.stripe.publishable') != null) {
+        if (config('app.gateways.stripe.secret') != null
+            && config('app.gateways.stripe.publishable') != null) {
             $this->gateways['stripe'] = new StripeGateway();
         }
-        if (config('app.gateways.felloh.public') != null && config('app.gateways.felloh.public') != null) {
+        if (config('app.gateways.felloh.client') != null
+            && config('app.gateways.felloh.secret') != null
+            && config('app.gateways.felloh.connected') != null
+            && config('app.gateways.felloh.account') != null) {
             $this->gateways['felloh'] = new FellohGateway();
         }
         $this->gateways['demo'] = new DemoGateway();
