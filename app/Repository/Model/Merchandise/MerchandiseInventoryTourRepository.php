@@ -57,7 +57,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return OrderMerchandise::create([
             'order_customer_id' => $orderCustomer->id,
             'merchandise_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price,
+            'cost' => $this->tourComponent->tour_sales_price ?? 0,
         ])->repository;
     }
 
