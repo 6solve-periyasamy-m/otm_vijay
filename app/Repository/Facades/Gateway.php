@@ -23,6 +23,6 @@ class Gateway
 
     public function getDefaultGateway(): \App\Http\Gateways\Gateway
     {
-        return sizeof($this->gateways) > 0 ? $this->gateways[0] : new DemoGateway();
+        return sizeof($this->gateways) > 0 ? $this->gateways[array_key_first($this->gateways)] : new DemoGateway();
     }
 }
