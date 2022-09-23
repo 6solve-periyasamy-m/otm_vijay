@@ -9,12 +9,7 @@ use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\System\GatewayPaymentLink;
 use Carbon\Carbon;
-use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Request;
 use Http;
-use Log;
 
 class FellohGateway extends Gateway
 {
@@ -97,31 +92,11 @@ class FellohGateway extends Gateway
 
     private function getApiToken(): array
     {
-        $response = $this->makePostRequest(
-            "{$this->url}/felloh-checkout-service/v1/token",
-            [],
-            ['clientId' => config('app.gateways.felloh.client'), 'clientSecret' => config('app.gateways.felloh.secret'),],
-        false);
-        return ['token' => $response->accessToken, 'expiry' => $response->expiryTime,];
-    }
-
-    private function makePostRequest(string $url, array $headers, array $bodyArray, bool $token = true)
-    {
-        if ($token) $this->renewToken();
-        $client = new Client();
-        $headers = [
+        $body = ['clientId' => config('app.gateways.felloh.client'), 'clientSecret' => config('app.gateways.felloh.secret'),];
+        $response = Http::withHeaders([
             'Account-ID' => config('app.gateways.felloh.account'),
-            ...$headers,
-        ];
-        if ($token) $headers['Authorization'] = 'Bearer ' . $this->token;
-        try {
-            $request = new Request('POST', $url, $headers, $this->encode_array($bodyArray));
-            $res = $client->send($request);
-            return json_decode($res->getBody());
-        } catch (Exception $e) {
-            Log::error($e);
-        }
-        return null;
+        ])->post($this->url . '/felloh-checkout-service/v1/token', $body);
+        return ['token' => $response->json('accessToken'), 'expiry' => $response->json('expiryTime'),];
     }
 
     private function getTransactionAmount(string $transactionId): ?float
@@ -146,18 +121,5 @@ class FellohGateway extends Gateway
             'oldMerchantRequestId' => $oldReference,
             'newMerchantRequestId' => $order->booking_reference,
         ]);
-    }
-
-    // Yes I know json_encode exists. Tell Felloh that
-    private function encode_array(array $array): string
-    {
-        $body = "{";
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->encode_array($value);
-            }
-            $body .= "\"$key\": \"{$value}\",";
-        }
-        return substr($body, 0, -1) . "}";
     }
 }
