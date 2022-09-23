@@ -9,6 +9,7 @@ use App\Models\Booking\Booking;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Models\Order\Payment\PaymentMethod;
 use App\Repository\Model\Order\OrderRepository;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\WebhookClient\Models\WebhookCall;
 
@@ -20,7 +21,8 @@ class CheckoutSuccessfulListener implements ShouldQueue
         $data = $payload['data']['object'];
         $metadata = $data['metadata'];
         if (key_exists('intention_id', $metadata)) {
-            (new StripeGateway())->process($metadata['intention_id'], $data['amount'], $payload['created']);
+            \Log::info($payload['created']);
+            (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($payload['created']));
         }
     }
 }
