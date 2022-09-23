@@ -3,6 +3,7 @@
 namespace App\Http\Gateways;
 
 use App\Http\Requests\Gateway\Felloh\WebhookRequest;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
@@ -69,7 +70,11 @@ class FellohGateway extends Gateway
     {
         $intention = GatewayPaymentLink::get(self::$GATEWAY, $reference)?->intention;
         if (!isset($intention)) return;
-        $this->processIntention($intention, $amount, self::$GATEWAY, $created);
+        $booking = Booking::where('token', '=', $intention->reference)->first();
+        $order = $this->processIntention($intention, $amount, self::$GATEWAY, $created);
+        if (isset($booking)) {
+            $this->updateMerchantRequestId($reference, $intention->reference, $order);
+        }
     }
 
     public function webhook(WebhookRequest $request)
