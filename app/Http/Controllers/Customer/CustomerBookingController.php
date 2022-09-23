@@ -18,6 +18,7 @@ use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Booking\BookingRepository;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use App\Repository\RoomingRepository;
+use Gateway;
 use Illuminate\Http\Request;
 use Session;
 use URL;
@@ -190,10 +191,11 @@ class CustomerBookingController extends Controller
         if ($amount >= 1_000_000) return back()->withErrors('We cannot process payments that large');
         if ($amount <= 0.3) return back()->withErrors('We cannot process payments that small');
 
+        $gateway = Gateway::getDefaultGateway();
         $item = new LineItem("Deposit for Booking from {$booking->leadTraveller->full_name}", $amount);
         $intention = PaymentIntention::build($booking->leadTraveller->customer, $booking->token, 'Deposit');
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
-        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer()));
+        return redirect($gateway->checkout([$item,], $intention, $booking->leadTraveller, $redirect));
     }
 }
