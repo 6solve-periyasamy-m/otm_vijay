@@ -8,6 +8,7 @@ use App\Http\Gateways\StripeGateway;
 use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Order\OrderRepository;
+use Gateway;
 use Illuminate\Http\Request;
 
 class CustomerFinancesController extends Controller
@@ -37,12 +38,13 @@ class CustomerFinancesController extends Controller
             return back()->withErrors('We cannot process payments that small');
         }
 
-        $redirect = setting('payment.success.redirect', url()->previous(route('customer.finances')));
+        $gateway = Gateway::getDefaultGateway();
+        $redirect = setting('payment.success.redirect', route('payment.gateway.stripe.success'));
 
         $item = new LineItem("Installment Payment ({$order->booking_reference})", $amount);
         $intention = PaymentIntention::build(CustomerAuthenticationRepository::getCustomer(), $order->booking_reference, 'Installment');
 
-        return redirect((new StripeGateway($redirect))->checkout([$item,], $intention, $redirect));
+        return redirect($gateway->checkout([$item,], $intention, CustomerAuthenticationRepository::getCustomer(), $redirect));
     }
 
     public function showInvoice(string $reference)
