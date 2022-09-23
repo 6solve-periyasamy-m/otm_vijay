@@ -22,7 +22,7 @@ class DemoGateway extends Gateway
             $amount += $item->cost;
         }
         $this->process($intention->id, $amount*100);
-        return $this->success;
+        return $success ?? $this->success;
     }
 
     public function process(string $reference, float $amount, string $created = null): void
