@@ -9,6 +9,8 @@ $leadAddons = $booking->leadTraveller->repository->getAvailableAddons();
 $shouldRooming = $tour->templates->count();
 @endphp
 
+@section('title', 'Confirm Booking')
+
 @push('header-stack')
     <style>
         .hidden {
