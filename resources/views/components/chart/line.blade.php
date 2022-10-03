@@ -7,7 +7,7 @@
                 @foreach ($labels as $label) '{{$label}}', @endforeach
             ],
             datasets: [{
-                label: 'Revenue by date',
+                label: '{{$name}}',
                 data: [@foreach ($values as $value) '{{$value}}', @endforeach],
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',

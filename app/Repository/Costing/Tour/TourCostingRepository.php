@@ -5,7 +5,10 @@ namespace App\Repository\Costing\Tour;
 use App\Models\Tour\Tour;
 use App\Repository\Abstracts\CostingRepository;
 use App\View\Components\Chart\Donut;
+use App\View\Components\Chart\Line;
+use Carbon\CarbonPeriod;
 use Closure;
+use DB;
 use Illuminate\Contracts\View\View;
 
 class TourCostingRepository extends CostingRepository
@@ -122,5 +125,27 @@ class TourCostingRepository extends CostingRepository
             $colors[] = '#AAA';
         }
         return (new Donut($this->tour->name . ' Revenue', $labels, $values, $colors))->render();
+    }
+
+    public function getOrdersOverTime(): Closure|View|string
+    {
+        $query = DB::table('orders');
+        $query->where('tour_id', '=', $this->tour->id);
+        $query->groupBy(DB::raw('DATE(`ordered_on`)'));
+        $query->orderBy(DB::raw('DATE(`ordered`)'));
+        $query->select(DB::raw("DATE(`ordered_on`) as 'ordered'"), DB::raw("COUNT(`id`) as 'orders'"));
+        $res = $query->get();
+        $results = $res->mapWithKeys(fn($item, $key) => [$item->ordered => $item->orders])->toArray();
+        $headers = [];
+        $data = [];
+        foreach (CarbonPeriod::create($res->first()->ordered, $res->last()->ordered) as $date) {
+            $headers[] = f_date($date);
+            if (array_key_exists($date->format('Y-m-d'), $results)) {
+                $data[] = $results[$date->format('Y-m-d')];
+            } else {
+                $data[] = 0;
+            }
+        }
+        return (new Line('Orders over Time', $headers, $data))->render();
     }
 }

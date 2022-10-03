@@ -169,5 +169,15 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                 </div>
             </div>
         </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Orders Over Time</h4>
+                    </div>
+                    {{ $tour->repository->getCosting()->getOrdersOverTime() }}
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
