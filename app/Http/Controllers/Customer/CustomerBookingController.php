@@ -182,7 +182,7 @@ class CustomerBookingController extends Controller
         $booking = $this->getBooking($token);
         if (!isset($booking) || $booking->tour_id !== $tour->id) abort(404);
         $dueToday = $booking->repository->getDueTodayAmount();
-        $amount = sigfig((int)preg_replace('/[^0-9.]/', '', $request->amount));
+        $amount = sigfig((float)preg_replace('/[^0-9.]/', '', $request->amount));
 
         if ($amount > $booking->repository->getTotalCost()) return back()->withErrors('You cannot pay more than you owe');
         if ($amount < $dueToday) return back()->withErrors('You must pay the minimum deposit');

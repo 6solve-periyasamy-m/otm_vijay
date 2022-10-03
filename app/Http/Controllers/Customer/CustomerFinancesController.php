@@ -19,7 +19,7 @@ class CustomerFinancesController extends Controller
     {
         $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required',]);
         $order = OrderRepository::getFromBookingReference($request->input('booking_reference'));
-        $amount = sigfig((int)preg_replace('/[^0-9.]/', '', $request->amount));
+        $amount = sigfig((float)preg_replace('/[^0-9.]/', '', $request->amount));
 
         if (!isset($order) ||
             $order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
