@@ -39,11 +39,11 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>Price per Person</p>
-                <h6 class="fw-bold">{{ $tour->base_price_per_person }}</h6>
+                <h6 class="fw-bold">{{ f_currency($tour->base_price_per_person) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Single Occupancy Surcharge</p>
-                <h6 class="fw-bold">{{ $tour->single_occupancy_surcharge }}</h6>
+                <h6 class="fw-bold">{{ f_currency($tour->single_occupancy_surcharge) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>From</p>
@@ -55,7 +55,7 @@
             </div>
             <div class="col-12 col-xl-6">
                 <p>Margin</p>
-                <h6 class="fw-bold">{{ $tour->margin }}</h6>
+                <h6 class="fw-bold">{{ f_currency($tour->margin) }}</h6>
             </div>
             <div class="col-12 col-xl-6">
                 <p>Is Active</p>
@@ -77,7 +77,7 @@
                     </a>
                 @endcan
                 @can('update', \App\Models\Merchandise\Merchandise::class)
-                    <a class="btn btn-primary" href="{{route('tours.fulfil', ['tour' => $tour,])}}">
+                    <a class="btn btn-danger" href="{{route('tours.fulfil', ['tour' => $tour,])}}">
                         <i class="icon-action-redo"></i>
                         <span>Fulfil Merchandise Orders</span>
                     </a>
@@ -97,6 +97,10 @@
                 <a class="btn btn-secondary" href="{{route('tours.rooming', ['tour' => $tour,])}}">
                     <i class="icon-list"></i>
                     <span>View Rooming List</span>
+                </a>
+                <a class="btn btn-warning" href="{{route('tours.costing', ['tour' => $tour,])}}">
+                    <i class="icon-chart"></i>
+                    <span>View Cost Information</span>
                 </a>
             </div>
         </div>
