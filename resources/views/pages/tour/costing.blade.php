@@ -15,7 +15,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
 @section('header-script')
     <script>
         $(document).ready(function () {
-            $('.installment-revenue-table').DataTable({fixedHeader: true,});
+            $('.data-table').DataTable({fixedHeader: true,});
         });
     </script>
 @endsection
@@ -59,7 +59,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
     <hr class="splitter"/>
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped">
+            <table class="table table-striped data-table">
                 <thead>
                 <tr>
                     <td style="width: 20%"></td>
@@ -96,6 +96,285 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
         </div>
     </div>
     <hr class="splitter"/>
+    <x-admin.section.card>
+        <ul class="nav nav-pills otm-tab">
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary">
+                    <i class="icon-list"></i> {{ __('tours.costing.view.cards.components.tabs.summary') }}
+                </button>
+            </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#accommodation">
+                    <i class="icon-home"></i> {{ __('tours.costing.view.cards.components.tabs.accommodation') }}
+                </button>
+            </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#activities">
+                    <i class="icon-settings"></i> {{ __('tours.costing.view.cards.components.tabs.activities') }}
+                </button>
+            </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">
+                    <i class="icon-plane"></i> {{ __('tours.costing.view.cards.components.tabs.flights') }}
+                </button>
+            </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#transport">
+                    <i class="icon-directions"></i> {{ __('tours.costing.view.cards.components.tabs.transport') }}
+                </button>
+            </li>
+            <li class="nav-item col-6 col-md-2">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#extras">
+                    <i class="icon-briefcase"></i> {{ __('tours.costing.view.cards.components.tabs.extras') }}
+                </button>
+            </li>
+        </ul>
+        <div id="tables" class="tab-content otm-tab-content">
+            <div id="summary" role="tabpanel" class="tab-pane fade show active">
+                <table class="table table-striped summary data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.component_type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($tour->repository->getComponents() as $componentRepository)
+                        <tr>
+                            <td>
+                                {{ ucwords($componentRepository->getComponentType()) }}
+                            </td>
+                            <td>
+                                @if ($componentRepository->getComponentType() == 'merchandise')
+                                    {{ __('tours.costing.view.cards.components.common.na') }}
+                                @else
+                                    {{ f_datetime($componentRepository->getInventory()->getStartTime()) }}
+                                    to
+                                    {{ f_datetime($componentRepository->getInventory()->getEndTime()) }}
+                                @endif
+                            </td>
+                            <td>
+                                {{ $componentRepository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getTourComponentType() }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getPurchasePrice() !== null ? f_currency($componentRepository->getPurchasePrice()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getCost() !== null ? f_currency($componentRepository->getCost()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $componentRepository->getMargin() !== null ? $componentRepository->getMargin() . '%' : 'No Cost to Company' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div id="accommodation" role="tabpanel" class="tab-pane fade">
+                <table class="table table-striped summary data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.component_type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($tour->accommodationInventoryTours()->with('inventory')->get() as $component)
+                        <tr>
+                            <td>
+                                {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                to
+                                {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            </td>
+                            <td>
+                                {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getTourComponentType() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div id="activities" role="tabpanel" class="tab-pane fade">
+                <table class="table table-striped summary data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.component_type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($tour->activityInventoryTours()->with('inventory')->get() as $component)
+                        <tr>
+                            <td>
+                                {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                to
+                                {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            </td>
+                            <td>
+                                {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getTourComponentType() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div id="flights" role="tabpanel" class="tab-pane fade">
+                <table class="table table-striped summary data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.component_type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($tour->flightInventoryTours()->with('inventory')->get() as $component)
+                        <tr>
+                            <td>
+                                {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                to
+                                {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            </td>
+                            <td>
+                                {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getTourComponentType() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div id="transport" role="tabpanel" class="tab-pane fade">
+                <table class="table table-striped summary data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.dates') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.component_type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($tour->transportInventoryTours()->with('inventory')->get() as $component)
+                        <tr>
+                            <td>
+                                {{ f_datetime($component->repository->getInventory()->getStartTime()) }}
+                                to
+                                {{ f_datetime($component->repository->getInventory()->getEndTime()) }}
+                            </td>
+                            <td>
+                                {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getTourComponentType() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div id="extras" role="tabpanel" class="tab-pane fade">
+                <table class="table table-striped summary data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.details') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.component_type') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.purchase') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.tour') }}</th>
+                        <th scope="col">{{ __('tours.costing.view.cards.components.common.price.margin') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($tour->merchandise()->with('inventory')->get() as $component)
+                        <tr>
+                            <td>
+                                {{ $component->repository->__toString() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getTourComponentType() }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getPurchasePrice() !== null ? f_currency($component->repository->getPurchasePrice()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getCost() !== null ? f_currency($component->repository->getCost()) : 'Not Set' }}
+                            </td>
+                            <td>
+                                {{ $component->repository->getMargin() !== null ? $component->repository->getMargin() . '%' : 'Not Set' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </x-admin.section.card>
+    <hr class="splitter"/>
     <div class="row">
         <div class="col-xl-6">
             <div class="card">
@@ -103,7 +382,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                     <div class="card-title">
                         <h4 class="fw-bold">Expected Installment Revenue</h4>
                     </div>
-                    <table class="table table-striped installment-revenue-table">
+                    <table class="table table-striped data-table">
                         <thead>
                         <tr>
                             <th scope="col">Due Date</th>
@@ -144,7 +423,7 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                     <div class="card-title">
                         <h4 class="fw-bold">Orders</h4>
                     </div>
-                    <table class="table table-striped installment-revenue-table">
+                    <table class="table table-striped data-table">
                         <thead>
                         <tr>
                             <th scope="col">Booking Reference</th>

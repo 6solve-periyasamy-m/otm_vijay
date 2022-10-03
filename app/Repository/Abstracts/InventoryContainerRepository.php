@@ -11,9 +11,22 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
     public abstract function getCost(): float;
     public abstract function getInventory(): ?InventoryRepository;
 
+    public function getSalesPrice(): ?float
+    {
+        return $this->getInventory()->getSalesPrice();
+    }
+
     public function getPurchasePrice(): ?float
     {
         return $this->getInventory()->getPurchasePrice();
+    }
+
+    public function getMargin(): ?float
+    {
+        $p = $this->getPurchasePrice();
+        $s = $this->getCost();
+        if (empty($p)) return null;
+        return sigfig((($s-$p)/$p)*100);
     }
 
     public function getStartTime(): Carbon
