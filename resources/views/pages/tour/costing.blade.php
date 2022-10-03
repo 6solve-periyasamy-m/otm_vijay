@@ -18,10 +18,15 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
             $('.data-table').DataTable({fixedHeader: true,});
         });
     </script>
+    <style>
+        .inactive {
+            background-color: #ccbbcc !important;
+        }
+    </style>
 @endsection
 
 @section('content')
-    <div class="otm-callout">
+    <div class="otm-callout @if(!$tour->is_active) inactive @endif">
         <div class="row">
             <div class="col-12">
                 <h4 class="fw-bold">{{ $tour->name }} @isset($tour->event)({{$tour->event->name}})@endisset</h4>
