@@ -138,5 +138,36 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                 </div>
             </div>
         </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="fw-bold">Orders</h4>
+                    </div>
+                    <table class="table table-striped installment-revenue-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Booking Reference</th>
+                            <th scope="col">Paying Travellers</th>
+                            <th scope="col">Expected</th>
+                            <th scope="col">Paid</th>
+                            <th scope="col">Remaining</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($tour->orders as $order)
+                            <tr>
+                                <td>{{ $order->booking_reference }}</td>
+                                <td>{{ $order->paying_customers }}</td>
+                                <td>{{ f_currency($order->cost) }}</td>
+                                <td>{{ f_currency($order->paid) }}</td>
+                                <td>{{ f_currency($order->remaining) }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
