@@ -59,6 +59,12 @@ $averageCustomer = ($tour->base_price_per_person+$fullCustomer)/2;
                     {{ f_date($tour->date_from) }} to {{ f_date($tour->date_to) }}
                 </h6>
             </div>
+            <div class="col-12">
+                <a class="btn btn-warning" href="{{route('tours.view', ['tour' => $tour,])}}">
+                    <i class="icon-action-redo"></i>
+                    <span>Back To Tour</span>
+                </a>
+            </div>
         </div>
     </div>
     <hr class="splitter"/>
