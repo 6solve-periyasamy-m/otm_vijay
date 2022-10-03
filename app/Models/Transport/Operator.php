@@ -3,6 +3,8 @@
 namespace App\Models\Transport;
 
 use App\Models\Helper\SimpleModel;
+use App\Models\Traits\HasRepository;
+use App\Repository\Model\Transport\OperatorRepository;
 use Database\Factories\Transport\OperatorFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Collection|Transport[] $transports
+ * @property-read OperatorRepository $repository
  * @property-read int|null $transports_count
  * @method static OperatorFactory factory(...$parameters)
  * @method static Builder|Operator newModelQuery()
@@ -42,7 +45,7 @@ use Illuminate\Support\Carbon;
  */
 class Operator extends SimpleModel
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRepository;
 
     protected $fillable = ['name', 'notes',];
 

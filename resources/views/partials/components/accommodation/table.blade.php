@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Accommodation\Accommodation $accommodation */ @endphp
 @section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () { $('#accommodationInventory').DataTable({fixedHeader: true}); });
@@ -35,11 +36,11 @@
                 <tr>
                     <td>{{ $accommodationInventory->roomType->name }}</td>
                     <td>{{ $accommodationInventory->boardType->name }}</td>
-                    <td>
+                    <td data-sort="{{$accommodationInventory->check_in->unix()}}">
                         {{ f_datetime($accommodationInventory->check_in) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_in_time_confirmed == 1) checked @endif>
                     </td>
-                    <td>
+                    <td data-sort="{{$accommodationInventory->check_out->unix()}}">
                         {{ f_datetime($accommodationInventory->check_out) }}&nbsp
                         <input type="checkbox" disabled @if($accommodationInventory->check_out_time_confirmed == 1) checked @endif>
                     </td>

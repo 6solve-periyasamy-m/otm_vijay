@@ -17,9 +17,10 @@ class CustomerFinancesController extends Controller
 
     public function makePayment(Request $request)
     {
-        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required|numeric|min:0.3|max:999999.99']);
+        $request->validate(['booking_reference' => 'required|exists:orders,booking_reference', 'amount' => 'required',]);
         $order = OrderRepository::getFromBookingReference($request->input('booking_reference'));
-        $amount = $request->input('amount');
+        $amount = sigfig((float)preg_replace('/[^0-9.]/', '', $request->amount));
+
         if (!isset($order) ||
             $order->repository->getOrderCustomer(CustomerAuthenticationRepository::getCustomer()) === null) {
             return back()->withErrors('Cannot make a payment for an invalid order');
@@ -27,6 +28,13 @@ class CustomerFinancesController extends Controller
         if ($amount > $order->remaining) {
             return back()->withErrors('Cannot pay more than you owe');
         }
+        if ($amount >= 1_000_000) {
+            return back()->withErrors('We cannot process payments that large');
+        }
+        if ($amount <= 0.3) {
+            return back()->withErrors('We cannot process payments that small');
+        }
+
         $redirect = setting('payment.success.redirect', url()->previous(route('customer.finances')));
 
         return StripeGateway::checkout([['name' => "Installment Payment ({$order->booking_reference})", 'quantity' => 1, 'cost' => $amount]], $order->booking_reference, 'Installment', CustomerAuthenticationRepository::getCustomer()->id, $redirect);

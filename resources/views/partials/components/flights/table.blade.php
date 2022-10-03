@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Flight\Flight $flight */ @endphp
 @section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () { $('#flightInventory').DataTable({fixedHeader: true}); });
@@ -36,9 +37,9 @@
                 <tr>
                     <td>{{ $flightInventory->flight_number }}</td>
                     <td>{{ $flightInventory->travelClass->name }}</td>
-                    <td>{{ f_datetime($flightInventory->check_in) }}</td>
-                    <td>{{ f_datetime($flightInventory->departs_at) }}</td>
-                    <td>{{ f_datetime($flightInventory->arrives_at) }}</td>
+                    <td data-sort="{{$flightInventory->check_in->unix()}}">{{ f_datetime($flightInventory->check_in) }}</td>
+                    <td data-sort="{{$flightInventory->departs_at->unix()}}">{{ f_datetime($flightInventory->departs_at) }}</td>
+                    <td data-sort="{{$flightInventory->arrives_at->unix()}}">{{ f_datetime($flightInventory->arrives_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($flightInventory->fit_selectable == 1) checked @endif>
                     </td>

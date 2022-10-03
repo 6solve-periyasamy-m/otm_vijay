@@ -11,6 +11,7 @@
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
             <th scope="col">Occupants</th>
+            <th scope="col">Accommodation Notes</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,11 @@
                     @php /** @var \App\Models\Order\OrderCustomer $traveller */ @endphp
                     @foreach($row->travellers as $traveller)
                         {{ $traveller->customer?->first_name ?? 'Redacted' }} {{ $traveller->customer?->last_name ?? 'Redacted' }},
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($row->travellers as $traveller)
+                        {{$traveller->accommodation_notes}}<br />
                     @endforeach
                 </td>
             </tr>

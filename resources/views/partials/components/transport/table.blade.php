@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Transport\Transport $transport */ @endphp
 @section('footer-script')
 <script type="text/javascript">
 $(document).ready(function() {
@@ -37,11 +38,11 @@ $(document).ready(function() {
             @foreach($transport->transportInventory as $transportInventory)
             <tr>
                 <td>{{ $transportInventory->travelClass->name }}</td>
-                <td>
+                <td data-sort="{{$transportInventory->departs_at->unix()}}">
                     {{ f_datetime($transportInventory->departs_at) }}&nbsp
                     <input type="checkbox" disabled @if($transportInventory->departure_time_confirmed == 1) checked @endif>
                 </td>
-                <td>
+                <td data-sort="{{$transportInventory->arrives_at->unix()}}">
                     {{ f_datetime($transportInventory->arrives_at) }}
                     <input type="checkbox" disabled @if($transportInventory->arrival_time_confirmed == 1) checked @endif>
                 </td>

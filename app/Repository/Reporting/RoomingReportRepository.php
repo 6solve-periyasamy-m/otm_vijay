@@ -53,6 +53,7 @@ class RoomingReportRepository implements HasRoomingList
         $largest = 0;
         $data = [];
         foreach ($roomingList->getRoomingList() as $orderAccommodation) {
+            if ($orderAccommodation->cancelled) continue;
             $occupancy = $orderAccommodation->accommodation_inventory->roomType->maximum_occupancy;
             if ($largest < $occupancy) $largest = $occupancy;
             $row = collect();

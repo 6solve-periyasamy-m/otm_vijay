@@ -585,14 +585,6 @@
         <h2 class="fw-bold">Merchandise</h2>
     </div>
     <div class="card">
-        <div class="card-body text-end">
-            <a href="{{ route('merchandise.create', ['tour' => $tour,]) }}" class="btn btn-primary">
-                <i class="icon-plus"></i>
-                <span>Create</span>
-            </a>
-        </div>
-    </div>
-    <div class="card">
         <div class="card-body">
             <table id="merchandise-table" class="table table-striped table-responsive-sm">
                 <thead>

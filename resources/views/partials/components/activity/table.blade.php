@@ -1,3 +1,4 @@
+@php /** @var \App\Models\Activity\Activity $activity */ @endphp
 @section('footer-script')
 <script type="text/javascript">
     $(document).ready(function () { $('#activityInventory').DataTable({fixedHeader: true}); });
@@ -33,8 +34,8 @@
             @foreach($activity->activityInventory as $activityInventory)
                 <tr>
                     <td>{{ $activityInventory->ticketType->name }}</td>
-                    <td>{{ f_datetime($activityInventory->starts_at) }}</td>
-                    <td>{{ f_datetime($activityInventory->ends_at) }}</td>
+                    <td data-sort="{{$activityInventory->starts_at->unix()}}">{{ f_datetime($activityInventory->starts_at) }}</td>
+                    <td data-sort="{{$activityInventory->ends_at->unix()}}">{{ f_datetime($activityInventory->ends_at) }}</td>
                     <td>
                         <input type="checkbox" disabled @if($activityInventory->fit_selectable == 1) checked @endif>
                     </td>

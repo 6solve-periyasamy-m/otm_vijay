@@ -1,4 +1,4 @@
-<div class="accordion" @if($attributes->has('nobg')) style="box-shadow: none;" @endif>
+<div class="accordion @if($attributes->has('hide')) hidden @endif" @if($attributes->has('nobg')) style="box-shadow: none;" @endif>
     <div class="card card-heading accordion-header">
         <div class="card-body accordion-button" data-bs-toggle="collapse" data-bs-target="#{{ $attributes->get('id', 'accordion') }}" aria-expanded="{{ $attributes->has('hidden') ? 'false' : 'true' }}" aria-controls="{{ $attributes->get('id', 'accordion') }}">
             {{ $header }}
